@@ -6,6 +6,6 @@ namespace Common
         Down,
         Left,
         Right,
-        None
+        Center
     }
 }
