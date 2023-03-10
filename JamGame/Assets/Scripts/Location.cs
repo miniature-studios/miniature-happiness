@@ -7,7 +7,7 @@ public class Path
 
 }
 
-public class Location : MonoBehaviour
+public partial class Location : MonoBehaviour
 {
     [SerializeField] WallPlacementRules wallPlacementRules;
 
@@ -35,5 +35,25 @@ public class Location : MonoBehaviour
     public Path FindPath()
     {
         throw new NotImplementedException();
+    }
+}
+
+public partial class Location : MonoBehaviour
+{
+    // TODO: Keep updated.
+    List<NeedProvider> needProviders;
+
+    void Start()
+    {
+        needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
+    }
+
+    public bool TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
+    {
+        foreach (var np in needProviders)
+            if (np.NeedType == need_type && np.TryBook(employee))
+                return true;
+
+        return false;
     }
 }
