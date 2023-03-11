@@ -1,37 +1,67 @@
+using Common;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PathfindingProvider
 {
-    // TODO: Pathfinding
+    Dictionary<Vector2Int, List<Direction>> availablePaths;
+
+    public PathfindingProvider(Dictionary<Vector2Int, List<Direction>> available_paths)
+    {
+        availablePaths = available_paths;
+    }
+
+    // TODO: Weighted pathfinding.
     public List<Vector2Int> FindPath(Vector2Int from, Vector2Int to)
     {
-        List<Vector2Int> path = new List<Vector2Int>();
+        Queue<Vector2Int> frontier = new Queue<Vector2Int>();
+        frontier.Enqueue(from);
 
-        if (from.x != to.x)
+        Dictionary<Vector2Int, Vector2Int> came_from = new Dictionary<Vector2Int, Vector2Int>()
+            { { from, from } };
+
+        while (frontier.Count != 0)
         {
-            bool inc_x = from.x < to.x;
-            for (int x = from.x; inc_x ? x < to.x : x > to.x; x += inc_x ? 1 : -1)
-                path.Add(new Vector2Int(x, from.y));
+            var current = frontier.Dequeue();
+            foreach (var direction in availablePaths[current])
+            {
+                var next = direction.ToVector2Int() + current;
+
+                if (!came_from.ContainsKey(next))
+                {
+                    frontier.Enqueue(next);
+                    came_from.Add(next, current);
+                }
+
+                if (next == to)
+                {
+                    var path = new List<Vector2Int>() { to };
+                    while (true)
+                    {
+                        path.Add(came_from[path[^1]]);
+                        if (path[^1] == from)
+                            break;
+                    }
+                    path.Reverse();
+
+                    Debug.Log("PATH FROM " + from + " TO " + to + ":");
+                    foreach (var ps in path)
+                        Debug.Log("    " + ps);
+
+                    return path;
+                }
+            }
         }
 
-        if (from.y != to.y)
-        {
-            bool inc_y = from.y < to.y;
-            for (int y = from.y; inc_y ? y < to.y : y > to.y; y += inc_y ? 1 : -1)
-                path.Add(new Vector2Int(to.x, y));
-        }
-
-        path.Add(to);
-
-        return path;
+        Debug.LogError("Path from " + from + " to " + to + " not found!");
+        return null;
     }
 }
 
 public partial class Location : MonoBehaviour
 {
     public Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
-    public PathfindingProvider PathfindingProvider = new PathfindingProvider();
+    public PathfindingProvider PathfindingProvider;
 }
 
 public partial class Location : MonoBehaviour
@@ -54,6 +84,14 @@ public partial class Location : MonoBehaviour
         rooms.Add(new Vector2Int(0, -1), DebugRoom1);
         rooms.Add(new Vector2Int(1, -1), DebugRoom2);
         rooms.Add(new Vector2Int(1, 0), DebugRoom3);
+
+        var available_paths = new Dictionary<Vector2Int, List<Direction>>();
+        available_paths.Add(new Vector2Int(0, 0), new List<Direction>() { Direction.Right, Direction.Down });
+        available_paths.Add(new Vector2Int(1, 0), new List<Direction>() { Direction.Left, Direction.Down });
+        available_paths.Add(new Vector2Int(0, -1), new List<Direction>() { Direction.Up });
+        available_paths.Add(new Vector2Int(1, -1), new List<Direction>() { Direction.Up });
+
+        PathfindingProvider = new PathfindingProvider(available_paths);
     }
 
     // TODO: Try book closest provider

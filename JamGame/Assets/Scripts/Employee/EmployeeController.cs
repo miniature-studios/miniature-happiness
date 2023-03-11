@@ -11,7 +11,8 @@ public class EmployeeController : MonoBehaviour
     {
         currentPath = path;
 
-        if (path.Count < 2)
+        // FIXME: Employee can move from slot to slot in bounds of a single room in future.
+        if (path[0].Item1 == path[^1].Item1)
         {
             OnFinishedMoving?.Invoke();
             return;
