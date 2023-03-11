@@ -5,34 +5,13 @@ using UnityEngine;
 public class PathfindingProvider 
 {
     // FindPath -> Point[]
+
 }
 
 public partial class Location : MonoBehaviour
 {
     public Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
     public PathfindingProvider PathfindingProvider;
-
-    // Move to LocationBuilder:
-
-    [SerializeField] WallPlacementRules wallPlacementRules;
-    public void PlaceRoom(Room room, Vector2Int position)
-    {
-        rooms.Add(position, room);
-        UpdateRoomWalls(position);
-    }
-
-    public Room TakeRoom(Vector2Int position)
-    {
-        var room = rooms[position];
-        rooms.Remove(position);
-        UpdateRoomWalls(position);
-        return room;
-    }
-
-    void UpdateRoomWalls(Vector2Int position)
-    {
-        // Send UpdateWalls requests based on wallPlacementRules to adjacent rooms
-    }
 }
 
 public partial class Location : MonoBehaviour

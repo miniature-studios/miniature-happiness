@@ -10,9 +10,16 @@ public class WallPlacementRule
     public RoomType room_b;
     public WallType wall;
 }
+public class DiractlyAllowedWalls
+{
+    public RoomType room;
+    public Vector2Int diraction;
+    public List<WallType> walls;
+}
 
 [CreateAssetMenu(fileName = "WallPlacementRules", menuName = "ScriptableObjects/WallPlacementRules", order = 1)]
 public class WallPlacementRules : ScriptableObject
 {
-    public List<WallPlacementRule> rules;
+    public List<WallPlacementRule> neighborsLimitation;
+    public List<DiractlyAllowedWalls> diractlyAllowedWalls;
 }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,6 +25,7 @@ public class LocationBuilder : MonoBehaviour
     GameObject test_room;
     [SerializeField]
     Location location;
+    [SerializeField] WallPlacementRules wallPlacementRules;
     Transform locationTransform;
 
     List<LocationCell> locationCells = new();
@@ -125,5 +127,24 @@ public class LocationBuilder : MonoBehaviour
     public void MoveToGameMode()
     {
         scrollView.SetActive(false);
+    }
+    
+    public void PlaceRoom(Room room, Vector2Int position)
+    {
+        rooms.Add(position, room);
+        UpdateRoomWalls(position);
+    }
+
+    public Room TakeRoom(Vector2Int position)
+    {
+        var room = rooms[position];
+        rooms.Remove(position);
+        UpdateRoomWalls(position);
+        return room;
+    }
+
+    void UpdateRoomWalls(Vector2Int position)
+    {
+        // Send UpdateWalls requests based on wallPlacementRules to adjacent rooms
     }
 }

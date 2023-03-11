@@ -10,13 +10,14 @@ public class RoomInternalPath
     public Direction from;
     public Direction to;
 
-    // Store path curves here
     public Vector3[] linePoints = new Vector3[4];
-
-    // methods:
-    //  GetPath (for NPC movement)
-    public List<Vector3> GetPath()
+    public Vector3 GetPathPoint(float normalizedTime)
     {
+        return Bezier.GetPoint(linePoints[0], linePoints[1], linePoints[2], linePoints[3], normalizedTime);
+    }
+    public float GetPathLength()
+    {
+        float sum = 0;
         List<Vector3> path = new List<Vector3>();
         path.Add(linePoints[0]);
         for (int i = 0; i < sigmentsNumber + 1; i++)
@@ -25,13 +26,6 @@ public class RoomInternalPath
             Vector3 point = Bezier.GetPoint(linePoints[0], linePoints[1], linePoints[2], linePoints[3], paremeter);
             path.Add(point);
         }
-        return path;
-    }
-    //  GetPathLength (maybe approx. for pathfinding)
-    public float GetPathLength()
-    {
-        float sum = 0;
-        List<Vector3> path = GetPath();
         for (int i = 0; i < path.Count - 1; i++)
         {
             sum += Vector3.Distance(path[i], path[i + 1]);
@@ -43,16 +37,13 @@ public class RoomInternalPath
 public class Room : MonoBehaviour
 {
     [SerializeField] public RoomType roomType;
-    // Room size
-    [SerializeField] ConstructinMatrix constructionMatrix;
-    // Room diraction
-    [SerializeField] public Vector2 currentDiraction = Vector2.up;
+    [SerializeField] Dictionary<RoomType, Vector2Int> necessarilyNeighbours;
+    [SerializeField] public Vector2Int currentDiraction = Vector2Int.up;
     [SerializeField] List<RoomInternalPath> internalPaths;
     public RoomInternalPath GetInternalPath(Direction from, Direction to)
     {
         return internalPaths.Find(r => r.from == from && r.to == to);
     }
-
     private void OnDrawGizmos()
     {
         foreach (var internalPath in internalPaths)
@@ -82,21 +73,4 @@ public class Room : MonoBehaviour
             }
         }
     }
-}
-
-public class ConstructinMatrix
-{
-    public List<List<WallParameters>> wallParameters;
-    WallParameters this[int x, int y]
-    {
-        get { return wallParameters[x][y]; }  
-    }
-}
-
-public class WallParameters
-{
-    public List<WallType> up_wall;
-    public List<WallType> right_wall;
-    public List<WallType> left_wall;
-    public List<WallType> down_wall;
 }
