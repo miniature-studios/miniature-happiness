@@ -50,7 +50,7 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         IsClicked = true;
         transform.SetParent(canvasRectTransform, true);
-        locationBuilder.InstantiateRoom(new RoomCreationInfo() { }); //
+        locationBuilder.AddRoomToScene(roomType);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -58,7 +58,7 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (IsMouseOverScrollView)
         {
             transform.SetParent(contentRectTransform);
-            locationBuilder.DeleteSelectedRoom();
+            locationBuilder.DeleteMovingRoom();
         }
         else if (IsClicked)
         {
