@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Path
+public class PathfindingProvider 
 {
-
+    // FindPath -> Point[]
 }
 
 public partial class Location : MonoBehaviour
 {
+    public Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
+    public PathfindingProvider PathfindingProvider;
+
+    // Move to LocationBuilder:
+
     [SerializeField] WallPlacementRules wallPlacementRules;
-
-    Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
-
     public void PlaceRoom(Room room, Vector2Int position)
     {
         rooms.Add(position, room);
@@ -30,11 +32,6 @@ public partial class Location : MonoBehaviour
     void UpdateRoomWalls(Vector2Int position)
     {
         // Send UpdateWalls requests based on wallPlacementRules to adjacent rooms
-    }
-
-    public Path FindPath()
-    {
-        throw new NotImplementedException();
     }
 }
 

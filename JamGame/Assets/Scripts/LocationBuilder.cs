@@ -9,6 +9,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[RequireComponent(typeof(Location))]
 public class LocationBuilder : MonoBehaviour
 {
     [SerializeField]
@@ -65,6 +66,7 @@ public class LocationBuilder : MonoBehaviour
     {
         // TODO: Load Correct Prefab
         ShowedRoom = Instantiate(test_room, GetNearestPlace(), new Quaternion(), locationTransform).GetComponent<Room>();
+        // TODO: Call Location's PlaceRoom
     }
     private void Update()
     {
@@ -99,6 +101,7 @@ public class LocationBuilder : MonoBehaviour
     public void DeleteSelectedRoom()
     {
         Destroy(ShowedRoom.gameObject);
+        // TODO: Call Location's TakeRoom.
     }
     public void BuildChoosedRoom()
     {
