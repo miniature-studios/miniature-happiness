@@ -327,6 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 40585369}
   - component: {fileID: 40585370}
+  - component: {fileID: 40585371}
   m_Layer: 0
   m_Name: Room (3)
   m_TagString: Untagged
@@ -508,6 +509,24 @@ MonoBehaviour:
     - {x: -1.5, y: 2.5, z: 2}
     - {x: 2.5, y: 2.5, z: 0}
   position: {x: 1, y: 0}
+--- !u!114 &40585371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40585368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda5bf624c499474fb22c8cabe42c4e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotAmount: 1
+  availableSlots: []
+  Filter:
+    Employees: []
+    FilterType: 2
+  NeedType: 2
 --- !u!1 &178612890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1919,6 +1938,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotAmount: 1
+  availableSlots: []
+  Filter:
+    Employees: []
+    FilterType: 3
   NeedType: 0
 --- !u!1 &1121829640
 GameObject:
@@ -2262,6 +2285,7 @@ MonoBehaviour:
   DebugRoom1: {fileID: 1070882168}
   DebugRoom2: {fileID: 2033423400}
   DebugRoom3: {fileID: 40585370}
+  employeeNeeds: {fileID: 11400000, guid: de4eec02cb72a5844838cbc59f89bd98, type: 2}
 --- !u!1 &1403376143
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,6 +3122,7 @@ MonoBehaviour:
   DebugRoom1: {fileID: 0}
   DebugRoom2: {fileID: 0}
   DebugRoom3: {fileID: 0}
+  employeeNeeds: {fileID: 0}
 --- !u!1 &2033423398
 GameObject:
   m_ObjectHideFlags: 0
@@ -3303,6 +3328,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotAmount: 1
+  availableSlots: []
+  Filter:
+    Employees: []
+    FilterType: 3
   NeedType: 1
 --- !u!1 &2124171488
 GameObject:

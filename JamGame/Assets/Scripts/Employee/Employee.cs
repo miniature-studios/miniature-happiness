@@ -23,6 +23,7 @@ public class Employee : MonoBehaviour
     EmployeeController controller;
     [SerializeField] List<Need> needs = new List<Need>();
     Need currentNeed;
+    NeedProvider.Slot occupiedSlot;
 
     void Start()
     {
@@ -32,6 +33,9 @@ public class Employee : MonoBehaviour
 
     void Update()
     {
+        foreach (var need in needs)
+            need.Update(Time.deltaTime);
+
         switch (state)
         {
             case State.Idle:
@@ -44,7 +48,8 @@ public class Employee : MonoBehaviour
                 if (satisfyingNeedRemaining < 0.0f)
                 {
                     state = State.Idle;
-                    // TODO: Change satisfaction level.
+                    currentNeed.satisfied += currentNeed.GetSatisfaction();
+                    occupiedSlot.Free();
                 }
                 break;
         }
@@ -74,6 +79,7 @@ public class Employee : MonoBehaviour
             if (booked != null)
             {
                 currentNeed = need;
+                occupiedSlot = booked;
                 MoveToSlot(booked);
                 break;
             }

@@ -6,9 +6,11 @@ public enum NeedProviderFilterType
 {
     BlackList,
     WhiteList,
-    None
+    FirstToTake,
+    None,
 }
 
+[Serializable]
 public class NeedProviderFilter
 {
     public NeedProviderFilter(List<Employee> employees, NeedProviderFilterType filter_type)
@@ -30,6 +32,15 @@ public class NeedProviderFilter
                 return Employees.Contains(employee);
             case NeedProviderFilterType.BlackList:
                 return !Employees.Contains(employee);
+            case NeedProviderFilterType.FirstToTake:
+                if (Employees.Contains(employee))
+                    return true;
+                else if (Employees.Count == 0)
+                {
+                    Employees.Add(employee);
+                    return true;
+                }
+                return false;
             default:
                 Debug.LogError("Unknown NeedProviderFilterType!");
                 return true;
@@ -40,46 +51,63 @@ public class NeedProviderFilter
 [RequireComponent(typeof(Room))]
 public class NeedProvider : MonoBehaviour
 {
+    [Serializable]
     public class Slot
     {
         public Room Room;
+        NeedProvider needProvider;
 
-        public Slot(Room room)
+        internal Slot(Room room, NeedProvider need_provider)
         {
             Room = room;
+            needProvider = need_provider;
+        }
+
+        public void Free()
+        {
+            needProvider.ReturnSlot(this);
         }
     }
 
-    // TODO: Store slots as List<Slot>
-    // TODO: Manage free slots
-
     [SerializeField] int slotAmount;
+
+    [SerializeField] List<Slot> availableSlots;
 
     public NeedProviderFilter Filter
         = new NeedProviderFilter(new List<Employee>(), NeedProviderFilterType.None);
     public NeedType NeedType;
 
-    List<Employee> queuedEmployees = new List<Employee>();
     Room room;
 
     private void Start()
     {
         room = GetComponent<Room>();
+
+        availableSlots = new List<Slot>();
+        for (int i = 0; i < slotAmount; i++)
+            availableSlots.Add(new Slot(room, this));
     }
 
     public Slot TryBookSlot(Employee employee)
     {
-        if (queuedEmployees.Count >= slotAmount)
+        if (availableSlots.Count == 0)
             return null;
 
         if (!Filter.IsEmployeeAllowed(employee))
             return null;
 
-        return new Slot(room);
+        var slot = availableSlots[0];
+        availableSlots.RemoveAt(0);
+        return slot;
     }
 
     public Need CreateNeed()
     {
         return new Need(NeedType);
+    }
+
+    void ReturnSlot(Slot slot)
+    {
+        availableSlots.Add(slot);
     }
 }

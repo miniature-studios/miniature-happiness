@@ -56,6 +56,7 @@ public partial class Location : MonoBehaviour
         rooms.Add(new Vector2Int(1, 0), DebugRoom3);
     }
 
+    // TODO: Try book closest provider
     public NeedProvider.Slot TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
     {
         foreach (var np in needProviders)
@@ -69,12 +70,13 @@ public partial class Location : MonoBehaviour
         return null;
     }
 
+    [SerializeField] EmployeeNeeds employeeNeeds;
     public void AddEmployee()
     {
         var new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
 
-        foreach (var np in needProviders)
-            new_employee.AddNeed(np.CreateNeed());
+        foreach (var need in employeeNeeds.needs)
+            new_employee.AddNeed(new Need(need));
 
         new_employee.gameObject.SetActive(true);
     }
