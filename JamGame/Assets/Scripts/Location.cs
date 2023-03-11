@@ -43,11 +43,6 @@ public class PathfindingProvider
                             break;
                     }
                     path.Reverse();
-
-                    Debug.Log("PATH FROM " + from + " TO " + to + ":");
-                    foreach (var ps in path)
-                        Debug.Log("    " + ps);
-
                     return path;
                 }
             }
@@ -95,14 +90,14 @@ public partial class Location : MonoBehaviour
     }
 
     // TODO: Try book closest provider
-    public NeedProvider.Slot TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
+    public NeedSlot TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
     {
         foreach (var np in needProviders)
             if (np.NeedType == need_type)
             {
-                var slot = np.TryBookSlot(employee);
-                if (slot != null)
-                    return slot;
+                var booked = np.TryBook(employee);
+                if (booked != null)
+                    return booked;
             }
 
         return null;
@@ -114,7 +109,7 @@ public partial class Location : MonoBehaviour
         var new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
 
         foreach (var need in employeeNeeds.needs)
-            new_employee.AddNeed(new Need(need));
+            new_employee.AddNeed(new NeedParameters(need));
 
         new_employee.gameObject.SetActive(true);
     }

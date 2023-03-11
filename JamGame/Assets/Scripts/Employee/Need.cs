@@ -9,34 +9,43 @@ public enum NeedType
     Work,
 }
 
-[Serializable]
 public class Need
 {
-    public NeedType NeedType;
-    public float satisfied = 0.0f;
+    public NeedParameters Parameters;
+    public float satisfied;
 
-    [SerializeField] float decrease_speed = 0.0f;
-    [SerializeField] float satisfaction_time = 5.0f;
-    [SerializeField] float satisfaction_gained = 1.0f;
-
-    public Need(NeedType ty)
+    public Need(NeedParameters parameters)
     {
-        NeedType = ty;
+        Parameters = parameters;
         satisfied = 0f;
-    }
-
-    public Need(Need prototype)
-    {
-        NeedType = prototype.NeedType;
-        satisfied = prototype.satisfied;
-        decrease_speed = prototype.decrease_speed;
-        satisfaction_time = prototype.satisfaction_time;
-        satisfaction_gained = prototype.satisfaction_gained;
     }
 
     public void Update(float delta_time)
     {
-        satisfied -= delta_time * decrease_speed;
+        satisfied -= delta_time * Parameters.decrease_speed;
+    }
+
+    public void Satisfy()
+    {
+        satisfied += Parameters.satisfaction_gained;
+    }
+}
+
+[Serializable]
+public class NeedParameters
+{
+    public NeedType NeedType;
+
+    [SerializeField] public float decrease_speed = 0.0f;
+    [SerializeField] public float satisfaction_time = 5.0f;
+    [SerializeField] public float satisfaction_gained = 1.0f;
+
+    public NeedParameters(NeedParameters prototype)
+    {
+        NeedType = prototype.NeedType;
+        decrease_speed = prototype.decrease_speed;
+        satisfaction_time = prototype.satisfaction_time;
+        satisfaction_gained = prototype.satisfaction_gained;
     }
 
     public float GetSatisfactionTime()

@@ -28,7 +28,7 @@ public class LocationBuilder : MonoBehaviour
         {
             for (int j = -5; j <= 5; j++)
             {
-                RoomCreationInfo roomCreationInfo = new(ToGlobal(new Vector2Int(i,j)), RoomType.None, Vector2Int.up);
+                RoomCreationInfo roomCreationInfo = new(ToGlobal(new Vector2Int(i, j)), RoomType.None, Vector2Int.up);
                 list.Add(roomCreationInfo);
             }
         }
@@ -80,7 +80,7 @@ public class LocationBuilder : MonoBehaviour
             var hits = Physics.RaycastAll(ray, 150f);
             Vector3 point = hits.ToList().Find(x => x.collider.GetComponent<LocationBuilder>() != null).point;
             Vector3 nearest_point = roomsSlots.Where(x => !x.IsPermanentlyBuilded).OrderBy(x => Vector3.Distance(point, x.position)).Last().position;
-            if(nearest_point != roomsSlots.Find(x => x.targetRoom.position == MovingRoom.position).position)
+            if (nearest_point != roomsSlots.Find(x => x.targetRoom.position == MovingRoom.position).position)
             {
                 RoomSlot roomSlot_from = roomsSlots.Find(x => x.bufferRoom.position == MovingRoom.position);
                 RoomSlot roomSlot_to = roomsSlots.Find(x => x.position == nearest_point);
@@ -124,9 +124,9 @@ public class LocationBuilder : MonoBehaviour
     }
     void UpdateRoomWalls(Vector2Int position)
     {
-        
+
     }
-    
+
     public void DeleteRoom(Room room)
     {
         Destroy(room.gameObject);

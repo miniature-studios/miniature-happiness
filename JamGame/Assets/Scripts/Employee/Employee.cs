@@ -23,7 +23,7 @@ public class Employee : MonoBehaviour
     EmployeeController controller;
     [SerializeField] List<Need> needs = new List<Need>();
     Need currentNeed;
-    NeedProvider.Slot occupiedSlot;
+    NeedSlot occupiedSlot;
 
     void Start()
     {
@@ -48,16 +48,16 @@ public class Employee : MonoBehaviour
                 if (satisfyingNeedRemaining < 0.0f)
                 {
                     state = State.Idle;
-                    currentNeed.satisfied += currentNeed.GetSatisfaction();
+                    currentNeed.Satisfy();
                     occupiedSlot.Free();
                 }
                 break;
         }
     }
 
-    public void AddNeed(Need need)
+    public void AddNeed(NeedParameters need)
     {
-        needs.Add(need);
+        needs.Add(new Need(need));
     }
 
     void UpdateNeedPriority()
@@ -75,7 +75,7 @@ public class Employee : MonoBehaviour
             if (need == currentNeed)
                 break;
 
-            NeedProvider.Slot booked = location.TryBookSlotInNeedProvider(this, need.NeedType);
+            NeedSlot booked = location.TryBookSlotInNeedProvider(this, need.Parameters.NeedType);
             if (booked != null)
             {
                 currentNeed = need;
@@ -86,11 +86,11 @@ public class Employee : MonoBehaviour
         }
     }
 
-    void MoveToSlot(NeedProvider.Slot slot)
+    void MoveToSlot(NeedSlot slot)
     {
         state = State.Walking;
 
-        var path_points = location.PathfindingProvider.FindPath(currentPosition, slot.Room.position);
+        var path_points = location.PathfindingProvider.FindPath(currentPosition, slot.room.position);
         var path = PathPointsToPath(path_points);
 
         movingToPosition = path[path.Count - 1].Item1.position;
@@ -124,7 +124,7 @@ public class Employee : MonoBehaviour
     {
         currentPosition = movingToPosition;
         state = State.SatisfyingNeed;
-        satisfyingNeedRemaining = currentNeed.GetSatisfactionTime();
+        satisfyingNeedRemaining = currentNeed.Parameters.GetSatisfactionTime();
     }
 
     private void OnEnable()
