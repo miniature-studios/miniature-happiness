@@ -11,6 +11,12 @@ public enum NeedProviderFilterType
 
 public class NeedProviderFilter
 {
+    public NeedProviderFilter(List<Employee> employees, NeedProviderFilterType filter_type)
+    {
+        Employees = employees;
+        FilterType = filter_type;
+    }
+
     public List<Employee> Employees = new List<Employee>();
     public NeedProviderFilterType FilterType;
 
@@ -45,10 +51,12 @@ public class NeedProvider : MonoBehaviour
     }
 
     // TODO: Store slots as List<Slot>
+    // TODO: Manage free slots
 
     [SerializeField] int slotAmount;
 
-    public NeedProviderFilter Filter;
+    public NeedProviderFilter Filter
+        = new NeedProviderFilter(new List<Employee>(), NeedProviderFilterType.None);
     public NeedType NeedType;
 
     List<Employee> queuedEmployees = new List<Employee>();
@@ -72,6 +80,6 @@ public class NeedProvider : MonoBehaviour
 
     public Need CreateNeed()
     {
-        throw new NotImplementedException();
+        return new Need(NeedType);
     }
 }

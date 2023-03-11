@@ -11,8 +11,11 @@ public class EmployeeController : MonoBehaviour
     {
         currentPath = path;
 
-        if (path.Count == 0)
+        if (path.Count < 2)
+        {
+            OnFinishedMoving?.Invoke();
             return;
+        }
 
         moving = true;
         current_internal_path = 0;
@@ -49,6 +52,8 @@ public class EmployeeController : MonoBehaviour
             current_internal_path_length = currentPath[current_internal_path].Item2.GetPathLength();
             current_internal_path_normalized_time = next_path_time_offset * speed / current_internal_path_length;
         }
+
+        current_internal_path_normalized_time += Time.deltaTime / current_internal_path_length * speed;
 
         // FIXME: Incapsulate fetching global position into RoomInternalPath
         var new_position = currentPath[current_internal_path].Item2.GetPathPoint(current_internal_path_normalized_time);

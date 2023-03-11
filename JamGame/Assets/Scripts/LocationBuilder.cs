@@ -1,10 +1,10 @@
 using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using System;
 
 [RequireComponent(typeof(Location))]
 public class LocationBuilder : MonoBehaviour
@@ -21,7 +21,7 @@ public class LocationBuilder : MonoBehaviour
     Room MovingRoom = null;
 
     List<RoomSlot> roomsSlots = new();
-    
+
     private void Awake()
     {
         locationTransform = location.GetComponent<Transform>();
@@ -66,7 +66,7 @@ public class LocationBuilder : MonoBehaviour
             var hits = Physics.RaycastAll(ray, 150f);
             MovingRoom = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
         }
-        if(MovingRoom != null)
+        if (MovingRoom != null)
         {
             MovingRoom.transform.position = GetNearestPlace();
             if (Input.GetAxis("Mouse ScrollWheel") > 0f)
@@ -133,7 +133,7 @@ public class LocationBuilder : MonoBehaviour
             dict.Add(slot.targetRoom.position, slot.targetRoom);
         }
         location.rooms = dict;
-        
+
         return false;
     }
 }

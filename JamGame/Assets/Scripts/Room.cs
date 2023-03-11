@@ -48,7 +48,9 @@ public class Room : MonoBehaviour
 
     public RoomInternalPath GetInternalPath(Direction from, Direction to)
     {
-        return internalPaths.Find(r => r.from == from && r.to == to);
+        return internalPaths.Find(r =>
+            (r.from == from && r.to == to)
+       );
     }
 
     private void OnDrawGizmos()

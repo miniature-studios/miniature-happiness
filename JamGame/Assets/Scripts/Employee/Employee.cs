@@ -1,3 +1,4 @@
+using Common;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class Employee : MonoBehaviour
     float satisfyingNeedRemaining = 0.0f;
 
     EmployeeController controller;
-    List<Need> needs = new List<Need>();
+    [SerializeField] List<Need> needs = new List<Need>();
     Need currentNeed;
 
     void Start()
@@ -49,6 +50,11 @@ public class Employee : MonoBehaviour
         }
     }
 
+    public void AddNeed(Need need)
+    {
+        needs.Add(need);
+    }
+
     void UpdateNeedPriority()
     {
         needs.Sort((x, y) => x.satisfied.CompareTo(y.satisfied));
@@ -69,6 +75,7 @@ public class Employee : MonoBehaviour
             {
                 currentNeed = need;
                 MoveToSlot(booked);
+                break;
             }
         }
     }
@@ -77,11 +84,34 @@ public class Employee : MonoBehaviour
     {
         state = State.Walking;
 
-        List<(Room, RoomInternalPath)> path = new List<(Room, RoomInternalPath)>();
-        location.PathfindingProvider.FindPath(currentPosition);
+        var path_points = location.PathfindingProvider.FindPath(currentPosition, slot.Room.position);
+        var path = PathPointsToPath(path_points);
+
         movingToPosition = path[path.Count - 1].Item1.position;
 
         controller.SetPath(path);
+    }
+
+    List<(Room, RoomInternalPath)> PathPointsToPath(List<Vector2Int> path_points)
+    {
+        List<(Room, RoomInternalPath)> path = new List<(Room, RoomInternalPath)>();
+
+        for (int i = 0; i < path_points.Count; i++)
+        {
+            Direction from_direction = Direction.Center;
+            Direction to_direction = Direction.Center;
+
+            if (i > 0)
+                from_direction = (path_points[i - 1] - path_points[i]).ToDirection();
+            if (i < path_points.Count - 1)
+                to_direction = (path_points[i + 1] - path_points[i]).ToDirection();
+
+            var room = location.rooms[path_points[i]];
+            var int_path = room.GetInternalPath(from_direction, to_direction);
+            path.Add((room, int_path));
+        }
+
+        return path;
     }
 
     void FinishedMoving()
