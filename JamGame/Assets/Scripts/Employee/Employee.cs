@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EmployeeController))]
+[RequireComponent(typeof(NeedCollectionModifier))]
 public class Employee : MonoBehaviour
 {
     enum State
@@ -25,6 +26,8 @@ public class Employee : MonoBehaviour
     Need currentNeed;
     NeedSlot occupiedSlot;
 
+    [SerializeField] NeedCollectionModifier needCollectionModifier;
+
     void Start()
     {
         controller = GetComponent<EmployeeController>();
@@ -33,9 +36,6 @@ public class Employee : MonoBehaviour
 
     void Update()
     {
-        foreach (var need in needs)
-            need.Update(Time.deltaTime);
-
         switch (state)
         {
             case State.Idle:
@@ -53,6 +53,24 @@ public class Employee : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    [SerializeField] List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
+    public void DesatisfyNeed(NeedType ty, float delta)
+    {
+        foreach (var need in needs)
+            if (need.Parameters.NeedType == ty)
+            {
+                float mul = 1.0f;
+                foreach (var mod in needDesatisfactionSpeedModifiers)
+                    if (mod.ty == ty)
+                    {
+                        mul = mod.multiplier;
+                        break;
+                    }
+
+                need.Desatisfy(delta * mul);
+            }
     }
 
     public void AddNeed(NeedParameters need)
@@ -79,6 +97,9 @@ public class Employee : MonoBehaviour
             if (booked != null)
             {
                 currentNeed = need;
+                currentNeed.Parameters = booked.GetNeedParameters(currentNeed.Parameters.NeedType);
+                currentNeed.Parameters = needCollectionModifier.Apply(new List<NeedParameters>() { currentNeed.Parameters })[0];
+
                 occupiedSlot = booked;
                 MoveToSlot(booked);
                 break;

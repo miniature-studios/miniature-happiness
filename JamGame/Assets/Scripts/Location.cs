@@ -59,12 +59,17 @@ public partial class Location : MonoBehaviour
     public PathfindingProvider PathfindingProvider;
 }
 
+[RequireComponent(typeof(NeedCollectionModifier))]
 public partial class Location : MonoBehaviour
 {
     [SerializeField] Employee employeePrototype;
 
     // TODO: Keep updated.
     List<NeedProvider> needProviders;
+    List<Employee> employees = new List<Employee>();
+
+    [SerializeField] List<NeedType> activeNeeds;
+    [SerializeField] NeedCollectionModifier needCollectionModifier;
 
     public Room DebugRoom0;
     public Room DebugRoom1;
@@ -87,6 +92,31 @@ public partial class Location : MonoBehaviour
         available_paths.Add(new Vector2Int(1, -1), new List<Direction>() { Direction.Up });
 
         PathfindingProvider = new PathfindingProvider(available_paths);
+
+        var need_parameters = new List<NeedParameters>();
+        foreach (var nt in activeNeeds)
+            need_parameters.Add(new NeedParameters(nt));
+        need_parameters = needCollectionModifier.Apply(need_parameters);
+        foreach (var np in needProviders)
+            np.ProvideNeedParameters(need_parameters);
+    }
+
+    [SerializeField] List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
+    void Update()
+    {
+        foreach (var need_ty in activeNeeds)
+        {
+            float mul = 1.0f;
+            foreach (var mod in needDesatisfactionSpeedModifiers)
+                if (mod.ty == need_ty)
+                {
+                    mul = mod.multiplier;
+                    break;
+                }
+
+            foreach (var emp in employees)
+                emp.DesatisfyNeed(need_ty, Time.deltaTime * mul);
+        }
     }
 
     // TODO: Try book closest provider
@@ -108,9 +138,10 @@ public partial class Location : MonoBehaviour
     {
         var new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
 
-        foreach (var need in employeeNeeds.needs)
+        foreach (var need in activeNeeds)
             new_employee.AddNeed(new NeedParameters(need));
 
         new_employee.gameObject.SetActive(true);
+        employees.Add(new_employee);
     }
 }

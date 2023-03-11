@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Room))]
+[RequireComponent(typeof(NeedCollectionModifier))]
 public class NeedProvider : MonoBehaviour
 {
     public enum FilterType
@@ -51,6 +52,8 @@ public class NeedProvider : MonoBehaviour
         }
     }
 
+    [SerializeField] NeedCollectionModifier needCollectionModifier;
+
     [SerializeField] List<NeedSlot> availableSlots;
     public NeedType NeedType;
 
@@ -61,5 +64,12 @@ public class NeedProvider : MonoBehaviour
                 return slot;
 
         return null;
+    }
+
+    public void ProvideNeedParameters(List<NeedParameters> parameters)
+    {
+        var need_parameters = needCollectionModifier.Apply(parameters);
+        foreach (var slot in availableSlots)
+            slot.ProvideNeedParameters(need_parameters);
     }
 }
