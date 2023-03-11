@@ -2,9 +2,9 @@
 {
     public enum WallType
     {
-        Wall,
-        Window,
-        Door,
-        None
+        Wall = 1,
+        Window = 2,
+        Door = 3,
+        None = 4
     }
 }
