@@ -13,7 +13,6 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     LocationBuilder locationBuilder;
     Image prefab_image;
 
-    [SerializeField]
     public RoomType roomType;
 
     RectTransform rectTransform;
@@ -38,27 +37,20 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if (scrollViewOverDetector.IsPointerOverUIObject())
             {
                 IsMouseOverScrollView = true;
-                // Show All Elements
                 prefab_image.enabled = true;
             }
             else
             {
                 IsMouseOverScrollView = false;
-                // Hide All Elements
                 prefab_image.enabled = false;
             }
         }
     }
-    public void LoadImage()
-    {
-        // Set image from prefab
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         IsClicked = true;
         transform.SetParent(canvasRectTransform, true);
-        locationBuilder.RenderSelectedRoom(roomType);
+        locationBuilder.InstantiateRoom(new RoomCreationInfo() { }); //
     }
 
     public void OnPointerUp(PointerEventData eventData)

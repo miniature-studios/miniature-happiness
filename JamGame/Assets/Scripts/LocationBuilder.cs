@@ -1,58 +1,52 @@
 using Common;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
+using System;
 
 [RequireComponent(typeof(Location))]
 public class LocationBuilder : MonoBehaviour
 {
-    [SerializeField]
-    GameObject scrollView;
-    [SerializeField]
-    RectTransform scrollViewContentRectTransform;
-    [SerializeField]
-    GameObject roomUiPrefab;
-    [SerializeField]
-    GameObject backgroundCell;
-    [SerializeField]
-    GameObject test_room;
-    [SerializeField]
-    Location location;
+    [SerializeField] GameObject scrollView;
+    [SerializeField] RectTransform scrollViewContentRectTransform;
+    [SerializeField] GameObject roomUiPrefab;
+    [SerializeField] Location location;
     [SerializeField] WallPlacementRules wallPlacementRules;
     Transform locationTransform;
 
-    List<LocationCell> locationCells = new();
+    [SerializeField] GameObject test_room;
+
+    Room MovingRoom = null;
+
+    List<RoomSlot> roomsSlots = new();
     
     private void Awake()
     {
         locationTransform = location.GetComponent<Transform>();
-        List<Vector2Int> buffer = new();
+        List<RoomCreationInfo> list = new();
         for (int i = -5; i <= 5; i++)
         {
             for (int j = -5; j <= 5; j++)
             {
-                buffer.Add(new Vector2Int(i, j));
+                RoomCreationInfo roomCreationInfo = new()
+                {
+                    Position = new Vector3(i, 0, j) * 5,
+                    Diraction = Vector2Int.up,
+                    RoomType = RoomType.None
+                };
+                list.Add(roomCreationInfo);
             }
         }
-        SetupLevel(buffer, new Dictionary<Vector2Int, RoomType>());
-        MoveToBuilderMode(new List<RoomType>() { RoomType.Outside, RoomType.Outside });
+        SetupLevel(list);
+        MoveToBuilderMode(new List<RoomType>() { RoomType.Empty, RoomType.Empty });
     }
-    public void SetupLevel(List<Vector2Int> FreePlaces, Dictionary<Vector2Int, RoomType> NecessarilyPlaces)
+    public void SetupLevel(List<RoomCreationInfo> rooms)
     {
-        foreach (var freePlace in FreePlaces)
+        foreach (var room in rooms)
         {
-            locationCells.Add(Instantiate(backgroundCell, new Vector3(freePlace.x, 0, freePlace.y) * 5, new Quaternion(), locationTransform).GetComponent<LocationCell>());
-            if (NecessarilyPlaces.ContainsKey(freePlace))
-            {
-                //locationCells.Last().BuildPermanentRoom(NecessarilyPlaces[freePlace]);
-            }
+            roomsSlots.AddRange(InstantiateRoom(room));
         }
     }
     public Vector3 GetNearestPlace()
@@ -61,90 +55,97 @@ public class LocationBuilder : MonoBehaviour
         var hits = Physics.RaycastAll(ray, 150f);
 
         Vector3 point = hits.ToList().Find(x => x.collider.GetComponent<LocationBuilder>() != null).point;
-        return locationCells.Select(x => x.GetComponent<Transform>().position).OrderBy(x => Vector3.Distance(x, point)).First();
-    }
-    Room ShowedRoom = null;
-    public void RenderSelectedRoom(RoomType roomType)
-    {
-        // TODO: Load Correct Prefab
-        ShowedRoom = Instantiate(test_room, GetNearestPlace(), new Quaternion(), locationTransform).GetComponent<Room>();
-        // TODO: Call Location's PlaceRoom
+        //return locationCells.Where(x => !x.IsPermanentBusy).Select(x => x.GetComponent<Transform>().position).OrderBy(x => Vector3.Distance(x, point)).First();
+        throw new NotImplementedException();
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && ShowedRoom == null)
+        if (Input.GetMouseButtonDown(0) && MovingRoom == null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hits = Physics.RaycastAll(ray, 150f);
-
-            if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()) != null)
-            {
-                // TODO: Load Correct Prefab
-                ShowedRoom = Instantiate(test_room, GetNearestPlace(), new Quaternion(), locationTransform).GetComponent<Room>();
-            }
+            MovingRoom = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
         }
-        if(ShowedRoom != null)
+        if(MovingRoom != null)
         {
-            ShowedRoom.transform.position = GetNearestPlace();
-            if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+            MovingRoom.transform.position = GetNearestPlace();
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
             {
-
+                RotateSelectedRoom(Vector2Int.right);
             }
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
             {
-
+                RotateSelectedRoom(Vector2Int.left);
             }
             if (Input.GetMouseButtonUp(0))
             {
-                ShowedRoom = null;
+                if (!CheckSelectedRoomForRightPlace())
+                    DeleteSelectedRoom();
             }
         }
     }
+    bool CheckSelectedRoomForRightPlace()
+    {
+        return false;
+    }
+    void RotateSelectedRoom(Vector2Int diraction)
+    {
+
+    }
+    void UpdateRoomWalls(Vector2Int position)
+    {
+
+    }
+    public List<RoomSlot> InstantiateRoom(RoomCreationInfo roomInfo)
+    {
+        // TODO: Load Correct Prefab
+        MovingRoom = Instantiate(test_room, GetNearestPlace(), new Quaternion(), locationTransform).GetComponent<Room>();
+        // TODO: Call Location's PlaceRoom
+        return null;
+    }
     public void DeleteSelectedRoom()
     {
-        Destroy(ShowedRoom.gameObject);
+        Destroy(MovingRoom.gameObject);
         // TODO: Call Location's TakeRoom.
     }
     public void BuildChoosedRoom()
     {
-        LocationCell currentCell = locationCells.Find(x => x.GetComponent<Transform>().position == ShowedRoom.GetComponent<Transform>().position);
-        if (!currentCell.IsBusy && !currentCell.IsPermanentBusy)
-        {
-            currentCell.Bind(ShowedRoom);
-        }
+        //LocationCell currentCell = locationCells.Find(x => x.GetComponent<Transform>().position == ShowedRoom.GetComponent<Transform>().position);
+        //if (!currentCell.IsBusy && !currentCell.IsPermanentBusy)
+        //{
+        //    currentCell.Bind(ShowedRoom);
+        //}
     }
-    public void MoveToBuilderMode(List<RoomType> roomPrefabsNames)
+    public void MoveToBuilderMode(List<RoomType> roomTypes)
     {
         scrollView.SetActive(true);
-        foreach (var roomPrefabsName in roomPrefabsNames)
+        foreach (var roomType in roomTypes)
         {
-            var buffer = Instantiate(roomUiPrefab, scrollViewContentRectTransform);
-            RoomUI roomui = buffer.GetComponent<RoomUI>();
-            roomui.roomType = roomPrefabsName;
-            roomui.LoadImage();
+            Instantiate(roomUiPrefab, scrollViewContentRectTransform);
         }
     }
-    public void MoveToGameMode()
+    public bool ValidateLocation()
     {
         scrollView.SetActive(false);
+        var dict = new Dictionary<Vector2Int, Room>();
+        foreach (var slot in roomsSlots)
+        {
+            dict.Add(slot.targetRoom.position, slot.targetRoom);
+        }
+        location.rooms = dict;
+        
+        return false;
     }
-    
-    public void PlaceRoom(Room room, Vector2Int position)
-    {
-        rooms.Add(position, room);
-        UpdateRoomWalls(position);
-    }
-
-    public Room TakeRoom(Vector2Int position)
-    {
-        var room = rooms[position];
-        rooms.Remove(position);
-        UpdateRoomWalls(position);
-        return room;
-    }
-
-    void UpdateRoomWalls(Vector2Int position)
-    {
-        // Send UpdateWalls requests based on wallPlacementRules to adjacent rooms
-    }
+}
+public class RoomSlot
+{
+    public Room targetRoom;
+    public bool IsBuilded = false;
+    public bool IsPermanentlyBuilded = false;
+}
+public class RoomCreationInfo
+{
+    public Vector3 Position;
+    public RoomType RoomType;
+    public Vector2Int Diraction;
 }
