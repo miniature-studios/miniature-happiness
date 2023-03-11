@@ -11,10 +11,12 @@ public class RoomInternalPath
     public Direction to;
 
     public Vector3[] linePoints = new Vector3[4];
+
     public Vector3 GetPathPoint(float normalizedTime)
     {
         return Bezier.GetPoint(linePoints[0], linePoints[1], linePoints[2], linePoints[3], normalizedTime);
     }
+
     public float GetPathLength()
     {
         float sum = 0;
@@ -40,10 +42,15 @@ public class Room : MonoBehaviour
     [SerializeField] Dictionary<RoomType, Vector2Int> necessarilyNeighbours;
     [SerializeField] public Vector2Int currentDiraction = Vector2Int.up;
     [SerializeField] List<RoomInternalPath> internalPaths;
+
+    // TODO: Fill in edit mode
+    public Vector2Int position;
+
     public RoomInternalPath GetInternalPath(Direction from, Direction to)
     {
         return internalPaths.Find(r => r.from == from && r.to == to);
     }
+
     private void OnDrawGizmos()
     {
         foreach (var internalPath in internalPaths)
@@ -63,6 +70,7 @@ public class Room : MonoBehaviour
             }
         }
     }
+
     private void OnDrawGizmosSelected()
     {
         foreach (var internalPath in internalPaths)

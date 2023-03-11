@@ -31,24 +31,43 @@ public class NeedProviderFilter
     }
 }
 
+[RequireComponent(typeof(Room))]
 public class NeedProvider : MonoBehaviour
 {
+    public class Slot
+    {
+        public Room Room;
+
+        public Slot(Room room)
+        {
+            Room = room;
+        }
+    }
+
+    // TODO: Store slots as List<Slot>
+
     [SerializeField] int slotAmount;
 
     public NeedProviderFilter Filter;
     public NeedType NeedType;
 
     List<Employee> queuedEmployees = new List<Employee>();
+    Room room;
 
-    public bool TryBook(Employee employee)
+    private void Start()
+    {
+        room = GetComponent<Room>();
+    }
+
+    public Slot TryBookSlot(Employee employee)
     {
         if (queuedEmployees.Count >= slotAmount)
-            return false;
+            return null;
 
         if (!Filter.IsEmployeeAllowed(employee))
-            return false;
+            return null;
 
-        return true;
+        return new Slot(room);
     }
 
     public Need CreateNeed()

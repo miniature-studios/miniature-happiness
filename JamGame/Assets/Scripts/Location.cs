@@ -1,11 +1,12 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathfindingProvider 
+public class PathfindingProvider
 {
-    // FindPath -> Point[]
-
+    public List<Vector2Int> FindPath(Vector2Int from)
+    {
+        return new List<Vector2Int>();
+    }
 }
 
 public partial class Location : MonoBehaviour
@@ -16,6 +17,8 @@ public partial class Location : MonoBehaviour
 
 public partial class Location : MonoBehaviour
 {
+    [SerializeField] Employee employeePrototype;
+
     // TODO: Keep updated.
     List<NeedProvider> needProviders;
 
@@ -24,12 +27,21 @@ public partial class Location : MonoBehaviour
         needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
     }
 
-    public bool TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
+    public NeedProvider.Slot TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
     {
         foreach (var np in needProviders)
-            if (np.NeedType == need_type && np.TryBook(employee))
-                return true;
+            if (np.NeedType == need_type)
+            {
+                var slot = np.TryBookSlot(employee);
+                if (slot != null)
+                    return slot;
+            }
 
-        return false;
+        return null;
+    }
+
+    public void AddEmployee()
+    {
+
     }
 }
