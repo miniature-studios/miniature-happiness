@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class LocationBuilder : MonoBehaviour
 {
@@ -29,6 +28,13 @@ public class LocationBuilder : MonoBehaviour
                 RoomCreationInfo roomCreationInfo = new(new Vector2Int(i, j), RoomType.None, Vector2Int.up);
                 list.Add(roomCreationInfo);
             }
+        }
+        for (int i = -3; i <= 3; i++)
+        {
+            list.Add(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
         }
         List<RoomType> rooms_ui = new List<RoomType>() { RoomType.Corridor };
         rooms_ui.Add(RoomType.Empty);
@@ -169,6 +175,8 @@ public class LocationBuilder : MonoBehaviour
     }
     public void UpdateWalls(Room target_room)
     {
+        if (target_room.roomType == RoomType.Outside)
+            return;
         for (int i = 0; i < 4; i++)
         {
             Vector2Int room_diraction = target_room.currentDiraction;
@@ -177,18 +185,12 @@ public class LocationBuilder : MonoBehaviour
 
             buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction) * 4.1f);
 
-            if (buffer_room != null)
-            {
-                buffer_diraction = buffer_room.currentDiraction;
-                while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
-                    buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
+            buffer_diraction = buffer_room.currentDiraction;
+            while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
+                buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
 
-                UpdateTwoWalls(target_room, room_diraction, buffer_room, buffer_diraction);
-            }
-            else
-            {
-                UpdateWall(target_room, room_diraction);
-            }
+            UpdateTwoWalls(target_room, room_diraction, buffer_room, buffer_diraction);
+
             target_room.currentDiraction = new Vector2Int(target_room.currentDiraction.y, -target_room.currentDiraction.x);
         }
     }
@@ -215,11 +217,6 @@ public class LocationBuilder : MonoBehaviour
         }
         ww1.SetWall(awaibleWallTypes[0]);
         ww2.SetWall(awaibleWallTypes[0]);
-    }
-    public void UpdateWall(Room room1, Vector2Int dir1)
-    {
-        var ww1 = room1.GetWallVisualizer(dir1);
-        ww1.SetWall(WallType.Window);
     }
     Vector3 ToGlobal(Vector2Int input)
     {
