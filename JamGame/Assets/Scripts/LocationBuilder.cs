@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using static UnityEditor.Progress;
 
 public class LocationBuilder : MonoBehaviour
 {
@@ -31,9 +33,18 @@ public class LocationBuilder : MonoBehaviour
         }
         for (int i = -3; i <= 3; i++)
         {
-            if(!list.Contains(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up));
+        }
+        for (int i = -3; i <= 3; i++) 
+        { 
             if (!list.Contains(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up));
+        }
+        for (int i = -2; i <= 2; i++) 
+        { 
             if (!list.Contains(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up));
+        }
+        for (int i = -2; i <= 2; i++) 
+        { 
             if (!list.Contains(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
         }
         //list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
@@ -56,6 +67,7 @@ public class LocationBuilder : MonoBehaviour
             Room room_link = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == room_cr_info.RoomType).obj, ToGlobal(room_cr_info.Position), new Quaternion(), transform).GetComponent<Room>();
             RotateTransform(room_link.transform, room_cr_info.Diraction);
             allRooms.Add(room_link);
+            CallAllInits(room_link);
             if (wallPlacementRules.offeredNeighbours.Select(x => x.parent_room).Contains(room_link.roomType))
             {
                 List<OfferedNeighbours> offeredNeighbours = wallPlacementRules.offeredNeighbours.Where(x => x.parent_room == room_link.roomType).ToList();
@@ -64,6 +76,7 @@ public class LocationBuilder : MonoBehaviour
                 {
                     var spawn_position = room_link.transform.position + RotateByVector(ToGlobal(neighbor.position), main_diraction);
                     Room room_link_1 = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == neighbor.cild_room).obj, spawn_position, new Quaternion(), transform).GetComponent<Room>();
+                    CallAllInits(room_link_1);
                     RotateTransform(room_link_1.transform, neighbor.diraction);
                     allRooms.Add(room_link_1);
                 }
@@ -155,11 +168,19 @@ public class LocationBuilder : MonoBehaviour
             }
             Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform); 
             var new_none = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == RoomType.None).obj, select.transform.position, new Quaternion(), transform).GetComponent<Room>();
+            CallAllInits(new_none);
             allRooms.Add(new_none);
             Destroy(select.gameObject);
             allRooms.Remove(select);
             UpdateWalls(new_none);
         }
+    }
+    public void CallAllInits(Room room)
+    {
+        room.GetWallVisualizer(Vector2Int.up).Init();
+        room.GetWallVisualizer(Vector2Int.right).Init();
+        room.GetWallVisualizer(Vector2Int.left).Init();
+        room.GetWallVisualizer(Vector2Int.down).Init();
     }
     public void MoveSelectedRoom(Vector2Int diraction)
     {
@@ -184,9 +205,11 @@ public class LocationBuilder : MonoBehaviour
     }
     public void RotateSelectedRoom()
     {
+        /*
         SelectedRoom.transform.Rotate(0,90,0);
-        SelectedRoom.currentDiraction = new Vector2Int(SelectedRoom.currentDiraction.y, -SelectedRoom.currentDiraction.x);
+        SelectedRoom.currentDiraction = RotateRight(SelectedRoom.currentDiraction);
         UpdateWalls(SelectedRoom);
+        */
     }
     public void AddRoomToScene(RoomType roomType)
     {
@@ -195,6 +218,7 @@ public class LocationBuilder : MonoBehaviour
         Destroy(link.gameObject);
         allRooms.Remove(link);
         allRooms.Add(Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == roomType).obj, position, new Quaternion(), transform).GetComponent<Room>());
+        CallAllInits(allRooms.Last());
         UpdateWalls(allRooms.Last());
     }
     public void MoveToBuilderMode(List<RoomType> roomTypes)
@@ -212,62 +236,40 @@ public class LocationBuilder : MonoBehaviour
         foreach (var room in allRooms)
         {
             room.position = ToLocal(room.transform.position / 4.1f);
-            if(!dict.ContainsKey(room.position))
-                dict.Add(room.position, room);
+            dict.Add(room.position, room);
         }
         location.rooms = dict;
+
         var availableDiractions = new Dictionary<Vector2Int, List<Direction>>();
         foreach (var target_room in allRooms)
         {
             List<Direction> directions = new List<Direction>();
 
             int delay = GetDelay(target_room.currentDiraction);
+
             Vector2Int see_diration = Vector2Int.up;
             for (int i = 0; i < 4; i++)
             {
-                Vector2Int buffer_diraction;
-                Room buffer_room;
-                buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(see_diration));
-
-                if (buffer_room == null)
-                    continue;
-
-                buffer_diraction = buffer_room.currentDiraction;
-                while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
-                    buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
-
-                int delay_2 = GetDelay(buffer_room.currentDiraction);
-                for (int j = 0; j < delay_2; j++)
-                {
-                    buffer_diraction = new Vector2Int(-buffer_diraction.y, buffer_diraction.x);
-                }
-
                 var room_inner_diration = see_diration;
-                for (int j = 0; j < delay; j++)
-                {
-                    room_inner_diration = new Vector2Int(-room_inner_diration.y, room_inner_diration.x);
-                }
 
-                bool passable = IsPassable(target_room, room_inner_diration, buffer_room, buffer_diraction);
+                for (int j = 0; j < delay; j++)
+                    room_inner_diration = RotateRight(room_inner_diration);
+
+                bool passable = IsPassable(target_room, room_inner_diration);
 
                 if (passable)
-                    directions.Add(room_inner_diration.ToDirection());
+                    directions.Add(see_diration.ToDirection());
 
-                see_diration = new Vector2Int(see_diration.y, -see_diration.x);
+                see_diration = RotateRight(see_diration);
             }
-            if (!availableDiractions.ContainsKey(target_room.position))
-                availableDiractions.Add(target_room.position, directions);
+            availableDiractions.Add(target_room.position, directions);
         }
         location.PathfindingProvider = new PathfindingProvider(availableDiractions);
+        paths = availableDiractions;
     }
-    public bool IsPassable(Room room1, Vector2Int dir1, Room room2, Vector2Int dir2)
+    public bool IsPassable(Room room1, Vector2Int dir1)
     {
-        var ww1 = room1.GetWallVisualizer(dir1);
-        var ww2 = room2.GetWallVisualizer(dir2);
-
-        if (ww1.GetActiveWall().IsPassable() && ww2.GetActiveWall().IsPassable())
-            return true;
-        return false;
+        return room1.GetWallVisualizer(dir1).GetActiveWall().IsPassable();
     }
     public void UpdateWalls(Room target_room)
     {
@@ -275,33 +277,33 @@ public class LocationBuilder : MonoBehaviour
         Vector2Int see_diration = Vector2Int.up;
         for (int i = 0; i < 4; i++)
         {
-            Vector2Int buffer_diraction;
-            Room buffer_room;
-            buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(see_diration));
-
-            if (buffer_room == null)
-                continue;
-
-            buffer_diraction = buffer_room.currentDiraction;
-            while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
-                buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
-
-            int delay_2 = GetDelay(buffer_room.currentDiraction);
-            for (int j = 0; j < delay_2; j++)
+            Room buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(see_diration));
+            if (buffer_room != null)
             {
-                buffer_diraction = new Vector2Int(-buffer_diraction.y, buffer_diraction.x);
+                Vector2Int buffer_diraction = buffer_room.currentDiraction;
+                while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
+                    buffer_diraction = RotateRight(buffer_diraction);
+
+                int delay_2 = GetDelay(buffer_room.currentDiraction);
+                for (int j = 0; j < delay_2; j++)
+                    buffer_diraction = RotateLeft(buffer_diraction);
+
+                var room_inner_diration = see_diration;
+                for (int j = 0; j < delay; j++)
+                    room_inner_diration = RotateLeft(room_inner_diration);
+
+                UpdateTwoWalls(target_room, room_inner_diration, buffer_room, buffer_diraction);
             }
-
-            var room_inner_diration = see_diration;
-            for (int j = 0; j < delay; j++)
-            {
-                room_inner_diration = new Vector2Int(-room_inner_diration.y, room_inner_diration.x);
-            }
-
-            UpdateTwoWalls(target_room, room_inner_diration, buffer_room, buffer_diraction);
-
-            see_diration = new Vector2Int(see_diration.y, -see_diration.x);
+            see_diration = RotateRight(see_diration);
         }
+    }
+    public Vector2Int RotateLeft(Vector2Int vector)
+    {
+        return new Vector2Int(-vector.y, vector.x);
+    }
+    public Vector2Int RotateRight(Vector2Int vector)
+    {
+        return new Vector2Int(vector.y, -vector.x);
     }
     public int GetDelay(Vector2Int vector)
     {
@@ -309,7 +311,7 @@ public class LocationBuilder : MonoBehaviour
         int delay = 0;
         while (v2 != v1)
         {
-            v2 = new Vector2Int(-v2.y, v2.x);
+            v2 = RotateLeft(v2);
             delay++;
         }
         return delay;
@@ -370,7 +372,44 @@ public class LocationBuilder : MonoBehaviour
     }
     void RotateTransform(Transform tr, Vector2Int diraction)
     {
-        tr.Rotate(0, 90 * GetDelay(diraction), 0);
+        tr.Rotate(0, -90 * GetDelay(diraction), 0);
+    }
+
+    public bool IsEnoughPlace()
+    {
+        if (allRooms.Find(x => x.roomType == RoomType.None) != null)
+            return true;
+        return false;
+    }
+
+    Dictionary<Vector2Int, List<Direction>>  paths = new Dictionary<Vector2Int, List<Direction>>();
+    private void OnDrawGizmos()
+    {
+        foreach (var item in paths)
+        {
+            var position = ToGlobal(item.Key);
+            position.y += 2;
+            Gizmos.DrawSphere(position, 0.2f);
+            foreach (var item1 in item.Value)
+            {
+                var end_position = position + ToGlobal(item1.ToVector2Int())/2;
+                Gizmos.DrawSphere(end_position, 0.1f);
+                Gizmos.DrawLine(position, end_position);
+            }
+        }
+        if (true)
+        {
+            foreach (var room in allRooms)
+            {
+                var pos = room.transform.position + ToGlobal(room.currentDiraction) / 6;
+                pos.y += 1;
+                Gizmos.DrawCube(pos, new Vector3(0.1f, 0.1f, 0.1f));
+                pos += ToGlobal(room.currentDiraction) / 6;
+                Gizmos.DrawCube(pos, new Vector3(0.1f, 0.1f, 0.1f));
+                pos += ToGlobal(room.currentDiraction) / 6;
+                Gizmos.DrawCube(pos, new Vector3(0.1f, 0.1f, 0.1f));
+            }
+        }
     }
 }
 public class RoomCreationInfo

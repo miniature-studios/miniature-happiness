@@ -13,7 +13,13 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        locationBuilder.AddRoomToScene(roomType);
-        if (roomType != RoomType.Corridor) { Destroy(gameObject); }
+        if (locationBuilder.IsEnoughPlace()) {
+            locationBuilder.AddRoomToScene(roomType);
+            if (roomType != RoomType.Corridor) { Destroy(gameObject); }
+        }
+        else
+        {
+            Debug.LogWarning("Not enough place");
+        }
     }
 }

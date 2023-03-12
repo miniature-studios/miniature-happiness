@@ -1,6 +1,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -39,6 +40,11 @@ public class WallCollection : MonoBehaviour
         throw new Exception();
     }
 
+    public void Init()
+    {
+        if (activeWall == null) activeWall = wallsDict[wallsDict.Keys.First()];
+    }
+
     public void SetWall(WallType type)
     {
         if (!wallsDict.ContainsKey(type))
@@ -49,10 +55,9 @@ public class WallCollection : MonoBehaviour
         foreach (var wall in wallsDict)
             wall.Value.SetActive(false);
 
-        //if (activeWall != null)
-        //    activeWall.SetActive(true);
-
         activeWall = wallsDict[type].gameObject;
+        if (activeWall == null)
+            Debug.LogError("SHIT");
         activeWall.SetActive(true);
     }
 }
