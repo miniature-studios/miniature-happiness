@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 7035358954825845509}
   - component: {fileID: 2036379750907670686}
   - component: {fileID: 6216456699137961980}
+  - component: {fileID: 6043657706522991283}
   m_Layer: 0
   m_Name: RoomOutside
   m_TagString: Untagged
@@ -84,7 +85,6 @@ MonoBehaviour:
   left: {fileID: 1880398553724609233}
   roomType: 2
   currentDiraction: {x: 0, y: 1}
-  internalPaths: []
   position: {x: 0, y: 0}
 --- !u!33 &2036379750907670686
 MeshFilter:
@@ -136,6 +136,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6043657706522991283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848387487497780485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4590a689fb0acc4e8ea4100940c9812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paths: []
 --- !u!1 &1848387487690519918
 GameObject:
   m_ObjectHideFlags: 0

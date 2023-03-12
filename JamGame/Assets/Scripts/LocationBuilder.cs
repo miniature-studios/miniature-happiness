@@ -123,8 +123,8 @@ public class LocationBuilder : MonoBehaviour
         {
             var select = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
             if (select.roomType != RoomType.Corridor)
-            { 
-                Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform); 
+            {
+                Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform);
             }
             allRooms.Add(Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == RoomType.None).obj, select.transform.position, new Quaternion(), transform).GetComponent<Room>());
             Destroy(select.gameObject);
@@ -144,7 +144,7 @@ public class LocationBuilder : MonoBehaviour
             pointer.transform.position += ToGlobal(diraction);
             foreach (var item in allRooms)
             {
-               UpdateWalls(item);
+                UpdateWalls(item);
             }
         }
     }
@@ -226,7 +226,7 @@ public class LocationBuilder : MonoBehaviour
             Vector2Int room_diraction = target_room.currentDiraction;
             Vector2Int buffer_diraction;
             Room buffer_room;
-            
+
             buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction));
 
             if (buffer_room == null)
@@ -248,7 +248,7 @@ public class LocationBuilder : MonoBehaviour
         List<WallType> awaibleWallTypes = new();
         foreach (var item in ww1.GetAvailableWalls())
         {
-            if(ww2.GetAvailableWalls().Contains(item))
+            if (ww2.GetAvailableWalls().Contains(item))
                 awaibleWallTypes.Add(item);
         }
         WallType choose = WallType.None;
@@ -256,7 +256,7 @@ public class LocationBuilder : MonoBehaviour
         {
             Debug.LogError($"No Pair of ({room1.roomType}) and ({room2.roomType})");
         }
-        if(awaibleWallTypes.Count > 1)
+        if (awaibleWallTypes.Count > 1)
         {
             var wallPlacmentRule = wallPlacementRules.neighborsLimitation.Find(x => (x.room_a == room1.roomType && x.room_b == room2.roomType) || (x.room_a == room2.roomType && x.room_b == room1.roomType));
             if (wallPlacmentRule != null)

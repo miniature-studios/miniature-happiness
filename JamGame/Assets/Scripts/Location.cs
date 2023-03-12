@@ -71,27 +71,14 @@ public partial class Location : MonoBehaviour
     [SerializeField] List<NeedType> activeNeeds;
     [SerializeField] NeedCollectionModifier needCollectionModifier;
 
-    public Room DebugRoom0;
-    public Room DebugRoom1;
-    public Room DebugRoom2;
-    public Room DebugRoom3;
-
     void Start()
     {
+
+    }
+
+    public void InitGameMode()
+    {
         needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
-
-        rooms.Add(new Vector2Int(0, 0), DebugRoom0);
-        rooms.Add(new Vector2Int(0, -1), DebugRoom1);
-        rooms.Add(new Vector2Int(1, -1), DebugRoom2);
-        rooms.Add(new Vector2Int(1, 0), DebugRoom3);
-
-        var available_paths = new Dictionary<Vector2Int, List<Direction>>();
-        available_paths.Add(new Vector2Int(0, 0), new List<Direction>() { Direction.Right, Direction.Down });
-        available_paths.Add(new Vector2Int(1, 0), new List<Direction>() { Direction.Left, Direction.Down });
-        available_paths.Add(new Vector2Int(0, -1), new List<Direction>() { Direction.Up });
-        available_paths.Add(new Vector2Int(1, -1), new List<Direction>() { Direction.Up });
-
-        PathfindingProvider = new PathfindingProvider(available_paths);
 
         var need_parameters = new List<NeedParameters>();
         foreach (var nt in activeNeeds)

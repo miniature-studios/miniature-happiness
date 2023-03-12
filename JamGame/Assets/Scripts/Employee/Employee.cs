@@ -36,6 +36,8 @@ public class Employee : MonoBehaviour
 
     void Update()
     {
+        Debug.Log($"Employee state: {state}");
+
         switch (state)
         {
             case State.Idle:
