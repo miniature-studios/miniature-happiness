@@ -28,6 +28,11 @@ public class Employee : MonoBehaviour
 
     [SerializeField] NeedCollectionModifier needCollectionModifier;
 
+    float stress;
+    [SerializeField] float stressStartThreshold;
+    [SerializeField] float stressIncreaseSpeed;
+    [SerializeField] float stressLimit;
+
     void Start()
     {
         controller = GetComponent<EmployeeController>();
@@ -53,6 +58,28 @@ public class Employee : MonoBehaviour
                 }
                 break;
         }
+
+        UpdateStress();
+    }
+
+    void UpdateStress()
+    {
+        int unsatisfied_count = 0;
+        foreach (var need in needs)
+            if (need.satisfied < stressStartThreshold)
+                unsatisfied_count++;
+
+        if (unsatisfied_count * 2 > needs.Count)
+            stress += stressIncreaseSpeed * Time.deltaTime;
+
+        if (stress > stressLimit)
+            LeaveJob();
+    }
+
+    bool whantsToLeave = true;
+    void LeaveJob()
+    {
+        whantsToLeave = true;
     }
 
     [SerializeField] List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
