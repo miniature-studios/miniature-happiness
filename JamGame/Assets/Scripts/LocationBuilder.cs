@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class LocationBuilder : MonoBehaviour
 {
@@ -11,71 +10,45 @@ public class LocationBuilder : MonoBehaviour
     [SerializeField] RectTransform scrollViewContentRectTransform;
     [SerializeField] Location location;
     [SerializeField] WallPlacementRules wallPlacementRules;
+    [SerializeField] RoomObjectsHandler roomObjectsHandler;
 
     Room SelectedRoom = null;
+    public bool selected = false;
+
     List<Room> allRooms = new List<Room>();
     private void Awake()
     {
         List<RoomCreationInfo> list = new();
-        for (int i = -5; i <= 5; i++)
+        for (int i = -2; i <= 2; i++)
         {
-            for (int j = -5; j <= 5; j++)
+            for (int j = -2; j <= 2; j++)
             {
                 RoomCreationInfo roomCreationInfo = new(new Vector2Int(i, j), RoomType.None, Vector2Int.up);
                 list.Add(roomCreationInfo);
             }
         }
+        List<RoomType> rooms_ui = new List<RoomType>() { RoomType.Corridor };
         SetupLevel(list);
-        MoveToBuilderMode(new List<RoomType>() { RoomType.Corridor, RoomType.Corridor });
+        MoveToBuilderMode(rooms_ui);
     }
     public void SetupLevel(List<RoomCreationInfo> rooms)
     {
         foreach (var room_cr_info in rooms)
         {
-            GameObject need_room = Resources.Load("room_cr_info.RoomType") as GameObject; // Add loading
-            Room room_link = Instantiate(need_room, ToGlobal(room_cr_info.Position), GetQ(room_cr_info.Diraction), transform).GetComponent<Room>();
+            Room room_link = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == room_cr_info.RoomType).obj, ToGlobal(room_cr_info.Position), GetQ(room_cr_info.Diraction), transform).GetComponent<Room>();
             room_link.position = room_cr_info.Position;
             allRooms.Add(room_link);
         }
-        /*
-        foreach (var room_cr_info in rooms.Where(x => !roomsSlots.Select(y => y.position).Contains(x.Position)))
-        {
-            // Load Right prefab
-            Room room_link = Instantiate(test_room, room_cr_info.Position, GetQ(room_cr_info.Diraction), transform).GetComponent<Room>();
-            roomsSlots.Add(new RoomSlot(null, room_link, ToGlobal(room_link.position), room_link.roomType == RoomType.None ? false : true));
-            var onr_l = wallPlacementRules.offeredNeighbours.Where(x => room_link.roomType == x.room_from).ToList();
-            foreach (var item in onr_l)
-            {
-                Room room_link1 = Instantiate(test_room, ToGlobal(room_link.position + GetRotateValue(room_link.currentDiraction, item.position)), GetQ(item.diraction), transform).GetComponent<Room>();
-                roomsSlots.Add(new RoomSlot(null, room_link1, ToGlobal(room_link1.position), room_link1.roomType == RoomType.None ? false : true));
-            }
-        }*/
     }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hits = Physics.RaycastAll(ray, 150f);
-            if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()) != null)
-            {
-                SelectedRoom = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
-            }
-            else
-            {
-                SelectedRoom = null;
-            }
+            SelectRoom_ByClick();
         }
         if (Input.GetMouseButtonDown(1))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hits = Physics.RaycastAll(ray, 150f);
-            if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()) != null)
-            {
-                var select = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
-                Instantiate(Resources.Load("select.roomType/UI") as GameObject, scrollViewContentRectTransform);
-                Destroy(select.gameObject);
-            }
+            DeleteRoom_ByClick();
         }
         if (SelectedRoom != null)
         {
@@ -101,14 +74,51 @@ public class LocationBuilder : MonoBehaviour
             }
         }
     }
+    public void SelectRoom_ByClick()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hits = Physics.RaycastAll(ray, 150f);
+        if (hits.ToList().Where(x => x.collider.GetComponent<Room>() != null).Count() != 0)
+        {
+            SelectedRoom = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
+            if (!selected)
+            {
+                selected = true;
+                //SelectedRoom.transform.position += new Vector3(0, 1, 0);
+            }
+        }
+        else
+        {
+            if (selected)
+            {
+                selected = false;
+                //SelectedRoom.transform.position -= new Vector3(0,1,0);
+            }
+            SelectedRoom = null;
+        }
+    }
+    public void DeleteRoom_ByClick()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hits = Physics.RaycastAll(ray, 150f);
+        if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()) != null)
+        {
+            var select = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
+            if(select.roomType != RoomType.Corridor) Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform);
+            Destroy(select.gameObject);
+        }
+    }
     public void MoveSelectedRoom(Vector2Int diraction)
     {
         Vector3 from = SelectedRoom.transform.position;
         Vector3 to = SelectedRoom.transform.position + ToGlobal(diraction);
 
-        Destroy(allRooms.Find(x => x.transform.position == to).gameObject);
-        SelectedRoom.transform.position = to;
-        Instantiate(Resources.Load("VoidRoom") as GameObject, from, new Quaternion(), transform);
+        var found = allRooms.Find(x => x.transform.position == to);
+        if (found != null && !roomObjectsHandler.nonmuvable_rooms.Contains(found.roomType))
+        {
+            found.transform.position = from;
+            SelectedRoom.transform.position = to;
+        }
     }
     public void RotateSelectedRoom()
     {
@@ -117,15 +127,17 @@ public class LocationBuilder : MonoBehaviour
     public void AddRoomToScene(RoomType roomType)
     {
         var position = allRooms.Find(x => x.roomType == RoomType.None).GetComponent<Transform>().position;
-        Destroy(allRooms.Find(x => x.transform.position == position).gameObject);
-        Instantiate(Resources.Load("roomType") as GameObject, position, new Quaternion(), transform);
+        var link = allRooms.Find(x => x.transform.position == position);
+        Destroy(link.gameObject);
+        allRooms.Remove(link);
+        allRooms.Add(Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == roomType).obj, position, new Quaternion(), transform).GetComponent<Room>());
     }
     public void MoveToBuilderMode(List<RoomType> roomTypes)
     {
         scrollView.SetActive(true);
         foreach (var roomType in roomTypes)
         {
-            Instantiate(Resources.Load("roomType/UI") as GameObject, scrollViewContentRectTransform);
+            Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == roomType).obj, scrollViewContentRectTransform);
         }
     }
     public bool ValidateLocation()
@@ -144,20 +156,11 @@ public class LocationBuilder : MonoBehaviour
 
     Vector3 ToGlobal(Vector2Int input)
     {
-        return new Vector3(input.x, 0, input.y) * 5;
-    }
-    Vector2Int ToLocal(Vector3 input)
-    {
-        return new Vector2Int((int)input.x, (int)input.z) / 5;
+        return new Vector3(input.x, 0, input.y) * 4.1f;
     }
     Quaternion GetQ(Vector2Int diraction)
     {
         return Quaternion.Euler(new Vector3(diraction.x, 0, diraction.y));
-    }
-    Quaternion RotateQua(Quaternion q, Vector2Int diraction)
-    {
-        Quaternion q1 = GetQ(diraction);
-        return Quaternion.RotateTowards(q, q1, 180);
     }
 }
 public class RoomCreationInfo
