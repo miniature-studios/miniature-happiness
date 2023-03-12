@@ -13,10 +13,10 @@ public class WallPlacementRule
 [Serializable]
 public class OfferedNeighbours
 {
-    public RoomType room_from;
+    public RoomType parent_room;
     public Vector2Int position;
     public Vector2Int diraction;
-    public RoomType room_to;
+    public RoomType cild_room;
 }
 
 [CreateAssetMenu(fileName = "WallPlacementRules", menuName = "ScriptableObjects/WallPlacementRules", order = 1)]
