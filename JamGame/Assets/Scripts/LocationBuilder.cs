@@ -31,15 +31,15 @@ public class LocationBuilder : MonoBehaviour
         }
         for (int i = -3; i <= 3; i++)
         {
-            list.Add(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up));
-            list.Add(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up));
-            list.Add(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up));
-            list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
+            if(!list.Contains(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up));
+            if (!list.Contains(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up));
+            if (!list.Contains(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up));
+            if (!list.Contains(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
         }
-        list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
-        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 2)));
-        list.Remove(list.Find(x => x.Position == new Vector2Int(0, 1)));
-        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 1)));
+        //list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
+        //list.Remove(list.Find(x => x.Position == new Vector2Int(1, 2)));
+        //list.Remove(list.Find(x => x.Position == new Vector2Int(0, 1)));
+        //list.Remove(list.Find(x => x.Position == new Vector2Int(1, 1)));
         List<RoomType> rooms_ui = new List<RoomType>() { RoomType.Corridor };
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.Empty);
@@ -212,7 +212,8 @@ public class LocationBuilder : MonoBehaviour
         foreach (var room in allRooms)
         {
             room.position = ToLocal(room.transform.position / 4.1f);
-            dict.Add(room.position, room);
+            if(!dict.ContainsKey(room.position))
+                dict.Add(room.position, room);
         }
         location.rooms = dict;
         var availableDiractions = new Dictionary<Vector2Int, List<Direction>>();
@@ -254,7 +255,8 @@ public class LocationBuilder : MonoBehaviour
 
                 see_diration = new Vector2Int(see_diration.y, -see_diration.x);
             }
-            availableDiractions.Add(target_room.position, directions);
+            if (!availableDiractions.ContainsKey(target_room.position))
+                availableDiractions.Add(target_room.position, directions);
         }
         location.PathfindingProvider = new PathfindingProvider(availableDiractions);
     }

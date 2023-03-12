@@ -16,8 +16,10 @@ namespace Common
         {
             switch (type)
             {
-                case WallType.Window | WallType.Wall: return false;
-                case WallType.None | WallType.Door: return true;
+                case WallType.Window:
+                case WallType.Wall: return false;
+                case WallType.None:
+                case WallType.Door: return true;
                 default:
                     Debug.LogError("Invald wall type");
                     return false;
