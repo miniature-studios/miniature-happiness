@@ -12,4 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8d44b21bfdd7c45836348624c3a82f, type: 3}
   m_Name: WallPlacementRules
   m_EditorClassIdentifier: 
-  rules: []
+  neighborsLimitation:
+  - room_a: 0
+    room_b: 0
+    wall: 4
+  - room_a: 0
+    room_b: 1
+    wall: 3
+  - room_a: 0
+    room_b: 3
+    wall: 1
+  - room_a: 0
+    room_b: 2
+    wall: 2
+  - room_a: 3
+    room_b: 3
+    wall: 4
+  - room_a: 2
+    room_b: 2
+    wall: 4
+  - room_a: 3
+    room_b: 2
+    wall: 4
+  - room_a: 1
+    room_b: 3
+    wall: 1
+  - room_a: 1
+    room_b: 2
+    wall: 1
+  - room_a: 1
+    room_b: 1
+    wall: 4
+  - room_a: 4
+    room_b: 4
+    wall: 4
+  - room_a: 4
+    room_b: 0
+    wall: 4
+  - room_a: 4
+    room_b: 1
+    wall: 3
+  - room_a: 4
+    room_b: 2
+    wall: 2
+  - room_a: 4
+    room_b: 3
+    wall: 1
+  offeredNeighbours: []

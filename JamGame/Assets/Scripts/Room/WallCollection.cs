@@ -16,7 +16,7 @@ public class WallCollection : MonoBehaviour
     Dictionary<WallType, GameObject> wallsDict;
     GameObject activeWall;
 
-    void Start()
+    void Awake()
     {
         wallsDict = new Dictionary<WallType, GameObject>();
         foreach (var wall in walls)
@@ -31,8 +31,16 @@ public class WallCollection : MonoBehaviour
 
     public void SetWall(WallType type)
     {
-        if (activeWall != null)
-            activeWall.SetActive(true);
+        if (!wallsDict.ContainsKey(type))
+        {
+            Debug.LogError($"Trying set {type}, that do not exist. {transform.position}");
+        }
+
+        foreach (var wall in wallsDict)
+            wall.Value.SetActive(false);
+
+        //if (activeWall != null)
+        //    activeWall.SetActive(true);
 
         activeWall = wallsDict[type].gameObject;
         activeWall.SetActive(true);

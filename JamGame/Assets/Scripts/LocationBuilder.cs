@@ -40,6 +40,8 @@ public class LocationBuilder : MonoBehaviour
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.Empty);
+        rooms_ui.Add(RoomType.WorkPlace);
+        rooms_ui.Add(RoomType.WorkPlace);
         SetupLevel(list);
         MoveToBuilderMode(rooms_ui);
     }
@@ -97,6 +99,11 @@ public class LocationBuilder : MonoBehaviour
                 selected = true;
                 pointer = Instantiate(selector_pointer, SelectedRoom.transform.position, new Quaternion(), transform);
             }
+            if (selected)
+            {
+                Destroy(pointer.gameObject);
+                pointer = Instantiate(selector_pointer, SelectedRoom.transform.position, new Quaternion(), transform);
+            }
         }
         else
         {
@@ -135,8 +142,10 @@ public class LocationBuilder : MonoBehaviour
             found.transform.position = from;
             SelectedRoom.transform.position = to;
             pointer.transform.position += ToGlobal(diraction);
-            UpdateWalls(found);
-            UpdateWalls(SelectedRoom);
+            foreach (var item in allRooms)
+            {
+               UpdateWalls(item);
+            }
         }
     }
     public void RotateSelectedRoom()
@@ -175,15 +184,16 @@ public class LocationBuilder : MonoBehaviour
     }
     public void UpdateWalls(Room target_room)
     {
-        if (target_room.roomType == RoomType.Outside)
-            return;
         for (int i = 0; i < 4; i++)
         {
             Vector2Int room_diraction = target_room.currentDiraction;
             Vector2Int buffer_diraction;
             Room buffer_room;
+            
+            buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction));
 
-            buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction) * 4.1f);
+            if (buffer_room == null)
+                continue;
 
             buffer_diraction = buffer_room.currentDiraction;
             while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
@@ -204,19 +214,41 @@ public class LocationBuilder : MonoBehaviour
             if(ww2.GetAvailableWalls().Contains(item))
                 awaibleWallTypes.Add(item);
         }
+        WallType choose = WallType.None;
         if (awaibleWallTypes.Count == 0)
-            Debug.LogWarning("NO MATCH");
+        {
+            Debug.LogError($"No Pair of ({room1.roomType}) and ({room2.roomType})");
+        }
         if(awaibleWallTypes.Count > 1)
         {
-            var v = wallPlacementRules.neighborsLimitation.Find(x => x.room_a == room1.roomType && x.room_b == room2.roomType || x.room_a == room2.roomType && x.room_b == room1.roomType);
-            foreach (var item in awaibleWallTypes)
+            var wallPlacmentRule = wallPlacementRules.neighborsLimitation.Find(x => (x.room_a == room1.roomType && x.room_b == room2.roomType) || (x.room_a == room2.roomType && x.room_b == room1.roomType));
+            if (wallPlacmentRule != null)
             {
-                if(item != v.wall)
-                    awaibleWallTypes.Remove(item);
+                if (!awaibleWallTypes.Contains(wallPlacmentRule.wall))
+                {
+                    Debug.LogError($"Invalid rule for pair ({room1.roomType}) and ({room2.roomType})");
+                }
+                else
+                {
+                    choose = wallPlacmentRule.wall;
+                }
+            }
+            else
+            {
+                string str = "";
+                foreach (var item in awaibleWallTypes)
+                    str += $"\n{item}";
+
+                Debug.LogWarning($"Pair of ({room1.roomType}) and ({room2.roomType}) has {awaibleWallTypes.Count} Variants:" + str);
+                choose = awaibleWallTypes.FirstOrDefault();
             }
         }
-        ww1.SetWall(awaibleWallTypes[0]);
-        ww2.SetWall(awaibleWallTypes[0]);
+        if (awaibleWallTypes.Count == 1)
+        {
+            choose = awaibleWallTypes.First();
+        }
+        ww1.SetWall(choose);
+        ww2.SetWall(choose);
     }
     Vector3 ToGlobal(Vector2Int input)
     {
