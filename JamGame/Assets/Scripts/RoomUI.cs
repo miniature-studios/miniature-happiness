@@ -14,6 +14,6 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         locationBuilder.AddRoomToScene(roomType);
-        Destroy(gameObject);
+        if (roomType != RoomType.Corridor) { Destroy(gameObject); }
     }
 }

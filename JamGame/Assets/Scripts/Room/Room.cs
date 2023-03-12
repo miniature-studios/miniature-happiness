@@ -41,7 +41,7 @@ public class Room : MonoBehaviour
     [SerializeField] public RoomType roomType;
     [SerializeField] Dictionary<RoomType, Vector2Int> necessarilyNeighbours;
     [SerializeField] public Vector2Int currentDiraction = Vector2Int.up;
-    [SerializeField] List<RoomInternalPath> internalPaths;
+    [SerializeField] List<RoomInternalPath> internalPaths = new List<RoomInternalPath>();
 
     // TODO: Fill in edit mode
     public Vector2Int position;
