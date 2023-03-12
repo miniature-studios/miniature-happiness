@@ -1,4 +1,6 @@
-﻿namespace Common
+﻿using UnityEngine;
+
+namespace Common
 {
     public enum WallType
     {
@@ -6,5 +8,20 @@
         Window = 2,
         Door = 3,
         None = 4
+    }
+
+    public static class WallTypeTools
+    {
+        public static bool IsPassable(this WallType type)
+        {
+            switch (type)
+            {
+                case WallType.Window | WallType.Wall: return false;
+                case WallType.None | WallType.Door: return true;
+                default:
+                    Debug.LogError("Invald wall type");
+                    return false;
+            }
+        }
     }
 }

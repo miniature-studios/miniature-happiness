@@ -170,7 +170,7 @@ public class LocationBuilder : MonoBehaviour
             Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == roomType).obj, scrollViewContentRectTransform);
         }
     }
-    public bool ValidateLocation()
+    public void ValidateLocation()
     {
         scrollView.SetActive(false);
         var dict = new Dictionary<Vector2Int, Room>();
@@ -180,7 +180,44 @@ public class LocationBuilder : MonoBehaviour
             dict.Add(room.position, room);
         }
         location.rooms = dict;
-        return true;
+        var availableDiractions = new Dictionary<Vector2Int, List<Direction>>();
+        foreach (var target_room in allRooms)
+        {
+            List<Direction> directions = new List<Direction>();
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2Int room_diraction = target_room.currentDiraction;
+                Vector2Int buffer_diraction;
+                Room buffer_room;
+
+                buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction));
+
+                if (buffer_room == null)
+                    continue;
+
+                buffer_diraction = buffer_room.currentDiraction;
+                while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
+                    buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
+
+                bool passable = IsPassable(target_room, room_diraction, buffer_room, buffer_diraction);
+
+                if (passable)
+                    directions.Add(room_diraction.ToDirection());
+
+                target_room.currentDiraction = new Vector2Int(target_room.currentDiraction.y, -target_room.currentDiraction.x);
+            }
+            availableDiractions.Add(target_room.position, directions);
+        }
+        location.PathfindingProvider = new PathfindingProvider(availableDiractions);
+    }
+    public bool IsPassable(Room room1, Vector2Int dir1, Room room2, Vector2Int dir2)
+    {
+        var ww1 = room1.GetWallVisualizer(dir1);
+        var ww2 = room2.GetWallVisualizer(dir2);
+
+        if (ww1.GetActiveWall().IsPassable() && ww2.GetActiveWall().IsPassable())
+            return true;
+        return false;
     }
     public void UpdateWalls(Room target_room)
     {

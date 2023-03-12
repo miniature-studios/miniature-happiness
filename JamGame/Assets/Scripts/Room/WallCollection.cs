@@ -29,6 +29,16 @@ public class WallCollection : MonoBehaviour
         return wallsDict.Keys;
     }
 
+    public WallType GetActiveWall()
+    {
+        foreach (var item in wallsDict)
+        {
+            if (item.Value == activeWall)
+                return item.Key;
+        }
+        throw new Exception();
+    }
+
     public void SetWall(WallType type)
     {
         if (!wallsDict.ContainsKey(type))
