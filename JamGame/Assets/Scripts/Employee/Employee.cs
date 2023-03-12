@@ -36,8 +36,6 @@ public class Employee : MonoBehaviour
 
     void Update()
     {
-        Debug.Log($"Employee state: {state}");
-
         switch (state)
         {
             case State.Idle:
@@ -114,6 +112,12 @@ public class Employee : MonoBehaviour
         state = State.Walking;
 
         var path_points = location.PathfindingProvider.FindPath(currentPosition, slot.room.position);
+        if (path_points.Count < 3)
+        {
+            FinishedMoving();
+            return;
+        }
+
         var path = PathPointsToPath(path_points);
 
         movingToPosition = path[path.Count - 1].Item1.position;
@@ -137,6 +141,9 @@ public class Employee : MonoBehaviour
 
             var room = location.rooms[path_points[i]];
             var int_path = room.GetInternalPath(from_direction, to_direction);
+            if (int_path == null)
+                Debug.LogError($"Internal path in room {room.position} not found for directions {from_direction} {to_direction}");
+
             path.Add((room, int_path));
         }
 

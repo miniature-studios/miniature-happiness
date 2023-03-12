@@ -127,6 +127,8 @@ public class InternalPathCollectionEditor : Editor
             pathCollection.paths.Clear();
 
         DrawDefaultInspector();
+
+        serializedObject.ApplyModifiedProperties();
     }
 
     Vector3 GetBorderPoint(Direction direction)
