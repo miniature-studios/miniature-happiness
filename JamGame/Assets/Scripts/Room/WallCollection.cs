@@ -24,9 +24,9 @@ public class WallCollection : MonoBehaviour
                 wallsDict.Add(wall.type, wall.wall);
     }
 
-    public IEnumerator<WallType> GetAvailableWalls()
+    public IEnumerable<WallType> GetAvailableWalls()
     {
-        return wallsDict.Keys.GetEnumerator();
+        return wallsDict.Keys;
     }
 
     public void SetWall(WallType type)
