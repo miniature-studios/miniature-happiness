@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LocationBuilder : MonoBehaviour
 {
@@ -112,7 +113,9 @@ public class LocationBuilder : MonoBehaviour
             { 
                 Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform); 
             }
+            allRooms.Add(Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == RoomType.None).obj, select.transform.position, new Quaternion(), transform).GetComponent<Room>());
             Destroy(select.gameObject);
+            UpdateWalls(allRooms.Last());
         }
     }
     public void MoveSelectedRoom(Vector2Int diraction)
@@ -126,6 +129,8 @@ public class LocationBuilder : MonoBehaviour
             found.transform.position = from;
             SelectedRoom.transform.position = to;
             pointer.transform.position += ToGlobal(diraction);
+            UpdateWalls(found);
+            UpdateWalls(SelectedRoom);
         }
     }
     public void RotateSelectedRoom()
@@ -140,6 +145,7 @@ public class LocationBuilder : MonoBehaviour
         Destroy(link.gameObject);
         allRooms.Remove(link);
         allRooms.Add(Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == roomType).obj, position, new Quaternion(), transform).GetComponent<Room>());
+        UpdateWalls(allRooms.Last());
     }
     public void MoveToBuilderMode(List<RoomType> roomTypes)
     {
@@ -153,42 +159,75 @@ public class LocationBuilder : MonoBehaviour
     {
         scrollView.SetActive(false);
         var dict = new Dictionary<Vector2Int, Room>();
-        foreach (var slot in allRooms)
+        foreach (var room in allRooms)
         {
-            // TODO
-            //slot.transform.position = new Vector2Int((int)slot.position.x, (int)slot.position.z);
-            //dict.Add(slot.targetRoom.position, slot.targetRoom);
+            room.position = ToLocal(room.transform.position / 4.1f);
+            dict.Add(room.position, room);
         }
         location.rooms = dict;
-        return false;
+        return true;
     }
-    public void UpdateWalls(Room room)
+    public void UpdateWalls(Room target_room)
     {
         for (int i = 0; i < 4; i++)
         {
-            Vector2Int room_diraction = room.currentDiraction;
+            Vector2Int room_diraction = target_room.currentDiraction;
             Vector2Int buffer_diraction;
             Room buffer_room;
 
-            room_diraction = Vector2Int.up;
-            buffer_room = allRooms.Find(x => x.transform.position == room.transform.position + ToGlobal(room_diraction) * 4.1f);
+            buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction) * 4.1f);
 
-            buffer_diraction = buffer_room.currentDiraction;
+            if (buffer_room != null)
+            {
+                buffer_diraction = buffer_room.currentDiraction;
+                while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
+                    buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
 
-
-            //UpdateTwoWalls();
-            room.currentDiraction = new Vector2Int(room.currentDiraction.y, -room.currentDiraction.x);
+                UpdateTwoWalls(target_room, room_diraction, buffer_room, buffer_diraction);
+            }
+            else
+            {
+                UpdateWall(target_room, room_diraction);
+            }
+            target_room.currentDiraction = new Vector2Int(target_room.currentDiraction.y, -target_room.currentDiraction.x);
         }
     }
-
     public void UpdateTwoWalls(Room room1, Vector2Int dir1, Room room2, Vector2Int dir2)
     {
-
+        var ww1 = room1.GetWallVisualizer(dir1);
+        var ww2 = room2.GetWallVisualizer(dir2);
+        List<WallType> awaibleWallTypes = new();
+        foreach (var item in ww1.GetAvailableWalls())
+        {
+            if(ww2.GetAvailableWalls().Contains(item))
+                awaibleWallTypes.Add(item);
+        }
+        if (awaibleWallTypes.Count == 0)
+            Debug.LogWarning("NO MATCH");
+        if(awaibleWallTypes.Count > 1)
+        {
+            var v = wallPlacementRules.neighborsLimitation.Find(x => x.room_a == room1.roomType && x.room_b == room2.roomType || x.room_a == room2.roomType && x.room_b == room1.roomType);
+            foreach (var item in awaibleWallTypes)
+            {
+                if(item != v.wall)
+                    awaibleWallTypes.Remove(item);
+            }
+        }
+        ww1.SetWall(awaibleWallTypes[0]);
+        ww2.SetWall(awaibleWallTypes[0]);
     }
-
+    public void UpdateWall(Room room1, Vector2Int dir1)
+    {
+        var ww1 = room1.GetWallVisualizer(dir1);
+        ww1.SetWall(WallType.Window);
+    }
     Vector3 ToGlobal(Vector2Int input)
     {
         return new Vector3(input.x, 0, input.y) * 4.1f;
+    }
+    Vector2Int ToLocal(Vector3 input)
+    {
+        return new Vector2Int((int)input.x, (int)input.z);
     }
     Quaternion GetQ(Vector2Int diraction)
     {

@@ -11,13 +11,6 @@ public class WallPlacementRule
     public WallType wall;
 }
 [Serializable]
-public class DiractlyAllowedWalls
-{
-    public RoomType room;
-    public Vector2Int diraction;
-    public List<WallType> walls;
-}
-[Serializable]
 public class OfferedNeighbours
 {
     public RoomType room_from;
@@ -30,6 +23,5 @@ public class OfferedNeighbours
 public class WallPlacementRules : ScriptableObject
 {
     public List<WallPlacementRule> neighborsLimitation;
-    public List<DiractlyAllowedWalls> diractlyAllowedWalls;
     public List<OfferedNeighbours> offeredNeighbours;
 }
