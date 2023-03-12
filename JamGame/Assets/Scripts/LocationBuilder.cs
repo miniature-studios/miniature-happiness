@@ -11,11 +11,13 @@ public class LocationBuilder : MonoBehaviour
     [SerializeField] Location location;
     [SerializeField] WallPlacementRules wallPlacementRules;
     [SerializeField] RoomObjectsHandler roomObjectsHandler;
+    [SerializeField] GameObject selector_pointer;
 
     Room SelectedRoom = null;
     public bool selected = false;
 
     List<Room> allRooms = new List<Room>();
+    GameObject pointer;
     private void Awake()
     {
         List<RoomCreationInfo> list = new();
@@ -28,6 +30,9 @@ public class LocationBuilder : MonoBehaviour
             }
         }
         List<RoomType> rooms_ui = new List<RoomType>() { RoomType.Corridor };
+        rooms_ui.Add(RoomType.Empty);
+        rooms_ui.Add(RoomType.Empty);
+        rooms_ui.Add(RoomType.Empty);
         SetupLevel(list);
         MoveToBuilderMode(rooms_ui);
     }
@@ -36,7 +41,6 @@ public class LocationBuilder : MonoBehaviour
         foreach (var room_cr_info in rooms)
         {
             Room room_link = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == room_cr_info.RoomType).obj, ToGlobal(room_cr_info.Position), GetQ(room_cr_info.Diraction), transform).GetComponent<Room>();
-            room_link.position = room_cr_info.Position;
             allRooms.Add(room_link);
         }
     }
@@ -84,7 +88,7 @@ public class LocationBuilder : MonoBehaviour
             if (!selected)
             {
                 selected = true;
-                //SelectedRoom.transform.position += new Vector3(0, 1, 0);
+                pointer = Instantiate(selector_pointer, SelectedRoom.transform.position, new Quaternion(), transform);
             }
         }
         else
@@ -92,7 +96,7 @@ public class LocationBuilder : MonoBehaviour
             if (selected)
             {
                 selected = false;
-                //SelectedRoom.transform.position -= new Vector3(0,1,0);
+                Destroy(pointer.gameObject);
             }
             SelectedRoom = null;
         }
@@ -101,10 +105,13 @@ public class LocationBuilder : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray, 150f);
-        if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()) != null)
+        if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()).Count() != 0)
         {
             var select = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
-            if(select.roomType != RoomType.Corridor) Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform);
+            if (select.roomType != RoomType.Corridor)
+            { 
+                Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform); 
+            }
             Destroy(select.gameObject);
         }
     }
@@ -118,11 +125,13 @@ public class LocationBuilder : MonoBehaviour
         {
             found.transform.position = from;
             SelectedRoom.transform.position = to;
+            pointer.transform.position += ToGlobal(diraction);
         }
     }
     public void RotateSelectedRoom()
     {
-        // TODO
+        SelectedRoom.transform.rotation.eulerAngles.Set(SelectedRoom.transform.rotation.eulerAngles.x, SelectedRoom.transform.rotation.eulerAngles.y + 90, SelectedRoom.transform.rotation.eulerAngles.z);
+        SelectedRoom.currentDiraction = new Vector2Int(SelectedRoom.currentDiraction.y, -SelectedRoom.currentDiraction.x);
     }
     public void AddRoomToScene(RoomType roomType)
     {
@@ -152,6 +161,29 @@ public class LocationBuilder : MonoBehaviour
         }
         location.rooms = dict;
         return false;
+    }
+    public void UpdateWalls(Room room)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            Vector2Int room_diraction = room.currentDiraction;
+            Vector2Int buffer_diraction;
+            Room buffer_room;
+
+            room_diraction = Vector2Int.up;
+            buffer_room = allRooms.Find(x => x.transform.position == room.transform.position + ToGlobal(room_diraction) * 4.1f);
+
+            buffer_diraction = buffer_room.currentDiraction;
+
+
+            //UpdateTwoWalls();
+            room.currentDiraction = new Vector2Int(room.currentDiraction.y, -room.currentDiraction.x);
+        }
+    }
+
+    public void UpdateTwoWalls(Room room1, Vector2Int dir1, Room room2, Vector2Int dir2)
+    {
+
     }
 
     Vector3 ToGlobal(Vector2Int input)
