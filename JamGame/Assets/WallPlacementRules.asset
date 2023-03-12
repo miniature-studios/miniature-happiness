@@ -58,4 +58,28 @@ MonoBehaviour:
   - room_a: 4
     room_b: 3
     wall: 1
-  offeredNeighbours: []
+  - room_a: 5
+    room_b: 6
+    wall: 4
+  - room_a: 6
+    room_b: 7
+    wall: 4
+  - room_a: 7
+    room_b: 8
+    wall: 4
+  - room_a: 5
+    room_b: 8
+    wall: 4
+  offeredNeighbours:
+  - parent_room: 5
+    position: {x: 1, y: 0}
+    diraction: {x: 0, y: 1}
+    cild_room: 6
+  - parent_room: 5
+    position: {x: 1, y: -1}
+    diraction: {x: 0, y: 1}
+    cild_room: 7
+  - parent_room: 5
+    position: {x: 0, y: -1}
+    diraction: {x: 0, y: 1}
+    cild_room: 8

@@ -36,6 +36,10 @@ public class LocationBuilder : MonoBehaviour
             list.Add(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up));
             list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
         }
+        list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
+        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 2)));
+        list.Remove(list.Find(x => x.Position == new Vector2Int(0, 1)));
+        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 1)));
         List<RoomType> rooms_ui = new List<RoomType>() { RoomType.Corridor };
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.Empty);
@@ -49,9 +53,30 @@ public class LocationBuilder : MonoBehaviour
     {
         foreach (var room_cr_info in rooms)
         {
-            Room room_link = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == room_cr_info.RoomType).obj, ToGlobal(room_cr_info.Position), GetQ(room_cr_info.Diraction), transform).GetComponent<Room>();
+            Room room_link = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == room_cr_info.RoomType).obj, ToGlobal(room_cr_info.Position), new Quaternion(), transform).GetComponent<Room>();
+            RotateTransform(room_link.transform, room_cr_info.Diraction);
             allRooms.Add(room_link);
+            if (wallPlacementRules.offeredNeighbours.Select(x => x.parent_room).Contains(room_link.roomType))
+            {
+                List<OfferedNeighbours> offeredNeighbours = wallPlacementRules.offeredNeighbours.Where(x => x.parent_room == room_link.roomType).ToList();
+                var main_diraction = room_link.currentDiraction;
+                foreach (var neighbor in offeredNeighbours)
+                {
+                    var spawn_position = room_link.transform.position + RotateByVector(ToGlobal(neighbor.position), main_diraction);
+                    Room room_link_1 = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == neighbor.cild_room).obj, spawn_position, new Quaternion(), transform).GetComponent<Room>();
+                    RotateTransform(room_link_1.transform, neighbor.diraction);
+                    allRooms.Add(room_link_1);
+                }
+            }
         }
+        UpdateAllWalls();
+    }
+    Vector3 RotateByVector(Vector3 vector, Vector2Int rotation)
+    {
+        var buffer_rotation = Vector2Int.up;
+        while (buffer_rotation != rotation)
+            vector = new Vector3(vector.y, 0, -vector.x);
+        return vector;
     }
     private void Update()
     {
@@ -91,7 +116,8 @@ public class LocationBuilder : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray, 150f);
-        if (hits.ToList().Where(x => x.collider.GetComponent<Room>() != null).Count() != 0)
+        var roomHits = hits.ToList().Where(x => x.collider.GetComponent<Room>() != null);
+        if (roomHits.Count() != 0 && !roomObjectsHandler.nonmuvable_rooms.Contains(hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>().roomType))
         {
             SelectedRoom = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
             if (!selected)
@@ -122,13 +148,17 @@ public class LocationBuilder : MonoBehaviour
         if (hits.ToList().FindAll(x => x.collider.GetComponent<Room>()).Count() != 0)
         {
             var select = hits.ToList().Find(x => x.collider.GetComponent<Room>()).collider.GetComponent<Room>();
-            if (select.roomType != RoomType.Corridor)
+            if(select == SelectedRoom)
             {
-                Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform);
+                selected = false;
+                Destroy(pointer.gameObject);
             }
-            allRooms.Add(Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == RoomType.None).obj, select.transform.position, new Quaternion(), transform).GetComponent<Room>());
+            Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == select.roomType).obj, scrollViewContentRectTransform); 
+            var new_none = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == RoomType.None).obj, select.transform.position, new Quaternion(), transform).GetComponent<Room>();
+            allRooms.Add(new_none);
             Destroy(select.gameObject);
-            UpdateWalls(allRooms.Last());
+            allRooms.Remove(select);
+            UpdateWalls(new_none);
         }
     }
     public void MoveSelectedRoom(Vector2Int diraction)
@@ -142,16 +172,21 @@ public class LocationBuilder : MonoBehaviour
             found.transform.position = from;
             SelectedRoom.transform.position = to;
             pointer.transform.position += ToGlobal(diraction);
-            foreach (var item in allRooms)
-            {
-                UpdateWalls(item);
-            }
+            UpdateAllWalls();
+        }
+    }
+    public void UpdateAllWalls()
+    {
+        foreach (var item in allRooms)
+        {
+            UpdateWalls(item);
         }
     }
     public void RotateSelectedRoom()
     {
-        SelectedRoom.transform.rotation.eulerAngles.Set(SelectedRoom.transform.rotation.eulerAngles.x, SelectedRoom.transform.rotation.eulerAngles.y + 90, SelectedRoom.transform.rotation.eulerAngles.z);
+        SelectedRoom.transform.Rotate(0,90,0);
         SelectedRoom.currentDiraction = new Vector2Int(SelectedRoom.currentDiraction.y, -SelectedRoom.currentDiraction.x);
+        UpdateWalls(SelectedRoom);
     }
     public void AddRoomToScene(RoomType roomType)
     {
@@ -184,13 +219,14 @@ public class LocationBuilder : MonoBehaviour
         foreach (var target_room in allRooms)
         {
             List<Direction> directions = new List<Direction>();
+
+            int delay = GetDelay(target_room.currentDiraction);
+            Vector2Int see_diration = Vector2Int.up;
             for (int i = 0; i < 4; i++)
             {
-                Vector2Int room_diraction = target_room.currentDiraction;
                 Vector2Int buffer_diraction;
                 Room buffer_room;
-
-                buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction));
+                buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(see_diration));
 
                 if (buffer_room == null)
                     continue;
@@ -199,12 +235,24 @@ public class LocationBuilder : MonoBehaviour
                 while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
                     buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
 
-                bool passable = IsPassable(target_room, room_diraction, buffer_room, buffer_diraction);
+                int delay_2 = GetDelay(buffer_room.currentDiraction);
+                for (int j = 0; j < delay_2; j++)
+                {
+                    buffer_diraction = new Vector2Int(-buffer_diraction.y, buffer_diraction.x);
+                }
+
+                var room_inner_diration = see_diration;
+                for (int j = 0; j < delay; j++)
+                {
+                    room_inner_diration = new Vector2Int(-room_inner_diration.y, room_inner_diration.x);
+                }
+
+                bool passable = IsPassable(target_room, room_inner_diration, buffer_room, buffer_diraction);
 
                 if (passable)
-                    directions.Add(room_diraction.ToDirection());
+                    directions.Add(room_inner_diration.ToDirection());
 
-                target_room.currentDiraction = new Vector2Int(target_room.currentDiraction.y, -target_room.currentDiraction.x);
+                see_diration = new Vector2Int(see_diration.y, -see_diration.x);
             }
             availableDiractions.Add(target_room.position, directions);
         }
@@ -221,13 +269,13 @@ public class LocationBuilder : MonoBehaviour
     }
     public void UpdateWalls(Room target_room)
     {
+        int delay = GetDelay(target_room.currentDiraction);
+        Vector2Int see_diration = Vector2Int.up;
         for (int i = 0; i < 4; i++)
         {
-            Vector2Int room_diraction = target_room.currentDiraction;
             Vector2Int buffer_diraction;
             Room buffer_room;
-
-            buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(room_diraction));
+            buffer_room = allRooms.Find(x => x.transform.position == target_room.transform.position + ToGlobal(see_diration));
 
             if (buffer_room == null)
                 continue;
@@ -236,10 +284,33 @@ public class LocationBuilder : MonoBehaviour
             while (buffer_room.transform.position + ToGlobal(buffer_diraction) != target_room.transform.position)
                 buffer_diraction = new Vector2Int(buffer_diraction.y, -buffer_diraction.x);
 
-            UpdateTwoWalls(target_room, room_diraction, buffer_room, buffer_diraction);
+            int delay_2 = GetDelay(buffer_room.currentDiraction);
+            for (int j = 0; j < delay_2; j++)
+            {
+                buffer_diraction = new Vector2Int(-buffer_diraction.y, buffer_diraction.x);
+            }
 
-            target_room.currentDiraction = new Vector2Int(target_room.currentDiraction.y, -target_room.currentDiraction.x);
+            var room_inner_diration = see_diration;
+            for (int j = 0; j < delay; j++)
+            {
+                room_inner_diration = new Vector2Int(-room_inner_diration.y, room_inner_diration.x);
+            }
+
+            UpdateTwoWalls(target_room, room_inner_diration, buffer_room, buffer_diraction);
+
+            see_diration = new Vector2Int(see_diration.y, -see_diration.x);
         }
+    }
+    public int GetDelay(Vector2Int vector)
+    {
+        Vector2Int v1 = Vector2Int.up, v2 = vector;
+        int delay = 0;
+        while (v2 != v1)
+        {
+            v2 = new Vector2Int(-v2.y, v2.x);
+            delay++;
+        }
+        return delay;
     }
     public void UpdateTwoWalls(Room room1, Vector2Int dir1, Room room2, Vector2Int dir2)
     {
@@ -248,7 +319,7 @@ public class LocationBuilder : MonoBehaviour
         List<WallType> awaibleWallTypes = new();
         foreach (var item in ww1.GetAvailableWalls())
         {
-            if (ww2.GetAvailableWalls().Contains(item))
+            if(ww2.GetAvailableWalls().Contains(item))
                 awaibleWallTypes.Add(item);
         }
         WallType choose = WallType.None;
@@ -256,7 +327,7 @@ public class LocationBuilder : MonoBehaviour
         {
             Debug.LogError($"No Pair of ({room1.roomType}) and ({room2.roomType})");
         }
-        if (awaibleWallTypes.Count > 1)
+        if(awaibleWallTypes.Count > 1)
         {
             var wallPlacmentRule = wallPlacementRules.neighborsLimitation.Find(x => (x.room_a == room1.roomType && x.room_b == room2.roomType) || (x.room_a == room2.roomType && x.room_b == room1.roomType));
             if (wallPlacmentRule != null)
@@ -295,9 +366,9 @@ public class LocationBuilder : MonoBehaviour
     {
         return new Vector2Int((int)input.x, (int)input.z);
     }
-    Quaternion GetQ(Vector2Int diraction)
+    void RotateTransform(Transform tr, Vector2Int diraction)
     {
-        return Quaternion.Euler(new Vector3(diraction.x, 0, diraction.y));
+        tr.Rotate(0, 90 * GetDelay(diraction), 0);
     }
 }
 public class RoomCreationInfo
