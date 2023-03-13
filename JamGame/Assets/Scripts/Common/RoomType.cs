@@ -7,7 +7,12 @@
         Corridor,
         Outside, // Build forbidden
         None, // No room haven't built
+
         WorkPlace,
+
+        WaterCloset,
+        Kitchen,
+
         BossRoom1,
         BossRoom2,
         BossRoom3,

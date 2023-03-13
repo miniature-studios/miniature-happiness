@@ -3,10 +3,10 @@ using UnityEngine;
 
 public enum NeedType
 {
-    DebugNeed0,
-    DebugNeed1,
-
     Work,
+
+    Piss,
+    Eat
 }
 
 [Serializable]
