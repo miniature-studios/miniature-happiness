@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4321433013115275602}
   - component: {fileID: 6043657706522991283}
   m_Layer: 0
-  m_Name: RoomBoss2
+  m_Name: RoomEntry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,6 +121,7 @@ Transform:
   m_Children:
   - {fileID: 2174240113551472356}
   - {fileID: 1848387487690519919}
+  - {fileID: 6016954070342361207}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -140,7 +141,7 @@ MonoBehaviour:
   right: {fileID: 5759394064170832829}
   down: {fileID: 1848387486619999038}
   left: {fileID: 8346320124018057608}
-  roomType: 8
+  roomType: 11
   currentDiraction: {x: 0, y: 1}
   position: {x: 0, y: 0}
 --- !u!65 &4321433013115275602
@@ -168,7 +169,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4590a689fb0acc4e8ea4100940c9812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paths: []
+  paths:
+  - from: 0
+    to: 1
+    linePoints:
+    - {x: 0, y: 0, z: 2.05}
+    - {x: 0, y: 0, z: 0.68333334}
+    - {x: 0, y: 0, z: -0.68333334}
+    - {x: 0, y: 0, z: -2.05}
+  - from: 1
+    to: 0
+    linePoints:
+    - {x: 0, y: 0, z: -2.05}
+    - {x: 0, y: 0, z: -0.68333334}
+    - {x: 0, y: 0, z: 0.68333334}
+    - {x: 0, y: 0, z: 2.05}
+  - from: 2
+    to: 3
+    linePoints:
+    - {x: -2.05, y: 0, z: 0}
+    - {x: -0.68333334, y: 0, z: 0}
+    - {x: 0.68333334, y: 0, z: 0}
+    - {x: 2.05, y: 0, z: 0}
+  - from: 3
+    to: 2
+    linePoints:
+    - {x: 2.05, y: 0, z: 0}
+    - {x: 0.68333334, y: 0, z: 0}
+    - {x: -0.68333334, y: 0, z: 0}
+    - {x: -2.05, y: 0, z: 0}
+  - from: 0
+    to: 3
+    linePoints:
+    - {x: 0, y: 0, z: 2.05}
+    - {x: 0, y: 0, z: 1.025}
+    - {x: 1.025, y: 0, z: 0}
+    - {x: 2.05, y: 0, z: 0}
+  - from: 0
+    to: 2
+    linePoints:
+    - {x: 0, y: 0, z: 2.05}
+    - {x: 0, y: 0, z: 1.025}
+    - {x: -1.025, y: 0, z: 0}
+    - {x: -2.05, y: 0, z: 0}
+  - from: 1
+    to: 3
+    linePoints:
+    - {x: 0, y: 0, z: -2.05}
+    - {x: 0, y: 0, z: -1.025}
+    - {x: 1.025, y: 0, z: 0}
+    - {x: 2.05, y: 0, z: 0}
+  - from: 1
+    to: 2
+    linePoints:
+    - {x: 0, y: 0, z: -2.05}
+    - {x: 0, y: 0, z: -1.025}
+    - {x: -1.025, y: 0, z: 0}
+    - {x: -2.05, y: 0, z: 0}
+  - from: 2
+    to: 0
+    linePoints:
+    - {x: -2.05, y: 0, z: 0}
+    - {x: -1.025, y: 0, z: 0}
+    - {x: 0, y: 0, z: 1.025}
+    - {x: 0, y: 0, z: 2.05}
+  - from: 2
+    to: 1
+    linePoints:
+    - {x: -2.05, y: 0, z: 0}
+    - {x: -1.025, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1.025}
+    - {x: 0, y: 0, z: -2.05}
+  - from: 3
+    to: 0
+    linePoints:
+    - {x: 2.05, y: 0, z: 0}
+    - {x: 1.025, y: 0, z: 0}
+    - {x: 0, y: 0, z: 1.025}
+    - {x: 0, y: 0, z: 2.05}
+  - from: 3
+    to: 1
+    linePoints:
+    - {x: 2.05, y: 0, z: 0}
+    - {x: 1.025, y: 0, z: 0}
+    - {x: 0, y: 0, z: -1.025}
+    - {x: 0, y: 0, z: -2.05}
 --- !u!1 &1848387487690519918
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,6 +496,50 @@ MonoBehaviour:
     wall: {fileID: 1862078481043315511}
   - type: 3
     wall: {fileID: 4904149790972097985}
+--- !u!1 &6642510469074953855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6016954070342361207}
+  - component: {fileID: 6339346123788254799}
+  m_Layer: 0
+  m_Name: CenterMarker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6016954070342361207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642510469074953855}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1848387487497780538}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6339346123788254799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6642510469074953855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721c4cb9d5e7f244496f0a852ec0937c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7351020302835556457
 GameObject:
   m_ObjectHideFlags: 0

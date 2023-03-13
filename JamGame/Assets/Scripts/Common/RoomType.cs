@@ -17,5 +17,7 @@
         BossRoom2,
         BossRoom3,
         BossRoom4,
+
+        EntryRoom
     }
 }

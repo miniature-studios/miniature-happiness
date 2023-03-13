@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 1848387487497780538}
   - component: {fileID: 7035358954825845509}
   - component: {fileID: 4321433013115275602}
+  - component: {fileID: 6043657706522991283}
   m_Layer: 0
   m_Name: RoomBoss4
   m_TagString: Untagged
@@ -139,9 +140,8 @@ MonoBehaviour:
   right: {fileID: 5759394064170832829}
   down: {fileID: 1848387486619999038}
   left: {fileID: 8346320124018057608}
-  roomType: 8
+  roomType: 10
   currentDiraction: {x: 0, y: 1}
-  internalPaths: []
   position: {x: 0, y: 0}
 --- !u!65 &4321433013115275602
 BoxCollider:
@@ -156,6 +156,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4.1, y: 0.1, z: 4.1}
   m_Center: {x: 0, y: -0.05, z: 0}
+--- !u!114 &6043657706522991283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848387487497780485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4590a689fb0acc4e8ea4100940c9812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paths: []
 --- !u!1 &1848387487690519918
 GameObject:
   m_ObjectHideFlags: 0

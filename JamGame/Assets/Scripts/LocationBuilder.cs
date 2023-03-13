@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using static UnityEditor.Progress;
 
 public class LocationBuilder : MonoBehaviour
 {
@@ -14,6 +12,7 @@ public class LocationBuilder : MonoBehaviour
     [SerializeField] WallPlacementRules wallPlacementRules;
     [SerializeField] RoomObjectsHandler roomObjectsHandler;
     [SerializeField] GameObject selector_pointer;
+    [SerializeField] Transform workers_spawner;
 
     Room SelectedRoom = null;
     public bool selected = false;
@@ -22,50 +21,64 @@ public class LocationBuilder : MonoBehaviour
     GameObject pointer;
     private void Awake()
     {
+        int corridor_count = 7;
+        int empty_count = 7;
+        int work_place_count = 7;
+        int kitchen_count = 7;
+        int water_closet_count = 7;
+
+        int grid_x = 6;
+        int grid_y = 6;
+
         List<RoomCreationInfo> list = new();
-        for (int i = -2; i <= 2; i++)
+        for (int i = 0; i < grid_x; i++)
         {
-            for (int j = -2; j <= 2; j++)
+            for (int j = 0; j < grid_y; j++)
             {
                 RoomCreationInfo roomCreationInfo = new(new Vector2Int(i, j), RoomType.None, Vector2Int.up);
                 list.Add(roomCreationInfo);
             }
         }
-        for (int i = -3; i <= 3; i++)
+        for (int i = -1; i <= grid_x; i++)
         {
-            list.Add(new(new Vector2Int(i, 3), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(i, grid_y), RoomType.Outside, Vector2Int.up));
         }
-        for (int i = -3; i <= 3; i++) 
+        for (int i = -1; i <= grid_x; i++) 
         { 
-            if (!list.Contains(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(i, -3), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(i, -1), RoomType.Outside, Vector2Int.up));
         }
-        for (int i = -2; i <= 2; i++) 
+        for (int i = 0; i < grid_y; i++) 
         { 
-            if (!list.Contains(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(3, i), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(-1, i), RoomType.Outside, Vector2Int.up));
         }
-        for (int i = -2; i <= 2; i++) 
+        for (int i = 0; i < grid_y; i++) 
         { 
-            if (!list.Contains(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
+            list.Add(new(new Vector2Int(grid_x, i), RoomType.Outside, Vector2Int.up));
         }
-        list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
-        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 2)));
-        list.Remove(list.Find(x => x.Position == new Vector2Int(0, 1)));
-        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 1)));
-        List<RoomType> rooms_ui = new List<RoomType>();
-        rooms_ui.Add(RoomType.Corridor);
-        rooms_ui.Add(RoomType.Corridor);
-        rooms_ui.Add(RoomType.Corridor);
-        rooms_ui.Add(RoomType.Empty);
-        rooms_ui.Add(RoomType.Empty);
-        rooms_ui.Add(RoomType.Empty);
-        rooms_ui.Add(RoomType.WorkPlace);
-        rooms_ui.Add(RoomType.WorkPlace);
-        rooms_ui.Add(RoomType.WorkPlace);
-        rooms_ui.Add(RoomType.Kitchen);
-        rooms_ui.Add(RoomType.Kitchen);
-        rooms_ui.Add(RoomType.WaterCloset);
-        rooms_ui.Add(RoomType.WaterCloset);
+        list.Find(x => x.Position == new Vector2Int(1,0)).RoomType = RoomType.EntryRoom;
         SetupLevel(list);
+
+        List<RoomType> rooms_ui = new List<RoomType>();
+        for (int i = 0; i < corridor_count; i++)
+        {
+            rooms_ui.Add(RoomType.Corridor);
+        }
+        for (int i = 0; i < empty_count; i++)
+        {
+            rooms_ui.Add(RoomType.Empty);
+        }
+        for (int i = 0; i < work_place_count; i++)
+        {
+            rooms_ui.Add(RoomType.WorkPlace);
+        }
+        for (int i = 0; i < kitchen_count; i++)
+        {
+            rooms_ui.Add(RoomType.Kitchen);
+        }
+        for (int i = 0; i < water_closet_count; i++)
+        {
+            rooms_ui.Add(RoomType.WaterCloset);
+        }
         MoveToBuilderMode(rooms_ui);
     }
     public void SetupLevel(List<RoomCreationInfo> rooms)
@@ -91,6 +104,7 @@ public class LocationBuilder : MonoBehaviour
             CallAllInits(room_link);
         }
         UpdateAllWalls();
+        //workers_spawner.position = allRooms.Find(x => x.roomType == RoomType.EntryRoom).GetComponent<Transform>().position;
     }
     Vector3 RotateByVector(Vector3 vector, Vector2Int rotation)
     {
