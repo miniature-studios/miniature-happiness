@@ -47,16 +47,24 @@ public class LocationBuilder : MonoBehaviour
         { 
             if (!list.Contains(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up))) list.Add(new(new Vector2Int(-3, i), RoomType.Outside, Vector2Int.up));
         }
-        //list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
-        //list.Remove(list.Find(x => x.Position == new Vector2Int(1, 2)));
-        //list.Remove(list.Find(x => x.Position == new Vector2Int(0, 1)));
-        //list.Remove(list.Find(x => x.Position == new Vector2Int(1, 1)));
-        List<RoomType> rooms_ui = new List<RoomType>() { RoomType.Corridor };
+        list.Find(x => x.Position == new Vector2Int(0, 2)).RoomType = RoomType.BossRoom1;
+        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 2)));
+        list.Remove(list.Find(x => x.Position == new Vector2Int(0, 1)));
+        list.Remove(list.Find(x => x.Position == new Vector2Int(1, 1)));
+        List<RoomType> rooms_ui = new List<RoomType>();
+        rooms_ui.Add(RoomType.Corridor);
+        rooms_ui.Add(RoomType.Corridor);
+        rooms_ui.Add(RoomType.Corridor);
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.Empty);
         rooms_ui.Add(RoomType.WorkPlace);
         rooms_ui.Add(RoomType.WorkPlace);
+        rooms_ui.Add(RoomType.WorkPlace);
+        rooms_ui.Add(RoomType.Kitchen);
+        rooms_ui.Add(RoomType.Kitchen);
+        rooms_ui.Add(RoomType.WaterCloset);
+        rooms_ui.Add(RoomType.WaterCloset);
         SetupLevel(list);
         MoveToBuilderMode(rooms_ui);
     }
@@ -67,7 +75,6 @@ public class LocationBuilder : MonoBehaviour
             Room room_link = Instantiate(roomObjectsHandler.room_list.Find(x => x.roomtype == room_cr_info.RoomType).obj, ToGlobal(room_cr_info.Position), new Quaternion(), transform).GetComponent<Room>();
             RotateTransform(room_link.transform, room_cr_info.Diraction);
             allRooms.Add(room_link);
-            CallAllInits(room_link);
             if (wallPlacementRules.offeredNeighbours.Select(x => x.parent_room).Contains(room_link.roomType))
             {
                 List<OfferedNeighbours> offeredNeighbours = wallPlacementRules.offeredNeighbours.Where(x => x.parent_room == room_link.roomType).ToList();
@@ -81,6 +88,7 @@ public class LocationBuilder : MonoBehaviour
                     allRooms.Add(room_link_1);
                 }
             }
+            CallAllInits(room_link);
         }
         UpdateAllWalls();
     }
@@ -229,9 +237,8 @@ public class LocationBuilder : MonoBehaviour
             Instantiate(roomObjectsHandler.room_ui.Find(x => x.roomtype == roomType).obj, scrollViewContentRectTransform);
         }
     }
-    public void ValidateLocation()
+    public bool ValidateLocation()
     {
-        scrollView.SetActive(false);
         var dict = new Dictionary<Vector2Int, Room>();
         foreach (var room in allRooms)
         {
@@ -266,6 +273,61 @@ public class LocationBuilder : MonoBehaviour
         }
         location.PathfindingProvider = new PathfindingProvider(availableDiractions);
         paths = availableDiractions;
+        if (!CheckForPaths(availableDiractions, dict))
+            return false;
+        scrollView.SetActive(false);
+        return true;
+    }
+    bool CheckForPaths(Dictionary<Vector2Int, List<Direction>>  availableDiractions, Dictionary<Vector2Int, Room> rooms)
+    {
+        foreach (var item in rooms)
+        {
+            if (item.Value.roomType == RoomType.Outside || item.Value.roomType == RoomType.None)
+            {
+                availableDiractions.Remove(item.Key);
+            }
+        }
+        List<VECmatches> graf = new();
+        foreach (var item in availableDiractions)
+        {
+            graf.Add(new VECmatches(item.Key, new List<Vector2Int>()));
+            foreach (var item1 in item.Value)
+            {
+                graf.Last().connections.Add(graf.Last().point + item1.ToVector2Int());
+            }
+        }
+        List<Vector2Int> stack = new();
+        stack.Add(graf.First().point);
+        while (stack.Count > 0)
+        {
+            var buffer = stack.Last();
+            stack.Remove(buffer);
+            graf.Find(x => x.point == buffer).chacked = true;
+            foreach (var conn in graf.Find(x => x.point == buffer).connections)
+            {
+                if (graf.Find(x => x.point == conn).chacked == false)
+                {
+                    stack.Add(conn);
+                }
+            }
+        }
+        foreach (var item in graf)
+        {
+            if (item.chacked == false)
+                return false;
+        }
+        return true;
+    }
+    class VECmatches
+    {
+        public bool chacked = false;
+        public Vector2Int point;
+        public List<Vector2Int> connections;
+        public VECmatches(Vector2Int point, List<Vector2Int> connections)
+        {
+            this.point = point;
+            this.connections = connections;
+        }
     }
     public bool IsPassable(Room room1, Vector2Int dir1)
     {
@@ -372,9 +434,8 @@ public class LocationBuilder : MonoBehaviour
     }
     void RotateTransform(Transform tr, Vector2Int diraction)
     {
-        tr.Rotate(0, -90 * GetDelay(diraction), 0);
+        tr.Rotate(0, 90 * GetDelay(diraction), 0);
     }
-
     public bool IsEnoughPlace()
     {
         if (allRooms.Find(x => x.roomType == RoomType.None) != null)

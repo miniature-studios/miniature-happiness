@@ -15,7 +15,7 @@ public class RoomUI : MonoBehaviour, IPointerDownHandler
     {
         if (locationBuilder.IsEnoughPlace()) {
             locationBuilder.AddRoomToScene(roomType);
-            if (roomType != RoomType.Corridor) { Destroy(gameObject); }
+            Destroy(gameObject);
         }
         else
         {
