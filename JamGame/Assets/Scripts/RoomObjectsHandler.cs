@@ -10,6 +10,11 @@ public class RoomObjectsHandler : ScriptableObject
     public List<MatchRoomTypes> room_list;
     public List<MatchRoomUi> room_ui;
     public List<RoomType> nonmuvable_rooms;
+
+    public void Draw()
+    {
+
+    }
 }
 [Serializable]
 public class MatchRoomTypes
