@@ -11,9 +11,6 @@ public class ButtonRunGame : MonoBehaviour, IPointerClickHandler
     Location _location;
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_locationbuilder.ValidateLocation())
-        {
-            _location.InitGameMode();
-        }
+        
     }
 }
