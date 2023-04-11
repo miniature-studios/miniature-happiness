@@ -24,6 +24,7 @@ public class TileBuilder : MonoBehaviour
     [SerializeField] TilePrefabsHandler tilePrefabsHandler;
     [SerializeField] GameObject pointer_prefab;
     [SerializeField] float Y_placing_shift = 0;
+    [SerializeField] int X_matrix_placing = 0;
 
     Tile SelectedTile = null;
     GameObject pointer;
@@ -53,6 +54,10 @@ public class TileBuilder : MonoBehaviour
                 AddTileToScene(TileType.outdoor);
             }
         }
+    }
+    public void ChangeXMatrixPlacing(int value)
+    {
+        X_matrix_placing += value;
     }
     public void LoadSceneComposition(string file_path)
     {
@@ -102,18 +107,20 @@ public class TileBuilder : MonoBehaviour
         else
         {
             UpdateTilesSides(SelectedTile.Position);
+            UpdateTilesSides(previous_place);
         }
         SelectedTile = null;
         Destroy(pointer.gameObject);
     }
     public void AddTileToScene(TileType tileType)
     {
-        var new_position = new Vector2Int(0, 0);
+        var new_position = new Vector2Int(X_matrix_placing, 0);
         while (AllTiles.Select(x => x.Position).Contains(new_position))
         {
             new_position += Direction.Up.ToVector2Int();
             if (new_position.y >= 10)
             {
+                X_matrix_placing++;
                 new_position.x++;
                 new_position.y = 0;
             }

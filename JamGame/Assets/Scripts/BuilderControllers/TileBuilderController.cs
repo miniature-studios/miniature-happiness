@@ -5,6 +5,24 @@ public class TileBuilderController : MonoBehaviour
 {
     [SerializeField] public TileBuilder tileBuilder;
     [SerializeField] bool EditorMode = true;
+    public void Start()
+    {
+        if (EditorMode)
+        {
+            Debug.Log("Controls:" +
+                "\nAlpha1 - build" +
+                "\nAlpha2 - outdoor" +
+                "\nAlpha3 - window" +
+                "\nAlpha4 - stairs" +
+                "\nRightArrow - XMatrixPlacing +1" +
+                "\nLeftArrow - XMatrixPlacing -1" +
+                "\n\nTo select tile to move, click LMB on it:" +
+                "\nDeselect tile - RMB" +
+                "\nMove selected tile: W A S D" +
+                "\nRotate selected tile: R" +
+                "\nDelete selected tile: Delete");
+        }
+    }
     public void Update()
     {
         if (EditorMode)
@@ -24,6 +42,14 @@ public class TileBuilderController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
                 tileBuilder.AddTileToScene(TileType.stairs);
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                tileBuilder.ChangeXMatrixPlacing(1);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                tileBuilder.ChangeXMatrixPlacing(-1);
             }
 
             if (Input.GetMouseButtonDown(0))
