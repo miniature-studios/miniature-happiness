@@ -73,26 +73,15 @@ public class TileBuilder : MonoBehaviour
     {
         File.WriteAllText(file_path, JsonConvert.SerializeObject(AllTiles.Select(x => new TileInfo(x.tileType, x.Position, x.Rotation)).ToList()));
     }
-    public void SelectTileByClick()
+    public void SelectTile(Tile tile)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var hits = Physics.RaycastAll(ray, 150f);
-        var roomHits = hits.ToList().Where(x => x.collider.GetComponent<Tile>() != null);
-        if (roomHits.Count() != 0)
-        {
-            var NowSelectedTile = hits.ToList().Find(x => x.collider.GetComponent<Tile>()).collider.GetComponent<Tile>();
-            if ((SelectedTile == null) || (SelectedTile != NowSelectedTile))
-            {
-                ComletePlacing();
-                SelectedTile = AllTiles.Find(x => x == NowSelectedTile);
-                previous_place = SelectedTile.Position;
-                previous_rotation = SelectedTile.Rotation;
-                pointer = Instantiate(pointer_prefab, NowSelectedTile.transform.position, new Quaternion(), transform);
-            }
-        }
-        else
+        if (AllTiles.Contains(tile) && SelectedTile != tile)
         {
             ComletePlacing();
+            SelectedTile = tile;
+            previous_place = SelectedTile.Position;
+            previous_rotation = SelectedTile.Rotation;
+            pointer = Instantiate(pointer_prefab, tile.transform.position, new Quaternion(), transform);
         }
     }
     public void ComletePlacing()

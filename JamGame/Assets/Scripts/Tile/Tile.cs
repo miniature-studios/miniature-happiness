@@ -5,16 +5,30 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class WallHandler
+public class WallPrefabHandler
 {
     public TileWallType Type;
     public GameObject Prefab;
 }
 [Serializable]
-public class WallPrefabCollection
+public class WallCollection
 {
     public TileWallPlace Place;
-    public List<WallHandler> Handlers;
+    public List<WallPrefabHandler> Handlers;
+    public void SetWall(TileWallType type)
+    {
+        foreach (var handler in Handlers)
+        {
+            if(handler.Type == type)
+                handler.Prefab.SetActive(true);
+            else
+                handler.Prefab.SetActive(false);
+        }
+    }
+    public bool IsActiveNone()
+    {
+        return Handlers.Find(x => x.Type == TileWallType.none).Prefab.activeSelf;
+    }
 }
 
 [Serializable]
@@ -28,6 +42,16 @@ public class CornerCollection
 {
     public TileCornerPlace Place;
     public List<CornerPrefabHandler> Handlers;
+    public void SetWall(TileCornerType type)
+    {
+        foreach (var handler in Handlers)
+        {
+            if (handler.Type == type)
+                handler.Prefab.SetActive(true);
+            else
+                handler.Prefab.SetActive(false);
+        }
+    }
 }
 
 [Serializable]
@@ -40,28 +64,34 @@ public class CenterPrefabHandler
 [Serializable]
 public class Tile : MonoBehaviour
 {
-    // Changes only when changed rotation or in start
-    Dictionary<TileWallPlace, List<TileWallType>> cashed_walls;
+    // Changes only when changed rotation or in awake
+    Dictionary<TileWallPlace, List<TileWallType>> cached_walls;
 
     Vector2Int position = new(0,0);
     int rotation = 0;
     float step = 5;
     [SerializeField] public TileType tileType;
-    [SerializeField] public TileElementsHandler elementsHandler;
-    [SerializeField] private List<TileMark> marks;
-    [SerializeField] public List<WallPrefabCollection> walls = new();
-    [SerializeField] public List<CornerCollection> corners = new();
-    [SerializeField] public List<CenterPrefabHandler> centerObjects = new();
-    [SerializeField] private List<TileWallType> wallsPriorityQueue = new() {
+    [SerializeField] TileElementsHandler elementsHandler;
+    [SerializeField] List<TileMark> marks;
+    [SerializeField] List<WallCollection> walls = new();
+    [SerializeField] List<CornerCollection> corners = new();
+    [SerializeField] List<CenterPrefabHandler> centerObjects = new();
+    [SerializeField] List<TileWallType> ForSameWalls_PriorityQueue = new() {
         TileWallType.none,
         TileWallType.door,
         TileWallType.window,
         TileWallType.wall
     };
+    [SerializeField] List<TileWallType> ForDifferentTiles_PriorityQueue = new() {
+        TileWallType.wall,
+        TileWallType.window,
+        TileWallType.door,
+        TileWallType.none
+    };
 
     public void Awake()
     {
-        UpdateCash();
+        UpdateCache();
     }
 
     public void RotateRight()
@@ -69,7 +99,7 @@ public class Tile : MonoBehaviour
         transform.Rotate(0.0f, 90.0f, 0.0f, Space.Self);
         rotation++;
         rotation %= 4;
-        UpdateCash();
+        UpdateCache();
     }
     public void Move(Direction direction)
     {
@@ -92,23 +122,24 @@ public class Tile : MonoBehaviour
         TileWallPlace OutPlace = TileWallPlace.down;
         foreach (var indexes in CheckQueue)
         {
+            TileWallType wallTypeToPlace = TileWallType.none;
             if (tiles[indexes[0]] != null && tiles[indexes[1]] != null) {
-                SetWall(MyPlace,
-                    ChooseWall(
-                        tiles[indexes[0]].Marks,
-                        tiles[indexes[0]].Walls[MyPlace],
-                        tiles[indexes[1]].Marks,
-                        tiles[indexes[1]].Walls[OutPlace]
-                        )
-                    ); 
+                wallTypeToPlace = ChooseWall(
+                    tiles[indexes[0]].Marks,
+                    tiles[indexes[0]].Walls[MyPlace],
+                    tiles[indexes[1]].Marks,
+                    tiles[indexes[1]].Walls[OutPlace]
+                ); 
             }
-            else
-            {
-                SetWall(MyPlace, TileWallType.none);
-            }
+            GetWallCollection(MyPlace).SetWall(wallTypeToPlace);
             MyPlace = MyPlace.Rotate90();
             OutPlace = OutPlace.Rotate90();
         }
+    }
+    public WallCollection GetWallCollection(TileWallPlace imagine_place)
+    {
+        Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
+        return walls.Find(x => x.Place == imagine_place);
     }
     public void UpdateCorners(List<Tile> tiles)
     {
@@ -123,22 +154,17 @@ public class Tile : MonoBehaviour
         TileWallPlace WallPlace = TileWallPlace.left;
         foreach (var indexes in CheckQueue)
         {
+            TileCornerType cornerTypeToPlace = TileCornerType.none;
             if (tiles[indexes[0]] != null && tiles[indexes[1]] != null && tiles[indexes[2]] != null && tiles[indexes[3]] != null)
             {
-                SetCorner(
-                    CornerPlace,
-                    ChooseCorner(
-                        !tiles[indexes[0]].IsActiveNone(WallPlace),
-                        !tiles[indexes[1]].IsActiveNone(WallPlace.Rotate90()),
-                        !tiles[indexes[2]].IsActiveNone(WallPlace.Rotate90().Rotate90()),
-                        !tiles[indexes[3]].IsActiveNone(WallPlace.Rotate90().Rotate90().Rotate90())
-                        )
-                    );
+                cornerTypeToPlace = ChooseCorner(
+                    !tiles[indexes[0]].IsActiveNone(WallPlace),
+                    !tiles[indexes[1]].IsActiveNone(WallPlace.Rotate90()),
+                    !tiles[indexes[2]].IsActiveNone(WallPlace.Rotate90().Rotate90()),
+                    !tiles[indexes[3]].IsActiveNone(WallPlace.Rotate90().Rotate90().Rotate90())
+                );
             }
-            else
-            {
-                SetCorner(CornerPlace, TileCornerType.none);
-            }
+            GetCornerCollection(CornerPlace).SetWall(cornerTypeToPlace);
             CornerPlace = CornerPlace.Rotate90();
             WallPlace = WallPlace.Rotate90();
         }
@@ -153,7 +179,7 @@ public class Tile : MonoBehaviour
         else if (wall_type_intersect.Count > 1)
         {
             var marks_intersect = MyMarks.Intersect(OutMarks).ToList();
-            foreach (var iterator in marks_intersect.Count == 0 ? Enumerable.Reverse(wallsPriorityQueue) : wallsPriorityQueue)
+            foreach (var iterator in marks_intersect.Count == 0 ? ForDifferentTiles_PriorityQueue : ForSameWalls_PriorityQueue)
             {
                 if (wall_type_intersect.Contains(iterator))
                     return iterator;
@@ -182,40 +208,15 @@ public class Tile : MonoBehaviour
         else 
             return TileCornerType.none;
     }
-    void SetWall(TileWallPlace place, TileWallType type)
+    public CornerCollection GetCornerCollection(TileCornerPlace imagine_place)
     {
-        Enumerable.Range(0, rotation).ToList().ForEach(x => place = place.RotateMinus90());
-        foreach (var wall_map in walls.Find(x => x.Place == place).Handlers)
-        {
-            if(wall_map.Type == type)
-            {
-                wall_map.Prefab.SetActive(true);
-            }
-            else
-            {
-                wall_map.Prefab.SetActive(false);
-            }
-        }
+        Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
+        return corners.Find(x => x.Place == imagine_place);
     }
-    void SetCorner(TileCornerPlace place, TileCornerType type)
+    bool IsActiveNone(TileWallPlace imagine_place)
     {
-        Enumerable.Range(0, rotation).ToList().ForEach(arg => place = place.RotateMinus90());
-        foreach (var handler in corners.Find(x => x.Place == place).Handlers)
-        {
-            if (handler.Type == type)
-            {
-                handler.Prefab.SetActive(true);
-            }
-            else
-            {
-                handler.Prefab.SetActive(false);
-            }
-        }
-    }
-    bool IsActiveNone(TileWallPlace wallPlace)
-    {
-        Enumerable.Range(0, rotation).ToList().ForEach(x => wallPlace = wallPlace.RotateMinus90());
-        return walls.Find(x => x.Place == wallPlace).Handlers.Find(x => x.Type == TileWallType.none).Prefab.activeSelf;
+        Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
+        return walls.Find(x => x.Place == imagine_place).IsActiveNone();
     }
 
     // Getters setters
@@ -260,19 +261,19 @@ public class Tile : MonoBehaviour
     {
         get
         {
-            return cashed_walls;
+            return cached_walls;
         }
     }
 
-    private void UpdateCash()
+    private void UpdateCache()
     {
         Dictionary<TileWallPlace, List<TileWallType>> list = new();
         foreach (var wall in walls)
         {
-            TileWallPlace correct_place = wall.Place;
-            Enumerable.Range(0, rotation).ToList().ForEach(arg => correct_place = correct_place.Rotate90());
-            list.Add(correct_place, wall.Handlers.Select(x => x.Type).ToList());
+            TileWallPlace imagine_place = wall.Place;
+            Enumerable.Range(0, rotation).ToList().ForEach(arg => imagine_place = imagine_place.Rotate90());
+            list.Add(imagine_place, wall.Handlers.Select(x => x.Type).ToList());
         }
-        cashed_walls = list;
+        cached_walls = list;
     }
 }

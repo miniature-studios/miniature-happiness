@@ -19,7 +19,7 @@ public class Room : MonoBehaviour
         internalPaths = transform.GetComponent<InternalPathCollection>();
     }
 
-    public WallPrefabCollection GetWallVisualizer(Vector2Int diraction)
+    public WallCollection GetWallVisualizer(Vector2Int diraction)
     {
         throw new NotImplementedException();
     }

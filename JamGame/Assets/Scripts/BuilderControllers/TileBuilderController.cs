@@ -1,4 +1,5 @@
 ﻿using Common;
+using System.Linq;
 using UnityEngine;
 
 public class TileBuilderController : MonoBehaviour
@@ -54,7 +55,13 @@ public class TileBuilderController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                tileBuilder.SelectTileByClick();
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                var hits = Physics.RaycastAll(ray, 150f);
+                var roomHits = hits.ToList().Where(x => x.collider.GetComponent<Tile>() != null);
+                if (roomHits.Count() != 0)
+                    tileBuilder.SelectTile(hits.ToList().Find(x => x.collider.GetComponent<Tile>()).collider.GetComponent<Tile>());
+                else
+                    tileBuilder.ComletePlacing();
             }
             if (Input.GetMouseButtonDown(1))
             {
