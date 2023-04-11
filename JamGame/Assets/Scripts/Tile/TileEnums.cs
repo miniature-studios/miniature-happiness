@@ -107,13 +107,6 @@ public static class TileCornerPlaceTools
         }
     }
 }
-public enum TileMark
-{
-    yard,
-    yard_window,
-    yard_door,
-    build
-}
 public enum TileCornerType
 {
     inside,

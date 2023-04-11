@@ -37,6 +37,32 @@ class TileBuilderControllerEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Turn ON Editor Mode."))
+        {
+            controller.SetEditorMode(true);
+        }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Turn OFF Editor Mode."))
+        {
+            controller.SetEditorMode(false);
+        }
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Turn ON Game Mode."))
+        {
+            controller.SetGameMode(true);
+        }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Turn OFF Game Mode."))
+        {
+            controller.SetGameMode(false);
+        }
+        EditorGUILayout.EndHorizontal();
+
         DrawDefaultInspector();
 
         serializedObject.ApplyModifiedProperties();

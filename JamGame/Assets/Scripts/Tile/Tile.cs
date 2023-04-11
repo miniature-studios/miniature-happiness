@@ -72,7 +72,7 @@ public class Tile : MonoBehaviour
     float step = 5;
     [SerializeField] public TileType tileType;
     [SerializeField] TileElementsHandler elementsHandler;
-    [SerializeField] List<TileMark> marks;
+    [SerializeField] List<string> marks;
     [SerializeField] List<WallCollection> walls = new();
     [SerializeField] List<CornerCollection> corners = new();
     [SerializeField] List<CenterPrefabHandler> centerObjects = new();
@@ -169,7 +169,7 @@ public class Tile : MonoBehaviour
             WallPlace = WallPlace.Rotate90();
         }
     }
-    TileWallType ChooseWall(List<TileMark> MyMarks, List<TileWallType> MyWalls, List<TileMark> OutMarks, List<TileWallType> OutWalls)
+    TileWallType ChooseWall(List<string> MyMarks, List<TileWallType> MyWalls, List<string> OutMarks, List<TileWallType> OutWalls)
     {
         var wall_type_intersect = MyWalls.Intersect(OutWalls).ToList();
         if(wall_type_intersect.Count == 1)
@@ -250,7 +250,7 @@ public class Tile : MonoBehaviour
                 RotateRight();
         }
     }
-    public List<TileMark> Marks
+    public List<string> Marks
     {
         get
         {
@@ -275,5 +275,67 @@ public class Tile : MonoBehaviour
             list.Add(imagine_place, wall.Handlers.Select(x => x.Type).ToList());
         }
         cached_walls = list;
+    }
+
+    public void UpdateTilePrefabComponents()
+    {
+        foreach (var wallCollection in walls)
+        {
+            float degrees = wallCollection.Place.GetDegrees();
+            foreach (var handler in wallCollection.Handlers)
+            {
+                var prefabHandler = elementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
+                if (prefabHandler != null)
+                {
+                    if (handler.Prefab != null)
+                        DestroyImmediate(handler.Prefab);
+                    handler.Prefab = Instantiate(prefabHandler.Prefab, transform.position, prefabHandler.Prefab.transform.rotation, transform);
+                    handler.Prefab.transform.Rotate(new(0, degrees, 0));
+                    handler.Prefab.SetActive(false);
+                    handler.Prefab.name = $"Wall - {handler.Type} - {wallCollection.Place} -| " + handler.Prefab.name;
+                }
+                else
+                {
+                    Debug.LogWarning($"Cannot find prefab for {handler.Type}");
+                }
+            }
+        }
+        foreach (var cornerCollection in corners)
+        {
+            float degrees = cornerCollection.Place.GetDegrees();
+            foreach (var handler in cornerCollection.Handlers)
+            {
+                var prefabHandler = elementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
+                if (prefabHandler != null)
+                {
+                    if (handler.Prefab != null)
+                        DestroyImmediate(handler.Prefab);
+                    handler.Prefab = Instantiate(prefabHandler.Prefab, transform.position, prefabHandler.Prefab.transform.rotation, transform);
+                    handler.Prefab.transform.Rotate(new(0, degrees, 0));
+                    handler.Prefab.SetActive(false);
+                    handler.Prefab.name = $"Corner - {handler.Type} - {cornerCollection.Place} -| " + handler.Prefab.name;
+                }
+                else
+                {
+                    Debug.LogWarning($"Cannot find prefab for {handler.Type}");
+                }
+            }
+        }
+        foreach (var object_in_center in centerObjects)
+        {
+            var prefabHandler = elementsHandler.CenterPrefabHandlers.Find(x => x.Type == object_in_center.Type);
+            if (prefabHandler != null)
+            {
+                if (object_in_center.Prefab != null)
+                    DestroyImmediate(object_in_center.Prefab);
+                object_in_center.Prefab = Instantiate(prefabHandler.Prefab, transform.position, new(), transform);
+                //object_in_center.Prefab.SetActive(false);
+                object_in_center.Prefab.name = $"Corner - {object_in_center.Type} -| " + object_in_center.Prefab.name;
+            }
+            else
+            {
+                Debug.LogWarning($"Cannot find prefab for {object_in_center.Type}");
+            }
+        }
     }
 }

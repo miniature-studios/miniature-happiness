@@ -1147,8 +1147,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5, y: 1, z: 5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 5, y: 0.5, z: 5}
+  m_Center: {x: 0, y: -0.25, z: 0}
 --- !u!114 &4099878462404765592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1163,7 +1163,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileType: 1
   elementsHandler: {fileID: 11400000, guid: 99a66526480ca504a89357db9738482d, type: 2}
-  marks: 00000000
+  marks:
+  - outside
   walls:
   - Place: 0
     Handlers:
@@ -1273,7 +1274,8 @@ MonoBehaviour:
   centerObjects:
   - Type: 1
     Prefab: {fileID: 6706765892709379874}
-  wallsPriorityQueue: 03000000020000000000000001000000
+  ForSameWalls_PriorityQueue: 03000000020000000000000001000000
+  ForDifferentTiles_PriorityQueue: 01000000000000000200000003000000
 --- !u!1 &4107075681449776720
 GameObject:
   m_ObjectHideFlags: 0
