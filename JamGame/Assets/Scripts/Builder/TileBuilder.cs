@@ -10,23 +10,22 @@ using UnityEditor;
 [Serializable]
 public class TileInfo
 {
-    public TileType tileType;
+    public GameObject prefab;
     public Vector2Int position;
     public int rotation;
-    public TileInfo(TileType tileType, Vector2Int position, int rotation)
+    public TileInfo(GameObject prefab, Vector2Int position, int rotation)
     {
-        this.tileType = tileType;
+        this.prefab = prefab;
         this.position = position;
         this.rotation = rotation;
     }
 }
 public class TileBuilder
 {
-    IBuilderValidator validator;
     Transform creating_transform;
-    TilePrefabsHandler tilePrefabsHandler;
     GameObject pointer_prefab;
 
+    int Y_max_matrix_placing = 20;
     int X_matrix_placing = 0;
     Tile SelectedTile = null;
     GameObject pointer;
@@ -34,39 +33,31 @@ public class TileBuilder
     Vector2Int previous_place;
     int previous_rotation;
 
-    public TileBuilder(TilePrefabsHandler prefabsHandler, GameObject pointer_prefab, Transform creating_transform, IBuilderValidator validator)
+    public TileBuilder(GameObject pointer_prefab, Transform creating_transform )
     {
-        tilePrefabsHandler = prefabsHandler;
         this.pointer_prefab = pointer_prefab;
         this.creating_transform = creating_transform;
-        this.validator = validator;
-        this.validator.Init(this);
     }
-    public void ChangeValidator(IBuilderValidator validator)
+    public void CreateRandomTiles(GameObject buildPrefab, GameObject stairsPrefab, GameObject windowPrefab, GameObject outdoorPrefab)
     {
-        this.validator = validator;
-        this.validator.Init(this);
-    }
-    public void CreateRandomTiles()
-    {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < Y_max_matrix_placing * Y_max_matrix_placing; i++)
         {
             var value = UnityEngine.Random.value * 100;
-            if (value < 25)
+            if (value < 50)
             {
-                AddTileToScene(TileType.build);
+                AddTileToScene(buildPrefab);
             }
-            else if(value > 25 && value < 50)
+            else if(value > 50 && value < 65)
             {
-                AddTileToScene(TileType.stairs);
+                AddTileToScene(stairsPrefab);
             }
-            else if (value > 50 && value < 75)
+            else if (value > 65 && value < 80)
             {
-                AddTileToScene(TileType.window);
+                AddTileToScene(windowPrefab);
             }
-            else if (value > 75)
+            else if (value > 80)
             {
-                AddTileToScene(TileType.outdoor);
+                AddTileToScene(outdoorPrefab);
             }
         }
     }
@@ -81,12 +72,12 @@ public class TileBuilder
         var infos = JsonConvert.DeserializeObject<List<TileInfo>>(File.ReadAllText(file_path));
         foreach (var tile in infos)
         {
-            CreateTile(tile.tileType, tile.position, tile.rotation);
+            CreateTile(tile.prefab, tile.position, tile.rotation);
         }
     }
     public void SaveSceneComposition(string file_path)
     {
-        File.WriteAllText(file_path, JsonConvert.SerializeObject(AllTiles.Select(x => new TileInfo(x.tileType, x.Position, x.Rotation)).ToList()));
+        File.WriteAllText(file_path, JsonConvert.SerializeObject(AllTiles.Select(x => new TileInfo(x.gameObject, x.Position, x.Rotation)).ToList()));
     }
     public void SelectTile(Tile tile)
     {
@@ -116,25 +107,24 @@ public class TileBuilder
         SelectedTile = null;
         GameObject.Destroy(pointer.gameObject);
     }
-    public void AddTileToScene(TileType tileType)
+    public void AddTileToScene(GameObject tilePrefab)
     {
         var new_position = new Vector2Int(X_matrix_placing, 0);
         while (AllTiles.Select(x => x.Position).Contains(new_position))
         {
             new_position += Direction.Up.ToVector2Int();
-            if (new_position.y >= 10)
+            if (new_position.y >= Y_max_matrix_placing)
             {
                 X_matrix_placing++;
                 new_position.x++;
                 new_position.y = 0;
             }
         }
-        CreateTile(tileType, new_position, 0);
+        CreateTile(tilePrefab, new_position, 0);
     }
-    public Tile CreateTile(TileType tileType, Vector2Int position, int rotation)
+    public Tile CreateTile(GameObject tilePrefab, Vector2Int position, int rotation)
     {
-        var prefab = tilePrefabsHandler.TilePrefabHandlers.Find(x => x.Type == tileType).Prefab;
-        var tile = GameObject.Instantiate(prefab, creating_transform).GetComponent<Tile>();
+        var tile = GameObject.Instantiate(tilePrefab, creating_transform).GetComponent<Tile>();
         AllTiles.Add(tile);
         tile.Position = position;
         tile.Rotation = rotation;

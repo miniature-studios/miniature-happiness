@@ -1,14 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-// Type that says what tile create (used by TilePrefabsHandler)
-public enum TileType
-{
-    build,
-    outdoor,
-    stairs,
-    window
-}
 public enum TileWallPlace
 {
     up,

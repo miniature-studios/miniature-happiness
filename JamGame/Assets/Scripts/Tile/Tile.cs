@@ -70,7 +70,6 @@ public class Tile : MonoBehaviour
     Vector2Int position = new(0,0);
     int rotation = 0;
     float step = 5;
-    [SerializeField] public TileType tileType;
     [SerializeField] TileElementsHandler elementsHandler;
     [SerializeField] List<string> marks;
     [SerializeField] List<WallCollection> walls = new();

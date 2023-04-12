@@ -1,15 +1,14 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(TileBuilderController))]
-class TileBuilderControllerEditor : Editor
+[CustomEditor(typeof(BuilderValidator))]
+class BuilderValidatorEditor : Editor
 {
     string LoadPath = "/Saves/Random1.txt";
     string SavePath = "/Saves/Random1.txt";
     public override void OnInspectorGUI()
     {
-        
-        var controller = serializedObject.targetObject as TileBuilderController;
+        var validator = serializedObject.targetObject as BuilderValidator;
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Save path: ");
@@ -20,7 +19,7 @@ class TileBuilderControllerEditor : Editor
         if (GUILayout.Button("Save scene into file."))
         {
             string path = Application.dataPath + SavePath;
-            controller.tileBuilder.SaveSceneComposition(path);
+            validator.tileBuilder.SaveSceneComposition(path);
         }
         EditorGUILayout.EndHorizontal();
 
@@ -33,33 +32,33 @@ class TileBuilderControllerEditor : Editor
         if (GUILayout.Button("Load scene from file."))
         {
             string path = Application.dataPath + LoadPath;
-            controller.tileBuilder.LoadSceneComposition(path);
+            validator.tileBuilder.LoadSceneComposition(path);
         }
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Turn ON Editor Mode."))
         {
-            controller.SetEditorMode(true);
+            validator.SetEditorMode(true);
         }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Turn OFF Editor Mode."))
         {
-            controller.SetEditorMode(false);
+            validator.SetEditorMode(false);
         }
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Turn ON Game Mode."))
         {
-            controller.SetGameMode(true);
+            validator.SetGameMode(true);
         }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Turn OFF Game Mode."))
         {
-            controller.SetGameMode(false);
+            validator.SetGameMode(false);
         }
         EditorGUILayout.EndHorizontal();
 
