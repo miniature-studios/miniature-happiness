@@ -20,51 +20,53 @@ public class TileInfo
         this.rotation = rotation;
     }
 }
-public class TileBuilder
+public class TileBuilder : MonoBehaviour
 {
-    Transform creating_transform;
-    GameObject pointer_prefab;
+    [SerializeField] GameObject pointer_prefab;
 
-    int Y_max_matrix_placing = 20;
-    int X_matrix_placing = 0;
+    IValidator validator = new GameingValidator();
+
+    public int Y_max_matrix_placing = 20;
+    public int X_matrix_placing = 0;
     Tile SelectedTile = null;
     GameObject pointer;
     List<Tile> AllTiles = new();
     Vector2Int previous_place;
     int previous_rotation;
 
-    public TileBuilder(GameObject pointer_prefab, Transform creating_transform )
+    public void DoCommand(ICommand command)
     {
-        this.pointer_prefab = pointer_prefab;
-        this.creating_transform = creating_transform;
-    }
-    public void CreateRandomTiles(GameObject buildPrefab, GameObject stairsPrefab, GameObject windowPrefab, GameObject outdoorPrefab)
-    {
-        for (int i = 0; i < Y_max_matrix_placing * Y_max_matrix_placing; i++)
+        if (validator.ValidateCommand(command))
         {
-            var value = UnityEngine.Random.value * 100;
-            if (value < 50)
-            {
-                AddTileToScene(buildPrefab);
-            }
-            else if(value > 50 && value < 65)
-            {
-                AddTileToScene(stairsPrefab);
-            }
-            else if (value > 65 && value < 80)
-            {
-                AddTileToScene(windowPrefab);
-            }
-            else if (value > 80)
-            {
-                AddTileToScene(outdoorPrefab);
-            }
+            // TODO do command
         }
     }
-    public void ChangeXMatrixPlacing(int value)
+    public void ChangeGameMode(Gamemode gamemode)
+    {
+        switch (gamemode)
+        {
+            case Gamemode.godmode_outside:
+                validator = new GodModeOutsideValidator();
+                break;
+            case Gamemode.godmode_inside:
+                validator = new GodModeInsideValidator();
+                break;
+            case Gamemode.building:
+                validator = new BuildingValidator();
+                break;
+            case Gamemode.gameing:
+                validator = new GameingValidator();
+                break;
+            default:
+                throw new ArgumentException();
+        }
+    }
+
+    void ChangeXMatrixPlacing(int value)
     {
         X_matrix_placing += value;
     }
+    // Public for Unity Editor in inspector
     public void LoadSceneComposition(string file_path)
     {
         while (AllTiles.Count > 0)
@@ -79,7 +81,7 @@ public class TileBuilder
     {
         File.WriteAllText(file_path, JsonConvert.SerializeObject(AllTiles.Select(x => new TileInfo(x.gameObject, x.Position, x.Rotation)).ToList()));
     }
-    public void SelectTile(Tile tile)
+    void SelectTile(Tile tile)
     {
         if (AllTiles.Contains(tile) && SelectedTile != tile)
         {
@@ -90,7 +92,7 @@ public class TileBuilder
             pointer = GameObject.Instantiate(pointer_prefab, tile.transform.position, new Quaternion());
         }
     }
-    public void ComletePlacing()
+    void ComletePlacing()
     {
         if (SelectedTile == null)
             return;
@@ -122,16 +124,16 @@ public class TileBuilder
         }
         CreateTile(tilePrefab, new_position, 0);
     }
-    public Tile CreateTile(GameObject tilePrefab, Vector2Int position, int rotation)
+    Tile CreateTile(GameObject tilePrefab, Vector2Int position, int rotation)
     {
-        var tile = GameObject.Instantiate(tilePrefab, creating_transform).GetComponent<Tile>();
+        var tile = GameObject.Instantiate(tilePrefab, transform).GetComponent<Tile>();
         AllTiles.Add(tile);
         tile.Position = position;
         tile.Rotation = rotation;
         UpdateTilesSides(tile.Position);
         return tile;
     }
-    public void DeleteSelectedTile()
+    void DeleteSelectedTile()
     {
         Tile buffer = SelectedTile;
         ComletePlacing();
@@ -144,7 +146,7 @@ public class TileBuilder
         GameObject.Destroy(tile.gameObject);
         UpdateTilesSides(clear_position);
     }
-    public void UpdateTilesSides(Vector2Int position)
+    void UpdateTilesSides(Vector2Int position)
     {
         for (int i = 1; i >= -1; i--)
         {
@@ -211,12 +213,12 @@ public class TileBuilder
     {
         return SelectedTile != null;
     }
-    public void MoveSelectedTile(Direction direction)
+    void MoveSelectedTile(Direction direction)
     {
         SelectedTile.Move(direction);
         pointer.transform.position = SelectedTile.transform.position;
     }
-    public void RotateSelectedTile()
+    void RotateSelectedTile()
     {
         SelectedTile.RotateRight();
     }

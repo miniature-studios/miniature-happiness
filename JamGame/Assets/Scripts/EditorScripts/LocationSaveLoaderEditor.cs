@@ -1,14 +1,14 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BuilderValidator))]
-class BuilderValidatorEditor : Editor
+[CustomEditor(typeof(TileBuilder))]
+class LocationSaveLoaderEditor : Editor
 {
     string LoadPath = "/Saves/Random1.txt";
     string SavePath = "/Saves/Random1.txt";
     public override void OnInspectorGUI()
     {
-        var validator = serializedObject.targetObject as BuilderValidator;
+        var tileBuilder = serializedObject.targetObject as TileBuilder;
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Save path: ");
@@ -19,7 +19,7 @@ class BuilderValidatorEditor : Editor
         if (GUILayout.Button("Save scene into file."))
         {
             string path = Application.dataPath + SavePath;
-            validator.tileBuilder.SaveSceneComposition(path);
+            tileBuilder.SaveSceneComposition(path);
         }
         EditorGUILayout.EndHorizontal();
 
@@ -32,33 +32,7 @@ class BuilderValidatorEditor : Editor
         if (GUILayout.Button("Load scene from file."))
         {
             string path = Application.dataPath + LoadPath;
-            validator.tileBuilder.LoadSceneComposition(path);
-        }
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Turn ON Editor Mode."))
-        {
-            validator.SetEditorMode(true);
-        }
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Turn OFF Editor Mode."))
-        {
-            validator.SetEditorMode(false);
-        }
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Turn ON Game Mode."))
-        {
-            validator.SetGameMode(true);
-        }
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Turn OFF Game Mode."))
-        {
-            validator.SetGameMode(false);
+            tileBuilder.LoadSceneComposition(path);
         }
         EditorGUILayout.EndHorizontal();
 
