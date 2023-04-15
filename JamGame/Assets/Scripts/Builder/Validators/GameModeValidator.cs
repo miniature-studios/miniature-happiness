@@ -2,7 +2,7 @@
 using UnityEngine;
 using Common;
 
-public class GameingValidator : IValidator
+public class GameModeValidator : IValidator
 {
     public bool ValidateCommand(ICommand command)
     {

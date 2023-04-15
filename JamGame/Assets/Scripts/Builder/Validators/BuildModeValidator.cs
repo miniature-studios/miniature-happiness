@@ -2,7 +2,7 @@
 using UnityEngine;
 using Common;
 
-public class BuildingValidator : IValidator
+public class BuildModeValidator : IValidator
 {
     public bool ValidateCommand(ICommand command)
     {

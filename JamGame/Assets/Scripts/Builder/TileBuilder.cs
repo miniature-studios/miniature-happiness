@@ -24,7 +24,7 @@ public class TileBuilder : MonoBehaviour
 {
     [SerializeField] GameObject pointer_prefab;
 
-    IValidator validator = new GameingValidator();
+    IValidator validator = new GameModeValidator();
 
     public int Y_max_matrix_placing = 20;
     public int X_matrix_placing = 0;
@@ -52,10 +52,10 @@ public class TileBuilder : MonoBehaviour
                 validator = new GodModeInsideValidator();
                 break;
             case Gamemode.building:
-                validator = new BuildingValidator();
+                validator = new BuildModeValidator();
                 break;
             case Gamemode.gameing:
-                validator = new GameingValidator();
+                validator = new GameModeValidator();
                 break;
             default:
                 throw new ArgumentException();
