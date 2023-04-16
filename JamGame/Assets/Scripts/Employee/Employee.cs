@@ -76,10 +76,10 @@ public class Employee : MonoBehaviour
             LeaveJob();
     }
 
-    bool whantsToLeave = true;
+    //bool whantsToLeave = true;
     void LeaveJob()
     {
-        whantsToLeave = true;
+        //whantsToLeave = true;
     }
 
     [SerializeField] List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
