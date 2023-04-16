@@ -1,3 +1,5 @@
 using UnityEngine;
-
-public class RoomCenterMarker : MonoBehaviour { }
+namespace EditorScripts
+{
+    public class RoomCenterMarker : MonoBehaviour { }
+}

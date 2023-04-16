@@ -3,7 +3,7 @@ using UnityEngine;
 using Common;
 
 [CustomEditor(typeof(Tile))]
-public class TileEditor : Editor
+public class TilePrefabsFiller : Editor
 {
     public override void OnInspectorGUI()
     {
@@ -80,4 +80,3 @@ public class TileEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
-

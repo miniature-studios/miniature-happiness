@@ -1,25 +1,13 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
-using Common;
 
-[CustomEditor(typeof(TileBuilder))]
-public class TileBuilderEditor : Editor
+public partial class TileBuilderEditor
 {
-    Gamemode gamemode;
-
-    GameObject buildPrefab;
-    GameObject stairsPrefab;
-    GameObject windowPrefab;
-    GameObject outdoorPrefab;
-
     string LoadPath = "/Saves/Random1.txt";
     string SavePath = "/Saves/Random1.txt";
 
-    public override void OnInspectorGUI()
+    public partial void ShowSaveLoading(TileBuilder tileBuilder)
     {
-        var tileBuilder = serializedObject.targetObject as TileBuilder;
-
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Save path: ");
         SavePath = EditorGUILayout.TextField(SavePath);
@@ -46,17 +34,7 @@ public class TileBuilderEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("New Gamemode: ");
-        gamemode = (Gamemode)EditorGUILayout.EnumPopup(gamemode);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Change game mode"))
-        {
-            tileBuilder.ChangeGameMode(gamemode);
-        }
-        EditorGUILayout.EndHorizontal();
+            
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("BuildPrefab: ");
@@ -100,10 +78,6 @@ public class TileBuilderEditor : Editor
             }
         }
         EditorGUILayout.EndHorizontal();
-
-        DrawDefaultInspector();
-
-        serializedObject.ApplyModifiedProperties();
     }
 }
 

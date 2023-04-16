@@ -89,6 +89,33 @@ public class Tile : MonoBehaviour
         TileWallType.none
     };
 
+    public Vector2Int Position
+    {
+        get { return position; }
+        set
+        {
+            position = value;
+            transform.position = new Vector3(
+                step * position.y,
+                transform.position.y,
+                -step * position.x
+                );
+        }
+    }
+    public int Rotation
+    {
+        get { return rotation; }
+        set
+        {
+            if (value < 0 || value > 3)
+                throw new ArgumentException($"Value: {value}");
+            while (rotation != value)
+                RotateRight();
+        }
+    }
+    public List<string> Marks { get { return marks; } }
+    public Dictionary<TileWallPlace, List<TileWallType>> Walls { get { return cached_walls; } }
+
     public void Awake()
     {
         UpdateCache();
@@ -229,32 +256,4 @@ public class Tile : MonoBehaviour
         }
         cached_walls = list;
     }
-
-    // Getters setters
-    public Vector2Int Position
-    {
-        get { return position; }
-        set
-        {
-            position = value;
-            transform.position = new Vector3(
-                step * position.y,
-                transform.position.y,
-                -step * position.x
-                );
-        }
-    }
-    public int Rotation
-{
-        get { return rotation; }
-        set
-        {
-            if (value < 0 || value > 3)
-                throw new ArgumentException($"Value: {value}");
-            while (rotation != value)
-                RotateRight();
-        }
-    }
-    public List<string> Marks { get  { return marks; } }
-    public Dictionary<TileWallPlace, List<TileWallType>> Walls { get { return cached_walls; } }
 }
