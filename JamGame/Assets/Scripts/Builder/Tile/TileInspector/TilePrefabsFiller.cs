@@ -2,13 +2,10 @@
 using UnityEngine;
 using Common;
 
-[CustomEditor(typeof(Tile))]
-public class TilePrefabsFiller : Editor
+public partial class TileInspector
 {
-    public override void OnInspectorGUI()
+    public partial void ShowPrefabsFilling(Tile tile)
     {
-        var tile = serializedObject.targetObject as Tile;
-
         EditorGUILayout.BeginHorizontal();
 
         if (GUILayout.Button("Fill tile with prefabs"))
@@ -74,9 +71,5 @@ public class TilePrefabsFiller : Editor
         }
 
         EditorGUILayout.EndHorizontal();
-
-        DrawDefaultInspector();
-
-        serializedObject.ApplyModifiedProperties();
     }
 }

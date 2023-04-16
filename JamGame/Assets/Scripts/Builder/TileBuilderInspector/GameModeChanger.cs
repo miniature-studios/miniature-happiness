@@ -2,10 +2,10 @@
 using UnityEditor;
 using UnityEngine;
 
-public partial class TileBuilderEditor : Editor
+public partial class TileBuilderInspector
 {
     Gamemode gamemode;
-    public partial void ShowEditorGameModeChangeing(TileBuilder tileBuilder)
+    public partial void ShowGameModeChangeing(TileBuilder tileBuilder)
     {
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("New Gamemode: ");

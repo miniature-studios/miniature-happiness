@@ -1,41 +1,19 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEditor;
+using UnityEngine;
 
-public partial class TileBuilderEditor
+public partial class TileBuilderInspector
 {
-    string LoadPath = "/Saves/Random1.txt";
-    string SavePath = "/Saves/Random1.txt";
-
-    public partial void ShowSaveLoading(TileBuilder tileBuilder)
+    GameObject buildPrefab;
+    GameObject stairsPrefab;
+    GameObject windowPrefab;
+    GameObject outdoorPrefab;
+    public partial void ShowRandomTilesCreating(TileBuilder tileBuilder)
     {
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Save path: ");
-        SavePath = EditorGUILayout.TextField(SavePath);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Save scene into file."))
-        {
-            string path = Application.dataPath + SavePath;
-            tileBuilder.SaveSceneComposition(path);
-        }
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Load path: ");
-        LoadPath = EditorGUILayout.TextField(LoadPath);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Load scene from file."))
-        {
-            string path = Application.dataPath + LoadPath;
-            tileBuilder.LoadSceneComposition(path);
-        }
-        EditorGUILayout.EndHorizontal();
-
-            
-
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("BuildPrefab: ");
         buildPrefab = (GameObject)EditorGUILayout.ObjectField(buildPrefab, typeof(GameObject), true);
@@ -80,4 +58,3 @@ public partial class TileBuilderEditor
         EditorGUILayout.EndHorizontal();
     }
 }
-
