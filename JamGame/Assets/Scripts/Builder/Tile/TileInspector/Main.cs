@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+
+using UnityEditor;
 
 [CustomEditor(typeof(Tile))]
 public partial class TileInspector : Editor
@@ -15,3 +17,5 @@ public partial class TileInspector : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+
+#endif

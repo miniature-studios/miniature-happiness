@@ -27,6 +27,8 @@ public class WallCollection
     }
     public bool IsActive(TileWallType tileWallType)
     {
+        if(Handlers.Find(x => x.Type == tileWallType) == null)
+            return false;
         return Handlers.Find(x => x.Type == tileWallType).Prefab.gameObject.activeSelf;
     }
 }
@@ -64,6 +66,11 @@ public class CenterPrefabHandler
 [Serializable]
 public class Tile : MonoBehaviour
 {
+    List<string> ignoringMarks = new()
+    {
+        "immutable",
+    };
+
     // Changes only when changed rotation or in awake
     Dictionary<TileWallPlace, List<TileWallType>> cached_walls;
 
@@ -198,6 +205,9 @@ public class Tile : MonoBehaviour
     }
     TileWallType ChooseWall(List<string> MyMarks, List<TileWallType> MyWalls, List<string> OutMarks, List<TileWallType> OutWalls)
     {
+        var MyNewMarks = MyMarks.Where(x => !ignoringMarks.Contains(x));
+        var OutNewMarks = OutMarks.Where(x => !ignoringMarks.Contains(x));
+
         var wall_type_intersect = MyWalls.Intersect(OutWalls).ToList();
         if(wall_type_intersect.Count == 1)
         {
@@ -205,7 +215,7 @@ public class Tile : MonoBehaviour
         }
         else if (wall_type_intersect.Count > 1)
         {
-            var marks_intersect = MyMarks.Intersect(OutMarks).ToList();
+            var marks_intersect = MyNewMarks.Intersect(OutNewMarks).ToList();
             foreach (var iterator in marks_intersect.Count == 0 ? ForDifferentTiles_PriorityQueue : ForSameWalls_PriorityQueue)
             {
                 if (wall_type_intersect.Contains(iterator))

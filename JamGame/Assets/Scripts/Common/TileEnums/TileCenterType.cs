@@ -6,6 +6,9 @@ namespace Common
     public enum TileCenterType
     {
         concrete,
-        none
+        none,
+        place1,
+        place2,
+        place3
     }
 }

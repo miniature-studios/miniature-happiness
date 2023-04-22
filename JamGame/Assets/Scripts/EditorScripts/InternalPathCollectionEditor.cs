@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Common;
 using System.Collections.Generic;
 using UnityEditor;
@@ -140,3 +141,4 @@ namespace EditorScripts
         }
     }
 }
+#endif

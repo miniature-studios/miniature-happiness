@@ -4,8 +4,7 @@ namespace Common
 {
     public enum Gamemode
     {
-        godmode_outside,
-        godmode_inside,
+        godmode,
         building,
         gameing
     }

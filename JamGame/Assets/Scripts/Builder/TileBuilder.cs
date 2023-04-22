@@ -22,37 +22,50 @@ public class TileInfo
 }
 public class TileBuilder : MonoBehaviour
 {
-    [SerializeField] GameObject pointer_prefab;
+    #region For Inspector
+    [SerializeField] public GameObject FreecpacePrefab;
+    [SerializeField] public GameObject StairsPrefab;
+    [SerializeField] public GameObject WindowPrefab;
+    [SerializeField] public GameObject OutdoorPrefab;
+    [SerializeField] public GameObject CorridoorPrefab;
+    [SerializeField] public GameObject WorkingPlaceFree;
+    [SerializeField] public GameObject WorkingPlace;
+    [SerializeField] public Gamemode GameMode;
+    [SerializeField] public string LoadPath = "/Saves/Random1.txt";
+    [SerializeField] public string SavePath = "/Saves/Random1.txt";
+    #endregion
 
-    IValidator validator = new GameModeValidator();
+    [SerializeField] GameObject pointerPrefab;
+    [SerializeField] GameObject _freecpacePrefab;
 
-    public int Y_max_matrix_placing = 20;
-    public int X_matrix_placing = 0;
-    Tile SelectedTile = null;
+    IValidator validator;
+
+    List<Tile> allTiles = new();
+
+    // Buffer variables
+    public Tile SelectedTile = null;
     GameObject pointer;
-    List<Tile> AllTiles = new();
     Vector2Int previous_place;
     int previous_rotation;
 
-    public void DoCommand(ICommand command)
+    public bool Execute(ICommand command)
     {
         if (validator.ValidateCommand(command))
         {
-            // TODO do command
+            command.Execute();
+            return true;
         }
+        return false;
     }
     public void ChangeGameMode(Gamemode gamemode)
     {
         switch (gamemode)
         {
-            case Gamemode.godmode_outside:
-                validator = new GodModeOutsideValidator();
-                break;
-            case Gamemode.godmode_inside:
-                validator = new GodModeInsideValidator();
+            case Gamemode.godmode:
+                validator = new GodModeValidator(this);
                 break;
             case Gamemode.building:
-                validator = new BuildModeValidator();
+                validator = new BuildModeValidator(this);
                 break;
             case Gamemode.gameing:
                 validator = new GameModeValidator();
@@ -62,15 +75,9 @@ public class TileBuilder : MonoBehaviour
         }
     }
 
-    void ChangeXMatrixPlacing(int value)
-    {
-        X_matrix_placing += value;
-    }
-    // Public for Unity Editor in inspector
     public void LoadSceneComposition(string file_path)
     {
-        while (AllTiles.Count > 0)
-            DeleteTile(AllTiles.Last());
+        DeleteAllTiles();
         var infos = JsonConvert.DeserializeObject<List<TileInfo>>(File.ReadAllText(file_path));
         foreach (var tile in infos)
         {
@@ -79,71 +86,154 @@ public class TileBuilder : MonoBehaviour
     }
     public void SaveSceneComposition(string file_path)
     {
-        File.WriteAllText(file_path, JsonConvert.SerializeObject(AllTiles.Select(x => new TileInfo(x.gameObject, x.Position, x.Rotation)).ToList()));
+        File.WriteAllText(file_path, JsonConvert.SerializeObject(allTiles.Select(x => new TileInfo(x.gameObject, x.Position, x.Rotation)).ToList()));
     }
-    void SelectTile(Tile tile)
+
+    public void SelectTile(Tile tile)
     {
-        if (AllTiles.Contains(tile) && SelectedTile != tile)
+        if (allTiles.Contains(tile) && SelectedTile != tile)
         {
             ComletePlacing();
             SelectedTile = tile;
+            ApplySelectedTile(tile);
             previous_place = SelectedTile.Position;
             previous_rotation = SelectedTile.Rotation;
-            pointer = GameObject.Instantiate(pointer_prefab, tile.transform.position, new Quaternion());
+            pointer = Instantiate(pointerPrefab, tile.transform.position, new Quaternion());
         }
     }
-    void ComletePlacing()
+    public void ComletePlacing()
     {
         if (SelectedTile == null)
             return;
-        if (AllTiles.Where(x => x != SelectedTile).Select(x => x.Position).Contains(SelectedTile.Position)) 
-        {
-            SelectedTile.Position = previous_place;
-            SelectedTile.Rotation = previous_rotation;
-        }
-        else
+        if(previous_place == SelectedTile.Position)
         {
             UpdateTilesSides(SelectedTile.Position);
             UpdateTilesSides(previous_place);
+            CancelSelectedTile(SelectedTile);
+            SelectedTile = null;
+            Destroy(pointer.gameObject);
+            return;
         }
-        SelectedTile = null;
-        GameObject.Destroy(pointer.gameObject);
-    }
-    public void AddTileToScene(GameObject tilePrefab)
-    {
-        var new_position = new Vector2Int(X_matrix_placing, 0);
-        while (AllTiles.Select(x => x.Position).Contains(new_position))
+        if (validator is GodModeValidator)
         {
-            new_position += Direction.Up.ToVector2Int();
-            if (new_position.y >= Y_max_matrix_placing)
+            var tileUnder = allTiles.Find(x => x != SelectedTile && x.Position == SelectedTile.Position);
+            if (tileUnder == null)
             {
-                X_matrix_placing++;
-                new_position.x++;
-                new_position.y = 0;
+                UpdateTilesSides(SelectedTile.Position);
+                UpdateTilesSides(previous_place);
+                CancelSelectedTile(SelectedTile);
+                SelectedTile = null;
+                Destroy(pointer.gameObject);
+                return;
             }
+            if (!CheckTileForMark(tileUnder, "freecpace"))
+            {
+                SelectedTile.Position = previous_place;
+                SelectedTile.Rotation = previous_rotation;
+            }
+            else
+            {
+                DeleteTile(tileUnder);
+                CreateFreeCpace(previous_place);
+                UpdateTilesSides(SelectedTile.Position);
+                UpdateTilesSides(previous_place);
+            }
+            CancelSelectedTile(SelectedTile);
+            SelectedTile = null;
+            Destroy(pointer.gameObject);
         }
-        CreateTile(tilePrefab, new_position, 0);
+        else
+        {
+            var tileUnder = allTiles.Find(x => x != SelectedTile && x.Position == SelectedTile.Position);
+            if (!CheckTileForMark(tileUnder, "freecpace"))
+            {
+                SelectedTile.Position = previous_place;
+                SelectedTile.Rotation = previous_rotation;
+            }
+            else
+            {
+                DeleteTile(tileUnder);
+                CreateFreeCpace(previous_place);
+                UpdateTilesSides(SelectedTile.Position);
+                UpdateTilesSides(previous_place);
+            }
+            CancelSelectedTile(SelectedTile);
+            SelectedTile = null;
+            Destroy(pointer.gameObject);
+        }
     }
-    Tile CreateTile(GameObject tilePrefab, Vector2Int position, int rotation)
+    public GameObject DeleteSelectedTile()
     {
-        var tile = GameObject.Instantiate(tilePrefab, transform).GetComponent<Tile>();
-        AllTiles.Add(tile);
+        Tile buffer = SelectedTile;
+        ComletePlacing();
+        DeleteTile(buffer);
+        return buffer.gameObject;
+    }
+    public void MoveSelectedTile(Direction direction)
+    {
+        SelectedTile.Move(direction);
+        pointer.transform.position = SelectedTile.transform.position;
+    }
+    public void RotateSelectedTile()
+    {
+        SelectedTile.RotateRight();
+    }
+    public bool CheckTileForMark(Tile tile, string tag)
+    {
+        if (tile == null)
+            return false;
+        return tile.Marks.Contains(tag);
+    }
+    public List<Tile> GetTilesInPosition(Vector2Int position)
+    {
+        return allTiles.FindAll(t => t.Position == position);
+    }
+    public List<Vector2Int> GetInsideListPositions()
+    {
+        return allTiles.FindAll(x => x.Marks.Contains("freecpace")).Select(x => x.Position).ToList();
+    }
+    public void DeleteAllTiles()
+    {
+        ComletePlacing();
+        while (allTiles.Count > 0)
+            DeleteTile(allTiles.Last());
+    }
+    public Tile CreateTile(GameObject tilePrefab, Vector2Int position, int rotation)
+    {
+        var tile = Instantiate(tilePrefab, transform).GetComponent<Tile>();
+        allTiles.Add(tile);
         tile.Position = position;
         tile.Rotation = rotation;
         UpdateTilesSides(tile.Position);
         return tile;
     }
-    void DeleteSelectedTile()
+
+    #region Private methods
+    void CreateFreeCpace(Vector2Int position)
     {
-        Tile buffer = SelectedTile;
-        ComletePlacing();
-        DeleteTile(buffer);
+        _ = CreateTile(_freecpacePrefab, position, 0);
+    }
+    void ApplySelectedTile(Tile tile)
+    {
+        tile.transform.position = new Vector3(
+            tile.transform.position.x,
+            tile.transform.position.y + 3,
+            tile.transform.position.z
+            );
+    }
+    void CancelSelectedTile(Tile tile)
+    {
+        tile.transform.position = new Vector3(
+            tile.transform.position.x,
+            tile.transform.position.y - 3,
+            tile.transform.position.z
+            );
     }
     void DeleteTile(Tile tile)
     {
-        AllTiles.Remove(tile);
         Vector2Int clear_position = tile.Position;
-        GameObject.Destroy(tile.gameObject);
+        Destroy(tile.gameObject);
+        allTiles.Remove(tile);
         UpdateTilesSides(clear_position);
     }
     void UpdateTilesSides(Vector2Int position)
@@ -165,7 +255,7 @@ public class TileBuilder : MonoBehaviour
     }
     void UpdateWallsInPosition(Vector2Int position)
     {
-        var tile = AllTiles.FirstOrDefault(x => x.Position == position);
+        var tile = allTiles.FirstOrDefault(x => x.Position == position);
         if (tile == null)
             return;
         List<Tile> tiles_around = new();
@@ -173,7 +263,7 @@ public class TileBuilder : MonoBehaviour
         {
             for (int j = -1; j <= 1; j++)
             {
-                var buffer = AllTiles.FirstOrDefault(x => x.Position == new Vector2Int(tile.Position.x + j, tile.Position.y + i));
+                var buffer = allTiles.FirstOrDefault(x => x.Position == new Vector2Int(tile.Position.x + j, tile.Position.y + i));
                 if (buffer != null)
                 {
                     tiles_around.Add(buffer);
@@ -188,7 +278,7 @@ public class TileBuilder : MonoBehaviour
     }
     void UpdateCornersInPosition(Vector2Int position)
     {
-        var tile = AllTiles.FirstOrDefault(x => x.Position == position);
+        var tile = allTiles.FirstOrDefault(x => x.Position == position);
         if (tile == null)
             return;
         List<Tile> tiles_around = new();
@@ -196,7 +286,7 @@ public class TileBuilder : MonoBehaviour
         {
             for (int j = -1; j <= 1; j++)
             {
-                var buffer = AllTiles.FirstOrDefault(x => x.Position == new Vector2Int(tile.Position.x + j, tile.Position.y + i));
+                var buffer = allTiles.FirstOrDefault(x => x.Position == new Vector2Int(tile.Position.x + j, tile.Position.y + i));
                 if (buffer != null)
                 {
                     tiles_around.Add(buffer);
@@ -209,17 +299,5 @@ public class TileBuilder : MonoBehaviour
         }
         tile.UpdateCorners(tiles_around);
     }
-    public bool IsTileSelected()
-    {
-        return SelectedTile != null;
-    }
-    void MoveSelectedTile(Direction direction)
-    {
-        SelectedTile.Move(direction);
-        pointer.transform.position = SelectedTile.transform.position;
-    }
-    void RotateSelectedTile()
-    {
-        SelectedTile.RotateRight();
-    }
+    #endregion
 }

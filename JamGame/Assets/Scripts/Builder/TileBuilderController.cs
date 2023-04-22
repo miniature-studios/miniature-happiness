@@ -14,64 +14,54 @@ public class TileBuilderController : MonoBehaviour
             var roomHits = hits.ToList().Where(x => x.collider.GetComponent<Tile>() != null);
             if (roomHits.Count() != 0)
             {
-                //tileBuilder.SelectTile(hits.ToList().Find(x => x.collider.GetComponent<Tile>()).collider.GetComponent<Tile>());
-                tileBuilder.DoCommand(null);
+                var tile = hits.ToList().Find(x => x.collider.GetComponent<Tile>()).collider.GetComponent<Tile>();
+                var command = new SelectTileCommand(tileBuilder, tile);
+                _ = tileBuilder.Execute(command);
             }
             else
             {
-                //tileBuilder.ComletePlacing();
-                tileBuilder.DoCommand(null);
+                _ = tileBuilder.Execute(new ComplatePlacingCommand(tileBuilder));
             }
         }
         if (Input.GetMouseButtonDown(1))
         {
-            //tileBuilder.ComletePlacing();
-            tileBuilder.DoCommand(null);
+            _ = tileBuilder.Execute(new ComplatePlacingCommand(tileBuilder));
         }
-        // FIXME хз как это правильно реализовать
-        if (tileBuilder.IsTileSelected())
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                //tileBuilder.MoveSelectedTile(Direction.Up);
-                tileBuilder.DoCommand(null);
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                //tileBuilder.MoveSelectedTile(Direction.Left);
-                tileBuilder.DoCommand(null);
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                //tileBuilder.MoveSelectedTile(Direction.Down);
-                tileBuilder.DoCommand(null);
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                //tileBuilder.MoveSelectedTile(Direction.Right);
-                tileBuilder.DoCommand(null);
-            }
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                //tileBuilder.RotateSelectedTile();
-                tileBuilder.DoCommand(null);
-            }
+            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Up);
+            _ = tileBuilder.Execute(command);
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            //tileBuilder.ChangeXMatrixPlacing(1);
-            tileBuilder.DoCommand(null);
+            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Left);
+            _ = tileBuilder.Execute(command);
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.S))
         {
-            //tileBuilder.ChangeXMatrixPlacing(-1);
-            tileBuilder.DoCommand(null);
+            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Down);
+            _ = tileBuilder.Execute(command);
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Right);
+            _ = tileBuilder.Execute(command);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _ = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder));
         }
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            //tileBuilder.DeleteSelectedTile();
-            tileBuilder.DoCommand(null);
+            GameObject destroyedtile = null;
+            var command = new DeleteSelectedTileCommand(tileBuilder, ref destroyedtile);
+            _ = tileBuilder.Execute(command);
         }
+    }
+    public bool CreateTile(GameObject tilePrefab)
+    {
+        var command = new AddTileToSceneCommand(tileBuilder, tilePrefab);
+        return tileBuilder.Execute(command);
     }
 }
 

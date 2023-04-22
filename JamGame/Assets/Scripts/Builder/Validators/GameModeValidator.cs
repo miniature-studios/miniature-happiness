@@ -6,6 +6,6 @@ public class GameModeValidator : IValidator
 {
     public bool ValidateCommand(ICommand command)
     {
-        throw new NotImplementedException();
+        return false;
     }
 }

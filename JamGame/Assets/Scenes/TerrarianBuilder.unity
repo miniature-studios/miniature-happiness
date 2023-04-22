@@ -181,9 +181,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d0b92b0aa85bf4796757efe36061bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointer_prefab: {fileID: 5826312097454661961, guid: 668fcb33222705649b6c63b41445f630, type: 3}
-  Y_max_matrix_placing: 20
-  X_matrix_placing: 0
+  FreecpacePrefab: {fileID: 4099878462404765597, guid: faae48f1bf08ba54aa20d6c20532e9ff, type: 3}
+  StairsPrefab: {fileID: 4099878462404765597, guid: 31fab6530be601443b90e2e52fd55cde, type: 3}
+  WindowPrefab: {fileID: 4099878462404765597, guid: 21e0cb481f0a03543aa0769d4c126918, type: 3}
+  OutdoorPrefab: {fileID: 4099878462404765597, guid: de6e03ffc1804ca48b2db0bf83b89795, type: 3}
+  CorridoorPrefab: {fileID: 8564799511680460385, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
+  WorkingPlaceFree: {fileID: 2583033231609469921, guid: 69163a8fbc2c34447b14a5a69481271c, type: 3}
+  WorkingPlace: {fileID: 5235027128370989237, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
+  GameMode: 1
+  LoadPath: /Saves/Random1.txt
+  SavePath: /Saves/Random1.txt
+  pointerPrefab: {fileID: 5826312097454661961, guid: 668fcb33222705649b6c63b41445f630, type: 3}
+  _freecpacePrefab: {fileID: 4099878462404765597, guid: faae48f1bf08ba54aa20d6c20532e9ff, type: 3}
+  SelectedTile: {fileID: 0}
 --- !u!1 &500220673
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +479,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699669835}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
   m_LocalScale: {x: 100, y: 1, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []

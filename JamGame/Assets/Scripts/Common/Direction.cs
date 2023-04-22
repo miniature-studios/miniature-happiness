@@ -42,5 +42,20 @@ namespace Common
                     return Vector2Int.zero;
             }
         }
+
+        public static Direction Rotate90(this Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.Up: return Direction.Right;
+                case Direction.Down: return Direction.Left;
+                case Direction.Left: return Direction.Up;
+                case Direction.Right: return Direction.Down;
+                case Direction.Center: return Direction.Center;
+                default:
+                    Debug.LogError("Unknown Direction");
+                    return dir;
+            }
+        }
     }
 }
