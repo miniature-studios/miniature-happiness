@@ -3,7 +3,7 @@
 public class DeleteSelectedTileCommand : ICommand
 {
     TileBuilder tileBuilder;
-    GameObject destroyedTile;
+    GameObject destroyedTile; // TODO
     public DeleteSelectedTileCommand(TileBuilder tileBuilder, ref GameObject destroyedTile)
     {
         this.tileBuilder = tileBuilder;
@@ -11,6 +11,6 @@ public class DeleteSelectedTileCommand : ICommand
     }
     public void Execute()
     {
-        destroyedTile = tileBuilder.DeleteSelectedTile();
+        tileBuilder.DeleteSelectedTile();
     }
 }

@@ -4,18 +4,18 @@ using UnityEngine;
 public class AddTileToSceneCommand : ICommand
 {
     TileBuilder tileBuilder;
-    GameObject tilePrefab;
+    public GameObject TilePrefab;
+    public Vector2Int CreatingPosition;
+    public int CreatingRotation;
     public AddTileToSceneCommand(TileBuilder tileBuilder, GameObject tilePrefab)
     {
         this.tileBuilder = tileBuilder;
-        this.tilePrefab = tilePrefab;
-    }
-    public void SetParameters(GameObject tilePrefab)
-    {
-        this.tilePrefab = tilePrefab;
+        this.TilePrefab = tilePrefab;
+        CreatingPosition = new();
+        CreatingRotation = 0;
     }
     public void Execute()
     {
-        tileBuilder.CreateTile(tilePrefab, tileBuilder.GetInsideListPositions().First(), 0);
+        tileBuilder.AddTileIntoBuilding(TilePrefab, CreatingPosition, CreatingRotation);
     }
 }

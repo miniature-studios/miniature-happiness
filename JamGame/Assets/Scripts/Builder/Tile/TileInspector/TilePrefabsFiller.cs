@@ -87,23 +87,6 @@ public partial class TileInspector
             {
                 centerHadler = tile.transform.Find("Center").gameObject;
             }
-
-            foreach (var object_in_center in tile.centerObjects)
-            {
-                var prefabHandler = tile.elementsHandler.CenterPrefabHandlers.Find(x => x.Type == object_in_center.Type);
-                if (prefabHandler != null)
-                {
-                    if (object_in_center.Prefab != null)
-                        DestroyImmediate(object_in_center.Prefab);
-                    object_in_center.Prefab = Instantiate(prefabHandler.Prefab, tile.transform.position, new(), centerHadler.transform);
-                    //object_in_center.Prefab.SetActive(false);
-                    object_in_center.Prefab.name = $"Center - {object_in_center.Type} -| " + object_in_center.Prefab.name;
-                }
-                else
-                {
-                    Debug.LogError($"Cannot find prefab for {object_in_center.Type}");
-                }
-            }
         }
 
         EditorGUILayout.EndHorizontal();
