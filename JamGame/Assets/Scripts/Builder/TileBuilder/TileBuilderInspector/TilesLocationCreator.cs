@@ -69,9 +69,9 @@ public partial class TileBuilderInspector
         }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add BIG working place"))
+        if (GUILayout.Button("Add choosed Tile"))
         {
-            tileBuilder.Execute(new AddTileToSceneCommand(tileBuilder, tileBuilder.BigWorkingPlace));
+            tileBuilder.Execute(new AddTileToSceneCommand(tileBuilder, tileBuilder.ChoosedTile));
         }
         if (GUILayout.Button("Create 1 of 4 tiles"))
         {

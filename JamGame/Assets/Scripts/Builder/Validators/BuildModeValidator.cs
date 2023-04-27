@@ -63,10 +63,6 @@ public class BuildModeValidator : IValidator
         {
             return new Answer("Accepted", true);
         }
-        if (command is CancelAddingCommand)
-        {
-            return new Answer("Accepted", true);
-        }
         if (command is RotateSelectedTileCommand)
         {
             if (tileBuilder.SelectedTile == null)

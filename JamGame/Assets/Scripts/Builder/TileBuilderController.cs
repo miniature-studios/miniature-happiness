@@ -25,12 +25,6 @@ public class TileBuilderController : MonoBehaviour
                 Debug.Log(answer.Massage);
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            var command = new CancelAddingCommand(tileBuilder);
-            var answer = tileBuilder.Execute(command);
-            Debug.Log(answer.Massage);
-        }
         if (Input.GetMouseButtonDown(1))
         {
             var answer = tileBuilder.Execute(new ComplatePlacingCommand(tileBuilder));
@@ -67,8 +61,8 @@ public class TileBuilderController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            GameObject destroyedtile = null;
-            var command = new DeleteSelectedTileCommand(tileBuilder, ref destroyedtile);
+            GameObject destroyedTile = null;
+            var command = new DeleteSelectedTileCommand(tileBuilder, ref destroyedTile);
             var answer = tileBuilder.Execute(command);
             Debug.Log(answer.Massage);
         }

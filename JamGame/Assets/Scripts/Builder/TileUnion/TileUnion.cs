@@ -206,24 +206,72 @@ public class TileUnion : MonoBehaviour
         {
             return vector;
         }
+        List<Vector2> variants = new();
         if (Math.Abs(vector.x % 1) == 0.5)
         {
-            // on x right axis TODO
+            float tail = Math.Abs(vector.y % 1);
+            if (tail < 0.5)
+            {
+                variants.Add(new(vector.x, (float)Math.Truncate(vector.y)));
+                variants.Add(new(vector.x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y));
+            }
+            else
+            {
+                variants.Add(new(vector.x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y));
+                variants.Add(new(vector.x, (float)Math.Truncate(vector.y) + vector.normalized.y));
+            }
         }
-        if (Math.Abs(vector.y % 1) == 0.5)
+        else if (Math.Abs(vector.y % 1) == 0.5)
         {
-            // on y right axis TODO
+            float tail = Math.Abs(vector.x % 1);
+            if (tail < 0.5)
+            {
+                variants.Add(new((float)Math.Truncate(vector.x), vector.y));
+                variants.Add(new((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, vector.y));
+            }
+            else
+            {
+                variants.Add(new((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, vector.y));
+                variants.Add(new((float)Math.Truncate(vector.x) + vector.normalized.x, vector.y));
+            }
         }
-        /* TODO
-        List<Vector2> list = new();
-        list.Add(new((float)Math.Truncate(vector.x), (float)Math.Truncate(vector.y)));
-        list.Add(new(list.First().x + vector.normalized.x, list.First().y));
-        list.Add(new(list.First().x, list.First().y + vector.normalized.y));
-        list.Add(new(list.First().x + vector.normalized.x, list.First().y + vector.normalized.y));
-        list.Add(new(list.First().x + vector.normalized.x/2, list.First().y + vector.normalized.y/2));
-        list = list.Select(x => x = new Vector2(x.x + vector.normalized.x/2, x.y + vector.normalized.y / 2)).ToList();
-        return list.OrderBy(x => Vector2.Distance(x, vector)).First();
-        */
-        throw new NotImplementedException();
+        else
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                variants.Add(new());
+            }
+            float tail_x = Math.Abs(vector.x % 1);
+            float tail_y = Math.Abs(vector.y % 1);
+            if(tail_x < 0.5)
+            {
+                variants[0] = new Vector2((float)Math.Truncate(vector.x), variants[0].y);
+                variants[1] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[1].y);
+                variants[2] = new Vector2((float)Math.Truncate(vector.x), variants[2].y);
+                variants[3] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[3].y);
+            }
+            else
+            {
+                variants[0] = new Vector2((float)Math.Truncate(vector.x) + vector.normalized.x, variants[0].y);
+                variants[1] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[1].y);
+                variants[2] = new Vector2((float)Math.Truncate(vector.x) + vector.normalized.x, variants[2].y);
+                variants[3] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[3].y);
+            }
+            if (tail_y < 0.5)
+            {
+                variants[0] = new Vector2(variants[0].x, (float)Math.Truncate(vector.y));
+                variants[1] = new Vector2(variants[1].x, (float)Math.Truncate(vector.y));
+                variants[2] = new Vector2(variants[2].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
+                variants[3] = new Vector2(variants[3].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
+            }
+            else
+            {
+                variants[0] = new Vector2(variants[0].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
+                variants[1] = new Vector2(variants[1].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
+                variants[2] = new Vector2(variants[2].x, (float)Math.Truncate(vector.y) + vector.normalized.y);
+                variants[3] = new Vector2(variants[3].x, (float)Math.Truncate(vector.y) + vector.normalized.y);
+            }
+        }
+        return variants.OrderBy(x => Vector2.Distance(x, vector)).First();
     }
 }

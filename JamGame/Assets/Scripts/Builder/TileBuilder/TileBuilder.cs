@@ -30,7 +30,7 @@ public class TileBuilder : MonoBehaviour
     [SerializeField] public GameObject CorridoorPrefab;
     [SerializeField] public GameObject WorkingPlaceFree;
     [SerializeField] public GameObject WorkingPlace;
-    [SerializeField] public GameObject BigWorkingPlace;
+    [SerializeField] public GameObject ChoosedTile;
     [SerializeField] public Gamemode GameMode;
     [SerializeField] public string LoadPath = "/Saves/Random1.txt";
     [SerializeField] public string SavePath = "/Saves/Random1.txt";
@@ -38,6 +38,7 @@ public class TileBuilder : MonoBehaviour
 
     [SerializeField] GameObject pointerPrefab;
     [SerializeField] GameObject _freecpacePrefab;
+    [SerializeField] GameObject errorPlacingPrefab;
 
     IValidator validator = new GameModeValidator();
 
@@ -46,6 +47,7 @@ public class TileBuilder : MonoBehaviour
     // Buffer variables
     public TileUnion SelectedTile = null;
     GameObject pointer;
+    List<GameObject> errors = new();
 
     bool justCreated = false;
     Vector2Int previousPlace;
@@ -85,7 +87,7 @@ public class TileBuilder : MonoBehaviour
         var infos = JsonConvert.DeserializeObject<List<TileInfo>>(File.ReadAllText(file_path));
         foreach (var tile in infos)
         {
-            CreateTile(tile.prefab, tile.position, tile.rotation);
+            _ = CreateTile(tile.prefab, tile.position, tile.rotation);
         }
     }
     public void SaveSceneComposition(string file_path)
@@ -119,53 +121,37 @@ public class TileBuilder : MonoBehaviour
             previousRotation = SelectedTile.Rotation;
             pointer = Instantiate(pointerPrefab, picked.TileUnionCenter, new Quaternion());
             IsolateUpdate(SelectedTile);
+            ApplyErrorPlacing(SelectedTile);
             return new Answer("Selected", true);
         }
     }
-    public Answer CanselSelectingTile(out GameObject destroyedObject)
-    {
-        if (SelectedTile == null)
-        {
-            destroyedObject = null;
-            return new Answer("Not selected Tile", false);
-        }
-        if (justCreated)
-        {
-            justCreated = false;
-            destroyedObject = null; // TODO
-            Destroy(SelectedTile.gameObject);
-            return new Answer("Selecting canceled", true);
-        }
-        else
-        {
-            SelectedTile.Position = previousPlace;
-            SelectedTile.Rotation = previousRotation;
-            UpdateSidesInPositions(SelectedTile.TilesPositionsForUpdating);
-            UpdateSidesInPositions(previousPlaces);
-            CancelSelectedTile(SelectedTile);
-            SelectedTile = null;
-            Destroy(pointer.gameObject);
-            destroyedObject = null;
-            justCreated = false;
-            return new Answer("Selecting canceled", true);
-        }
-    }
-    public Answer DeleteSelectedTile(ref GameObject destroyedTile)
+    public Answer DeleteSelectedTile(out GameObject destroyedTile)
     {
         if (SelectedTile == null)
         {
             destroyedTile = null;
             return new Answer("Not selected Tile", false);
         }
+        if (justCreated)
+        {
+            justCreated = false;
+            destroyedTile = DeleteTile(SelectedTile);
+            Destroy(pointer.gameObject);
+            CancelErrorPlacing();
+            return new Answer("Selected tile deleted", true);
+        }
         else
         {
             var deletedPositions = new List<Vector2Int>(SelectedTile.TilesPositions);
-            ComletePlacing();
             destroyedTile = DeleteTile(SelectedTile);
             foreach (var position in deletedPositions)
             {
-                CreateTile(FreecpacePrefab, position, 0);
+                _ = CreateTile(FreecpacePrefab, position, 0);
             }
+            UpdateSidesInPositions(deletedPositions);
+            justCreated = false;
+            Destroy(pointer.gameObject);
+            CancelErrorPlacing();
             return new Answer("Selected tile deleted", true);
         }
     }
@@ -179,6 +165,8 @@ public class TileBuilder : MonoBehaviour
         {
             SelectedTile.Move(direction);
             pointer.transform.position = SelectedTile.TileUnionCenter;
+            CancelErrorPlacing();
+            ApplyErrorPlacing(SelectedTile);
             return new Answer("Selected tile moved", true);
         }
     }
@@ -192,6 +180,8 @@ public class TileBuilder : MonoBehaviour
         {
             SelectedTile.Rotation++;
             pointer.transform.position = SelectedTile.TileUnionCenter;
+            CancelErrorPlacing();
+            ApplyErrorPlacing(SelectedTile);
             return new Answer("Selected tile rotated", true);
         }
     }
@@ -208,6 +198,7 @@ public class TileBuilder : MonoBehaviour
             CancelSelectedTile(SelectedTile);
             SelectedTile = null;
             Destroy(pointer.gameObject);
+            CancelErrorPlacing();
             return new Answer("same place", true);
         }
         var tilesUnder = allTiles.FindAll(x => x != SelectedTile && x.TilesPositions.Intersect(SelectedTile.TilesPositions).ToList().Count > 0);
@@ -219,6 +210,7 @@ public class TileBuilder : MonoBehaviour
             SelectedTile = null;
             Destroy(pointer.gameObject);
             justCreated = false;
+            CancelErrorPlacing();
             return new Answer("Placed in the void |GodMode|", true);
         }
 
@@ -229,7 +221,6 @@ public class TileBuilder : MonoBehaviour
         List<Tile> incorrectTiles = new();
         if (!IsValidPlacing(SelectedTile, out incorrectTiles))
         {
-            // TODO incorrectTiles
             return new Answer($"Cannot place {incorrectTiles.Count} tiles", false);
         }
 
@@ -250,18 +241,14 @@ public class TileBuilder : MonoBehaviour
         SelectedTile = null;
         Destroy(pointer.gameObject);
         justCreated = false;
+        CancelErrorPlacing();
         return new Answer("Placed", true);
     }
     public Answer DeleteAllTiles()
     {
-        var ansver = ComletePlacing();
-        if (ansver.Accepted)
-        {
-            while (allTiles.Count > 0)
-                _ = DeleteTile(allTiles.Last());
-            return new Answer("Deleted all tiles", true);
-        }
-        else return ansver;
+        while (allTiles.Count > 0)
+            _ = DeleteTile(allTiles.Last());
+        return new Answer("Deleted all tiles", true);
     }
 
     public Answer AddTileIntoBuilding(GameObject tilePrefab, Vector2Int position, int rotation)
@@ -352,6 +339,22 @@ public class TileBuilder : MonoBehaviour
             tileUnion.transform.position.y - 3,
             tileUnion.transform.position.z
             );
+    }
+    void ApplyErrorPlacing(TileUnion tileUnion)
+    {
+        _ = IsValidPlacing(tileUnion, out List<Tile> errorTiles);
+        foreach (var tile in errorTiles)
+        {
+            errors.Add(Instantiate(errorPlacingPrefab, tile.transform.position, new(), transform));
+        }
+    }
+    void CancelErrorPlacing()
+    {
+        while(errors.Count > 0)
+        {
+            Destroy(errors.Last().gameObject);
+            errors.Remove(errors.Last());
+        }
     }
     GameObject DeleteTile(TileUnion tileUnion)
     {
