@@ -4,8 +4,8 @@ using Common;
 
 public class GameModeValidator : IValidator
 {
-    public bool ValidateCommand(ICommand command)
+    public Answer ValidateCommand(ICommand command)
     {
-        return false;
+        return new Answer("Cannot do anything in Game Mode", false);
     }
 }

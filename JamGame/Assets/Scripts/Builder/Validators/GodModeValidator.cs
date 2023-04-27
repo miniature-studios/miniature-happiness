@@ -9,7 +9,7 @@ public class GodModeValidator : IValidator
         this.tileBuilder = tileBuilder;
     }
 
-    public bool ValidateCommand(ICommand command)
+    public Answer ValidateCommand(ICommand command)
     {
         if (command is AddTileToSceneCommand)
         {
@@ -22,12 +22,11 @@ public class GodModeValidator : IValidator
                 foreach (var freePosition in insideListPositions)
                 {
                     var futurePlaces = creatingtileUnion.GetImaginePlaces(freePosition, creatingtileUnion.Rotation + rotation);
-                    if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TileCount
-                        && tileBuilder.IsValidPlacing(creatingtileUnion, freePosition, rotation))
+                    if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TileCount)
                     {
                         addCommand.CreatingPosition = freePosition;
                         addCommand.CreatingRotation = rotation;
-                        return true;
+                        return new Answer("Accepted", true);
                     }
                 }
                 rotation++;
@@ -39,27 +38,9 @@ public class GodModeValidator : IValidator
             } while (tileBuilder.GetTileUnionsInPositions(creatingtileUnion.GetImaginePlaces(position, creatingtileUnion.Rotation)).Count > 0);
             addCommand.CreatingPosition = position;
             addCommand.CreatingRotation = creatingtileUnion.Rotation;
-            return true;
+            return new Answer("Accepted", true);
         }
-        if (command is MoveSelectedTileCommand)
-        {
-            if (tileBuilder.SelectedTile == null)
-                return false;
-            return true;
-        }
-        if (command is DeleteSelectedTileCommand)
-        {
-            if (tileBuilder.SelectedTile == null)
-                return false;
-            return true;
-        }
-        if (command is RotateSelectedTileCommand)
-        {
-            if (tileBuilder.SelectedTile == null)
-                return false;
-            return true;
-        }
-        return true;
+        return new Answer("Accepted", true);
     }
 }
 

@@ -8,8 +8,8 @@ public class SelectTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.tile = tile;
     }
-    public void Execute()
+    public Answer Execute()
     {
-        tileBuilder.SelectTile(tile);
+        return tileBuilder.SelectTile(tile);
     }
 }

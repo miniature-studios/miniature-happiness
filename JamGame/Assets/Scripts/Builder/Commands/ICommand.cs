@@ -2,6 +2,6 @@
 
 public interface ICommand
 {
-    public abstract void Execute();
+    public abstract Answer Execute();
 }
 

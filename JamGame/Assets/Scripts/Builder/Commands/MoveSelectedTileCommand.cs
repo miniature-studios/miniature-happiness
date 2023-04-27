@@ -9,9 +9,9 @@ public class MoveSelectedTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.direction = direction;
     }
-    public void Execute()
+    public Answer Execute()
     {
-        tileBuilder.MoveSelectedTile(direction);
+        return tileBuilder.MoveSelectedTile(direction);
     }
 }
 

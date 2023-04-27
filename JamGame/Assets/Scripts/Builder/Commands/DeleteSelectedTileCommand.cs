@@ -9,8 +9,8 @@ public class DeleteSelectedTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.destroyedTile = destroyedTile;
     }
-    public void Execute()
+    public Answer Execute()
     {
-        tileBuilder.DeleteSelectedTile();
+        return tileBuilder.DeleteSelectedTile(ref destroyedTile);
     }
 }

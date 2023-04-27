@@ -109,75 +109,26 @@ public class TileUnion : MonoBehaviour
         }
         return list.Select(x => x + unionPosition).ToList();
     }
-    public (Dictionary<Vector2Int, Tile>, List<Vector2Int>) GetImagineUpdatingPlaces(Vector2Int unionPosition, int unionRotation)
+    public List<Tile> IsValidPlacing(Dictionary<Vector2Int, Tile> tilePairs)
     {
-        Dictionary<Vector2Int, Tile> dict = new();
-
-        foreach (var tile in tiles)
+        Dictionary<Vector2Int, Tile> localTilePairs = new();
+        foreach (var pairs in tilePairs)
         {
-            dict.Add(tile.Position, tile);
+            localTilePairs.Add(pairs.Key - Position, pairs.Value);
         }
-
-        Dictionary<Vector2Int, Tile> newDict = new();
-
-        // Rotating
-        for (int j = Rotation; j < unionRotation; j++)
-        {
-            var firstCenter = GetCenterMass(dict.Select(x => x.Key).ToList());
-            foreach (var item in dict)
-            {
-                newDict.Add(new(item.Key.y, -item.Key.x), item.Value);
-            }
-            var secondCenter = GetCenterMass(dict.Select(x => x.Key).ToList());
-            var delta = (firstCenter - secondCenter);
-            dict.Clear();
-            foreach (var item in newDict)
-            {
-                dict.Add(new(item.Key.x + (int)delta.x, item.Key.y + (int)delta.y), item.Value);
-            }
-        }
-
-        HashSet<Vector2Int> buffer = new();
-        foreach (var place in dict.Keys)
-        {
-            for (int i = 1; i >= -1; i--)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    var pos = new Vector2Int(place.x + j, place.y + i);
-                    buffer.Add(pos);
-                }
-            }
-        }
-        List<Vector2Int> nullPositions = new();
-        foreach (var position in buffer)
-        {
-            if (!dict.ContainsKey(position))
-                nullPositions.Add(position + unionPosition);
-        }
-        newDict.Clear();
-        foreach (var item in dict)
-        {
-            newDict.Add(new Vector2Int(item.Key.x + unionPosition.x, item.Key.y + unionPosition.y), item.Value);
-        }
-        return (newDict, nullPositions);
-    }
-    public List<Tile> IsValidPlacing(Dictionary<Vector2Int, Tile> tilePairs, Vector2Int unionPosition, int unionRotation)
-    {
         List<Tile> invalidTiles = new();
-        var ImPlaces = GetImaginePlaces(unionPosition, unionRotation);
-        foreach (var place in ImPlaces)
+        foreach (var tile in tiles)
         {
             List<Tile> tilesAround = new();
             for (int i = 1; i >= -1; i--)
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    tilesAround.Add(tilePairs[place + new Vector2Int(j, i)]);
+                    tilesAround.Add(localTilePairs[tile.Position + new Vector2Int(j, i)]);
                 }
             }
-            if (!tilePairs[place].TryUpdateWalls(tilesAround))
-                invalidTiles.Add(tilePairs[place]);
+            if (!tile.TryUpdateWalls(tilesAround))
+                invalidTiles.Add(tile);
         }
         return invalidTiles;
     }

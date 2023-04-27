@@ -1,8 +1,8 @@
 ﻿
-public class ComplatePlacingCommand : ICommand
+public class CancelAddingCommand : ICommand
 {
     TileBuilder tileBuilder;
-    public ComplatePlacingCommand(TileBuilder tileBuilder)
+    public CancelAddingCommand(TileBuilder tileBuilder)
     {
         this.tileBuilder = tileBuilder;
     }

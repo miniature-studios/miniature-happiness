@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 public interface IValidator
 {
-    public bool ValidateCommand(ICommand command);
+    public Answer ValidateCommand(ICommand command);
 }
 
