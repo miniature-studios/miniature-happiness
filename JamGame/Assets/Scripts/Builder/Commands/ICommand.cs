@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Common;
 
 public interface ICommand
 {
-    public abstract Answer Execute();
+    public abstract Response Execute();
 }
 

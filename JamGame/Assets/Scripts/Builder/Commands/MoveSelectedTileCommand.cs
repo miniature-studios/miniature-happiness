@@ -1,4 +1,7 @@
 ﻿using Common;
+using System.Linq;
+using System;
+using UnityEngine;
 
 public class MoveSelectedTileCommand : ICommand
 {
@@ -9,7 +12,7 @@ public class MoveSelectedTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.direction = direction;
     }
-    public Answer Execute()
+    public Response Execute()
     {
         return tileBuilder.MoveSelectedTile(direction);
     }

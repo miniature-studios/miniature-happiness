@@ -3,22 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TileUnion : MonoBehaviour
 {
+    [SerializeField] public string UiName = "TileUnion";
+    [SerializeField] public GameObject UnionPrefab;
     [SerializeField] public List<Tile> tiles = new();
     [SerializeField] Vector2Int unionPosition;
     [SerializeField] int unionRotation;
-    float step = 5;
     public Vector2Int Position
     {
         get { return unionPosition; }
         set {
             unionPosition = value;
             transform.localPosition = new Vector3(
-                step * unionPosition.y,
+                BuilderMatrix.Step * unionPosition.y,
                 transform.localPosition.y,
-                -step * unionPosition.x
+                -BuilderMatrix.Step * unionPosition.x
                 );
         }
     }
@@ -71,7 +73,8 @@ public class TileUnion : MonoBehaviour
             return vector;
         }
     }
-    public int TileCount { get { return tiles.Count; } }
+    public int TilesCount { get { return tiles.Count; } }
+    public Vector2Int CenterTilePosition { get { return GetCenterTilePosition(); } }
     public void Move(Direction direction)
     {
         Position += direction.ToVector2Int();
@@ -191,13 +194,13 @@ public class TileUnion : MonoBehaviour
     }
     Vector2 GetCenterMass(List<Vector2Int> positions)
     {
-        Vector2 firstPos = new();
+        Vector2 VectorSum = new();
         foreach (var pos in positions)
         {
-            firstPos += pos;
+            VectorSum += pos;
         }
-        firstPos /= positions.Count;
-        return GetRightPoint(firstPos);
+        VectorSum /= positions.Count;
+        return GetRightPoint(VectorSum);
     }
     Vector2 GetRightPoint(Vector2 vector)
     {
@@ -273,5 +276,20 @@ public class TileUnion : MonoBehaviour
             }
         }
         return variants.OrderBy(x => Vector2.Distance(x, vector)).First();
+    }
+    Vector2Int GetCenterTilePosition()
+    {
+        Vector2 VectorSum = new();
+        foreach (var pos in TilesPositions)
+        {
+            VectorSum += pos;
+        }
+        VectorSum /= TilesCount;
+        List<Vector2Int> vectors = new();
+        vectors.Add(new((int)Math.Truncate(VectorSum.x), (int)Math.Truncate(VectorSum.y)));
+        vectors.Add(new((int)Math.Truncate(VectorSum.x), (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y));
+        vectors.Add(new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y)));
+        vectors.Add(new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y));
+        return vectors.OrderBy(x => Vector2.Distance(x, VectorSum)).First();
     }
 }

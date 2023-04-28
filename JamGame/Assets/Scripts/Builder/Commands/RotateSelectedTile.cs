@@ -1,4 +1,4 @@
-﻿
+﻿using Common;
 public class RotateSelectedTileCommand : ICommand
 {
     TileBuilder tileBuilder;
@@ -6,7 +6,7 @@ public class RotateSelectedTileCommand : ICommand
     {
         this.tileBuilder = tileBuilder;
     }
-    public Answer Execute()
+    public Response Execute()
     {
         return tileBuilder.RotateSelectedTile();
     }

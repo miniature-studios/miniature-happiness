@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
+using Common;
 
 public class GodModeValidator : IValidator
 {
@@ -9,7 +10,7 @@ public class GodModeValidator : IValidator
         this.tileBuilder = tileBuilder;
     }
 
-    public Answer ValidateCommand(ICommand command)
+    public Response ValidateCommand(ICommand command)
     {
         if (command is AddTileToSceneCommand)
         {
@@ -22,11 +23,11 @@ public class GodModeValidator : IValidator
                 foreach (var freePosition in insideListPositions)
                 {
                     var futurePlaces = creatingtileUnion.GetImaginePlaces(freePosition, creatingtileUnion.Rotation + rotation);
-                    if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TileCount)
+                    if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TilesCount)
                     {
                         addCommand.CreatingPosition = freePosition;
                         addCommand.CreatingRotation = rotation;
-                        return new Answer("Accepted", true);
+                        return new Response("Accepted", true);
                     }
                 }
                 rotation++;
@@ -38,9 +39,9 @@ public class GodModeValidator : IValidator
             } while (tileBuilder.GetTileUnionsInPositions(creatingtileUnion.GetImaginePlaces(position, creatingtileUnion.Rotation)).Count > 0);
             addCommand.CreatingPosition = position;
             addCommand.CreatingRotation = creatingtileUnion.Rotation;
-            return new Answer("Accepted", true);
+            return new Response("Accepted", true);
         }
-        return new Answer("Accepted", true);
+        return new Response("Accepted", true);
     }
 }
 

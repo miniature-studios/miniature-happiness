@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
+using Common;
 
 public class AddTileToSceneCommand : ICommand
 {
@@ -14,7 +14,7 @@ public class AddTileToSceneCommand : ICommand
         CreatingPosition = new();
         CreatingRotation = 0;
     }
-    public Answer Execute()
+    public Response Execute()
     {
         return tileBuilder.AddTileIntoBuilding(TilePrefab, CreatingPosition, CreatingRotation);
     }

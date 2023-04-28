@@ -1,11 +1,9 @@
-﻿using System;
-using UnityEngine;
-using Common;
+﻿using Common;
 
 public class GameModeValidator : IValidator
 {
-    public Answer ValidateCommand(ICommand command)
+    public Response ValidateCommand(ICommand command)
     {
-        return new Answer("Cannot do anything in Game Mode", false);
+        return new Response("Cannot do anything in Game Mode", false);
     }
 }

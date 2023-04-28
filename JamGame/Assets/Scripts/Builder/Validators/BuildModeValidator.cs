@@ -8,7 +8,7 @@ public class BuildModeValidator : IValidator
     {
         this.tileBuilder = tileBuilder;
     }
-    public Answer ValidateCommand(ICommand command)
+    public Response ValidateCommand(ICommand command)
     {
         if(command is AddTileToSceneCommand)
         {
@@ -21,60 +21,68 @@ public class BuildModeValidator : IValidator
                 foreach (var freePosition in insideListPositions)
                 {
                     var futurePlaces = creatingtileUnion.GetImaginePlaces(freePosition, creatingtileUnion.Rotation + rotation);
-                    if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TileCount)
+                    if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TilesCount)
                     {
                         addCommand.CreatingPosition = freePosition;
                         addCommand.CreatingRotation = rotation;
-                        return new Answer("Accepted", true);
+                        return new Response("Accepted", true);
                     }
                 }
                 rotation++;
             }
-            return new Answer("Cannot place, not enough free place", false);
+            return new Response("Cannot place, not enough free place", false);
         }
         if (command is SelectTileCommand)
         {
             var selectCommand = command as SelectTileCommand;
             TileUnion selectedTileUnion = tileBuilder.DetectTileUnion(selectCommand.tile);
             if (selectedTileUnion.IsAllWithMark("immutable"))
-                return new Answer("Immutable Tile", false);
+                return new Response("Immutable Tile", false);
             if (selectedTileUnion.IsAllWithMark("freecpace"))
-                return new Answer("Free cpace Tile", false);
-            return new Answer("Accepted", true);
+                return new Response("Free cpace Tile", false);
+            return new Response("Accepted", true);
+        }
+        if(command is MoveSelectedTileToRayCommand)
+        {
+            if (tileBuilder.SelectedTile == null)
+            {
+                return new Response("Not selected Tile", false);
+            }
+            return new Response("Accepted", true);
         }
         if (command is MoveSelectedTileCommand)
         {
             if (tileBuilder.SelectedTile == null)
             {
-                return new Answer("Not selected Tile", false);
+                return new Response("Not selected Tile", false);
             }
             var moveCommand = command as MoveSelectedTileCommand;
             var newUnionPosition = tileBuilder.SelectedTile.Position + moveCommand.direction.ToVector2Int();
             var newPositions = tileBuilder.SelectedTile.GetImaginePlaces(newUnionPosition, tileBuilder.SelectedTile.Rotation);
             if (!tileBuilder.GetTileUnionsInPositions(newPositions).All(x => !x.IsAllWithMark("outside")))
-                return new Answer("Can not move outside", false);
-            return new Answer("Accepted", true);
+                return new Response("Can not move outside", false);
+            return new Response("Accepted", true);
         }
         if (command is ComplatePlacingCommand)
         {
-            return new Answer("Accepted", true);
+            return new Response("Accepted", true);
         }
         if (command is DeleteSelectedTileCommand)
         {
-            return new Answer("Accepted", true);
+            return new Response("Accepted", true);
         }
         if (command is RotateSelectedTileCommand)
         {
             if (tileBuilder.SelectedTile == null)
             {
-                return new Answer("Not selected Tile", false);
+                return new Response("Not selected Tile", false);
             }
             var rotateCommand = command as RotateSelectedTileCommand;
             var newPosition = tileBuilder.SelectedTile.GetImaginePlaces(tileBuilder.SelectedTile.Position, tileBuilder.SelectedTile.Rotation + 1);
             if (!tileBuilder.GetTileUnionsInPositions(newPosition).All(x => !x.IsAllWithMark("outside")))
-                return new Answer("Can not rotate into outside", false);
-            return new Answer("Accepted", true);
+                return new Response("Can not rotate into outside", false);
+            return new Response("Accepted", true);
         }
-        return new Answer("Can not do this command", false);
+        return new Response("Can not do this command", false);
     }
 }

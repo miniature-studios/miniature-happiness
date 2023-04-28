@@ -64,7 +64,7 @@ public class Tile : MonoBehaviour
 
     [SerializeField] Vector2Int position = new(0,0);
     [SerializeField] int rotation = 0;
-    float step = 5;
+
     // Public fields for unity Editor in inspector
     [SerializeField] public TileElementsHandler elementsHandler;
     [SerializeField] List<string> marks;
@@ -78,9 +78,9 @@ public class Tile : MonoBehaviour
         {
             position = value;
             transform.localPosition = new Vector3(
-                step * position.y,
+                BuilderMatrix.Step * position.y,
                 transform.localPosition.y,
-                -step * position.x
+                -BuilderMatrix.Step * position.x
                 );
         }
     }
@@ -95,21 +95,18 @@ public class Tile : MonoBehaviour
                 value -= 4;
             transform.rotation = Quaternion.Euler(0, 90 * value, 0);
             rotation = value;
-            UpdateCache();
+            UpdateWallsCache();
         }
     }
     public List<string> Marks { get { return marks; } }
-    public Dictionary<TileWallPlace, List<TileWallType>> Walls { get { return cached_walls; } }
-
-    public void Awake()
-    {
-        UpdateCache();
+    public Dictionary<TileWallPlace, List<TileWallType>> Walls { 
+        get {
+            if (cached_walls == null)
+                UpdateWallsCache();
+            return cached_walls; 
+        } 
     }
 
-    public void Move(Direction direction)
-    {
-        Position += direction.ToVector2Int();
-    }
 
     // [0] [1] [2]
     // [3] [4] [5]
@@ -248,7 +245,7 @@ public class Tile : MonoBehaviour
         var wallCollection = walls.Find(x => x.Place == imaginePlace);
         return !wallCollection.IsActive(TileWallType.none);
     }
-    private void UpdateCache()
+    private void UpdateWallsCache()
     {
         Dictionary<TileWallPlace, List<TileWallType>> list = new();
         foreach (var wall in walls)

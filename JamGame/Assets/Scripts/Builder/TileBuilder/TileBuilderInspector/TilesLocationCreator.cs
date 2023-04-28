@@ -73,30 +73,11 @@ public partial class TileBuilderInspector
         {
             tileBuilder.Execute(new AddTileToSceneCommand(tileBuilder, tileBuilder.ChoosedTile));
         }
-        if (GUILayout.Button("Create 1 of 4 tiles"))
+        if (GUILayout.Button("Clear Scene"))
         {
-            if (counter == 0 || counter == 4)
-            {
-                tileBuilder.DeleteAllTiles();
-                tileBuilder.CreateTile(tileBuilder.OutdoorPrefab, new(0, 0), 0);
-                counter = 0;
-            }
-            else if (counter == 1)
-            {
-                tileBuilder.CreateTile(tileBuilder.OutdoorPrefab, new(0, 1), 0);
-            }
-            else if (counter == 2)
-            {
-                tileBuilder.CreateTile(tileBuilder.FreecpacePrefab, new(1, 0), 0);
-            }
-            else if (counter == 3)
-            {
-                tileBuilder.CreateTile(tileBuilder.FreecpacePrefab, new(1, 1), 0);
-            }
-            counter++;
+            tileBuilder.DeleteAllTiles();
         }
         EditorGUILayout.EndHorizontal();
     }
-    int counter = 0;
 }
 #endif

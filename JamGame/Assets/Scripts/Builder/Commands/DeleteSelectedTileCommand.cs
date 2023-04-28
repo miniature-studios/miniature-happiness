@@ -1,16 +1,21 @@
 ﻿using UnityEngine;
+using Common;
+using System;
 
 public class DeleteSelectedTileCommand : ICommand
 {
     TileBuilder tileBuilder;
     GameObject destroyedTile;
-    public DeleteSelectedTileCommand(TileBuilder tileBuilder, ref GameObject destroyedTile)
+    Action<GameObject> sendDestroyedTile;
+    public DeleteSelectedTileCommand(TileBuilder tileBuilder, Action<GameObject> sendDestroyedTile)
     {
         this.tileBuilder = tileBuilder;
-        this.destroyedTile = destroyedTile;
+        this.sendDestroyedTile = sendDestroyedTile;
     }
-    public Answer Execute()
+    public Response Execute()
     {
-        return tileBuilder.DeleteSelectedTile(out destroyedTile);
+        var response = tileBuilder.DeleteSelectedTile(out destroyedTile);
+        sendDestroyedTile(destroyedTile);
+        return response;
     }
 }

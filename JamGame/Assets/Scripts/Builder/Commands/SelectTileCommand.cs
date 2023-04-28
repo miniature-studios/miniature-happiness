@@ -1,4 +1,5 @@
-﻿
+﻿using Common;
+
 public class SelectTileCommand : ICommand
 {
     TileBuilder tileBuilder;
@@ -8,7 +9,7 @@ public class SelectTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.tile = tile;
     }
-    public Answer Execute()
+    public Response Execute()
     {
         return tileBuilder.SelectTile(tile);
     }
