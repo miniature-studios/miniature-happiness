@@ -1,5 +1,4 @@
 ﻿using Common;
-using System.Linq;
 using UnityEngine;
 
 public class TileBuilderController : MonoBehaviour
@@ -12,7 +11,7 @@ public class TileBuilderController : MonoBehaviour
     bool mousePressed = false;
     bool mouseOverUI = false;
     bool mouseUIClicked = false;
-    UITile uITileClicked = null;
+    TileUI uITileClicked = null;
     public void Update()
     {
         Vector2 mousePosition = Input.mousePosition;
@@ -23,19 +22,13 @@ public class TileBuilderController : MonoBehaviour
         {
             mousePressed = true;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            var hits = Physics.RaycastAll(ray, 300f);
-            var roomHits = hits.ToList().Where(x => x.collider.GetComponent<Tile>() != null);
-            if (roomHits.Count() != 0)
+            var command = new SelectTileCommand(tileBuilder, ray);
+            var response = tileBuilder.Execute(command);
+            Debug.Log(response.Message);
+            if(!response.Accepted)
             {
-                var tile = hits.ToList().Find(x => x.collider.GetComponent<Tile>()).collider.GetComponent<Tile>();
-                var command = new SelectTileCommand(tileBuilder, tile);
-                var response = tileBuilder.Execute(command);
-                Debug.Log(response.Message);
-            }
-            else
-            {
-                var response = tileBuilder.Execute(new ComplatePlacingCommand(tileBuilder));
-                Debug.Log(response.Message);
+                var secondresponse = tileBuilder.Execute(new CompletePlacingCommand(tileBuilder));
+                Debug.Log(secondresponse.Message);
             }
         }
 
@@ -47,7 +40,7 @@ public class TileBuilderController : MonoBehaviour
             }
             mousePressed = false;
             mouseUIClicked = false;
-            var response = tileBuilder.Execute(new ComplatePlacingCommand(tileBuilder));
+            var response = tileBuilder.Execute(new CompletePlacingCommand(tileBuilder));
             Debug.Log(response.Message);
         }
 
@@ -59,36 +52,19 @@ public class TileBuilderController : MonoBehaviour
             Debug.Log(response.Message);
         }
 
-        /*
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Up);
-            var response = tileBuilder.Execute(command);
-            Debug.Log(response.Message);
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Left);
-            var response = tileBuilder.Execute(command);
-            Debug.Log(response.Message);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Down);
-            var response = tileBuilder.Execute(command);
-            Debug.Log(response.Message);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            var command = new MoveSelectedTileCommand(tileBuilder, Direction.Right);
-            var response = tileBuilder.Execute(command);
-            Debug.Log(response.Message);
-        }
-        */
-
         if (Input.GetKeyDown(KeyCode.R))
         {
-            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder));
+            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Right));
+            Debug.Log(response.Message);
+        }
+        if(Input.mouseScrollDelta.y > 0)
+        {
+            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Right));
+            Debug.Log(response.Message);
+        }
+        if (Input.mouseScrollDelta.y < 0)
+        {
+            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Left));
             Debug.Log(response.Message);
         }
         if (Input.GetKeyDown(KeyCode.Delete))
@@ -107,13 +83,15 @@ public class TileBuilderController : MonoBehaviour
         if (mouseUIClicked)
         {
             var response = CreateTile(uITileClicked.TileUnionPrefab);
-            if(response.Accepted)
-                Destroy(uITileClicked.gameObject);
+            if (response.Accepted)
+            {
+                uITileClicked.TakeOne();
+            }
         }
         mouseOverUI = false;
     }
 
-    public void MouseUIClick(UITile uITile)
+    public void MouseUIClick(TileUI uITile)
     {
         mouseUIClicked = true;
         uITileClicked = uITile;
@@ -121,30 +99,37 @@ public class TileBuilderController : MonoBehaviour
 
     public void DeleteTile(bool stillselected = false)
     {
-        GameObject destroyedTile = null;
-        var command = new DeleteSelectedTileCommand(tileBuilder, (arg) => destroyedTile = arg);
+        GameObject destroyedTileUIPrefab = null;
+        var command = new DeleteSelectedTileCommand(tileBuilder, (arg) => destroyedTileUIPrefab = arg);
         var response = tileBuilder.Execute(command);
         Debug.Log(response.Message);
         if (response.Accepted)
         {
             if (stillselected)
-                uITileClicked = AddUIElement(destroyedTile);
+                uITileClicked = CreateUIElement(destroyedTileUIPrefab);
             else
-                _ = AddUIElement(destroyedTile);
+                _ = CreateUIElement(destroyedTileUIPrefab);
         }
         
     }
-
     public Response CreateTile(GameObject tilePrefab)
     {
         var command = new AddTileToSceneCommand(tileBuilder, tilePrefab);
         return tileBuilder.Execute(command);
     }
-    public UITile AddUIElement(GameObject TilePrefab)
+    public TileUI CreateUIElement(GameObject UIPrefab)
     {
-        var UiElement = Instantiate(TileUIPrefab, UIHandler);
-        UiElement.GetComponent<UITile>().Init(TilePrefab, MouseUIClick);
-        return UiElement.GetComponent<UITile>();
+        var UiElement = Instantiate(UIPrefab, UIHandler);
+        var ansver = UiElement.GetComponent<TileUI>().Init(MouseUIClick);
+        if (ansver.Merged)
+        {
+            Destroy(UiElement);
+            return ansver.MergedTo;
+        }
+        else
+        {
+            return UiElement.GetComponent<TileUI>();
+        }
     }
 }
 

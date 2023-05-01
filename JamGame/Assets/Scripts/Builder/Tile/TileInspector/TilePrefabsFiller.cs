@@ -57,7 +57,7 @@ public partial class TileInspector
 
             foreach (var cornerCollection in tile.corners)
             {
-                float degrees = cornerCollection.Place.GetDegrees();
+                float degrees = cornerCollection.Place.GetDegrees() - 45;
                 foreach (var handler in cornerCollection.Handlers)
                 {
                     var prefabHandler = tile.elementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);

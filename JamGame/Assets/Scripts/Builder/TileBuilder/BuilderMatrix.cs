@@ -11,20 +11,7 @@ public static class BuilderMatrix
     {
         point /= Step;
         point = new(-point.y, point.x);
-        List<Vector2Int> positions = new();
-        positions.Add(new(RoundDown(point.x), RoundDown(point.y)));
-        positions.Add(new(RoundDown(point.x), RoundUp(point.y)));
-        positions.Add(new(RoundUp(point.x), RoundDown(point.y)));
-        positions.Add(new(RoundUp(point.x), RoundUp(point.y)));
-        return positions.OrderBy(x => Vector2.Distance(point, (Vector2)x)).First();
-    }
-    static int RoundDown(float value)
-    {
-        return (int)Math.Truncate(value);
-    }
-    static int RoundUp(float value)
-    {
-        return (int)Math.Truncate(value) + 1;
+        return new(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y));
     }
 }
 

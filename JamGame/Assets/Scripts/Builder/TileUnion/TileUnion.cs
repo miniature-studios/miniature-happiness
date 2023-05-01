@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TileUnion : MonoBehaviour
 {
-    [SerializeField] public string UiName = "TileUnion";
-    [SerializeField] public GameObject UnionPrefab;
+    [SerializeField] public GameObject UIPrefab;
     [SerializeField] public List<Tile> tiles = new();
     [SerializeField] Vector2Int unionPosition;
     [SerializeField] int unionRotation;
+
     public Vector2Int Position
     {
         get { return unionPosition; }
@@ -37,28 +36,25 @@ public class TileUnion : MonoBehaviour
                 RotateRight();
         }
     }
-    public List<Vector2Int> TilesPositionsForUpdating
+    public IEnumerable<Vector2Int> TilesPositionsForUpdating
     {
         get 
         {
             HashSet<Vector2Int> buffer = new();
             foreach (var tile in tiles)
             {
-                for (int i = 1; i >= -1; i--)
+                foreach (var position in GetNinePositions())
                 {
-                    for (int j = -1; j <= 1; j++)
-                    {
-                        var pos = new Vector2Int(tile.Position.x + j, tile.Position.y + i);
-                        buffer.Add(pos);
-                    }
+                    var pos = tile.Position + position;
+                    buffer.Add(pos);
                 }
             }
-            return buffer.Select(arg => new Vector2Int(arg.x + Position.x, arg.y + Position.y)).ToList();
+            return buffer.Select(arg => new Vector2Int(arg.x + Position.x, arg.y + Position.y));
         }
     }
-    public List<Vector2Int> TilesPositions
+    public IEnumerable<Vector2Int> TilesPositions
     {
-        get { return tiles.Select(x => x.Position + Position).ToList(); }
+        get { return tiles.Select(x => x.Position + Position); }
     }
     public Vector3 TileUnionCenter
     {
@@ -92,107 +88,59 @@ public class TileUnion : MonoBehaviour
     {
         return tiles.Contains(tile);
     }
-    public List<Vector2Int> GetImaginePlaces(Vector2Int unionPosition, int unionRotation)
+    public IEnumerable<Vector2Int> GetImaginePlaces(Vector2Int unionPosition, int unionRotation)
     {
         var list = tiles.Select(x => x.Position).ToList();
         // Rotating
         for (int j = Rotation; j < unionRotation; j++)
         {
-            var firstCenter = GetCenterMass(list);
+            var firstCenter = GetCenterOfMass(list);
             for (int i = 0; i < list.Count; i++)
             {
                 list[i] = new(list[i].y, -list[i].x);
             }
-            var secondCenter = GetCenterMass(list);
+            var secondCenter = GetCenterOfMass(list);
             var delta = (firstCenter - secondCenter);
             for (int i = 0; i < list.Count; i++)
             {
                 list[i] += new Vector2Int((int)delta.x, (int)delta.y);
             }
         }
-        return list.Select(x => x + unionPosition).ToList();
+        return list.Select(x => x + unionPosition);
     }
-    public List<Tile> IsValidPlacing(Dictionary<Vector2Int, Tile> tilePairs)
+    public List<Tile> GetOverlappingWalls(TileBuilder tileBuilder)
     {
-        Dictionary<Vector2Int, Tile> localTilePairs = new();
-        foreach (var pairs in tilePairs)
-        {
-            localTilePairs.Add(pairs.Key - Position, pairs.Value);
-        }
         List<Tile> invalidTiles = new();
         foreach (var tile in tiles)
         {
-            List<Tile> tilesAround = new();
-            for (int i = 1; i >= -1; i--)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    tilesAround.Add(localTilePairs[tile.Position + new Vector2Int(j, i)]);
-                }
-            }
-            if (!tile.TryUpdateWalls(tilesAround))
+            if (!tile.UpdateWalls(tileBuilder, tile.Position + Position).Valid)
                 invalidTiles.Add(tile);
         }
         return invalidTiles;
     }
-    public void UpdateWalls(Dictionary<Vector2Int, Tile> tilePairs)
+    public void IsolateUpdate()
     {
-        Dictionary<Vector2Int, Tile> localTilePairs = new();
-        foreach (var pairs in tilePairs)
-        {
-            localTilePairs.Add(pairs.Key - Position, pairs.Value);
-        }
-        foreach (var tile in tiles)
-        {
-            List<Tile> tilesAround = new();
-            for (int i = 1; i >= -1; i--)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    tilesAround.Add(localTilePairs[tile.Position + new Vector2Int(j, i)]);
-                }
-            }
-            tile.UpdateWalls(tilesAround);
-        }
+        // TODO
     }
-    public void UpdateCorners(Dictionary<Vector2Int, Tile> tilePairs)
-    {
-        Dictionary<Vector2Int, Tile> localTilePairs = new();
-        foreach (var pairs in tilePairs)
-        {
-            localTilePairs.Add(pairs.Key - Position, pairs.Value);
-        }
-        foreach (var tile in tiles)
-        {
-            List<Tile> tilesAround = new();
-            for (int i = 1; i >= -1; i--)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    tilesAround.Add(localTilePairs[tile.Position + new Vector2Int(j, i)]);
-                }
-            }
-            tile.UpdateCorners(tilesAround);
-        }
-    }
+
     void RotateRight()
     {
         unionRotation++;
-        var firstCenter = GetCenterMass(tiles.Select(x => x.Position).ToList());
+        var firstCenter = GetCenterOfMass(tiles.Select(x => x.Position).ToList());
         foreach (var tile in tiles)
         {
             tile.Rotation++;
             tile.Position = new Vector2Int(tile.Position.y, -tile.Position.x);
         } 
         unionRotation %= 4;
-        var secondCenter = GetCenterMass(tiles.Select(x => x.Position).ToList());
+        var secondCenter = GetCenterOfMass(tiles.Select(x => x.Position).ToList());
         var delta = (firstCenter - secondCenter);
         foreach (var tile in tiles)
         {
             tile.Position += new Vector2Int((int)delta.x, (int)delta.y);
         }
     }
-    Vector2 GetCenterMass(List<Vector2Int> positions)
+    Vector2 GetCenterOfMass(List<Vector2Int> positions)
     {
         Vector2 VectorSum = new();
         foreach (var pos in positions)
@@ -200,81 +148,17 @@ public class TileUnion : MonoBehaviour
             VectorSum += pos;
         }
         VectorSum /= positions.Count;
-        return GetRightPoint(VectorSum);
+        return GetNearestPointForCenterOfMass(VectorSum);
     }
-    Vector2 GetRightPoint(Vector2 vector)
+    Vector2 GetNearestPointForCenterOfMass(Vector2 vector)
     {
-        if((Math.Abs(vector.x % 1) == 0.5 && Math.Abs(vector.y % 1) == 0.5)
-            || (vector.x % 1 == 0 && vector.y % 1 == 0))
-        {
-            return vector;
-        }
         List<Vector2> variants = new();
-        if (Math.Abs(vector.x % 1) == 0.5)
-        {
-            float tail = Math.Abs(vector.y % 1);
-            if (tail < 0.5)
-            {
-                variants.Add(new(vector.x, (float)Math.Truncate(vector.y)));
-                variants.Add(new(vector.x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y));
-            }
-            else
-            {
-                variants.Add(new(vector.x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y));
-                variants.Add(new(vector.x, (float)Math.Truncate(vector.y) + vector.normalized.y));
-            }
-        }
-        else if (Math.Abs(vector.y % 1) == 0.5)
-        {
-            float tail = Math.Abs(vector.x % 1);
-            if (tail < 0.5)
-            {
-                variants.Add(new((float)Math.Truncate(vector.x), vector.y));
-                variants.Add(new((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, vector.y));
-            }
-            else
-            {
-                variants.Add(new((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, vector.y));
-                variants.Add(new((float)Math.Truncate(vector.x) + vector.normalized.x, vector.y));
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                variants.Add(new());
-            }
-            float tail_x = Math.Abs(vector.x % 1);
-            float tail_y = Math.Abs(vector.y % 1);
-            if(tail_x < 0.5)
-            {
-                variants[0] = new Vector2((float)Math.Truncate(vector.x), variants[0].y);
-                variants[1] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[1].y);
-                variants[2] = new Vector2((float)Math.Truncate(vector.x), variants[2].y);
-                variants[3] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[3].y);
-            }
-            else
-            {
-                variants[0] = new Vector2((float)Math.Truncate(vector.x) + vector.normalized.x, variants[0].y);
-                variants[1] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[1].y);
-                variants[2] = new Vector2((float)Math.Truncate(vector.x) + vector.normalized.x, variants[2].y);
-                variants[3] = new Vector2((float)Math.Truncate(vector.x) + 0.5f * vector.normalized.x, variants[3].y);
-            }
-            if (tail_y < 0.5)
-            {
-                variants[0] = new Vector2(variants[0].x, (float)Math.Truncate(vector.y));
-                variants[1] = new Vector2(variants[1].x, (float)Math.Truncate(vector.y));
-                variants[2] = new Vector2(variants[2].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
-                variants[3] = new Vector2(variants[3].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
-            }
-            else
-            {
-                variants[0] = new Vector2(variants[0].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
-                variants[1] = new Vector2(variants[1].x, (float)Math.Truncate(vector.y) + 0.5f * vector.normalized.y);
-                variants[2] = new Vector2(variants[2].x, (float)Math.Truncate(vector.y) + vector.normalized.y);
-                variants[3] = new Vector2(variants[3].x, (float)Math.Truncate(vector.y) + vector.normalized.y);
-            }
-        }
+        variants.Add(new(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y)));
+        variants.Add(
+            new(
+                Mathf.RoundToInt(vector.x + vector.normalized.x / 2) - vector.normalized.x / 2,
+                Mathf.RoundToInt(vector.y + vector.normalized.y / 2) - vector.normalized.x / 2
+            ));
         return variants.OrderBy(x => Vector2.Distance(x, vector)).First();
     }
     Vector2Int GetCenterTilePosition()
@@ -291,5 +175,15 @@ public class TileUnion : MonoBehaviour
         vectors.Add(new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y)));
         vectors.Add(new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y));
         return vectors.OrderBy(x => Vector2.Distance(x, VectorSum)).First();
+    }
+    IEnumerable<Vector2Int> GetNinePositions()
+    {
+        for (int i = 1; i >= -1; i--)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                yield return new Vector2Int(j, i);
+            }
+        }
     }
 }

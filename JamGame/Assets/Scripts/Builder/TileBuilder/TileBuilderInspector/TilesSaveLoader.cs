@@ -12,7 +12,7 @@ public partial class TileBuilderInspector
             string localPath = "Assets/Prefabs/SceneCompositions/" + tileBuilder.SceneCompositionPrefabSavingName + ".prefab";
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
             bool prefabSuccess;
-            PrefabUtility.SaveAsPrefabAsset(tileBuilder.rootObject, localPath, out prefabSuccess);
+            PrefabUtility.SaveAsPrefabAsset(tileBuilder.RootObject, localPath, out prefabSuccess);
             if (prefabSuccess == true)
                 Debug.Log("Prefab was saved successfully");
             else

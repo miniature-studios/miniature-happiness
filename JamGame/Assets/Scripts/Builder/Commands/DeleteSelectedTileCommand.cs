@@ -5,17 +5,17 @@ using System;
 public class DeleteSelectedTileCommand : ICommand
 {
     TileBuilder tileBuilder;
-    GameObject destroyedTile;
-    Action<GameObject> sendDestroyedTile;
-    public DeleteSelectedTileCommand(TileBuilder tileBuilder, Action<GameObject> sendDestroyedTile)
+    GameObject tileUIPrefab;
+    Action<GameObject> sendUIPrefab;
+    public DeleteSelectedTileCommand(TileBuilder tileBuilder, Action<GameObject> sendUIPrefab)
     {
         this.tileBuilder = tileBuilder;
-        this.sendDestroyedTile = sendDestroyedTile;
+        this.sendUIPrefab = sendUIPrefab;
     }
     public Response Execute()
     {
-        var response = tileBuilder.DeleteSelectedTile(out destroyedTile);
-        sendDestroyedTile(destroyedTile);
+        var response = tileBuilder.DeleteSelectedTile(out tileUIPrefab);
+        sendUIPrefab(tileUIPrefab);
         return response;
     }
 }

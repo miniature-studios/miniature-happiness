@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
-using System.Linq;
 
 public partial class TileUnionInspector
 {
@@ -15,7 +14,10 @@ public partial class TileUnionInspector
                 tile.Position = tile.Position;
                 tile.Rotation = tile.Rotation;
             }
-            Enumerable.Repeat(tileUnion.Rotation++, 4);
+            tileUnion.Rotation++;
+            tileUnion.Rotation++;
+            tileUnion.Rotation++;
+            tileUnion.Rotation++;
         }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();

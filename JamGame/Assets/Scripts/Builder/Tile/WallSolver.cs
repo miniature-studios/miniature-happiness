@@ -1,34 +1,36 @@
 ﻿using Common;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine;
 
-public static class WallSolver
+public class WallSolver : MonoBehaviour
 {
-    public static List<TileWallType> ForSameWalls_PriorityQueue = new() {
+    public List<TileWallType> ForSameWalls_PriorityQueue = new() {
         TileWallType.none,
         TileWallType.door,
         TileWallType.window,
         TileWallType.wall
     };
-    public static List<TileWallType> ForSameWalls_PriorityQueue_FirstDoor = new() {
+    public List<TileWallType> ForSameWalls_PriorityQueue_FirstDoor = new() {
         TileWallType.door,
         TileWallType.none,
         TileWallType.window,
         TileWallType.wall
     };
-    public static List<TileWallType> ForDifferentTiles_PriorityQueue = new() {
+    public List<TileWallType> ForDifferentTiles_PriorityQueue = new() {
         TileWallType.wall,
         TileWallType.window,
         TileWallType.door,
         TileWallType.none
     };
 
-    public static List<string> ignoringMarks = new()
+    public List<string> ignoringMarks = new()
     {
         "immutable",
     };
 
-    public static TileWallType ChooseWall(List<string> MyMarks, List<TileWallType> MyWalls, List<string> OutMarks, List<TileWallType> OutWalls)
+    public TileWallType? ChooseWall(IEnumerable<string> MyMarks, List<TileWallType> MyWalls, IEnumerable<string> OutMarks, List<TileWallType> OutWalls)
     {
         var MyNewMarks = MyMarks.Where(x => !ignoringMarks.Contains(x));
         var OutNewMarks = OutMarks.Where(x => !ignoringMarks.Contains(x));
@@ -43,7 +45,7 @@ public static class WallSolver
             var marks_intersect = MyNewMarks.Intersect(OutNewMarks).ToList();
             // Unique rule
             if ((
-                !(MyMarks.Contains("freecpace") || OutMarks.Contains("freecpace"))
+                !(MyMarks.Contains("freespace") || OutMarks.Contains("freespace"))
                 &&
                 !(MyMarks.Contains("outside") || OutMarks.Contains("outside")))
                 &&
@@ -65,7 +67,7 @@ public static class WallSolver
                 }
             }
         }
-        throw new System.Exception("No intersections in two rooms");
+        return null;
     }
 }
 

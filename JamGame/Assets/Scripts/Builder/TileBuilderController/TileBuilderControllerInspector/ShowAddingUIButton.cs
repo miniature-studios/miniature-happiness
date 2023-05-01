@@ -9,7 +9,7 @@ public partial class TileBuilderControllerInspector
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Save scene composition into prefab."))
         {
-            tileBuilderController.AddUIElement(tileBuilderController.TileToCreatePrefab);
+            tileBuilderController.CreateUIElement(tileBuilderController.TileToCreatePrefab);
         }
         EditorGUILayout.EndHorizontal();
     }

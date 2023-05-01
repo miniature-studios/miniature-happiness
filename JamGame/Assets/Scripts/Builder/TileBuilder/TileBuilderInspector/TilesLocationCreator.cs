@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class TileBuilderInspector
 {
-    int squareSideLength = 20;
+    int squareSideLength = 2;
     public partial void ShowLocationBuildingButtons(TileBuilder tileBuilder)
     {
         EditorGUILayout.BeginHorizontal();
@@ -15,10 +15,10 @@ public partial class TileBuilderInspector
             tileBuilder.DeleteAllTiles();
             for (int i = 0; i < squareSideLength * squareSideLength; i++)
             {
-                var value = UnityEngine.Random.value * 100;
+                var value = Random.value * 100;
                 if (value < 50)
                 {
-                    tileBuilder.CreateTile(tileBuilder.FreecpacePrefab, new(x,y), 0);
+                    tileBuilder.CreateTile(tileBuilder.FreespacePrefab, new(x,y), 0);
                 }
                 else if (value > 50 && value < 65)
                 {
@@ -33,7 +33,7 @@ public partial class TileBuilderInspector
                     tileBuilder.CreateTile(tileBuilder.OutdoorPrefab, new(x, y), 0);
                 }
                 y++;
-                if(y > squareSideLength)
+                if (y >= squareSideLength)
                 {
                     y = 0;
                     x++;
@@ -60,7 +60,7 @@ public partial class TileBuilderInspector
                     else if (j == 4)
                         tileBuilder.CreateTile(tileBuilder.WorkingPlaceFree, new(i + 1, j + 1), 0);
                     else
-                        tileBuilder.CreateTile(tileBuilder.FreecpacePrefab, new(i + 1, j + 1), 0);
+                        tileBuilder.CreateTile(tileBuilder.FreespacePrefab, new(i + 1, j + 1), 0);
                 }
                 tileBuilder.CreateTile(tileBuilder.OutdoorPrefab, new(i + 1, 8), 0);
             }
@@ -76,6 +76,20 @@ public partial class TileBuilderInspector
         if (GUILayout.Button("Clear Scene"))
         {
             tileBuilder.DeleteAllTiles();
+        }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Add 4 Tiles"))
+        {
+            tileBuilder.DeleteAllTiles();
+            tileBuilder.CreateTile(tileBuilder.OutdoorPrefab, new(0, 0), 0);
+            tileBuilder.CreateTile(tileBuilder.OutdoorPrefab, new(0, 1), 0);
+            tileBuilder.CreateTile(tileBuilder.WorkingPlaceFree, new(1, 0), 0);
+            tileBuilder.CreateTile(tileBuilder.WorkingPlace, new(1, 1), 0);
+        }
+        if (GUILayout.Button("Update All"))
+        {
+            tileBuilder.UpdateAllTiles();
         }
         EditorGUILayout.EndHorizontal();
     }

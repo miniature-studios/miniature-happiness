@@ -36,7 +36,7 @@ public class GodModeValidator : IValidator
             do
             {
                 position.x++;
-            } while (tileBuilder.GetTileUnionsInPositions(creatingtileUnion.GetImaginePlaces(position, creatingtileUnion.Rotation)).Count > 0);
+            } while (tileBuilder.GetTileUnionsInPositions(creatingtileUnion.GetImaginePlaces(position, creatingtileUnion.Rotation)).Count() > 0);
             addCommand.CreatingPosition = position;
             addCommand.CreatingRotation = creatingtileUnion.Rotation;
             return new Response("Accepted", true);
