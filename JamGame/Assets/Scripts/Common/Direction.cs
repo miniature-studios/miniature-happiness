@@ -1,5 +1,4 @@
-using System;
-using System.Data;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Common
@@ -179,6 +178,22 @@ namespace Common
                 default:
                     Debug.LogError("Unknown Direction");
                     return 0;
+            }
+        }
+        public static IEnumerable<Direction> GetCircle90(this Direction dir)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                yield return dir;
+                dir = dir.Rotate90();
+            }
+        }
+        public static IEnumerable<Direction> GetCircle45(this Direction dir)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                yield return dir;
+                dir = dir.Rotate45();
             }
         }
     }

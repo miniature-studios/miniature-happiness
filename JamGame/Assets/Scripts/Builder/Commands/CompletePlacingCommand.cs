@@ -6,7 +6,7 @@ public class CompletePlacingCommand : ICommand
     {
         this.tileBuilder = tileBuilder;
     }
-    public Response Execute()
+    public Result Execute()
     {
         return tileBuilder.ComletePlacing();
     }

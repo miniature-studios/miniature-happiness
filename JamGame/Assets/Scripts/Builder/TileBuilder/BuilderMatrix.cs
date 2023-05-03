@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Common;
 using UnityEngine;
 
-public static class BuilderMatrix
+[CreateAssetMenu(fileName = "BuilderMatrix", menuName = "ScriptableObjects/BuilderMatrix", order = 3)]
+public class BuilderMatrix: ScriptableObject
 {
-    public static float SelectingPlaneHeight = 1;
-    public static int Step = 5;
-    public static Vector2Int GetMatrixPosition(Vector2 point)
+    [SerializeField] float SelectingPlaneHeight = 1;
+    [SerializeField] public int Step = 5;
+    public Result GetMatrixPosition(Ray ray)
     {
-        point /= Step;
-        point = new(-point.y, point.x);
-        return new(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y));
+        Plane plane = new(Vector3.up, new Vector3(0, SelectingPlaneHeight, 0));
+        if (plane.Raycast(ray, out float enter))
+        {
+            Vector3 hitPoint = ray.GetPoint(enter);
+            return new SuccessResult<Vector2Int>(new(Mathf.RoundToInt(-hitPoint.z / Step), Mathf.RoundToInt(hitPoint.x / Step)));
+        }
+        else
+        {
+            return new FailResult("No ray hits with matrix");
+        }
     }
 }
 

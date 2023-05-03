@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4909747499406386467
 Transform:
   m_ObjectHideFlags: 0
@@ -1230,8 +1230,9 @@ MonoBehaviour:
   UIPrefab: {fileID: 0}
   tiles:
   - {fileID: 7469511929702345568}
-  unionPosition: {x: 0, y: 0}
-  unionRotation: 0
+  position: {x: 0, y: 0}
+  rotation: 0
+  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
 --- !u!1 &6934735835718584262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1387,11 +1388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5468c1783e6285d46913079e510b080c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
-  rotation: 0
   elementsHandler: {fileID: 11400000, guid: a6fd4adfb654f5d48af13ff1b959be75, type: 2}
-  marks:
-  - freespace
   walls:
   - Place: 0
     Handlers:
@@ -1498,6 +1495,16 @@ MonoBehaviour:
       Prefab: {fileID: 2034875026441003909}
     - Type: 6
       Prefab: {fileID: 3070947822441079899}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  startMaterial: {fileID: 2100000, guid: 328922ba69fa15e45aefc62aa2ff5e94, type: 2}
+  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
+  marks:
+  - freespace
+  position: {x: 0, y: 0}
+  rotation: 0
+  SelectLiftingHeight: 3
 --- !u!1 &7719504773568138338
 GameObject:
   m_ObjectHideFlags: 0

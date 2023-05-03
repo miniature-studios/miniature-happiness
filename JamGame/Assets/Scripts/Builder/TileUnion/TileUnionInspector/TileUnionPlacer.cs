@@ -9,6 +9,7 @@ public partial class TileUnionInspector
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Place tiles in union to right positions."))
         {
+            tileUnion.CreateTileUnionCehe();
             foreach (var tile in tileUnion.tiles)
             {
                 tile.Position = tile.Position;

@@ -4,7 +4,8 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class WallSolver : MonoBehaviour
+[CreateAssetMenu(fileName = "WallSolver", menuName = "ScriptableObjects/WallSolver", order = 4)]
+public class WallSolver : ScriptableObject
 {
     public List<TileWallType> ForSameWalls_PriorityQueue = new() {
         TileWallType.none,

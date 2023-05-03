@@ -11,19 +11,17 @@ public class MoveSelectedTileToRayCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.ray = ray;
     }
-    public Response Execute()
+    public Result Execute()
     {
-        Plane plane = new(Vector3.up, new Vector3(0, BuilderMatrix.SelectingPlaneHeight, 0));
-        if (plane.Raycast(ray, out float enter))
+        var result = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
+        if (result.Success)
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            Vector2Int point = BuilderMatrix.GetMatrixPosition(new(hitPoint.x, hitPoint.z));
-
+            Vector2Int point = (result as Result<Vector2Int>).Data;
             Direction direction;
             var delta = point - tileBuilder.SelectedTile.CenterTilePosition;
             if (Math.Abs(delta.x) == Math.Abs(delta.y) && Math.Abs(delta.y) == 0)
             {
-                return new Response("Zero moving", false);
+                return new FailResult("Zero moving");
             }
             else if (Math.Abs(delta.x) > Math.Abs(delta.y))
             {
@@ -49,7 +47,7 @@ public class MoveSelectedTileToRayCommand : ICommand
         }
         else
         {
-            return new Response("No plane hits", false);
+            return new FailResult("No plane hits");
         }
     }
 }

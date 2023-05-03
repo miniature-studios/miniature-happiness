@@ -2,8 +2,8 @@
 
 public class GameModeValidator : IValidator
 {
-    public Response ValidateCommand(ICommand command)
+    public Result ValidateCommand(ICommand command)
     {
-        return new Response("Cannot do anything in Game Mode", false);
+        return new FailResult("Cannot do anything in Game Mode");
     }
 }

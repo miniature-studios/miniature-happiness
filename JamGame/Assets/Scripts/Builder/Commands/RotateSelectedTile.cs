@@ -8,7 +8,7 @@ public class RotateSelectedTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.direction = direction;
     }
-    public Response Execute()
+    public Result Execute()
     {
         return tileBuilder.RotateSelectedTile(direction);
     }

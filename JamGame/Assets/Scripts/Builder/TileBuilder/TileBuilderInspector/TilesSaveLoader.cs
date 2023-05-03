@@ -9,7 +9,7 @@ public partial class TileBuilderInspector
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Save scene composition into prefab."))
         {
-            string localPath = "Assets/Prefabs/SceneCompositions/" + tileBuilder.SceneCompositionPrefabSavingName + ".prefab";
+            string localPath = "Assets/Prefabs/SceneCompositions/" + tileBuilder.SavingName + ".prefab";
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
             bool prefabSuccess;
             PrefabUtility.SaveAsPrefabAsset(tileBuilder.RootObject, localPath, out prefabSuccess);
@@ -23,7 +23,7 @@ public partial class TileBuilderInspector
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Load scene composition from prefab."))
         {
-            tileBuilder.LoadSceneComposition(tileBuilder.SceneCompositionLoadingPrefab);
+            tileBuilder.LoadSceneComposition(tileBuilder.LoadingPrefab);
         }
         EditorGUILayout.EndHorizontal();
     }

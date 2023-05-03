@@ -1958,11 +1958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5468c1783e6285d46913079e510b080c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
-  rotation: 0
   elementsHandler: {fileID: 11400000, guid: 93c8fd7424bb0f64b9bc6244dc1f3581, type: 2}
-  marks:
-  - workingplace
   walls:
   - Place: 0
     Handlers:
@@ -2069,6 +2065,16 @@ MonoBehaviour:
       Prefab: {fileID: 1695663489640899547}
     - Type: 6
       Prefab: {fileID: 627717184467126338}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  startMaterial: {fileID: 2100000, guid: 328922ba69fa15e45aefc62aa2ff5e94, type: 2}
+  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
+  marks:
+  - workingplace
+  position: {x: 0, y: 0}
+  rotation: 0
+  SelectLiftingHeight: 3
 --- !u!65 &3959184631637674846
 BoxCollider:
   m_ObjectHideFlags: 0

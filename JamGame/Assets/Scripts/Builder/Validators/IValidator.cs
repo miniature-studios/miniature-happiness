@@ -2,6 +2,6 @@
 
 public interface IValidator
 {
-    public Response ValidateCommand(ICommand command);
+    public Result ValidateCommand(ICommand command);
 }
 

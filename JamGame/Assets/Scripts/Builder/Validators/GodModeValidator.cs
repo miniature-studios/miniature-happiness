@@ -10,12 +10,12 @@ public class GodModeValidator : IValidator
         this.tileBuilder = tileBuilder;
     }
 
-    public Response ValidateCommand(ICommand command)
+    public Result ValidateCommand(ICommand command)
     {
         if (command is AddTileToSceneCommand)
         {
             var addCommand = command as AddTileToSceneCommand;
-            TileUnion creatingtileUnion = addCommand.TilePrefab.GetComponent<TileUnion>();
+            TileUnion creatingtileUnion = addCommand.tilePrefab.GetComponent<TileUnion>();
             var insideListPositions = tileBuilder.GetInsideListPositions();
             int rotation = 0;
             while (rotation < 4)
@@ -27,7 +27,7 @@ public class GodModeValidator : IValidator
                     {
                         addCommand.CreatingPosition = freePosition;
                         addCommand.CreatingRotation = rotation;
-                        return new Response("Accepted", true);
+                        return new SuccessResult();
                     }
                 }
                 rotation++;
@@ -39,9 +39,9 @@ public class GodModeValidator : IValidator
             } while (tileBuilder.GetTileUnionsInPositions(creatingtileUnion.GetImaginePlaces(position, creatingtileUnion.Rotation)).Count() > 0);
             addCommand.CreatingPosition = position;
             addCommand.CreatingRotation = creatingtileUnion.Rotation;
-            return new Response("Accepted", true);
+            return new SuccessResult();
         }
-        return new Response("Accepted", true);
+        return new SuccessResult();
     }
 }
 

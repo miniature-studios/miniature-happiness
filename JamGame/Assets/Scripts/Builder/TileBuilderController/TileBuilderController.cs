@@ -5,7 +5,6 @@ public class TileBuilderController : MonoBehaviour
 {
     [SerializeField] TileBuilder tileBuilder;
     [SerializeField] public GameObject TileToCreatePrefab;
-    [SerializeField] public GameObject TileUIPrefab;
     [SerializeField] public Transform UIHandler;
     Vector2 previousMousePosition;
     bool mousePressed = false;
@@ -24,11 +23,9 @@ public class TileBuilderController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var command = new SelectTileCommand(tileBuilder, ray);
             var response = tileBuilder.Execute(command);
-            Debug.Log(response.Message);
-            if(!response.Accepted)
+            if(response.Failure)
             {
-                var secondresponse = tileBuilder.Execute(new CompletePlacingCommand(tileBuilder));
-                Debug.Log(secondresponse.Message);
+                _ = tileBuilder.Execute(new CompletePlacingCommand(tileBuilder));
             }
         }
 
@@ -40,32 +37,19 @@ public class TileBuilderController : MonoBehaviour
             }
             mousePressed = false;
             mouseUIClicked = false;
-            var response = tileBuilder.Execute(new CompletePlacingCommand(tileBuilder));
-            Debug.Log(response.Message);
+            _ = tileBuilder.Execute(new CompletePlacingCommand(tileBuilder));
         }
 
         if(mouseDelta.magnitude > 0 && mousePressed)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var command = new MoveSelectedTileToRayCommand(tileBuilder, ray);
-            var response = tileBuilder.Execute(command);
-            Debug.Log(response.Message);
+            _ = tileBuilder.Execute(command);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Right));
-            Debug.Log(response.Message);
-        }
-        if(Input.mouseScrollDelta.y > 0)
-        {
-            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Right));
-            Debug.Log(response.Message);
-        }
-        if (Input.mouseScrollDelta.y < 0)
-        {
-            var response = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Left));
-            Debug.Log(response.Message);
+            _ = tileBuilder.Execute(new RotateSelectedTileCommand(tileBuilder, Direction.Right));
         }
         if (Input.GetKeyDown(KeyCode.Delete))
         {
@@ -82,8 +66,8 @@ public class TileBuilderController : MonoBehaviour
     {
         if (mouseUIClicked)
         {
-            var response = CreateTile(uITileClicked.TileUnionPrefab);
-            if (response.Accepted)
+            var result = CreateTile(uITileClicked.TileUnionPrefab);
+            if (result.Success)
             {
                 uITileClicked.TakeOne();
             }
@@ -97,26 +81,24 @@ public class TileBuilderController : MonoBehaviour
         uITileClicked = uITile;
     }
 
-    public void DeleteTile(bool stillselected = false)
+    public void DeleteTile()
     {
         GameObject destroyedTileUIPrefab = null;
         var command = new DeleteSelectedTileCommand(tileBuilder, (arg) => destroyedTileUIPrefab = arg);
         var response = tileBuilder.Execute(command);
-        Debug.Log(response.Message);
-        if (response.Accepted)
+        if (response.Success)
         {
-            if (stillselected)
-                uITileClicked = CreateUIElement(destroyedTileUIPrefab);
-            else
-                _ = CreateUIElement(destroyedTileUIPrefab);
+            _ = CreateUIElement(destroyedTileUIPrefab);
         }
-        
     }
-    public Response CreateTile(GameObject tilePrefab)
+
+    public Result CreateTile(GameObject tilePrefab)
     {
-        var command = new AddTileToSceneCommand(tileBuilder, tilePrefab);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var command = new AddTileToSceneCommand(tileBuilder, tilePrefab, ray);
         return tileBuilder.Execute(command);
     }
+
     public TileUI CreateUIElement(GameObject UIPrefab)
     {
         var UiElement = Instantiate(UIPrefab, UIHandler);

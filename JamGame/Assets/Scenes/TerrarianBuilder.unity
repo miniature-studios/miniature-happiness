@@ -132,9 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 40476286}
-  - component: {fileID: 40476288}
   - component: {fileID: 40476289}
-  - component: {fileID: 40476290}
   m_Layer: 0
   m_Name: TileBuilder
   m_TagString: Untagged
@@ -154,26 +152,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1329428466}
+  - {fileID: 404178275}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &40476288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40476285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileBuilder: {fileID: 40476289}
-  TileToCreatePrefab: {fileID: 6065267748929872738, guid: 1e1eb3a047df7fd49b9b7097d0192a0e, type: 3}
-  TileUIPrefab: {fileID: 1399198852134951616, guid: 111dfd2fa370c0b4ab7e199336290e56, type: 3}
-  UIHandler: {fileID: 806777541}
 --- !u!114 &40476289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,31 +176,43 @@ MonoBehaviour:
   WorkingPlaceFree: {fileID: 721046682041479175, guid: 9376253a30395b340a27ac99b7697059, type: 3}
   WorkingPlace: {fileID: 8812810329888060619, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
   ChoosedTile: {fileID: 424481578478286981, guid: 5e3cf41a766bd984eb7e6a396e9a6627, type: 3}
-  GameMode: 1
-  SceneCompositionLoadingPrefab: {fileID: 1079265432, guid: 515ef27278c893140a9f8c4d5e262abb, type: 3}
-  SceneCompositionPrefabSavingName: SampleBuilding
-  pointerPrefab: {fileID: 5826312097454661961, guid: 668fcb33222705649b6c63b41445f630, type: 3}
+  LoadingPrefab: {fileID: 0}
+  SavingName: SampleBuilding
   freespacePrefab: {fileID: 6867066097170886016, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
-  errorPlacingPrefab: {fileID: 9110350974871343431, guid: cf101928a6aed7a49b21b18c307971f7, type: 3}
-  rootObject: {fileID: 1329428465}
-  wallSolver: {fileID: 40476290}
---- !u!114 &40476290
-MonoBehaviour:
+  rootObject: {fileID: 404178274}
+  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  GameMode: 1
+--- !u!1 &404178274
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40476285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8d76baa1d88d0e43859e1038e1dbcc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ForSameWalls_PriorityQueue: 03000000020000000000000001000000
-  ForSameWalls_PriorityQueue_FirstDoor: 02000000030000000000000001000000
-  ForDifferentTiles_PriorityQueue: 01000000000000000200000003000000
-  ignoringMarks:
-  - immutable
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 404178275}
+  m_Layer: 0
+  m_Name: RootObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &404178275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404178274}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 40476286}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &500220673
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,7 +492,7 @@ RectTransform:
   m_Children:
   - {fileID: 1395078481}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -515,7 +509,6 @@ GameObject:
   m_Component:
   - component: {fileID: 806777541}
   - component: {fileID: 806777542}
-  - component: {fileID: 806777543}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -569,19 +562,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &806777543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806777540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8f148f9cdee3884fb9b3888f8ce4b90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1329428465
+--- !u!1 &950253093
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -589,29 +570,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1329428466}
+  - component: {fileID: 950253094}
+  - component: {fileID: 950253095}
   m_Layer: 0
-  m_Name: RootObject(Clone)
+  m_Name: TileBuilderController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1329428466
+--- !u!4 &950253094
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1329428465}
+  m_GameObject: {fileID: 950253093}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 40476286}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &950253095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950253093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileBuilder: {fileID: 40476289}
+  TileToCreatePrefab: {fileID: 7606936360430423357, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
+  UIHandler: {fileID: 806777541}
 --- !u!1 &1395078480
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +734,7 @@ MonoBehaviour:
   CloseYPosition: -60
   HideSpeed: 10
   canvas: {fileID: 764846866}
-  controller: {fileID: 40476288}
+  controller: {fileID: 950253095}
 --- !u!1 &1494997326
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,6 +835,37 @@ MonoBehaviour:
   navigationSpeed: 2
   shiftMultiplier: 2
   sensitivity: 0.5
+--- !u!1 &1644229839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1644229840}
+  m_Layer: 0
+  m_Name: RootObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1644229840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644229839}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1699669835
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,7 +962,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904627829
 GameObject:
@@ -1002,7 +1030,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1932186754
 GameObject:
@@ -1033,5 +1061,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

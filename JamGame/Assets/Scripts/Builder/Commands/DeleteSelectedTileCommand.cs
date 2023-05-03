@@ -12,7 +12,7 @@ public class DeleteSelectedTileCommand : ICommand
         this.tileBuilder = tileBuilder;
         this.sendUIPrefab = sendUIPrefab;
     }
-    public Response Execute()
+    public Result Execute()
     {
         var response = tileBuilder.DeleteSelectedTile(out tileUIPrefab);
         sendUIPrefab(tileUIPrefab);
