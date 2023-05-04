@@ -9,11 +9,12 @@ public class TileUnion : MonoBehaviour
 {
     [SerializeField] public GameObject UIPrefab;
     [SerializeField] public List<Tile> tiles = new();
-    [SerializeField] Vector2Int position;
-    [SerializeField] int rotation;
-    [SerializeField] BuilderMatrix builderMatrix;
-    
-    class TileUnionConfiguration
+    [SerializeField] private Vector2Int position;
+    [SerializeField, Range(0, 3)] private int rotation;
+    [SerializeField] private BuilderMatrix builderMatrix;
+    private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration = null;
+
+    private class TileUnionConfiguration
     {
         public Vector2Int CenterTilePosition;
         public List<Vector2Int> TilesPositionsForUpdating;
@@ -27,7 +28,8 @@ public class TileUnion : MonoBehaviour
             CenterTilePosition = centerTilePosition;
         }
     }
-    class TileConfiguration
+
+    private class TileConfiguration
     {
         public Tile TargetTile;
         public Vector2Int Position;
@@ -39,29 +41,34 @@ public class TileUnion : MonoBehaviour
             Rotation = rotation;
         }
     }
-    Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration = null;
 
-    Dictionary<int, TileUnionConfiguration> CachedUnionConfiguration
+    private Dictionary<int, TileUnionConfiguration> CachedUnionConfiguration
     {
         get
         {
             if (cachedUnionConfiguration == null)
             {
-                CreateTileUnionCehe();
+                CreateCache();
             }
             return cachedUnionConfiguration;
         }
     }
-    public Vector2Int Position { get => position; set => SetTileUnionPosition(value); }
-    public int Rotation { get => rotation; set => SetTileUnionRotationFromCehe(value); }
-    public IEnumerable<Vector2Int> TilesPositionsForUpdating { get => CachedUnionConfiguration[rotation].TilesPositionsForUpdating.Select(x => x + position); }
-    public IEnumerable<Vector2Int> TilesPositions { get => CachedUnionConfiguration[rotation].TilesPositions.Select(x => x + position); }
-    public int TilesCount { get => tiles.Count; }
-    public Vector2Int CenterTilePosition { get => CachedUnionConfiguration[rotation].CenterTilePosition + position; }
+    public Vector2Int Position => position;
+    public int Rotation => rotation;
+    public IEnumerable<Vector2Int> TilesPositionsForUpdating => CachedUnionConfiguration[rotation].TilesPositionsForUpdating.Select(x => x + position);
+    public IEnumerable<Vector2Int> TilesPositions => CachedUnionConfiguration[rotation].TilesPositions.Select(x => x + position);
+    public int TilesCount => tiles.Count;
+    public Vector2Int CenterPosition => CachedUnionConfiguration[rotation].CenterTilePosition + position;
 
+    private void OnValidate()
+    {
+        CreateCache();
+        SetPosition(Position);
+        SetRotation(Rotation);
+    }
     public void Move(Direction direction)
     {
-        Position += direction.ToVector2Int();
+        SetPosition(Position + direction.ToVector2Int());
     }
     public bool IsAllWithMark(string mark)
     {
@@ -74,13 +81,13 @@ public class TileUnion : MonoBehaviour
     public Result TryApplyErrorTiles(TileBuilder tileBuilder)
     {
         List<Tile> invalidTiles = new();
-        foreach (var tile in tiles)
+        foreach (Tile tile in tiles)
         {
             Dictionary<Direction, Tile> neighbours = new();
-            foreach (var pos in Direction.Up.GetCircle90())
+            foreach (Direction pos in Direction.Up.GetCircle90())
             {
-                var bufferPosition = Position + pos.ToVector2Int() + tile.Position;
-                tileBuilder.TileUnionDictionary.TryGetValue(bufferPosition, out TileUnion tileUnion);
+                Vector2Int bufferPosition = Position + pos.ToVector2Int() + tile.Position;
+                _ = tileBuilder.TileUnionDictionary.TryGetValue(bufferPosition, out TileUnion tileUnion);
                 if (tileUnion != null)
                 {
                     neighbours.Add(pos, tileBuilder.TileUnionDictionary[bufferPosition].GetTile(bufferPosition));
@@ -97,9 +104,9 @@ public class TileUnion : MonoBehaviour
         }
         if (invalidTiles.Count > 0)
         {
-            foreach (var tile in invalidTiles)
+            foreach (Tile tile in invalidTiles)
             {
-                tile.ApplyErrorState();
+                tile.SetTileState(Tile.TileState.SelectedAndErrored);
             }
             return new SuccessResult();
         }
@@ -108,36 +115,29 @@ public class TileUnion : MonoBehaviour
             return new FailResult("No error walls");
         }
     }
-    public void CancelErrorTiles()
-    {
-        foreach (var tile in tiles)
-        {
-            tile.CancelErrorState();
-        }
-    }
     public void ApplySelecting()
     {
-        foreach (var tile in tiles)
+        foreach (Tile tile in tiles)
         {
-            tile.ApplySelectState();
+            tile.SetTileState(Tile.TileState.Selected);
         }
     }
     public void CancelSelecting()
     {
-        foreach (var tile in tiles)
+        foreach (Tile tile in tiles)
         {
-            tile.CancelSelectState();
+            tile.SetTileState(Tile.TileState.Normal);
         }
     }
-    public void UpdateWallsInTile(TileBuilder tileBuilder, Vector2Int position)
+    public void UpdateWalls(TileBuilder tileBuilder, Vector2Int position)
     {
-        var tile = GetTile(position);
+        Tile tile = GetTile(position);
         Dictionary<Direction, Tile> neighbours = new();
-        foreach (var pos in Direction.Up.GetCircle90())
+        foreach (Direction pos in Direction.Up.GetCircle90())
         {
-            var bufferPosition = position + pos.ToVector2Int();
-            tileBuilder.TileUnionDictionary.TryGetValue(bufferPosition, out TileUnion tileUnion);
-            if(tileUnion != null)
+            Vector2Int bufferPosition = position + pos.ToVector2Int();
+            _ = tileBuilder.TileUnionDictionary.TryGetValue(bufferPosition, out TileUnion tileUnion);
+            if (tileUnion != null)
             {
                 neighbours.Add(pos, tileBuilder.TileUnionDictionary[bufferPosition].GetTile(bufferPosition));
             }
@@ -146,20 +146,20 @@ public class TileUnion : MonoBehaviour
                 neighbours.Add(pos, null);
             }
         }
-        var result = tile.RequestWallUpdates(neighbours);
+        Result<Tile.WallTypeMatch> result = tile.RequestWallUpdates(neighbours);
         if (result.Success)
         {
-            tile.ApplyUpdatingWalls(result as SuccessResult<Dictionary<Direction, TileWallType>>);
+            tile.ApplyUpdatingWalls(result);
         }
     }
-    public void UpdateCornersInTile(TileBuilder tileBuilder, Vector2Int position)
+    public void UpdateCorners(TileBuilder tileBuilder, Vector2Int position)
     {
-        var tile = GetTile(position);
+        Tile tile = GetTile(position);
         Dictionary<Direction, Tile> neighbours = new();
-        foreach (var pos in Direction.Up.GetCircle45())
+        foreach (Direction pos in Direction.Up.GetCircle45())
         {
-            var bufferPosition = position + pos.ToVector2Int();
-            tileBuilder.TileUnionDictionary.TryGetValue(bufferPosition, out TileUnion tileUnion);
+            Vector2Int bufferPosition = position + pos.ToVector2Int();
+            _ = tileBuilder.TileUnionDictionary.TryGetValue(bufferPosition, out TileUnion tileUnion);
             if (tileUnion != null)
             {
                 neighbours.Add(pos, tileBuilder.TileUnionDictionary[bufferPosition].GetTile(bufferPosition));
@@ -173,12 +173,12 @@ public class TileUnion : MonoBehaviour
     }
     public void IsolateUpdate()
     {
-        foreach (var tile in tiles)
+        foreach (Tile tile in tiles)
         {
             Dictionary<Direction, Tile> neighbours = new();
-            foreach (var pos in Direction.Up.GetCircle90())
+            foreach (Direction pos in Direction.Up.GetCircle90())
             {
-                var bufferPosition = tile.Position + pos.ToVector2Int();
+                Vector2Int bufferPosition = tile.Position + pos.ToVector2Int();
                 if (tiles.Select(x => x.Position).Contains(bufferPosition))
                 {
                     neighbours.Add(pos, tiles.Find(x => x.Position == bufferPosition));
@@ -188,25 +188,25 @@ public class TileUnion : MonoBehaviour
                     neighbours.Add(pos, null);
                 }
             }
-            var result = tile.RequestWallUpdates(neighbours);
+            Result<Tile.WallTypeMatch> result = tile.RequestWallUpdates(neighbours);
             if (result.Success)
             {
-                tile.ApplyUpdatingWalls(result as SuccessResult<Dictionary<Direction, TileWallType>>);
+                tile.ApplyUpdatingWalls(result);
             }
         }
     }
 
-    public void CreateTileUnionCehe()
+    private void CreateCache()
     {
         cachedUnionConfiguration = new();
         for (int i = 0; i < 4; i++)
         {
             List<TileConfiguration> tileConfigurations = new();
-            foreach (var tile in tiles)
+            foreach (Tile tile in tiles)
             {
                 tileConfigurations.Add(new(tile, tile.Position, tile.Rotation));
             }
-            cachedUnionConfiguration.Add(rotation, 
+            cachedUnionConfiguration.Add(rotation,
                 new(GetTilesPositionsForUpdating().ToList(),
                     tiles.Select(x => x.Position).ToList(),
                     tileConfigurations,
@@ -216,52 +216,16 @@ public class TileUnion : MonoBehaviour
         }
     }
 
-    Tile GetTile(Vector2Int plobalPosition)
+    public void SetRotation(int rotation)
     {
-        plobalPosition -= position;
-        return tiles.FirstOrDefault(x => x.Position == plobalPosition);
-    }
-    void RotateTileUnion()
-    {
-        rotation++;
-        var firstCenter = TileUnionTools.GetCenterOfMass(tiles.Select(x => x.Position).ToList());
-        foreach (var tile in tiles)
+        this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
+        foreach (TileConfiguration config in CachedUnionConfiguration[this.rotation].TilesConfigurations)
         {
-            tile.Rotation++;
-            tile.Position = new Vector2Int(tile.Position.y, -tile.Position.x);
-        }
-        rotation %= 4;
-        var secondCenter = TileUnionTools.GetCenterOfMass(tiles.Select(x => x.Position).ToList());
-        var delta = (firstCenter - secondCenter);
-        foreach (var tile in tiles)
-        {
-            tile.Position += new Vector2Int((int)delta.x, (int)delta.y);
+            config.TargetTile.SetPosition(config.Position);
+            config.TargetTile.SetRotation(config.Rotation);
         }
     }
-    void SetTileUnionRotationFromCehe(int rotation)
-    {
-        this.rotation = rotation % 4;
-        foreach (var config in CachedUnionConfiguration[this.rotation].TilesConfigurations)
-        {
-            config.TargetTile.Position = config.Position;
-            config.TargetTile.Rotation = config.Rotation;
-        }
-    }
-    IEnumerable<Vector2Int> GetTilesPositionsForUpdating()
-    {
-        HashSet<Vector2Int> localPositions = new();
-        foreach (var tile in tiles)
-        {
-            foreach (var position in Direction.Up.GetCircle45())
-            {
-                var pos = tile.Position + position.ToVector2Int();
-                localPositions.Add(pos);
-            }
-            localPositions.Add(tile.Position);
-        }
-        return localPositions;
-    }
-    void SetTileUnionPosition(Vector2Int vector)
+    public void SetPosition(Vector2Int vector)
     {
         position = vector;
         transform.localPosition = new Vector3(
@@ -270,19 +234,61 @@ public class TileUnion : MonoBehaviour
             -builderMatrix.Step * position.x
             );
     }
-    Vector2Int GetCenterTilePosition()
+
+    private Tile GetTile(Vector2Int plobalPosition)
+    {
+        plobalPosition -= position;
+        return tiles.FirstOrDefault(x => x.Position == plobalPosition);
+    }
+
+    private void RotateTileUnion()
+    {
+        rotation++;
+        Vector2 firstCenter = TileUnionTools.GetCenterOfMass(tiles.Select(x => x.Position).ToList());
+        foreach (Tile tile in tiles)
+        {
+            tile.SetRotation(tile.Rotation + 1);
+            tile.SetPosition(new Vector2Int(tile.Position.y, -tile.Position.x));
+        }
+        rotation %= 4;
+        Vector2 secondCenter = TileUnionTools.GetCenterOfMass(tiles.Select(x => x.Position).ToList());
+        Vector2 delta = firstCenter - secondCenter;
+        foreach (Tile tile in tiles)
+        {
+            tile.SetPosition(tile.Position + new Vector2Int((int)delta.x, (int)delta.y));
+        }
+    }
+
+    private IEnumerable<Vector2Int> GetTilesPositionsForUpdating()
+    {
+        HashSet<Vector2Int> localPositions = new();
+        foreach (Tile tile in tiles)
+        {
+            foreach (Direction position in Direction.Up.GetCircle45())
+            {
+                Vector2Int pos = tile.Position + position.ToVector2Int();
+                _ = localPositions.Add(pos);
+            }
+            _ = localPositions.Add(tile.Position);
+        }
+        return localPositions;
+    }
+
+    private Vector2Int GetCenterTilePosition()
     {
         Vector2 VectorSum = new();
-        foreach (var pos in tiles.Select(x => x.Position))
+        foreach (Vector2Int pos in tiles.Select(x => x.Position))
         {
             VectorSum += pos;
         }
         VectorSum /= TilesCount;
-        List<Vector2Int> vectors = new();
-        vectors.Add(new((int)Math.Truncate(VectorSum.x), (int)Math.Truncate(VectorSum.y)));
-        vectors.Add(new((int)Math.Truncate(VectorSum.x), (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y));
-        vectors.Add(new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y)));
-        vectors.Add(new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y));
+        List<Vector2Int> vectors = new()
+        {
+            new((int)Math.Truncate(VectorSum.x), (int)Math.Truncate(VectorSum.y)),
+            new((int)Math.Truncate(VectorSum.x), (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y),
+            new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y)),
+            new((int)Math.Truncate(VectorSum.x) + (int)VectorSum.normalized.x, (int)Math.Truncate(VectorSum.y) + (int)VectorSum.normalized.y)
+        };
         return vectors.OrderBy(x => Vector2.Distance(x, VectorSum)).First();
     }
 }

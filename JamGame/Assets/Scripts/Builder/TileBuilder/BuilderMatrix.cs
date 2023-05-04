@@ -2,11 +2,11 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "BuilderMatrix", menuName = "ScriptableObjects/BuilderMatrix", order = 3)]
-public class BuilderMatrix: ScriptableObject
+public class BuilderMatrix : ScriptableObject
 {
-    [SerializeField] float SelectingPlaneHeight = 1;
+    [SerializeField] private float SelectingPlaneHeight = 1;
     [SerializeField] public int Step = 5;
-    public Result GetMatrixPosition(Ray ray)
+    public Result<Vector2Int> GetMatrixPosition(Ray ray)
     {
         Plane plane = new(Vector3.up, new Vector3(0, SelectingPlaneHeight, 0));
         if (plane.Raycast(ray, out float enter))
@@ -16,7 +16,7 @@ public class BuilderMatrix: ScriptableObject
         }
         else
         {
-            return new FailResult("No ray hits with matrix");
+            return new FailResult<Vector2Int>("No ray hits with matrix");
         }
     }
 }

@@ -8,13 +8,13 @@ public partial class TileInspector : Editor
     public partial void ShowPrefabsFilling(Tile tile);
     public override void OnInspectorGUI()
     {
-        var tile = serializedObject.targetObject as Tile;
+        Tile tile = serializedObject.targetObject as Tile;
 
         ShowPrefabsFilling(tile);
 
-        DrawDefaultInspector();
+        _ = DrawDefaultInspector();
 
-        serializedObject.ApplyModifiedProperties();
+        _ = serializedObject.ApplyModifiedProperties();
     }
 }
 

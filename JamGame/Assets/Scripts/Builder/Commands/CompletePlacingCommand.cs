@@ -1,12 +1,7 @@
 ﻿using Common;
 public class CompletePlacingCommand : ICommand
 {
-    TileBuilder tileBuilder;
-    public CompletePlacingCommand(TileBuilder tileBuilder)
-    {
-        this.tileBuilder = tileBuilder;
-    }
-    public Result Execute()
+    public Result Execute(TileBuilder tileBuilder)
     {
         return tileBuilder.ComletePlacing();
     }

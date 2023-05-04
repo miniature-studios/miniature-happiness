@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
 using UnityEditor;
-using System.IO;
+using UnityEngine;
 
 namespace GradientSkybox
 {
@@ -26,16 +26,16 @@ namespace GradientSkybox
                 }
             }
 
-            SerializedObject data = new SerializedObject(gradientObject);
+            SerializedObject data = new(gradientObject);
             data.Update();
             SerializedProperty gradientProperty = data.FindProperty("gradient");
             Texture2D texture = null;
 
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(gradientProperty);
+            _ = EditorGUILayout.PropertyField(gradientProperty);
             if (EditorGUI.EndChangeCheck())
             {
-                data.ApplyModifiedProperties();
+                _ = data.ApplyModifiedProperties();
                 texture = CreateRampTexture();
                 texture.wrapMode = TextureWrapMode.Clamp;
                 material.SetTexture("_RampTex", texture);
@@ -74,7 +74,7 @@ namespace GradientSkybox
         private Texture2D CreateRampTexture()
         {
             Gradient gradient = gradientObject.gradient;
-            Texture2D texture = new Texture2D(128, 2);
+            Texture2D texture = new(128, 2);
             for (int h = 0; h < texture.height; h++)
             {
                 for (int w = 0; w < texture.width; w++)

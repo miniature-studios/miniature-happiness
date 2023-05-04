@@ -20,8 +20,10 @@ public class RoomInternalPath
     public float GetPathLength()
     {
         float sum = 0;
-        List<Vector3> path = new List<Vector3>();
-        path.Add(linePoints[0]);
+        List<Vector3> path = new()
+        {
+            linePoints[0]
+        };
         for (int i = 0; i < sigmentsNumber + 1; i++)
         {
             float paremeter = (float)i / sigmentsNumber;

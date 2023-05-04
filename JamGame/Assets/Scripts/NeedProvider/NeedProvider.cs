@@ -23,7 +23,7 @@ public class NeedProvider : MonoBehaviour
             FilterType = filter_type;
         }
 
-        public List<Employee> Employees = new List<Employee>();
+        public List<Employee> Employees = new();
         public FilterType FilterType;
 
         public bool IsEmployeeAllowed(Employee employee)
@@ -38,7 +38,9 @@ public class NeedProvider : MonoBehaviour
                     return !Employees.Contains(employee);
                 case FilterType.FirstToTake:
                     if (Employees.Contains(employee))
+                    {
                         return true;
+                    }
                     else if (Employees.Count == 0)
                     {
                         Employees.Add(employee);
@@ -52,24 +54,30 @@ public class NeedProvider : MonoBehaviour
         }
     }
 
-    [SerializeField] NeedCollectionModifier needCollectionModifier;
+    [SerializeField] private NeedCollectionModifier needCollectionModifier;
 
-    [SerializeField] List<NeedSlot> availableSlots;
+    [SerializeField] private List<NeedSlot> availableSlots;
     public NeedType NeedType;
 
     public NeedSlot TryBook(Employee employee)
     {
-        foreach (var slot in availableSlots)
+        foreach (NeedSlot slot in availableSlots)
+        {
             if (slot.TryBook(employee))
+            {
                 return slot;
+            }
+        }
 
         return null;
     }
 
     public void ProvideNeedParameters(List<NeedParameters> parameters)
     {
-        var need_parameters = needCollectionModifier.Apply(parameters);
-        foreach (var slot in availableSlots)
+        List<NeedParameters> need_parameters = needCollectionModifier.Apply(parameters);
+        foreach (NeedSlot slot in availableSlots)
+        {
             slot.ProvideNeedParameters(need_parameters);
+        }
     }
 }

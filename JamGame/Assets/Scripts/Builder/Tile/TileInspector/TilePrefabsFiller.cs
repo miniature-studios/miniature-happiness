@@ -1,13 +1,13 @@
 ﻿#if UNITY_EDITOR
+using Common;
 using UnityEditor;
 using UnityEngine;
-using Common;
 
 public partial class TileInspector
 {
     public partial void ShowPrefabsFilling(Tile tile)
     {
-        EditorGUILayout.BeginHorizontal();
+        _ = EditorGUILayout.BeginHorizontal();
 
         if (GUILayout.Button("Fill tile with prefabs"))
         {
@@ -22,16 +22,18 @@ public partial class TileInspector
                 wallsHadler = tile.transform.Find("Walls").gameObject;
             }
 
-            foreach (var wallCollection in tile.walls)
+            foreach (WallCollection wallCollection in tile.walls)
             {
                 float degrees = wallCollection.Place.GetDegrees();
-                foreach (var handler in wallCollection.Handlers)
+                foreach (WallPrefabHandler handler in wallCollection.Handlers)
                 {
-                    var prefabHandler = tile.elementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
+                    TileWallPrefabHandler prefabHandler = tile.elementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
                     if (prefabHandler != null)
                     {
                         if (handler.Prefab != null)
+                        {
                             DestroyImmediate(handler.Prefab);
+                        }
                         handler.Prefab = Instantiate(prefabHandler.Prefab, tile.transform.position, prefabHandler.Prefab.transform.rotation, wallsHadler.transform);
                         handler.Prefab.transform.Rotate(new(0, degrees, 0));
                         handler.Prefab.SetActive(false);
@@ -55,16 +57,19 @@ public partial class TileInspector
                 cornersHadler = tile.transform.Find("Corners").gameObject;
             }
 
-            foreach (var cornerCollection in tile.corners)
+            foreach (CornerCollection cornerCollection in tile.corners)
             {
                 float degrees = cornerCollection.Place.GetDegrees() - 45;
-                foreach (var handler in cornerCollection.Handlers)
+                foreach (CornerPrefabHandler handler in cornerCollection.Handlers)
                 {
-                    var prefabHandler = tile.elementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
+                    TileCornerPrefabHandler prefabHandler = tile.elementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
                     if (prefabHandler != null)
                     {
                         if (handler.Prefab != null)
+                        {
                             DestroyImmediate(handler.Prefab);
+                        }
+
                         handler.Prefab = Instantiate(prefabHandler.Prefab, tile.transform.position, prefabHandler.Prefab.transform.rotation, cornersHadler.transform);
                         handler.Prefab.transform.Rotate(new(0, degrees, 0));
                         handler.Prefab.SetActive(false);

@@ -1,20 +1,18 @@
-﻿using UnityEngine;
-using Common;
+﻿using Common;
 using System;
+using UnityEngine;
 
 public class DeleteSelectedTileCommand : ICommand
 {
-    TileBuilder tileBuilder;
-    GameObject tileUIPrefab;
-    Action<GameObject> sendUIPrefab;
-    public DeleteSelectedTileCommand(TileBuilder tileBuilder, Action<GameObject> sendUIPrefab)
+    private GameObject tileUIPrefab;
+    private readonly Action<GameObject> sendUIPrefab;
+    public DeleteSelectedTileCommand(Action<GameObject> sendUIPrefab)
     {
-        this.tileBuilder = tileBuilder;
         this.sendUIPrefab = sendUIPrefab;
     }
-    public Result Execute()
+    public Result Execute(TileBuilder tileBuilder)
     {
-        var response = tileBuilder.DeleteSelectedTile(out tileUIPrefab);
+        Result response = tileBuilder.DeleteSelectedTile(out tileUIPrefab);
         sendUIPrefab(tileUIPrefab);
         return response;
     }

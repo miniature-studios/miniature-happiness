@@ -3,12 +3,12 @@ using UnityEngine.EventSystems;
 
 public class ScrollViewHider : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] float OpenYPosition = 50;
-    [SerializeField] float CloseYPosition = -60;
-    [SerializeField] float HideSpeed = 10;
-    [SerializeField] Canvas canvas;
-    [SerializeField] TileBuilderController controller;
-    RectTransform rectTransform;
+    [SerializeField] private float OpenYPosition = 50;
+    [SerializeField] private float CloseYPosition = -60;
+    [SerializeField] private float HideSpeed = 10;
+    [SerializeField] private Canvas canvas;
+    [SerializeField] private TileBuilderController controller;
+    private RectTransform rectTransform;
     public void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -29,10 +29,8 @@ public class ScrollViewHider : MonoBehaviour, IPointerEnterHandler, IPointerExit
     }
     public bool IsInRectangle(Vector2 point)
     {
-        if(point.x > rectTransform.offsetMin.x && point.x < canvas.pixelRect.width + rectTransform.offsetMax.x
-           && point.y > 0 && point.y < rectTransform.rect.height)
-            return true;
-        return false;
+        return point.x > rectTransform.offsetMin.x && point.x < canvas.pixelRect.width + rectTransform.offsetMax.x
+           && point.y > 0 && point.y < rectTransform.rect.height;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class EmployeeController : MonoBehaviour
 {
-    [SerializeField] float speed;
-
-    List<(Room, RoomInternalPath)> currentPath;
+    [SerializeField] private float speed;
+    private List<(Room, RoomInternalPath)> currentPath;
 
     public void SetPath(List<(Room, RoomInternalPath)> path)
     {
@@ -24,17 +23,20 @@ public class EmployeeController : MonoBehaviour
         current_internal_path_length = path[0].Item2.GetPathLength();
     }
 
-    bool moving = false;
+    private bool moving = false;
     public void Update()
     {
         if (moving)
+        {
             Move();
+        }
     }
 
-    int current_internal_path;
-    float current_internal_path_normalized_time;
-    float current_internal_path_length;
-    void Move()
+    private int current_internal_path;
+    private float current_internal_path_normalized_time;
+    private float current_internal_path_length;
+
+    private void Move()
     {
         float current_path_rem = 1.0f - current_internal_path_normalized_time;
         current_path_rem *= current_internal_path_length / speed;
@@ -57,7 +59,7 @@ public class EmployeeController : MonoBehaviour
         current_internal_path_normalized_time += Time.deltaTime / current_internal_path_length * speed;
 
         // FIXME: Incapsulate fetching global position into RoomInternalPath
-        var new_position = currentPath[current_internal_path].Item2.GetPathPoint(current_internal_path_normalized_time);
+        Vector3 new_position = currentPath[current_internal_path].Item2.GetPathPoint(current_internal_path_normalized_time);
         transform.position = new_position + currentPath[current_internal_path].Item1.transform.position;
     }
 

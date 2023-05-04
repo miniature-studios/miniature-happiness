@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-
-namespace Common
+﻿namespace Common
 {
     public enum TileCornerType
     {

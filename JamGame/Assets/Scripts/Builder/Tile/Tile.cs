@@ -17,19 +17,22 @@ public class WallCollection
     public List<WallPrefabHandler> Handlers;
     public void SetWall(TileWallType type)
     {
-        foreach (var handler in Handlers)
+        foreach (WallPrefabHandler handler in Handlers)
         {
-            if(handler.Type == type)
+            if (handler.Type == type)
+            {
                 handler.Prefab.SetActive(true);
+            }
             else
+            {
                 handler.Prefab.SetActive(false);
+            }
         }
     }
     public bool IsActive(TileWallType tileWallType)
     {
-        if(Handlers.Find(x => x.Type == tileWallType) == null)
-            return false;
-        return Handlers.Find(x => x.Type == tileWallType).Prefab.gameObject.activeSelf;
+        return Handlers.Find(x => x.Type == tileWallType) != null
+&& Handlers.Find(x => x.Type == tileWallType).Prefab.gameObject.activeSelf;
     }
 }
 
@@ -46,85 +49,85 @@ public class CornerCollection
     public List<CornerPrefabHandler> Handlers;
     public void SetCorner(TileCornerType type)
     {
-        foreach (var handler in Handlers)
+        foreach (CornerPrefabHandler handler in Handlers)
         {
             if (handler.Type == type)
+            {
                 handler.Prefab.SetActive(true);
+            }
             else
+            {
                 handler.Prefab.SetActive(false);
+            }
         }
     }
 }
 
 [SelectionBase]
+[RequireComponent(typeof(TileView))]
 public class Tile : MonoBehaviour
 {
     [SerializeField] public TileElementsHandler elementsHandler;
     [SerializeField] public List<WallCollection> walls = new();
     [SerializeField] public List<CornerCollection> corners = new();
-    [SerializeField] public Material transparentMaterial;
-    [SerializeField] public Material errorMaterial;
-    [SerializeField] public Material startMaterial;
+    [SerializeField] public TileView tileView;
 
-    [SerializeField] BuilderMatrix builderMatrix;
-    [SerializeField] WallSolver wallSolver;
+    [SerializeField] private BuilderMatrix builderMatrix;
+    [SerializeField] private WallSolver wallSolver;
 
-    [SerializeField] List<string> marks;
-    [SerializeField] Vector2Int position = new(0,0);
-    [SerializeField] int rotation = 0;
+    [SerializeField] private List<string> marks;
+    [SerializeField] private Vector2Int position = new(0, 0);
+    [SerializeField, Range(0, 3)] private int rotation = 0;
+    private Dictionary<Direction, List<TileWallType>> cachedWalls;
+    private TileState currentState = TileState.Normal;
 
-    public float SelectLiftingHeight = 3;
-    float UnSelectedYPosition;
-    float SelectedYPosition;
-    
-    Dictionary<Direction, List<TileWallType>> cachedWalls;
-
-    Renderer[] renderers;
-    TileState currentState = TileState.Normal;
-
-    public Vector2Int Position { get => position; set => SetPosition(value); }
-    public int Rotation { get => rotation; set => SetRotation(value); }
-    public IEnumerable<string> Marks { get => marks; }
-    public Dictionary<Direction, List<TileWallType>> Walls { 
-        get {
+    public Vector2Int Position => position;
+    public int Rotation => rotation;
+    public IEnumerable<string> Marks => marks;
+    public Dictionary<Direction, List<TileWallType>> Walls
+    {
+        get
+        {
             if (cachedWalls == null)
             {
                 UpdateWallsCache();
             }
-            return cachedWalls; 
-        } 
-    }
-
-    public void Awake()
-    {
-        SetActileChilds(transform);
-        renderers = GetComponentsInChildren<Renderer>();
-        UnSelectedYPosition = transform.position.y;
-        SelectedYPosition = UnSelectedYPosition + SelectLiftingHeight;
-    }
-    public void SetActileChilds(Transform transform)
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Transform child = transform.GetChild(i);
-            child.gameObject.SetActive(true);
-            SetActileChilds(child);
+            return cachedWalls;
         }
     }
 
-    public void Init(BuilderMatrix builderMatrix, WallSolver wallSolver)
+    private readonly float selectLiftingHeight = 3;
+    private float unselectedYPosition;
+    private float selectedYPosition;
+
+    private void Awake()
     {
-        this.builderMatrix = builderMatrix;
-        this.wallSolver = wallSolver;
+        unselectedYPosition = transform.position.y;
+        selectedYPosition = unselectedYPosition + selectLiftingHeight;
     }
 
-    public Result RequestWallUpdates(Dictionary<Direction, Tile> neighbours)
+    private void OnValidate()
+    {
+        SetPosition(Position);
+        SetRotation(Rotation);
+    }
+
+    public struct WallTypeMatch
+    {
+        public Dictionary<Direction, TileWallType> Data;
+        public WallTypeMatch(Dictionary<Direction, TileWallType> data)
+        {
+            Data = data;
+        }
+    }
+
+    public Result<WallTypeMatch> RequestWallUpdates(Dictionary<Direction, Tile> neighbours)
     {
         Dictionary<Direction, TileWallType> configuration = new();
-        foreach (var direction in Direction.Up.GetCircle90())
+        foreach (Direction direction in Direction.Up.GetCircle90())
         {
             TileWallType? wallTypeToPlace = TileWallType.none;
-            var outTile = neighbours[direction];
+            Tile outTile = neighbours[direction];
             if (outTile != null)
             {
                 wallTypeToPlace = wallSolver.ChooseWall(
@@ -136,20 +139,21 @@ public class Tile : MonoBehaviour
             }
             if (wallTypeToPlace == null)
             {
-                return new FailResult("No walls to place");
+                return new FailResult<WallTypeMatch>("No walls to place");
             }
             configuration.Add(direction, wallTypeToPlace.Value);
         }
-        return new SuccessResult<Dictionary<Direction, TileWallType>>(configuration);
+        return new SuccessResult<WallTypeMatch>(new(configuration));
     }
-    public void ApplyUpdatingWalls(Result<Dictionary<Direction, TileWallType>> result)
+    public void ApplyUpdatingWalls(Result<WallTypeMatch> result)
     {
-        foreach (var pair in result.Data)
+        foreach (KeyValuePair<Direction, TileWallType> pair in result.Data.Data)
         {
             GetWallCollection(pair.Key).SetWall(pair.Value);
         }
     }
-    WallCollection GetWallCollection(Direction imaginePlace)
+
+    private WallCollection GetWallCollection(Direction imaginePlace)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
         return walls.Find(x => x.Place == imaginePlace);
@@ -157,12 +161,12 @@ public class Tile : MonoBehaviour
 
     public void UpdateCorners(Dictionary<Direction, Tile> neighbours)
     {
-        foreach (var direction in Direction.Left.GetCircle90())
+        foreach (Direction direction in Direction.Left.GetCircle90())
         {
             TileCornerType cornerTypeToPlace = TileCornerType.none;
-            var tile1 = neighbours[direction];
-            var tile2 = neighbours[direction.Rotate45()];
-            var tile3 = neighbours[direction.Rotate90()];
+            Tile tile1 = neighbours[direction];
+            Tile tile2 = neighbours[direction.Rotate45()];
+            Tile tile3 = neighbours[direction.Rotate90()];
             if (tile1 != null && tile2 != null && tile3 != null)
             {
                 cornerTypeToPlace = ChooseCorner(
@@ -175,146 +179,81 @@ public class Tile : MonoBehaviour
             GetCornerCollection(direction.Rotate45()).SetCorner(cornerTypeToPlace);
         }
     }
-    TileCornerType ChooseCorner(bool existWall1, bool existWall2, bool existWall3, bool existWall4)
+
+    private TileCornerType ChooseCorner(bool existWall1, bool existWall2, bool existWall3, bool existWall4)
     {
-        if (existWall1 == true && existWall4 == true)
-            return TileCornerType.inside;
-        else if (existWall1 == true && existWall3 == true)
-            return TileCornerType.wall_right;
-        else if (existWall4 == true && existWall2 == true)
-            return TileCornerType.wall_left;
-        else if (existWall2 == true && existWall3 == true)
-            return TileCornerType.outside_middle;
-        else if (existWall1 == true && existWall2 == true)
-            return TileCornerType.outside_right;
-        else if (existWall4 == true && existWall3 == true)
-            return TileCornerType.outside_left;
-        else 
-            return TileCornerType.none;
+        return existWall1 == true && existWall4 == true
+            ? TileCornerType.inside
+            : existWall1 == true && existWall3 == true
+                ? TileCornerType.wall_right
+                : existWall4 == true && existWall2 == true
+                            ? TileCornerType.wall_left
+                            : existWall2 == true && existWall3 == true
+                                        ? TileCornerType.outside_middle
+                                        : existWall1 == true && existWall2 == true
+                                                    ? TileCornerType.outside_right
+                                                    : existWall4 == true && existWall3 == true ? TileCornerType.outside_left : TileCornerType.none;
     }
-    CornerCollection GetCornerCollection(Direction imaginePlace)
+
+    private CornerCollection GetCornerCollection(Direction imaginePlace)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
         return corners.Find(x => x.Place == imaginePlace);
     }
 
-    enum TileState
+    public enum TileState
     {
         Normal,
         Selected,
-        Errored,
         SelectedAndErrored
     }
-    public void ApplySelectState()
-    {
-        if (currentState == TileState.Normal)
-        {
-            SetTileState(TileState.Selected);
-        }
-        else if (currentState == TileState.Errored)
-        {
-            SetTileState(TileState.SelectedAndErrored);
-        }
-    }
-    public void CancelSelectState()
-    {
-        if(currentState == TileState.Selected)
-        {
-            SetTileState(TileState.Normal);
-        }
-        else if(currentState == TileState.SelectedAndErrored)
-        {
-            SetTileState(TileState.Errored);
-        }
-    }
-    public void ApplyErrorState()
-    {
-        if (currentState == TileState.Normal)
-        {
-            SetTileState(TileState.Errored);
-        }
-        else if (currentState == TileState.Selected)
-        {
-            SetTileState(TileState.SelectedAndErrored);
-        }
-    }
-    public void CancelErrorState()
-    {
-        if (currentState == TileState.Errored)
-        {
-            SetTileState(TileState.Normal);
-        }
-        else if (currentState == TileState.SelectedAndErrored)
-        {
-            SetTileState(TileState.Selected);
-        }
-    }
-
-    void SetTileState(TileState state)
+    public void SetTileState(TileState state)
     {
         currentState = state;
         switch (currentState)
         {
             default:
             case TileState.Normal:
-                transform.position = new Vector3(transform.position.x, UnSelectedYPosition, transform.position.z);
-                foreach (var render in renderers)
-                {
-                    render.materials = new Material[1] { startMaterial };
-                }
+                transform.position = new Vector3(transform.position.x, unselectedYPosition, transform.position.z);
+                tileView.SetDefaultMaterial();
                 break;
             case TileState.Selected:
-                transform.position = new Vector3(transform.position.x, SelectedYPosition, transform.position.z);
-                foreach (var render in renderers)
-                {
-                    render.materials = new Material[1] { transparentMaterial };
-                }
-                break;
-            case TileState.Errored:
-                transform.position = new Vector3(transform.position.x, UnSelectedYPosition, transform.position.z);
-                foreach (var render in renderers)
-                {
-                    render.materials = new Material[2] { startMaterial, errorMaterial };
-                }
+                transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
+                tileView.SetSelectedMaterial();
                 break;
             case TileState.SelectedAndErrored:
-                transform.position = new Vector3(transform.position.x, SelectedYPosition, transform.position.z);
-                foreach (var render in renderers)
-                {
-                    render.materials = new Material[2] { transparentMaterial, errorMaterial };
-                }
+                transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
+                tileView.SetSelectedAndErroredMaterial();
                 break;
         }
     }
-
     public void SetPosition(Vector2Int position)
     {
         this.position = position;
-        if (builderMatrix != null)
-        {
-            transform.localPosition = new Vector3(
-                builderMatrix.Step * position.y,
-                transform.localPosition.y,
-                -builderMatrix.Step * position.x
-                );
-        }
+        transform.localPosition = new Vector3(
+            builderMatrix.Step * position.y,
+            transform.localPosition.y,
+            -builderMatrix.Step * position.x
+            );
     }
-    void SetRotation(int rotation)
+    public void SetRotation(int rotation)
     {
-        this.rotation = rotation % 4;
+        this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
         transform.rotation = Quaternion.Euler(0, 90 * this.rotation, 0);
         UpdateWallsCache();
     }
-    bool IsWall(Direction imaginePlace)
+
+    private bool IsWall(Direction imaginePlace)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
-        var wallCollection = walls.Find(x => x.Place == imaginePlace);
+        WallCollection wallCollection = walls.Find(x => x.Place == imaginePlace);
         return !wallCollection.IsActive(TileWallType.none);
     }
-    void UpdateWallsCache()
+
+    private void UpdateWallsCache()
     {
         Dictionary<Direction, List<TileWallType>> list = new();
-        foreach (var wall in walls)
+        foreach (WallCollection wall in walls)
         {
             Direction imagine_place = wall.Place;
             Enumerable.Range(0, rotation).ToList().ForEach(arg => imagine_place = imagine_place.Rotate90());

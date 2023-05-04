@@ -6,21 +6,11 @@ namespace Common
     {
         public bool Success { get; protected set; }
         public bool Failure => !Success;
-    }
-    public abstract class Result<T> : Result
-    {
-        private T _data;
 
-        protected Result(T data)
-        {
-            Data = data;
-        }
+        protected string _error;
 
-        public T Data
-        {
-            get => Success ? _data : throw new Exception($"You can't access .{nameof(Data)} when .{nameof(Success)} is false");
-            set => _data = value;
-        }
+        public string Error => Failure ? _error :
+                throw new Exception($"You can't access .{nameof(Error)} when .{nameof(Failure)} is false");
     }
     public class SuccessResult : Result
     {
@@ -29,33 +19,42 @@ namespace Common
             Success = true;
         }
     }
-    public interface IFailResult
+    public class FailResult : Result
     {
-        string FailCause { get; }
-    }
-    public class FailResult : Result, IFailResult
-    {
-        public string FailCause { get; protected set; }
-        public FailResult(string failCause)
+        public FailResult(string error)
         {
             Success = false;
-            FailCause = failCause;
+            _error = error;
         }
     }
-    public class FailResult<T> : Result<T>, IFailResult
+
+    public abstract class Result<T>
     {
-        public string FailCause { get; protected set; }
-        public FailResult(T data, string failCause) : base(data)
-        {
-            Success = false;
-            FailCause = failCause;
-        }
+        public bool Success { get; protected set; }
+        public bool Failure => !Success;
+
+        protected string _error;
+        protected T _data;
+
+        public string Error => Failure ? _error :
+                throw new Exception($"You can't access .{nameof(Error)} when .{nameof(Failure)} is false");
+        public T Data => Success ? _data :
+                throw new Exception($"You can't access .{nameof(Data)} when .{nameof(Success)} is false");
     }
     public class SuccessResult<T> : Result<T>
     {
-        public SuccessResult(T data) : base(data)
+        public SuccessResult(T data)
         {
             Success = true;
+            _data = data;
+        }
+    }
+    public class FailResult<T> : Result<T>
+    {
+        public FailResult(string error)
+        {
+            Success = false;
+            _error = error;
         }
     }
 }

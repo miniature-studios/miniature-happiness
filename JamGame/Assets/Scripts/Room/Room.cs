@@ -7,14 +7,13 @@ using UnityEngine;
 public class Room : MonoBehaviour
 {
     [SerializeField] public RoomType roomType;
-    [SerializeField] Dictionary<RoomType, Vector2Int> necessarilyNeighbours;
+    [SerializeField] private Dictionary<RoomType, Vector2Int> necessarilyNeighbours;
     [SerializeField] public Vector2Int currentDiraction = Vector2Int.up;
 
     public Vector2Int position;
+    private InternalPathCollection internalPaths;
 
-    InternalPathCollection internalPaths;
-
-    void Start()
+    private void Start()
     {
         internalPaths = transform.GetComponent<InternalPathCollection>();
     }

@@ -1,15 +1,15 @@
 ﻿#if UNITY_EDITOR
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 public partial class TileBuilderControllerInspector
 {
     public partial void ShowAddingUIButton(TileBuilderController tileBuilderController)
     {
-        EditorGUILayout.BeginHorizontal();
+        _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add UIelement"))
         {
-            tileBuilderController.CreateUIElement(tileBuilderController.TileToCreatePrefab);
+            _ = tileBuilderController.CreateUIElement(tileBuilderController.TileToCreatePrefab);
         }
         EditorGUILayout.EndHorizontal();
     }

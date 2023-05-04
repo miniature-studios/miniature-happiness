@@ -2345,6 +2345,7 @@ GameObject:
   - component: {fileID: 8134398512049564712}
   - component: {fileID: 8134398512049564713}
   - component: {fileID: 8134398512049564714}
+  - component: {fileID: 4080974455453199714}
   m_Layer: 0
   m_Name: OutsideDoorTile
   m_TagString: Untagged
@@ -2359,7 +2360,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8134398512049564719}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2492,9 +2493,7 @@ MonoBehaviour:
       Prefab: {fileID: 4978530000288983021}
     - Type: 6
       Prefab: {fileID: 5339129139879590096}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  startMaterial: {fileID: 2100000, guid: 328922ba69fa15e45aefc62aa2ff5e94, type: 2}
+  tileView: {fileID: 4080974455453199714}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
@@ -2502,7 +2501,21 @@ MonoBehaviour:
   - outside
   position: {x: 0, y: 0}
   rotation: 0
-  SelectLiftingHeight: 3
+--- !u!114 &4080974455453199714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8134398512049564719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!1 &8139116567993330388
 GameObject:
   m_ObjectHideFlags: 0

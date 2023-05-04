@@ -2,14 +2,12 @@
 
 public class MoveSelectedTileCommand : ICommand
 {
-    TileBuilder tileBuilder;
     public Direction direction;
-    public MoveSelectedTileCommand(TileBuilder tileBuilder, Direction direction)
+    public MoveSelectedTileCommand(Direction direction)
     {
-        this.tileBuilder = tileBuilder;
         this.direction = direction;
     }
-    public Result Execute()
+    public Result Execute(TileBuilder tileBuilder)
     {
         return tileBuilder.MoveSelectedTile(direction);
     }

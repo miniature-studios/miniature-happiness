@@ -1337,6 +1337,7 @@ GameObject:
   - component: {fileID: 7469511929702345570}
   - component: {fileID: 7469511929702345571}
   - component: {fileID: 7469511929702345568}
+  - component: {fileID: 2969708062689619648}
   m_Layer: 0
   m_Name: Nothing
   m_TagString: Untagged
@@ -1495,16 +1496,28 @@ MonoBehaviour:
       Prefab: {fileID: 2034875026441003909}
     - Type: 6
       Prefab: {fileID: 3070947822441079899}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  startMaterial: {fileID: 2100000, guid: 328922ba69fa15e45aefc62aa2ff5e94, type: 2}
+  tileView: {fileID: 2969708062689619648}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
   - freespace
   position: {x: 0, y: 0}
   rotation: 0
-  SelectLiftingHeight: 3
+--- !u!114 &2969708062689619648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7469511929702345573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!1 &7719504773568138338
 GameObject:
   m_ObjectHideFlags: 0

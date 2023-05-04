@@ -1,7 +1,7 @@
+using Common;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Common;
 
 [Serializable]
 public class TileWallPrefabHandler

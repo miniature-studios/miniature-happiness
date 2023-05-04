@@ -4,29 +4,17 @@ using UnityEngine;
 
 public class SelectTileCommand : ICommand
 {
-    TileBuilder tileBuilder;
-    float rayDistance = 300;
     public TileUnion tile;
-    public SelectTileCommand(TileBuilder tileBuilder, Ray ray)
+    public SelectTileCommand(Ray ray)
     {
-        this.tileBuilder = tileBuilder;
-        var hits = Physics.RaycastAll(ray, rayDistance);
-        var tiles = hits.ToList()
+        RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
+        System.Collections.Generic.IEnumerable<TileUnion> tiles = hits.ToList()
             .Where(x => x.collider.GetComponentInParent<TileUnion>() != null)
             .Select(x => x.collider.GetComponentInParent<TileUnion>());
-        if (tiles.Count() != 0)
-        {
-            this.tile = tiles.First();
-        }
-        else
-        {
-            tile = null;
-        }
+        tile = tiles.Count() != 0 ? tiles.First() : null;
     }
-    public Result Execute()
+    public Result Execute(TileBuilder tileBuilder)
     {
-        if(tile == null)
-            return new FailResult("No hits");
-        return tileBuilder.SelectTile(tile);
+        return tile == null ? new FailResult("No hits") : tileBuilder.SelectTile(tile);
     }
 }

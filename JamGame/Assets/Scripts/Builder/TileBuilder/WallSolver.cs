@@ -33,42 +33,45 @@ public class WallSolver : ScriptableObject
 
     public TileWallType? ChooseWall(IEnumerable<string> MyMarks, List<TileWallType> MyWalls, IEnumerable<string> OutMarks, List<TileWallType> OutWalls)
     {
-        var MyNewMarks = MyMarks.Where(x => !ignoringMarks.Contains(x));
-        var OutNewMarks = OutMarks.Where(x => !ignoringMarks.Contains(x));
+        IEnumerable<string> MyNewMarks = MyMarks.Where(x => !ignoringMarks.Contains(x));
+        IEnumerable<string> OutNewMarks = OutMarks.Where(x => !ignoringMarks.Contains(x));
 
-        var wall_type_intersect = MyWalls.Intersect(OutWalls).ToList();
+        List<TileWallType> wall_type_intersect = MyWalls.Intersect(OutWalls).ToList();
         if (wall_type_intersect.Count == 1)
         {
             return wall_type_intersect.First();
         }
         else if (wall_type_intersect.Count > 1)
         {
-            var marks_intersect = MyNewMarks.Intersect(OutNewMarks).ToList();
+            List<string> marks_intersect = MyNewMarks.Intersect(OutNewMarks).ToList();
             // Unique rule
-            if ((
+            if (
                 !(MyMarks.Contains("freespace") || OutMarks.Contains("freespace"))
                 &&
-                !(MyMarks.Contains("outside") || OutMarks.Contains("outside")))
+                !(MyMarks.Contains("outside") || OutMarks.Contains("outside"))
                 &&
                 (MyMarks.Contains("corridor") || OutMarks.Contains("corridor"))
                 )
             {
-                foreach (var iterator in ForSameWalls_PriorityQueue_FirstDoor)
+                foreach (TileWallType iterator in ForSameWalls_PriorityQueue_FirstDoor)
                 {
                     if (wall_type_intersect.Contains(iterator))
+                    {
                         return iterator;
+                    }
                 }
             }
             else // Gather rule
             {
-                foreach (var iterator in marks_intersect.Count == 0 ? ForDifferentTiles_PriorityQueue : ForSameWalls_PriorityQueue)
+                foreach (TileWallType iterator in marks_intersect.Count == 0 ? ForDifferentTiles_PriorityQueue : ForSameWalls_PriorityQueue)
                 {
                     if (wall_type_intersect.Contains(iterator))
+                    {
                         return iterator;
+                    }
                 }
             }
         }
         return null;
     }
 }
-

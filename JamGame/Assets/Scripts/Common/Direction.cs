@@ -180,21 +180,25 @@ namespace Common
                     return 0;
             }
         }
-        public static IEnumerable<Direction> GetCircle90(this Direction dir)
+        public static List<Direction> GetCircle90(this Direction dir)
         {
+            List<Direction> list = new();
             for (int i = 0; i < 4; i++)
             {
-                yield return dir;
+                list.Add(dir);
                 dir = dir.Rotate90();
             }
+            return list;
         }
-        public static IEnumerable<Direction> GetCircle45(this Direction dir)
+        public static List<Direction> GetCircle45(this Direction dir)
         {
+            List<Direction> list = new();
             for (int i = 0; i < 8; i++)
             {
-                yield return dir;
+                list.Add(dir);
                 dir = dir.Rotate45();
             }
+            return list;
         }
     }
 }

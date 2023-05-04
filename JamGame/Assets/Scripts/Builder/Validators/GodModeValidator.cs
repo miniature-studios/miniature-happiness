@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+﻿using Common;
 using System.Linq;
-using Common;
+using UnityEngine;
 
 public class GodModeValidator : IValidator
 {
-    TileBuilder tileBuilder;
+    private readonly TileBuilder tileBuilder;
     public GodModeValidator(TileBuilder tileBuilder)
     {
         this.tileBuilder = tileBuilder;
@@ -14,15 +14,15 @@ public class GodModeValidator : IValidator
     {
         if (command is AddTileToSceneCommand)
         {
-            var addCommand = command as AddTileToSceneCommand;
+            AddTileToSceneCommand addCommand = command as AddTileToSceneCommand;
             TileUnion creatingtileUnion = addCommand.tilePrefab.GetComponent<TileUnion>();
-            var insideListPositions = tileBuilder.GetInsideListPositions();
+            System.Collections.Generic.IEnumerable<Vector2Int> insideListPositions = tileBuilder.GetInsideListPositions();
             int rotation = 0;
             while (rotation < 4)
             {
-                foreach (var freePosition in insideListPositions)
+                foreach (Vector2Int freePosition in insideListPositions)
                 {
-                    var futurePlaces = creatingtileUnion.GetImaginePlaces(freePosition, creatingtileUnion.Rotation + rotation);
+                    System.Collections.Generic.IEnumerable<Vector2Int> futurePlaces = creatingtileUnion.GetImaginePlaces(freePosition, creatingtileUnion.Rotation + rotation);
                     if (insideListPositions.Intersect(futurePlaces).Count() == creatingtileUnion.TilesCount)
                     {
                         addCommand.CreatingPosition = freePosition;

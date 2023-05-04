@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using Common;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ public partial class TileBuilderInspector
 {
     public partial void ShowGameModeChangeing(TileBuilder tileBuilder)
     {
-        EditorGUILayout.BeginHorizontal();
+        _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Change game mode"))
         {
             tileBuilder.ChangeGameMode(tileBuilder.GameMode);

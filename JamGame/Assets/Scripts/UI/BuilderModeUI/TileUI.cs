@@ -1,17 +1,16 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
-using TMPro;
 using System;
 using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TileUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] public GameObject TileUnionPrefab;
-    [SerializeField] TMP_Text text;
+    [SerializeField] private TMP_Text text;
     [SerializeField] public TMP_Text Counter;
-
-    Action<TileUI> clickEvent;
-    bool over = false;
+    private Action<TileUI> clickEvent;
+    private bool over = false;
 
     public class InitAnsver
     {
@@ -26,7 +25,7 @@ public class TileUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public InitAnsver Init(Action<TileUI> clickEvent)
     {
         this.clickEvent = clickEvent;
-        var uis = transform.parent.GetComponentsInChildren<TileUI>().Where(x => x != this);
+        System.Collections.Generic.IEnumerable<TileUI> uis = transform.parent.GetComponentsInChildren<TileUI>().Where(x => x != this);
         if (uis.Count() > 0)
         {
             uis.First().Counter.text = Convert.ToString(Convert.ToInt32(uis.First().Counter.text) + 1);

@@ -2,6 +2,6 @@
 
 public interface ICommand
 {
-    public abstract Result Execute();
+    public Result Execute(TileBuilder tileBuilder);
 }
 
