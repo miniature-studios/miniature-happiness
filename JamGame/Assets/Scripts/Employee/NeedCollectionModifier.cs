@@ -32,22 +32,29 @@ public class NeedCollectionModifier : MonoBehaviour
         PrepareModifiers();
     }
 
-    void PrepareModifiers()
+    private void PrepareModifiers()
     {
         Modifiers = new Dictionary<NeedType, NeedParametersModifiers>();
         if (ModifiersRaw != null)
-            foreach (var modifiers in ModifiersRaw)
+        {
+            foreach (NeedTypeWithModifiers modifiers in ModifiersRaw)
+            {
                 Modifiers.Add(modifiers.ty, modifiers.mods);
+            }
+        }
     }
 
     public List<NeedParameters> Apply(List<NeedParameters> needs)
     {
-        List<NeedParameters> new_needs = new List<NeedParameters>();
-        foreach (var need in needs)
+        List<NeedParameters> new_needs = new();
+        foreach (NeedParameters need in needs)
         {
-            var new_need = new NeedParameters(need);
+            NeedParameters new_need = new(need);
             if (Modifiers.ContainsKey(need.NeedType))
+            {
                 new_need.ApplyModifiers(Modifiers[need.NeedType]);
+            }
+
             new_needs.Add(new_need);
         }
         return new_needs;

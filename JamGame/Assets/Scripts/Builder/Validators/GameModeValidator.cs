@@ -1,11 +1,9 @@
-﻿using System;
-using UnityEngine;
-using Common;
+﻿using Common;
 
 public class GameModeValidator : IValidator
 {
-    public bool ValidateCommand(ICommand command)
+    public Result ValidateCommand(ICommand command)
     {
-        throw new NotImplementedException();
+        return new FailResult("Cannot do anything in Game Mode");
     }
 }

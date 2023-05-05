@@ -6,40 +6,37 @@ using UnityEngine;
 [RequireComponent(typeof(NeedCollectionModifier))]
 public class Employee : MonoBehaviour
 {
-    enum State
+    private enum State
     {
         Idle,
         Walking,
         SatisfyingNeed
     }
 
-    State state = State.Idle;
+    private State state = State.Idle;
 
-    [SerializeField] Location location;
-    [SerializeField] Vector2Int currentPosition = new Vector2Int(0, 0);
-    Vector2Int movingToPosition;
+    [SerializeField] private Location location;
+    [SerializeField] private Vector2Int currentPosition = new(0, 0);
+    private Vector2Int movingToPosition;
+    private float satisfyingNeedRemaining = 0.0f;
+    private EmployeeController controller;
+    [SerializeField] private List<Need> needs = new();
+    private Need currentNeed;
+    private NeedSlot occupiedSlot;
 
-    float satisfyingNeedRemaining = 0.0f;
+    [SerializeField] private NeedCollectionModifier needCollectionModifier;
+    private float stress;
+    [SerializeField] private float stressStartThreshold;
+    [SerializeField] private float stressIncreaseSpeed;
+    [SerializeField] private float stressLimit;
 
-    EmployeeController controller;
-    [SerializeField] List<Need> needs = new List<Need>();
-    Need currentNeed;
-    NeedSlot occupiedSlot;
-
-    [SerializeField] NeedCollectionModifier needCollectionModifier;
-
-    float stress;
-    [SerializeField] float stressStartThreshold;
-    [SerializeField] float stressIncreaseSpeed;
-    [SerializeField] float stressLimit;
-
-    void Start()
+    private void Start()
     {
         controller = GetComponent<EmployeeController>();
         UpdateNeedPriority();
     }
 
-    void Update()
+    private void Update()
     {
         switch (state)
         {
@@ -62,42 +59,54 @@ public class Employee : MonoBehaviour
         UpdateStress();
     }
 
-    void UpdateStress()
+    private void UpdateStress()
     {
         int unsatisfied_count = 0;
-        foreach (var need in needs)
+        foreach (Need need in needs)
+        {
             if (need.satisfied < stressStartThreshold)
+            {
                 unsatisfied_count++;
+            }
+        }
 
         if (unsatisfied_count * 2 > needs.Count)
+        {
             stress += stressIncreaseSpeed * Time.deltaTime;
+        }
 
         if (stress > stressLimit)
+        {
             LeaveJob();
+        }
     }
 
     //bool whantsToLeave = true;
-    void LeaveJob()
+    private void LeaveJob()
     {
         //whantsToLeave = true;
     }
 
-    [SerializeField] List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
+    [SerializeField] private List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
     public void DesatisfyNeed(NeedType ty, float delta)
     {
-        foreach (var need in needs)
+        foreach (Need need in needs)
+        {
             if (need.Parameters.NeedType == ty)
             {
                 float mul = 1.0f;
-                foreach (var mod in needDesatisfactionSpeedModifiers)
+                foreach (NeedDesatisfactionSpeedModifier mod in needDesatisfactionSpeedModifiers)
+                {
                     if (mod.ty == ty)
                     {
                         mul = mod.multiplier;
                         break;
                     }
+                }
 
                 need.Desatisfy(delta * mul);
             }
+        }
     }
 
     public void AddNeed(NeedParameters need)
@@ -105,7 +114,7 @@ public class Employee : MonoBehaviour
         needs.Add(new Need(need));
     }
 
-    void UpdateNeedPriority()
+    private void UpdateNeedPriority()
     {
         needs.Sort((x, y) => x.satisfied.CompareTo(y.satisfied));
 
@@ -115,10 +124,12 @@ public class Employee : MonoBehaviour
             currentNeed = null;
         }
 
-        foreach (var need in needs)
+        foreach (Need need in needs)
         {
             if (need == currentNeed)
+            {
                 break;
+            }
 
             NeedSlot booked = location.TryBookSlotInNeedProvider(this, need.Parameters.NeedType);
             if (booked != null)
@@ -134,27 +145,27 @@ public class Employee : MonoBehaviour
         }
     }
 
-    void MoveToSlot(NeedSlot slot)
+    private void MoveToSlot(NeedSlot slot)
     {
         state = State.Walking;
 
-        var path_points = location.PathfindingProvider.FindPath(currentPosition, slot.room.position);
+        List<Vector2Int> path_points = location.PathfindingProvider.FindPath(currentPosition, slot.room.position);
         if (path_points.Count < 3)
         {
             FinishedMoving();
             return;
         }
 
-        var path = PathPointsToPath(path_points);
+        List<(Room, RoomInternalPath)> path = PathPointsToPath(path_points);
 
-        movingToPosition = path[path.Count - 1].Item1.position;
+        movingToPosition = path[^1].Item1.position;
 
         controller.SetPath(path);
     }
 
-    List<(Room, RoomInternalPath)> PathPointsToPath(List<Vector2Int> path_points)
+    private List<(Room, RoomInternalPath)> PathPointsToPath(List<Vector2Int> path_points)
     {
-        List<(Room, RoomInternalPath)> path = new List<(Room, RoomInternalPath)>();
+        List<(Room, RoomInternalPath)> path = new();
 
         for (int i = 0; i < path_points.Count; i++)
         {
@@ -162,14 +173,21 @@ public class Employee : MonoBehaviour
             Direction to_direction = Direction.Center;
 
             if (i > 0)
+            {
                 from_direction = (path_points[i - 1] - path_points[i]).ToDirection();
-            if (i < path_points.Count - 1)
-                to_direction = (path_points[i + 1] - path_points[i]).ToDirection();
+            }
 
-            var room = location.rooms[path_points[i]];
-            var int_path = room.GetInternalPath(from_direction, to_direction);
+            if (i < path_points.Count - 1)
+            {
+                to_direction = (path_points[i + 1] - path_points[i]).ToDirection();
+            }
+
+            Room room = location.rooms[path_points[i]];
+            RoomInternalPath int_path = room.GetInternalPath(from_direction, to_direction);
             if (int_path == null)
+            {
                 Debug.LogError($"Internal path in room {room.position} not found for directions {from_direction} {to_direction}");
+            }
 
             path.Add((room, int_path));
         }
@@ -177,7 +195,7 @@ public class Employee : MonoBehaviour
         return path;
     }
 
-    void FinishedMoving()
+    private void FinishedMoving()
     {
         currentPosition = movingToPosition;
         state = State.SatisfyingNeed;
@@ -187,7 +205,10 @@ public class Employee : MonoBehaviour
     private void OnEnable()
     {
         if (controller == null)
+        {
             controller = GetComponent<EmployeeController>();
+        }
+
         controller.OnFinishedMoving += FinishedMoving;
     }
 

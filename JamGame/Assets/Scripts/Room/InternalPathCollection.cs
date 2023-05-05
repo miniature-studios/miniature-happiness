@@ -5,21 +5,23 @@ using UnityEngine;
 public class InternalPathCollection : MonoBehaviour
 {
     // DEBUG - public for InternalPathCollectionEditor
-    [SerializeField] public List<RoomInternalPath> paths = new List<RoomInternalPath>();
+    [SerializeField] public List<RoomInternalPath> paths = new();
 
     public RoomInternalPath GetPath(Direction from, Direction to)
     {
         return paths.Find(r =>
-            (r.from == from && r.to == to)
+            r.from == from && r.to == to
         );
     }
 
     private void OnDrawGizmos()
     {
-        foreach (var internalPath in paths)
+        foreach (RoomInternalPath internalPath in paths)
         {
             if (internalPath.linePoints.Length < 4)
+            {
                 continue;
+            }
 
             Vector3 preveousePoint = internalPath.linePoints[0];
 
@@ -30,7 +32,7 @@ public class InternalPathCollection : MonoBehaviour
                 Gizmos.DrawLine(preveousePoint, point);
                 preveousePoint = point;
             }
-            foreach (var item in internalPath.linePoints)
+            foreach (Vector3 item in internalPath.linePoints)
             {
                 Gizmos.DrawSphere(item, 0.2f);
             }
@@ -39,9 +41,9 @@ public class InternalPathCollection : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        foreach (var internalPath in paths)
+        foreach (RoomInternalPath internalPath in paths)
         {
-            foreach (var item in internalPath.linePoints)
+            foreach (Vector3 item in internalPath.linePoints)
             {
                 Gizmos.DrawWireSphere(item, 0.21f);
             }
