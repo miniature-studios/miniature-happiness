@@ -46,6 +46,9 @@ public class TileBuilder : MonoBehaviour
                 }
             }
         }
+        CreateNormalBuilding();
+        UpdateAllTiles();
+        ChangeGameMode(Gamemode.building);
     }
 
     public Result Execute(ICommand command)
@@ -292,11 +295,8 @@ public class TileBuilder : MonoBehaviour
     private GameObject DeleteTile(TileUnion tileUnion)
     {
         GameObject UIPrefab = tileUnion.UIPrefab;
+        DestroyImmediate(tileUnion.gameObject);
         RemoveTileFromDictionary(tileUnion);
-        if (tileUnion.gameObject)
-        {
-            DestroyImmediate(tileUnion.gameObject);
-        }
         return UIPrefab;
     }
     public void RemoveTileFromDictionary(TileUnion tileUnion)
@@ -321,6 +321,53 @@ public class TileBuilder : MonoBehaviour
         foreach ((TileUnion, Vector2Int) pair in queue)
         {
             pair.Item1.UpdateCorners(this, pair.Item2);
+        }
+    }
+
+    // For test
+    public void CreateNormalBuilding()
+    {
+        DeleteAllTiles();
+        for (int i = 0; i < 9; i++)
+        {
+            CreateTileAndBind(OutdoorPrefab, new(0, i), 0);
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            if (i == 1)
+            {
+                CreateTileAndBind(StairsPrefab, new(i + 1, 0), 0);
+            }
+            else
+            {
+                CreateTileAndBind(OutdoorPrefab, new(i + 1, 0), 0);
+            }
+
+            for (int j = 0; j < 7; j++)
+            {
+                if (j == 2)
+                {
+                    CreateTileAndBind(CorridoorPrefab, new(i + 1, j + 1), 0);
+                }
+                else if (j == 3)
+                {
+                    CreateTileAndBind(WorkingPlace, new(i + 1, j + 1), 0);
+                }
+                else if (j == 4)
+                {
+                    CreateTileAndBind(WorkingPlaceFree, new(i + 1, j + 1), 0);
+                }
+                else
+                {
+                    CreateTileAndBind(FreespacePrefab, new(i + 1, j + 1), 0);
+                }
+            }
+            CreateTileAndBind(OutdoorPrefab, new(i + 1, 8), 0);
+        }
+        for (int i = 0; i < 9; i++)
+        {
+            CreateTileAndBind(OutdoorPrefab, new(9, i), 0);
         }
     }
 }

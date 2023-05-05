@@ -11,9 +11,8 @@ public class TileView : MonoBehaviour
     {
         SetActileChilds(transform);
         renderers = GetComponentsInChildren<Renderer>();
-        SetDefaultMaterial();
+        SetMaterial(TileMaterial.Default);
     }
-
     private void SetActileChilds(Transform transform)
     {
         for (int i = 0; i < transform.childCount; i++)
@@ -24,27 +23,36 @@ public class TileView : MonoBehaviour
         }
     }
 
-    public void SetDefaultMaterial()
+    public enum TileMaterial
     {
-        foreach (Renderer render in renderers)
-        {
-            render.materials = new Material[1] { startMaterial };
-        }
+        Default,
+        Transparent,
+        TransparentAndError
     }
 
-    public void SetSelectedMaterial()
+    public void SetMaterial(TileMaterial material)
     {
-        foreach (Renderer render in renderers)
+        switch (material)
         {
-            render.materials = new Material[1] { transparentMaterial };
-        }
-    }
-
-    public void SetSelectedAndErroredMaterial()
-    {
-        foreach (Renderer render in renderers)
-        {
-            render.materials = new Material[2] { transparentMaterial, errorMaterial };
+            default:
+            case TileMaterial.Default:
+                foreach (Renderer render in renderers)
+                {
+                    render.materials = new Material[1] { startMaterial };
+                }
+                break;
+            case TileMaterial.Transparent:
+                foreach (Renderer render in renderers)
+                {
+                    render.materials = new Material[1] { transparentMaterial };
+                }
+                break;
+            case TileMaterial.TransparentAndError:
+                foreach (Renderer render in renderers)
+                {
+                    render.materials = new Material[2] { transparentMaterial, errorMaterial };
+                }
+                break;
         }
     }
 }

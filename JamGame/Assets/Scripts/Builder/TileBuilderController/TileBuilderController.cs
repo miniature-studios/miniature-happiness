@@ -3,29 +3,46 @@ using UnityEngine;
 
 public class TileBuilderController : MonoBehaviour
 {
-    [SerializeField] private TileBuilder tileBuilder;
-    [SerializeField] public GameObject TileToCreatePrefab;
+    [Header("==== For debugging ====")]
+    [SerializeField] public GameObject CorridorUIPrefab;
+    [SerializeField] public GameObject WorkingSpaceUIPrefab;
+    [SerializeField] public GameObject WorkingSpaceFreeUIPrefab;
+    [SerializeField] public GameObject TripleWorkingSpaceUIPrefab;
+
+    [Header("==== Require variables ====")]
+    [SerializeField] private TileBuilder TileBuilder;
     [SerializeField] public Transform UIHandler;
     private Vector2 previousMousePosition;
     private bool mousePressed = false;
     private bool mouseOverUI = false;
     private bool mouseUIClicked = false;
     private TileUI uiTileClicked = null;
+
+    private void Start()
+    {
+        AddUIElements();
+    }
+
     public void Update()
     {
         Vector2 mousePosition = Input.mousePosition;
         Vector2 mouseDelta = mousePosition - previousMousePosition;
         previousMousePosition = mousePosition;
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             mousePressed = true;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             SelectTileCommand command = new(ray);
-            Result response = tileBuilder.Execute(command);
+            Result response = TileBuilder.Execute(command);
             if (response.Failure)
             {
-                _ = tileBuilder.Execute(new CompletePlacingCommand());
+                _ = TileBuilder.Execute(new CompletePlacingCommand());
             }
         }
 
@@ -37,19 +54,19 @@ public class TileBuilderController : MonoBehaviour
             }
             mousePressed = false;
             mouseUIClicked = false;
-            _ = tileBuilder.Execute(new CompletePlacingCommand());
+            _ = TileBuilder.Execute(new CompletePlacingCommand());
         }
 
         if (mouseDelta.magnitude > 0 && mousePressed)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             MoveSelectedTileToRayCommand command = new(ray);
-            _ = tileBuilder.Execute(command);
+            _ = TileBuilder.Execute(command);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _ = tileBuilder.Execute(new RotateSelectedTileCommand(Direction.Right));
+            _ = TileBuilder.Execute(new RotateSelectedTileCommand(Direction.Right));
         }
         if (Input.GetKeyDown(KeyCode.Delete))
         {
@@ -85,7 +102,7 @@ public class TileBuilderController : MonoBehaviour
     {
         GameObject destroyedTileUIPrefab = null;
         DeleteSelectedTileCommand command = new((arg) => destroyedTileUIPrefab = arg);
-        Result response = tileBuilder.Execute(command);
+        Result response = TileBuilder.Execute(command);
         if (response.Success)
         {
             _ = CreateUIElement(destroyedTileUIPrefab);
@@ -96,7 +113,7 @@ public class TileBuilderController : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         AddTileToSceneCommand command = new(tilePrefab, ray);
-        return tileBuilder.Execute(command);
+        return TileBuilder.Execute(command);
     }
 
     public TileUI CreateUIElement(GameObject UIPrefab)
@@ -112,6 +129,22 @@ public class TileBuilderController : MonoBehaviour
         {
             return UiElement.GetComponent<TileUI>();
         }
+    }
+
+    public void AddUIElements()
+    {
+        _ = CreateUIElement(CorridorUIPrefab);
+        _ = CreateUIElement(CorridorUIPrefab);
+        _ = CreateUIElement(CorridorUIPrefab);
+        _ = CreateUIElement(WorkingSpaceUIPrefab);
+        _ = CreateUIElement(WorkingSpaceUIPrefab);
+        _ = CreateUIElement(WorkingSpaceUIPrefab);
+        _ = CreateUIElement(WorkingSpaceFreeUIPrefab);
+        _ = CreateUIElement(WorkingSpaceFreeUIPrefab);
+        _ = CreateUIElement(WorkingSpaceFreeUIPrefab);
+        _ = CreateUIElement(TripleWorkingSpaceUIPrefab);
+        _ = CreateUIElement(TripleWorkingSpaceUIPrefab);
+        _ = CreateUIElement(TripleWorkingSpaceUIPrefab);
     }
 }
 

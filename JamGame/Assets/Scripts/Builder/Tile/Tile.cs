@@ -90,7 +90,7 @@ public class Tile : MonoBehaviour
         {
             if (cachedWalls == null)
             {
-                UpdateWallsCache();
+                CreateWallsCache();
             }
             return cachedWalls;
         }
@@ -215,15 +215,15 @@ public class Tile : MonoBehaviour
             default:
             case TileState.Normal:
                 transform.position = new Vector3(transform.position.x, unselectedYPosition, transform.position.z);
-                tileView.SetDefaultMaterial();
+                tileView.SetMaterial(TileView.TileMaterial.Default);
                 break;
             case TileState.Selected:
                 transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
-                tileView.SetSelectedMaterial();
+                tileView.SetMaterial(TileView.TileMaterial.Transparent);
                 break;
             case TileState.SelectedAndErrored:
                 transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
-                tileView.SetSelectedAndErroredMaterial();
+                tileView.SetMaterial(TileView.TileMaterial.TransparentAndError);
                 break;
         }
     }
@@ -240,7 +240,7 @@ public class Tile : MonoBehaviour
     {
         this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
         transform.rotation = Quaternion.Euler(0, 90 * this.rotation, 0);
-        UpdateWallsCache();
+        CreateWallsCache();
     }
 
     private bool IsWall(Direction imaginePlace)
@@ -250,7 +250,7 @@ public class Tile : MonoBehaviour
         return !wallCollection.IsActive(TileWallType.none);
     }
 
-    private void UpdateWallsCache()
+    private void CreateWallsCache()
     {
         Dictionary<Direction, List<TileWallType>> list = new();
         foreach (WallCollection wall in walls)

@@ -7,9 +7,9 @@ public partial class TileBuilderControllerInspector
     public partial void ShowAddingUIButton(TileBuilderController tileBuilderController)
     {
         _ = EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add UIelement"))
+        if (GUILayout.Button("Add UIelements"))
         {
-            _ = tileBuilderController.CreateUIElement(tileBuilderController.TileToCreatePrefab);
+            tileBuilderController.AddUIElements();
         }
         EditorGUILayout.EndHorizontal();
     }

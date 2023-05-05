@@ -42,48 +42,7 @@ public partial class TileBuilderInspector
         }
         if (GUILayout.Button("Create normal building"))
         {
-            tileBuilder.DeleteAllTiles();
-            for (int i = 0; i < 9; i++)
-            {
-                tileBuilder.CreateTileAndBind(tileBuilder.OutdoorPrefab, new(0, i), 0);
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                if (i == 1)
-                {
-                    tileBuilder.CreateTileAndBind(tileBuilder.StairsPrefab, new(i + 1, 0), 0);
-                }
-                else
-                {
-                    tileBuilder.CreateTileAndBind(tileBuilder.OutdoorPrefab, new(i + 1, 0), 0);
-                }
-
-                for (int j = 0; j < 7; j++)
-                {
-                    if (j == 2)
-                    {
-                        tileBuilder.CreateTileAndBind(tileBuilder.CorridoorPrefab, new(i + 1, j + 1), 0);
-                    }
-                    else if (j == 3)
-                    {
-                        tileBuilder.CreateTileAndBind(tileBuilder.WorkingPlace, new(i + 1, j + 1), 0);
-                    }
-                    else if (j == 4)
-                    {
-                        tileBuilder.CreateTileAndBind(tileBuilder.WorkingPlaceFree, new(i + 1, j + 1), 0);
-                    }
-                    else
-                    {
-                        tileBuilder.CreateTileAndBind(tileBuilder.FreespacePrefab, new(i + 1, j + 1), 0);
-                    }
-                }
-                tileBuilder.CreateTileAndBind(tileBuilder.OutdoorPrefab, new(i + 1, 8), 0);
-            }
-            for (int i = 0; i < 9; i++)
-            {
-                tileBuilder.CreateTileAndBind(tileBuilder.OutdoorPrefab, new(9, i), 0);
-            }
+            tileBuilder.CreateNormalBuilding();
         }
         EditorGUILayout.EndHorizontal();
         _ = EditorGUILayout.BeginHorizontal();
