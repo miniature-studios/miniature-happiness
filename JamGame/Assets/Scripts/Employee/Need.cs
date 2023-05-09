@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum NeedType
 {
     Work,
-
     Piss,
     Eat
 }
@@ -12,68 +12,85 @@ public enum NeedType
 [Serializable]
 public class Need
 {
-    public NeedParameters Parameters;
+    [Serializable]
+    public struct NeedProperties
+    {
+        public NeedType NeedType;
+        public float SatisfactionTime;
+        public float SatisfactionGained;
+        public float DecreaseSpeed;
 
-    // FIXMENOW: not needed more?
-    public float decrease_speed = 1.0f;
+        public NeedProperties(NeedType ty)
+        {
+            NeedType = ty;
+            SatisfactionTime = 5.0f;
+            SatisfactionGained = 1.0f;
+            DecreaseSpeed = 1.0f;
+        }
+
+        public NeedProperties Combine(NeedProperties other)
+        {
+            return new NeedProperties
+            {
+                NeedType = NeedType,
+                SatisfactionTime = SatisfactionTime * other.SatisfactionTime,
+                SatisfactionGained = SatisfactionGained * other.SatisfactionGained,
+                DecreaseSpeed = DecreaseSpeed * other.DecreaseSpeed,
+            };
+        }
+    }
+
+    private NeedProperties properties;
+    public NeedType NeedType => properties.NeedType;
+
     public float satisfied = 0.0f;
+
+    [SerializeField]
+    [HideInInspector]
+    private List<NeedModifiers> registeredModifiers;
 
     public Need(Need prototype)
     {
-        decrease_speed = prototype.decrease_speed;
         satisfied = prototype.satisfied;
-        Parameters = new NeedParameters(prototype.Parameters);
+        properties = prototype.properties;
     }
 
-    public Need(NeedParameters parameters)
+    public Need(NeedProperties parameters)
     {
-        Parameters = parameters;
+        properties = parameters;
     }
 
-    public void Desatisfy(float delta)
+    // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
+    public void Desatisfy(float delta_time)
     {
-        satisfied -= delta * decrease_speed;
+        satisfied -= delta_time * GetProperties().DecreaseSpeed;
     }
 
     public void Satisfy()
     {
-        satisfied += Parameters.satisfaction_gained;
-    }
-}
-
-[Serializable]
-public class NeedParameters
-{
-    public NeedType NeedType;
-
-    [SerializeField] public float satisfaction_time = 5.0f;
-    [SerializeField] public float satisfaction_gained = 1.0f;
-
-    public NeedParameters(NeedType ty)
-    {
-        NeedType = ty;
+        satisfied += GetProperties().SatisfactionGained;
     }
 
-    public NeedParameters(NeedParameters prototype)
+    public NeedProperties GetProperties()
     {
-        NeedType = prototype.NeedType;
-        satisfaction_time = prototype.satisfaction_time;
-        satisfaction_gained = prototype.satisfaction_gained;
+        NeedModifiersCollection modifiers = NeedModifiersCollection.Default();
+        foreach (NeedModifiers mods in registeredModifiers)
+        {
+            modifiers.Merge(mods.Modifiers);
+        }
+        return modifiers.Apply(properties);
     }
 
-    public void ApplyModifiers(NeedParametersModifiers modifiers)
+    public void RegisterModifier(NeedModifiers modifiers)
     {
-        satisfaction_time *= modifiers.satisfaction_time;
-        satisfaction_gained *= modifiers.satisfaction_gained;
+        if (!registeredModifiers.Contains(modifiers))
+        {
+            registeredModifiers.Add(modifiers);
+        }
     }
 
-    public float GetSatisfactionTime()
+    public void UnregisterModifier(NeedModifiers modifiers)
     {
-        return satisfaction_time;
-    }
-
-    public float GetSatisfaction()
-    {
-        return satisfaction_gained;
+        _ = registeredModifiers.Remove(modifiers);
     }
 }
