@@ -1,134 +1,43 @@
-using Common;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathfindingProvider
+public class Location : MonoBehaviour
 {
-    Dictionary<Vector2Int, List<Direction>> availablePaths;
+    [SerializeField] private Employee employeePrototype;
+    private List<NeedProvider> needProviders;
+    private readonly List<Employee> employees = new();
 
-    public PathfindingProvider(Dictionary<Vector2Int, List<Direction>> available_paths)
+    private void Start()
     {
-        availablePaths = available_paths;
-    }
-
-    // TODO: Weighted pathfinding.
-    public List<Vector2Int> FindPath(Vector2Int from, Vector2Int to)
-    {
-        Queue<Vector2Int> frontier = new Queue<Vector2Int>();
-        frontier.Enqueue(from);
-
-        Dictionary<Vector2Int, Vector2Int> came_from = new Dictionary<Vector2Int, Vector2Int>()
-            { { from, from } };
-
-        while (frontier.Count != 0)
-        {
-            var current = frontier.Dequeue();
-            foreach (var direction in availablePaths[current])
-            {
-                var next = direction.ToVector2Int() + current;
-
-                if (!came_from.ContainsKey(next))
-                {
-                    frontier.Enqueue(next);
-                    came_from.Add(next, current);
-                }
-
-                if (next == to)
-                {
-                    var path = new List<Vector2Int>() { to };
-                    while (true)
-                    {
-                        path.Add(came_from[path[^1]]);
-                        if (path[^1] == from)
-                            break;
-                    }
-                    path.Reverse();
-                    return path;
-                }
-            }
-        }
-
-        Debug.LogError("Path from " + from + " to " + to + " not found!");
-        return null;
-    }
-}
-
-public partial class Location : MonoBehaviour
-{
-    public Dictionary<Vector2Int, Room> rooms = new Dictionary<Vector2Int, Room>();
-    public PathfindingProvider PathfindingProvider;
-}
-
-[RequireComponent(typeof(NeedCollectionModifier))]
-public partial class Location : MonoBehaviour
-{
-    [SerializeField] Employee employeePrototype;
-
-    // TODO: Keep updated.
-    List<NeedProvider> needProviders;
-    List<Employee> employees = new List<Employee>();
-
-    [SerializeField] List<NeedType> activeNeeds;
-    [SerializeField] NeedCollectionModifier needCollectionModifier;
-
-    void Start()
-    {
-
+        InitGameMode();
     }
 
     public void InitGameMode()
     {
         needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
-
-        var need_parameters = new List<NeedParameters>();
-        foreach (var nt in activeNeeds)
-            need_parameters.Add(new NeedParameters(nt));
-        need_parameters = needCollectionModifier.Apply(need_parameters);
-        foreach (var np in needProviders)
-            np.ProvideNeedParameters(need_parameters);
     }
 
-    [SerializeField] List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
-    void Update()
+    private void Update()
     {
-        foreach (var need_ty in activeNeeds)
-        {
-            float mul = 1.0f;
-            foreach (var mod in needDesatisfactionSpeedModifiers)
-                if (mod.ty == need_ty)
-                {
-                    mul = mod.multiplier;
-                    break;
-                }
 
-            foreach (var emp in employees)
-                emp.DesatisfyNeed(need_ty, Time.deltaTime * mul);
-        }
     }
 
-    // TODO: Try book closest provider
-    public NeedSlot TryBookSlotInNeedProvider(Employee employee, NeedType need_type)
-    {
-        foreach (var np in needProviders)
-            if (np.NeedType == need_type)
-            {
-                var booked = np.TryBook(employee);
-                if (booked != null)
-                    return booked;
-            }
-
-        return null;
-    }
-
-    [SerializeField] EmployeeNeeds employeeNeeds;
+    [SerializeField] private EmployeeNeeds employeeNeeds;
     public void AddEmployee()
     {
-        var new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
-
-        foreach (var need in activeNeeds)
-            new_employee.AddNeed(new NeedParameters(need));
-
+        Employee new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
         new_employee.gameObject.SetActive(true);
         employees.Add(new_employee);
+    }
+
+    public IEnumerable<NeedProvider> FindAllAvailableProviders(Employee employee, NeedType need_type)
+    {
+        foreach (NeedProvider provider in needProviders)
+        {
+            if (provider.NeedType == need_type && provider.IsAvailable(employee))
+            {
+                yield return provider;
+            }
+        }
     }
 }

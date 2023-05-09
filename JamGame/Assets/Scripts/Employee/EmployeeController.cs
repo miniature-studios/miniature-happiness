@@ -1,64 +1,81 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class EmployeeController : MonoBehaviour
 {
-    [SerializeField] float speed;
+    [SerializeField] private float maxVelocity;
 
-    List<(Room, RoomInternalPath)> currentPath;
+    private NavMeshAgent agent;
+    private Vector3 averageVelocity = Vector3.zero;
+    public Vector3 AverageVelocity => averageVelocity;
 
-    public void SetPath(List<(Room, RoomInternalPath)> path)
+    private PersonalSpace personalSpace;
+
+    private void Start()
     {
-        currentPath = path;
+        agent = GetComponent<NavMeshAgent>();
 
-        // FIXME: Employee can move from slot to slot in bounds of a single room in future.
-        if (path[0].Item1 == path[^1].Item1)
+        personalSpace = GetComponentInChildren<PersonalSpace>();
+        if (personalSpace == null)
         {
-            OnFinishedMoving?.Invoke();
-            return;
+            Debug.LogError("Personal space not found");
         }
-
-        moving = true;
-        current_internal_path = 0;
-        current_internal_path_normalized_time = 0;
-        current_internal_path_length = path[0].Item2.GetPathLength();
     }
 
-    bool moving = false;
-    public void Update()
+    public float? ComputePathLength(NeedProvider need_provider)
     {
-        if (moving)
-            Move();
-    }
-
-    int current_internal_path;
-    float current_internal_path_normalized_time;
-    float current_internal_path_length;
-    void Move()
-    {
-        float current_path_rem = 1.0f - current_internal_path_normalized_time;
-        current_path_rem *= current_internal_path_length / speed;
-        if (current_path_rem < Time.deltaTime)
+        NavMeshPath path = new();
+        if (agent.CalculatePath(need_provider.transform.position, path))
         {
-            float next_path_time_offset = Time.deltaTime - current_path_rem;
-
-            if (current_internal_path == currentPath.Count - 1)
+            if (path.status == NavMeshPathStatus.PathComplete)
             {
-                moving = false;
-                OnFinishedMoving?.Invoke();
-                return;
-            }
-            current_internal_path++;
+                float total_length = 0f;
+                for (int i = 0; i < path.corners.Length - 1; i++)
+                {
+                    total_length += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+                }
 
-            current_internal_path_length = currentPath[current_internal_path].Item2.GetPathLength();
-            current_internal_path_normalized_time = next_path_time_offset * speed / current_internal_path_length;
+                return total_length;
+            }
         }
 
-        current_internal_path_normalized_time += Time.deltaTime / current_internal_path_length * speed;
+        return null;
+    }
 
-        // FIXME: Incapsulate fetching global position into RoomInternalPath
-        var new_position = currentPath[current_internal_path].Item2.GetPathPoint(current_internal_path_normalized_time);
-        transform.position = new_position + currentPath[current_internal_path].Item1.transform.position;
+    private Vector3 currentDestination;
+
+    public void SetDestination(Vector3 target_position)
+    {
+        moving = true;
+        currentDestination = target_position;
+        _ = agent.SetDestination(currentDestination);
+    }
+
+    private bool moving = false;
+    private Vector3 prevPosition;
+
+    private void Update()
+    {
+        averageVelocity = (transform.position - prevPosition) / Time.deltaTime;
+        prevPosition = transform.position;
+
+        if (moving && agent.remainingDistance < 0.01f)
+        {
+            moving = false;
+            OnFinishedMoving?.Invoke();
+        }
+
+        agent.speed = (1.0f - personalSpace.GetCrowdMetrics()) * maxVelocity;
+        Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
+        if (steering.sqrMagnitude > 0.0001)
+        {
+            agent.velocity = steering;
+        }
+        else
+        {
+            _ = agent.SetDestination(currentDestination);
+        }
     }
 
     public delegate void FinishedMovingHandler();

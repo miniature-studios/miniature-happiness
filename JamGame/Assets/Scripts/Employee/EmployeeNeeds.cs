@@ -4,5 +4,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EmployeeNeeds", menuName = "ScriptableObjects/EmployeeNeeds", order = 1)]
 public class EmployeeNeeds : ScriptableObject
 {
-    public List<NeedParameters> needs;
+    public List<Need.NeedProperties> needs;
 }
