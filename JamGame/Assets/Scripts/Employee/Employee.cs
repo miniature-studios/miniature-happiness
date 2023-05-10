@@ -1,9 +1,8 @@
-using Common;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(EmployeeController))]
-[RequireComponent(typeof(NeedCollectionModifier))]
 public class Employee : MonoBehaviour
 {
     private enum State
@@ -16,32 +15,32 @@ public class Employee : MonoBehaviour
     private State state = State.Idle;
 
     [SerializeField] private Location location;
-    [SerializeField] private Vector2Int currentPosition = new(0, 0);
-    private Vector2Int movingToPosition;
-    private float satisfyingNeedRemaining = 0.0f;
-    private EmployeeController controller;
+
     [SerializeField] private List<Need> needs = new();
     private Need currentNeed;
-    private NeedSlot occupiedSlot;
+    private float satisfyingNeedRemaining = 0.0f;
+    private NeedProvider targetNeedProvider = null;
 
-    [SerializeField] private NeedCollectionModifier needCollectionModifier;
-    private float stress;
-    [SerializeField] private float stressStartThreshold;
-    [SerializeField] private float stressIncreaseSpeed;
-    [SerializeField] private float stressLimit;
+    private EmployeeController controller;
+
+    private readonly List<NeedModifiers> registeredModifiers = new();
 
     private void Start()
     {
         controller = GetComponent<EmployeeController>();
-        UpdateNeedPriority();
     }
 
     private void Update()
     {
+        UpdateNeeds(Time.deltaTime);
+
         switch (state)
         {
             case State.Idle:
-                UpdateNeedPriority();
+                targetNeedProvider = GetTargetNeedProvider();
+                state = State.Walking;
+                // TODO: Fetch target position from NeedProvider in future.
+                controller.SetDestination(targetNeedProvider.transform.position);
                 break;
             case State.Walking:
                 break;
@@ -51,70 +50,32 @@ public class Employee : MonoBehaviour
                 {
                     state = State.Idle;
                     currentNeed.Satisfy();
-                    occupiedSlot.Free();
+                    targetNeedProvider.Release();
+                    targetNeedProvider = null;
                 }
                 break;
         }
-
-        UpdateStress();
     }
 
-    private void UpdateStress()
-    {
-        int unsatisfied_count = 0;
-        foreach (Need need in needs)
-        {
-            if (need.satisfied < stressStartThreshold)
-            {
-                unsatisfied_count++;
-            }
-        }
-
-        if (unsatisfied_count * 2 > needs.Count)
-        {
-            stress += stressIncreaseSpeed * Time.deltaTime;
-        }
-
-        if (stress > stressLimit)
-        {
-            LeaveJob();
-        }
-    }
-
-    //bool whantsToLeave = true;
-    private void LeaveJob()
-    {
-        //whantsToLeave = true;
-    }
-
-    [SerializeField] private List<NeedDesatisfactionSpeedModifier> needDesatisfactionSpeedModifiers;
-    public void DesatisfyNeed(NeedType ty, float delta)
+    private void UpdateNeeds(float delta_time)
     {
         foreach (Need need in needs)
         {
-            if (need.Parameters.NeedType == ty)
-            {
-                float mul = 1.0f;
-                foreach (NeedDesatisfactionSpeedModifier mod in needDesatisfactionSpeedModifiers)
-                {
-                    if (mod.ty == ty)
-                    {
-                        mul = mod.multiplier;
-                        break;
-                    }
-                }
-
-                need.Desatisfy(delta * mul);
-            }
+            need.Desatisfy(delta_time);
         }
     }
 
-    public void AddNeed(NeedParameters need)
+    public void AddNeed(Need.NeedProperties properties)
     {
-        needs.Add(new Need(need));
+        Need need = new(properties);
+        foreach (NeedModifiers modifer in registeredModifiers)
+        {
+            need.RegisterModifier(modifer);
+        }
+        needs.Add(need);
     }
 
-    private void UpdateNeedPriority()
+    private NeedProvider GetTargetNeedProvider()
     {
         needs.Sort((x, y) => x.satisfied.CompareTo(y.satisfied));
 
@@ -131,75 +92,79 @@ public class Employee : MonoBehaviour
                 break;
             }
 
-            NeedSlot booked = location.TryBookSlotInNeedProvider(this, need.Parameters.NeedType);
-            if (booked != null)
+            List<NeedProvider> available_providers = location.FindAllAvailableProviders(this, need.NeedType).ToList();
+
+            NeedProvider selected_provider = null;
+            float min_distance = float.PositiveInfinity;
+            foreach (NeedProvider provider in available_providers)
             {
-                currentNeed = need;
-                currentNeed.Parameters = booked.GetNeedParameters(currentNeed.Parameters.NeedType);
-                currentNeed.Parameters = needCollectionModifier.Apply(new List<NeedParameters>() { currentNeed.Parameters })[0];
+                float? distance = controller.ComputePathLength(provider);
+                if (!distance.HasValue)
+                {
+                    Debug.LogWarning($"NeedProvider {provider.name} is inaccessible");
+                    continue;
+                }
 
-                occupiedSlot = booked;
-                MoveToSlot(booked);
-                break;
-            }
-        }
-    }
-
-    private void MoveToSlot(NeedSlot slot)
-    {
-        state = State.Walking;
-
-        List<Vector2Int> path_points = location.PathfindingProvider.FindPath(currentPosition, slot.room.position);
-        if (path_points.Count < 3)
-        {
-            FinishedMoving();
-            return;
-        }
-
-        List<(Room, RoomInternalPath)> path = PathPointsToPath(path_points);
-
-        movingToPosition = path[^1].Item1.position;
-
-        controller.SetPath(path);
-    }
-
-    private List<(Room, RoomInternalPath)> PathPointsToPath(List<Vector2Int> path_points)
-    {
-        List<(Room, RoomInternalPath)> path = new();
-
-        for (int i = 0; i < path_points.Count; i++)
-        {
-            Direction from_direction = Direction.Center;
-            Direction to_direction = Direction.Center;
-
-            if (i > 0)
-            {
-                from_direction = (path_points[i - 1] - path_points[i]).ToDirection();
+                if (distance.Value < min_distance)
+                {
+                    min_distance = distance.Value;
+                    selected_provider = provider;
+                }
             }
 
-            if (i < path_points.Count - 1)
+            if (selected_provider == null)
             {
-                to_direction = (path_points[i + 1] - path_points[i]).ToDirection();
+                continue;
             }
 
-            Room room = location.rooms[path_points[i]];
-            RoomInternalPath int_path = room.GetInternalPath(from_direction, to_direction);
-            if (int_path == null)
-            {
-                Debug.LogError($"Internal path in room {room.position} not found for directions {from_direction} {to_direction}");
-            }
-
-            path.Add((room, int_path));
+            currentNeed = need;
+            return selected_provider;
         }
 
-        return path;
+        Debug.LogError("Failed to select target NeedProvider");
+        return null;
     }
 
     private void FinishedMoving()
     {
-        currentPosition = movingToPosition;
-        state = State.SatisfyingNeed;
-        satisfyingNeedRemaining = currentNeed.Parameters.GetSatisfactionTime();
+        if (targetNeedProvider.TryTake(this))
+        {
+            state = State.SatisfyingNeed;
+            satisfyingNeedRemaining = currentNeed.GetProperties().SatisfactionTime;
+        }
+        else
+        {
+            state = State.Idle;
+        }
+    }
+
+    public void RegisterModifier(NeedModifiers modifiers)
+    {
+        if (registeredModifiers.Contains(modifiers))
+        {
+            Debug.LogWarning("Modifiers already registered");
+            return;
+        }
+
+        registeredModifiers.Add(modifiers);
+        foreach (Need need in needs)
+        {
+            need.RegisterModifier(modifiers);
+        }
+    }
+
+    public void UnregisterModifier(NeedModifiers modifiers)
+    {
+        if (!registeredModifiers.Remove(modifiers))
+        {
+            Debug.LogWarning("Modifiers to unregister not found");
+            return;
+        }
+
+        foreach (Need need in needs)
+        {
+            need.UnregisterModifier(modifiers);
+        }
     }
 
     private void OnEnable()
