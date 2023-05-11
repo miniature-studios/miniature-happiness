@@ -134,6 +134,7 @@ public class Employee : MonoBehaviour
         }
         else
         {
+
             state = State.Idle;
         }
     }

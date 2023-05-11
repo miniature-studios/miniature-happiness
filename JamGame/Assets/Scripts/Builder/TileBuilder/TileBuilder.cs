@@ -82,6 +82,7 @@ public class TileBuilder : MonoBehaviour
                 TileUnionDictionary.Add(pos, union);
             }
         }
+        UpdateAllTiles();
     }
 
     public Result SelectTile(TileUnion tile)

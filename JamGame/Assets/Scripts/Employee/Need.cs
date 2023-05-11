@@ -40,7 +40,7 @@ public class Need
         }
     }
 
-    private NeedProperties properties;
+    [SerializeField] private NeedProperties properties;
     public NeedType NeedType => properties.NeedType;
 
     public float satisfied = 0.0f;
