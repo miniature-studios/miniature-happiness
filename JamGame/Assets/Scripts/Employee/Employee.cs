@@ -1,8 +1,56 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
+{
+    private readonly List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
+    private readonly Employee employee;
+
+    public BuffsNeedModifiersPool(Employee employee)
+    {
+        this.employee = employee;
+    }
+
+    public void RegisterEffect(NeedModifierEffect effect)
+    {
+        GameObject mods_go = new("_buff_need_modifiers", typeof(NeedModifiers));
+        mods_go.transform.SetParent(employee.transform);
+        NeedModifiers mods = mods_go.GetComponent<NeedModifiers>();
+        mods.SetRawModifiers(effect.NeedModifiers.ToList());
+
+        registeredModifiers.Add((effect, mods));
+        employee.RegisterModifier(mods);
+    }
+
+    public void UnregisterEffect(NeedModifierEffect effect)
+    {
+        int to_remove = -1;
+        for (int i = 0; i < registeredModifiers.Count; i++)
+        {
+            if (registeredModifiers[i].Item1 == effect)
+            {
+                to_remove = i;
+                break;
+            }
+        }
+
+        if (to_remove == -1)
+        {
+            Debug.LogError("Failed to unregister NeedModifierEffect: Not registered");
+            return;
+        }
+
+        employee.UnregisterModifier(registeredModifiers[to_remove].Item2);
+        GameObject.Destroy(registeredModifiers[to_remove].Item2.gameObject);
+        registeredModifiers.RemoveAt(to_remove);
+    }
+}
+
+
 [RequireComponent(typeof(EmployeeController))]
+[RequireComponent(typeof(Stress))]
 public class Employee : MonoBehaviour
 {
     private enum State
@@ -25,14 +73,32 @@ public class Employee : MonoBehaviour
 
     private readonly List<NeedModifiers> registeredModifiers = new();
 
+    private Stress stress;
+
+    [Serializable]
+    private struct AppliedBuff
+    {
+        [InspectorReadOnly] public Buff Buff;
+        [InspectorReadOnly] public float RemainingTime;
+    }
+
+    [SerializeField] private List<AppliedBuff> appliedBuffs = new();
+
+    private BuffsNeedModifiersPool buffsNeedModifiers;
+
     private void Start()
     {
         controller = GetComponent<EmployeeController>();
+        stress = GetComponent<Stress>();
+
+        buffsNeedModifiers = new BuffsNeedModifiersPool(this);
     }
 
     private void Update()
     {
         UpdateNeeds(Time.deltaTime);
+        stress.UpdateStress(needs, Time.deltaTime);
+        UpdateBuffs(Time.deltaTime);
 
         switch (state)
         {
@@ -62,6 +128,24 @@ public class Employee : MonoBehaviour
         foreach (Need need in needs)
         {
             need.Desatisfy(delta_time);
+        }
+    }
+
+    private void UpdateBuffs(float delta_time)
+    {
+        for (int i = appliedBuffs.Count - 1; i >= 0; i--)
+        {
+            AppliedBuff ab = appliedBuffs[i];
+            ab.RemainingTime -= delta_time;
+            if (ab.RemainingTime < 0.0f)
+            {
+                UnregisterBuff(appliedBuffs[i].Buff);
+                appliedBuffs.RemoveAt(i);
+            }
+            else
+            {
+                appliedBuffs[i] = ab;
+            }
         }
     }
 
@@ -134,7 +218,6 @@ public class Employee : MonoBehaviour
         }
         else
         {
-
             state = State.Idle;
         }
     }
@@ -181,5 +264,46 @@ public class Employee : MonoBehaviour
     private void OnDisable()
     {
         controller.OnFinishedMoving -= FinishedMoving;
+    }
+
+    // TODO: match type of effect with corresponding Executor type.
+    public void RegisterBuff(Buff buff)
+    {
+        appliedBuffs.Add(new AppliedBuff { Buff = buff, RemainingTime = buff.time });
+        foreach (IEffect effect in buff.Effects)
+        {
+            if (effect is StressEffect se)
+            {
+                stress.RegisterEffect(se);
+            }
+            else if (effect is NeedModifierEffect nme)
+            {
+                buffsNeedModifiers.RegisterEffect(nme);
+            }
+            else if (effect is ControllerEffect ce)
+            {
+                controller.RegisterEffect(ce);
+            }
+        }
+    }
+
+    // TODO: match type of effect with corresponding Executor type.
+    private void UnregisterBuff(Buff buff)
+    {
+        foreach (IEffect effect in buff.Effects)
+        {
+            if (effect is StressEffect se)
+            {
+                stress.UnregisterEffect(se);
+            }
+            else if (effect is NeedModifierEffect nme)
+            {
+                buffsNeedModifiers.UnregisterEffect(nme);
+            }
+            else if (effect is ControllerEffect ce)
+            {
+                controller.UnregisterEffect(ce);
+            }
+        }
     }
 }
