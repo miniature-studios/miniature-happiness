@@ -1,10 +1,8 @@
-﻿using UnityEngine;
-
-public class RoomConfig
+﻿public class RoomConfig
 {
-    public GameObject RoomUI;
-    public RoomConfig(GameObject roomUI)
+    public RoomShopUI RoomShopUI;
+    public RoomConfig(RoomShopUI roomUI)
     {
-        RoomUI = roomUI;
+        RoomShopUI = roomUI;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("==== For tests ====")]
-    [SerializeField] private GameObject testUI;
+    [SerializeField] private TileUI testUI;
     [Header("==== Require variables ====")]
     [SerializeField] private ScrollViewHider scrollHider;
     [SerializeField] private TileBuilderController tileBuilderController;
@@ -20,10 +20,10 @@ public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointe
         _ = CreateUIElement(testUI);
     }
 
-    public TileUI CreateUIElement(GameObject UIPrefab)
+    public TileUI CreateUIElement(TileUI UIPrefab)
     {
-        GameObject UiElement = Instantiate(UIPrefab, Container);
-        TileUI.InitAnsver ansver = UiElement.GetComponent<TileUI>().Init(MouseUIClick);
+        TileUI UiElement = Instantiate(UIPrefab, Container);
+        TileUI.InitAnsver ansver = UiElement.Init(MouseUIClick);
         if (ansver.Merged)
         {
             Destroy(UiElement);
@@ -31,7 +31,7 @@ public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointe
         }
         else
         {
-            return UiElement.GetComponent<TileUI>();
+            return UiElement;
         }
     }
 

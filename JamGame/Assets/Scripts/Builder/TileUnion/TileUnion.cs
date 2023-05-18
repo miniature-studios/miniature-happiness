@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(RoomProperties))]
 public class TileUnion : MonoBehaviour
 {
-    [SerializeField] public GameObject UIPrefab;
+    [SerializeField] public TileUI UIPrefab;
     [SerializeField] public List<Tile> tiles = new();
     [SerializeField] private Vector2Int position;
     [SerializeField, Range(0, 3)] private int rotation;

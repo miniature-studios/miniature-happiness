@@ -67,6 +67,11 @@ public class TileBuilder : MonoBehaviour
         UpdateAllTiles();
     }
 
+    public bool CheckBuildingForConsistance()
+    {
+        throw new NotImplementedException();
+    }
+
     public Result SelectTile(TileUnion tile)
     {
         if (SelectedTile == tile)
@@ -95,7 +100,7 @@ public class TileBuilder : MonoBehaviour
             return new SuccessResult();
         }
     }
-    public Result DeleteSelectedTile(out GameObject DeletedTileUI)
+    public Result DeleteSelectedTile(out TileUI DeletedTileUI)
     {
         if (SelectedTile == null)
         {
@@ -275,13 +280,13 @@ public class TileBuilder : MonoBehaviour
         return tileUnion;
     }
 
-    private GameObject DeleteTile(TileUnion tileUnion)
+    private TileUI DeleteTile(TileUnion tileUnion)
     {
         if (tileUnion == null)
         {
             return null;
         }
-        GameObject UIPrefab = tileUnion.UIPrefab;
+        TileUI UIPrefab = tileUnion.UIPrefab;
         DestroyImmediate(tileUnion.gameObject);
         RemoveTileFromDictionary(tileUnion);
         return UIPrefab;

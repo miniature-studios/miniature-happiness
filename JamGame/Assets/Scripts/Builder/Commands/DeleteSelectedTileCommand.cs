@@ -1,12 +1,11 @@
 ﻿using Common;
 using System;
-using UnityEngine;
 
 public class DeleteSelectedTileCommand : ICommand
 {
-    private GameObject tileUIPrefab;
-    private readonly Action<GameObject> sendUIPrefab;
-    public DeleteSelectedTileCommand(Action<GameObject> sendUIPrefab)
+    private TileUI tileUIPrefab;
+    private readonly Action<TileUI> sendUIPrefab;
+    public DeleteSelectedTileCommand(Action<TileUI> sendUIPrefab)
     {
         this.sendUIPrefab = sendUIPrefab;
     }

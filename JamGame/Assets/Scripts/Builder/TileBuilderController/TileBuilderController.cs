@@ -7,8 +7,10 @@ public class TileBuilderController : MonoBehaviour
     [Header("==== Info Fields ====")]
     [SerializeField] private string CurrentValidator;
     [Header("==== Require variables ====")]
-    [SerializeField] private TilesPanelController tilesPanelController;
+    public TilesPanelController tilesPanelController;
     public TileBuilder TileBuilder;
+    [SerializeField] private CustomButton buttonCompletePlacing;
+    public Action completeMeeting;
 
     private IValidator validator = new GameModeValidator();
     private Vector2 previousMousePosition;
@@ -30,7 +32,7 @@ public class TileBuilderController : MonoBehaviour
         };
     }
 
-    public void Update()
+    private void Update()
     {
         CurrentValidator = validator.GetType().Name;
 
@@ -77,12 +79,26 @@ public class TileBuilderController : MonoBehaviour
     }
     public void DeleteTile()
     {
-        GameObject destroyedTileUIPrefab = null;
+        TileUI destroyedTileUIPrefab = null;
         DeleteSelectedTileCommand command = new((arg) => destroyedTileUIPrefab = arg);
         Result result = Execute(command);
         if (result.Success)
         {
             _ = tilesPanelController.CreateUIElement(destroyedTileUIPrefab);
+        }
+    }
+
+    public void TryCompleteMeeting()
+    {
+        if (TileBuilder.CheckBuildingForConsistance())
+        {
+            buttonCompletePlacing.UIHider.SetState(UIElementState.Hided);
+            tilesPanelController.gameObject.SetActive(false);
+            completeMeeting?.Invoke();
+        }
+        else
+        {
+            // TODO Show no consistence
         }
     }
 }

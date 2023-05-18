@@ -1,3 +1,4 @@
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using UnityEngine;
 public class RoomWeights
 {
     public float Weight;
-    public GameObject RoomShopUI;
+    public RoomShopUI RoomShopUI;
 }
 
 [Serializable]
@@ -18,7 +19,7 @@ public class RandomRoomConfig : AbstractRoomConfig
     public override RoomConfig GetRoomConfig()
     {
         List<float> list = roomWeights.Select(x => x.Weight).ToList();
-        GameObject result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].RoomShopUI;
+        RoomShopUI result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].RoomShopUI;
         return new RoomConfig(result);
     }
 }

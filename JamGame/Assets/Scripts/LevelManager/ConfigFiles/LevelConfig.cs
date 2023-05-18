@@ -13,6 +13,7 @@ public class Tariffs
 [CreateAssetMenu(fileName = "LevelConfig", menuName = "Level/LevelConfig", order = 0)]
 public class LevelConfig : ScriptableObject
 {
+    public float BossStressSpeed;
     public Tariffs tariffs;
     public List<DayConfig> Days;
     public DayConfig DefaultDay;

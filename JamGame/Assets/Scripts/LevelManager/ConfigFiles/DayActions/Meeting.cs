@@ -13,5 +13,6 @@ public class Meeting : DayAction
     public override void ReleaseAction(LevelExecuter LevelExecuter, Action EndActionHandler)
     {
         LevelExecuter.TileBuilderController.ChangeGameMode(Gamemode.building);
+        LevelExecuter.TileBuilderController.completeMeeting = EndActionHandler;
     }
 }
