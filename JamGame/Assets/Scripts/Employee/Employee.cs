@@ -140,7 +140,6 @@ public class Employee : MonoBehaviour
             if (ab.RemainingTime < 0.0f)
             {
                 UnregisterBuff(appliedBuffs[i].Buff);
-                appliedBuffs.RemoveAt(i);
             }
             else
             {
@@ -288,22 +287,34 @@ public class Employee : MonoBehaviour
     }
 
     // TODO: match type of effect with corresponding Executor type.
-    private void UnregisterBuff(Buff buff)
+    public void UnregisterBuff(Buff buff)
     {
-        foreach (IEffect effect in buff.Effects)
+        for (int i = 0; i < appliedBuffs.Count; i++)
         {
-            if (effect is StressEffect se)
+            if (appliedBuffs[i].Buff == buff)
             {
-                stress.UnregisterEffect(se);
-            }
-            else if (effect is NeedModifierEffect nme)
-            {
-                buffsNeedModifiers.UnregisterEffect(nme);
-            }
-            else if (effect is ControllerEffect ce)
-            {
-                controller.UnregisterEffect(ce);
+                appliedBuffs.RemoveAt(i);
+
+                foreach (IEffect effect in buff.Effects)
+                {
+                    if (effect is StressEffect se)
+                    {
+                        stress.UnregisterEffect(se);
+                    }
+                    else if (effect is NeedModifierEffect nme)
+                    {
+                        buffsNeedModifiers.UnregisterEffect(nme);
+                    }
+                    else if (effect is ControllerEffect ce)
+                    {
+                        controller.UnregisterEffect(ce);
+                    }
+                }
+
+                return;
             }
         }
+
+        Debug.LogError("Failed to unregister buff: not registered");
     }
 }

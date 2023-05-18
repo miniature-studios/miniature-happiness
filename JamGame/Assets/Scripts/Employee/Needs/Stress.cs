@@ -20,12 +20,17 @@ internal struct StressByNeedDissatisfactionWithNeedType
 internal struct StressStage
 {
     public float StartsAt;
+    public Buff Buff;
 }
 
+[RequireComponent(typeof(Employee))]
 public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
 {
+    private Employee employee;
+
     [SerializeField] private List<StressStage> stages;
     private int currentStage = 0;
+    private Buff currentBuff;
 
     [SerializeField] private List<StressByNeedDissatisfactionWithNeedType> configRaw;
     private Dictionary<NeedType, StressByNeedDissatisfaction> config;
@@ -44,6 +49,8 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
     private void Start()
     {
         PrepareConfig();
+
+        employee = GetComponent<Employee>();
     }
 
     public void UpdateStress(List<Need> needs, float delta_time)
@@ -64,12 +71,30 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
 
         stress += (delta - restoreSpeed) * delta_time;
 
-        for (int i = 0; i < stages.Count - 1; i++)
+        int new_stage = 0;
+        for (int i = stages.Count - 1; i > 0; i--)
         {
-            if (stages[i + 1].StartsAt > stress)
+            if (stages[i].StartsAt < stress)
             {
-                currentStage = i;
+                new_stage = i;
                 break;
+            }
+        }
+
+        if (currentStage != new_stage)
+        {
+            currentStage = new_stage;
+
+            if (currentBuff != null)
+            {
+                employee.UnregisterBuff(currentBuff);
+            }
+
+            currentBuff = stages[currentStage].Buff;
+
+            if (currentBuff != null)
+            {
+                employee.RegisterBuff(currentBuff);
             }
         }
     }
