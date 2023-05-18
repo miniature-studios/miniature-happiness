@@ -65,6 +65,7 @@ public class CornerCollection
 
 [SelectionBase]
 [RequireComponent(typeof(TileView))]
+[RequireComponent(typeof(BoxCollider))]
 public class Tile : MonoBehaviour
 {
     [SerializeField] public TileElementsHandler elementsHandler;

@@ -46,10 +46,6 @@ public partial class TileBuilderInspector
         }
         EditorGUILayout.EndHorizontal();
         _ = EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add choosed Tile"))
-        {
-            _ = tileBuilder.Execute(new AddTileToSceneCommand(tileBuilder.ChoosedTile));
-        }
         if (GUILayout.Button("Clear Scene"))
         {
             tileBuilder.DeleteAllTiles();

@@ -1,8 +1,8 @@
 ﻿using Common;
 public class CompletePlacingCommand : ICommand
 {
-    public Result Execute(TileBuilder tileBuilder)
+    public Result Execute(TileBuilderController tileBuilderController)
     {
-        return tileBuilder.ComletePlacing();
+        return tileBuilderController.TileBuilder.ComletePlacing();
     }
 }

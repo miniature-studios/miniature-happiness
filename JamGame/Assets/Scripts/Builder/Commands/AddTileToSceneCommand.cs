@@ -20,8 +20,8 @@ public class AddTileToSceneCommand : ICommand
         CreatingPosition = new();
         CreatingRotation = 0;
     }
-    public Result Execute(TileBuilder tileBuilder)
+    public Result Execute(TileBuilderController tileBuilderController)
     {
-        return tileBuilder.AddTileIntoBuilding(tilePrefab, CreatingPosition, CreatingRotation);
+        return tileBuilderController.TileBuilder.AddTileIntoBuilding(tilePrefab, CreatingPosition, CreatingRotation);
     }
 }

@@ -16,7 +16,7 @@ public class TileCornerPrefabHandler
     public GameObject Prefab;
 }
 
-[CreateAssetMenu(fileName = "TileElementsHandler", menuName = "ScriptableObjects/TileElementsHandler", order = 2)]
+[CreateAssetMenu(fileName = "TileElementsHandler", menuName = "Builder/TileElementsHandler", order = 0)]
 public class TileElementsHandler : ScriptableObject
 {
     public List<TileWallPrefabHandler> WallPrefabHandlers;

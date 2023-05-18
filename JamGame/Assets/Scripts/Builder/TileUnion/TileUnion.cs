@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 [SelectionBase]
+[RequireComponent(typeof(RoomProperties))]
 public class TileUnion : MonoBehaviour
 {
     [SerializeField] public GameObject UIPrefab;

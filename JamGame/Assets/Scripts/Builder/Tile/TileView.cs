@@ -1,27 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TileView : MonoBehaviour
 {
-    [SerializeField] public Material startMaterial;
-    [SerializeField] public Material transparentMaterial;
-    [SerializeField] public Material errorMaterial;
+    public Material startMaterial;
+    public Material transparentMaterial;
+    public Material errorMaterial;
     private Renderer[] renderers;
-
-    private void Awake()
-    {
-        SetActileChilds(transform);
-        renderers = GetComponentsInChildren<Renderer>();
-        SetMaterial(TileMaterial.Default);
-    }
-    private void SetActileChilds(Transform transform)
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Transform child = transform.GetChild(i);
-            child.gameObject.SetActive(true);
-            SetActileChilds(child);
-        }
-    }
+    private readonly Dictionary<TileMaterial, Material[]> materailPairs = new();
 
     public enum TileMaterial
     {
@@ -30,29 +16,31 @@ public class TileView : MonoBehaviour
         TransparentAndError
     }
 
+    private void Awake()
+    {
+        SetActiveChilds(transform);
+        renderers = GetComponentsInChildren<Renderer>();
+        materailPairs.Add(TileMaterial.Default, new Material[1] { startMaterial });
+        materailPairs.Add(TileMaterial.Transparent, new Material[1] { transparentMaterial });
+        materailPairs.Add(TileMaterial.TransparentAndError, new Material[2] { transparentMaterial, errorMaterial });
+        SetMaterial(TileMaterial.Default);
+    }
+
+    private void SetActiveChilds(Transform transform)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            child.gameObject.SetActive(true);
+            SetActiveChilds(child);
+        }
+    }
+
     public void SetMaterial(TileMaterial material)
     {
-        switch (material)
+        foreach (Renderer render in renderers)
         {
-            default:
-            case TileMaterial.Default:
-                foreach (Renderer render in renderers)
-                {
-                    render.materials = new Material[1] { startMaterial };
-                }
-                break;
-            case TileMaterial.Transparent:
-                foreach (Renderer render in renderers)
-                {
-                    render.materials = new Material[1] { transparentMaterial };
-                }
-                break;
-            case TileMaterial.TransparentAndError:
-                foreach (Renderer render in renderers)
-                {
-                    render.materials = new Material[2] { transparentMaterial, errorMaterial };
-                }
-                break;
+            render.materials = materailPairs[material];
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Common;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BuilderMatrix", menuName = "ScriptableObjects/BuilderMatrix", order = 3)]
+[CreateAssetMenu(fileName = "BuilderMatrix", menuName = "Builder/BuilderMatrix", order = 2)]
 public class BuilderMatrix : ScriptableObject
 {
     [SerializeField] private float SelectingPlaneHeight = 1;

@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WallSolver", menuName = "ScriptableObjects/WallSolver", order = 4)]
+[CreateAssetMenu(fileName = "WallSolver", menuName = "Builder/WallSolver", order = 1)]
 public class WallSolver : ScriptableObject
 {
     public List<TileWallType> ForSameWalls_PriorityQueue = new() {

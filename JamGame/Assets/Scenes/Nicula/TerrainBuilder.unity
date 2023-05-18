@@ -154,7 +154,7 @@ Transform:
   m_Children:
   - {fileID: 404178275}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &40476289
 MonoBehaviour:
@@ -492,7 +492,7 @@ RectTransform:
   m_Children:
   - {fileID: 1395078481}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -562,7 +562,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1 &950253093
+--- !u!1 &1067622708
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -570,48 +570,104 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 950253094}
-  - component: {fileID: 950253095}
+  - component: {fileID: 1067622713}
+  - component: {fileID: 1067622712}
+  - component: {fileID: 1067622711}
+  - component: {fileID: 1067622709}
+  - component: {fileID: 1067622710}
+  - component: {fileID: 1067622714}
   m_Layer: 0
-  m_Name: TileBuilderController
+  m_Name: LevelSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &950253094
+--- !u!114 &1067622709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e11e827645b9e44b8d3e622527232e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1067622710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TestUI: {fileID: 7606936360430423357, guid: 0d05684e431656940a17b24ac15adfe3, type: 3}
+  TileBuilder: {fileID: 40476289}
+  UIHandler: {fileID: 806777541}
+--- !u!114 &1067622711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d988d9b1677756c4dbc262e66c64b152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelConfig: {fileID: 11400000, guid: 1b883c56a49425c409948dac0e72d0ea, type: 2}
+  levelExecuter: {fileID: 1067622712}
+--- !u!114 &1067622712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25f39322050ab9c4ba1637c761cc736b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TileBuilderController: {fileID: 1067622710}
+  EmployeeFactory: {fileID: 1067622709}
+  Tariffs:
+    WaterCost: 0
+    ElectricityCost: 0
+--- !u!4 &1067622713
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950253093}
+  m_GameObject: {fileID: 1067622708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &950253095
+--- !u!114 &1067622714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 950253093}
+  m_GameObject: {fileID: 1067622708}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
+  m_Script: {fileID: 11500000, guid: c1f2b7715c6af274cbc0f85a12a44ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CorridorUIPrefab: {fileID: 7606936360430423357, guid: c64e33f649924034fa7310e5db878cd6, type: 3}
-  WorkingSpaceUIPrefab: {fileID: 7606936360430423357, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
-  WorkingSpaceFreeUIPrefab: {fileID: 7606936360430423357, guid: 9fa931fe74c05ad49b30eea3585c513b, type: 3}
-  TripleWorkingSpaceUIPrefab: {fileID: 7606936360430423357, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
-  TileBuilder: {fileID: 40476289}
-  UIHandler: {fileID: 806777541}
 --- !u!1 &1395078480
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +793,7 @@ MonoBehaviour:
   CloseYPosition: -60
   HideSpeed: 10
   canvas: {fileID: 764846866}
-  controller: {fileID: 950253095}
+  controller: {fileID: 0}
 --- !u!1 &1494997326
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,7 +990,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904627829
 GameObject:
@@ -1002,5 +1058,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

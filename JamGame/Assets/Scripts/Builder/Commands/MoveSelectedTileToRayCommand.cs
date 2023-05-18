@@ -9,14 +9,14 @@ public class MoveSelectedTileToRayCommand : ICommand
     {
         this.ray = ray;
     }
-    public Result Execute(TileBuilder tileBuilder)
+    public Result Execute(TileBuilderController tileBuilderController)
     {
-        Result<Vector2Int> result = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
+        Result<Vector2Int> result = tileBuilderController.TileBuilder.BuilderMatrix.GetMatrixPosition(ray);
         if (result.Success)
         {
             Vector2Int point = result.Data;
             Direction direction;
-            Vector2Int delta = point - tileBuilder.SelectedTile.CenterPosition;
+            Vector2Int delta = point - tileBuilderController.TileBuilder.SelectedTile.CenterPosition;
             if (Math.Abs(delta.x) == Math.Abs(delta.y) && Math.Abs(delta.y) == 0)
             {
                 return new FailResult("Zero moving");
@@ -26,11 +26,12 @@ public class MoveSelectedTileToRayCommand : ICommand
                 direction = Math.Abs(delta.x) > Math.Abs(delta.y)
                     ? delta.x > 0 ? Direction.Right : Direction.Left
                     : Math.Abs(delta.x) < Math.Abs(delta.y)
-                                    ? delta.y > 0 ? Direction.Up : Direction.Down
-                                    : UnityEngine.Random.value > 0.5 ? delta.x > 0 ? Direction.Right : Direction.Left : delta.y > 0 ? Direction.Up : Direction.Down;
+                    ? delta.y > 0 ? Direction.Up : Direction.Down
+                    : UnityEngine.Random.value > 0.5 ? delta.x > 0
+                    ? Direction.Right : Direction.Left : delta.y > 0 ? Direction.Up : Direction.Down;
             }
             MoveSelectedTileCommand command = new(direction);
-            return tileBuilder.Execute(command);
+            return tileBuilderController.Execute(command);
         }
         else
         {

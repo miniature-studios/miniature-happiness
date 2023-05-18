@@ -6,8 +6,8 @@ public class RotateSelectedTileCommand : ICommand
     {
         this.direction = direction;
     }
-    public Result Execute(TileBuilder tileBuilder)
+    public Result Execute(TileBuilderController tileBuilderController)
     {
-        return tileBuilder.RotateSelectedTile(direction);
+        return tileBuilderController.TileBuilder.RotateSelectedTile(direction);
     }
 }

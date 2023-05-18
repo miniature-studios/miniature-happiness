@@ -7,8 +7,8 @@ public class MoveSelectedTileCommand : ICommand
     {
         this.direction = direction;
     }
-    public Result Execute(TileBuilder tileBuilder)
+    public Result Execute(TileBuilderController tileBuilderController)
     {
-        return tileBuilder.MoveSelectedTile(direction);
+        return tileBuilderController.TileBuilder.MoveSelectedTile(direction);
     }
 }

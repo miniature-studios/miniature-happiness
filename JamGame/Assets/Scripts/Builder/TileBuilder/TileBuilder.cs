@@ -23,8 +23,7 @@ public class TileBuilder : MonoBehaviour
     [SerializeField] private GameObject freespacePrefab;
     [SerializeField] private GameObject rootObject;
     [SerializeField] private BuilderMatrix builderMatrix;
-    [SerializeField] public Gamemode GameMode;
-    private IValidator validator = new GameModeValidator();
+
     private List<Vector2Int> previousPlaces;
     private int previousRotation;
     private bool justCreated = false;
@@ -46,25 +45,8 @@ public class TileBuilder : MonoBehaviour
                 }
             }
         }
-        CreateNormalBuilding();
+        CreateNormalBuilding(); // CLEANUP
         UpdateAllTiles();
-        ChangeGameMode(Gamemode.building);
-    }
-
-    public Result Execute(ICommand command)
-    {
-        Result response = validator.ValidateCommand(command);
-        return response.Success ? command.Execute(this) : response;
-    }
-    public void ChangeGameMode(Gamemode gamemode)
-    {
-        validator = gamemode switch
-        {
-            Gamemode.godmode => new GodModeValidator(this),
-            Gamemode.building => new BuildModeValidator(this),
-            Gamemode.gameing => new GameModeValidator(),
-            _ => throw new ArgumentException(),
-        };
     }
 
     public void LoadSceneComposition(GameObject SceneCompositionPrefab)
@@ -295,6 +277,10 @@ public class TileBuilder : MonoBehaviour
 
     private GameObject DeleteTile(TileUnion tileUnion)
     {
+        if (tileUnion == null)
+        {
+            return null;
+        }
         GameObject UIPrefab = tileUnion.UIPrefab;
         DestroyImmediate(tileUnion.gameObject);
         RemoveTileFromDictionary(tileUnion);
