@@ -181,7 +181,6 @@ MonoBehaviour:
   freespacePrefab: {fileID: 6867066097170886016, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
   rootObject: {fileID: 404178274}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  GameMode: 1
 --- !u!1 &404178274
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,9 +606,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestUI: {fileID: 7606936360430423357, guid: 0d05684e431656940a17b24ac15adfe3, type: 3}
+  CurrentValidator: 
+  tilesPanelController: {fileID: 1395078486}
   TileBuilder: {fileID: 40476289}
-  UIHandler: {fileID: 806777541}
 --- !u!114 &1067622711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -622,6 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d988d9b1677756c4dbc262e66c64b152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentAction: 
   levelConfig: {fileID: 11400000, guid: 1b883c56a49425c409948dac0e72d0ea, type: 2}
   levelExecuter: {fileID: 1067622712}
 --- !u!114 &1067622712
@@ -680,6 +680,7 @@ GameObject:
   - component: {fileID: 1395078484}
   - component: {fileID: 1395078483}
   - component: {fileID: 1395078482}
+  - component: {fileID: 1395078486}
   - component: {fileID: 1395078485}
   m_Layer: 5
   m_Name: Scroll View
@@ -793,7 +794,23 @@ MonoBehaviour:
   CloseYPosition: -60
   HideSpeed: 10
   canvas: {fileID: 764846866}
-  controller: {fileID: 0}
+  rectTransform: {fileID: 1395078481}
+--- !u!114 &1395078486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395078480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4edc3d0f6a3734b856b7f562dc18bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testUI: {fileID: 7606936360430423357, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
+  scrollHider: {fileID: 1395078485}
+  tileBuilderController: {fileID: 1067622710}
+  Container: {fileID: 806777541}
 --- !u!1 &1494997326
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class LevelSheduler : MonoBehaviour
 {
+    [Header("==== Info Fields ====")]
+    [SerializeField] private string CurrentAction = "";
+    [Header("==== Require variables ====")]
     [SerializeField] private LevelConfig levelConfig;
     [SerializeField] private LevelExecuter levelExecuter;
     private readonly List<DayAction> allActions = new();
@@ -21,6 +24,7 @@ public class LevelSheduler : MonoBehaviour
         }
         else
         {
+            actionEnumerator = levelConfig.DefaultDay.DayActions.GetEnumerator();
             PlayDefaultDay();
         }
     }
@@ -43,5 +47,9 @@ public class LevelSheduler : MonoBehaviour
             actionEnumerator.Reset();
         }
         actionEnumerator.Current.ReleaseAction(levelExecuter, () => PlayDefaultDay());
+    }
+    public void Update()
+    {
+        CurrentAction = actionEnumerator.Current.GetType().Name;
     }
 }

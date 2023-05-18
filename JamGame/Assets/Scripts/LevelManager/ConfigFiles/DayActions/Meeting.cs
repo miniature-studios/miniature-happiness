@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,6 @@ public class Meeting : DayAction
     [SerializeField] private List<DayEvent> dayEvents;
     public override void ReleaseAction(LevelExecuter LevelExecuter, Action EndActionHandler)
     {
-        throw new NotImplementedException();
+        LevelExecuter.TileBuilderController.ChangeGameMode(Gamemode.building);
     }
 }

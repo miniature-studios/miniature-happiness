@@ -7,7 +7,7 @@ public class DayStart : DayAction
 {
     public override void ReleaseAction(LevelExecuter LevelExecuter, Action EndActionHandler)
     {
-        throw new NotImplementedException();
+        EndActionHandler();
     }
 }
 
