@@ -195,9 +195,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentValidator: 
-  tilesPanelController: {fileID: 1395078486}
+  buttonCompleteMeeting: {fileID: 942830171}
+  TilesPanelController: {fileID: 1395078486}
   TileBuilder: {fileID: 40476289}
-  buttonCompletePlacing: {fileID: 0}
 --- !u!1 &71229552
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +303,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  checkForState: 0
   UIHider: {fileID: 0}
 --- !u!1 &124202641
 GameObject:
@@ -1382,9 +1383,9 @@ MonoBehaviour:
   buttonClicked:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 40476290}
-        m_TargetAssemblyTypeName: TileBuilderController, Assembly-CSharp
-        m_MethodName: TryCompleteMeeting
+      - m_Target: {fileID: 1671638923}
+        m_TargetAssemblyTypeName: ShopController, Assembly-CSharp
+        m_MethodName: OpenShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1394,6 +1395,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  checkForState: 1
   UIHider: {fileID: 878022344}
 --- !u!114 &878022344
 MonoBehaviour:
@@ -1407,8 +1409,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7200974ad5a6d424a9ff670e3ebb3ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unhidedPosition: {x: 110, y: -110}
-  hidedPosition: {x: -110, y: -110}
+  shownPosition: {x: 110, y: -110}
+  hiddenPosition: {x: -110, y: -110}
   hideSpeed: 2
   UIElementState: 0
 --- !u!114 &878022345
@@ -1540,8 +1542,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7200974ad5a6d424a9ff670e3ebb3ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unhidedPosition: {x: 110, y: -50}
-  hidedPosition: {x: 110, y: 50}
+  shownPosition: {x: 110, y: -50}
+  hiddenPosition: {x: 110, y: 50}
   hideSpeed: 2
   UIElementState: 0
 --- !u!114 &942830171
@@ -1571,6 +1573,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  checkForState: 1
   UIHider: {fileID: 942830170}
 --- !u!1 &1046907719
 GameObject:
@@ -1716,7 +1719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1067622713}
-  - component: {fileID: 1067622712}
+  - component: {fileID: 1067622715}
   - component: {fileID: 1067622711}
   - component: {fileID: 1067622709}
   - component: {fileID: 1067622714}
@@ -1753,27 +1756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentAction: 
   levelConfig: {fileID: 11400000, guid: 1b883c56a49425c409948dac0e72d0ea, type: 2}
-  levelExecuter: {fileID: 1067622712}
---- !u!114 &1067622712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067622708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25f39322050ab9c4ba1637c761cc736b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TileBuilderController: {fileID: 40476290}
-  EmployeeFactory: {fileID: 1067622709}
-  FinancesController: {fileID: 1125594364}
-  BossStressController: {fileID: 1479122928}
-  ShopController: {fileID: 0}
-  Tariffs:
-    WaterCost: 0
-    ElectricityCost: 0
+  levelExecuter: {fileID: 1067622715}
 --- !u!4 &1067622713
 Transform:
   m_ObjectHideFlags: 0
@@ -1801,6 +1784,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f2b7715c6af274cbc0f85a12a44ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1067622715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TileBuilderController: {fileID: 40476290}
+  EmployeeFactory: {fileID: 1067622709}
+  FinancesController: {fileID: 1125594364}
+  BossStressController: {fileID: 1479122928}
+  ShopController: {fileID: 1671638923}
 --- !u!1 &1088033067
 GameObject:
   m_ObjectHideFlags: 0
@@ -1946,9 +1946,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countText: {fileID: 1243994321}
-  LerpSpeed: 1
-  rectTransform: {fileID: 0}
+  LerpSpeed: 5
   UIHider: {fileID: 1125594365}
+  MoneyCount: 0
 --- !u!114 &1125594364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1974,8 +1974,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7200974ad5a6d424a9ff670e3ebb3ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unhidedPosition: {x: 0, y: 0}
-  hidedPosition: {x: 0, y: 75}
+  shownPosition: {x: 0, y: 0}
+  hiddenPosition: {x: 0, y: 90}
   hideSpeed: 2
   UIElementState: 0
 --- !u!1 &1243994319
@@ -2441,9 +2441,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4edc3d0f6a3734b856b7f562dc18bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testUI: {fileID: 7606936360430423357, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
+  testUI: {fileID: 7606936360430423353, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
   scrollHider: {fileID: 1395078485}
-  tileBuilderController: {fileID: 0}
+  tileBuilderController: {fileID: 40476290}
   Container: {fileID: 806777541}
 --- !u!1 &1479122924
 GameObject:
@@ -2498,8 +2498,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7200974ad5a6d424a9ff670e3ebb3ac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unhidedPosition: {x: 25, y: -220}
-  hidedPosition: {x: -25, y: -220}
+  shownPosition: {x: 25, y: -220}
+  hiddenPosition: {x: -25, y: -220}
   hideSpeed: 2
   UIElementState: 0
 --- !u!114 &1479122927
@@ -2927,10 +2927,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a388e3e0d9e151244ab4f8ad3772179b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileBuilderController: {fileID: 0}
-  financesController: {fileID: 0}
-  roomsUIContainer: {fileID: 0}
-  employeeUIContainer: {fileID: 0}
+  tileBuilderController: {fileID: 40476290}
+  financesController: {fileID: 1125594364}
+  roomsUIContainer: {fileID: 1897020500}
+  employeeUIContainer: {fileID: 124202642}
+  buttonShopOpen: {fileID: 878022343}
   ShopPanel: {fileID: 1344148175}
 --- !u!1 &1699669835
 GameObject:

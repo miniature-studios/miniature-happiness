@@ -1,41 +1,44 @@
 ﻿using Common;
 using UnityEngine;
 
-
 public class UIHider : MonoBehaviour
 {
-    [SerializeField] private Vector2 unhidedPosition;
-    [SerializeField] private Vector2 hidedPosition;
+    [SerializeField] private Vector2 shownPosition;
+    [SerializeField] private Vector2 hiddenPosition;
     [SerializeField] private float hideSpeed = 10;
-    private RectTransform rectTransform;
+
     public UIElementState UIElementState;
-    private Vector3 position;
+
+    private RectTransform rectTransform;
+    private Vector2 currentPosition;
+
     public void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-        SetState(UIElementState = UIElementState.Hided);
+        SetState(UIElementState);
     }
+
     public void Update()
     {
-        rectTransform.anchoredPosition3D = position;
-    }
-    public void SetState(UIElementState buttonState)
-    {
-        UIElementState = buttonState;
-        Vector2 position = buttonState switch
-        {
-            UIElementState.Hided => hidedPosition,
-            _ => unhidedPosition,
-        };
-        this.position = Vector3.Lerp(
+        rectTransform.anchoredPosition3D = Vector3.Lerp(
             rectTransform.anchoredPosition3D,
             new Vector3(
-                position.x,
-                position.y,
+                currentPosition.x,
+                currentPosition.y,
                 rectTransform.anchoredPosition3D.z
                 ),
             Time.deltaTime * hideSpeed
             );
+    }
+
+    public void SetState(UIElementState button_state)
+    {
+        UIElementState = button_state;
+        currentPosition = button_state switch
+        {
+            UIElementState.Hidden => hiddenPosition,
+            _ => shownPosition,
+        };
     }
 }
 

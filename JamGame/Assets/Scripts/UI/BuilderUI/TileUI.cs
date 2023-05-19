@@ -7,9 +7,10 @@ using UnityEngine.EventSystems;
 
 public class TileUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] public GameObject TileUnionPrefab;
-    [SerializeField] public TMP_Text text;
-    [SerializeField] public TMP_Text Counter;
+    public TileUnion TileUnionPrefab;
+    public TMP_Text Text;
+    public TMP_Text Counter;
+
     private Action<TileUI> clickEvent;
     private bool over = false;
 
@@ -17,16 +18,17 @@ public class TileUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public bool Merged;
         public TileUI MergedTo;
-        public InitAnsver(bool merged, TileUI mergedTo)
+        public InitAnsver(bool merged, TileUI merged_to)
         {
             Merged = merged;
-            MergedTo = mergedTo;
+            MergedTo = merged_to;
         }
     }
-    public InitAnsver Init(Action<TileUI> clickEvent)
+
+    public InitAnsver Init(Action<TileUI> click_event)
     {
-        this.clickEvent = clickEvent;
-        IEnumerable<TileUI> uis = transform.parent.GetComponentsInChildren<TileUI>().Where(x => x != this && x.text.text == text.text);
+        clickEvent = click_event;
+        IEnumerable<TileUI> uis = transform.parent.GetComponentsInChildren<TileUI>().Where(x => x != this && x.Text.text == Text.text);
         if (uis.Count() > 0)
         {
             uis.First().Counter.text = Convert.ToString(Convert.ToInt32(uis.First().Counter.text) + 1);
@@ -37,6 +39,7 @@ public class TileUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             return new InitAnsver(false, null);
         }
     }
+
     public void TakeOne()
     {
         if (Convert.ToInt32(Counter.text) > 1)

@@ -1,20 +1,21 @@
 ﻿using Common;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class SelectTileCommand : ICommand
 {
-    public TileUnion tile;
+    public TileUnion Tile;
     public SelectTileCommand(Ray ray)
     {
         RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
-        System.Collections.Generic.IEnumerable<TileUnion> tiles = hits.ToList()
+        IEnumerable<TileUnion> tiles = hits.ToList()
             .Where(x => x.collider.GetComponentInParent<TileUnion>() != null)
             .Select(x => x.collider.GetComponentInParent<TileUnion>());
-        tile = tiles.Count() != 0 ? tiles.First() : null;
+        Tile = tiles.Count() != 0 ? tiles.First() : null;
     }
-    public Result Execute(TileBuilderController tileBuilderController)
+    public Result Execute(TileBuilderController tile_builder_controller)
     {
-        return tile == null ? new FailResult("No hits") : tileBuilderController.TileBuilder.SelectTile(tile);
+        return Tile == null ? new FailResult("No hits") : tile_builder_controller.TileBuilder.SelectTile(Tile);
     }
 }

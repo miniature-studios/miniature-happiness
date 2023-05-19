@@ -4,15 +4,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BuilderMatrix", menuName = "Builder/BuilderMatrix", order = 2)]
 public class BuilderMatrix : ScriptableObject
 {
-    [SerializeField] private float SelectingPlaneHeight = 1;
-    [SerializeField] public int Step = 5;
+    [SerializeField] private float selectingPlaneHeight = 1;
+
+    public int Step = 5;
+
     public Result<Vector2Int> GetMatrixPosition(Ray ray)
     {
-        Plane plane = new(Vector3.up, new Vector3(0, SelectingPlaneHeight, 0));
+        Plane plane = new(Vector3.up, new Vector3(0, selectingPlaneHeight, 0));
         if (plane.Raycast(ray, out float enter))
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            return new SuccessResult<Vector2Int>(new(Mathf.RoundToInt(-hitPoint.z / Step), Mathf.RoundToInt(hitPoint.x / Step)));
+            Vector3 hit_point = ray.GetPoint(enter);
+            return new SuccessResult<Vector2Int>(new(Mathf.RoundToInt(-hit_point.z / Step), Mathf.RoundToInt(hit_point.x / Step)));
         }
         else
         {

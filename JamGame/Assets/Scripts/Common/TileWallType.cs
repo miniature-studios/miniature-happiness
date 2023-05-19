@@ -2,9 +2,9 @@
 {
     public enum TileWallType
     {
-        window,
-        wall,
-        door,
-        none
+        Window,
+        Wall,
+        Door,
+        None
     }
 }

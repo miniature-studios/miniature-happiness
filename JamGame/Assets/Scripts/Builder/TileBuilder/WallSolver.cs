@@ -7,53 +7,53 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WallSolver", menuName = "Builder/WallSolver", order = 1)]
 public class WallSolver : ScriptableObject
 {
-    public List<TileWallType> ForSameWalls_PriorityQueue = new() {
-        TileWallType.none,
-        TileWallType.door,
-        TileWallType.window,
-        TileWallType.wall
+    public List<TileWallType> ForSameWallsPriorityQueue = new() {
+        TileWallType.None,
+        TileWallType.Door,
+        TileWallType.Window,
+        TileWallType.Wall
     };
-    public List<TileWallType> ForSameWalls_PriorityQueue_FirstDoor = new() {
-        TileWallType.door,
-        TileWallType.none,
-        TileWallType.window,
-        TileWallType.wall
+    public List<TileWallType> ForSameWallsPriorityQueueFirstDoor = new() {
+        TileWallType.Door,
+        TileWallType.None,
+        TileWallType.Window,
+        TileWallType.Wall
     };
-    public List<TileWallType> ForDifferentTiles_PriorityQueue = new() {
-        TileWallType.wall,
-        TileWallType.window,
-        TileWallType.door,
-        TileWallType.none
+    public List<TileWallType> ForDifferentTilesPriorityQueue = new() {
+        TileWallType.Wall,
+        TileWallType.Window,
+        TileWallType.Door,
+        TileWallType.None
     };
 
-    public List<string> ignoringMarks = new()
+    public List<string> IgnoringMarks = new()
     {
         "immutable",
     };
 
-    public TileWallType? ChooseWall(IEnumerable<string> MyMarks, List<TileWallType> MyWalls, IEnumerable<string> OutMarks, List<TileWallType> OutWalls)
+    public TileWallType? ChooseWall(IEnumerable<string> my_marks, List<TileWallType> my_walls, IEnumerable<string> out_marks, List<TileWallType> out_walls)
     {
-        IEnumerable<string> MyNewMarks = MyMarks.Where(x => !ignoringMarks.Contains(x));
-        IEnumerable<string> OutNewMarks = OutMarks.Where(x => !ignoringMarks.Contains(x));
+        IEnumerable<string> my_new_marks = my_marks.Where(x => !IgnoringMarks.Contains(x));
+        IEnumerable<string> out_new_marks = out_marks.Where(x => !IgnoringMarks.Contains(x));
 
-        List<TileWallType> wall_type_intersect = MyWalls.Intersect(OutWalls).ToList();
+        List<TileWallType> wall_type_intersect = my_walls.Intersect(out_walls).ToList();
         if (wall_type_intersect.Count == 1)
         {
             return wall_type_intersect.First();
         }
         else if (wall_type_intersect.Count > 1)
         {
-            List<string> marks_intersect = MyNewMarks.Intersect(OutNewMarks).ToList();
+            List<string> marks_intersect = my_new_marks.Intersect(out_new_marks).ToList();
             // Unique rule
             if (
-                !(MyMarks.Contains("freespace") || OutMarks.Contains("freespace"))
+                !(my_marks.Contains("freespace") || out_marks.Contains("freespace"))
                 &&
-                !(MyMarks.Contains("outside") || OutMarks.Contains("outside"))
+                !(my_marks.Contains("outside") || out_marks.Contains("outside"))
                 &&
-                (MyMarks.Contains("corridor") || OutMarks.Contains("corridor"))
+                (my_marks.Contains("corridor") || out_marks.Contains("corridor"))
                 )
             {
-                foreach (TileWallType iterator in ForSameWalls_PriorityQueue_FirstDoor)
+                foreach (TileWallType iterator in ForSameWallsPriorityQueueFirstDoor)
                 {
                     if (wall_type_intersect.Contains(iterator))
                     {
@@ -63,7 +63,7 @@ public class WallSolver : ScriptableObject
             }
             else // Gather rule
             {
-                foreach (TileWallType iterator in marks_intersect.Count == 0 ? ForDifferentTiles_PriorityQueue : ForSameWalls_PriorityQueue)
+                foreach (TileWallType iterator in marks_intersect.Count == 0 ? ForDifferentTilesPriorityQueue : ForSameWallsPriorityQueue)
                 {
                     if (wall_type_intersect.Contains(iterator))
                     {

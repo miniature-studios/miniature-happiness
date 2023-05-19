@@ -2,7 +2,7 @@
 {
     public enum UIElementState
     {
-        Hided,
-        Unhided
+        Hidden,
+        Shown
     }
 }

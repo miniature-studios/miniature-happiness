@@ -5,13 +5,13 @@ public class DeleteSelectedTileCommand : ICommand
 {
     private TileUI tileUIPrefab;
     private readonly Action<TileUI> sendUIPrefab;
-    public DeleteSelectedTileCommand(Action<TileUI> sendUIPrefab)
+    public DeleteSelectedTileCommand(Action<TileUI> send_ui_prefab)
     {
-        this.sendUIPrefab = sendUIPrefab;
+        sendUIPrefab = send_ui_prefab;
     }
-    public Result Execute(TileBuilderController tileBuilderController)
+    public Result Execute(TileBuilderController tile_builder_controller)
     {
-        Result response = tileBuilderController.TileBuilder.DeleteSelectedTile(out tileUIPrefab);
+        Result response = tile_builder_controller.TileBuilder.DeleteSelectedTile(out tileUIPrefab);
         sendUIPrefab(tileUIPrefab);
         return response;
     }

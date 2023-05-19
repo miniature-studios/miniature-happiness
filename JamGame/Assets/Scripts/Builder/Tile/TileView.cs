@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class TileView : MonoBehaviour
 {
-    public Material startMaterial;
-    public Material transparentMaterial;
-    public Material errorMaterial;
+    [SerializeField] private Material startMaterial;
+    [SerializeField] private Material transparentMaterial;
+    [SerializeField] private Material errorMaterial;
+
     private Renderer[] renderers;
     private readonly Dictionary<TileMaterial, Material[]> materailPairs = new();
 

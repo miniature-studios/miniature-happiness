@@ -9,7 +9,9 @@ public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointe
     [Header("==== Require variables ====")]
     [SerializeField] private ScrollViewHider scrollHider;
     [SerializeField] private TileBuilderController tileBuilderController;
-    [SerializeField] private Transform Container;
+    [SerializeField] private Transform container;
+
+    public ScrollViewHider ScrollViewHider => scrollHider;
 
     private bool mouseOverUI = false;
     private bool mouseUIClicked = false;
@@ -20,9 +22,9 @@ public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointe
         _ = CreateUIElement(testUI);
     }
 
-    public TileUI CreateUIElement(TileUI UIPrefab)
+    public TileUI CreateUIElement(TileUI ui_prefab)
     {
-        TileUI UiElement = Instantiate(UIPrefab, Container);
+        TileUI UiElement = Instantiate(ui_prefab, container);
         TileUI.InitAnsver ansver = UiElement.Init(MouseUIClick);
         if (ansver.Merged)
         {
@@ -43,12 +45,12 @@ public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointe
         }
         mouseUIClicked = false;
     }
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData event_data)
     {
         mouseOverUI = true;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData event_data)
     {
         if (mouseUIClicked)
         {
@@ -61,10 +63,10 @@ public class TilesPanelController : MonoBehaviour, IPointerEnterHandler, IPointe
         mouseOverUI = false;
     }
 
-    public void MouseUIClick(TileUI uITile)
+    public void MouseUIClick(TileUI ui_tile)
     {
         mouseUIClicked = true;
-        uiTileClicked = uITile;
+        uiTileClicked = ui_tile;
     }
 }
 

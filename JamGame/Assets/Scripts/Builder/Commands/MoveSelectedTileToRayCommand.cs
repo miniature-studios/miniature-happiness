@@ -5,18 +5,18 @@ using UnityEngine;
 public class MoveSelectedTileToRayCommand : ICommand
 {
     private Ray ray;
-    public MoveSelectedTileToRayCommand(Ray ray)
+    public MoveSelectedTileToRayCommand(Ray _ray)
     {
-        this.ray = ray;
+        ray = _ray;
     }
-    public Result Execute(TileBuilderController tileBuilderController)
+    public Result Execute(TileBuilderController tile_builder_controller)
     {
-        Result<Vector2Int> result = tileBuilderController.TileBuilder.BuilderMatrix.GetMatrixPosition(ray);
+        Result<Vector2Int> result = tile_builder_controller.TileBuilder.BuilderMatrix.GetMatrixPosition(ray);
         if (result.Success)
         {
             Vector2Int point = result.Data;
             Direction direction;
-            Vector2Int delta = point - tileBuilderController.TileBuilder.SelectedTile.CenterPosition;
+            Vector2Int delta = point - tile_builder_controller.TileBuilder.SelectedTile.CenterPosition;
             if (Math.Abs(delta.x) == Math.Abs(delta.y) && Math.Abs(delta.y) == 0)
             {
                 return new FailResult("Zero moving");
@@ -31,7 +31,7 @@ public class MoveSelectedTileToRayCommand : ICommand
                     ? Direction.Right : Direction.Left : delta.y > 0 ? Direction.Up : Direction.Down;
             }
             MoveSelectedTileCommand command = new(direction);
-            return tileBuilderController.Execute(command);
+            return tile_builder_controller.Execute(command);
         }
         else
         {

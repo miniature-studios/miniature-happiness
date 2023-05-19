@@ -4,14 +4,14 @@ using UnityEngine;
 
 public partial class TileBuilderInspector
 {
-    public partial void ShowTilesSaveLoading(TileBuilder tileBuilder)
+    public partial void ShowTilesSaveLoading(TileBuilder tile_builder)
     {
         _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Save scene composition into prefab."))
         {
-            string localPath = "Assets/Prefabs/SceneCompositions/" + tileBuilder.SavingName + ".prefab";
+            string localPath = "Assets/Prefabs/SceneCompositions/" + tile_builder.SavingName + ".prefab";
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
-            _ = PrefabUtility.SaveAsPrefabAsset(tileBuilder.RootObject, localPath, out bool prefabSuccess);
+            _ = PrefabUtility.SaveAsPrefabAsset(tile_builder.RootObject, localPath, out bool prefabSuccess);
             if (prefabSuccess == true)
             {
                 Debug.Log("Prefab was saved successfully");
@@ -26,7 +26,7 @@ public partial class TileBuilderInspector
         _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Load scene composition from prefab."))
         {
-            tileBuilder.LoadSceneComposition(tileBuilder.LoadingPrefab);
+            tile_builder.LoadSceneComposition(tile_builder.LoadingPrefab);
         }
         EditorGUILayout.EndHorizontal();
     }

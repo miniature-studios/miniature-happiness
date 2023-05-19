@@ -7,22 +7,28 @@ public class BossBar : MonoBehaviour
     [SerializeField] private float maxValueYPosition;
     [SerializeField] private float maxValue = 100;
     [SerializeField] private float changeSpeed = 10;
+
     public UIHider UIHider;
+
     private float currentYPosition;
     private float currentYScale;
+
+    public float BarValue { get; private set; }
+
     private void Awake()
     {
         currentYPosition = maxValueYPosition;
         currentYScale = rectTransform.localScale.y;
         SetBarValue(0);
     }
-    public float BarValue { get; private set; }
+
     public void SetBarValue(float value)
     {
         currentYScale = value / maxValue;
         currentYPosition = (currentYScale * (minValueYPosition - maxValueYPosition)) + minValueYPosition;
         BarValue = value;
     }
+
     private void Update()
     {
         rectTransform.anchoredPosition3D = Vector3.Lerp(

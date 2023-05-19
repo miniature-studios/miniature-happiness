@@ -4,14 +4,14 @@ using UnityEditor;
 [CustomEditor(typeof(TileBuilder))]
 public partial class TileBuilderInspector : Editor
 {
-    public partial void ShowLocationBuildingButtons(TileBuilder tileBuilder);
-    public partial void ShowTilesSaveLoading(TileBuilder tileBuilder);
+    public partial void ShowLocationBuildingButtons(TileBuilder tile_builder);
+    public partial void ShowTilesSaveLoading(TileBuilder tile_builder);
     public override void OnInspectorGUI()
     {
-        TileBuilder tileBuilder = serializedObject.targetObject as TileBuilder;
+        TileBuilder tile_builder = serializedObject.targetObject as TileBuilder;
 
-        ShowLocationBuildingButtons(tileBuilder);
-        ShowTilesSaveLoading(tileBuilder);
+        ShowLocationBuildingButtons(tile_builder);
+        ShowTilesSaveLoading(tile_builder);
 
         _ = DrawDefaultInspector();
 

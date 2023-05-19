@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class RoomShopUI : MonoBehaviour
 {
+    [SerializeField] private int cost;
+
     public TileUI TileUnionUIPrefab;
     public TMP_Text MoneyCounter;
-    public int cost;
+
     private Func<int, TileUI, bool> RoomBuying;
 
     public void Awake()
@@ -23,7 +25,7 @@ public class RoomShopUI : MonoBehaviour
     {
         if (RoomBuying(cost, TileUnionUIPrefab))
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }
