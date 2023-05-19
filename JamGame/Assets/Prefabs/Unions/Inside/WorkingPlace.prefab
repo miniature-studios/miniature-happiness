@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIPrefab: {fileID: 7606936360430423357, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
-  tiles:
-  - {fileID: 6808865837424331611}
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  UIPrefab: {fileID: 7606936360430423357, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
+  Tiles:
+  - {fileID: 6808865837424331611}
 --- !u!114 &1556806492221354896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +73,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8812810329888060660}
     m_Modifications:
+    - target: {fileID: 7852530068206187739, guid: efd98ad481f9405448621066f865b325, type: 3}
+      propertyPath: TileView
+      value: 
+      objectReference: {fileID: 8994238681229289860}
+    - target: {fileID: 7852530068206187739, guid: efd98ad481f9405448621066f865b325, type: 3}
+      propertyPath: ElementsHandler
+      value: 
+      objectReference: {fileID: 11400000, guid: deb6c4eb02f62684fbde1cf96a717321, type: 2}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -139,3 +147,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
   m_PrefabInstance: {fileID: 3640097180195798912}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8994238681229289860 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5644643607131936260, guid: efd98ad481f9405448621066f865b325, type: 3}
+  m_PrefabInstance: {fileID: 3640097180195798912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

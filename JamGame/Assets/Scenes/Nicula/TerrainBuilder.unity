@@ -169,17 +169,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518be29018dfac24681fc56b5a8c4789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FreespacePrefab: {fileID: 6867066097170886016, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
-  StairsPrefab: {fileID: 8368415304887353141, guid: a4d06f29c95bafc4bb2680359a078ed8, type: 3}
-  WindowPrefab: {fileID: 8143707441816155109, guid: 2f51a1aaddcffe54aaa11da4257f39b4, type: 3}
-  OutdoorPrefab: {fileID: 8676573656510189659, guid: c1f209f52ddf6584a912baa55f578d0e, type: 3}
-  CorridoorPrefab: {fileID: 1583034983851126797, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
-  WorkingPlaceFree: {fileID: 721046682041479175, guid: 9376253a30395b340a27ac99b7697059, type: 3}
-  WorkingPlace: {fileID: 8812810329888060619, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
+  FreespacePrefab: {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
+  StairsPrefab: {fileID: 9058891122285443271, guid: a4d06f29c95bafc4bb2680359a078ed8, type: 3}
+  WindowPrefab: {fileID: 8143707441816155107, guid: 2f51a1aaddcffe54aaa11da4257f39b4, type: 3}
+  OutdoorPrefab: {fileID: 8676573656510189661, guid: c1f209f52ddf6584a912baa55f578d0e, type: 3}
+  CorridoorPrefab: {fileID: 1583034983851126799, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
+  WorkingPlaceFree: {fileID: 721046682041479169, guid: 9376253a30395b340a27ac99b7697059, type: 3}
+  WorkingPlace: {fileID: 8812810329888060661, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
   ChoosedTile: {fileID: 424481578478286981, guid: 5e3cf41a766bd984eb7e6a396e9a6627, type: 3}
   LoadingPrefab: {fileID: 0}
   SavingName: SampleBuilding
-  freespacePrefab: {fileID: 6867066097170886016, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
+  freespacePrefab: {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
   rootObject: {fileID: 404178274}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
 --- !u!114 &40476290
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentValidator: 
+  currentValidator: 
   buttonCompleteMeeting: {fileID: 942830171}
   TilesPanelController: {fileID: 1395078486}
   TileBuilder: {fileID: 40476289}
@@ -303,7 +303,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  checkForState: 0
   UIHider: {fileID: 0}
 --- !u!1 &124202641
 GameObject:
@@ -1395,7 +1394,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  checkForState: 1
   UIHider: {fileID: 878022344}
 --- !u!114 &878022344
 MonoBehaviour:
@@ -1573,7 +1571,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  checkForState: 1
   UIHider: {fileID: 942830170}
 --- !u!1 &1046907719
 GameObject:
@@ -1754,7 +1751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d988d9b1677756c4dbc262e66c64b152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAction: 
+  currentAction: 
   levelConfig: {fileID: 11400000, guid: 1b883c56a49425c409948dac0e72d0ea, type: 2}
   levelExecuter: {fileID: 1067622715}
 --- !u!4 &1067622713
@@ -1946,7 +1943,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countText: {fileID: 1243994321}
-  LerpSpeed: 5
+  lerpSpeed: 1
   UIHider: {fileID: 1125594365}
   MoneyCount: 0
 --- !u!114 &1125594364
@@ -2424,9 +2421,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3ddfecb49ab82a4bb10f3ad503921e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OpenYPosition: 50
-  CloseYPosition: -60
-  HideSpeed: 10
+  openYPosition: 50
+  closeYPosition: -60
+  hideSpeed: 10
   canvas: {fileID: 764846866}
   rectTransform: {fileID: 1395078481}
 --- !u!114 &1395078486
@@ -2444,7 +2441,7 @@ MonoBehaviour:
   testUI: {fileID: 7606936360430423353, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
   scrollHider: {fileID: 1395078485}
   tileBuilderController: {fileID: 40476290}
-  Container: {fileID: 806777541}
+  container: {fileID: 806777541}
 --- !u!1 &1479122924
 GameObject:
   m_ObjectHideFlags: 0

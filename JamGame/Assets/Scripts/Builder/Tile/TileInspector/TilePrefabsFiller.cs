@@ -21,6 +21,10 @@ public partial class TileInspector
             {
                 walls_hadler = tile.transform.Find("Walls").gameObject;
             }
+            while (walls_hadler.transform.childCount > 0)
+            {
+                DestroyImmediate(walls_hadler.transform.GetChild(0).gameObject);
+            }
 
             foreach (WallCollection wall_collection in tile.Walls)
             {
@@ -55,6 +59,10 @@ public partial class TileInspector
             else
             {
                 corners_hadler = tile.transform.Find("Corners").gameObject;
+            }
+            while (corners_hadler.transform.childCount > 0)
+            {
+                DestroyImmediate(corners_hadler.transform.GetChild(0).gameObject);
             }
 
             foreach (CornerCollection corner_collection in tile.Corners)
