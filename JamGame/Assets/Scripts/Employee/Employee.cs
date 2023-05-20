@@ -73,7 +73,7 @@ public class Employee : MonoBehaviour
 
     private readonly List<NeedModifiers> registeredModifiers = new();
 
-    private Stress stress;
+    public Stress Stress { get; private set; }
 
     [Serializable]
     private struct AppliedBuff
@@ -89,7 +89,7 @@ public class Employee : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<EmployeeController>();
-        stress = GetComponent<Stress>();
+        Stress = GetComponent<Stress>();
 
         buffsNeedModifiers = new BuffsNeedModifiersPool(this);
     }
@@ -97,7 +97,7 @@ public class Employee : MonoBehaviour
     private void Update()
     {
         UpdateNeeds(Time.deltaTime);
-        stress.UpdateStress(needs, Time.deltaTime);
+        Stress.UpdateStress(needs, Time.deltaTime);
         UpdateBuffs(Time.deltaTime);
 
         switch (state)
@@ -273,7 +273,7 @@ public class Employee : MonoBehaviour
         {
             if (effect is StressEffect se)
             {
-                stress.RegisterEffect(se);
+                Stress.RegisterEffect(se);
             }
             else if (effect is NeedModifierEffect nme)
             {
@@ -299,7 +299,7 @@ public class Employee : MonoBehaviour
                 {
                     if (effect is StressEffect se)
                     {
-                        stress.UnregisterEffect(se);
+                        Stress.UnregisterEffect(se);
                     }
                     else if (effect is NeedModifierEffect nme)
                     {

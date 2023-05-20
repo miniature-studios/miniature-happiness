@@ -38,6 +38,7 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
     [InspectorReadOnly]
     [SerializeField]
     private float stress = 0.0f;
+    public float Value => stress;
 
     [SerializeField] private float restoreSpeed;
 

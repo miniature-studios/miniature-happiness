@@ -14,24 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   time: Infinity
   rawEffects:
-  - effectType: needModifierEffect
+  - selectedType: ControllerEffect
     controllerEffect:
-      speedMultiplier: 0
+      speedMultiplier: 0.01
     needModifierEffect:
-      needModifiers:
-      - NeedType: 0
-        SatisfactionTime: 1
-        SatisfactionGained: 0
-        DecreaseSpeed: -10
+      needModifiers: []
     stressEffect:
       increaseMultiplier: 0
-  - effectType: controllerEffect
+  - selectedType: NeedModifierEffect
     controllerEffect:
       speedMultiplier: 0.01
     needModifierEffect:
       needModifiers:
       - NeedType: 0
-        SatisfactionTime: 1
+        SatisfactionTime: 0.01
         SatisfactionGained: 0
         DecreaseSpeed: -10
     stressEffect:

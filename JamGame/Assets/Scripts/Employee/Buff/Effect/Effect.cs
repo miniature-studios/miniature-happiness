@@ -1,0 +1,5 @@
+[InterfaceEditor]
+public interface IEffect
+{
+
+}

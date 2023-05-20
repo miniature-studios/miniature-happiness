@@ -1,0 +1,19 @@
+﻿using System;
+using UnityEngine;
+
+[Serializable]
+public class Serialized|=INTERFACE_CLASS_NAME=|
+{
+    [SerializeField] private string selectedType;
+
+|=FIELDS=|
+
+    public |=INTERFACE_NAME=| To|=INTERFACE_CLASS_NAME=|()
+    {
+        return selectedType switch
+        {
+|=SWITCH_VARIANTS=|
+            _ => throw new NotImplementedException(),
+        };
+    }
+}
