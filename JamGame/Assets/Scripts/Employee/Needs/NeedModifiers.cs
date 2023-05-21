@@ -57,6 +57,12 @@ public class NeedModifiers : MonoBehaviour
     private NeedModifiersCollection modifiers;
     public NeedModifiersCollection Modifiers => modifiers;
 
+    public void SetRawModifiers(List<Need.NeedProperties> raw)
+    {
+        modifiersRaw = raw;
+        PrepareModifiers();
+    }
+
     private void OnValidate()
     {
         PrepareModifiers();
@@ -69,6 +75,7 @@ public class NeedModifiers : MonoBehaviour
 
     private void PrepareModifiers()
     {
+        modifiersRaw ??= new List<Need.NeedProperties>();
         modifiers = new NeedModifiersCollection(modifiersRaw);
     }
 }

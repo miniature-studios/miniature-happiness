@@ -53,11 +53,13 @@ public class Need
     {
         satisfied = prototype.satisfied;
         properties = prototype.properties;
+        registeredModifiers = new List<NeedModifiers>();
     }
 
     public Need(NeedProperties parameters)
     {
         properties = parameters;
+        registeredModifiers = new List<NeedModifiers>();
     }
 
     // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?

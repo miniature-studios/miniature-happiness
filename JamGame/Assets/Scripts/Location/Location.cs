@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Location : MonoBehaviour
@@ -7,19 +8,19 @@ public class Location : MonoBehaviour
     private List<NeedProvider> needProviders;
     private readonly List<Employee> employees = new();
 
+    // TODO: Update in runtime.
+    private List<IOverlayRenderer> overlayRenderers;
+
     private void Start()
     {
         InitGameMode();
+
+        overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
     }
 
     public void InitGameMode()
     {
         needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
-    }
-
-    private void Update()
-    {
-
     }
 
     [SerializeField] private EmployeeNeeds employeeNeeds;
@@ -39,5 +40,29 @@ public class Location : MonoBehaviour
                 yield return provider;
             }
         }
+    }
+
+    // TODO: Move to the other script (UI folder?).
+    public void ApplyOverlay<O>(O overlay) where O : class, IOverlay
+    {
+        foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+        {
+            if (overlay_renderer is IOverlayRenderer<O> or)
+            {
+                or.ApplyOverlay(overlay);
+            }
+        }
+    }
+
+    // TODO: Move to the other script (UI folder?).
+    public void RevertOverlay<O>(O overlay) where O : class, IOverlay
+    {
+        //foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+        //{
+        //    if (overlay_renderer is IOverlayRenderer<O> or)
+        //    {
+        //        or.RevertOverlay(overlay);
+        //    }
+        //}
     }
 }

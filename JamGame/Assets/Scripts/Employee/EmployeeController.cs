@@ -1,9 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EmployeeController : MonoBehaviour
+public class EmployeeController : MonoBehaviour, IEffectExecutor<ControllerEffect>
 {
+    private enum State
+    {
+        Idle,
+        Moving,
+        BuildingPath,
+    }
+
     [SerializeField] private float maxVelocity;
 
     private NavMeshAgent agent;
@@ -11,6 +19,21 @@ public class EmployeeController : MonoBehaviour
     public Vector3 AverageVelocity => averageVelocity;
 
     private PersonalSpace personalSpace;
+
+    private Vector3 currentDestination;
+    private Vector3 prevPosition;
+
+    private State state = State.Idle;
+
+    public delegate void FinishedMovingHandler();
+    public event FinishedMovingHandler OnFinishedMoving;
+
+    public void SetDestination(Vector3 target_position)
+    {
+        currentDestination = target_position;
+        _ = agent.SetDestination(currentDestination);
+        state = State.BuildingPath;
+    }
 
     private void Start()
     {
@@ -20,6 +43,48 @@ public class EmployeeController : MonoBehaviour
         if (personalSpace == null)
         {
             Debug.LogError("Personal space not found");
+        }
+    }
+
+    private void Update()
+    {
+        averageVelocity = (transform.position - prevPosition) / Time.deltaTime;
+        prevPosition = transform.position;
+
+        switch (state)
+        {
+            case State.Idle:
+                break;
+            case State.BuildingPath:
+                if (!agent.pathPending)
+                {
+                    state = State.Moving;
+                }
+                break;
+            case State.Moving:
+                CorrectMovement();
+                if (agent.remainingDistance < 0.01f)
+                {
+                    state = State.Idle;
+                    OnFinishedMoving?.Invoke();
+                }
+                break;
+        }
+    }
+
+    private void CorrectMovement()
+    {
+        agent.speed = (1.0f - personalSpace.GetCrowdMetrics())
+            * maxVelocity * maxVelocityMultiplierByEffects;
+
+        Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
+        if (steering.sqrMagnitude > 0.0001)
+        {
+            agent.velocity = steering;
+        }
+        else
+        {
+            _ = agent.SetDestination(currentDestination);
         }
     }
 
@@ -43,41 +108,27 @@ public class EmployeeController : MonoBehaviour
         return null;
     }
 
-    private Vector3 currentDestination;
+    private float maxVelocityMultiplierByEffects = 1.0f;
+    private readonly List<ControllerEffect> registeredEffects = new();
 
-    public void SetDestination(Vector3 target_position)
+    public void RegisterEffect(ControllerEffect effect)
     {
-        moving = true;
-        currentDestination = target_position;
-        _ = agent.SetDestination(currentDestination);
+        registeredEffects.Add(effect);
+        maxVelocityMultiplierByEffects *= effect.SpeedMultiplier;
     }
 
-    private bool moving = false;
-    private Vector3 prevPosition;
-
-    private void Update()
+    public void UnregisterEffect(ControllerEffect effect)
     {
-        averageVelocity = (transform.position - prevPosition) / Time.deltaTime;
-        prevPosition = transform.position;
-
-        if (moving && agent.remainingDistance < 0.01f)
+        if (!registeredEffects.Remove(effect))
         {
-            moving = false;
-            OnFinishedMoving?.Invoke();
+            Debug.LogError("Failed to remove ControllerEffect: Not registered");
+            return;
         }
 
-        agent.speed = (1.0f - personalSpace.GetCrowdMetrics()) * maxVelocity;
-        Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
-        if (steering.sqrMagnitude > 0.0001)
+        maxVelocityMultiplierByEffects = 1.0f;
+        foreach (ControllerEffect eff in registeredEffects)
         {
-            agent.velocity = steering;
-        }
-        else
-        {
-            _ = agent.SetDestination(currentDestination);
+            maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
         }
     }
-
-    public delegate void FinishedMovingHandler();
-    public event FinishedMovingHandler OnFinishedMoving;
 }
