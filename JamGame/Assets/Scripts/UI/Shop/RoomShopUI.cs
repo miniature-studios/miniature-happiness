@@ -4,26 +4,40 @@ using UnityEngine;
 
 public class RoomShopUI : MonoBehaviour
 {
-    [SerializeField] private int cost;
+    [SerializeField] private RoomInventoryUI tileUIPrefab;
+    [SerializeField] private TMP_Text moneyText;
+    [SerializeField] private TMP_Text waterText;
+    [SerializeField] private TMP_Text electricityText;
+    [SerializeField] private TMP_Text roomNameText;
+    private RoomProperties roomProperties;
 
-    public TileUI TileUnionUIPrefab;
-    public TMP_Text MoneyCounter;
+    private Func<RoomProperties, RoomInventoryUI, bool> RoomBuying;
 
-    private Func<int, TileUI, bool> RoomBuying;
-
-    public void Awake()
+    private void OnValidate()
     {
-        MoneyCounter.text = Convert.ToString(cost);
+        if (tileUIPrefab)
+        {
+            Awake();
+        }
     }
 
-    public void Init(Func<int, TileUI, bool> room_buying)
+    private void Awake()
+    {
+        roomProperties = tileUIPrefab.TileUnionPrefab.RoomProperties;
+        roomNameText.text = roomProperties.RoomName;
+        moneyText.text = "Money cost: " + Convert.ToString(roomProperties.Cost);
+        waterText.text = "Water: " + Convert.ToString(roomProperties.WaterConsumption);
+        electricityText.text = "Electro: " + Convert.ToString(roomProperties.ElectricityComsumption);
+    }
+
+    public void Init(Func<RoomProperties, RoomInventoryUI, bool> room_buying)
     {
         RoomBuying = room_buying;
     }
 
     public void TryBuyRoom()
     {
-        if (RoomBuying(cost, TileUnionUIPrefab))
+        if (RoomBuying(roomProperties, tileUIPrefab))
         {
             Destroy(gameObject);
         }

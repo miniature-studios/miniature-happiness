@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3198020651115359956}
-  - component: {fileID: 3198020651115359958}
   - component: {fileID: 3198020651115359959}
   m_Layer: 0
   m_Name: BossOffice
@@ -35,20 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3198020651115359958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3198020651115359957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0b06c71e5dba504d8b9b9d0535b396b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ElectricityConsumption: 0
-  WaterConsumption: 0
 --- !u!114 &3198020651115359959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,13 +46,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIPrefab: {fileID: 7606936360430423357, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
-  tiles:
-  - {fileID: 1850657713405631901}
-  - {fileID: 1850657715124660817}
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  roomProperties:
+    RoomName: 
+    Cost: 0
+    WaterConsumption: 0
+    ElectricityComsumption: 0
+  UIPrefab: {fileID: 7606936360430423353, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
+  Tiles:
+  - {fileID: 1850657713405631901}
+  - {fileID: 1850657715124660817}
 --- !u!1001 &3198020650893914602
 PrefabInstance:
   m_ObjectHideFlags: 0

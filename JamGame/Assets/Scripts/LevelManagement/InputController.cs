@@ -2,7 +2,7 @@
 
 public class InputController : MonoBehaviour
 {
-    public void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {

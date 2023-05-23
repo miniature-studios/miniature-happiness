@@ -23,12 +23,13 @@ public class MoveSelectedTileToRayCommand : ICommand
             }
             else
             {
-                direction = Math.Abs(delta.x) > Math.Abs(delta.y)
-                    ? delta.x > 0 ? Direction.Right : Direction.Left
-                    : Math.Abs(delta.x) < Math.Abs(delta.y)
-                    ? delta.y > 0 ? Direction.Up : Direction.Down
-                    : UnityEngine.Random.value > 0.5 ? delta.x > 0
-                    ? Direction.Right : Direction.Left : delta.y > 0 ? Direction.Up : Direction.Down;
+                direction = (Math.Abs(delta.x) > Math.Abs(delta.y), delta.x >= 0, delta.y >= 0) switch
+                {
+                    (true, true, _) => Direction.Up,
+                    (true, false, _) => Direction.Down,
+                    (false, _, true) => Direction.Right,
+                    (false, _, false) => Direction.Left
+                };
             }
             MoveSelectedTileCommand command = new(direction);
             return tile_builder_controller.Execute(command);

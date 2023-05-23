@@ -4,9 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BuilderMatrix", menuName = "Builder/BuilderMatrix", order = 2)]
 public class BuilderMatrix : ScriptableObject
 {
-    [SerializeField] private float selectingPlaneHeight = 1;
+    [SerializeField] private float selectingPlaneHeight;
+    [SerializeField] private int step;
 
-    public int Step = 5;
+    public int Step => step;
 
     public Result<Vector2Int> GetMatrixPosition(Ray ray)
     {

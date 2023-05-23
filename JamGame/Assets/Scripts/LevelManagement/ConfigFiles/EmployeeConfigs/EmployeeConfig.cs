@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-
-public class EmployeeConfig
+﻿public class EmployeeConfig
 {
-    public string EmployeeName;
-    public Profession Profession;
-    public List<Peculiarity> Peculiarities;
-    public EmployeeConfig(string employee_name, Profession profession, List<Peculiarity> peculiarities)
+    public string EmployeeName { get; }
+    public Employee Employee { get; }
+    public EmployeeConfig(Employee employee, string employee_name)
     {
         EmployeeName = employee_name;
-        Profession = profession;
-        Peculiarities = peculiarities;
+        Employee = employee;
     }
 }
 

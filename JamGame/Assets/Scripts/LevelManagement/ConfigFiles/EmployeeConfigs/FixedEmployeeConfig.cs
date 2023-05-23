@@ -1,17 +1,14 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-[CreateAssetMenu(fileName = "FixedEmployeeConfig", menuName = "Level/Employee/FixedEmployeeConfig", order = 0)]
-public class FixedEmployeeConfig : AbstractEmployeeConfig
+public class FixedEmployeeConfig : IEmployeeConfig
 {
     [SerializeField] private string employeeName;
-    [SerializeField] private Profession profession;
-    [SerializeField] private List<Peculiarity> peculiarities;
+    [SerializeField] private Employee employee;
 
-    public override EmployeeConfig GetEmployeeConfig()
+    public EmployeeConfig GetEmployeeConfig()
     {
-        return new EmployeeConfig(employeeName, profession, peculiarities);
+        return new EmployeeConfig(employee, employeeName);
     }
 }

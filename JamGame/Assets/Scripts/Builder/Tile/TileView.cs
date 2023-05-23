@@ -3,27 +3,30 @@ using UnityEngine;
 
 public class TileView : MonoBehaviour
 {
-    [SerializeField] private Material startMaterial;
+    [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material transparentMaterial;
     [SerializeField] private Material errorMaterial;
 
     private Renderer[] renderers;
-    private readonly Dictionary<TileMaterial, Material[]> materailPairs = new();
+    private Dictionary<TileMaterial, Material[]> materialsByState;
 
     public enum TileMaterial
     {
         Default,
-        Transparent,
-        TransparentAndError
+        Selected,
+        SelectedOverlapping
     }
 
     private void Awake()
     {
         SetActiveChilds(transform);
         renderers = GetComponentsInChildren<Renderer>();
-        materailPairs.Add(TileMaterial.Default, new Material[1] { startMaterial });
-        materailPairs.Add(TileMaterial.Transparent, new Material[1] { transparentMaterial });
-        materailPairs.Add(TileMaterial.TransparentAndError, new Material[2] { transparentMaterial, errorMaterial });
+        materialsByState = new()
+        {
+            { TileMaterial.Default, new Material[1] { defaultMaterial } },
+            { TileMaterial.Selected, new Material[1] { transparentMaterial } },
+            { TileMaterial.SelectedOverlapping, new Material[2] { transparentMaterial, errorMaterial } },
+        };
         SetMaterial(TileMaterial.Default);
     }
 
@@ -41,7 +44,7 @@ public class TileView : MonoBehaviour
     {
         foreach (Renderer render in renderers)
         {
-            render.materials = materailPairs[material];
+            render.materials = materialsByState[material];
         }
     }
 }

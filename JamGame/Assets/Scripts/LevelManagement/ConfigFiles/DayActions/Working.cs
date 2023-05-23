@@ -3,12 +3,10 @@ using UnityEngine;
 
 [Serializable]
 [CreateAssetMenu(fileName = "Working", menuName = "Level/DayActions/Working", order = 2)]
-public class Working : DayAction
+public class Working : IDayAction
 {
     [SerializeField] private float workingTime;
-    public override void ReleaseAction(LevelExecutor Level_executor, Action show_end_handler)
-    {
-        throw new NotImplementedException();
-    }
+    public float WorkingTime => workingTime;
+    public Action ActionEnd { get; set; }
 }
 

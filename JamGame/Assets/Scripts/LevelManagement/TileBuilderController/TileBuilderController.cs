@@ -4,21 +4,15 @@ using UnityEngine;
 
 public class TileBuilderController : MonoBehaviour
 {
-    [Header("==== Info Fields ====")]
-    [SerializeField] private string currentValidator;
-
-    [Header("==== Require variables ====")]
-    [SerializeField] private CustomButton buttonCompleteMeeting;
-
-    public TilesPanelController TilesPanelController;
-    public TileBuilder TileBuilder;
-    public Action СompleteMeetingEvent;
+    [SerializeField] private TileBuilder tileBuilder;
+    [SerializeField] private InventoryUIController tilesPanelController;
+    public TileBuilder TileBuilder => tileBuilder;
 
     private IValidator validator = new GameModeValidator();
     private Vector2 previousMousePosition;
     private bool mousePressed = false;
 
-    public UIHider ButtonCompleteMeetingUIHider => buttonCompleteMeeting.UIHider;
+    public event Action BuildedValidatedOffice;
 
     public Result Execute(ICommand command)
     {
@@ -30,8 +24,8 @@ public class TileBuilderController : MonoBehaviour
     {
         validator = gamemode switch
         {
-            Gamemode.GodMode => new GodModeValidator(TileBuilder),
-            Gamemode.Building => new BuildModeValidator(TileBuilder),
+            Gamemode.GodMode => new GodModeValidator(tileBuilder),
+            Gamemode.Building => new BuildModeValidator(tileBuilder),
             Gamemode.Gameing => new GameModeValidator(),
             _ => throw new ArgumentException(),
         };
@@ -39,8 +33,6 @@ public class TileBuilderController : MonoBehaviour
 
     private void Update()
     {
-        currentValidator = validator.GetType().Name;
-
         Vector2 mousePosition = Input.mousePosition;
         Vector2 mouseDelta = mousePosition - previousMousePosition;
         previousMousePosition = mousePosition;
@@ -59,7 +51,7 @@ public class TileBuilderController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            TilesPanelController.DeselectTile(mousePressed);
+            tilesPanelController.DeselectTile(mousePressed);
             mousePressed = false;
             _ = Execute(new CompletePlacingCommand());
         }
@@ -86,26 +78,24 @@ public class TileBuilderController : MonoBehaviour
 
     public void DeleteTile()
     {
-        TileUI destroyed_tile_ui_prefab = null;
+        RoomInventoryUI destroyed_tile_ui_prefab = null;
         DeleteSelectedTileCommand command = new((arg) => destroyed_tile_ui_prefab = arg);
         Result result = Execute(command);
         if (result.Success)
         {
-            _ = TilesPanelController.CreateUIElement(destroyed_tile_ui_prefab);
+            _ = tilesPanelController.CreateUIElement(destroyed_tile_ui_prefab);
         }
     }
 
-    public void TryCompleteMeeting()
+    public void ValidateBuilding()
     {
-        if (TileBuilder.CheckBuildingForConsistance())
+        if (tileBuilder.Validate())
         {
-            buttonCompleteMeeting.UIHider.SetState(UIElementState.Hidden);
-            TilesPanelController.gameObject.SetActive(false);
-            СompleteMeetingEvent?.Invoke();
+            BuildedValidatedOffice();
         }
         else
         {
-            // TODO Show no consistence
+            // TODO Show fail validation
         }
     }
 }

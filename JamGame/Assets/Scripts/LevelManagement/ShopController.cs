@@ -1,40 +1,26 @@
-﻿using Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopController : MonoBehaviour
 {
-    [SerializeField] private TileBuilderController tileBuilderController;
-    [SerializeField] private FinancesController financesController;
+    [SerializeField] private InventoryUIController tilesPanelController;
+    [SerializeField] private Finances financesController;
     [SerializeField] private Transform roomsUIContainer;
-    [SerializeField] private Transform employeeUIContainer;
-    [SerializeField] private CustomButton buttonShopOpen;
+    private Animator shopAnimator;
 
-    public Transform ShopPanel;
+    private void Awake()
+    {
+        shopAnimator = GetComponent<Animator>();
+    }
 
-    public UIHider ButtonShopOpenUIHider => buttonShopOpen.UIHider;
+    public void OpenShop()
+    {
+        shopAnimator.SetBool("Showed", true);
+    }
 
     public void CloseShop()
     {
-        SetShopState(UIElementState.Hidden);
-    }
-    public void OpenShop()
-    {
-        SetShopState(UIElementState.Shown);
-    }
-
-    public void SetShopState(UIElementState ui_element_state)
-    {
-        switch (ui_element_state)
-        {
-            case UIElementState.Shown:
-                ShopPanel.gameObject.SetActive(true);
-                break;
-            default:
-            case UIElementState.Hidden:
-                ShopPanel.gameObject.SetActive(false);
-                break;
-        }
+        shopAnimator.SetBool("Showed", false);
     }
 
     public void SetShopRooms(IEnumerable<RoomConfig> room_configs)
@@ -50,12 +36,12 @@ public class ShopController : MonoBehaviour
         }
     }
 
-    public bool TryBuyRoom(int cost, TileUI tile_ui)
+    public bool TryBuyRoom(RoomProperties roomProporties, RoomInventoryUI tile_ui)
     {
-        if (financesController.MoneyCount - cost > 0)
+        if (financesController.MoneyCount - roomProporties.Cost > 0)
         {
-            financesController.TakeMoney(cost);
-            _ = tileBuilderController.TilesPanelController.CreateUIElement(tile_ui);
+            financesController.TakeMoney(roomProporties.Cost);
+            _ = tilesPanelController.CreateUIElement(tile_ui);
             return true;
         }
         else
@@ -67,7 +53,13 @@ public class ShopController : MonoBehaviour
 
     public void SetShopEmployees(IEnumerable<EmployeeConfig> employee_configs)
     {
+        // TODO
+    }
 
+    public bool TryBuyEmployee(int cost, RoomInventoryUI tile_ui)
+    {
+        // TODO
+        throw new System.NotImplementedException();
     }
 }
 

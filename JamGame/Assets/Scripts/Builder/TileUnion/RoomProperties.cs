@@ -1,7 +1,10 @@
-using UnityEngine;
+﻿using System;
 
-public class RoomProperties : MonoBehaviour
+[Serializable]
+public class RoomProperties
 {
-    public float ElectricityConsumption;
-    public float WaterConsumption;
+    public string RoomName;
+    public int Cost;
+    public int WaterConsumption;
+    public int ElectricityComsumption;
 }

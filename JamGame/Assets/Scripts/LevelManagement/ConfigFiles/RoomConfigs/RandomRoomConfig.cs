@@ -12,11 +12,10 @@ public class RoomWeights
 }
 
 [Serializable]
-[CreateAssetMenu(fileName = "RandomRoomConfig", menuName = "Level/Room/RandomRoomConfig", order = 1)]
-public class RandomRoomConfig : AbstractRoomConfig
+public class RandomRoomConfig : IRoomConfig
 {
     [SerializeField] private List<RoomWeights> roomWeights;
-    public override RoomConfig GetRoomConfig()
+    public RoomConfig GetRoomConfig()
     {
         List<float> list = roomWeights.Select(x => x.Weight).ToList();
         RoomShopUI result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].RoomShopUI;

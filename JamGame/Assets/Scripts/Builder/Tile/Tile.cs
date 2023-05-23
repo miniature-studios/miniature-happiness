@@ -81,7 +81,7 @@ public class Tile : MonoBehaviour
     [SerializeField, Range(0, 3)] private int rotation = 0;
 
     public TileElementsHandler ElementsHandler;
-    public List<WallCollection> Walls = new();
+    public List<WallCollection> RawWalls = new();
     public List<CornerCollection> Corners = new();
     public TileView TileView;
 
@@ -91,7 +91,8 @@ public class Tile : MonoBehaviour
     public Vector2Int Position => position;
     public int Rotation => rotation;
     public IEnumerable<string> Marks => marks;
-    public Dictionary<Direction, List<TileWallType>> WallsDictionary
+
+    private Dictionary<Direction, List<TileWallType>> walls
     {
         get
         {
@@ -139,9 +140,9 @@ public class Tile : MonoBehaviour
             {
                 wallTypeToPlace = wallSolver.ChooseWall(
                     Marks,
-                    WallsDictionary[direction],
+                    walls[direction],
                     outTile.Marks,
-                    outTile.WallsDictionary[direction.GetOpposite()]
+                    outTile.walls[direction.GetOpposite()]
                 );
             }
             if (wallTypeToPlace == null)
@@ -163,7 +164,7 @@ public class Tile : MonoBehaviour
     private WallCollection GetWallCollection(Direction imagine_place)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
-        return Walls.Find(x => x.Place == imagine_place);
+        return RawWalls.Find(x => x.Place == imagine_place);
     }
 
     public void UpdateCorners(Dictionary<Direction, Tile> neighbours)
@@ -176,44 +177,29 @@ public class Tile : MonoBehaviour
             Tile tile3 = neighbours[direction.Rotate90()];
             if (tile1 != null && tile2 != null && tile3 != null)
             {
-                corner_type_to_place = ChooseCorner(new(
+                corner_type_to_place = ChooseCorner(
                     IsWall(direction),
                     tile1.IsWall(direction.Rotate90()),
                     tile2.IsWall(direction.GetOpposite()),
                     tile3.IsWall(direction.RotateMinus90())
-                    ));
+                    );
             }
             GetCornerCollection(direction.Rotate45()).SetCorner(corner_type_to_place);
         }
     }
 
-    private class WallsBools
+    private TileCornerType ChooseCorner(bool wall1, bool wall2, bool wall3, bool wall4)
     {
-        public bool Wall1;
-        public bool Wall2;
-        public bool Wall3;
-        public bool Wall4;
-        public WallsBools(bool wall1, bool wall2, bool wall3, bool wall4)
+        return (wall1, wall2, wall3, wall4) switch
         {
-            Wall1 = wall1;
-            Wall2 = wall2;
-            Wall3 = wall3;
-            Wall4 = wall4;
-        }
-    }
-    private TileCornerType ChooseCorner(WallsBools wallsBools)
-    {
-        return wallsBools.Wall1 == true && wallsBools.Wall4 == true
-            ? TileCornerType.Inside
-            : wallsBools.Wall1 == true && wallsBools.Wall3 == true
-                ? TileCornerType.WallRight
-                : wallsBools.Wall4 == true && wallsBools.Wall2 == true
-                            ? TileCornerType.WallLeft
-                            : wallsBools.Wall2 == true && wallsBools.Wall3 == true
-                                        ? TileCornerType.OutsideMiddle
-                                        : wallsBools.Wall1 == true && wallsBools.Wall2 == true
-                                                    ? TileCornerType.OutsideRight
-                                                    : wallsBools.Wall4 == true && wallsBools.Wall3 == true ? TileCornerType.OutsideLeft : TileCornerType.None;
+            (true, _, _, true) => TileCornerType.Inside,
+            (true, _, true, _) => TileCornerType.WallRight,
+            (_, true, _, true) => TileCornerType.WallLeft,
+            (_, true, true, _) => TileCornerType.OutsideMiddle,
+            (true, true, _, _) => TileCornerType.OutsideRight,
+            (_, _, true, true) => TileCornerType.OutsideLeft,
+            _ => TileCornerType.None,
+        };
     }
 
     private CornerCollection GetCornerCollection(Direction imaginePlace)
@@ -241,11 +227,11 @@ public class Tile : MonoBehaviour
                 break;
             case TileState.Selected:
                 transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
-                TileView.SetMaterial(TileView.TileMaterial.Transparent);
+                TileView.SetMaterial(TileView.TileMaterial.Selected);
                 break;
             case TileState.SelectedAndErrored:
                 transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
-                TileView.SetMaterial(TileView.TileMaterial.TransparentAndError);
+                TileView.SetMaterial(TileView.TileMaterial.SelectedOverlapping);
                 break;
         }
     }
@@ -269,14 +255,14 @@ public class Tile : MonoBehaviour
     private bool IsWall(Direction imagine_place)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
-        WallCollection wall_collection = Walls.Find(x => x.Place == imagine_place);
+        WallCollection wall_collection = RawWalls.Find(x => x.Place == imagine_place);
         return !wall_collection.IsActive(TileWallType.None);
     }
 
     private void CreateWallsCache()
     {
         Dictionary<Direction, List<TileWallType>> list = new();
-        foreach (WallCollection wall in Walls)
+        foreach (WallCollection wall in RawWalls)
         {
             Direction imagine_place = wall.Place;
             Enumerable.Range(0, rotation).ToList().ForEach(arg => imagine_place = imagine_place.Rotate90());

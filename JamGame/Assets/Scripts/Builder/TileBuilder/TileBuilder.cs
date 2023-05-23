@@ -68,7 +68,7 @@ public class TileBuilder : MonoBehaviour
         UpdateAllTiles();
     }
 
-    public bool CheckBuildingForConsistance()
+    public bool Validate()
     {
         // TODO check for consistance
         throw new NotImplementedException();
@@ -103,7 +103,7 @@ public class TileBuilder : MonoBehaviour
         }
     }
 
-    public Result DeleteSelectedTile(out TileUI deleted_tile_ui)
+    public Result DeleteSelectedTile(out RoomInventoryUI deleted_tile_ui)
     {
         if (SelectedTile == null)
         {
@@ -292,13 +292,13 @@ public class TileBuilder : MonoBehaviour
         return tileUnion;
     }
 
-    private TileUI DeleteTile(TileUnion tile_union)
+    private RoomInventoryUI DeleteTile(TileUnion tile_union)
     {
         if (tile_union == null)
         {
             return null;
         }
-        TileUI UIPrefab = tile_union.UIPrefab;
+        RoomInventoryUI UIPrefab = tile_union.UIPrefab;
         DestroyImmediate(tile_union.gameObject);
         RemoveTileFromDictionary(tile_union);
         return UIPrefab;
@@ -306,9 +306,13 @@ public class TileBuilder : MonoBehaviour
 
     public void RemoveTileFromDictionary(TileUnion tile_union)
     {
-        foreach (KeyValuePair<Vector2Int, TileUnion> item in TileUnionDictionary.Where(x => x.Value == tile_union).Distinct().ToList())
+        foreach (KeyValuePair<Vector2Int, TileUnion> item in TileUnionDictionary)
         {
-            _ = TileUnionDictionary.Remove(item.Key);
+            if (item.Value == tile_union)
+            {
+                _ = TileUnionDictionary.Remove(item.Key);
+                break;
+            }
         }
     }
 

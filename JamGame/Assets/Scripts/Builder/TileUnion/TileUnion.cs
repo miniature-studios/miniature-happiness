@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[Serializable]
 [SelectionBase]
-[RequireComponent(typeof(RoomProperties))]
 public class TileUnion : MonoBehaviour
 {
     [SerializeField] private Vector2Int position;
     [SerializeField, Range(0, 3)] private int rotation;
     [SerializeField] private BuilderMatrix builderMatrix;
+    [SerializeField] private RoomProperties roomProperties;
 
-    public TileUI UIPrefab;
+    public RoomProperties RoomProperties => roomProperties;
+
+    public RoomInventoryUI UIPrefab;
     public List<Tile> Tiles = new();
 
     private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration = null;

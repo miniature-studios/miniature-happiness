@@ -1,8 +1,8 @@
 ﻿public class RoomConfig
 {
-    public RoomShopUI RoomShopUI;
-    public RoomConfig(RoomShopUI room_ui)
+    public RoomShopUI RoomShopUI { get; }
+    public RoomConfig(RoomShopUI room_shop_ui)
     {
-        RoomShopUI = room_ui;
+        RoomShopUI = room_shop_ui;
     }
 }

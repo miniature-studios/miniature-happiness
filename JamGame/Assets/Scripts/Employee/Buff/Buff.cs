@@ -13,6 +13,7 @@ public class Buff : ScriptableObject
     {
         get
         {
+            // TODO : refactor
             if (effects == null)
             {
                 effects = new();
