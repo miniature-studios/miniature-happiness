@@ -20,20 +20,19 @@ MonoBehaviour:
   defaultDay:
     rawDayActions:
     - selectedType: DayStart
+      dayStart:
+        morningMoney: 500
       meeting:
         shopEmployees: []
         shopRooms: []
       working:
         workingTime: 0
     - selectedType: Meeting
+      dayStart:
+        morningMoney: 0
       meeting:
         shopEmployees: []
         shopRooms:
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            roomShopUI: {fileID: 4919599710832685324, guid: f577b4ad07466364bb5aa76c838616b4, type: 3}
-          randomRoomConfig:
-            roomWeights: []
         - selectedType: FixedRoomConfig
           fixedRoomConfig:
             roomShopUI: {fileID: 4919599710832685324, guid: c948183e6d43c6b4ba81c523c0b43f3c, type: 3}
@@ -47,12 +46,16 @@ MonoBehaviour:
       working:
         workingTime: 0
     - selectedType: Working
+      dayStart:
+        morningMoney: 0
       meeting:
         shopEmployees: []
         shopRooms: []
       working:
         workingTime: 4
     - selectedType: DayEnd
+      dayStart:
+        morningMoney: 0
       meeting:
         shopEmployees: []
         shopRooms: []

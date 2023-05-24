@@ -1,4 +1,5 @@
 ﻿using Common;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,6 +10,7 @@ public class InventoryUIController : MonoBehaviour, IPointerEnterHandler, IPoint
     [Header("==== Require variables ====")]
     [SerializeField] private TileBuilderController tileBuilderController;
     [SerializeField] private Transform container;
+    [SerializeField] private TMP_Text button_text;
 
     private Animator tilesInventoryAnimator;
 
@@ -20,10 +22,15 @@ public class InventoryUIController : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         tilesInventoryAnimator = GetComponent<Animator>();
     }
-    private void Update()
+
+    private bool inventoryShowed = false;
+    public void InventoryButtonClick()
     {
-        tilesInventoryAnimator.SetBool("IsMouseOver", mouseOverUI);
+        inventoryShowed = !inventoryShowed;
+        tilesInventoryAnimator.SetBool("Showed", inventoryShowed);
+        button_text.text = inventoryShowed ? "Close" : "Open";
     }
+
     private void Start()
     {
         _ = CreateUIElement(testUI);

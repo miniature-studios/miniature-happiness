@@ -22,7 +22,11 @@ public class DayConfig
     {
         get
         {
-            (dayActions ??= new()).AddRange(rawDayActions.Select(x => x.ToDayAction()));
+            if (dayActions == null)
+            {
+                dayActions = new();
+                dayActions.AddRange(rawDayActions.Select(x => x.ToDayAction()));
+            }
             return dayActions.AsReadOnly();
         }
     }

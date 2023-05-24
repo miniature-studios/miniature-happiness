@@ -25,9 +25,9 @@ public class ShopController : MonoBehaviour
 
     public void SetShopRooms(IEnumerable<RoomConfig> room_configs)
     {
-        foreach (GameObject child in roomsUIContainer.transform)
+        foreach (RectTransform child in roomsUIContainer)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
         foreach (RoomConfig config in room_configs)
         {

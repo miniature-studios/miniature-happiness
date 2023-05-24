@@ -25,10 +25,10 @@ public class MoveSelectedTileToRayCommand : ICommand
             {
                 direction = (Math.Abs(delta.x) > Math.Abs(delta.y), delta.x >= 0, delta.y >= 0) switch
                 {
-                    (true, true, _) => Direction.Up,
-                    (true, false, _) => Direction.Down,
-                    (false, _, true) => Direction.Right,
-                    (false, _, false) => Direction.Left
+                    (true, true, _) => Direction.Right,
+                    (true, false, _) => Direction.Left,
+                    (false, _, true) => Direction.Up,
+                    (false, _, false) => Direction.Down
                 };
             }
             MoveSelectedTileCommand command = new(direction);
