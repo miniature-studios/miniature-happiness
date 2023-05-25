@@ -9,6 +9,9 @@ public class Personality : MonoBehaviour
 
     [SerializeField] private List<Quirk> quirks;
 
+    // TODO: Will change when QuirkView will be implemented.
+    public IEnumerable<Quirk> Quirks { get => quirks; }
+
     private void Start()
     {
         Employee employee = GetComponent<Employee>();
