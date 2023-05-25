@@ -1,5 +1,7 @@
 ﻿using Common;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TileBuilderController : MonoBehaviour
@@ -83,19 +85,35 @@ public class TileBuilderController : MonoBehaviour
         Result result = Execute(command);
         if (result.Success)
         {
-            _ = tilesPanelController.CreateUIElement(destroyed_tile_ui_prefab);
+            tilesPanelController.CreateUIElement(destroyed_tile_ui_prefab);
         }
     }
 
+    // TODO as command
     public void ValidateBuilding()
     {
-        if (tileBuilder.Validate())
+        if (tileBuilder.Validate().Success)
         {
             BuildedValidatedOffice();
         }
-        else
+    }
+
+    // TODO as another class
+    public struct OfficeInfo
+    {
+        public int InsideTilesCount;
+        public IEnumerable<RoomProperties> RoomProperties;
+    }
+
+    public OfficeInfo GetOfficeInfo()
+    {
+        return new()
         {
-            // TODO Show fail validation
-        }
+            InsideTilesCount = tileBuilder.GetAllInsideListPositions().Count(),
+            RoomProperties = tileBuilder
+                .GetTileUnionsInPositions(tileBuilder.GetAllInsideListPositions())
+                .Where(x => x.TryGetComponent(out RoomProperties roomProperties))
+                .Select(x => x.GetComponent<RoomProperties>())
+        };
     }
 }

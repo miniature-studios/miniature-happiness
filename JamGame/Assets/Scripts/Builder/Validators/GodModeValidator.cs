@@ -18,7 +18,7 @@ public class GodModeValidator : IValidator
         {
             AddTileToSceneCommand add_command = command as AddTileToSceneCommand;
             TileUnion creatingtile_union = add_command.TilePrefab.GetComponent<TileUnion>();
-            IEnumerable<Vector2Int> inside_list_positions = tileBuilder.GetInsideListPositions();
+            IEnumerable<Vector2Int> inside_list_positions = tileBuilder.GetFreeSpaceInsideListPositions();
             int rotation = 0;
             while (rotation < 4)
             {

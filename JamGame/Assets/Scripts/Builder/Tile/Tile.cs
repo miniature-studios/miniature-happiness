@@ -252,6 +252,20 @@ public class Tile : MonoBehaviour
         CreateWallsCache();
     }
 
+    public IEnumerable<Direction> GetDirectionsWithNoneOrDoor()
+    {
+        foreach (Direction imagine_place in Direction.Up.GetCircle90())
+        {
+            Direction place = imagine_place;
+            Enumerable.Range(0, rotation).ToList().ForEach(x => place = place.RotateMinus90());
+            WallCollection wall_collection = RawWalls.Find(x => x.Place == place);
+            if (wall_collection.IsActive(TileWallType.None) || wall_collection.IsActive(TileWallType.Door))
+            {
+                yield return imagine_place;
+            }
+        }
+    }
+
     private bool IsWall(Direction imagine_place)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());

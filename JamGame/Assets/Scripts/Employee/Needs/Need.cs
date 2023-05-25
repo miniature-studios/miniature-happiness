@@ -45,6 +45,7 @@ public class Need
 
     public float satisfied = 0.0f;
 
+    // TODO: refactor
     [SerializeField]
     [HideInInspector]
     private List<NeedModifiers> registeredModifiers;

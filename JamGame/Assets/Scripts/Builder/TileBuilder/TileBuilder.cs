@@ -68,10 +68,47 @@ public class TileBuilder : MonoBehaviour
         UpdateAllTiles();
     }
 
-    public bool Validate()
+    public Result Validate()
     {
-        // TODO check for consistance
-        throw new NotImplementedException();
+        if (SelectedTile != null)
+        {
+            return new FailResult("Complete placing first");
+        }
+
+        Stack<KeyValuePair<Vector2Int, TileUnion>> points_stack = new(TileUnionDictionary.Where(
+            x => x.Value.IsAllWithMark("door")));
+        List<KeyValuePair<Vector2Int, TileUnion>> tiles_to_check = TileUnionDictionary.Where(
+            x => !x.Value.IsAllWithMark("outside") && !x.Value.IsAllWithMark("freespace")).ToList();
+
+        while (points_stack.Count > 0)
+        {
+            KeyValuePair<Vector2Int, TileUnion> point = points_stack.Pop();
+            foreach (Direction dir in point.Value.GetAccessibleDirectionsFromPosition(point.Key))
+            {
+                List<KeyValuePair<Vector2Int, TileUnion>> near_tiles = new(tiles_to_check.Where(x => x.Key == dir.ToVector2Int() + point.Key));
+                if (near_tiles.Count() > 0)
+                {
+                    foreach (KeyValuePair<Vector2Int, TileUnion> founded_tile in near_tiles)
+                    {
+                        _ = tiles_to_check.Remove(founded_tile);
+                        points_stack.Push(founded_tile);
+                    }
+                }
+            }
+        }
+
+        if (tiles_to_check.Count > 0)
+        {
+            foreach (TileUnion union in tiles_to_check.Select(x => x.Value).Distinct())
+            {
+                union.ShowInvalidPlacing();
+            }
+            return new FailResult("Some tiles not connected");
+        }
+        else
+        {
+            return new SuccessResult();
+        }
     }
 
     public Result SelectTile(TileUnion tile)
@@ -269,9 +306,14 @@ public class TileBuilder : MonoBehaviour
         return TileUnionDictionary.Where(x => positions.Contains(x.Key)).Select(x => x.Value).Distinct();
     }
 
-    public IEnumerable<Vector2Int> GetInsideListPositions()
+    public IEnumerable<Vector2Int> GetFreeSpaceInsideListPositions()
     {
         return TileUnionDictionary.Where(x => x.Value.IsAllWithMark("freespace")).Select(x => x.Key).OrderBy(x => Vector2Int.Distance(x, new(0, 0)));
+    }
+
+    public IEnumerable<Vector2Int> GetAllInsideListPositions()
+    {
+        return TileUnionDictionary.Where(x => !x.Value.IsAllWithMark("outside")).Select(x => x.Key);
     }
 
     public void CreateTileAndBind(TileUnion tile_prefab, Vector2Int position, int rotation)
@@ -284,7 +326,7 @@ public class TileBuilder : MonoBehaviour
         UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
     }
 
-    public TileUnion CreateTile(TileUnion tile_prefab, Vector2Int position, int rotation)
+    private TileUnion CreateTile(TileUnion tile_prefab, Vector2Int position, int rotation)
     {
         TileUnion tileUnion = Instantiate(tile_prefab, rootObject.transform);
         tileUnion.SetPosition(position);
@@ -304,7 +346,7 @@ public class TileBuilder : MonoBehaviour
         return UIPrefab;
     }
 
-    public void RemoveTileFromDictionary(TileUnion tile_union)
+    private void RemoveTileFromDictionary(TileUnion tile_union)
     {
         foreach (KeyValuePair<Vector2Int, TileUnion> item in TileUnionDictionary)
         {

@@ -23,7 +23,7 @@ public class Location : MonoBehaviour
         needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
     }
 
-    [SerializeField] private EmployeeNeeds employeeNeeds;
+    [SerializeField] private EmployeeNeeds employeeNeeds; // TODO refactor
     public void AddEmployee()
     {
         Employee new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);

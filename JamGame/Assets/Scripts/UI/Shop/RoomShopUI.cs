@@ -23,11 +23,17 @@ public class RoomShopUI : MonoBehaviour
 
     private void Awake()
     {
-        roomProperties = tileUIPrefab.TileUnionPrefab.RoomProperties;
-        roomNameText.text = roomProperties.RoomName;
-        moneyText.text = "Money cost: " + Convert.ToString(roomProperties.Cost);
-        waterText.text = "Water: " + Convert.ToString(roomProperties.WaterConsumption);
-        electricityText.text = "Electro: " + Convert.ToString(roomProperties.ElectricityComsumption);
+        if (tileUIPrefab.TileUnionPrefab.TryGetComponent(out roomProperties))
+        {
+            roomNameText.text = roomProperties.RoomName;
+            moneyText.text = "Money cost: " + Convert.ToString(roomProperties.Cost);
+            waterText.text = "Water: " + Convert.ToString(roomProperties.WaterConsumption);
+            electricityText.text = "Electro: " + Convert.ToString(roomProperties.ElectricityComsumption);
+        }
+        else
+        {
+            Debug.LogError($"No room properties in {tileUIPrefab.name}");
+        }
     }
 
     public void Init(Func<RoomProperties, RoomInventoryUI, bool> room_buying)

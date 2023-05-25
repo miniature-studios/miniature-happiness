@@ -1,7 +1,8 @@
 ﻿using System;
+using UnityEngine;
 
 [Serializable]
-public class RoomProperties
+public class RoomProperties : MonoBehaviour
 {
     public string RoomName;
     public int Cost;

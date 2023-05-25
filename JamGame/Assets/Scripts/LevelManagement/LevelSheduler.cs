@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LevelSheduler : MonoBehaviour
 {
-    [SerializeField] private LevelConfig levelConfig;
+    [SerializeField] private LevelActionsConfig levelActionsConfig;
     [SerializeField] private LevelExecutor levelExecuter;
 
     private IEnumerator<DayConfig> dayEnumerator;
@@ -11,15 +11,15 @@ public class LevelSheduler : MonoBehaviour
 
     private void Start()
     {
-        if (levelConfig.Days.Count > 0)
+        if (levelActionsConfig.Days.Count > 0)
         {
-            (dayEnumerator = levelConfig.Days.GetEnumerator()).MoveNext();
-            (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
+            _ = (dayEnumerator = levelActionsConfig.Days.GetEnumerator()).MoveNext();
+            _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
             actionEnumerator.Current.ActionEnd = PlayPlannedActions;
         }
         else
         {
-            (actionEnumerator = levelConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
+            _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
             actionEnumerator.Current.ActionEnd = PlayDefaultDay;
         }
         levelExecuter.ExecuteDayAction(actionEnumerator.Current);
@@ -31,12 +31,12 @@ public class LevelSheduler : MonoBehaviour
         {
             if (dayEnumerator.MoveNext())
             {
-                (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
+                _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
                 actionEnumerator.Current.ActionEnd = PlayPlannedActions;
             }
             else
             {
-                (actionEnumerator = levelConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
+                _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
                 actionEnumerator.Current.ActionEnd = PlayDefaultDay;
             }
         }
@@ -48,6 +48,7 @@ public class LevelSheduler : MonoBehaviour
         if (!actionEnumerator.MoveNext())
         {
             actionEnumerator.Reset();
+            _ = actionEnumerator.MoveNext();
         }
         actionEnumerator.Current.ActionEnd = PlayDefaultDay;
         levelExecuter.ExecuteDayAction(actionEnumerator.Current);

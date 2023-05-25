@@ -5,14 +5,19 @@ using UnityEngine;
 
 public class LevelExecutor : MonoBehaviour
 {
+    [SerializeField] private LevelProportiesConfig levelProportiesConfig;
+
     [SerializeField] private TileBuilderController tileBuilderController;
     [SerializeField] private Finances financesController;
     [SerializeField] private ShopController shopController;
     [SerializeField] private UIController uIController;
+    [SerializeField] private TarrifsCounter tarrifsCounter;
+    [SerializeField] private DailyBillPanel dailyBillPanel;
 
     private void Awake()
     {
         tileBuilderController.BuildedValidatedOffice += CompleteMeeting;
+        dailyBillPanel.continueButtonPress += CompleteDayEnd;
     }
 
     public void ExecuteDayAction(IDayAction day_action)
@@ -33,13 +38,13 @@ public class LevelExecutor : MonoBehaviour
         financesController.AddMoney(day_start.MorningMoney);
         uIController.SetUIState(UIController.UIState.AllHidden);
         uIController.HideTransitionPanel("Day starts early...", 1,
-            () => StartCoroutine(DayStartAnimation(2, day_start.ActionEnd)));
+            () => StartCoroutine(DayStartRoutine(1, day_start.ActionEnd)));
     }
 
-    private IEnumerator DayStartAnimation(float time, Action animation_end)
+    private IEnumerator DayStartRoutine(float time, Action animation_end)
     {
         yield return new WaitForSeconds(time);
-        animation_end();
+        uIController.ShowTransitionPanel("And ended early...", 1, animation_end);
     }
     #endregion
 
@@ -47,21 +52,17 @@ public class LevelExecutor : MonoBehaviour
     private Meeting currentMeeting = null;
     private void Execute(Meeting meeting)
     {
-        uIController.ShowTransitionPanel("And now,starts meeting...", 1, () =>
-        {
-
-            tileBuilderController.ChangeGameMode(Gamemode.Building);
-            shopController.SetShopRooms(meeting.ShopRooms);
-            shopController.SetShopEmployees(meeting.ShopEmployees);
-            uIController.SetUIState(UIController.UIState.ForMeeting);
-            uIController.HideTransitionPanel("And now,starts meeting...", 1, null);
-            currentMeeting = meeting;
-        });
+        tileBuilderController.ChangeGameMode(Gamemode.Building);
+        shopController.SetShopRooms(meeting.ShopRooms);
+        shopController.SetShopEmployees(meeting.ShopEmployees);
+        uIController.SetUIState(UIController.UIState.ForMeeting);
+        uIController.HideTransitionPanel("And now, starts meeting...", 1, null);
+        currentMeeting = meeting;
     }
 
     private void CompleteMeeting()
     {
-        currentMeeting.ActionEnd();
+        uIController.ShowTransitionPanel("Meeting ends...", 1, currentMeeting.ActionEnd);
         currentMeeting = null;
     }
     #endregion
@@ -69,35 +70,34 @@ public class LevelExecutor : MonoBehaviour
     #region Working
     private void Execute(Working working)
     {
-        uIController.ShowTransitionPanel("Working Time!!!", 1, () =>
-        {
-            uIController.SetUIState(UIController.UIState.ForWorking);
-            _ = StartCoroutine(WorkingTime(working.WorkingTime, working.ActionEnd));
-            uIController.HideTransitionPanel("Working Time!!!", 1, null);
-        });
-
+        uIController.SetUIState(UIController.UIState.ForWorking);
+        uIController.HideTransitionPanel("Working Time!!!", 1,
+            () => StartCoroutine(WorkingTime(working.WorkingTime, working.ActionEnd)));
     }
 
     private IEnumerator WorkingTime(float time, Action endWorkingTime)
     {
         yield return new WaitForSeconds(time);
-        endWorkingTime();
+        uIController.ShowTransitionPanel("Working time ends.", 1, endWorkingTime);
     }
     #endregion
 
     #region Day End
-    private IEnumerator DayEndAnimation(float time, Action animation_end)
-    {
-        yield return new WaitForSeconds(time);
-        animation_end();
-    }
-
+    private DayEnd currentDayEnd = null;
     private void Execute(DayEnd day_end)
     {
         uIController.SetUIState(UIController.UIState.AllHidden);
-        _ = StartCoroutine(DayEndAnimation(2,
-            () => uIController.ShowTransitionPanel("And day ends...", 1, day_end.ActionEnd)
-            ));
+        Check check = tarrifsCounter.GetCheck(levelProportiesConfig.Tariffs);
+        financesController.TakeMoney(check.Summ);
+        uIController.ShowDailyBillPanel(check);
+        uIController.HideTransitionPanel("And day ends....", 1, null);
+        currentDayEnd = day_end;
+    }
+    private void CompleteDayEnd()
+    {
+        uIController.HideDailyBillPanel();
+        uIController.ShowTransitionPanel("And day ended.", 1, currentDayEnd.ActionEnd);
+        currentMeeting = null;
     }
     #endregion
 }

@@ -58,7 +58,7 @@ public class SerializedEffectDrawer : PropertyDrawer
         float height = 0.0f;
         if (selected_type != "")
         {
-            var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+            SerializedProperty typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
             height = EditorGUI.GetPropertyHeight(typed_prop);
         }
         return EditorGUIUtility.singleLineHeight + height;

@@ -41,7 +41,7 @@ public class ShopController : MonoBehaviour
         if (financesController.MoneyCount - roomProporties.Cost > 0)
         {
             financesController.TakeMoney(roomProporties.Cost);
-            _ = tilesPanelController.CreateUIElement(tile_ui);
+            tilesPanelController.CreateUIElement(tile_ui);
             return true;
         }
         else

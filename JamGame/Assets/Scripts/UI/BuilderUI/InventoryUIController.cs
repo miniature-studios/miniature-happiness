@@ -33,21 +33,16 @@ public class InventoryUIController : MonoBehaviour, IPointerEnterHandler, IPoint
 
     private void Start()
     {
-        _ = CreateUIElement(testUI);
+        CreateUIElement(testUI);
     }
 
-    public RoomInventoryUI CreateUIElement(RoomInventoryUI ui_prefab)
+    public void CreateUIElement(RoomInventoryUI ui_prefab)
     {
         RoomInventoryUI UiElement = Instantiate(ui_prefab, container);
         RoomInventoryUI.InitAnsver ansver = UiElement.Init(MouseUIClick);
         if (ansver.Merged)
         {
-            Destroy(UiElement);
-            return ansver.MergedTo;
-        }
-        else
-        {
-            return UiElement;
+            Destroy(UiElement.gameObject);
         }
     }
 

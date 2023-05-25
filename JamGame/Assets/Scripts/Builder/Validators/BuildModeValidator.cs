@@ -18,7 +18,7 @@ public class BuildModeValidator : IValidator
         {
             AddTileToSceneCommand add_command = command as AddTileToSceneCommand;
             TileUnion creatingtile_union = add_command.TilePrefab.GetComponent<TileUnion>();
-            IEnumerable<Vector2Int> inside_list_positions = tileBuilder.GetInsideListPositions();
+            IEnumerable<Vector2Int> inside_list_positions = tileBuilder.GetFreeSpaceInsideListPositions();
 
             Vector2Int picked_position;
             Result<Vector2Int> result = tileBuilder.BuilderMatrix.GetMatrixPosition(add_command.Ray);

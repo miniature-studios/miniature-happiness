@@ -48,11 +48,6 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  roomProperties:
-    RoomName: 
-    Cost: 0
-    WaterConsumption: 0
-    ElectricityComsumption: 0
   UIPrefab: {fileID: 0}
   Tiles:
   - {fileID: 8374785168588562266}
@@ -106,6 +101,14 @@ PrefabInstance:
     - target: {fileID: 8134398512049564712, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8134398512049564714, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
+      propertyPath: marks.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8134398512049564714, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
+      propertyPath: marks.Array.data[2]
+      value: door
       objectReference: {fileID: 0}
     - target: {fileID: 8134398512049564719, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
       propertyPath: m_Name

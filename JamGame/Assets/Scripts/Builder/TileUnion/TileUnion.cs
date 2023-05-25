@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,9 +11,6 @@ public class TileUnion : MonoBehaviour
     [SerializeField] private Vector2Int position;
     [SerializeField, Range(0, 3)] private int rotation;
     [SerializeField] private BuilderMatrix builderMatrix;
-    [SerializeField] private RoomProperties roomProperties;
-
-    public RoomProperties RoomProperties => roomProperties;
 
     public RoomInventoryUI UIPrefab;
     public List<Tile> Tiles = new();
@@ -135,6 +133,29 @@ public class TileUnion : MonoBehaviour
 
     public void CancelSelecting()
     {
+        foreach (Tile tile in Tiles)
+        {
+            tile.SetTileState(Tile.TileState.Normal);
+        }
+    }
+
+    public IEnumerable<Direction> GetAccessibleDirectionsFromPosition(Vector2Int position)
+    {
+        return Tiles.Find(x => x.Position == position - this.position).GetDirectionsWithNoneOrDoor();
+    }
+
+    public void ShowInvalidPlacing()
+    {
+        foreach (Tile tile in Tiles)
+        {
+            tile.SetTileState(Tile.TileState.SelectedAndErrored);
+        }
+        _ = StartCoroutine(ShowInvalidPlacingRoutine());
+    }
+
+    private IEnumerator ShowInvalidPlacingRoutine()
+    {
+        yield return new WaitForSeconds(1);
         foreach (Tile tile in Tiles)
         {
             tile.SetTileState(Tile.TileState.Normal);

@@ -13,6 +13,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Animator transitionPanelAnimator;
     [SerializeField] private Animator inventoryButtonAnimator;
     [SerializeField] private TMP_Text transitionPanelText;
+    [SerializeField] private DailyBillPanel dailyBillPanel;
 
     private UIState uIState = UIState.AllHidden;
 
@@ -59,6 +60,17 @@ public class UIController : MonoBehaviour
             case UIState.ForMeeting: ShowForMeeting(); break;
             case UIState.ForWorking: ShowForWorking(); break;
         }
+    }
+
+    public void ShowDailyBillPanel(Check check)
+    {
+        dailyBillPanel.gameObject.SetActive(true);
+        dailyBillPanel.ShowDailyBill(check);
+    }
+
+    public void HideDailyBillPanel()
+    {
+        dailyBillPanel.gameObject.SetActive(false);
     }
 
     private void HideAllUI()
