@@ -1,11 +1,14 @@
+using System;
 using UnityEngine;
 
-public class ExtendedEmployeeInfoOverlay : MonoBehaviour, IOverlay
+[Serializable]
+public class ExtendedEmployeeInfoOverlay : IOverlay
 {
-    // TODO: template of UI for employee?
+    [SerializeField] GameObject uiPrefab;
+    public GameObject UIPrefab => uiPrefab;
 
-    public void Activate(Location location)
+    public void Activate(IOverlayManager overlay_manager)
     {
-        location.ApplyOverlay(this);
+        overlay_manager.ApplyOverlay(this);
     }
 }

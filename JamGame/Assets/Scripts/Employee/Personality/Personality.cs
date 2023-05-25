@@ -4,7 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Employee))]
 public class Personality : MonoBehaviour
 {
-    [SerializeField] private new string name;
+    [SerializeField] private string _name;
+    public string Name => _name;
+
     [SerializeField] private List<Quirk> quirks;
 
     private void Start()
