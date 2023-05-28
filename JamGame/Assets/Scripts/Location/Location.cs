@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Location : MonoBehaviour
@@ -18,7 +17,6 @@ public class Location : MonoBehaviour
         needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
     }
 
-    [SerializeField] private EmployeeNeeds employeeNeeds;
     public void AddEmployee()
     {
         Employee new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
