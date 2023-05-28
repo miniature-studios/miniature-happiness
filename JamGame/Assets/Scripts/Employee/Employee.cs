@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -83,6 +84,8 @@ public class Employee : MonoBehaviour
     }
 
     [SerializeField] private List<AppliedBuff> appliedBuffs = new();
+    // TODO: Will change when BuffView will be implemented.
+    public IEnumerable<Buff> Buffs { get => appliedBuffs.Select(buff => buff.Buff); }
 
     private BuffsNeedModifiersPool buffsNeedModifiers;
 

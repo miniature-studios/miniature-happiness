@@ -25,4 +25,9 @@ public class Buff : ScriptableObject
             return effects.AsReadOnly();
         }
     }
+
+    // TODO: Move to BuffView
+    // TODO: Change to Image
+    [SerializeField] string _name;
+    public string Name => _name;
 }

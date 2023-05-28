@@ -1,4 +1,5 @@
+[InterfaceEditor]
 public interface IOverlay
 {
-    void Activate(Location location);
+    void Activate(IOverlayManager overlay_manager);
 }

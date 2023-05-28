@@ -29,7 +29,7 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
     private Employee employee;
 
     [SerializeField] private List<StressStage> stages;
-    private int currentStage = 0;
+    private int currentStage = -1;
     private Buff currentBuff;
 
     [SerializeField] private List<StressByNeedDissatisfactionWithNeedType> configRaw;
