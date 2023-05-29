@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 
-public class StressOverlay : MonoBehaviour, IOverlay
+[Serializable]
+public class StressOverlay : IOverlay
 {
     [SerializeField] private Color minimalStressColor;
     [SerializeField] private float minimalStressBound;
@@ -14,8 +16,8 @@ public class StressOverlay : MonoBehaviour, IOverlay
     public Color MaximalStressColor => maximalStressColor;
     public float MaximalStressBound => maximalStressBound;
 
-    public void Activate(Location location)
+    public void Activate(IOverlayManager overlay_manager)
     {
-        location.ApplyOverlay(this);
+        overlay_manager.ApplyOverlay(this);
     }
 }
