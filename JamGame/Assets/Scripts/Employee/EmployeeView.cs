@@ -10,6 +10,17 @@ public partial class EmployeeView : MonoBehaviour
         employee = GetComponent<Employee>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
+
+    void Update()
+    {
+        UpdateStressOverlay();
+    }
+
+    public void RevertOverlays()
+    {
+        RevertStressOverlay();
+        RevertExtendedInfoOverlay();
+    }
 }
 
 [RequireComponent(typeof(MeshRenderer))]
@@ -17,36 +28,57 @@ public partial class EmployeeView : IOverlayRenderer<StressOverlay>
 {
     private MeshRenderer meshRenderer;
 
+    StressOverlay appliedStressOverlay;
+
     public void ApplyOverlay(StressOverlay overlay)
     {
+        appliedStressOverlay = overlay;
+    }
+
+    void UpdateStressOverlay()
+    {
+        if (appliedStressOverlay == null)
+            return;
+
         float normalized_stress = employee.Stress.Value;
 
-        normalized_stress = (normalized_stress - overlay.MinimalStressBound)
-            / (overlay.MaximalStressBound - overlay.MinimalStressBound);
+        normalized_stress = (normalized_stress - appliedStressOverlay.MinimalStressBound)
+            / (appliedStressOverlay.MaximalStressBound - appliedStressOverlay.MinimalStressBound);
         normalized_stress = Mathf.Clamp01(normalized_stress);
 
         meshRenderer.materials[0].color = Color.Lerp(
-            overlay.MinimalStressColor,
-            overlay.MaximalStressColor,
+            appliedStressOverlay.MinimalStressColor,
+            appliedStressOverlay.MaximalStressColor,
             normalized_stress
         );
     }
 
-    public void RevertOverlay(StressOverlay overlay)
+    public void RevertStressOverlay()
     {
+        appliedStressOverlay = null;
         meshRenderer.materials[0].color = Color.white;
     }
 }
 
 public partial class EmployeeView : IOverlayRenderer<ExtendedEmployeeInfoOverlay>
 {
+    GameObject overlayUI;
+
     public void ApplyOverlay(ExtendedEmployeeInfoOverlay overlay)
     {
+        if(overlayUI == null)
+        {
+            overlayUI = Instantiate(overlay.UIPrefab, transform, false);
+        }
 
+        overlayUI.SetActive(true);
     }
 
-    public void RevertOverlay(ExtendedEmployeeInfoOverlay overlay)
+    public void RevertExtendedInfoOverlay()
     {
+        if (overlayUI == null)
+            return;
 
+        overlayUI.SetActive(false);
     }
 }
