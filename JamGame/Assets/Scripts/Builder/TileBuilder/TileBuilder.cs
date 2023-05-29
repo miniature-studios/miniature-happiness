@@ -31,6 +31,7 @@ public partial class TileBuilder : MonoBehaviour
                 }
             }
         }
+        CreateNormalBuilding(); // DELETE ME
         UpdateAllTiles();
     }
 
@@ -62,7 +63,7 @@ public partial class TileBuilder : MonoBehaviour
         Stack<KeyValuePair<Vector2Int, TileUnion>> points_stack = new(TileUnionDictionary.Where(
             x => x.Value.IsAllWithMark("door")));
         List<KeyValuePair<Vector2Int, TileUnion>> tiles_to_check = TileUnionDictionary.Where(
-            x => !x.Value.IsAllWithMark("outside") && !x.Value.IsAllWithMark("freespace")).ToList();
+            x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("freespace")).ToList();
 
         while (points_stack.Count > 0)
         {
@@ -297,7 +298,7 @@ public partial class TileBuilder : MonoBehaviour
 
     public IEnumerable<Vector2Int> GetAllInsideListPositions()
     {
-        return TileUnionDictionary.Where(x => !x.Value.IsAllWithMark("outside")).Select(x => x.Key);
+        return TileUnionDictionary.Where(x => !x.Value.IsAllWithMark("Outside")).Select(x => x.Key);
     }
 
     public void CreateTileAndBind(TileUnion tile_prefab, Vector2Int position, int rotation)

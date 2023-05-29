@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3198020651115359956}
   - component: {fileID: 3198020651115359959}
+  - component: {fileID: 7760471442925452505}
+  - component: {fileID: 3471307561655678767}
   m_Layer: 0
   m_Name: BossOffice
   m_TagString: Untagged
@@ -49,15 +51,38 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  roomProperties:
-    RoomName: 
-    Cost: 0
-    WaterConsumption: 0
-    ElectricityComsumption: 0
   UIPrefab: {fileID: 7606936360430423353, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
   Tiles:
   - {fileID: 1850657713405631901}
   - {fileID: 1850657715124660817}
+--- !u!114 &7760471442925452505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198020651115359957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 666
+  waterConsumption: 0
+  electricityComsumption: 0
+--- !u!114 &3471307561655678767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198020651115359957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Boss Room
 --- !u!1001 &3198020650893914602
 PrefabInstance:
   m_ObjectHideFlags: 0

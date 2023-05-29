@@ -29,9 +29,9 @@ public class WallSolver : ScriptableObject
             if (
                 !(my_marks.Contains("freespace") || out_marks.Contains("freespace"))
                 &&
-                !(my_marks.Contains("outside") || out_marks.Contains("outside"))
+                !(my_marks.Contains("Outside") || out_marks.Contains("Outside"))
                 &&
-                (my_marks.Contains("corridor") || out_marks.Contains("corridor"))
+                (my_marks.Contains("Corridor") || out_marks.Contains("Corridor"))
                 )
             {
                 foreach (TileWallType iterator in ForSameTilesPriorityQueueForCoridoor)

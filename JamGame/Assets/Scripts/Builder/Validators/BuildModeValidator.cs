@@ -67,7 +67,7 @@ public class BuildModeValidator : IValidator
         {
             return select_command.Tile == null
                 ? new FailResult("No hits")
-                : select_command.Tile.IsAllWithMark("immutable")
+                : select_command.Tile.IsAllWithMark("Immutable")
                 ? new FailResult("Immutable Tile")
                 : select_command.Tile.IsAllWithMark("freespace") ? new FailResult("Free space Tile") : new SuccessResult();
         }
@@ -84,7 +84,7 @@ public class BuildModeValidator : IValidator
 
             Vector2Int new_union_position = tileBuilder.SelectedTile.Position + move_command.Direction.Value.ToVector2Int();
             IEnumerable<Vector2Int> newPositions = tileBuilder.SelectedTile.GetImaginePlaces(new_union_position, tileBuilder.SelectedTile.Rotation);
-            return !tileBuilder.GetTileUnionsInPositions(newPositions).All(x => !x.IsAllWithMark("outside"))
+            return !tileBuilder.GetTileUnionsInPositions(newPositions).All(x => !x.IsAllWithMark("Outside"))
                 ? new FailResult("Can not move outside")
                 : new SuccessResult();
         }
@@ -95,7 +95,7 @@ public class BuildModeValidator : IValidator
                 return new FailResult("Not selected Tile");
             }
             IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(tileBuilder.SelectedTile.Position, tileBuilder.SelectedTile.Rotation + rotate_command.Direction.ToInt());
-            return !tileBuilder.GetTileUnionsInPositions(newPosition).All(x => !x.IsAllWithMark("outside"))
+            return !tileBuilder.GetTileUnionsInPositions(newPosition).All(x => !x.IsAllWithMark("Outside"))
                 ? new FailResult("Can not rotate into outside")
                 : new SuccessResult();
         }

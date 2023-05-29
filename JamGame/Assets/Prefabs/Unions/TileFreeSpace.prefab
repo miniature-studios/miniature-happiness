@@ -878,6 +878,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6867066097170886031}
   - component: {fileID: 6867066097170886030}
+  - component: {fileID: 4917616759478488844}
+  - component: {fileID: 6612249543558426817}
   m_Layer: 0
   m_Name: TileFreeSpace
   m_TagString: Untagged
@@ -916,9 +918,37 @@ MonoBehaviour:
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  UIPrefab: {fileID: 0}
+  UIPrefab: {fileID: 7606936360430423353, guid: 32858c7307f455d48a4957f9ea2f9eb6, type: 3}
   Tiles:
   - {fileID: 7469511929702345568}
+--- !u!114 &4917616759478488844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867066097170886016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 0
+  waterConsumption: 0
+  electricityComsumption: 0
+--- !u!114 &6612249543558426817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6867066097170886016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Free Space
 --- !u!1 &6940623351037495327
 GameObject:
   m_ObjectHideFlags: 0

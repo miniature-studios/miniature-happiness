@@ -6,6 +6,8 @@ using System.Linq;
 using UnityEngine;
 
 [SelectionBase]
+[RequireComponent(typeof(RoomProperties))]
+[RequireComponent(typeof(RoomViewProperties))]
 public class TileUnion : MonoBehaviour
 {
     [SerializeField] private Vector2Int position;

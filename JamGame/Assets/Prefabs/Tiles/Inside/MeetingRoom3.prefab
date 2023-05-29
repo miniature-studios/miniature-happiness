@@ -355,7 +355,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!65 &8535002818117319685
@@ -370,7 +370,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 5, y: 0.2, z: 5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &3877456016379751543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,104 +383,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5468c1783e6285d46913079e510b080c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elementsHandler: {fileID: 11400000, guid: 894f8a49ac6e8e64793e77c2a58c0cb9, type: 2}
-  walls:
-  - Place: 0
-    Handlers:
-    - Type: 1
-      Prefab: {fileID: 2657999672957252410}
-    - Type: 0
-      Prefab: {fileID: 8207545896488487442}
-    - Type: 2
-      Prefab: {fileID: 9115617611989877708}
-    - Type: 3
-      Prefab: {fileID: 4897538108576787317}
-  - Place: 2
-    Handlers:
-    - Type: 1
-      Prefab: {fileID: 381042331909524452}
-    - Type: 0
-      Prefab: {fileID: 499281229568130213}
-  - Place: 6
-    Handlers:
-    - Type: 3
-      Prefab: {fileID: 7661649877017417793}
-  - Place: 4
-    Handlers:
-    - Type: 3
-      Prefab: {fileID: 968330319560456564}
-  corners:
-  - Place: 1
-    Handlers:
-    - Type: 0
-      Prefab: {fileID: 5722074981537684448}
-    - Type: 1
-      Prefab: {fileID: 3427856086831812968}
-    - Type: 2
-      Prefab: {fileID: 6082115965722508309}
-    - Type: 3
-      Prefab: {fileID: 3584291813249308380}
-    - Type: 4
-      Prefab: {fileID: 5084266101323012868}
-    - Type: 5
-      Prefab: {fileID: 1517477670134180717}
-    - Type: 6
-      Prefab: {fileID: 4707850820216796728}
-  - Place: 3
-    Handlers:
-    - Type: 0
-      Prefab: {fileID: 4189746148053330662}
-    - Type: 1
-      Prefab: {fileID: 6247248297181508935}
-    - Type: 2
-      Prefab: {fileID: 7651380919067182757}
-    - Type: 3
-      Prefab: {fileID: 1935521690720358628}
-    - Type: 4
-      Prefab: {fileID: 208687037542810086}
-    - Type: 5
-      Prefab: {fileID: 5871637773245138323}
-    - Type: 6
-      Prefab: {fileID: 4998351260251041456}
-  - Place: 5
-    Handlers:
-    - Type: 0
-      Prefab: {fileID: 1975433888071191892}
-    - Type: 1
-      Prefab: {fileID: 2958994953427133020}
-    - Type: 2
-      Prefab: {fileID: 842895240563953073}
-    - Type: 3
-      Prefab: {fileID: 1164742271861950363}
-    - Type: 4
-      Prefab: {fileID: 610778578336454310}
-    - Type: 5
-      Prefab: {fileID: 4333279184033136250}
-    - Type: 6
-      Prefab: {fileID: 6276478968142654295}
-  - Place: 7
-    Handlers:
-    - Type: 0
-      Prefab: {fileID: 2473681625134636954}
-    - Type: 1
-      Prefab: {fileID: 546812191350528056}
-    - Type: 2
-      Prefab: {fileID: 8829792503454702735}
-    - Type: 3
-      Prefab: {fileID: 3231855331511769345}
-    - Type: 4
-      Prefab: {fileID: 7433865329271088041}
-    - Type: 5
-      Prefab: {fileID: 3688882675892663069}
-    - Type: 6
-      Prefab: {fileID: 178080997870958806}
-  tileView: {fileID: 5222350865024239130}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
-  - BossOffice
+  - Meeting Room
+  - Immutable
   position: {x: 0, y: 0}
   rotation: 0
+  ElementsHandler: {fileID: 11400000, guid: 8159d03eb68a40649a07d55f88732e9c, type: 2}
+  RawWalls: []
+  Corners: []
+  TileView: {fileID: 5222350865024239130}
 --- !u!1 &578897160990438865
 GameObject:
   m_ObjectHideFlags: 0
