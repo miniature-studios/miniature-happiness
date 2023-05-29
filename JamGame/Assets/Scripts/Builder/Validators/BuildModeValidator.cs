@@ -14,9 +14,12 @@ public class BuildModeValidator : IValidator
 
     public Result ValidateCommand(ICommand command)
     {
-        if (command is AddTileToSceneCommand)
+        if (command is CompletePlacingCommand or DeleteSelectedTileCommand or ValidateBuildingCommand)
         {
-            AddTileToSceneCommand add_command = command as AddTileToSceneCommand;
+            return new SuccessResult();
+        }
+        if (command is AddTileToSceneCommand add_command)
+        {
             TileUnion creatingtile_union = add_command.TilePrefab.GetComponent<TileUnion>();
             IEnumerable<Vector2Int> inside_list_positions = tileBuilder.GetFreeSpaceInsideListPositions();
 
@@ -60,48 +63,38 @@ public class BuildModeValidator : IValidator
                 return new FailResult("Cannot place, not enough free place");
             }
         }
-        if (command is SelectTileCommand)
+        if (command is SelectTileCommand select_command)
         {
-            SelectTileCommand select_command = command as SelectTileCommand;
             return select_command.Tile == null
                 ? new FailResult("No hits")
                 : select_command.Tile.IsAllWithMark("immutable")
                 ? new FailResult("Immutable Tile")
                 : select_command.Tile.IsAllWithMark("freespace") ? new FailResult("Free space Tile") : new SuccessResult();
         }
-        if (command is MoveSelectedTileToRayCommand)
-        {
-            return tileBuilder.SelectedTile == null ? new FailResult("Not selected Tile") : new SuccessResult();
-        }
-        if (command is MoveSelectedTileCommand)
+        if (command is MoveSelectedTileCommand move_command)
         {
             if (tileBuilder.SelectedTile == null)
             {
                 return new FailResult("Not selected Tile");
             }
-            MoveSelectedTileCommand move_command = command as MoveSelectedTileCommand;
-            Vector2Int new_union_position = tileBuilder.SelectedTile.Position + move_command.Direction.ToVector2Int();
+            if (move_command.Direction == null)
+            {
+                return new FailResult("Null direction");
+            }
+
+            Vector2Int new_union_position = tileBuilder.SelectedTile.Position + move_command.Direction.Value.ToVector2Int();
             IEnumerable<Vector2Int> newPositions = tileBuilder.SelectedTile.GetImaginePlaces(new_union_position, tileBuilder.SelectedTile.Rotation);
             return !tileBuilder.GetTileUnionsInPositions(newPositions).All(x => !x.IsAllWithMark("outside"))
                 ? new FailResult("Can not move outside")
                 : new SuccessResult();
         }
-        if (command is CompletePlacingCommand)
-        {
-            return new SuccessResult();
-        }
-        if (command is DeleteSelectedTileCommand)
-        {
-            return new SuccessResult();
-        }
-        if (command is RotateSelectedTileCommand)
+        if (command is RotateSelectedTileCommand rotate_command)
         {
             if (tileBuilder.SelectedTile == null)
             {
                 return new FailResult("Not selected Tile");
             }
-            RotateSelectedTileCommand rotate_command = command as RotateSelectedTileCommand;
-            IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(tileBuilder.SelectedTile.Position, tileBuilder.SelectedTile.Rotation + rotate_command.Direction.GetIntRotationValue());
+            IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(tileBuilder.SelectedTile.Position, tileBuilder.SelectedTile.Rotation + rotate_command.Direction.ToInt());
             return !tileBuilder.GetTileUnionsInPositions(newPosition).All(x => !x.IsAllWithMark("outside"))
                 ? new FailResult("Can not rotate into outside")
                 : new SuccessResult();

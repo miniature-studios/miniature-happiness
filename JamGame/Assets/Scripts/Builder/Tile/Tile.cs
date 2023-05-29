@@ -1,6 +1,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using UnityEngine;
 
@@ -16,26 +17,11 @@ public class WallCollection
 {
     public Direction Place;
     public List<WallPrefabHandler> Handlers;
-
+    public TileWallType ActiveWallType { get; private set; }
     public void SetWall(TileWallType type)
     {
-        foreach (WallPrefabHandler handler in Handlers)
-        {
-            if (handler.Type == type)
-            {
-                handler.Prefab.SetActive(true);
-            }
-            else
-            {
-                handler.Prefab.SetActive(false);
-            }
-        }
-    }
-
-    public bool IsActive(TileWallType tile_wall_type)
-    {
-        return Handlers.Find(x => x.Type == tile_wall_type) != null
-            && Handlers.Find(x => x.Type == tile_wall_type).Prefab.activeSelf;
+        ActiveWallType = type;
+        Handlers.ForEach(x => x.Prefab.SetActive(x.Type == type));
     }
 }
 
@@ -54,17 +40,7 @@ public class CornerCollection
 
     public void SetCorner(TileCornerType type)
     {
-        foreach (CornerPrefabHandler handler in Handlers)
-        {
-            if (handler.Type == type)
-            {
-                handler.Prefab.SetActive(true);
-            }
-            else
-            {
-                handler.Prefab.SetActive(false);
-            }
-        }
+        Handlers.ForEach(x => x.Prefab.SetActive(x.Type == type));
     }
 }
 
@@ -177,20 +153,26 @@ public class Tile : MonoBehaviour
             Tile tile3 = neighbours[direction.Rotate90()];
             if (tile1 != null && tile2 != null && tile3 != null)
             {
-                corner_type_to_place = ChooseCorner(
-                    IsWall(direction),
-                    tile1.IsWall(direction.Rotate90()),
-                    tile2.IsWall(direction.GetOpposite()),
-                    tile3.IsWall(direction.RotateMinus90())
-                    );
+                corner_type_to_place = ChooseCorner(new TileWallType[] {
+                    GetActiveWallType(direction),
+                    tile1.GetActiveWallType(direction.Rotate90()),
+                    tile2.GetActiveWallType(direction.GetOpposite()),
+                    tile3.GetActiveWallType(direction.RotateMinus90())
+                });
             }
             GetCornerCollection(direction.Rotate45()).SetCorner(corner_type_to_place);
         }
     }
 
-    private TileCornerType ChooseCorner(bool wall1, bool wall2, bool wall3, bool wall4)
+    // Walls means:
+    // 0 - own left wall
+    // 1 - left neighbour up wall
+    // 2 - left up neighbour right wall
+    // 3 - up neigbour down wall
+    private TileCornerType ChooseCorner(TileWallType[] walls)
     {
-        return (wall1, wall2, wall3, wall4) switch
+        Contract.Requires(walls.Length == 4); // HOW
+        return (walls[0].IsWall(), walls[1].IsWall(), walls[2].IsWall(), walls[3].IsWall()) switch
         {
             (true, _, _, true) => TileCornerType.Inside,
             (true, _, true, _) => TileCornerType.WallRight,
@@ -223,15 +205,15 @@ public class Tile : MonoBehaviour
             default:
             case TileState.Normal:
                 transform.position = new Vector3(transform.position.x, unselectedYPosition, transform.position.z);
-                TileView.SetMaterial(TileView.TileMaterial.Default);
+                TileView.SetMaterial(TileView.State.Default);
                 break;
             case TileState.Selected:
                 transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
-                TileView.SetMaterial(TileView.TileMaterial.Selected);
+                TileView.SetMaterial(TileView.State.Selected);
                 break;
             case TileState.SelectedAndErrored:
                 transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
-                TileView.SetMaterial(TileView.TileMaterial.SelectedOverlapping);
+                TileView.SetMaterial(TileView.State.SelectedOverlapping);
                 break;
         }
     }
@@ -252,25 +234,24 @@ public class Tile : MonoBehaviour
         CreateWallsCache();
     }
 
-    public IEnumerable<Direction> GetDirectionsWithNoneOrDoor()
+    public IEnumerable<Direction> GetPassableDirections()
     {
         foreach (Direction imagine_place in Direction.Up.GetCircle90())
         {
             Direction place = imagine_place;
             Enumerable.Range(0, rotation).ToList().ForEach(x => place = place.RotateMinus90());
-            WallCollection wall_collection = RawWalls.Find(x => x.Place == place);
-            if (wall_collection.IsActive(TileWallType.None) || wall_collection.IsActive(TileWallType.Door))
+            if (RawWalls.Find(x => x.Place == place).ActiveWallType.IsPassable())
             {
                 yield return imagine_place;
             }
         }
     }
 
-    private bool IsWall(Direction imagine_place)
+    private TileWallType GetActiveWallType(Direction imagine_place)
     {
         Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
         WallCollection wall_collection = RawWalls.Find(x => x.Place == imagine_place);
-        return !wall_collection.IsActive(TileWallType.None);
+        return wall_collection.ActiveWallType;
     }
 
     private void CreateWallsCache()

@@ -80,15 +80,6 @@ namespace Common
         {
             return (int)dir * 45;
         }
-        public static int GetIntRotationValue(this Direction dir)
-        {
-            return dir switch
-            {
-                Direction.Right => 1,
-                Direction.Left => -1,
-                _ => 0,
-            };
-        }
         public static List<Direction> GetCircle90(this Direction dir)
         {
             List<Direction> list = new();

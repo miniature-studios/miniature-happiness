@@ -15,42 +15,39 @@ public class LevelSheduler : MonoBehaviour
         {
             _ = (dayEnumerator = levelActionsConfig.Days.GetEnumerator()).MoveNext();
             _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
-            actionEnumerator.Current.ActionEnd = PlayPlannedActions;
+            levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayPlannedActions);
         }
         else
         {
             _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
-            actionEnumerator.Current.ActionEnd = PlayDefaultDay;
+            levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayDefaultDay);
         }
-        levelExecuter.ExecuteDayAction(actionEnumerator.Current);
     }
 
-    public void PlayPlannedActions()
+    private void PlayPlannedActions()
     {
         if (!actionEnumerator.MoveNext())
         {
             if (dayEnumerator.MoveNext())
             {
                 _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
-                actionEnumerator.Current.ActionEnd = PlayPlannedActions;
+                levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayPlannedActions);
             }
             else
             {
                 _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
-                actionEnumerator.Current.ActionEnd = PlayDefaultDay;
+                levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayDefaultDay);
             }
         }
-        levelExecuter.ExecuteDayAction(actionEnumerator.Current);
     }
 
-    public void PlayDefaultDay()
+    private void PlayDefaultDay()
     {
         if (!actionEnumerator.MoveNext())
         {
             actionEnumerator.Reset();
             _ = actionEnumerator.MoveNext();
         }
-        actionEnumerator.Current.ActionEnd = PlayDefaultDay;
-        levelExecuter.ExecuteDayAction(actionEnumerator.Current);
+        levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayDefaultDay);
     }
 }

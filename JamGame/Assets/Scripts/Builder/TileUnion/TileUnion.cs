@@ -63,12 +63,12 @@ public class TileUnion : MonoBehaviour
     public int TilesCount => Tiles.Count;
     public Vector2Int CenterPosition => configuration[rotation].CenterTilePosition + position;
 
-    private void OnValidate()
-    {
-        CreateCache();
-        SetPosition(Position);
-        SetRotation(Rotation);
-    }
+    //private void OnValidate()
+    //{
+    //    CreateCache();
+    //    SetPosition(Position);
+    //    SetRotation(Rotation);
+    //}
 
     public void Move(Direction direction)
     {
@@ -141,7 +141,7 @@ public class TileUnion : MonoBehaviour
 
     public IEnumerable<Direction> GetAccessibleDirectionsFromPosition(Vector2Int position)
     {
-        return Tiles.Find(x => x.Position == position - this.position).GetDirectionsWithNoneOrDoor();
+        return Tiles.Find(x => x.Position == position - this.position).GetPassableDirections();
     }
 
     public void ShowInvalidPlacing()

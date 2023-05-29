@@ -1,23 +1,42 @@
-﻿using UnityEngine;
+﻿using Common;
+using UnityEngine;
+using UnityEngine.Events;
+
+public struct Money : IReadonlyData<Money>
+{
+    public int Count { get; set; }
+    public Money Data => this;
+}
 
 public class Finances : MonoBehaviour
 {
-    [InspectorReadOnly] private int moneyCount;
-    public int MoneyCount => moneyCount;
+    [SerializeField, InspectorReadOnly] private Money money;
+    public UnityEvent<IReadonlyData<Money>> MoneyChange;
 
-    public void SetMoney(int value)
+    public void SetMoney(int money_count)
     {
-        moneyCount = value;
+        money.Count = money_count;
+        MoneyChange?.Invoke(money);
     }
 
-    public void TakeMoney(int value)
+    public Result TryTakeMoney(int money_count)
     {
-        moneyCount -= value;
+        if (money.Count >= money_count)
+        {
+            money.Count -= money_count;
+            MoneyChange?.Invoke(money);
+            return new SuccessResult();
+        }
+        else
+        {
+            return new FailResult("Not enough money");
+        }
     }
 
-    public void AddMoney(int value)
+    public void AddMoney(int money_count)
     {
-        moneyCount += value;
+        money.Count += money_count;
+        MoneyChange?.Invoke(money);
     }
 }
 

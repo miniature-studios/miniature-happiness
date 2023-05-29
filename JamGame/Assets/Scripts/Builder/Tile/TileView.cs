@@ -8,9 +8,9 @@ public class TileView : MonoBehaviour
     [SerializeField] private Material errorMaterial;
 
     private Renderer[] renderers;
-    private Dictionary<TileMaterial, Material[]> materialsByState;
+    private Dictionary<State, Material[]> materialsByState;
 
-    public enum TileMaterial
+    public enum State
     {
         Default,
         Selected,
@@ -23,11 +23,11 @@ public class TileView : MonoBehaviour
         renderers = GetComponentsInChildren<Renderer>();
         materialsByState = new()
         {
-            { TileMaterial.Default, new Material[1] { defaultMaterial } },
-            { TileMaterial.Selected, new Material[1] { transparentMaterial } },
-            { TileMaterial.SelectedOverlapping, new Material[2] { transparentMaterial, errorMaterial } },
+            { State.Default, new Material[1] { defaultMaterial } },
+            { State.Selected, new Material[1] { transparentMaterial } },
+            { State.SelectedOverlapping, new Material[2] { transparentMaterial, errorMaterial } },
         };
-        SetMaterial(TileMaterial.Default);
+        SetMaterial(State.Default);
     }
 
     private void SetActiveChilds(Transform transform)
@@ -40,7 +40,7 @@ public class TileView : MonoBehaviour
         }
     }
 
-    public void SetMaterial(TileMaterial material)
+    public void SetMaterial(State material)
     {
         foreach (Renderer render in renderers)
         {

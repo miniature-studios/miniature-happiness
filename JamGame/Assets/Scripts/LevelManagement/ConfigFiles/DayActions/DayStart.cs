@@ -6,6 +6,5 @@ public class DayStart : IDayAction
 {
     [SerializeField] private int morningMoney;
     public int MorningMoney => morningMoney;
-    public Action ActionEnd { get; set; }
 }
 

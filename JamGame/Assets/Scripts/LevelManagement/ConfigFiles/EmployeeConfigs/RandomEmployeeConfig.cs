@@ -14,7 +14,6 @@ public class EmployeeWeights
 [Serializable]
 public class RandomEmployeeConfig : IEmployeeConfig
 {
-    [SerializeField][Min(0)] private int maxPeculiarityCount;
     [SerializeField] private List<EmployeeWeights> employeeWeights;
     [SerializeField] private EmployeeNameGenerator nameGenerator;
 

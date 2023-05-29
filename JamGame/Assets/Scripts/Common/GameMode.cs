@@ -2,8 +2,8 @@
 {
     public enum Gamemode
     {
-        GodMode,
-        Building,
-        Gameing
+        God,
+        Build,
+        Play
     }
 }

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 721046682041479168}
   - component: {fileID: 721046682041479169}
+  - component: {fileID: 3938435421449016778}
+  - component: {fileID: 7651071026812846955}
   m_Layer: 0
   m_Name: ClearWorkingPlace
   m_TagString: Untagged
@@ -51,6 +53,34 @@ MonoBehaviour:
   UIPrefab: {fileID: 7606936360430423353, guid: 9fa931fe74c05ad49b30eea3585c513b, type: 3}
   Tiles:
   - {fileID: 4783181086558189131}
+--- !u!114 &3938435421449016778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721046682041479175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 50
+  waterConsumption: 1
+  electricityComsumption: 1
+--- !u!114 &7651071026812846955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721046682041479175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Clear Working Place
 --- !u!1001 &2311167621655707682
 PrefabInstance:
   m_ObjectHideFlags: 0

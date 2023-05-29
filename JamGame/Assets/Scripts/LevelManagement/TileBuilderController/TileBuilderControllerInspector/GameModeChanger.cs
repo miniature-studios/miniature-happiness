@@ -5,6 +5,7 @@ using UnityEngine;
 
 public partial class TileBuilderControllerInspector
 {
+    private Gamemode gamemode_to_change = Gamemode.God;
     public partial void ShowGameModeChangeing(TileBuilderController tile_builder)
     {
         _ = EditorGUILayout.BeginHorizontal();

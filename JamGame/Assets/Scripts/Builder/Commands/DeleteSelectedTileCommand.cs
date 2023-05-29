@@ -9,9 +9,9 @@ public class DeleteSelectedTileCommand : ICommand
     {
         sendUIPrefab = send_ui_prefab;
     }
-    public Result Execute(TileBuilderController tile_builder_controller)
+    public Result Execute(TileBuilder tile_builder)
     {
-        Result response = tile_builder_controller.TileBuilder.DeleteSelectedTile(out tileUIPrefab);
+        Result response = tile_builder.DeleteSelectedTile(out tileUIPrefab);
         sendUIPrefab(tileUIPrefab);
         return response;
     }

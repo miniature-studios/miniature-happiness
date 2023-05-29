@@ -1,20 +1,23 @@
-﻿using System.Linq;
+﻿using Common;
+using System.Linq;
 using UnityEngine;
 
-public struct Check
+[SerializeField]
+public struct Check : IReadonlyData<Check>
 {
     public int Water;
     public int Electricity;
     public int Rent;
-    public int Summ => Water + Electricity + Rent;
+    public int Sum => Water + Electricity + Rent;
+    public Check Data => this;
 }
 
 public class TarrifsCounter : MonoBehaviour
 {
-    [SerializeField] private TileBuilderController tileBuilderController;
+    [SerializeField] private OfficeMonitoring officeMonitoring;
     public Check GetCheck(Tariffs tariffs)
     {
-        TileBuilderController.OfficeInfo info = tileBuilderController.GetOfficeInfo();
+        OfficeMonitoring.OfficeInfo info = officeMonitoring.GetOfficeInfo();
         return new()
         {
             Rent = info.InsideTilesCount * tariffs.RentCost,

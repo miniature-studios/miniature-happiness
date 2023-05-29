@@ -4,23 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TileBuilder : MonoBehaviour
+public partial class TileBuilder : MonoBehaviour
 {
-    [Header("==== Variables for debugging ====")]
-    public TileUnion FreespacePrefab;
-    public TileUnion StairsPrefab;
-    public TileUnion WindowPrefab;
-    public TileUnion OutdoorPrefab;
-    public TileUnion CorridoorPrefab;
-    public TileUnion WorkingPlaceFree;
-    public TileUnion WorkingPlace;
-    public TileUnion ChoosedTile;
-
-    [Header("==== Scene composition Save/Loading ====")]
-    public GameObject LoadingPrefab;
-    public string SavingName = "SampleBuilding";
-
-    [Header("==== Reqire variables ====")]
     [SerializeField] private TileUnion freespacePrefab;
     [SerializeField] private GameObject rootObject;
     [SerializeField] private BuilderMatrix builderMatrix;
@@ -46,7 +31,6 @@ public class TileBuilder : MonoBehaviour
                 }
             }
         }
-        CreateNormalBuilding(); // CLEANUP
         UpdateAllTiles();
     }
 
@@ -152,7 +136,7 @@ public class TileBuilder : MonoBehaviour
             justCreated = false;
             deleted_tile_ui = DeleteTile(SelectedTile);
             SelectedTile = null;
-            return new FailResult("Selected tile deleted");
+            return new SuccessResult();
         }
         else
         {
@@ -164,7 +148,7 @@ public class TileBuilder : MonoBehaviour
             }
             foreach (Vector2Int position in previousPlaces)
             {
-                CreateTileAndBind(FreespacePrefab, position, 0);
+                CreateTileAndBind(freespacePrefab, position, 0);
             }
             UpdateSidesInPositions(previousPlaces);
             SelectedTile = null;
@@ -187,7 +171,7 @@ public class TileBuilder : MonoBehaviour
         }
     }
 
-    public Result RotateSelectedTile(Direction direction)
+    public Result RotateSelectedTile(RotationDirection direction)
     {
         if (SelectedTile == null)
         {
@@ -195,7 +179,7 @@ public class TileBuilder : MonoBehaviour
         }
         else
         {
-            SelectedTile.SetRotation(SelectedTile.Rotation + direction.GetIntRotationValue());
+            SelectedTile.SetRotation(SelectedTile.Rotation + direction.ToInt());
             SelectedTile.ApplySelecting();
             _ = SelectedTile.TryApplyErrorTiles(this);
             return new SuccessResult();
@@ -372,53 +356,6 @@ public class TileBuilder : MonoBehaviour
         foreach ((TileUnion, Vector2Int) pair in queue)
         {
             pair.Item1.UpdateCorners(this, pair.Item2);
-        }
-    }
-
-    // For test
-    public void CreateNormalBuilding()
-    {
-        DeleteAllTiles();
-        for (int i = 0; i < 9; i++)
-        {
-            CreateTileAndBind(OutdoorPrefab, new(0, i), 0);
-        }
-
-        for (int i = 0; i < 8; i++)
-        {
-            if (i == 1)
-            {
-                CreateTileAndBind(StairsPrefab, new(i + 1, 0), 0);
-            }
-            else
-            {
-                CreateTileAndBind(OutdoorPrefab, new(i + 1, 0), 0);
-            }
-
-            for (int j = 0; j < 7; j++)
-            {
-                if (j == 2)
-                {
-                    CreateTileAndBind(CorridoorPrefab, new(i + 1, j + 1), 0);
-                }
-                else if (j == 3)
-                {
-                    CreateTileAndBind(WorkingPlace, new(i + 1, j + 1), 0);
-                }
-                else if (j == 4)
-                {
-                    CreateTileAndBind(WorkingPlaceFree, new(i + 1, j + 1), 0);
-                }
-                else
-                {
-                    CreateTileAndBind(FreespacePrefab, new(i + 1, j + 1), 0);
-                }
-            }
-            CreateTileAndBind(OutdoorPrefab, new(i + 1, 8), 0);
-        }
-        for (int i = 0; i < 9; i++)
-        {
-            CreateTileAndBind(OutdoorPrefab, new(9, i), 0);
         }
     }
 }

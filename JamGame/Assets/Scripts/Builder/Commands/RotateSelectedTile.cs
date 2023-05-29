@@ -1,13 +1,14 @@
 ﻿using Common;
+
 public class RotateSelectedTileCommand : ICommand
 {
-    public Direction Direction;
-    public RotateSelectedTileCommand(Direction direction)
+    public RotationDirection Direction { get; }
+    public RotateSelectedTileCommand(RotationDirection direction)
     {
         Direction = direction;
     }
-    public Result Execute(TileBuilderController tile_builder_controller)
+    public Result Execute(TileBuilder tile_builder)
     {
-        return tile_builder_controller.TileBuilder.RotateSelectedTile(Direction);
+        return tile_builder.RotateSelectedTile(Direction);
     }
 }

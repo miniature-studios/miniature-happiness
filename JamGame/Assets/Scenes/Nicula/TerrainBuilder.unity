@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 40476286}
   - component: {fileID: 40476289}
-  - component: {fileID: 40476290}
   m_Layer: 0
   m_Name: TileBuilder
   m_TagString: Untagged
@@ -169,33 +168,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518be29018dfac24681fc56b5a8c4789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FreespacePrefab: {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
-  StairsPrefab: {fileID: 9058891122285443271, guid: a4d06f29c95bafc4bb2680359a078ed8, type: 3}
-  WindowPrefab: {fileID: 8143707441816155107, guid: 2f51a1aaddcffe54aaa11da4257f39b4, type: 3}
-  OutdoorPrefab: {fileID: 8676573656510189661, guid: c1f209f52ddf6584a912baa55f578d0e, type: 3}
-  CorridoorPrefab: {fileID: 1583034983851126799, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
-  WorkingPlaceFree: {fileID: 721046682041479169, guid: 9376253a30395b340a27ac99b7697059, type: 3}
-  WorkingPlace: {fileID: 8812810329888060661, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
-  ChoosedTile: {fileID: 424481578478286981, guid: 5e3cf41a766bd984eb7e6a396e9a6627, type: 3}
-  LoadingPrefab: {fileID: 0}
-  SavingName: SampleBuilding
   freespacePrefab: {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
   rootObject: {fileID: 404178274}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
---- !u!114 &40476290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40476285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileBuilder: {fileID: 40476289}
-  tilesPanelController: {fileID: 1395078486}
+  loadingPrefab: {fileID: 0}
+  savingName: SampleScene
+  stairsPrefab: {fileID: 9058891122285443271, guid: a4d06f29c95bafc4bb2680359a078ed8, type: 3}
+  windowPrefab: {fileID: 8143707441816155107, guid: 2f51a1aaddcffe54aaa11da4257f39b4, type: 3}
+  outdoorPrefab: {fileID: 8676573656510189661, guid: c1f209f52ddf6584a912baa55f578d0e, type: 3}
+  corridoorPrefab: {fileID: 1583034983851126799, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
+  workingPlaceFree: {fileID: 721046682041479169, guid: 9376253a30395b340a27ac99b7697059, type: 3}
+  workingPlace: {fileID: 8812810329888060661, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
+  squareSideLength: 30
 --- !u!1 &124202641
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,8 +463,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395078486}
-        m_TargetAssemblyTypeName: InventoryUIController, Assembly-CSharp
+      - m_Target: {fileID: 1395078489}
+        m_TargetAssemblyTypeName: InventoryView, Assembly-CSharp
         m_MethodName: InventoryButtonClick
         m_Mode: 1
         m_Arguments:
@@ -561,6 +545,7 @@ GameObject:
   - component: {fileID: 285264312}
   - component: {fileID: 285264311}
   - component: {fileID: 285264313}
+  - component: {fileID: 285264314}
   m_Layer: 5
   m_Name: TransitionPanel
   m_TagString: Untagged
@@ -647,6 +632,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &285264314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285264309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26bc5e9f4c5a18c4394f5bc2cf9b9aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textOnPanel: {fileID: 1440722302}
 --- !u!1 &348394387
 GameObject:
   m_ObjectHideFlags: 0
@@ -817,10 +815,10 @@ RectTransform:
   m_Father: {fileID: 1344148175}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 438, y: -258}
-  m_SizeDelta: {x: 188.8398, y: 48.3526}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -120, y: 51}
+  m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &360214826
 MonoBehaviour:
@@ -866,9 +864,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1671638923}
-        m_TargetAssemblyTypeName: ShopController, Assembly-CSharp
-        m_MethodName: CloseShop
+      - m_Target: {fileID: 1671638926}
+        m_TargetAssemblyTypeName: ShopView, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1824,17 +1822,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825985572}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 961603832}
-  m_RootOrder: 1
+  m_Father: {fileID: 1698919316}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -55.429306}
+  m_AnchoredPosition: {x: 0, y: -223.82932}
   m_SizeDelta: {x: 330, y: 199.1414}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &825985574
@@ -2087,15 +2085,15 @@ GameObject:
   m_Component:
   - component: {fileID: 961603832}
   - component: {fileID: 961603834}
-  - component: {fileID: 961603833}
   - component: {fileID: 961603835}
+  - component: {fileID: 961603836}
   m_Layer: 5
   m_Name: DailyBillPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &961603832
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2108,8 +2106,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1750729705}
   - {fileID: 1698919316}
-  - {fileID: 825985573}
   - {fileID: 1043157728}
   m_Father: {fileID: 764846867}
   m_RootOrder: 6
@@ -2119,36 +2117,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -400, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &961603833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 961603831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0.4627451, a: 0.99215686}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &961603834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2170,6 +2138,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dailyBillText: {fileID: 825985574}
+  continueButtonPress:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1067622715}
+        m_TargetAssemblyTypeName: LevelExecutor, Assembly-CSharp
+        m_MethodName: CompleteDayEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!95 &961603836
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961603831}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a13a1e42d6da7234d8a062005917163a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1043157727
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,9 +2208,9 @@ RectTransform:
   m_Father: {fileID: 961603832}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 282.99997, y: -227.5}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -100, y: 25}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1043157729
@@ -2453,6 +2456,9 @@ GameObject:
   - component: {fileID: 1067622714}
   - component: {fileID: 1067622716}
   - component: {fileID: 1067622717}
+  - component: {fileID: 1067622718}
+  - component: {fileID: 1067622719}
+  - component: {fileID: 1067622721}
   m_Layer: 0
   m_Name: LevelSystem
   m_TagString: Untagged
@@ -2514,12 +2520,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelProportiesConfig: {fileID: 11400000, guid: 6349cb7c3067f4046860306c82a53dc3, type: 2}
-  tileBuilderController: {fileID: 40476290}
+  tileBuilderController: {fileID: 1067622721}
   financesController: {fileID: 1125594364}
   shopController: {fileID: 1671638923}
   uIController: {fileID: 1067622716}
   tarrifsCounter: {fileID: 1067622717}
   dailyBillPanel: {fileID: 961603835}
+  levelTemperaryData: {fileID: 1067622719}
+  transitionPanel: {fileID: 285264314}
 --- !u!114 &1067622716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2532,15 +2540,171 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c5b5298e457d74a97c3a5224845dc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonCompleteMeetingAnimator: {fileID: 2055214695}
-  buttonOpenShopAnimator: {fileID: 1711617369}
-  shopPanelAnimator: {fileID: 1671638924}
-  financesAnimator: {fileID: 1125594365}
-  tilesInventoryAnimator: {fileID: 1395078487}
-  transitionPanelAnimator: {fileID: 285264313}
-  inventoryButtonAnimator: {fileID: 262105753}
-  transitionPanelText: {fileID: 1440722302}
-  dailyBillPanel: {fileID: 961603835}
+  animatorList:
+    NamedAnimators:
+    - Name: Transition panel
+      Animator: {fileID: 285264313}
+    - Name: Daily Bill panel
+      Animator: {fileID: 961603836}
+    - Name: Button Open Shop
+      Animator: {fileID: 1711617369}
+    - Name: Inventory Button
+      Animator: {fileID: 262105753}
+    - Name: Button Complete Meeting
+      Animator: {fileID: 2055214695}
+    - Name: Finances
+      Animator: {fileID: 1125594365}
+    - Name: Inventory
+      Animator: {fileID: 1395078487}
+    InterfaceMatcher:
+    - InterfaceName: DayEnd
+      animatorBools:
+      - AnimatorName: Transition panel
+        StartDelay: 2
+        StartIsActive: 0
+        EndDelay: 2
+        EndIsActive: 1
+      - AnimatorName: Daily Bill panel
+        StartDelay: 0
+        StartIsActive: 1
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Open Shop
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Inventory Button
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Complete Meeting
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Finances
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Inventory
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+    - InterfaceName: DayStart
+      animatorBools:
+      - AnimatorName: Transition panel
+        StartDelay: 2
+        StartIsActive: 0
+        EndDelay: 2
+        EndIsActive: 1
+      - AnimatorName: Daily Bill panel
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Open Shop
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Inventory Button
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Complete Meeting
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Finances
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Inventory
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+    - InterfaceName: Meeting
+      animatorBools:
+      - AnimatorName: Transition panel
+        StartDelay: 2
+        StartIsActive: 0
+        EndDelay: 2
+        EndIsActive: 1
+      - AnimatorName: Daily Bill panel
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Open Shop
+        StartDelay: 0
+        StartIsActive: 1
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Inventory Button
+        StartDelay: 0
+        StartIsActive: 1
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Complete Meeting
+        StartDelay: 0
+        StartIsActive: 1
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Finances
+        StartDelay: 0
+        StartIsActive: 1
+        EndDelay: 0
+        EndIsActive: 1
+      - AnimatorName: Inventory
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+    - InterfaceName: Working
+      animatorBools:
+      - AnimatorName: Transition panel
+        StartDelay: 2
+        StartIsActive: 0
+        EndDelay: 2
+        EndIsActive: 1
+      - AnimatorName: Daily Bill panel
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Open Shop
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Inventory Button
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Button Complete Meeting
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
+      - AnimatorName: Finances
+        StartDelay: 0
+        StartIsActive: 1
+        EndDelay: 0
+        EndIsActive: 1
+      - AnimatorName: Inventory
+        StartDelay: 0
+        StartIsActive: 0
+        EndDelay: 0
+        EndIsActive: 0
 --- !u!114 &1067622717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2553,7 +2717,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a88a541785f5e469c202a39c744953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileBuilderController: {fileID: 40476290}
+  officeMonitoring: {fileID: 1067622718}
+--- !u!114 &1067622718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1f9a291325f494fbc4bf7c8ca9f72c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileBuilder: {fileID: 40476289}
+--- !u!114 &1067622719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c133eb7d5481ae9439106285a46a51df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CheckChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 961603835}
+        m_TargetAssemblyTypeName: DailyBillPanel, Assembly-CSharp
+        m_MethodName: OnChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1067622721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b73d055d4a6f4843a69c6ee2323420a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileBuilder: {fileID: 40476289}
+  inventoryController: {fileID: 1395078488}
+  JustAddedUI:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1395078488}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: JustAddedNewRoom
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  BuildedValidatedOffice:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1067622715}
+        m_TargetAssemblyTypeName: LevelExecutor, Assembly-CSharp
+        m_MethodName: CompleteMeeting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1088033067
 GameObject:
   m_ObjectHideFlags: 0
@@ -2713,6 +2961,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6f0b05b18cf13459f15faeed408ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoneyChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1125594363}
+        m_TargetAssemblyTypeName: FinancesCounter, Assembly-CSharp
+        m_MethodName: OnChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!95 &1125594365
 Animator:
   serializedVersion: 5
@@ -2993,7 +3256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1344148175
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3069,8 +3332,10 @@ GameObject:
   - component: {fileID: 1395078484}
   - component: {fileID: 1395078483}
   - component: {fileID: 1395078482}
-  - component: {fileID: 1395078486}
   - component: {fileID: 1395078487}
+  - component: {fileID: 1395078490}
+  - component: {fileID: 1395078489}
+  - component: {fileID: 1395078488}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -3167,22 +3432,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1395078480}
   m_CullTransparentMesh: 1
---- !u!114 &1395078486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1395078480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae4edc3d0f6a3734b856b7f562dc18bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testUI: {fileID: 7606936360430423353, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
-  tileBuilderController: {fileID: 40476290}
-  container: {fileID: 806777541}
-  button_text: {fileID: 1893067746}
 --- !u!95 &1395078487
 Animator:
   serializedVersion: 5
@@ -3203,6 +3452,87 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1395078488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395078480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d01920a4bdd5d624d8f3c8e7f7a8593e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryModel: {fileID: 1395078490}
+--- !u!114 &1395078489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395078480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d29dbaa833b614b944bb4b833b325e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  container: {fileID: 806777541}
+  button_text: {fileID: 1893067746}
+  PointerOverEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1395078488}
+        m_TargetAssemblyTypeName: InventoryController, Assembly-CSharp
+        m_MethodName: PointerOverView
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1067622721}
+        m_TargetAssemblyTypeName: TileBuilderController, Assembly-CSharp
+        m_MethodName: PointerOverView
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1395078490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395078480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdef159651c6ee64293aefa880fb661f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollectionChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1395078489}
+        m_TargetAssemblyTypeName: InventoryView, Assembly-CSharp
+        m_MethodName: OnInventoryChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1440722300
 GameObject:
   m_ObjectHideFlags: 0
@@ -3555,6 +3885,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1671638922}
+  - component: {fileID: 1671638925}
+  - component: {fileID: 1671638926}
   - component: {fileID: 1671638923}
   - component: {fileID: 1671638924}
   m_Layer: 5
@@ -3594,12 +3926,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1671638921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a388e3e0d9e151244ab4f8ad3772179b, type: 3}
+  m_Script: {fileID: 11500000, guid: b8ec7eeb9ff22544d87bdd6f2d53f85e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilesPanelController: {fileID: 1395078486}
+  inventoryController: {fileID: 1395078488}
+  shopModel: {fileID: 1671638925}
   financesController: {fileID: 1125594364}
-  roomsUIContainer: {fileID: 1897020500}
 --- !u!95 &1671638924
 Animator:
   serializedVersion: 5
@@ -3620,6 +3952,46 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1671638925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671638921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3377d109e65ef46b5037bd2c3eb12b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollectionChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1671638926}
+        m_TargetAssemblyTypeName: ShopView, Assembly-CSharp
+        m_MethodName: OnShopRoomsChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1671638926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671638921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b53ede75c53a8746983e1fb49787ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomsUIContainer: {fileID: 1897020500}
 --- !u!1 &1698919315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3649,9 +4021,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 825985573}
   m_Father: {fileID: 961603832}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3938,9 +4311,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1671638923}
-        m_TargetAssemblyTypeName: ShopController, Assembly-CSharp
-        m_MethodName: OpenShop
+      - m_Target: {fileID: 1671638926}
+        m_TargetAssemblyTypeName: ShopView, Assembly-CSharp
+        m_MethodName: Open
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4008,6 +4381,82 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!1 &1750729704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1750729705}
+  - component: {fileID: 1750729707}
+  - component: {fileID: 1750729706}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1750729705
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750729704}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 961603832}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1750729706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750729704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0.4627451, a: 0.99215686}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1750729707
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750729704}
+  m_CullTransparentMesh: 1
 --- !u!1 &1893067744
 GameObject:
   m_ObjectHideFlags: 0
@@ -4217,6 +4666,7 @@ GameObject:
   - component: {fileID: 1904627832}
   - component: {fileID: 1904627831}
   - component: {fileID: 1904627830}
+  - component: {fileID: 1904627833}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4274,6 +4724,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1904627833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1904627829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62516e1d971df446a3970f8f55ad99f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2055214690
 GameObject:
   m_ObjectHideFlags: 0
@@ -4359,7 +4821,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 40476290}
+      - m_Target: {fileID: 1067622721}
         m_TargetAssemblyTypeName: TileBuilderController, Assembly-CSharp
         m_MethodName: ValidateBuilding
         m_Mode: 1

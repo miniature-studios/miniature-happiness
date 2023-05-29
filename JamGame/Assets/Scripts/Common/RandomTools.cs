@@ -5,7 +5,8 @@ namespace Common
 {
     public static class RandomTools
     {
-        // Выбирает случайный индекс от 0 до размера входного массива, с учетом весов на местах индексов
+        // Select weighted random numbers in range [0..weights.Length] 
+        // Probability of selecting i is weights[i] / sum(weights)
         public static int RandomlyChooseWithWeights(List<float> weights)
         {
             float sum_weights = weights.Sum();

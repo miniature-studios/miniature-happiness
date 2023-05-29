@@ -2,6 +2,6 @@
 
 public interface ICommand
 {
-    public Result Execute(TileBuilderController tile_builder_controller);
+    public Result Execute(TileBuilder tile_builder);
 }
 

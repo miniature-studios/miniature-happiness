@@ -1,10 +1,10 @@
 ﻿public class EmployeeConfig
 {
-    public string EmployeeName { get; }
+    public string Name { get; }
     public Employee Employee { get; }
-    public EmployeeConfig(Employee employee, string employee_name)
+    public EmployeeConfig(Employee employee, string name)
     {
-        EmployeeName = employee_name;
+        Name = name;
         Employee = employee;
     }
 }

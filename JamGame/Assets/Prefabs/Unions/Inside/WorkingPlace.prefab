@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8812810329888060660}
   - component: {fileID: 8812810329888060661}
   - component: {fileID: 8145493792244014611}
+  - component: {fileID: -7414770468872496184}
   m_Layer: 0
   m_Name: WorkingPlace
   m_TagString: Untagged
@@ -64,10 +65,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomName: Working Place
-  Cost: 100
-  WaterConsumption: 2
-  ElectricityComsumption: 5
+  cost: 50
+  waterConsumption: 1
+  electricityComsumption: 1
+--- !u!114 &-7414770468872496184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8812810329888060619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Working Place
 --- !u!1001 &3640097180195798912
 PrefabInstance:
   m_ObjectHideFlags: 0

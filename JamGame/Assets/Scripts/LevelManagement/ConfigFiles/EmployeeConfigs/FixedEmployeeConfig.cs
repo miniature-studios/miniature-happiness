@@ -4,11 +4,11 @@ using UnityEngine;
 [Serializable]
 public class FixedEmployeeConfig : IEmployeeConfig
 {
-    [SerializeField] private string employeeName;
+    [SerializeField] private string name;
     [SerializeField] private Employee employee;
 
     public EmployeeConfig GetEmployeeConfig()
     {
-        return new EmployeeConfig(employee, employeeName);
+        return new EmployeeConfig(employee, name);
     }
 }

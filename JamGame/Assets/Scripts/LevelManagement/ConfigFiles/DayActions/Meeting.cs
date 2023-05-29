@@ -13,6 +13,4 @@ public class Meeting : IDayAction
         => shopEmployees.Select(x => x.ToEmployeeConfig().GetEmployeeConfig());
     public IEnumerable<RoomConfig> ShopRooms
         => shopRooms.Select(x => x.ToRoomConfig().GetRoomConfig());
-
-    public Action ActionEnd { get; set; }
 }

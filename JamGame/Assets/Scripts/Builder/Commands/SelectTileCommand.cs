@@ -14,8 +14,8 @@ public class SelectTileCommand : ICommand
             .Select(x => x.collider.GetComponentInParent<TileUnion>());
         Tile = tiles.Count() != 0 ? tiles.First() : null;
     }
-    public Result Execute(TileBuilderController tile_builder_controller)
+    public Result Execute(TileBuilder tile_builder)
     {
-        return Tile == null ? new FailResult("No hits") : tile_builder_controller.TileBuilder.SelectTile(Tile);
+        return Tile == null ? new FailResult("No hits") : tile_builder.SelectTile(Tile);
     }
 }

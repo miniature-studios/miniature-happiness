@@ -1,7 +1,5 @@
-﻿using System;
-
-[InterfaceEditor]
+﻿[InterfaceEditor]
 public interface IDayAction
 {
-    public Action ActionEnd { get; set; }
+
 }
