@@ -152,7 +152,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 404178275}
+  - {fileID: 665495717}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -169,9 +169,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   freespacePrefab: {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
-  rootObject: {fileID: 404178274}
+  rootObject: {fileID: 665495718}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  loadingPrefab: {fileID: 0}
+  loadingPrefab: {fileID: 837739598059282929, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
   savingName: SampleScene
   stairsPrefab: {fileID: 9058891122285443271, guid: a4d06f29c95bafc4bb2680359a078ed8, type: 3}
   windowPrefab: {fileID: 8143707441816155107, guid: 2f51a1aaddcffe54aaa11da4257f39b4, type: 3}
@@ -180,6 +180,7 @@ MonoBehaviour:
   workingPlaceFree: {fileID: 721046682041479169, guid: 9376253a30395b340a27ac99b7697059, type: 3}
   workingPlace: {fileID: 8812810329888060661, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
   squareSideLength: 30
+  loadFromSceneComposition: 0
 --- !u!1 &124202641
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +215,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8810.169, y: 23787.467}
+  m_AnchoredPosition: {x: 0.000121707555, y: 0.00036621094}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &124202643
@@ -1049,37 +1050,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 395572857}
   m_CullTransparentMesh: 1
---- !u!1 &404178274
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 404178275}
-  m_Layer: 0
-  m_Name: RootObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &404178275
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 404178274}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 40476286}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &404733192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,6 +1505,73 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657078262}
   m_CullTransparentMesh: 1
+--- !u!1001 &665495716
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 40476286}
+    m_Modifications:
+    - target: {fileID: 837739598059282929, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_Name
+      value: GreatSampleScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+--- !u!4 &665495717 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4325319161855072258, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+  m_PrefabInstance: {fileID: 665495716}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &665495718 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 837739598059282929, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
+  m_PrefabInstance: {fileID: 665495716}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &764846863
 GameObject:
   m_ObjectHideFlags: 0
@@ -4653,7 +4690,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -79291.516, y: 21144.408}
+  m_AnchoredPosition: {x: -0.0002453918, y: 0.00033569336}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1897020501
