@@ -11,11 +11,11 @@ public class NamedRoomInventoriUI
 
 public partial class InventoryController
 {
-    public List<NamedRoomInventoriUI> namedRoomInventoriUIs;
+    public List<NamedRoomInventoriUI> namedRoomInventoryUIs;
 
     public void CreateGodsInventory()
     {
-        foreach (NamedRoomInventoriUI item in namedRoomInventoriUIs)
+        foreach (NamedRoomInventoriUI item in namedRoomInventoryUIs)
         {
             for (int i = 0; i < 666; i++)
             {

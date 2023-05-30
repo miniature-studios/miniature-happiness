@@ -12,7 +12,7 @@ public class TileBuilderController : MonoBehaviour
     private Vector2 previousMousePosition;
     private bool mousePressed = false;
 
-    public UnityEvent<RoomInventoryUI> JustAddedUI;
+    public UnityEvent<RoomInventoryUI> JustAddedUI; // FIXME
     public UnityEvent BuildedValidatedOffice;
 
     private void Awake()

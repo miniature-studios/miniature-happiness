@@ -12,7 +12,6 @@ public class Tariffs
     public int RentCost => rentCost;
 }
 
-
 [Serializable]
 [CreateAssetMenu(fileName = "LevelPropertiesConfig", menuName = "Level/LevelPropertiesConfig", order = 1)]
 public class LevelPropertiesConfig : ScriptableObject

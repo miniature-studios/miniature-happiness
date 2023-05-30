@@ -5,7 +5,6 @@ public partial class LevelExecutor
 {
     public void Execute(DayEnd day_end, Action next_action)
     {
-
         Check check = tarrifsCounter.GetCheck(levelProportiesConfig.Tariffs);
         Result result = financesController.TryTakeMoney(check.Sum);
         if (result.Success)

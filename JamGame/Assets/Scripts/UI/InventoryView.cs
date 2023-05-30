@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -39,7 +40,8 @@ public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 DeleteAllItems();
                 break;
             default:
-                break;
+                Debug.LogError($"Unexpected variant of NotifyCollectionChangedAction: {e.Action}");
+                throw new ArgumentException();
         }
     }
 

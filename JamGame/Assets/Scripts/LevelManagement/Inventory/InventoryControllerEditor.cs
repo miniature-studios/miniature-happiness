@@ -9,7 +9,7 @@ public class InventoryControllerEditor : Editor
     {
         InventoryController inventory_controller = serializedObject.targetObject as InventoryController;
 
-        foreach (NamedRoomInventoriUI item in inventory_controller.namedRoomInventoriUIs)
+        foreach (NamedRoomInventoriUI item in inventory_controller.namedRoomInventoryUIs)
         {
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(item.Name))
