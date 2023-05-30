@@ -17,8 +17,8 @@ public partial class InventoryController : MonoBehaviour
         {
             if (pointerOverView)
             {
-                selectedRoom = RaycastUtilities.UIRaycast(Input.mousePosition)
-                    .Where(x => x.GetComponent<RoomInventoryUI>())
+                selectedRoom = RaycastUtilities.UIRaycast(Input.mousePosition)?
+                    .Where(x => x.GetComponent<RoomInventoryUI>())?
                     .Select(x => x.GetComponent<RoomInventoryUI>()).First();
             }
         }

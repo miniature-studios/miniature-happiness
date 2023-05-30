@@ -1,5 +1,4 @@
-﻿using Common;
-using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -26,56 +25,49 @@ public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         button_text.text = inventoryShowed ? "Close" : "Open";
     }
 
-    public void OnInventoryChanged(List<RoomInventoryUI> items, NotifyCollectionChangedAction action)
+    public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        switch (action)
+        switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                AddNewItems(items);
+                AddNewItem(e.NewItems[0] as RoomInventoryUI);
                 break;
             case NotifyCollectionChangedAction.Remove:
-                RemoveOldItems(items);
+                RemoveOldItem(e.OldItems[0] as RoomInventoryUI);
                 break;
-            case NotifyCollectionChangedAction.Replace:
-                ReplaceAllItems(items);
+            case NotifyCollectionChangedAction.Reset:
+                DeleteAllItems();
                 break;
             default:
                 break;
         }
     }
 
-    private void ReplaceAllItems(List<RoomInventoryUI> NewItems)
+    private void DeleteAllItems()
     {
         foreach (RoomInventoryUI old_item in container.transform.GetComponentsInChildren<RoomInventoryUI>())
         {
             old_item.Counter = 0;
         }
-        AddNewItems(NewItems);
     }
 
-    private void RemoveOldItems(List<RoomInventoryUI> old_items)
+    private void RemoveOldItem(RoomInventoryUI old_item)
     {
         RoomInventoryUI[] room_inventorys = container.transform.GetComponentsInChildren<RoomInventoryUI>();
-        foreach (RoomInventoryUI old_item in old_items)
+        room_inventorys.First(x => x.TileUnion == old_item.TileUnion).Counter--;
+    }
+
+    private void AddNewItem(RoomInventoryUI new_item)
+    {
+        RoomInventoryUI[] room_inventorys = container.transform.GetComponentsInChildren<RoomInventoryUI>();
+        RoomInventoryUI existed = room_inventorys.FirstOrDefault(x => x.TileUnion == new_item.TileUnion);
+        if (existed != null)
         {
-            room_inventorys.First(x => x.TileUnion == old_item.TileUnion).Counter--;
+            existed.Counter++;
         }
-    }
-
-    private void AddNewItems(List<RoomInventoryUI> new_items)
-    {
-        RoomInventoryUI[] room_inventorys = container.transform.GetComponentsInChildren<RoomInventoryUI>();
-        for (int i = 0; i < new_items.Count; i++)
+        else
         {
-            RoomInventoryUI existed = room_inventorys.FirstOrDefault(x => x.TileUnion == new_items[i].TileUnion);
-            if (existed != null)
-            {
-                existed.Counter++;
-            }
-            else
-            {
-                new_items[i] = Instantiate(new_items[i], container).GetComponent<RoomInventoryUI>();
-            }
+            _ = Instantiate(new_item, container).GetComponent<RoomInventoryUI>();
         }
     }
 

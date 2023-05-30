@@ -1,5 +1,4 @@
-﻿using Common;
-using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 
@@ -8,48 +7,41 @@ public class ShopView : MonoBehaviour
     [SerializeField] private Transform roomsUIContainer;
     private Animator shopAnimator;
 
-    public void OnShopRoomsChanged(List<RoomShopUI> items, NotifyCollectionChangedAction action)
+    public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        switch (action)
+        switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                AddNewItems(items);
+                AddNewItems(e.NewItems[0] as RoomShopUI);
                 break;
             case NotifyCollectionChangedAction.Remove:
-                RemoveOldItems(items);
+                RemoveOldItems(e.OldItems[0] as RoomShopUI);
                 break;
-            case NotifyCollectionChangedAction.Replace:
-                ReplaceAllItems(items);
+            case NotifyCollectionChangedAction.Reset:
+                DeleteAllItems();
                 break;
             default:
                 break;
         }
     }
 
-    private void ReplaceAllItems(List<RoomShopUI> NewItems)
+    private void DeleteAllItems()
     {
         foreach (RoomShopUI old_item in roomsUIContainer.transform.GetComponentsInChildren<RoomShopUI>())
         {
             Destroy(old_item.gameObject);
         }
-        AddNewItems(NewItems);
     }
 
-    private void RemoveOldItems(List<RoomShopUI> old_items)
+    private void RemoveOldItems(RoomShopUI old_item)
     {
         RoomShopUI[] room_inventorys = roomsUIContainer.transform.GetComponentsInChildren<RoomShopUI>();
-        foreach (RoomShopUI old_item in old_items)
-        {
-            Destroy(room_inventorys.First(x => x.RoomInventoryUI == old_item.RoomInventoryUI).gameObject);
-        }
+        Destroy(room_inventorys.First(x => x.RoomInventoryUI == old_item.RoomInventoryUI).gameObject);
     }
 
-    private void AddNewItems(List<RoomShopUI> new_items)
+    private void AddNewItems(RoomShopUI new_item)
     {
-        for (int i = 0; i < new_items.Count; i++)
-        {
-            new_items[i] = Instantiate(new_items[i], roomsUIContainer).GetComponent<RoomShopUI>();
-        }
+        _ = Instantiate(new_item, roomsUIContainer).GetComponent<RoomShopUI>();
     }
 
     private void Awake()

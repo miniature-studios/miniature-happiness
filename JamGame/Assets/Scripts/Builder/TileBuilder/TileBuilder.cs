@@ -31,7 +31,10 @@ public partial class TileBuilder : MonoBehaviour
                 }
             }
         }
-        CreateNormalBuilding(); // DELETE ME
+        if (loadFromSceneComposition && loadingPrefab != null)
+        {
+            LoadSceneComposition(loadingPrefab);
+        }
         UpdateAllTiles();
     }
 

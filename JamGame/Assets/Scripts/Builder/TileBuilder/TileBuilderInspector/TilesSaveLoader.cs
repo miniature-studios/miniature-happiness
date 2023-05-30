@@ -32,6 +32,10 @@ public partial class TileBuilderInspector
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
+        tile_builder.loadFromSceneComposition = EditorGUILayout.Toggle("Load from prefab on start?", tile_builder.loadFromSceneComposition);
+        EditorGUILayout.EndHorizontal();
+
+        _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Load scene composition from prefab."))
         {
             tile_builder.LoadSceneComposition(tile_builder.loadingPrefab);

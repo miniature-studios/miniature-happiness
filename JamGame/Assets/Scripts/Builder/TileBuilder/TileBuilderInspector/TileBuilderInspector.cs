@@ -12,6 +12,7 @@ public partial class TileBuilder
     [HideInInspector] public TileUnion workingPlaceFree;
     [HideInInspector] public TileUnion workingPlace;
     [HideInInspector] public int squareSideLength = 30;
+    [HideInInspector] public bool loadFromSceneComposition;
 
     public void CreateRandomBuilding()
     {

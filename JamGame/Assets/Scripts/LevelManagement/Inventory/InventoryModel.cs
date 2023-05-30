@@ -1,34 +1,40 @@
-﻿using Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class InventoryModel : MonoBehaviour
 {
-    private readonly List<RoomInventoryUI> roomsInInventory = new();
-    public UnityEvent<List<RoomInventoryUI>, NotifyCollectionChangedAction> CollectionChanged = new();
+    private readonly ObservableCollection<RoomInventoryUI> roomsInInventory = new();
+    public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
     public ImmutableList<RoomInventoryUI> RoomsInInventory => roomsInInventory.ToImmutableList();
+
+    private void Awake()
+    {
+        roomsInInventory.CollectionChanged += CollectionChanged.Invoke;
+    }
 
     public void AddNewRoom(RoomInventoryUI room_in_inventory)
     {
         roomsInInventory.Add(room_in_inventory);
-        CollectionChanged.Invoke(new() { room_in_inventory }, NotifyCollectionChangedAction.Add);
     }
 
     public void RemoveRoom(RoomInventoryUI room_in_inventory)
     {
         _ = roomsInInventory.Remove(roomsInInventory.First(x => x.TileUnion == room_in_inventory.TileUnion));
-        CollectionChanged.Invoke(new() { room_in_inventory }, NotifyCollectionChangedAction.Remove);
     }
 
-    public void SetRooms(List<RoomInventoryUI> room_in_inventory)
+    public void SetRooms(IEnumerable<RoomInventoryUI> room_in_inventory)
     {
         roomsInInventory.Clear();
-        roomsInInventory.AddRange(room_in_inventory);
-        CollectionChanged.Invoke(room_in_inventory, NotifyCollectionChangedAction.Replace);
+        foreach (RoomInventoryUI room in room_in_inventory)
+        {
+            roomsInInventory.Add(room);
+        }
     }
 }
 

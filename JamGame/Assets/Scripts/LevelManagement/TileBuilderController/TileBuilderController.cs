@@ -45,14 +45,17 @@ public class TileBuilderController : MonoBehaviour
 
         bool isOverUI = RaycastUtilities.PointerIsOverUI(Input.mousePosition);
 
-        if (Input.GetMouseButtonDown(0) && !isOverUI)
+        if (Input.GetMouseButtonDown(0))
         {
             mousePressed = true;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Result response = Execute(new SelectTileCommand(ray));
-            if (response.Failure)
+            if (!isOverUI)
             {
-                _ = Execute(new CompletePlacingCommand());
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Result response = Execute(new SelectTileCommand(ray));
+                if (response.Failure)
+                {
+                    _ = Execute(new CompletePlacingCommand());
+                }
             }
         }
 
