@@ -94,7 +94,7 @@ public class BuildModeValidator : IValidator
             {
                 return new FailResult("Not selected Tile");
             }
-            IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(tileBuilder.SelectedTile.Position, tileBuilder.SelectedTile.Rotation + rotate_command.Direction.ToInt());
+            IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(tileBuilder.SelectedTile.Position, tileBuilder.SelectedTile.Rotation + (int)rotate_command.Direction);
             return !tileBuilder.GetTileUnionsInPositions(newPosition).All(x => !x.IsAllWithMark("Outside"))
                 ? new FailResult("Can not rotate into outside")
                 : new SuccessResult();

@@ -5,7 +5,7 @@ namespace Common
 {
     public enum Direction
     {
-        Up,
+        Up = 0,
         RightUp,
         Right,
         RightDown,
@@ -80,7 +80,7 @@ namespace Common
         {
             return (int)dir * 45;
         }
-        public static List<Direction> GetCircle90(this Direction dir)
+        public static IEnumerable<Direction> GetCircle90(this Direction dir)
         {
             List<Direction> list = new();
             for (int i = 0; i < 4; i++)
@@ -90,7 +90,7 @@ namespace Common
             }
             return list;
         }
-        public static List<Direction> GetCircle45(this Direction dir)
+        public static IEnumerable<Direction> GetCircle45(this Direction dir)
         {
             List<Direction> list = new();
             for (int i = 0; i < 8; i++)

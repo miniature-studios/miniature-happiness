@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class LevelExecutor
 {
-    private void Execute(Working working, Action next_action)
+    public void Execute(Working working, Action next_action)
     {
         transitionPanel.SetText("Working start.");
         uIController.PlayDayActionStart(working.GetType(), () => StartCoroutine(WorkingTime(working.WorkingTime, next_action)));

@@ -10,8 +10,8 @@ public partial class TileBuilder : MonoBehaviour
     [SerializeField] private GameObject rootObject;
     [SerializeField] private BuilderMatrix builderMatrix;
 
-    private List<Vector2Int> previousPlaces;
-    private int previousRotation;
+    private List<Vector2Int> previousPlaces = new();
+    private int previousRotation = 0;
     private bool justCreated = false;
 
     public TileUnion SelectedTile { get; private set; } = null;
@@ -180,7 +180,7 @@ public partial class TileBuilder : MonoBehaviour
         }
         else
         {
-            SelectedTile.SetRotation(SelectedTile.Rotation + direction.ToInt());
+            SelectedTile.SetRotation(SelectedTile.Rotation + (int)direction);
             SelectedTile.ApplySelecting();
             _ = SelectedTile.TryApplyErrorTiles(this);
             return new SuccessResult();

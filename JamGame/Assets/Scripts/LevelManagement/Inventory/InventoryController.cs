@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class InventoryController : MonoBehaviour
+public partial class InventoryController : MonoBehaviour
 {
     [SerializeField] private InventoryModel inventoryModel;
     private RoomInventoryUI selectedRoom = null;

@@ -14,17 +14,5 @@ public partial class LevelExecutor : MonoBehaviour
     [SerializeField] private TransitionPanel transitionPanel;
 
     private Action bufferAction;
-
-    public void ExecuteDayAction(IDayAction day_action, Action next_action)
-    {
-        switch (day_action)
-        {
-            case DayStart: Execute(day_action as DayStart, next_action); break;
-            case DayEnd: Execute(day_action as DayEnd, next_action); break;
-            case Meeting: Execute(day_action as Meeting, next_action); break;
-            case Working: Execute(day_action as Working, next_action); break;
-            default: throw new ArgumentException();
-        }
-    }
 }
 

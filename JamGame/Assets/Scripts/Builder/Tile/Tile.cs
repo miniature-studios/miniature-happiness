@@ -111,7 +111,7 @@ public class Tile : MonoBehaviour
         foreach (Direction direction in Direction.Up.GetCircle90())
         {
             TileWallType? wallTypeToPlace = TileWallType.None;
-            Tile outTile = neighbours[direction];
+            Tile outTile = neighbours?[direction];
             if (outTile != null)
             {
                 wallTypeToPlace = wallSolver.ChooseWall(
@@ -254,7 +254,7 @@ public class Tile : MonoBehaviour
         return wall_collection.ActiveWallType;
     }
 
-    private void CreateWallsCache()
+    public void CreateWallsCache()
     {
         Dictionary<Direction, List<TileWallType>> list = new();
         foreach (WallCollection wall in RawWalls)

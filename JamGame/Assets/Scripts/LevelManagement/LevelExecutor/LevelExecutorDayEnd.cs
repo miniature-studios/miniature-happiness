@@ -3,7 +3,7 @@ using System;
 
 public partial class LevelExecutor
 {
-    private void Execute(DayEnd day_end, Action next_action)
+    public void Execute(DayEnd day_end, Action next_action)
     {
 
         Check check = tarrifsCounter.GetCheck(levelProportiesConfig.Tariffs);

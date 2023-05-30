@@ -3,7 +3,7 @@ using System;
 
 public partial class LevelExecutor
 {
-    private void Execute(Meeting meeting, Action next_action)
+    public void Execute(Meeting meeting, Action next_action)
     {
         tileBuilderController.ChangeGameMode(Gamemode.Build);
         shopController.SetShopRooms(meeting.ShopRooms);

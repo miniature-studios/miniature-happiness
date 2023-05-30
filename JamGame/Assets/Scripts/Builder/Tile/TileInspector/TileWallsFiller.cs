@@ -27,8 +27,8 @@ public partial class TileInspector
                 }
                 tile.RawWalls.Add(walls_collection);
             }
+            tile.CreateWallsCache();
         }
-
         EditorGUILayout.EndHorizontal();
     }
 }

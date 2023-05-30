@@ -243,7 +243,7 @@ public class AnimatorListDrawer : PropertyDrawer
                     SerializedProperty element = listProperty.GetArrayElementAtIndex(index);
 
                     Vector2 position = rect.position;
-                    string text = $"Animator {index} name: ";
+                    string text = $"{(element.FindPropertyRelative("Animator").objectReferenceValue as Animator).name}: ";
                     float length = 110;
                     EditorGUI.LabelField(new Rect(position.x, position.y, length, EditorGUIUtility.singleLineHeight), text);
 

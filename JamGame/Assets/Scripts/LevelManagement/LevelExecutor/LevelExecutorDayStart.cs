@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class LevelExecutor
 {
-    private void Execute(DayStart day_start, Action next_action)
+    public void Execute(DayStart day_start, Action next_action)
     {
         financesController.AddMoney(day_start.MorningMoney);
         transitionPanel.SetText("Day start start.");

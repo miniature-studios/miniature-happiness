@@ -65,12 +65,12 @@ public class TileUnion : MonoBehaviour
     public int TilesCount => Tiles.Count;
     public Vector2Int CenterPosition => configuration[rotation].CenterTilePosition + position;
 
-    //private void OnValidate()
-    //{
-    //    CreateCache();
-    //    SetPosition(Position);
-    //    SetRotation(Rotation);
-    //}
+    private void OnValidate()
+    {
+        CreateCache();
+        SetPosition(Position);
+        SetRotation(Rotation);
+    }
 
     public void Move(Direction direction)
     {
@@ -218,7 +218,7 @@ public class TileUnion : MonoBehaviour
                 Vector2Int bufferPosition = tile.Position + pos.ToVector2Int();
                 if (Tiles.Select(x => x.Position).Contains(bufferPosition))
                 {
-                    neighbours.Add(pos, Tiles.Find(x => x.Position == bufferPosition));
+                    neighbours.Add(pos, Tiles.FirstOrDefault(x => x.Position == bufferPosition));
                 }
                 else
                 {
@@ -233,7 +233,7 @@ public class TileUnion : MonoBehaviour
         }
     }
 
-    private void CreateCache()
+    public void CreateCache()
     {
         cachedUnionConfiguration = new();
         for (int i = 0; i < 4; i++)

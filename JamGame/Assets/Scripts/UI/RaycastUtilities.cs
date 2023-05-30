@@ -8,7 +8,7 @@ public static class RaycastUtilities
 {
     public static bool PointerIsOverUI(Vector2 screenPos)
     {
-        GameObject hitObject = UIRaycast(ScreenPosToPointerData(screenPos)).First();
+        GameObject hitObject = UIRaycast(ScreenPosToPointerData(screenPos))?.First();
         return hitObject != null && hitObject.layer == LayerMask.NameToLayer("UI");
     }
 

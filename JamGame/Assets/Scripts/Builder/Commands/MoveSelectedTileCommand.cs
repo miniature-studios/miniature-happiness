@@ -33,6 +33,10 @@ public class MoveSelectedTileCommand : ICommand
     }
     public Result Execute(TileBuilder tile_builder)
     {
+        if (Direction == null)
+        {
+            return new FailResult("Null diraction");
+        }
         return tile_builder.MoveSelectedTile((Direction)Direction);
     }
 }

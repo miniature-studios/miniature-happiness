@@ -15,12 +15,12 @@ public class LevelSheduler : MonoBehaviour
         {
             _ = (dayEnumerator = levelActionsConfig.Days.GetEnumerator()).MoveNext();
             _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
-            levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayPlannedActions);
+            actionEnumerator.Current.Execute(levelExecuter, PlayPlannedActions);
         }
         else
         {
             _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
-            levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayDefaultDay);
+            actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
         }
     }
 
@@ -31,12 +31,12 @@ public class LevelSheduler : MonoBehaviour
             if (dayEnumerator.MoveNext())
             {
                 _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
-                levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayPlannedActions);
+                actionEnumerator.Current.Execute(levelExecuter, PlayPlannedActions);
             }
             else
             {
                 _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
-                levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayDefaultDay);
+                actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
             }
         }
     }
@@ -48,6 +48,6 @@ public class LevelSheduler : MonoBehaviour
             actionEnumerator.Reset();
             _ = actionEnumerator.MoveNext();
         }
-        levelExecuter.ExecuteDayAction(actionEnumerator.Current, PlayDefaultDay);
+        actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
     }
 }

@@ -43,7 +43,9 @@ public class TileBuilderController : MonoBehaviour
         Vector2 mouseDelta = mousePosition - previousMousePosition;
         previousMousePosition = mousePosition;
 
-        if (Input.GetMouseButtonDown(0))
+        bool isOverUI = RaycastUtilities.PointerIsOverUI(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0) && !isOverUI)
         {
             mousePressed = true;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -60,7 +62,7 @@ public class TileBuilderController : MonoBehaviour
             _ = Execute(new CompletePlacingCommand());
         }
 
-        if (mouseDelta.magnitude > 0 && mousePressed)
+        if (mouseDelta.magnitude > 0 && mousePressed && !isOverUI)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             MoveSelectedTileCommand command = new(
@@ -73,7 +75,7 @@ public class TileBuilderController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _ = Execute(new RotateSelectedTileCommand(RotationDirection.Right));
+            _ = Execute(new RotateSelectedTileCommand(RotationDirection.Clockwise));
         }
     }
 

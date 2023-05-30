@@ -1482,7 +1482,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &657078264
 MonoBehaviour:
@@ -2644,28 +2644,28 @@ MonoBehaviour:
         EndDelay: 0
         EndIsActive: 0
       - AnimatorName: Button Open Shop
-        StartDelay: 0
+        StartDelay: 2
         StartIsActive: 1
         EndDelay: 0
         EndIsActive: 0
       - AnimatorName: Inventory Button
-        StartDelay: 0
+        StartDelay: 2
         StartIsActive: 1
         EndDelay: 0
         EndIsActive: 0
       - AnimatorName: Button Complete Meeting
-        StartDelay: 0
+        StartDelay: 2
         StartIsActive: 1
         EndDelay: 0
         EndIsActive: 0
       - AnimatorName: Finances
-        StartDelay: 0
+        StartDelay: 2
         StartIsActive: 1
         EndDelay: 0
         EndIsActive: 1
       - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
+        StartDelay: 2
+        StartIsActive: 1
         EndDelay: 0
         EndIsActive: 0
     - InterfaceName: Working
@@ -3387,9 +3387,9 @@ MonoBehaviour:
   m_Viewport: {fileID: 657078263}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
-  m_HorizontalScrollbarSpacing: -3
+  m_HorizontalScrollbarVisibility: 1
+  m_VerticalScrollbarVisibility: 1
+  m_HorizontalScrollbarSpacing: 5
   m_VerticalScrollbarSpacing: -3
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3465,6 +3465,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryModel: {fileID: 1395078490}
+  namedRoomInventoriUIs:
+  - Name: Working Place
+    RIUI: {fileID: 7606936360430423353, guid: dc1a62b24ebede14d9ce49d7c5d6e6c7, type: 3}
+  - Name: Triple Working Place
+    RIUI: {fileID: 7606936360430423353, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
+  - Name: Toilet
+    RIUI: {fileID: 7606936360430423353, guid: f1440cad1afca294bb59bdc1da10fc68, type: 3}
+  - Name: Smoking Room
+    RIUI: {fileID: 7606936360430423353, guid: eda091c342cd4a1499fb8320a184def6, type: 3}
+  - Name: Meeting Room
+    RIUI: {fileID: 7606936360430423353, guid: 0d05684e431656940a17b24ac15adfe3, type: 3}
+  - Name: Kitchen
+    RIUI: {fileID: 7606936360430423353, guid: 35822aff102aeb744b074e5020203af4, type: 3}
+  - Name: Free Space
+    RIUI: {fileID: 7606936360430423353, guid: 32858c7307f455d48a4957f9ea2f9eb6, type: 3}
+  - Name: Corridor
+    RIUI: {fileID: 7606936360430423353, guid: c64e33f649924034fa7310e5db878cd6, type: 3}
+  - Name: Clear Working Place
+    RIUI: {fileID: 7606936360430423353, guid: 9fa931fe74c05ad49b30eea3585c513b, type: 3}
+  - Name: Boss Office
+    RIUI: {fileID: 7606936360430423353, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
+  - Name: Outside
+    RIUI: {fileID: 7606936360430423353, guid: cc9682de5cc62984db9d4fd1e53b00b5, type: 3}
+  - Name: Outside Stairs
+    RIUI: {fileID: 7606936360430423353, guid: 28bd73668b24b8b4f86f5a2a33f79579, type: 3}
+  - Name: Outside Window
+    RIUI: {fileID: 7606936360430423353, guid: 127e7effae6c0a441b66ce105ed89672, type: 3}
 --- !u!114 &1395078489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4750,7 +4777,7 @@ GameObject:
   - component: {fileID: 2055214692}
   - component: {fileID: 2055214695}
   m_Layer: 5
-  m_Name: ButtonCompleteMeeting
+  m_Name: BTNEndMeeting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
