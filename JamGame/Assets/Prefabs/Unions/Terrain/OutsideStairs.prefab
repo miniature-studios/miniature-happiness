@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8368415304887353142}
   - component: {fileID: 9058891122285443271}
+  - component: {fileID: 7513005684843302404}
+  - component: {fileID: 7219926068475135685}
   m_Layer: 0
   m_Name: OutsideStairs
   m_TagString: Untagged
@@ -45,12 +47,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIPrefab: {fileID: 0}
-  tiles:
-  - {fileID: 8374785168588562266}
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  UIPrefab: {fileID: 7606936360430423353, guid: 28bd73668b24b8b4f86f5a2a33f79579, type: 3}
+  Tiles:
+  - {fileID: 8374785168588562266}
+--- !u!114 &7513005684843302404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8368415304887353141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 0
+  waterConsumption: 0
+  electricityComsumption: 0
+--- !u!114 &7219926068475135685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8368415304887353141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Outside Door
 --- !u!1001 &349599497661215600
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101,6 +131,14 @@ PrefabInstance:
     - target: {fileID: 8134398512049564712, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8134398512049564714, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
+      propertyPath: marks.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8134398512049564714, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
+      propertyPath: marks.Array.data[2]
+      value: door
       objectReference: {fileID: 0}
     - target: {fileID: 8134398512049564719, guid: ab8eb1e5689230c45b61b8460a15614c, type: 3}
       propertyPath: m_Name

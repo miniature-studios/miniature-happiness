@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 424481578478287034}
   - component: {fileID: 424481578478287035}
+  - component: {fileID: 2712493387141704771}
+  - component: {fileID: 2921718996570172954}
   m_Layer: 0
   m_Name: TripleWorkingPlace
   m_TagString: Untagged
@@ -47,14 +49,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIPrefab: {fileID: 7606936360430423357, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
-  tiles:
+  position: {x: 0, y: 0}
+  rotation: 0
+  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  UIPrefab: {fileID: 7606936360430423353, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
+  Tiles:
   - {fileID: 8084771380271662051}
   - {fileID: 7091060574257686939}
   - {fileID: 5946919560210859430}
-  position: {x: 0, y: 0}
-  rotation: 2
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+--- !u!114 &2712493387141704771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424481578478286981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 250
+  waterConsumption: 2
+  electricityComsumption: 1
+--- !u!114 &2921718996570172954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424481578478286981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Triple Working Place
 --- !u!1001 &1049699884072492352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -145,7 +175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187739, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: position.x
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_RootOrder
@@ -161,7 +191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_LocalRotation.w
@@ -226,7 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187739, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: position.x
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_RootOrder
@@ -242,7 +272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 7852530068206187740, guid: efd98ad481f9405448621066f865b325, type: 3}
       propertyPath: m_LocalRotation.w

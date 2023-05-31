@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1583034983851126798}
   - component: {fileID: 1583034983851126799}
+  - component: {fileID: -8591950061750672310}
+  - component: {fileID: -473963289737851900}
   m_Layer: 0
   m_Name: Corridor
   m_TagString: Untagged
@@ -45,12 +47,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIPrefab: {fileID: 7606936360430423357, guid: c64e33f649924034fa7310e5db878cd6, type: 3}
-  tiles:
-  - {fileID: 975591842707337276}
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  UIPrefab: {fileID: 7606936360430423353, guid: c64e33f649924034fa7310e5db878cd6, type: 3}
+  Tiles:
+  - {fileID: 975591842707337276}
+--- !u!114 &-8591950061750672310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583034983851126797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cost: 50
+  waterConsumption: 1
+  electricityComsumption: 1
+--- !u!114 &-473963289737851900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583034983851126797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomName: Corridoor
 --- !u!1001 &2347268994450217170
 PrefabInstance:
   m_ObjectHideFlags: 0

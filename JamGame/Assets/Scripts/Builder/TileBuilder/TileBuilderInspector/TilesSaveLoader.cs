@@ -4,14 +4,22 @@ using UnityEngine;
 
 public partial class TileBuilderInspector
 {
-    public partial void ShowTilesSaveLoading(TileBuilder tileBuilder)
+    public partial void ShowTilesSaveLoading(TileBuilder tile_builder)
     {
+        _ = EditorGUILayout.BeginHorizontal();
+        tile_builder.loadingPrefab = (GameObject)EditorGUILayout.ObjectField("Loading prefab: ", tile_builder.loadingPrefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+
+        _ = EditorGUILayout.BeginHorizontal();
+        tile_builder.savingName = EditorGUILayout.TextField("Saveing name: ", tile_builder.savingName);
+        EditorGUILayout.EndHorizontal();
+
         _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Save scene composition into prefab."))
         {
-            string localPath = "Assets/Prefabs/SceneCompositions/" + tileBuilder.SavingName + ".prefab";
+            string localPath = "Assets/Prefabs/SceneCompositions/" + tile_builder.savingName + ".prefab";
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
-            _ = PrefabUtility.SaveAsPrefabAsset(tileBuilder.RootObject, localPath, out bool prefabSuccess);
+            _ = PrefabUtility.SaveAsPrefabAsset(tile_builder.RootObject, localPath, out bool prefabSuccess);
             if (prefabSuccess == true)
             {
                 Debug.Log("Prefab was saved successfully");
@@ -24,9 +32,13 @@ public partial class TileBuilderInspector
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
+        tile_builder.loadFromSceneComposition = EditorGUILayout.Toggle("Load from prefab on start?", tile_builder.loadFromSceneComposition);
+        EditorGUILayout.EndHorizontal();
+
+        _ = EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Load scene composition from prefab."))
         {
-            tileBuilder.LoadSceneComposition(tileBuilder.LoadingPrefab);
+            tile_builder.LoadSceneComposition(tile_builder.loadingPrefab);
         }
         EditorGUILayout.EndHorizontal();
     }

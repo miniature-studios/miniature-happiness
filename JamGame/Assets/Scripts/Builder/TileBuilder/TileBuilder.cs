@@ -4,29 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TileBuilder : MonoBehaviour
+public partial class TileBuilder : MonoBehaviour
 {
-    [Header("==== Variables for debugging ====")]
-    [SerializeField] public GameObject FreespacePrefab;
-    [SerializeField] public GameObject StairsPrefab;
-    [SerializeField] public GameObject WindowPrefab;
-    [SerializeField] public GameObject OutdoorPrefab;
-    [SerializeField] public GameObject CorridoorPrefab;
-    [SerializeField] public GameObject WorkingPlaceFree;
-    [SerializeField] public GameObject WorkingPlace;
-    [SerializeField] public GameObject ChoosedTile;
-    [Header("==== Scene composition Save/Loading ====")]
-    [SerializeField] public GameObject LoadingPrefab;
-    [SerializeField] public string SavingName = "SampleBuilding";
-
-    [Header("==== Reqire variables ====")]
-    [SerializeField] private GameObject freespacePrefab;
+    [SerializeField] private TileUnion freespacePrefab;
     [SerializeField] private GameObject rootObject;
     [SerializeField] private BuilderMatrix builderMatrix;
-    [SerializeField] public Gamemode GameMode;
-    private IValidator validator = new GameModeValidator();
-    private List<Vector2Int> previousPlaces;
-    private int previousRotation;
+
+    private List<Vector2Int> previousPlaces = new();
+    private int previousRotation = 0;
     private bool justCreated = false;
 
     public TileUnion SelectedTile { get; private set; } = null;
@@ -46,35 +31,21 @@ public class TileBuilder : MonoBehaviour
                 }
             }
         }
-        CreateNormalBuilding();
-        UpdateAllTiles();
-        ChangeGameMode(Gamemode.building);
-    }
-
-    public Result Execute(ICommand command)
-    {
-        Result response = validator.ValidateCommand(command);
-        return response.Success ? command.Execute(this) : response;
-    }
-    public void ChangeGameMode(Gamemode gamemode)
-    {
-        validator = gamemode switch
+        if (loadFromSceneComposition && loadingPrefab != null)
         {
-            Gamemode.godmode => new GodModeValidator(this),
-            Gamemode.building => new BuildModeValidator(this),
-            Gamemode.gameing => new GameModeValidator(),
-            _ => throw new ArgumentException(),
-        };
+            LoadSceneComposition(loadingPrefab);
+        }
+        UpdateAllTiles();
     }
 
-    public void LoadSceneComposition(GameObject SceneCompositionPrefab)
+    public void LoadSceneComposition(GameObject scene_composition_prefab)
     {
         DeleteAllTiles();
         if (rootObject != null)
         {
             DestroyImmediate(rootObject);
         }
-        rootObject = Instantiate(SceneCompositionPrefab, transform);
+        rootObject = Instantiate(scene_composition_prefab, transform);
         foreach (TileUnion union in rootObject.GetComponentsInChildren<TileUnion>())
         {
             foreach (Vector2Int pos in union.TilesPositions)
@@ -83,6 +54,49 @@ public class TileBuilder : MonoBehaviour
             }
         }
         UpdateAllTiles();
+    }
+
+    public Result Validate()
+    {
+        if (SelectedTile != null)
+        {
+            return new FailResult("Complete placing first");
+        }
+
+        Stack<KeyValuePair<Vector2Int, TileUnion>> points_stack = new(TileUnionDictionary.Where(
+            x => x.Value.IsAllWithMark("door")));
+        List<KeyValuePair<Vector2Int, TileUnion>> tiles_to_check = TileUnionDictionary.Where(
+            x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("freespace")).ToList();
+
+        while (points_stack.Count > 0)
+        {
+            KeyValuePair<Vector2Int, TileUnion> point = points_stack.Pop();
+            foreach (Direction dir in point.Value.GetAccessibleDirectionsFromPosition(point.Key))
+            {
+                List<KeyValuePair<Vector2Int, TileUnion>> near_tiles = new(tiles_to_check.Where(x => x.Key == dir.ToVector2Int() + point.Key));
+                if (near_tiles.Count() > 0)
+                {
+                    foreach (KeyValuePair<Vector2Int, TileUnion> founded_tile in near_tiles)
+                    {
+                        _ = tiles_to_check.Remove(founded_tile);
+                        points_stack.Push(founded_tile);
+                    }
+                }
+            }
+        }
+
+        if (tiles_to_check.Count > 0)
+        {
+            foreach (TileUnion union in tiles_to_check.Select(x => x.Value).Distinct())
+            {
+                union.ShowInvalidPlacing();
+            }
+            return new FailResult("Some tiles not connected");
+        }
+        else
+        {
+            return new SuccessResult();
+        }
     }
 
     public Result SelectTile(TileUnion tile)
@@ -113,37 +127,39 @@ public class TileBuilder : MonoBehaviour
             return new SuccessResult();
         }
     }
-    public Result DeleteSelectedTile(out GameObject DeletedTileUI)
+
+    public Result DeleteSelectedTile(out RoomInventoryUI deleted_tile_ui)
     {
         if (SelectedTile == null)
         {
-            DeletedTileUI = null;
+            deleted_tile_ui = null;
             return new FailResult("Not selected Tile");
         }
         if (justCreated)
         {
             justCreated = false;
-            DeletedTileUI = DeleteTile(SelectedTile);
+            deleted_tile_ui = DeleteTile(SelectedTile);
             SelectedTile = null;
-            return new FailResult("Selected tile deleted");
+            return new SuccessResult();
         }
         else
         {
             justCreated = false;
-            DeletedTileUI = DeleteTile(SelectedTile);
+            deleted_tile_ui = DeleteTile(SelectedTile);
             foreach (Vector2Int pos in previousPlaces)
             {
                 _ = TileUnionDictionary.Remove(pos);
             }
             foreach (Vector2Int position in previousPlaces)
             {
-                CreateTileAndBind(FreespacePrefab, position, 0);
+                CreateTileAndBind(freespacePrefab, position, 0);
             }
             UpdateSidesInPositions(previousPlaces);
             SelectedTile = null;
             return new SuccessResult();
         }
     }
+
     public Result MoveSelectedTile(Direction direction)
     {
         if (SelectedTile == null)
@@ -158,7 +174,8 @@ public class TileBuilder : MonoBehaviour
             return new SuccessResult();
         }
     }
-    public Result RotateSelectedTile(Direction direction)
+
+    public Result RotateSelectedTile(RotationDirection direction)
     {
         if (SelectedTile == null)
         {
@@ -166,12 +183,13 @@ public class TileBuilder : MonoBehaviour
         }
         else
         {
-            SelectedTile.SetRotation(SelectedTile.Rotation + direction.GetIntRotationValue());
+            SelectedTile.SetRotation(SelectedTile.Rotation + (int)direction);
             SelectedTile.ApplySelecting();
             _ = SelectedTile.TryApplyErrorTiles(this);
             return new SuccessResult();
         }
     }
+
     public Result ComletePlacing()
     {
         if (SelectedTile == null)
@@ -238,14 +256,15 @@ public class TileBuilder : MonoBehaviour
         justCreated = false;
         return new SuccessResult();
     }
-    public Result AddTileIntoBuilding(GameObject tilePrefab, Vector2Int position, int rotation)
+
+    public Result AddTileIntoBuilding(TileUnion tile_prefab, Vector2Int position, int rotation)
     {
         if (SelectedTile != null)
         {
             return new FailResult("Complete placing previous tile");
         }
         justCreated = true;
-        TileUnion tile = CreateTile(tilePrefab, position, rotation);
+        TileUnion tile = CreateTile(tile_prefab, position, rotation);
         return SelectTile(tile);
     }
 
@@ -257,6 +276,7 @@ public class TileBuilder : MonoBehaviour
         }
         TileUnionDictionary.Clear();
     }
+
     public void UpdateAllTiles()
     {
         foreach (KeyValuePair<Vector2Int, TileUnion> pair in TileUnionDictionary)
@@ -268,43 +288,61 @@ public class TileBuilder : MonoBehaviour
             pair.Value.UpdateCorners(this, pair.Key);
         }
     }
+
     public IEnumerable<TileUnion> GetTileUnionsInPositions(IEnumerable<Vector2Int> positions)
     {
         return TileUnionDictionary.Where(x => positions.Contains(x.Key)).Select(x => x.Value).Distinct();
     }
-    public IEnumerable<Vector2Int> GetInsideListPositions()
+
+    public IEnumerable<Vector2Int> GetFreeSpaceInsideListPositions()
     {
         return TileUnionDictionary.Where(x => x.Value.IsAllWithMark("freespace")).Select(x => x.Key).OrderBy(x => Vector2Int.Distance(x, new(0, 0)));
     }
-    public void CreateTileAndBind(GameObject tilePrefab, Vector2Int position, int rotation)
+
+    public IEnumerable<Vector2Int> GetAllInsideListPositions()
     {
-        TileUnion tileUnion = CreateTile(tilePrefab, position, rotation);
+        return TileUnionDictionary.Where(x => !x.Value.IsAllWithMark("Outside")).Select(x => x.Key);
+    }
+
+    public void CreateTileAndBind(TileUnion tile_prefab, Vector2Int position, int rotation)
+    {
+        TileUnion tileUnion = CreateTile(tile_prefab, position, rotation);
         foreach (Vector2Int pos in tileUnion.TilesPositions)
         {
             TileUnionDictionary.Add(pos, tileUnion);
         }
         UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
     }
-    public TileUnion CreateTile(GameObject tilePrefab, Vector2Int position, int rotation)
+
+    private TileUnion CreateTile(TileUnion tile_prefab, Vector2Int position, int rotation)
     {
-        TileUnion tileUnion = Instantiate(tilePrefab, rootObject.transform).GetComponent<TileUnion>();
+        TileUnion tileUnion = Instantiate(tile_prefab, rootObject.transform);
         tileUnion.SetPosition(position);
         tileUnion.SetRotation(rotation);
         return tileUnion;
     }
 
-    private GameObject DeleteTile(TileUnion tileUnion)
+    private RoomInventoryUI DeleteTile(TileUnion tile_union)
     {
-        GameObject UIPrefab = tileUnion.UIPrefab;
-        DestroyImmediate(tileUnion.gameObject);
-        RemoveTileFromDictionary(tileUnion);
+        if (tile_union == null)
+        {
+            return null;
+        }
+        RoomInventoryUI UIPrefab = tile_union.UIPrefab;
+        DestroyImmediate(tile_union.gameObject);
+        RemoveTileFromDictionary(tile_union);
         return UIPrefab;
     }
-    public void RemoveTileFromDictionary(TileUnion tileUnion)
+
+    private void RemoveTileFromDictionary(TileUnion tile_union)
     {
-        foreach (KeyValuePair<Vector2Int, TileUnion> item in TileUnionDictionary.Where(x => x.Value == tileUnion).Distinct().ToList())
+        foreach (KeyValuePair<Vector2Int, TileUnion> item in TileUnionDictionary)
         {
-            _ = TileUnionDictionary.Remove(item.Key);
+            if (item.Value == tile_union)
+            {
+                _ = TileUnionDictionary.Remove(item.Key);
+                break;
+            }
         }
     }
 
@@ -322,53 +360,6 @@ public class TileBuilder : MonoBehaviour
         foreach ((TileUnion, Vector2Int) pair in queue)
         {
             pair.Item1.UpdateCorners(this, pair.Item2);
-        }
-    }
-
-    // For test
-    public void CreateNormalBuilding()
-    {
-        DeleteAllTiles();
-        for (int i = 0; i < 9; i++)
-        {
-            CreateTileAndBind(OutdoorPrefab, new(0, i), 0);
-        }
-
-        for (int i = 0; i < 8; i++)
-        {
-            if (i == 1)
-            {
-                CreateTileAndBind(StairsPrefab, new(i + 1, 0), 0);
-            }
-            else
-            {
-                CreateTileAndBind(OutdoorPrefab, new(i + 1, 0), 0);
-            }
-
-            for (int j = 0; j < 7; j++)
-            {
-                if (j == 2)
-                {
-                    CreateTileAndBind(CorridoorPrefab, new(i + 1, j + 1), 0);
-                }
-                else if (j == 3)
-                {
-                    CreateTileAndBind(WorkingPlace, new(i + 1, j + 1), 0);
-                }
-                else if (j == 4)
-                {
-                    CreateTileAndBind(WorkingPlaceFree, new(i + 1, j + 1), 0);
-                }
-                else
-                {
-                    CreateTileAndBind(FreespacePrefab, new(i + 1, j + 1), 0);
-                }
-            }
-            CreateTileAndBind(OutdoorPrefab, new(i + 1, 8), 0);
-        }
-        for (int i = 0; i < 9; i++)
-        {
-            CreateTileAndBind(OutdoorPrefab, new(9, i), 0);
         }
     }
 }

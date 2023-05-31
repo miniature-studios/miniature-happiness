@@ -3,25 +3,25 @@ using UnityEngine;
 
 public class AddTileToSceneCommand : ICommand
 {
-    public GameObject tilePrefab;
+    public TileUnion TilePrefab;
     public Vector2Int CreatingPosition;
     public int CreatingRotation;
-    public Ray ray;
-    public AddTileToSceneCommand(GameObject tilePrefab, Ray ray)
+    public Ray Ray;
+    public AddTileToSceneCommand(TileUnion tile_prefab, Ray ray)
     {
-        this.tilePrefab = tilePrefab;
+        TilePrefab = tile_prefab;
         CreatingPosition = new();
         CreatingRotation = 0;
-        this.ray = ray;
+        Ray = ray;
     }
-    public AddTileToSceneCommand(GameObject tilePrefab)
+    public AddTileToSceneCommand(TileUnion tile_prefab)
     {
-        this.tilePrefab = tilePrefab;
+        TilePrefab = tile_prefab;
         CreatingPosition = new();
         CreatingRotation = 0;
     }
-    public Result Execute(TileBuilder tileBuilder)
+    public Result Execute(TileBuilder tile_builder)
     {
-        return tileBuilder.AddTileIntoBuilding(tilePrefab, CreatingPosition, CreatingRotation);
+        return tile_builder.AddTileIntoBuilding(TilePrefab, CreatingPosition, CreatingRotation);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
 public class Buff : ScriptableObject
 {
+    // TODO: refactor
     [SerializeField] public float time;
 
     [SerializeField] private List<SerializedEffect> rawEffects;

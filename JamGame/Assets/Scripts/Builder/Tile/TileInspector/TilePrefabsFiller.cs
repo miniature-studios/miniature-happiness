@@ -11,33 +11,37 @@ public partial class TileInspector
 
         if (GUILayout.Button("Fill tile with prefabs"))
         {
-            GameObject wallsHadler;
+            GameObject walls_handler;
             if (tile.transform.Find("Walls") == null)
             {
-                wallsHadler = new GameObject("Walls");
-                wallsHadler.transform.parent = tile.gameObject.transform;
+                walls_handler = new GameObject("Walls");
+                walls_handler.transform.parent = tile.gameObject.transform;
             }
             else
             {
-                wallsHadler = tile.transform.Find("Walls").gameObject;
+                walls_handler = tile.transform.Find("Walls").gameObject;
+            }
+            while (walls_handler.transform.childCount > 0)
+            {
+                DestroyImmediate(walls_handler.transform.GetChild(0).gameObject);
             }
 
-            foreach (WallCollection wallCollection in tile.walls)
+            foreach (WallCollection wall_collection in tile.RawWalls)
             {
-                float degrees = wallCollection.Place.GetDegrees();
-                foreach (WallPrefabHandler handler in wallCollection.Handlers)
+                float degrees = wall_collection.Place.GetDegrees();
+                foreach (WallPrefabHandler handler in wall_collection.Handlers)
                 {
-                    TileWallPrefabHandler prefabHandler = tile.elementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
-                    if (prefabHandler != null)
+                    TileWallPrefabHandler prefab_handler = tile.ElementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
+                    if (prefab_handler != null)
                     {
                         if (handler.Prefab != null)
                         {
                             DestroyImmediate(handler.Prefab);
                         }
-                        handler.Prefab = Instantiate(prefabHandler.Prefab, tile.transform.position, prefabHandler.Prefab.transform.rotation, wallsHadler.transform);
+                        handler.Prefab = Instantiate(prefab_handler.Prefab, tile.transform.position, prefab_handler.Prefab.transform.rotation, walls_handler.transform);
                         handler.Prefab.transform.Rotate(new(0, degrees, 0));
                         handler.Prefab.SetActive(false);
-                        handler.Prefab.name = $"Wall - {handler.Type} - {wallCollection.Place} -| " + handler.Prefab.name;
+                        handler.Prefab.name = $"Wall - {handler.Type} - {wall_collection.Place} -| " + handler.Prefab.name;
                     }
                     else
                     {
@@ -46,34 +50,38 @@ public partial class TileInspector
                 }
             }
 
-            GameObject cornersHadler;
+            GameObject corners_handler;
             if (tile.transform.Find("Corners") == null)
             {
-                cornersHadler = new GameObject("Corners");
-                cornersHadler.transform.parent = tile.gameObject.transform;
+                corners_handler = new GameObject("Corners");
+                corners_handler.transform.parent = tile.gameObject.transform;
             }
             else
             {
-                cornersHadler = tile.transform.Find("Corners").gameObject;
+                corners_handler = tile.transform.Find("Corners").gameObject;
+            }
+            while (corners_handler.transform.childCount > 0)
+            {
+                DestroyImmediate(corners_handler.transform.GetChild(0).gameObject);
             }
 
-            foreach (CornerCollection cornerCollection in tile.corners)
+            foreach (CornerCollection corner_collection in tile.Corners)
             {
-                float degrees = cornerCollection.Place.GetDegrees() - 45;
-                foreach (CornerPrefabHandler handler in cornerCollection.Handlers)
+                float degrees = corner_collection.Place.GetDegrees() - 45;
+                foreach (CornerPrefabHandler handler in corner_collection.Handlers)
                 {
-                    TileCornerPrefabHandler prefabHandler = tile.elementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
-                    if (prefabHandler != null)
+                    TileCornerPrefabHandler prefab_handler = tile.ElementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
+                    if (prefab_handler != null)
                     {
                         if (handler.Prefab != null)
                         {
                             DestroyImmediate(handler.Prefab);
                         }
 
-                        handler.Prefab = Instantiate(prefabHandler.Prefab, tile.transform.position, prefabHandler.Prefab.transform.rotation, cornersHadler.transform);
+                        handler.Prefab = Instantiate(prefab_handler.Prefab, tile.transform.position, prefab_handler.Prefab.transform.rotation, corners_handler.transform);
                         handler.Prefab.transform.Rotate(new(0, degrees, 0));
                         handler.Prefab.SetActive(false);
-                        handler.Prefab.name = $"Corner - {handler.Type} - {cornerCollection.Place} -| " + handler.Prefab.name;
+                        handler.Prefab.name = $"Corner - {handler.Type} - {corner_collection.Place} -| " + handler.Prefab.name;
                     }
                     else
                     {
@@ -82,15 +90,15 @@ public partial class TileInspector
                 }
             }
 
-            GameObject centerHadler;
+            GameObject center_handler;
             if (tile.transform.Find("Center") == null)
             {
-                centerHadler = new GameObject("Center");
-                centerHadler.transform.parent = tile.gameObject.transform;
+                center_handler = new GameObject("Center");
+                center_handler.transform.parent = tile.gameObject.transform;
             }
             else
             {
-                centerHadler = tile.transform.Find("Center").gameObject;
+                center_handler = tile.transform.Find("Center").gameObject;
             }
         }
 
