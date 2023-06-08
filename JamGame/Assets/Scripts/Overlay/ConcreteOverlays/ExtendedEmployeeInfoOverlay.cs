@@ -4,7 +4,8 @@ using UnityEngine;
 [Serializable]
 public class ExtendedEmployeeInfoOverlay : IOverlay
 {
-    [SerializeField] GameObject uiPrefab;
+    [SerializeField]
+    private GameObject uiPrefab;
     public GameObject UIPrefab => uiPrefab;
 
     public void Activate(IOverlayManager overlay_manager)

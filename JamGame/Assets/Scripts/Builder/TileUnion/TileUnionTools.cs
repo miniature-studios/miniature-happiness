@@ -12,14 +12,17 @@ public static class TileUnionTools
             vector_sum += pos;
         }
         vector_sum /= positions.Count;
-        List<Vector2> variants = new()
-        {
-            new(Mathf.RoundToInt(vector_sum.x), Mathf.RoundToInt(vector_sum.y)),
-            new(
-                Mathf.RoundToInt(vector_sum.x + (vector_sum.normalized.x / 2)) - (vector_sum.normalized.x / 2),
-                Mathf.RoundToInt(vector_sum.y + (vector_sum.normalized.y / 2)) - (vector_sum.normalized.x / 2)
+        List<Vector2> variants =
+            new()
+            {
+                new(Mathf.RoundToInt(vector_sum.x), Mathf.RoundToInt(vector_sum.y)),
+                new(
+                    Mathf.RoundToInt(vector_sum.x + (vector_sum.normalized.x / 2))
+                        - (vector_sum.normalized.x / 2),
+                    Mathf.RoundToInt(vector_sum.y + (vector_sum.normalized.y / 2))
+                        - (vector_sum.normalized.x / 2)
                 )
-        };
+            };
         return variants.OrderBy(x => Vector2.Distance(x, vector_sum)).First();
     }
 }

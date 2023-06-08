@@ -14,8 +14,11 @@ public class EmployeeWeights
 [Serializable]
 public class RandomEmployeeConfig : IEmployeeConfig
 {
-    [SerializeField] private List<EmployeeWeights> employeeWeights;
-    [SerializeField] private EmployeeNameGenerator nameGenerator;
+    [SerializeField]
+    private List<EmployeeWeights> employeeWeights;
+
+    [SerializeField]
+    private EmployeeNameGenerator nameGenerator;
 
     public EmployeeConfig GetEmployeeConfig()
     {

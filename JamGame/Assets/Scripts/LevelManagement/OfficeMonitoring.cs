@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class OfficeMonitoring : MonoBehaviour
 {
-    [SerializeField] private TileBuilder tileBuilder;
+    [SerializeField]
+    private TileBuilder tileBuilder;
+
     public struct OfficeInfo
     {
         public int InsideTilesCount;
@@ -23,4 +25,3 @@ public class OfficeMonitoring : MonoBehaviour
         };
     }
 }
-

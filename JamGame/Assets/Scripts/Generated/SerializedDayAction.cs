@@ -4,12 +4,20 @@ using UnityEngine;
 [Serializable]
 public class SerializedDayAction
 {
-    [SerializeField] private string selectedType;
+    [SerializeField]
+    private string selectedType;
 
-    [SerializeField] private DayEnd dayEnd;
-    [SerializeField] private DayStart dayStart;
-    [SerializeField] private Meeting meeting;
-    [SerializeField] private Working working;
+    [SerializeField]
+    private DayEnd dayEnd;
+
+    [SerializeField]
+    private DayStart dayStart;
+
+    [SerializeField]
+    private Meeting meeting;
+
+    [SerializeField]
+    private Working working;
 
     public IDayAction ToDayAction()
     {

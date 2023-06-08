@@ -7,6 +7,7 @@ using UnityEngine;
 public class TileUnionInspector : Editor
 {
     private TileUnion tile_union;
+
     public override void OnInspectorGUI()
     {
         tile_union = serializedObject.targetObject as TileUnion;

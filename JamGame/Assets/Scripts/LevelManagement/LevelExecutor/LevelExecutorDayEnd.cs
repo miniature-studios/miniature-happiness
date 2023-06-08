@@ -27,4 +27,3 @@ public partial class LevelExecutor
         uIController.PlayDayActionEnd(bufferAction);
     }
 }
-

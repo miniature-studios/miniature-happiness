@@ -5,7 +5,11 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(SerializedEmployeeConfig))]
 public class SerializedEmployeeConfigDrawer : PropertyDrawer
 {
-    private readonly string[] implementingTypeNames = { "FixedEmployeeConfig", "RandomEmployeeConfig" };
+    private readonly string[] implementingTypeNames =
+    {
+        "FixedEmployeeConfig",
+        "RandomEmployeeConfig"
+    };
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -41,8 +45,9 @@ public class SerializedEmployeeConfigDrawer : PropertyDrawer
         pos.y += EditorGUIUtility.singleLineHeight;
         pos.height = position.height - EditorGUIUtility.singleLineHeight;
 
-        SerializedProperty typed_prop =
-            property.FindPropertyRelative(PascalToCamelCase(selected_type));
+        SerializedProperty typed_prop = property.FindPropertyRelative(
+            PascalToCamelCase(selected_type)
+        );
         _ = EditorGUI.PropertyField(pos, typed_prop, true);
     }
 
@@ -58,7 +63,9 @@ public class SerializedEmployeeConfigDrawer : PropertyDrawer
         float height = 0.0f;
         if (selected_type != "")
         {
-            var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+            SerializedProperty typed_prop = property.FindPropertyRelative(
+                PascalToCamelCase(selected_type)
+            );
             height = EditorGUI.GetPropertyHeight(typed_prop);
         }
         return EditorGUIUtility.singleLineHeight + height;

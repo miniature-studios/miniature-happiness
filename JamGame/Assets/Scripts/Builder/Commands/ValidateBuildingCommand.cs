@@ -7,4 +7,3 @@ public class ValidateBuildingCommand : ICommand
         return tile_builder.Validate();
     }
 }
-

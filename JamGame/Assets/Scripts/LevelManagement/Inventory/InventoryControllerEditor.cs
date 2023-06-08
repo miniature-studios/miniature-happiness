@@ -7,9 +7,10 @@ public class InventoryControllerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        InventoryController inventory_controller = serializedObject.targetObject as InventoryController;
+        InventoryController inventory_controller =
+            serializedObject.targetObject as InventoryController;
 
-        foreach (NamedRoomInventoriUI item in inventory_controller.namedRoomInventoryUIs)
+        foreach (NamedRoomInventoriUI item in inventory_controller.NamedRoomInventoryUIs)
         {
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(item.Name))

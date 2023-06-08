@@ -5,7 +5,8 @@ using UnityEngine;
 
 public partial class InventoryController : MonoBehaviour
 {
-    [SerializeField] private InventoryModel inventoryModel;
+    [SerializeField]
+    private InventoryModel inventoryModel;
     private RoomInventoryUI selectedRoom = null;
     private bool pointerOverView = false;
 
@@ -17,9 +18,11 @@ public partial class InventoryController : MonoBehaviour
         {
             if (pointerOverView)
             {
-                selectedRoom = RaycastUtilities.UIRaycast(Input.mousePosition)?
-                    .Where(x => x.GetComponent<RoomInventoryUI>())?
-                    .Select(x => x.GetComponent<RoomInventoryUI>()).First();
+                selectedRoom = RaycastUtilities
+                    .UIRaycast(Input.mousePosition)
+                    ?.Where(x => x.GetComponent<RoomInventoryUI>())
+                    ?.Select(x => x.GetComponent<RoomInventoryUI>())
+                    .First();
             }
         }
 
@@ -52,4 +55,3 @@ public partial class InventoryController : MonoBehaviour
         selectedRoom = new_room;
     }
 }
-

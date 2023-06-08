@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-[CreateAssetMenu(fileName = "EmployeeNameGenerator", menuName = "Level/EmployeeNameGenerator", order = 0)]
+[CreateAssetMenu(
+    fileName = "EmployeeNameGenerator",
+    menuName = "Level/EmployeeNameGenerator",
+    order = 0
+)]
 public class EmployeeNameGenerator : ScriptableObject
 {
-    [SerializeField] private List<string> firstNames;
-    [SerializeField] private List<string> lastNames;
+    [SerializeField]
+    private List<string> firstNames;
+
+    [SerializeField]
+    private List<string> lastNames;
 
     public string GenerateName()
     {
@@ -17,4 +24,3 @@ public class EmployeeNameGenerator : ScriptableObject
         return $"{first_name} {last_name}";
     }
 }
-

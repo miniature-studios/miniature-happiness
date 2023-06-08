@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ShopView : MonoBehaviour
 {
-    [SerializeField] private Transform roomsUIContainer;
+    [SerializeField]
+    private Transform roomsUIContainer;
     private Animator shopAnimator;
 
     public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -27,7 +28,9 @@ public class ShopView : MonoBehaviour
 
     private void DeleteAllItems()
     {
-        foreach (RoomShopUI old_item in roomsUIContainer.transform.GetComponentsInChildren<RoomShopUI>())
+        foreach (
+            RoomShopUI old_item in roomsUIContainer.transform.GetComponentsInChildren<RoomShopUI>()
+        )
         {
             Destroy(old_item.gameObject);
         }
@@ -35,8 +38,11 @@ public class ShopView : MonoBehaviour
 
     private void RemoveOldItems(RoomShopUI old_item)
     {
-        RoomShopUI[] room_inventorys = roomsUIContainer.transform.GetComponentsInChildren<RoomShopUI>();
-        Destroy(room_inventorys.First(x => x.RoomInventoryUI == old_item.RoomInventoryUI).gameObject);
+        RoomShopUI[] room_inventorys =
+            roomsUIContainer.transform.GetComponentsInChildren<RoomShopUI>();
+        Destroy(
+            room_inventorys.First(x => x.RoomInventoryUI == old_item.RoomInventoryUI).gameObject
+        );
     }
 
     private void AddNewItems(RoomShopUI new_item)
@@ -59,4 +65,3 @@ public class ShopView : MonoBehaviour
         shopAnimator.SetBool("Showed", false);
     }
 }
-

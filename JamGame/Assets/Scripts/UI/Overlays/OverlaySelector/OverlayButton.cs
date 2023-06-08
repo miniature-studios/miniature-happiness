@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class OverlayButton : MonoBehaviour
 {
-    [SerializeField] SerializedOverlay overlay;
-    [SerializeField] OverlaySelectorProxy proxy;
+    [SerializeField]
+    private SerializedOverlay overlay;
+
+    [SerializeField]
+    private OverlaySelectorProxy proxy;
 
     public void Activate()
     {

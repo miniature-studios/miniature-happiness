@@ -8,7 +8,10 @@ public partial class LevelExecutor
     {
         financesController.AddMoney(day_start.MorningMoney);
         transitionPanel.SetText("Day start start.");
-        uIController.PlayDayActionStart(day_start.GetType(), () => StartCoroutine(DayStartRoutine(1, next_action)));
+        uIController.PlayDayActionStart(
+            day_start.GetType(),
+            () => _ = StartCoroutine(DayStartRoutine(1, next_action))
+        );
     }
 
     private IEnumerator DayStartRoutine(float time, Action next_action)
@@ -18,4 +21,3 @@ public partial class LevelExecutor
         uIController.PlayDayActionEnd(next_action);
     }
 }
-

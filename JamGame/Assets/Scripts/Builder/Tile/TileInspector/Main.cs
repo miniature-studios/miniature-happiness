@@ -5,8 +5,11 @@ using UnityEditor;
 public partial class TileInspector : Editor
 {
     public partial void ShowWallsFilling(Tile tile);
+
     public partial void ShowCornersFilling(Tile tile);
+
     public partial void ShowPrefabsFilling(Tile tile);
+
     public override void OnInspectorGUI()
     {
         Tile tile = serializedObject.targetObject as Tile;

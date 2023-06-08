@@ -1,4 +1,4 @@
-public interface IOverlayRenderer 
+public interface IOverlayRenderer
 {
     public void RevertOverlays();
 }

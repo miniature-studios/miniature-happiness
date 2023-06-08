@@ -5,12 +5,13 @@ using UnityEngine.Events;
 public struct Money : IReadonlyData<Money>
 {
     public int Count { get; set; }
-    public Money Data => this;
+    public readonly Money Data => this;
 }
 
 public class Finances : MonoBehaviour
 {
-    [SerializeField, InspectorReadOnly] private Money money;
+    [SerializeField, InspectorReadOnly]
+    private Money money;
     public UnityEvent<IReadonlyData<Money>> MoneyChange;
 
     public void SetMoney(int money_count)
@@ -39,4 +40,3 @@ public class Finances : MonoBehaviour
         MoneyChange?.Invoke(money);
     }
 }
-

@@ -6,6 +6,7 @@ using UnityEngine;
 public class SelectTileCommand : ICommand
 {
     public TileUnion Tile;
+
     public SelectTileCommand(Ray ray)
     {
         RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
@@ -14,6 +15,7 @@ public class SelectTileCommand : ICommand
             .Select(x => x.collider.GetComponentInParent<TileUnion>());
         Tile = tiles.Count() != 0 ? tiles.First() : null;
     }
+
     public Result Execute(TileBuilder tile_builder)
     {
         return Tile == null ? new FailResult("No hits") : tile_builder.SelectTile(Tile);

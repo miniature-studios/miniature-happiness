@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Location : MonoBehaviour
 {
-    [SerializeField] private Employee employeePrototype;
+    [SerializeField]
+    private Employee employeePrototype;
     private List<NeedProvider> needProviders;
     private readonly List<Employee> employees = new();
 
@@ -24,7 +25,10 @@ public class Location : MonoBehaviour
         employees.Add(new_employee);
     }
 
-    public IEnumerable<NeedProvider> FindAllAvailableProviders(Employee employee, NeedType need_type)
+    public IEnumerable<NeedProvider> FindAllAvailableProviders(
+        Employee employee,
+        NeedType need_type
+    )
     {
         foreach (NeedProvider provider in needProviders)
         {

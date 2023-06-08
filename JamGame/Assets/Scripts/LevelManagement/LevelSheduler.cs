@@ -3,8 +3,11 @@ using UnityEngine;
 
 public class LevelSheduler : MonoBehaviour
 {
-    [SerializeField] private LevelActionsConfig levelActionsConfig;
-    [SerializeField] private LevelExecutor levelExecuter;
+    [SerializeField]
+    private LevelActionsConfig levelActionsConfig;
+
+    [SerializeField]
+    private LevelExecutor levelExecuter;
 
     private IEnumerator<DayConfig> dayEnumerator;
     private IEnumerator<IDayAction> actionEnumerator;
@@ -19,7 +22,9 @@ public class LevelSheduler : MonoBehaviour
         }
         else
         {
-            _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
+            _ = (
+                actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
+            ).MoveNext();
             actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
         }
     }
@@ -30,12 +35,16 @@ public class LevelSheduler : MonoBehaviour
         {
             if (dayEnumerator.MoveNext())
             {
-                _ = (actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()).MoveNext();
+                _ = (
+                    actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
+                ).MoveNext();
                 actionEnumerator.Current.Execute(levelExecuter, PlayPlannedActions);
             }
             else
             {
-                _ = (actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()).MoveNext();
+                _ = (
+                    actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
+                ).MoveNext();
                 actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
             }
         }

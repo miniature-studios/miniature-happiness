@@ -4,6 +4,7 @@ using UnityEngine;
 [Serializable]
 public class StressEffect : IEffect
 {
-    [SerializeField] private float increaseMultiplier;
+    [SerializeField]
+    private float increaseMultiplier;
     public float IncreaseMultiplier => increaseMultiplier;
 }

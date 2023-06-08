@@ -3,45 +3,45 @@ using UnityEngine;
 
 public struct NeedModifiersCollection
 {
-    private Dictionary<NeedType, Need.NeedProperties> Modifiers;
+    private Dictionary<NeedType, Need.NeedProperties> modifiers;
 
     public static NeedModifiersCollection Default()
     {
         return new NeedModifiersCollection
         {
-            Modifiers = new Dictionary<NeedType, Need.NeedProperties>()
+            modifiers = new Dictionary<NeedType, Need.NeedProperties>()
         };
     }
 
     public NeedModifiersCollection(List<Need.NeedProperties> modifiers_raw)
     {
-        Modifiers = new Dictionary<NeedType, Need.NeedProperties>();
+        modifiers = new Dictionary<NeedType, Need.NeedProperties>();
         foreach (Need.NeedProperties modifier in modifiers_raw)
         {
-            Modifiers.Add(modifier.NeedType, modifier);
+            modifiers.Add(modifier.NeedType, modifier);
         }
     }
 
-    public void Merge(NeedModifiersCollection other)
+    public readonly void Merge(NeedModifiersCollection other)
     {
-        foreach (KeyValuePair<NeedType, Need.NeedProperties> mods in other.Modifiers)
+        foreach (KeyValuePair<NeedType, Need.NeedProperties> mods in other.modifiers)
         {
-            if (Modifiers.ContainsKey(mods.Key))
+            if (modifiers.ContainsKey(mods.Key))
             {
-                Modifiers[mods.Key] = Modifiers[mods.Key].Combine(mods.Value);
+                modifiers[mods.Key] = modifiers[mods.Key].Combine(mods.Value);
             }
             else
             {
-                Modifiers.Add(mods.Key, mods.Value);
+                modifiers.Add(mods.Key, mods.Value);
             }
         }
     }
 
-    public Need.NeedProperties Apply(Need.NeedProperties properties)
+    public readonly Need.NeedProperties Apply(Need.NeedProperties properties)
     {
-        if (Modifiers.ContainsKey(properties.NeedType))
+        if (modifiers.ContainsKey(properties.NeedType))
         {
-            Need.NeedProperties modifier = Modifiers[properties.NeedType];
+            Need.NeedProperties modifier = modifiers[properties.NeedType];
             properties.SatisfactionGained *= modifier.SatisfactionGained;
             properties.SatisfactionTime *= modifier.SatisfactionTime;
             properties.DecreaseSpeed *= modifier.DecreaseSpeed;
@@ -53,7 +53,8 @@ public struct NeedModifiersCollection
 
 public class NeedModifiers : MonoBehaviour
 {
-    [SerializeField] private List<Need.NeedProperties> modifiersRaw;
+    [SerializeField]
+    private List<Need.NeedProperties> modifiersRaw;
     private NeedModifiersCollection modifiers;
     public NeedModifiersCollection Modifiers => modifiers;
 

@@ -7,31 +7,70 @@ public partial class TileBuilderInspector
     public partial void ShowLocationBuildingButtons(TileBuilder tile_builder)
     {
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.squareSideLength = EditorGUILayout.IntField("Square side length: ", tile_builder.squareSideLength);
+        tile_builder.SquareSideLength = EditorGUILayout.IntField(
+            "Square side length: ",
+            tile_builder.SquareSideLength
+        );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.stairsPrefab = (TileUnion)EditorGUILayout.ObjectField("Stairs prefab: ", tile_builder.stairsPrefab, typeof(TileUnion), true);
+        tile_builder.StairsPrefab = (TileUnion)
+            EditorGUILayout.ObjectField(
+                "Stairs prefab: ",
+                tile_builder.StairsPrefab,
+                typeof(TileUnion),
+                true
+            );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.windowPrefab = (TileUnion)EditorGUILayout.ObjectField("Window prefab: ", tile_builder.windowPrefab, typeof(TileUnion), true);
+        tile_builder.WindowPrefab = (TileUnion)
+            EditorGUILayout.ObjectField(
+                "Window prefab: ",
+                tile_builder.WindowPrefab,
+                typeof(TileUnion),
+                true
+            );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.outdoorPrefab = (TileUnion)EditorGUILayout.ObjectField("Outdoor prefab: ", tile_builder.outdoorPrefab, typeof(TileUnion), true);
+        tile_builder.OutdoorPrefab = (TileUnion)
+            EditorGUILayout.ObjectField(
+                "Outdoor prefab: ",
+                tile_builder.OutdoorPrefab,
+                typeof(TileUnion),
+                true
+            );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.corridoorPrefab = (TileUnion)EditorGUILayout.ObjectField("Corridoor prefab: ", tile_builder.corridoorPrefab, typeof(TileUnion), true);
+        tile_builder.CorridoorPrefab = (TileUnion)
+            EditorGUILayout.ObjectField(
+                "Corridoor prefab: ",
+                tile_builder.CorridoorPrefab,
+                typeof(TileUnion),
+                true
+            );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.workingPlaceFree = (TileUnion)EditorGUILayout.ObjectField("Working place free prefab: ", tile_builder.workingPlaceFree, typeof(TileUnion), true);
+        tile_builder.WorkingPlaceFree = (TileUnion)
+            EditorGUILayout.ObjectField(
+                "Working place free prefab: ",
+                tile_builder.WorkingPlaceFree,
+                typeof(TileUnion),
+                true
+            );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();
-        tile_builder.workingPlace = (TileUnion)EditorGUILayout.ObjectField("Working place prefab: ", tile_builder.workingPlace, typeof(TileUnion), true);
+        tile_builder.WorkingPlace = (TileUnion)
+            EditorGUILayout.ObjectField(
+                "Working place prefab: ",
+                tile_builder.WorkingPlace,
+                typeof(TileUnion),
+                true
+            );
         EditorGUILayout.EndHorizontal();
 
         _ = EditorGUILayout.BeginHorizontal();

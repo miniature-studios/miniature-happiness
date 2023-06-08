@@ -8,8 +8,11 @@ using UnityEngine.EventSystems;
 
 public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private Transform container;
-    [SerializeField] private TMP_Text button_text;
+    [SerializeField]
+    private Transform container;
+
+    [SerializeField]
+    private TMP_Text button_text;
     private Animator tilesInventoryAnimator;
     public UnityEvent<bool> PointerOverEvent;
 
@@ -19,6 +22,7 @@ public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     private bool inventoryShowed = false;
+
     public void InventoryButtonClick()
     {
         inventoryShowed = !inventoryShowed;
@@ -47,7 +51,9 @@ public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void DeleteAllItems()
     {
-        foreach (RoomInventoryUI old_item in container.transform.GetComponentsInChildren<RoomInventoryUI>())
+        foreach (
+            RoomInventoryUI old_item in container.transform.GetComponentsInChildren<RoomInventoryUI>()
+        )
         {
             old_item.Counter = 0;
         }
@@ -55,14 +61,18 @@ public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void RemoveOldItem(RoomInventoryUI old_item)
     {
-        RoomInventoryUI[] room_inventorys = container.transform.GetComponentsInChildren<RoomInventoryUI>();
+        RoomInventoryUI[] room_inventorys =
+            container.transform.GetComponentsInChildren<RoomInventoryUI>();
         room_inventorys.First(x => x.TileUnion == old_item.TileUnion).Counter--;
     }
 
     private void AddNewItem(RoomInventoryUI new_item)
     {
-        RoomInventoryUI[] room_inventorys = container.transform.GetComponentsInChildren<RoomInventoryUI>();
-        RoomInventoryUI existed = room_inventorys.FirstOrDefault(x => x.TileUnion == new_item.TileUnion);
+        RoomInventoryUI[] room_inventorys =
+            container.transform.GetComponentsInChildren<RoomInventoryUI>();
+        RoomInventoryUI existed = room_inventorys.FirstOrDefault(
+            x => x.TileUnion == new_item.TileUnion
+        );
         if (existed != null)
         {
             existed.Counter++;
@@ -83,4 +93,3 @@ public class InventoryView : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         PointerOverEvent?.Invoke(false);
     }
 }
-

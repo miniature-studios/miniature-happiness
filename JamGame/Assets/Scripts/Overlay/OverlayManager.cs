@@ -6,7 +6,8 @@ public interface IOverlayManager
 {
     public void RevertAllOverlays();
 
-    public void ApplyOverlay<O>(O overlay) where O : class, IOverlay;
+    public void ApplyOverlay<O>(O overlay)
+        where O : class, IOverlay;
 }
 
 public class OverlayManager : MonoBehaviour, IOverlayManager
@@ -27,7 +28,8 @@ public class OverlayManager : MonoBehaviour, IOverlayManager
         }
     }
 
-    public void ApplyOverlay<O>(O overlay) where O : class, IOverlay
+    public void ApplyOverlay<O>(O overlay)
+        where O : class, IOverlay
     {
         foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
         {

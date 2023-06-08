@@ -4,11 +4,17 @@ using UnityEngine;
 [Serializable]
 public class SerializedEffect
 {
-    [SerializeField] private string selectedType;
+    [SerializeField]
+    private string selectedType;
 
-    [SerializeField] private ControllerEffect controllerEffect;
-    [SerializeField] private NeedModifierEffect needModifierEffect;
-    [SerializeField] private StressEffect stressEffect;
+    [SerializeField]
+    private ControllerEffect controllerEffect;
+
+    [SerializeField]
+    private NeedModifierEffect needModifierEffect;
+
+    [SerializeField]
+    private StressEffect stressEffect;
 
     public IEffect ToEffect()
     {

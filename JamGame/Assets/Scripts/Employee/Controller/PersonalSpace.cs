@@ -4,7 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class PersonalSpace : MonoBehaviour
 {
-    [SerializeField] private PersonalSpaceConfig config;
+    [SerializeField]
+    private PersonalSpaceConfig config;
 
     private SphereCollider personalSpaceTrigger;
     private EmployeeController controller;
@@ -22,8 +23,7 @@ public class PersonalSpace : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        EmployeeController employee = other.GetComponent<EmployeeController>();
-        if (employee != null)
+        if (other.TryGetComponent(out EmployeeController employee))
         {
             _ = employeesInPersonalSpace.Add(employee);
         }
@@ -31,8 +31,7 @@ public class PersonalSpace : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        EmployeeController employee = other.GetComponent<EmployeeController>();
-        if (employee != null)
+        if (other.TryGetComponent(out EmployeeController employee))
         {
             _ = employeesInPersonalSpace.Remove(employee);
         }
@@ -55,15 +54,22 @@ public class PersonalSpace : MonoBehaviour
         foreach (EmployeeController employee in employeesInPersonalSpace)
         {
             float metrics;
-            bool employee_standing = employee.AverageVelocity.magnitude < config.MovelessVelocityThreshold;
+            bool employee_standing =
+                employee.AverageVelocity.magnitude < config.MovelessVelocityThreshold;
             if (employee_standing)
             {
                 metrics = SlowDownFactorByDistance(employee);
             }
             else
             {
-                float relative_velocity = Vector3.Dot(controller.AverageVelocity.normalized, employee.AverageVelocity.normalized);
-                metrics = relative_velocity < 0.0f ? 0.0f : SlowDownFactorByDistance(employee) * relative_velocity;
+                float relative_velocity = Vector3.Dot(
+                    controller.AverageVelocity.normalized,
+                    employee.AverageVelocity.normalized
+                );
+                metrics =
+                    relative_velocity < 0.0f
+                        ? 0.0f
+                        : SlowDownFactorByDistance(employee) * relative_velocity;
             }
 
             if (metrics > max_metrics)
@@ -109,7 +115,8 @@ public class PersonalSpace : MonoBehaviour
         }
 
         Vector3 closest_employee_velocity = closest_employee.AverageVelocity.normalized;
-        Vector3 steering_direction = new(-closest_employee_velocity.z, 0.0f, closest_employee_velocity.x);
+        Vector3 steering_direction =
+            new(-closest_employee_velocity.z, 0.0f, closest_employee_velocity.x);
         float steering_strength = SlowDownFactorByDistance(closest_employee);
         return steering_direction * steering_strength;
     }

@@ -18,6 +18,7 @@ public class WallCollection
     public Direction Place;
     public List<WallPrefabHandler> Handlers;
     public TileWallType ActiveWallType { get; private set; }
+
     public void SetWall(TileWallType type)
     {
         ActiveWallType = type;
@@ -49,12 +50,20 @@ public class CornerCollection
 [RequireComponent(typeof(BoxCollider))]
 public class Tile : MonoBehaviour
 {
-    [SerializeField] private BuilderMatrix builderMatrix;
-    [SerializeField] private WallSolver wallSolver;
+    [SerializeField]
+    private BuilderMatrix builderMatrix;
 
-    [SerializeField] private List<string> marks;
-    [SerializeField] private Vector2Int position = new(0, 0);
-    [SerializeField, Range(0, 3)] private int rotation = 0;
+    [SerializeField]
+    private WallSolver wallSolver;
+
+    [SerializeField]
+    private List<string> marks;
+
+    [SerializeField]
+    private Vector2Int position = new(0, 0);
+
+    [SerializeField, Range(0, 3)]
+    private int rotation = 0;
 
     public TileElementsHandler ElementsHandler;
     public List<WallCollection> RawWalls = new();
@@ -68,7 +77,7 @@ public class Tile : MonoBehaviour
     public int Rotation => rotation;
     public IEnumerable<string> Marks => marks;
 
-    private Dictionary<Direction, List<TileWallType>> walls
+    private Dictionary<Direction, List<TileWallType>> Walls
     {
         get
         {
@@ -99,6 +108,7 @@ public class Tile : MonoBehaviour
     public struct WallTypeMatch
     {
         public Dictionary<Direction, TileWallType> Data;
+
         public WallTypeMatch(Dictionary<Direction, TileWallType> data)
         {
             Data = data;
@@ -116,9 +126,9 @@ public class Tile : MonoBehaviour
             {
                 wallTypeToPlace = wallSolver.ChooseWall(
                     Marks,
-                    walls[direction],
+                    Walls[direction],
                     outTile.Marks,
-                    outTile.walls[direction.GetOpposite()]
+                    outTile.Walls[direction.GetOpposite()]
                 );
             }
             if (wallTypeToPlace == null)
@@ -129,6 +139,7 @@ public class Tile : MonoBehaviour
         }
         return new SuccessResult<WallTypeMatch>(new(configuration));
     }
+
     public void ApplyUpdatingWalls(Result<WallTypeMatch> result)
     {
         foreach (KeyValuePair<Direction, TileWallType> pair in result.Data.Data)
@@ -139,7 +150,10 @@ public class Tile : MonoBehaviour
 
     private WallCollection GetWallCollection(Direction imagine_place)
     {
-        Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
+        Enumerable
+            .Range(0, rotation)
+            .ToList()
+            .ForEach(x => imagine_place = imagine_place.RotateMinus90());
         return RawWalls.Find(x => x.Place == imagine_place);
     }
 
@@ -153,12 +167,15 @@ public class Tile : MonoBehaviour
             Tile tile3 = neighbours[direction.Rotate90()];
             if (tile1 != null && tile2 != null && tile3 != null)
             {
-                corner_type_to_place = ChooseCorner(new TileWallType[] {
-                    GetActiveWallType(direction),
-                    tile1.GetActiveWallType(direction.Rotate90()),
-                    tile2.GetActiveWallType(direction.GetOpposite()),
-                    tile3.GetActiveWallType(direction.RotateMinus90())
-                });
+                corner_type_to_place = ChooseCorner(
+                    new TileWallType[]
+                    {
+                        GetActiveWallType(direction),
+                        tile1.GetActiveWallType(direction.Rotate90()),
+                        tile2.GetActiveWallType(direction.GetOpposite()),
+                        tile3.GetActiveWallType(direction.RotateMinus90())
+                    }
+                );
             }
             GetCornerCollection(direction.Rotate45()).SetCorner(corner_type_to_place);
         }
@@ -186,7 +203,10 @@ public class Tile : MonoBehaviour
 
     private CornerCollection GetCornerCollection(Direction imaginePlace)
     {
-        Enumerable.Range(0, rotation).ToList().ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
+        Enumerable
+            .Range(0, rotation)
+            .ToList()
+            .ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
         return Corners.Find(x => x.Place == imaginePlace);
     }
 
@@ -204,19 +224,32 @@ public class Tile : MonoBehaviour
         {
             default:
             case TileState.Normal:
-                transform.position = new Vector3(transform.position.x, unselectedYPosition, transform.position.z);
+                transform.position = new Vector3(
+                    transform.position.x,
+                    unselectedYPosition,
+                    transform.position.z
+                );
                 TileView.SetMaterial(TileView.State.Default);
                 break;
             case TileState.Selected:
-                transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
+                transform.position = new Vector3(
+                    transform.position.x,
+                    selectedYPosition,
+                    transform.position.z
+                );
                 TileView.SetMaterial(TileView.State.Selected);
                 break;
             case TileState.SelectedAndErrored:
-                transform.position = new Vector3(transform.position.x, selectedYPosition, transform.position.z);
+                transform.position = new Vector3(
+                    transform.position.x,
+                    selectedYPosition,
+                    transform.position.z
+                );
                 TileView.SetMaterial(TileView.State.SelectedOverlapping);
                 break;
         }
     }
+
     public void SetPosition(Vector2Int _position)
     {
         position = _position;
@@ -224,7 +257,7 @@ public class Tile : MonoBehaviour
             builderMatrix.Step * _position.y,
             transform.localPosition.y,
             -builderMatrix.Step * _position.x
-            );
+        );
     }
 
     public void SetRotation(int _rotation)
@@ -249,7 +282,10 @@ public class Tile : MonoBehaviour
 
     private TileWallType GetActiveWallType(Direction imagine_place)
     {
-        Enumerable.Range(0, rotation).ToList().ForEach(x => imagine_place = imagine_place.RotateMinus90());
+        Enumerable
+            .Range(0, rotation)
+            .ToList()
+            .ForEach(x => imagine_place = imagine_place.RotateMinus90());
         WallCollection wall_collection = RawWalls.Find(x => x.Place == imagine_place);
         return wall_collection.ActiveWallType;
     }
@@ -260,7 +296,10 @@ public class Tile : MonoBehaviour
         foreach (WallCollection wall in RawWalls)
         {
             Direction imagine_place = wall.Place;
-            Enumerable.Range(0, rotation).ToList().ForEach(arg => imagine_place = imagine_place.Rotate90());
+            Enumerable
+                .Range(0, rotation)
+                .ToList()
+                .ForEach(arg => imagine_place = imagine_place.Rotate90());
             list.Add(imagine_place, wall.Handlers.Select(x => x.Type).ToList());
         }
         cachedWalls = list;

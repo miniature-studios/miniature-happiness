@@ -31,17 +31,25 @@ public partial class TileInspector
                 float degrees = wall_collection.Place.GetDegrees();
                 foreach (WallPrefabHandler handler in wall_collection.Handlers)
                 {
-                    TileWallPrefabHandler prefab_handler = tile.ElementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
+                    TileWallPrefabHandler prefab_handler =
+                        tile.ElementsHandler.WallPrefabHandlers.Find(x => x.Type == handler.Type);
                     if (prefab_handler != null)
                     {
                         if (handler.Prefab != null)
                         {
                             DestroyImmediate(handler.Prefab);
                         }
-                        handler.Prefab = Instantiate(prefab_handler.Prefab, tile.transform.position, prefab_handler.Prefab.transform.rotation, walls_handler.transform);
+                        handler.Prefab = Instantiate(
+                            prefab_handler.Prefab,
+                            tile.transform.position,
+                            prefab_handler.Prefab.transform.rotation,
+                            walls_handler.transform
+                        );
                         handler.Prefab.transform.Rotate(new(0, degrees, 0));
                         handler.Prefab.SetActive(false);
-                        handler.Prefab.name = $"Wall - {handler.Type} - {wall_collection.Place} -| " + handler.Prefab.name;
+                        handler.Prefab.name =
+                            $"Wall - {handler.Type} - {wall_collection.Place} -| "
+                            + handler.Prefab.name;
                     }
                     else
                     {
@@ -70,7 +78,8 @@ public partial class TileInspector
                 float degrees = corner_collection.Place.GetDegrees() - 45;
                 foreach (CornerPrefabHandler handler in corner_collection.Handlers)
                 {
-                    TileCornerPrefabHandler prefab_handler = tile.ElementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
+                    TileCornerPrefabHandler prefab_handler =
+                        tile.ElementsHandler.CornerPrefabHandlers.Find(x => x.Type == handler.Type);
                     if (prefab_handler != null)
                     {
                         if (handler.Prefab != null)
@@ -78,10 +87,17 @@ public partial class TileInspector
                             DestroyImmediate(handler.Prefab);
                         }
 
-                        handler.Prefab = Instantiate(prefab_handler.Prefab, tile.transform.position, prefab_handler.Prefab.transform.rotation, corners_handler.transform);
+                        handler.Prefab = Instantiate(
+                            prefab_handler.Prefab,
+                            tile.transform.position,
+                            prefab_handler.Prefab.transform.rotation,
+                            corners_handler.transform
+                        );
                         handler.Prefab.transform.Rotate(new(0, degrees, 0));
                         handler.Prefab.SetActive(false);
-                        handler.Prefab.name = $"Corner - {handler.Type} - {corner_collection.Place} -| " + handler.Prefab.name;
+                        handler.Prefab.name =
+                            $"Corner - {handler.Type} - {corner_collection.Place} -| "
+                            + handler.Prefab.name;
                     }
                     else
                     {

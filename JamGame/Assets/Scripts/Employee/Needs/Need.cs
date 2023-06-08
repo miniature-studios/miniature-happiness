@@ -40,19 +40,20 @@ public class Need
         }
     }
 
-    [SerializeField] private NeedProperties properties;
+    [SerializeField]
+    private NeedProperties properties;
     public NeedType NeedType => properties.NeedType;
 
-    public float satisfied = 0.0f;
+    public float Satisfied = 0.0f;
 
     // TODO: refactor
     [SerializeField]
     [HideInInspector]
-    private List<NeedModifiers> registeredModifiers;
+    private readonly List<NeedModifiers> registeredModifiers;
 
     public Need(Need prototype)
     {
-        satisfied = prototype.satisfied;
+        Satisfied = prototype.Satisfied;
         properties = prototype.properties;
         registeredModifiers = new List<NeedModifiers>();
     }
@@ -66,12 +67,12 @@ public class Need
     // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
     public void Desatisfy(float delta_time)
     {
-        satisfied -= delta_time * GetProperties().DecreaseSpeed;
+        Satisfied -= delta_time * GetProperties().DecreaseSpeed;
     }
 
     public void Satisfy()
     {
-        satisfied += GetProperties().SatisfactionGained;
+        Satisfied += GetProperties().SatisfactionGained;
     }
 
     public NeedProperties GetProperties()

@@ -7,10 +7,14 @@ namespace Common
         public bool Success { get; protected set; }
         public bool Failure => !Success;
 
-        protected string error;
+        protected string Err;
 
-        public string Error => Failure ? error :
-                throw new Exception($"You can't access .{nameof(Error)} when .{nameof(Failure)} is false");
+        public string Error =>
+            Failure
+                ? Err
+                : throw new Exception(
+                    $"You can't access .{nameof(Error)} when .{nameof(Failure)} is false"
+                );
     }
 
     public class SuccessResult : Result
@@ -26,7 +30,7 @@ namespace Common
         public FailResult(string error)
         {
             Success = false;
-            base.error = error;
+            base.Err = error;
         }
     }
 
@@ -35,13 +39,21 @@ namespace Common
         public bool Success { get; protected set; }
         public bool Failure => !Success;
 
-        protected string error;
-        protected T data;
+        protected string Err;
+        protected T Data_;
 
-        public string Error => Failure ? error :
-                throw new Exception($"You can't access .{nameof(Error)} when .{nameof(Failure)} is false");
-        public T Data => Success ? data :
-                throw new Exception($"You can't access .{nameof(Data)} when .{nameof(Success)} is false");
+        public string Error =>
+            Failure
+                ? Err
+                : throw new Exception(
+                    $"You can't access .{nameof(Error)} when .{nameof(Failure)} is false"
+                );
+        public T Data =>
+            Success
+                ? Data_
+                : throw new Exception(
+                    $"You can't access .{nameof(Data)} when .{nameof(Success)} is false"
+                );
     }
 
     public class SuccessResult<T> : Result<T>
@@ -49,7 +61,7 @@ namespace Common
         public SuccessResult(T data)
         {
             Success = true;
-            base.data = data;
+            base.Data_ = data;
         }
     }
 
@@ -58,7 +70,7 @@ namespace Common
         public FailResult(string error)
         {
             Success = false;
-            base.error = error;
+            base.Err = error;
         }
     }
 }

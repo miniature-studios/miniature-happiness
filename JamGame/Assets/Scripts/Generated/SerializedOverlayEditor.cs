@@ -5,7 +5,12 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(SerializedOverlay))]
 public class SerializedOverlayDrawer : PropertyDrawer
 {
-    private readonly string[] implementingTypeNames = { "DefaultOverlay", "ExtendedEmployeeInfoOverlay", "StressOverlay" };
+    private readonly string[] implementingTypeNames =
+    {
+        "DefaultOverlay",
+        "ExtendedEmployeeInfoOverlay",
+        "StressOverlay"
+    };
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -41,8 +46,9 @@ public class SerializedOverlayDrawer : PropertyDrawer
         pos.y += EditorGUIUtility.singleLineHeight;
         pos.height = position.height - EditorGUIUtility.singleLineHeight;
 
-        SerializedProperty typed_prop =
-            property.FindPropertyRelative(PascalToCamelCase(selected_type));
+        SerializedProperty typed_prop = property.FindPropertyRelative(
+            PascalToCamelCase(selected_type)
+        );
         _ = EditorGUI.PropertyField(pos, typed_prop, true);
     }
 
@@ -58,7 +64,9 @@ public class SerializedOverlayDrawer : PropertyDrawer
         float height = 0.0f;
         if (selected_type != "")
         {
-            var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+            SerializedProperty typed_prop = property.FindPropertyRelative(
+                PascalToCamelCase(selected_type)
+            );
             height = EditorGUI.GetPropertyHeight(typed_prop);
         }
         return EditorGUIUtility.singleLineHeight + height;

@@ -7,7 +7,8 @@ using UnityEngine;
 [Serializable]
 public class DayConfig
 {
-    [SerializeField] private List<SerializedDayAction> rawDayActions;
+    [SerializeField]
+    private List<SerializedDayAction> rawDayActions;
     private List<IDayAction> dayActions;
     public ReadOnlyCollection<IDayAction> DayActions
     {
@@ -27,8 +28,11 @@ public class DayConfig
 [CreateAssetMenu(fileName = "LevelActionsConfig", menuName = "Level/LevelActionsConfig", order = 0)]
 public class LevelActionsConfig : ScriptableObject
 {
-    [SerializeField] private List<DayConfig> days;
-    [SerializeField] private DayConfig defaultDay;
+    [SerializeField]
+    private List<DayConfig> days;
+
+    [SerializeField]
+    private DayConfig defaultDay;
     public ReadOnlyCollection<DayConfig> Days => days.AsReadOnly();
     public DayConfig DefaultDay => defaultDay;
 }

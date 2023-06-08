@@ -16,14 +16,15 @@ public partial class TileInspector
             tile.Corners = new();
             foreach (Direction direction in Direction.RightUp.GetCircle90())
             {
-                CornerCollection corners_collection = new()
+                CornerCollection corners_collection = new() { Place = direction, Handlers = new() };
+                foreach (
+                    TileCornerType corner_type in Enum.GetValues(typeof(TileCornerType))
+                        .Cast<TileCornerType>()
+                )
                 {
-                    Place = direction,
-                    Handlers = new()
-                };
-                foreach (TileCornerType corner_type in Enum.GetValues(typeof(TileCornerType)).Cast<TileCornerType>())
-                {
-                    corners_collection.Handlers.Add(new CornerPrefabHandler() { Type = corner_type, Prefab = null });
+                    corners_collection.Handlers.Add(
+                        new CornerPrefabHandler() { Type = corner_type, Prefab = null }
+                    );
                 }
                 tile.Corners.Add(corners_collection);
             }

@@ -5,7 +5,9 @@ using UnityEditor;
 public partial class TileBuilderInspector : Editor
 {
     public partial void ShowLocationBuildingButtons(TileBuilder tile_builder);
+
     public partial void ShowTilesSaveLoading(TileBuilder tile_builder);
+
     public override void OnInspectorGUI()
     {
         TileBuilder tile_builder = serializedObject.targetObject as TileBuilder;

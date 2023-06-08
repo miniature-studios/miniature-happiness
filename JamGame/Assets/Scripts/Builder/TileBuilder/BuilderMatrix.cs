@@ -4,8 +4,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BuilderMatrix", menuName = "Builder/BuilderMatrix", order = 2)]
 public class BuilderMatrix : ScriptableObject
 {
-    [SerializeField] private float selectingPlaneHeight;
-    [SerializeField] private int step;
+    [SerializeField]
+    private float selectingPlaneHeight;
+
+    [SerializeField]
+    private int step;
 
     public int Step => step;
 
@@ -15,7 +18,9 @@ public class BuilderMatrix : ScriptableObject
         if (plane.Raycast(ray, out float enter))
         {
             Vector3 hit_point = ray.GetPoint(enter);
-            return new SuccessResult<Vector2Int>(new(Mathf.RoundToInt(-hit_point.z / Step), Mathf.RoundToInt(hit_point.x / Step)));
+            return new SuccessResult<Vector2Int>(
+                new(Mathf.RoundToInt(-hit_point.z / Step), Mathf.RoundToInt(hit_point.x / Step))
+            );
         }
         else
         {
@@ -23,4 +28,3 @@ public class BuilderMatrix : ScriptableObject
         }
     }
 }
-

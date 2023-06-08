@@ -12,7 +12,8 @@ public class EmployeeController : MonoBehaviour, IEffectExecutor<ControllerEffec
         BuildingPath,
     }
 
-    [SerializeField] private float maxVelocity;
+    [SerializeField]
+    private float maxVelocity;
 
     private NavMeshAgent agent;
     private Vector3 averageVelocity = Vector3.zero;
@@ -74,8 +75,8 @@ public class EmployeeController : MonoBehaviour, IEffectExecutor<ControllerEffec
 
     private void CorrectMovement()
     {
-        agent.speed = (1.0f - personalSpace.GetCrowdMetrics())
-            * maxVelocity * maxVelocityMultiplierByEffects;
+        agent.speed =
+            (1.0f - personalSpace.GetCrowdMetrics()) * maxVelocity * maxVelocityMultiplierByEffects;
 
         Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
         if (steering.sqrMagnitude > 0.0001)

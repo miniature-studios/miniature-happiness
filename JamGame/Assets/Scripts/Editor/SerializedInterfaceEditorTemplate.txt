@@ -5,7 +5,7 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(Serialized|=INTERFACE_CLASS_NAME=|))]
 public class Serialized|=INTERFACE_CLASS_NAME=|Drawer : PropertyDrawer
 {
-    private readonly string[] implementingTypeNames = { |=IMPLEMENTING_TYPE_NAMES=| };
+    private string[] implementingTypeNames = { |=IMPLEMENTING_TYPE_NAMES=| };
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -41,8 +41,9 @@ public class Serialized|=INTERFACE_CLASS_NAME=|Drawer : PropertyDrawer
         pos.y += EditorGUIUtility.singleLineHeight;
         pos.height = position.height - EditorGUIUtility.singleLineHeight;
 
-        SerializedProperty typed_prop =
-            property.FindPropertyRelative(PascalToCamelCase(selected_type));
+        SerializedProperty typed_prop = property.FindPropertyRelative(
+            PascalToCamelCase(selected_type)
+        );
         _ = EditorGUI.PropertyField(pos, typed_prop, true);
     }
 
@@ -58,7 +59,9 @@ public class Serialized|=INTERFACE_CLASS_NAME=|Drawer : PropertyDrawer
         float height = 0.0f;
         if (selected_type != "")
         {
-            var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+            var typed_prop = property.FindPropertyRelative(
+                PascalToCamelCase(selected_type)
+            );
             height = EditorGUI.GetPropertyHeight(typed_prop);
         }
         return EditorGUIUtility.singleLineHeight + height;

@@ -8,14 +8,13 @@ public class NamedRoomInventoriUI
     public RoomInventoryUI RIUI;
 }
 
-
 public partial class InventoryController
 {
-    public List<NamedRoomInventoriUI> namedRoomInventoryUIs;
+    public List<NamedRoomInventoriUI> NamedRoomInventoryUIs;
 
     public void CreateGodsInventory()
     {
-        foreach (NamedRoomInventoriUI item in namedRoomInventoryUIs)
+        foreach (NamedRoomInventoriUI item in NamedRoomInventoryUIs)
         {
             for (int i = 0; i < 666; i++)
             {
@@ -29,4 +28,3 @@ public partial class InventoryController
         AddNewRoom(RIUI);
     }
 }
-

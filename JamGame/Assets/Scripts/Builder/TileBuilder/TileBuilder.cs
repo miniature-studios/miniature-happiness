@@ -6,16 +6,25 @@ using UnityEngine;
 
 public partial class TileBuilder : MonoBehaviour
 {
-    [SerializeField] private TileUnion freespacePrefab;
-    [SerializeField] private GameObject rootObject;
-    [SerializeField] private BuilderMatrix builderMatrix;
+    [SerializeField]
+    private TileUnion freespacePrefab;
+
+    [SerializeField]
+    private GameObject rootObject;
+
+    [SerializeField]
+    private BuilderMatrix builderMatrix;
 
     private List<Vector2Int> previousPlaces = new();
     private int previousRotation = 0;
     private bool justCreated = false;
 
     public TileUnion SelectedTile { get; private set; } = null;
-    public GameObject RootObject { get => rootObject; set => rootObject = value; }
+    public GameObject RootObject
+    {
+        get => rootObject;
+        set => rootObject = value;
+    }
     public BuilderMatrix BuilderMatrix => builderMatrix;
     public Dictionary<Vector2Int, TileUnion> TileUnionDictionary { get; } = new();
 
@@ -31,9 +40,9 @@ public partial class TileBuilder : MonoBehaviour
                 }
             }
         }
-        if (loadFromSceneComposition && loadingPrefab != null)
+        if (LoadFromSceneComposition && LoadingPrefab != null)
         {
-            LoadSceneComposition(loadingPrefab);
+            LoadSceneComposition(LoadingPrefab);
         }
         UpdateAllTiles();
     }
@@ -63,17 +72,19 @@ public partial class TileBuilder : MonoBehaviour
             return new FailResult("Complete placing first");
         }
 
-        Stack<KeyValuePair<Vector2Int, TileUnion>> points_stack = new(TileUnionDictionary.Where(
-            x => x.Value.IsAllWithMark("door")));
-        List<KeyValuePair<Vector2Int, TileUnion>> tiles_to_check = TileUnionDictionary.Where(
-            x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("freespace")).ToList();
+        Stack<KeyValuePair<Vector2Int, TileUnion>> points_stack =
+            new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("door")));
+        List<KeyValuePair<Vector2Int, TileUnion>> tiles_to_check = TileUnionDictionary
+            .Where(x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("freespace"))
+            .ToList();
 
         while (points_stack.Count > 0)
         {
             KeyValuePair<Vector2Int, TileUnion> point = points_stack.Pop();
             foreach (Direction dir in point.Value.GetAccessibleDirectionsFromPosition(point.Key))
             {
-                List<KeyValuePair<Vector2Int, TileUnion>> near_tiles = new(tiles_to_check.Where(x => x.Key == dir.ToVector2Int() + point.Key));
+                List<KeyValuePair<Vector2Int, TileUnion>> near_tiles =
+                    new(tiles_to_check.Where(x => x.Key == dir.ToVector2Int() + point.Key));
                 if (near_tiles.Count() > 0)
                 {
                     foreach (KeyValuePair<Vector2Int, TileUnion> founded_tile in near_tiles)
@@ -196,14 +207,22 @@ public partial class TileBuilder : MonoBehaviour
         {
             return new FailResult("Not selected Tile");
         }
-        if (previousPlaces.Intersect(SelectedTile.TilesPositions).Count() == previousPlaces.Count && previousRotation == SelectedTile.Rotation && !justCreated)
+        if (
+            previousPlaces.Intersect(SelectedTile.TilesPositions).Count() == previousPlaces.Count
+            && previousRotation == SelectedTile.Rotation
+            && !justCreated
+        )
         {
             UpdateSidesInPositions(SelectedTile.TilesPositionsForUpdating);
             SelectedTile.CancelSelecting();
             SelectedTile = null;
             return new SuccessResult();
         }
-        List<TileUnion> tilesUnder = TileUnionDictionary.Where(x => SelectedTile.TilesPositions.Contains(x.Key)).Select(x => x.Value).Distinct().ToList();
+        List<TileUnion> tilesUnder = TileUnionDictionary
+            .Where(x => SelectedTile.TilesPositions.Contains(x.Key))
+            .Select(x => x.Value)
+            .Distinct()
+            .ToList();
         _ = tilesUnder.Remove(SelectedTile);
         if (!tilesUnder.All(x => x.IsAllWithMark("freespace")))
         {
@@ -291,12 +310,18 @@ public partial class TileBuilder : MonoBehaviour
 
     public IEnumerable<TileUnion> GetTileUnionsInPositions(IEnumerable<Vector2Int> positions)
     {
-        return TileUnionDictionary.Where(x => positions.Contains(x.Key)).Select(x => x.Value).Distinct();
+        return TileUnionDictionary
+            .Where(x => positions.Contains(x.Key))
+            .Select(x => x.Value)
+            .Distinct();
     }
 
     public IEnumerable<Vector2Int> GetFreeSpaceInsideListPositions()
     {
-        return TileUnionDictionary.Where(x => x.Value.IsAllWithMark("freespace")).Select(x => x.Key).OrderBy(x => Vector2Int.Distance(x, new(0, 0)));
+        return TileUnionDictionary
+            .Where(x => x.Value.IsAllWithMark("freespace"))
+            .Select(x => x.Key)
+            .OrderBy(x => Vector2Int.Distance(x, new(0, 0)));
     }
 
     public IEnumerable<Vector2Int> GetAllInsideListPositions()

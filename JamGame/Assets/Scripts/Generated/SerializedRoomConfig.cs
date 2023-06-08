@@ -4,10 +4,14 @@ using UnityEngine;
 [Serializable]
 public class SerializedRoomConfig
 {
-    [SerializeField] private string selectedType;
+    [SerializeField]
+    private string selectedType;
 
-    [SerializeField] private FixedRoomConfig fixedRoomConfig;
-    [SerializeField] private RandomRoomConfig randomRoomConfig;
+    [SerializeField]
+    private FixedRoomConfig fixedRoomConfig;
+
+    [SerializeField]
+    private RandomRoomConfig randomRoomConfig;
 
     public IRoomConfig ToRoomConfig()
     {

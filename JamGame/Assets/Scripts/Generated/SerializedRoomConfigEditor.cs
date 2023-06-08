@@ -41,8 +41,9 @@ public class SerializedRoomConfigDrawer : PropertyDrawer
         pos.y += EditorGUIUtility.singleLineHeight;
         pos.height = position.height - EditorGUIUtility.singleLineHeight;
 
-        SerializedProperty typed_prop =
-            property.FindPropertyRelative(PascalToCamelCase(selected_type));
+        SerializedProperty typed_prop = property.FindPropertyRelative(
+            PascalToCamelCase(selected_type)
+        );
         _ = EditorGUI.PropertyField(pos, typed_prop, true);
     }
 
@@ -58,7 +59,9 @@ public class SerializedRoomConfigDrawer : PropertyDrawer
         float height = 0.0f;
         if (selected_type != "")
         {
-            var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+            SerializedProperty typed_prop = property.FindPropertyRelative(
+                PascalToCamelCase(selected_type)
+            );
             height = EditorGUI.GetPropertyHeight(typed_prop);
         }
         return EditorGUIUtility.singleLineHeight + height;

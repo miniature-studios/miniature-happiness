@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class ShopController : MonoBehaviour
 {
-    [SerializeField] private InventoryController inventoryController;
-    [SerializeField] private ShopModel shopModel;
-    [SerializeField] private Finances financesController;
+    [SerializeField]
+    private InventoryController inventoryController;
+
+    [SerializeField]
+    private ShopModel shopModel;
+
+    [SerializeField]
+    private Finances financesController;
 
     public void SetShopRooms(IEnumerable<RoomConfig> room_configs)
     {
@@ -41,4 +46,3 @@ public class ShopController : MonoBehaviour
         throw new System.NotImplementedException();
     }
 }
-

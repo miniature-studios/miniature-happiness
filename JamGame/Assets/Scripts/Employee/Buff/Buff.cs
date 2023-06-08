@@ -6,9 +6,10 @@ using UnityEngine;
 public class Buff : ScriptableObject
 {
     // TODO: refactor
-    [SerializeField] public float time;
+    public float Time;
 
-    [SerializeField] private List<SerializedEffect> rawEffects;
+    [SerializeField]
+    private List<SerializedEffect> rawEffects;
     private List<IEffect> effects;
     public ReadOnlyCollection<IEffect> Effects
     {
@@ -29,6 +30,7 @@ public class Buff : ScriptableObject
 
     // TODO: Move to BuffView
     // TODO: Change to Image
-    [SerializeField] string _name;
-    public string Name => _name;
+    [SerializeField]
+    private string name_;
+    public string Name => name_;
 }

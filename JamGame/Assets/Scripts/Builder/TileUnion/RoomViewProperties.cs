@@ -2,6 +2,7 @@
 
 public class RoomViewProperties : MonoBehaviour
 {
-    [SerializeField] private string roomName;
+    [SerializeField]
+    private string roomName;
     public string RoomName => roomName;
 }

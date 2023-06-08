@@ -2,25 +2,28 @@ using UnityEngine;
 
 public class EditorCameraController : MonoBehaviour
 {
-    [SerializeField] private float navigationSpeed = 2.0f;
-    [SerializeField] private float shiftMultiplier = 2f;
-    [SerializeField] private float sensitivity = 0.5f;
+    [SerializeField]
+    private float navigationSpeed = 2.0f;
 
-    private Camera cam;
+    [SerializeField]
+    private float shiftMultiplier = 2f;
+
+    [SerializeField]
+    private float sensitivity = 0.5f;
+
     private Vector3 anchorPoint;
     private Quaternion anchorRot;
-
-    private void Awake()
-    {
-        cam = GetComponent<Camera>();
-    }
 
     private void Update()
     {
         if (Input.GetMouseButton(1))
         {
             Vector3 move = Vector3.zero;
-            float speed = navigationSpeed * (Input.GetKey(KeyCode.LeftShift) ? shiftMultiplier : 1f) * Time.deltaTime * 9.1f;
+            float speed =
+                navigationSpeed
+                * (Input.GetKey(KeyCode.LeftShift) ? shiftMultiplier : 1f)
+                * Time.deltaTime
+                * 9.1f;
             if (Input.GetKey(KeyCode.W))
             {
                 move += Vector3.forward * speed;

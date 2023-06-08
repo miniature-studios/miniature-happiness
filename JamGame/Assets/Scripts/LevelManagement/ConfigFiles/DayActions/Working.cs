@@ -4,7 +4,8 @@ using UnityEngine;
 [Serializable]
 public class Working : IDayAction
 {
-    [SerializeField] private float workingTime;
+    [SerializeField]
+    private float workingTime;
     public float WorkingTime => workingTime;
 
     public void Execute(LevelExecutor executor, Action next_action)
@@ -12,4 +13,3 @@ public class Working : IDayAction
         executor.Execute(this, next_action);
     }
 }
-

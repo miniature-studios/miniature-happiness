@@ -7,7 +7,10 @@ public partial class LevelExecutor
     public void Execute(Working working, Action next_action)
     {
         transitionPanel.SetText("Working start.");
-        uIController.PlayDayActionStart(working.GetType(), () => StartCoroutine(WorkingTime(working.WorkingTime, next_action)));
+        uIController.PlayDayActionStart(
+            working.GetType(),
+            () => _ = StartCoroutine(WorkingTime(working.WorkingTime, next_action))
+        );
     }
 
     private IEnumerator WorkingTime(float time, Action endWorkingTime)
@@ -17,4 +20,3 @@ public partial class LevelExecutor
         uIController.PlayDayActionEnd(endWorkingTime);
     }
 }
-

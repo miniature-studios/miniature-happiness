@@ -28,11 +28,13 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
 {
     private Employee employee;
 
-    [SerializeField] private List<StressStage> stages;
+    [SerializeField]
+    private List<StressStage> stages;
     private int currentStage = -1;
     private Buff currentBuff;
 
-    [SerializeField] private List<StressByNeedDissatisfactionWithNeedType> configRaw;
+    [SerializeField]
+    private List<StressByNeedDissatisfactionWithNeedType> configRaw;
     private Dictionary<NeedType, StressByNeedDissatisfaction> config;
 
     [InspectorReadOnly]
@@ -40,7 +42,8 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
     private float stress = 0.0f;
     public float Value => stress;
 
-    [SerializeField] private float restoreSpeed;
+    [SerializeField]
+    private float restoreSpeed;
 
     private void OnValidate()
     {
@@ -61,7 +64,7 @@ public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
         {
             if (config.TryGetValue(need.NeedType, out StressByNeedDissatisfaction diss))
             {
-                if (need.satisfied < diss.Threshold)
+                if (need.Satisfied < diss.Threshold)
                 {
                     delta += diss.Speed;
                 }

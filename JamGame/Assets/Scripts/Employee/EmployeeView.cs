@@ -11,7 +11,7 @@ public partial class EmployeeView : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    void Update()
+    private void Update()
     {
         UpdateStressOverlay();
     }
@@ -27,22 +27,24 @@ public partial class EmployeeView : MonoBehaviour
 public partial class EmployeeView : IOverlayRenderer<StressOverlay>
 {
     private MeshRenderer meshRenderer;
-
-    StressOverlay appliedStressOverlay;
+    private StressOverlay appliedStressOverlay;
 
     public void ApplyOverlay(StressOverlay overlay)
     {
         appliedStressOverlay = overlay;
     }
 
-    void UpdateStressOverlay()
+    private void UpdateStressOverlay()
     {
         if (appliedStressOverlay == null)
+        {
             return;
+        }
 
         float normalized_stress = employee.Stress.Value;
 
-        normalized_stress = (normalized_stress - appliedStressOverlay.MinimalStressBound)
+        normalized_stress =
+            (normalized_stress - appliedStressOverlay.MinimalStressBound)
             / (appliedStressOverlay.MaximalStressBound - appliedStressOverlay.MinimalStressBound);
         normalized_stress = Mathf.Clamp01(normalized_stress);
 
@@ -62,11 +64,11 @@ public partial class EmployeeView : IOverlayRenderer<StressOverlay>
 
 public partial class EmployeeView : IOverlayRenderer<ExtendedEmployeeInfoOverlay>
 {
-    GameObject overlayUI;
+    private GameObject overlayUI;
 
     public void ApplyOverlay(ExtendedEmployeeInfoOverlay overlay)
     {
-        if(overlayUI == null)
+        if (overlayUI == null)
         {
             overlayUI = Instantiate(overlay.UIPrefab, transform, false);
         }
@@ -77,7 +79,9 @@ public partial class EmployeeView : IOverlayRenderer<ExtendedEmployeeInfoOverlay
     public void RevertExtendedInfoOverlay()
     {
         if (overlayUI == null)
+        {
             return;
+        }
 
         overlayUI.SetActive(false);
     }

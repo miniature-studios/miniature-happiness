@@ -8,7 +8,8 @@ public partial class TileBuilderControllerInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        TileBuilderController tile_builder_controller = serializedObject.targetObject as TileBuilderController;
+        TileBuilderController tile_builder_controller =
+            serializedObject.targetObject as TileBuilderController;
 
         ShowGameModeChangeing(tile_builder_controller);
 

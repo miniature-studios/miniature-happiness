@@ -65,15 +65,12 @@ public class NeedProvider : MonoBehaviour
         }
     }
 
-    [SerializeField] private Filter filter;
-    [SerializeField] public NeedType NeedType;
+    [SerializeField]
+    private Filter filter;
+
+    public NeedType NeedType;
 
     private Employee currentEmployee = null;
-
-    private void Start()
-    {
-
-    }
 
     public bool TryTake(Employee employee)
     {
@@ -93,7 +90,7 @@ public class NeedProvider : MonoBehaviour
         return true;
     }
 
-    // TODO: Control release inside NeedProvider 
+    // TODO: Control release inside NeedProvider
     public void Release()
     {
         foreach (NeedModifiers modifier in registeredModifiers)

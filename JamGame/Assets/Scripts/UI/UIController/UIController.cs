@@ -11,7 +11,14 @@ public class AnimatorBool
     public bool StartIsActive;
     public float EndDelay;
     public bool EndIsActive;
-    public AnimatorBool(string animator_name, float start_delay, bool start_is_active, float end_delay, bool end_is_active)
+
+    public AnimatorBool(
+        string animator_name,
+        float start_delay,
+        bool start_is_active,
+        float end_delay,
+        bool end_is_active
+    )
     {
         AnimatorName = animator_name;
         StartDelay = start_delay;
@@ -25,11 +32,12 @@ public class AnimatorBool
 public class InterfaceMatch
 {
     public string InterfaceName;
-    public List<AnimatorBool> animatorBools;
+    public List<AnimatorBool> AnimatorBools;
+
     public InterfaceMatch(string interfaceName, List<AnimatorBool> animatorBools)
     {
         InterfaceName = interfaceName;
-        this.animatorBools = animatorBools;
+        AnimatorBools = animatorBools;
     }
 }
 
@@ -49,29 +57,37 @@ public class AnimatorList
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] private AnimatorList animatorList;
+    [SerializeField]
+    private AnimatorList animatorList;
     private InterfaceMatch interfaceMatch;
+
     public void PlayDayActionStart(Type day_type, Action animation_end)
     {
         interfaceMatch = animatorList.InterfaceMatcher.Find(x => x.InterfaceName == day_type.Name);
         float longest_delay = 0f;
-        foreach (AnimatorBool anim_bools in interfaceMatch.animatorBools)
+        foreach (AnimatorBool anim_bools in interfaceMatch.AnimatorBools)
         {
             longest_delay = Mathf.Max(anim_bools.StartDelay, longest_delay);
-            Animator animator = animatorList.NamedAnimators.Find(x => x.Name == anim_bools.AnimatorName).Animator;
-            _ = StartCoroutine(AnimationTemplate(anim_bools.StartDelay, animator, anim_bools.StartIsActive));
+            Animator animator = animatorList.NamedAnimators
+                .Find(x => x.Name == anim_bools.AnimatorName)
+                .Animator;
+            _ = StartCoroutine(
+                AnimationTemplate(anim_bools.StartDelay, animator, anim_bools.StartIsActive)
+            );
         }
         _ = StartCoroutine(DoAfterWait(longest_delay, animation_end));
     }
 
-    // TODO another implementation 
+    // TODO another implementation
     public void PlayDayActionEnd(Action animation_end)
     {
         float longest_delay = 0f;
-        foreach (AnimatorBool anim_bools in interfaceMatch.animatorBools)
+        foreach (AnimatorBool anim_bools in interfaceMatch.AnimatorBools)
         {
             longest_delay = Mathf.Max(anim_bools.StartDelay, longest_delay);
-            Animator animator = animatorList.NamedAnimators.Find(x => x.Name == anim_bools.AnimatorName).Animator;
+            Animator animator = animatorList.NamedAnimators
+                .Find(x => x.Name == anim_bools.AnimatorName)
+                .Animator;
             animator.SetBool("Showed", anim_bools.EndIsActive);
         }
         _ = StartCoroutine(DoAfterWait(longest_delay, animation_end));
@@ -89,4 +105,3 @@ public class UIController : MonoBehaviour
         action?.Invoke();
     }
 }
-

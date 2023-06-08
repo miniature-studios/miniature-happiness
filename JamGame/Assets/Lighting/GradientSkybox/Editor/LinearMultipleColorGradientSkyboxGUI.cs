@@ -51,14 +51,20 @@ namespace GradientSkybox
 
                 byte[] png = texture.EncodeToPNG();
                 string textureRelativePath = materialRelativePath + ".png";
-                string textureAbsolutePath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), textureRelativePath);
+                string textureAbsolutePath = Path.Combine(
+                    System.IO.Directory.GetCurrentDirectory(),
+                    textureRelativePath
+                );
                 File.WriteAllBytes(textureAbsolutePath, png);
 
-                TextureImporter textureImporter = AssetImporter.GetAtPath(textureRelativePath) as TextureImporter;
+                TextureImporter textureImporter =
+                    AssetImporter.GetAtPath(textureRelativePath) as TextureImporter;
                 textureImporter.wrapMode = TextureWrapMode.Clamp;
                 AssetDatabase.ImportAsset(textureRelativePath);
 
-                Texture2D savedTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureRelativePath);
+                Texture2D savedTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(
+                    textureRelativePath
+                );
                 material.SetTexture("_RampTex", savedTexture);
 
                 isGradientSaved = true;
@@ -66,14 +72,16 @@ namespace GradientSkybox
 
             if (!isGradientSaved)
             {
-                EditorGUILayout.HelpBox("Changes to gradient has not saved yet.", MessageType.Warning);
+                EditorGUILayout.HelpBox(
+                    "Changes to gradient has not saved yet.",
+                    MessageType.Warning
+                );
             }
-
         }
 
         private Texture2D CreateRampTexture()
         {
-            Gradient gradient = gradientObject.gradient;
+            Gradient gradient = gradientObject.Gradient;
             Texture2D texture = new(128, 2);
             for (int h = 0; h < texture.height; h++)
             {

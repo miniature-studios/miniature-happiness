@@ -5,8 +5,11 @@ using UnityEngine.Events;
 
 public class TileBuilderController : MonoBehaviour
 {
-    [SerializeField] private TileBuilder tileBuilder;
-    [SerializeField] private InventoryController inventoryController;
+    [SerializeField]
+    private TileBuilder tileBuilder;
+
+    [SerializeField]
+    private InventoryController inventoryController;
 
     private IValidator validator = new GameModeValidator();
     private Vector2 previousMousePosition;
@@ -68,10 +71,13 @@ public class TileBuilderController : MonoBehaviour
         if (mouseDelta.magnitude > 0 && mousePressed && !isOverUI)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            MoveSelectedTileCommand command = new(
-                ray,
-                tileBuilder.BuilderMatrix,
-                tileBuilder.SelectedTile == null ? Vector2Int.zero : tileBuilder.SelectedTile.CenterPosition
+            MoveSelectedTileCommand command =
+                new(
+                    ray,
+                    tileBuilder.BuilderMatrix,
+                    tileBuilder.SelectedTile == null
+                        ? Vector2Int.zero
+                        : tileBuilder.SelectedTile.CenterPosition
                 );
             _ = Execute(command);
         }

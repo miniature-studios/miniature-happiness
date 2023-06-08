@@ -17,14 +17,21 @@ public class GodModeValidator : IValidator
         if (command is AddTileToSceneCommand add_command)
         {
             TileUnion creatingtile_union = add_command.TilePrefab.GetComponent<TileUnion>();
-            IEnumerable<Vector2Int> inside_list_positions = tileBuilder.GetFreeSpaceInsideListPositions();
+            IEnumerable<Vector2Int> inside_list_positions =
+                tileBuilder.GetFreeSpaceInsideListPositions();
             int rotation = 0;
             while (rotation < 4)
             {
                 foreach (Vector2Int free_position in inside_list_positions)
                 {
-                    IEnumerable<Vector2Int> futurePlaces = creatingtile_union.GetImaginePlaces(free_position, creatingtile_union.Rotation + rotation);
-                    if (inside_list_positions.Intersect(futurePlaces).Count() == creatingtile_union.TilesCount)
+                    IEnumerable<Vector2Int> futurePlaces = creatingtile_union.GetImaginePlaces(
+                        free_position,
+                        creatingtile_union.Rotation + rotation
+                    );
+                    if (
+                        inside_list_positions.Intersect(futurePlaces).Count()
+                        == creatingtile_union.TilesCount
+                    )
                     {
                         add_command.CreatingPosition = free_position;
                         add_command.CreatingRotation = rotation;
@@ -37,7 +44,13 @@ public class GodModeValidator : IValidator
             do
             {
                 position.x++;
-            } while (tileBuilder.GetTileUnionsInPositions(creatingtile_union.GetImaginePlaces(position, creatingtile_union.Rotation)).Count() > 0);
+            } while (
+                tileBuilder
+                    .GetTileUnionsInPositions(
+                        creatingtile_union.GetImaginePlaces(position, creatingtile_union.Rotation)
+                    )
+                    .Count() > 0
+            );
             add_command.CreatingPosition = position;
             add_command.CreatingRotation = creatingtile_union.Rotation;
             return new SuccessResult();
@@ -45,4 +58,3 @@ public class GodModeValidator : IValidator
         return new SuccessResult();
     }
 }
-

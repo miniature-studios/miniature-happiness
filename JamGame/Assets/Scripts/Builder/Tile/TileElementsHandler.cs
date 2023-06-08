@@ -9,6 +9,7 @@ public class TileWallPrefabHandler
     public TileWallType Type;
     public GameObject Prefab;
 }
+
 [Serializable]
 public class TileCornerPrefabHandler
 {
@@ -16,7 +17,11 @@ public class TileCornerPrefabHandler
     public GameObject Prefab;
 }
 
-[CreateAssetMenu(fileName = "TileElementsHandler", menuName = "Builder/TileElementsHandler", order = 0)]
+[CreateAssetMenu(
+    fileName = "TileElementsHandler",
+    menuName = "Builder/TileElementsHandler",
+    order = 0
+)]
 public class TileElementsHandler : ScriptableObject
 {
     public List<TileWallPrefabHandler> WallPrefabHandlers;

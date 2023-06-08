@@ -11,7 +11,7 @@ public class EmployeeInfoUI : MonoBehaviour
 
     private TMP_Text text;
 
-    void Start()
+    private void Start()
     {
         cam = Camera.main;
 
@@ -21,14 +21,14 @@ public class EmployeeInfoUI : MonoBehaviour
         text = GetComponentInChildren<TMP_Text>();
     }
 
-    void Update()
+    private void Update()
     {
         transform.LookAt(cam.transform.position);
 
-        var buffs = employee.Buffs
+        string buffs = employee.Buffs
             .Select(buff => buff.Name)
             .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : ", ") + y);
-        var quirks = personality.Quirks
+        string quirks = personality.Quirks
             .Select(quirk => quirk.Name)
             .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : ", ") + y);
 

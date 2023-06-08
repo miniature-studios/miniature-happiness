@@ -5,7 +5,7 @@ namespace Common
 {
     public static class RandomTools
     {
-        // Select weighted random numbers in range [0..weights.Length] 
+        // Select weighted random numbers in range [0..weights.Length]
         // Probability of selecting i is weights[i] / sum(weights)
         public static int RandomlyChooseWithWeights(List<float> weights)
         {

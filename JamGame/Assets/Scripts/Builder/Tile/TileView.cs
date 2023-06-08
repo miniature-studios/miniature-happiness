@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class TileView : MonoBehaviour
 {
-    [SerializeField] private Material defaultMaterial;
-    [SerializeField] private Material transparentMaterial;
-    [SerializeField] private Material errorMaterial;
+    [SerializeField]
+    private Material defaultMaterial;
+
+    [SerializeField]
+    private Material transparentMaterial;
+
+    [SerializeField]
+    private Material errorMaterial;
 
     private Renderer[] renderers;
     private Dictionary<State, Material[]> materialsByState;

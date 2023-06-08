@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -49,7 +48,6 @@ internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
     }
 }
 
-
 [RequireComponent(typeof(EmployeeController))]
 [RequireComponent(typeof(Stress))]
 public class Employee : MonoBehaviour
@@ -63,9 +61,11 @@ public class Employee : MonoBehaviour
 
     private State state = State.Idle;
 
-    [SerializeField] private Location location;
+    [SerializeField]
+    private Location location;
 
-    [SerializeField] private List<Need> needs = new();
+    [SerializeField]
+    private List<Need> needs = new();
     private Need currentNeed;
     private float satisfyingNeedRemaining = 0.0f;
     private NeedProvider targetNeedProvider = null;
@@ -79,13 +79,18 @@ public class Employee : MonoBehaviour
     [Serializable]
     private struct AppliedBuff
     {
-        [InspectorReadOnly] public Buff Buff;
-        [InspectorReadOnly] public float RemainingTime;
+        [InspectorReadOnly]
+        public Buff Buff;
+
+        [InspectorReadOnly]
+        public float RemainingTime;
     }
 
-    [SerializeField] private List<AppliedBuff> appliedBuffs = new();
+    [SerializeField]
+    private List<AppliedBuff> appliedBuffs = new();
+
     // TODO: Will change when BuffView will be implemented.
-    public IEnumerable<Buff> Buffs { get => appliedBuffs.Select(buff => buff.Buff); }
+    public IEnumerable<Buff> Buffs => appliedBuffs.Select(buff => buff.Buff);
 
     private BuffsNeedModifiersPool buffsNeedModifiers;
 
@@ -163,7 +168,7 @@ public class Employee : MonoBehaviour
 
     private NeedProvider GetTargetNeedProvider()
     {
-        needs.Sort((x, y) => x.satisfied.CompareTo(y.satisfied));
+        needs.Sort((x, y) => x.Satisfied.CompareTo(y.Satisfied));
 
         if (state == State.Idle)
         {
@@ -178,7 +183,9 @@ public class Employee : MonoBehaviour
                 break;
             }
 
-            List<NeedProvider> available_providers = location.FindAllAvailableProviders(this, need.NeedType).ToList();
+            List<NeedProvider> available_providers = location
+                .FindAllAvailableProviders(this, need.NeedType)
+                .ToList();
 
             NeedProvider selected_provider = null;
             float min_distance = float.PositiveInfinity;
@@ -271,7 +278,7 @@ public class Employee : MonoBehaviour
     // TODO: match type of effect with corresponding Executor type.
     public void RegisterBuff(Buff buff)
     {
-        appliedBuffs.Add(new AppliedBuff { Buff = buff, RemainingTime = buff.time });
+        appliedBuffs.Add(new AppliedBuff { Buff = buff, RemainingTime = buff.Time });
         foreach (IEffect effect in buff.Effects)
         {
             if (effect is StressEffect se)

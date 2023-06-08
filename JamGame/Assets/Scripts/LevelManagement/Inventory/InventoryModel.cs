@@ -21,7 +21,8 @@ public class InventoryModel : MonoBehaviour
 
     public void RemoveRoom(RoomInventoryUI room_in_inventory)
     {
-        _ = roomsInInventory.Remove(roomsInInventory.First(x => x.TileUnion == room_in_inventory.TileUnion));
+        _ = roomsInInventory.Remove(
+            roomsInInventory.First(x => x.TileUnion == room_in_inventory.TileUnion)
+        );
     }
 }
-

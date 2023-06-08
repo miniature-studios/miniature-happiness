@@ -4,10 +4,14 @@ using UnityEngine;
 [Serializable]
 public class SerializedEmployeeConfig
 {
-    [SerializeField] private string selectedType;
+    [SerializeField]
+    private string selectedType;
 
-    [SerializeField] private FixedEmployeeConfig fixedEmployeeConfig;
-    [SerializeField] private RandomEmployeeConfig randomEmployeeConfig;
+    [SerializeField]
+    private FixedEmployeeConfig fixedEmployeeConfig;
+
+    [SerializeField]
+    private RandomEmployeeConfig randomEmployeeConfig;
 
     public IEmployeeConfig ToEmployeeConfig()
     {

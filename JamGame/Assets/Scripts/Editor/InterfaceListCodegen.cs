@@ -11,10 +11,10 @@ public class InterfaceEditorGenerator : ICodeGenerator
 {
     public void Execute(GeneratorContext context)
     {
-        IEnumerable<Type> interface_types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a =>
-                a.GetTypes()
-                .Where(t => t.IsDefined(typeof(InterfaceEditorAttribute)))
+        IEnumerable<Type> interface_types = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(
+                a => a.GetTypes().Where(t => t.IsDefined(typeof(InterfaceEditorAttribute)))
             );
 
         foreach (Type interface_type in interface_types)
@@ -30,15 +30,16 @@ public class InterfaceEditorGenerator : ICodeGenerator
 
         string[] implemented_for_types = ClassNamesImplementingInterface(interface_type);
 
-        string fields = implemented_for_types.Select(ty =>
-            $"    [SerializeField] private {ty} {PascalToCamelCase(ty)};"
-        ).Aggregate("", (x, y) => x + (x.Length == 0 ? "" : "\r\n") + y);
+        string fields = implemented_for_types
+            .Select(ty => $"    [SerializeField]\r\n    private {ty} {PascalToCamelCase(ty)};")
+            .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : "\r\n\r\n") + y);
 
-        string switch_variants = implemented_for_types.Select(ty =>
-            $"            \"{ty}\" => {PascalToCamelCase(ty)},"
-        ).Aggregate("", (x, y) => x + (x.Length == 0 ? "" : "\r\n") + y);
+        string switch_variants = implemented_for_types
+            .Select(ty => $"            \"{ty}\" => {PascalToCamelCase(ty)},")
+            .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : "\r\n") + y);
 
-        string template_path = Application.dataPath + "/Scripts/Editor/SerializedInterfaceTemplate.txt";
+        string template_path =
+            Application.dataPath + "/Scripts/Editor/SerializedInterfaceTemplate.txt";
         string code = File.ReadAllText(template_path);
         code = code.Replace("|=INTERFACE_NAME=|", interface_name);
         code = code.Replace("|=INTERFACE_CLASS_NAME=|", interface_name[1..]);
@@ -59,7 +60,8 @@ public class InterfaceEditorGenerator : ICodeGenerator
             .Select(t => '"' + t + '"')
             .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : ", ") + y);
 
-        string template_path = Application.dataPath + "/Scripts/Editor/SerializedInterfaceEditorTemplate.txt";
+        string template_path =
+            Application.dataPath + "/Scripts/Editor/SerializedInterfaceEditorTemplate.txt";
         string code = File.ReadAllText(template_path);
         code = code.Replace("|=INTERFACE_CLASS_NAME=|", interface_name[1..]);
         code = code.Replace("|=IMPLEMENTING_TYPE_NAMES=|", implementing_type_names);
@@ -70,11 +72,12 @@ public class InterfaceEditorGenerator : ICodeGenerator
 
     private string[] ClassNamesImplementingInterface(Type interface_type)
     {
-        return Assembly.GetAssembly(interface_type)
-                .GetTypes()
-                .Where(type => interface_type.IsAssignableFrom(type) && !type.IsInterface)
-                .Select(t => t.Name)
-                .ToArray();
+        return Assembly
+            .GetAssembly(interface_type)
+            .GetTypes()
+            .Where(type => interface_type.IsAssignableFrom(type) && !type.IsInterface)
+            .Select(t => t.Name)
+            .ToArray();
     }
 
     private string PascalToCamelCase(string pascal)

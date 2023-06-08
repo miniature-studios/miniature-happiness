@@ -14,7 +14,9 @@ public class RoomWeights
 [Serializable]
 public class RandomRoomConfig : IRoomConfig
 {
-    [SerializeField] private List<RoomWeights> roomWeights;
+    [SerializeField]
+    private List<RoomWeights> roomWeights;
+
     public RoomConfig GetRoomConfig()
     {
         List<float> list = roomWeights.Select(x => x.Weight).ToList();

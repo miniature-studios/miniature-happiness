@@ -4,13 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(Employee))]
 public class Personality : MonoBehaviour
 {
-    [SerializeField] private string _name;
-    public string Name => _name;
+    [SerializeField]
+    private string name_;
+    public string Name => name_;
 
-    [SerializeField] private List<Quirk> quirks;
+    [SerializeField]
+    private List<Quirk> quirks;
 
     // TODO: Will change when QuirkView will be implemented.
-    public IEnumerable<Quirk> Quirks { get => quirks; }
+    public IEnumerable<Quirk> Quirks => quirks;
 
     private void Start()
     {

@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class FinancesCounter : MonoBehaviour
 {
-    [SerializeField] private TMP_Text countText;
-    [SerializeField] private float lerpSpeed;
-    [SerializeField] private Finances finances;
+    [SerializeField]
+    private TMP_Text countText;
+
+    [SerializeField]
+    private float lerpSpeed;
+
+    [SerializeField]
+    private Finances finances;
     private int buffer_count;
     private float lerpCount = 0;
 
