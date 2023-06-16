@@ -2,137 +2,140 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-internal struct StressByNeedDissatisfaction
+namespace Employee
 {
-    public float Threshold;
-    public float Speed;
-}
-
-[Serializable]
-internal struct StressByNeedDissatisfactionWithNeedType
-{
-    public NeedType NeedType;
-    public StressByNeedDissatisfaction DesatisfactionConfig;
-}
-
-[Serializable]
-internal struct StressStage
-{
-    public float StartsAt;
-    public Buff Buff;
-}
-
-[RequireComponent(typeof(Employee))]
-public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
-{
-    private Employee employee;
-
-    [SerializeField]
-    private List<StressStage> stages;
-    private int currentStage = -1;
-    private Buff currentBuff;
-
-    [SerializeField]
-    private List<StressByNeedDissatisfactionWithNeedType> configRaw;
-    private Dictionary<NeedType, StressByNeedDissatisfaction> config;
-
-    [InspectorReadOnly]
-    [SerializeField]
-    private float stress = 0.0f;
-    public float Value => stress;
-
-    [SerializeField]
-    private float restoreSpeed;
-
-    private void OnValidate()
+    [Serializable]
+    internal struct StressByNeedDissatisfaction
     {
-        PrepareConfig();
+        public float Threshold;
+        public float Speed;
     }
 
-    private void Start()
+    [Serializable]
+    internal struct StressByNeedDissatisfactionWithNeedType
     {
-        PrepareConfig();
-
-        employee = GetComponent<Employee>();
+        public NeedType NeedType;
+        public StressByNeedDissatisfaction DesatisfactionConfig;
     }
 
-    public void UpdateStress(List<Need> needs, float delta_time)
+    [Serializable]
+    internal struct StressStage
     {
-        float delta = 0.0f;
-        foreach (Need need in needs)
+        public float StartsAt;
+        public Buff Buff;
+    }
+
+    [RequireComponent(typeof(Employee))]
+    public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
+    {
+        private Employee employee;
+
+        [SerializeField]
+        private List<StressStage> stages;
+        private int currentStage = -1;
+        private Buff currentBuff;
+
+        [SerializeField]
+        private List<StressByNeedDissatisfactionWithNeedType> configRaw;
+        private Dictionary<NeedType, StressByNeedDissatisfaction> config;
+
+        [InspectorReadOnly]
+        [SerializeField]
+        private float stress = 0.0f;
+        public float Value => stress;
+
+        [SerializeField]
+        private float restoreSpeed;
+
+        private void OnValidate()
         {
-            if (config.TryGetValue(need.NeedType, out StressByNeedDissatisfaction diss))
+            PrepareConfig();
+        }
+
+        private void Start()
+        {
+            PrepareConfig();
+
+            employee = GetComponent<Employee>();
+        }
+
+        public void UpdateStress(List<Need> needs, float delta_time)
+        {
+            float delta = 0.0f;
+            foreach (Need need in needs)
             {
-                if (need.Satisfied < diss.Threshold)
+                if (config.TryGetValue(need.NeedType, out StressByNeedDissatisfaction diss))
                 {
-                    delta += diss.Speed;
+                    if (need.Satisfied < diss.Threshold)
+                    {
+                        delta += diss.Speed;
+                    }
+                }
+            }
+
+            delta *= increaseMultiplierByEffects;
+
+            stress += (delta - restoreSpeed) * delta_time;
+
+            int new_stage = 0;
+            for (int i = stages.Count - 1; i > 0; i--)
+            {
+                if (stages[i].StartsAt < stress)
+                {
+                    new_stage = i;
+                    break;
+                }
+            }
+
+            if (currentStage != new_stage)
+            {
+                currentStage = new_stage;
+
+                if (currentBuff != null)
+                {
+                    employee.UnregisterBuff(currentBuff);
+                }
+
+                currentBuff = stages[currentStage].Buff;
+
+                if (currentBuff != null)
+                {
+                    employee.RegisterBuff(currentBuff);
                 }
             }
         }
 
-        delta *= increaseMultiplierByEffects;
-
-        stress += (delta - restoreSpeed) * delta_time;
-
-        int new_stage = 0;
-        for (int i = stages.Count - 1; i > 0; i--)
+        private void PrepareConfig()
         {
-            if (stages[i].StartsAt < stress)
+            config = new Dictionary<NeedType, StressByNeedDissatisfaction>();
+            foreach (StressByNeedDissatisfactionWithNeedType des in configRaw)
             {
-                new_stage = i;
-                break;
+                config.Add(des.NeedType, des.DesatisfactionConfig);
             }
         }
 
-        if (currentStage != new_stage)
-        {
-            currentStage = new_stage;
+        private float increaseMultiplierByEffects = 1.0f;
+        private readonly List<StressEffect> registeredEffects = new();
 
-            if (currentBuff != null)
+        public void RegisterEffect(StressEffect effect)
+        {
+            registeredEffects.Add(effect);
+            increaseMultiplierByEffects *= effect.IncreaseMultiplier;
+        }
+
+        public void UnregisterEffect(StressEffect effect)
+        {
+            if (!registeredEffects.Remove(effect))
             {
-                employee.UnregisterBuff(currentBuff);
+                Debug.LogError("Failed to remove StressEffect: Not registered");
+                return;
             }
 
-            currentBuff = stages[currentStage].Buff;
-
-            if (currentBuff != null)
+            increaseMultiplierByEffects = 1.0f;
+            foreach (StressEffect eff in registeredEffects)
             {
-                employee.RegisterBuff(currentBuff);
+                increaseMultiplierByEffects *= eff.IncreaseMultiplier;
             }
-        }
-    }
-
-    private void PrepareConfig()
-    {
-        config = new Dictionary<NeedType, StressByNeedDissatisfaction>();
-        foreach (StressByNeedDissatisfactionWithNeedType des in configRaw)
-        {
-            config.Add(des.NeedType, des.DesatisfactionConfig);
-        }
-    }
-
-    private float increaseMultiplierByEffects = 1.0f;
-    private readonly List<StressEffect> registeredEffects = new();
-
-    public void RegisterEffect(StressEffect effect)
-    {
-        registeredEffects.Add(effect);
-        increaseMultiplierByEffects *= effect.IncreaseMultiplier;
-    }
-
-    public void UnregisterEffect(StressEffect effect)
-    {
-        if (!registeredEffects.Remove(effect))
-        {
-            Debug.LogError("Failed to remove StressEffect: Not registered");
-            return;
-        }
-
-        increaseMultiplierByEffects = 1.0f;
-        foreach (StressEffect eff in registeredEffects)
-        {
-            increaseMultiplierByEffects *= eff.IncreaseMultiplier;
         }
     }
 }

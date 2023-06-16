@@ -2,41 +2,44 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public interface IOverlayManager
+namespace Overlay
 {
-    public void RevertAllOverlays();
-
-    public void ApplyOverlay<O>(O overlay)
-        where O : class, IOverlay;
-}
-
-public class OverlayManager : MonoBehaviour, IOverlayManager
-{
-    // TODO: Update in runtime.
-    private List<IOverlayRenderer> overlayRenderers;
-
-    private void Start()
+    public interface IOverlayManager
     {
-        overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
+        public void RevertAllOverlays();
+
+        public void ApplyOverlay<O>(O overlay)
+            where O : class, IOverlay;
     }
 
-    public void RevertAllOverlays()
+    public class OverlayManager : MonoBehaviour, IOverlayManager
     {
-        foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+        // TODO: Update in runtime.
+        private List<IOverlayRenderer> overlayRenderers;
+
+        private void Start()
         {
-            overlay_renderer.RevertOverlays();
+            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
         }
-    }
 
-    public void ApplyOverlay<O>(O overlay)
-        where O : class, IOverlay
-    {
-        foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+        public void RevertAllOverlays()
         {
-            overlay_renderer.RevertOverlays();
-            if (overlay_renderer is IOverlayRenderer<O> or)
+            foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
             {
-                or.ApplyOverlay(overlay);
+                overlay_renderer.RevertOverlays();
+            }
+        }
+
+        public void ApplyOverlay<O>(O overlay)
+            where O : class, IOverlay
+        {
+            foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+            {
+                overlay_renderer.RevertOverlays();
+                if (overlay_renderer is IOverlayRenderer<O> or)
+                {
+                    or.ApplyOverlay(overlay);
+                }
             }
         }
     }

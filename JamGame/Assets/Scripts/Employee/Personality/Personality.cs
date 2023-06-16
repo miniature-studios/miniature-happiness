@@ -1,28 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Employee))]
-public class Personality : MonoBehaviour
+namespace Employee
 {
-    [SerializeField]
-    private string name_;
-    public string Name => name_;
+    // TODO: Can we place Quirk here or even make it to be not SO.
 
-    [SerializeField]
-    private List<Quirk> quirks;
-
-    // TODO: Will change when QuirkView will be implemented.
-    public IEnumerable<Quirk> Quirks => quirks;
-
-    private void Start()
+    [RequireComponent(typeof(Employee))]
+    public class Personality : MonoBehaviour
     {
-        Employee employee = GetComponent<Employee>();
+        [SerializeField]
+        private string name_;
+        public string Name => name_;
 
-        foreach (Quirk quirk in quirks)
+        [SerializeField]
+        private List<Quirk> quirks;
+
+        // TODO: Will change when QuirkView will be implemented.
+        public IEnumerable<Quirk> Quirks => quirks;
+
+        private void Start()
         {
-            foreach (Need.NeedProperties additional_need in quirk.AdditionalNeeds)
+            Employee employee = GetComponent<Employee>();
+
+            foreach (Quirk quirk in quirks)
             {
-                employee.AddNeed(additional_need);
+                foreach (Need.NeedProperties additional_need in quirk.AdditionalNeeds)
+                {
+                    employee.AddNeed(additional_need);
+                }
             }
         }
     }

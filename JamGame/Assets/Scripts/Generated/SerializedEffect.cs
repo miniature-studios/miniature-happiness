@@ -8,7 +8,7 @@ public class SerializedEffect
     private string selectedType;
 
     [SerializeField]
-    private ControllerEffect controllerEffect;
+    private Controller controllerEffect;
 
     [SerializeField]
     private NeedModifierEffect needModifierEffect;

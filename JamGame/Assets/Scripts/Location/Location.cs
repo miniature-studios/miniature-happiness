@@ -1,40 +1,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Location : MonoBehaviour
+namespace Location
 {
-    [SerializeField]
-    private Employee employeePrototype;
-    private List<NeedProvider> needProviders;
-    private readonly List<Employee> employees = new();
-
-    private void Start()
+    public class Location : MonoBehaviour
     {
-        InitGameMode();
-    }
+        [SerializeField]
+        private Employee employeePrototype;
+        private List<NeedProvider> needProviders;
+        private readonly List<Employee> employees = new();
 
-    public void InitGameMode()
-    {
-        needProviders = new List<NeedProvider>(transform.GetComponentsInChildren<NeedProvider>());
-    }
-
-    public void AddEmployee()
-    {
-        Employee new_employee = Instantiate(employeePrototype, employeePrototype.transform.parent);
-        new_employee.gameObject.SetActive(true);
-        employees.Add(new_employee);
-    }
-
-    public IEnumerable<NeedProvider> FindAllAvailableProviders(
-        Employee employee,
-        NeedType need_type
-    )
-    {
-        foreach (NeedProvider provider in needProviders)
+        private void Start()
         {
-            if (provider.NeedType == need_type && provider.IsAvailable(employee))
+            InitGameMode();
+        }
+
+        public void InitGameMode()
+        {
+            needProviders = new List<NeedProvider>(
+                transform.GetComponentsInChildren<NeedProvider>()
+            );
+        }
+
+        public void AddEmployee()
+        {
+            Employee new_employee = Instantiate(
+                employeePrototype,
+                employeePrototype.transform.parent
+            );
+            new_employee.gameObject.SetActive(true);
+            employees.Add(new_employee);
+        }
+
+        public IEnumerable<NeedProvider> FindAllAvailableProviders(
+            Employee employee,
+            NeedType need_type
+        )
+        {
+            foreach (NeedProvider provider in needProviders)
             {
-                yield return provider;
+                if (provider.NeedType == need_type && provider.IsAvailable(employee))
+                {
+                    yield return provider;
+                }
             }
         }
     }

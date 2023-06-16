@@ -2,134 +2,139 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
-public class EmployeeController : MonoBehaviour, IEffectExecutor<ControllerEffect>
+namespace Employee
 {
-    private enum State
+    [RequireComponent(typeof(NavMeshAgent))]
+    public class EmployeeController : MonoBehaviour, IEffectExecutor<Controller>
     {
-        Idle,
-        Moving,
-        BuildingPath,
-    }
-
-    [SerializeField]
-    private float maxVelocity;
-
-    private NavMeshAgent agent;
-    private Vector3 averageVelocity = Vector3.zero;
-    public Vector3 AverageVelocity => averageVelocity;
-
-    private PersonalSpace personalSpace;
-
-    private Vector3 currentDestination;
-    private Vector3 prevPosition;
-
-    private State state = State.Idle;
-
-    public delegate void FinishedMovingHandler();
-    public event FinishedMovingHandler OnFinishedMoving;
-
-    public void SetDestination(Vector3 target_position)
-    {
-        currentDestination = target_position;
-        _ = agent.SetDestination(currentDestination);
-        state = State.BuildingPath;
-    }
-
-    private void Start()
-    {
-        agent = GetComponent<NavMeshAgent>();
-
-        personalSpace = GetComponentInChildren<PersonalSpace>();
-        if (personalSpace == null)
+        private enum State
         {
-            Debug.LogError("Personal space not found");
+            Idle,
+            Moving,
+            BuildingPath,
         }
-    }
 
-    private void Update()
-    {
-        averageVelocity = (transform.position - prevPosition) / Time.deltaTime;
-        prevPosition = transform.position;
+        [SerializeField]
+        private float maxVelocity;
 
-        switch (state)
+        private NavMeshAgent agent;
+        private Vector3 averageVelocity = Vector3.zero;
+        public Vector3 AverageVelocity => averageVelocity;
+
+        private PersonalSpace personalSpace;
+
+        private Vector3 currentDestination;
+        private Vector3 prevPosition;
+
+        private State state = State.Idle;
+
+        public delegate void FinishedMovingHandler();
+        public event FinishedMovingHandler OnFinishedMoving;
+
+        public void SetDestination(Vector3 target_position)
         {
-            case State.Idle:
-                break;
-            case State.BuildingPath:
-                if (!agent.pathPending)
-                {
-                    state = State.Moving;
-                }
-                break;
-            case State.Moving:
-                CorrectMovement();
-                if (agent.remainingDistance < 0.01f)
-                {
-                    state = State.Idle;
-                    OnFinishedMoving?.Invoke();
-                }
-                break;
-        }
-    }
-
-    private void CorrectMovement()
-    {
-        agent.speed =
-            (1.0f - personalSpace.GetCrowdMetrics()) * maxVelocity * maxVelocityMultiplierByEffects;
-
-        Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
-        if (steering.sqrMagnitude > 0.0001)
-        {
-            agent.velocity = steering;
-        }
-        else
-        {
+            currentDestination = target_position;
             _ = agent.SetDestination(currentDestination);
+            state = State.BuildingPath;
         }
-    }
 
-    public float? ComputePathLength(NeedProvider need_provider)
-    {
-        NavMeshPath path = new();
-        if (agent.CalculatePath(need_provider.transform.position, path))
+        private void Start()
         {
-            if (path.status == NavMeshPathStatus.PathComplete)
-            {
-                float total_length = 0f;
-                for (int i = 0; i < path.corners.Length - 1; i++)
-                {
-                    total_length += Vector3.Distance(path.corners[i], path.corners[i + 1]);
-                }
+            agent = GetComponent<NavMeshAgent>();
 
-                return total_length;
+            personalSpace = GetComponentInChildren<PersonalSpace>();
+            if (personalSpace == null)
+            {
+                Debug.LogError("Personal space not found");
             }
         }
 
-        return null;
-    }
-
-    private float maxVelocityMultiplierByEffects = 1.0f;
-    private readonly List<ControllerEffect> registeredEffects = new();
-
-    public void RegisterEffect(ControllerEffect effect)
-    {
-        registeredEffects.Add(effect);
-        maxVelocityMultiplierByEffects *= effect.SpeedMultiplier;
-    }
-
-    public void UnregisterEffect(ControllerEffect effect)
-    {
-        if (!registeredEffects.Remove(effect))
+        private void Update()
         {
-            Debug.LogError("Failed to remove ControllerEffect: Not registered");
-            return;
+            averageVelocity = (transform.position - prevPosition) / Time.deltaTime;
+            prevPosition = transform.position;
+
+            switch (state)
+            {
+                case State.Idle:
+                    break;
+                case State.BuildingPath:
+                    if (!agent.pathPending)
+                    {
+                        state = State.Moving;
+                    }
+                    break;
+                case State.Moving:
+                    CorrectMovement();
+                    if (agent.remainingDistance < 0.01f)
+                    {
+                        state = State.Idle;
+                        OnFinishedMoving?.Invoke();
+                    }
+                    break;
+            }
         }
 
-        maxVelocityMultiplierByEffects = 1.0f;
-        foreach (ControllerEffect eff in registeredEffects)
+        private void CorrectMovement()
         {
-            maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
+            agent.speed =
+                (1.0f - personalSpace.GetCrowdMetrics())
+                * maxVelocity
+                * maxVelocityMultiplierByEffects;
+
+            Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
+            if (steering.sqrMagnitude > 0.0001)
+            {
+                agent.velocity = steering;
+            }
+            else
+            {
+                _ = agent.SetDestination(currentDestination);
+            }
+        }
+
+        public float? ComputePathLength(NeedProvider need_provider)
+        {
+            NavMeshPath path = new();
+            if (agent.CalculatePath(need_provider.transform.position, path))
+            {
+                if (path.status == NavMeshPathStatus.PathComplete)
+                {
+                    float total_length = 0f;
+                    for (int i = 0; i < path.corners.Length - 1; i++)
+                    {
+                        total_length += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+                    }
+
+                    return total_length;
+                }
+            }
+
+            return null;
+        }
+
+        private float maxVelocityMultiplierByEffects = 1.0f;
+        private readonly List<Controller> registeredEffects = new();
+
+        public void RegisterEffect(Controller effect)
+        {
+            registeredEffects.Add(effect);
+            maxVelocityMultiplierByEffects *= effect.SpeedMultiplier;
+        }
+
+        public void UnregisterEffect(Controller effect)
+        {
+            if (!registeredEffects.Remove(effect))
+            {
+                Debug.LogError("Failed to remove ControllerEffect: Not registered");
+                return;
+            }
+
+            maxVelocityMultiplierByEffects = 1.0f;
+            foreach (Controller eff in registeredEffects)
+            {
+                maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
+            }
         }
     }
 }
