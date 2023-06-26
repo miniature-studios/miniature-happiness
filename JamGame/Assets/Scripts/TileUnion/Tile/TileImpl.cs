@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using TileBuilder;
 using UnityEngine;
 
 namespace TileUnion.Tile
@@ -79,10 +80,11 @@ namespace TileUnion.Tile
         }
     }
 
+    // TODO: Move enums outside of TileImpl.
     [SelectionBase]
     [RequireComponent(typeof(TileView))]
     [RequireComponent(typeof(BoxCollider))]
-    public class Tile : MonoBehaviour
+    public class TileImpl : MonoBehaviour
     {
         [SerializeField]
         private BuilderMatrix builderMatrix;
@@ -149,13 +151,13 @@ namespace TileUnion.Tile
             }
         }
 
-        public Result<WallTypeMatch> RequestWallUpdates(Dictionary<Direction, Tile> neighbours)
+        public Result<WallTypeMatch> RequestWallUpdates(Dictionary<Direction, TileImpl> neighbours)
         {
             Dictionary<Direction, WallType> configuration = new();
             foreach (Direction direction in Direction.Up.GetCircle90())
             {
                 WallType? wallTypeToPlace = WallType.None;
-                Tile outTile = neighbours?[direction];
+                TileImpl outTile = neighbours?[direction];
                 if (outTile != null)
                 {
                     wallTypeToPlace = wallSolver.ChooseWall(
@@ -191,14 +193,14 @@ namespace TileUnion.Tile
             return RawWalls.Find(x => x.Place == imagine_place);
         }
 
-        public void UpdateCorners(Dictionary<Direction, Tile> neighbours)
+        public void UpdateCorners(Dictionary<Direction, TileImpl> neighbours)
         {
             foreach (Direction direction in Direction.Left.GetCircle90())
             {
                 CornerType corner_type_to_place = CornerType.None;
-                Tile tile1 = neighbours[direction];
-                Tile tile2 = neighbours[direction.Rotate45()];
-                Tile tile3 = neighbours[direction.Rotate90()];
+                TileImpl tile1 = neighbours[direction];
+                TileImpl tile2 = neighbours[direction.Rotate45()];
+                TileImpl tile3 = neighbours[direction.Rotate90()];
                 if (tile1 != null && tile2 != null && tile3 != null)
                 {
                     corner_type_to_place = ChooseCorner(

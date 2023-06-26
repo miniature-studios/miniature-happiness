@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace TileUnion.Inspector
 {
-    [CustomEditor(typeof(TileUnion))]
+    [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-        private TileUnion tile_union;
+        private TileUnionImpl tile_union;
 
         public override void OnInspectorGUI()
         {
-            tile_union = serializedObject.targetObject as TileUnion;
+            tile_union = serializedObject.targetObject as TileUnionImpl;
 
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Show rotating"))

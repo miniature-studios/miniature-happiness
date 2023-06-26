@@ -2,23 +2,24 @@ using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder.Command
 {
     public interface ICommand
     {
-        public Result Execute(TileBuilder tile_builder);
+        public Result Execute(TileBuilderImpl tile_builder);
     }
 
     public class AddTileToScene : ICommand
     {
-        public TileUnion TilePrefab;
+        public TileUnionImpl TilePrefab;
         public Vector2Int CreatingPosition;
         public int CreatingRotation;
         public Ray Ray;
 
-        public AddTileToScene(TileUnion tile_prefab, Ray ray)
+        public AddTileToScene(TileUnionImpl tile_prefab, Ray ray)
         {
             TilePrefab = tile_prefab;
             CreatingPosition = new();
@@ -26,14 +27,14 @@ namespace TileBuilder.Command
             Ray = ray;
         }
 
-        public AddTileToScene(TileUnion tile_prefab)
+        public AddTileToScene(TileUnionImpl tile_prefab)
         {
             TilePrefab = tile_prefab;
             CreatingPosition = new();
             CreatingRotation = 0;
         }
 
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             return tile_builder.AddTileIntoBuilding(TilePrefab, CreatingPosition, CreatingRotation);
         }
@@ -41,7 +42,7 @@ namespace TileBuilder.Command
 
     public class CompletePlacing : ICommand
     {
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             return tile_builder.ComletePlacing();
         }
@@ -57,7 +58,7 @@ namespace TileBuilder.Command
             sendUIPrefab = send_ui_prefab;
         }
 
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             Result response = tile_builder.DeleteSelectedTile(out tileUIPrefab);
             sendUIPrefab(tileUIPrefab);
@@ -102,7 +103,7 @@ namespace TileBuilder.Command
             }
         }
 
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             return Direction == null
                 ? new FailResult("Null diraction")
@@ -119,7 +120,7 @@ namespace TileBuilder.Command
             Direction = direction;
         }
 
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             return tile_builder.RotateSelectedTile(Direction);
         }
@@ -127,18 +128,18 @@ namespace TileBuilder.Command
 
     public class SelectTile : ICommand
     {
-        public TileUnion Tile;
+        public TileUnionImpl Tile;
 
         public SelectTile(Ray ray)
         {
             RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
-            IEnumerable<TileUnion> tiles = hits.ToList()
-                .Where(x => x.collider.GetComponentInParent<TileUnion>() != null)
-                .Select(x => x.collider.GetComponentInParent<TileUnion>());
+            IEnumerable<TileUnionImpl> tiles = hits.ToList()
+                .Where(x => x.collider.GetComponentInParent<TileUnionImpl>() != null)
+                .Select(x => x.collider.GetComponentInParent<TileUnionImpl>());
             Tile = tiles.Count() != 0 ? tiles.First() : null;
         }
 
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             return Tile == null ? new FailResult("No hits") : tile_builder.SelectTile(Tile);
         }
@@ -146,7 +147,7 @@ namespace TileBuilder.Command
 
     public class ValidateBuilding : ICommand
     {
-        public Result Execute(TileBuilder tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder)
         {
             return tile_builder.Validate();
         }

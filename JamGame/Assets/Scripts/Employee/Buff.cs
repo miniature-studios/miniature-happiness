@@ -1,3 +1,4 @@
+using Employee.Effect;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,7 +52,7 @@ namespace Employee
     public interface IEffect { }
 
     [Serializable]
-    public class Stress : IEffect
+    public class StressEffect : IEffect
     {
         [SerializeField]
         private float increaseMultiplier;
@@ -59,7 +60,7 @@ namespace Employee
     }
 
     [Serializable]
-    public class NeedModifier : IEffect
+    public class NeedModifierEffect : IEffect
     {
         [SerializeField]
         private List<Need.NeedProperties> needModifiers;
@@ -67,7 +68,7 @@ namespace Employee
     }
 
     [Serializable]
-    public class Controller : IEffect
+    public class ControllerEffect : IEffect
     {
         [SerializeField]
         private float speedMultiplier;

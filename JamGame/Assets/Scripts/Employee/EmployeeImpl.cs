@@ -1,3 +1,4 @@
+using Location;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace Employee
     internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
     {
         private readonly List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
-        private readonly Employee employee;
+        private readonly EmployeeImpl employee;
 
-        public BuffsNeedModifiersPool(Employee employee)
+        public BuffsNeedModifiersPool(EmployeeImpl employee)
         {
             this.employee = employee;
         }
@@ -51,8 +52,8 @@ namespace Employee
     }
 
     [RequireComponent(typeof(EmployeeController))]
-    [RequireComponent(typeof(Stress))]
-    public class Employee : MonoBehaviour
+    [RequireComponent(typeof(StressEffect))]
+    public class EmployeeImpl : MonoBehaviour
     {
         private enum State
         {
@@ -64,7 +65,7 @@ namespace Employee
         private State state = State.Idle;
 
         [SerializeField]
-        private Location location;
+        private LocationImpl location;
 
         [SerializeField]
         private List<Need> needs = new();
@@ -76,7 +77,7 @@ namespace Employee
 
         private readonly List<NeedModifiers> registeredModifiers = new();
 
-        public Stress Stress { get; private set; }
+        public StressMeter Stress { get; private set; }
 
         [Serializable]
         private struct AppliedBuff
@@ -99,7 +100,7 @@ namespace Employee
         private void Start()
         {
             controller = GetComponent<EmployeeController>();
-            Stress = GetComponent<Stress>();
+            Stress = GetComponent<StressMeter>();
 
             buffsNeedModifiers = new BuffsNeedModifiersPool(this);
         }
@@ -288,7 +289,7 @@ namespace Employee
                 {
                     buffsNeedModifiers.RegisterEffect(nme);
                 }
-                else if (effect is Controller ce)
+                else if (effect is ControllerEffect ce)
                 {
                     controller.RegisterEffect(ce);
                 }
@@ -314,7 +315,7 @@ namespace Employee
                         {
                             buffsNeedModifiers.UnregisterEffect(nme);
                         }
-                        else if (effect is Controller ce)
+                        else if (effect is ControllerEffect ce)
                         {
                             controller.UnregisterEffect(ce);
                         }

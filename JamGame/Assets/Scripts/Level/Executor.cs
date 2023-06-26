@@ -12,7 +12,7 @@ namespace Level
         private LevelConfig levelConfig;
 
         [SerializeField]
-        private TileBuilderController tileBuilderController;
+        private TileBuilder.ControllerImpl tileBuilderController;
 
         [SerializeField]
         private Finances financesController;
@@ -80,7 +80,7 @@ namespace Level
 
         public void Execute(Meeting meeting, Action next_action)
         {
-            tileBuilderController.ChangeGameMode(GameMode.Build);
+            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             transitionPanel.SetText("Meeting start.");

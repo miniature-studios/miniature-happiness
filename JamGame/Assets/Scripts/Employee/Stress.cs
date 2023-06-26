@@ -25,10 +25,10 @@ namespace Employee
         public Buff Buff;
     }
 
-    [RequireComponent(typeof(Employee))]
-    public class Stress : MonoBehaviour, IEffectExecutor<StressEffect>
+    [RequireComponent(typeof(EmployeeImpl))]
+    public class StressMeter : MonoBehaviour, IEffectExecutor<StressEffect>
     {
-        private Employee employee;
+        private EmployeeImpl employee;
 
         [SerializeField]
         private List<StressStage> stages;
@@ -56,7 +56,7 @@ namespace Employee
         {
             PrepareConfig();
 
-            employee = GetComponent<Employee>();
+            employee = GetComponent<EmployeeImpl>();
         }
 
         public void UpdateStress(List<Need> needs, float delta_time)

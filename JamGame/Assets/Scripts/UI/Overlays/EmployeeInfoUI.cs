@@ -1,3 +1,4 @@
+using Employee;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class EmployeeInfoUI : MonoBehaviour
     private Camera cam;
 
     private Personality personality;
-    private Employee employee;
+    private EmployeeImpl employee;
 
     private TMP_Text text;
 
@@ -16,7 +17,7 @@ public class EmployeeInfoUI : MonoBehaviour
         cam = Camera.main;
 
         personality = GetComponentInParent<Personality>();
-        employee = GetComponentInParent<Employee>();
+        employee = GetComponentInParent<EmployeeImpl>();
 
         text = GetComponentInChildren<TMP_Text>();
     }

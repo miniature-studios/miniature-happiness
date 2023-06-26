@@ -1,25 +1,28 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class SerializedRoomConfig
+namespace Level.Config
 {
-    [SerializeField]
-    private string selectedType;
-
-    [SerializeField]
-    private FixedRoomConfig fixedRoomConfig;
-
-    [SerializeField]
-    private RandomRoomConfig randomRoomConfig;
-
-    public IRoomConfig ToRoomConfig()
+    [Serializable]
+    public class SerializedRoomConfig
     {
-        return selectedType switch
+        [SerializeField]
+        private string selectedType;
+
+        [SerializeField]
+        private FixedRoomConfig fixedRoomConfig;
+
+        [SerializeField]
+        private RandomRoomConfig randomRoomConfig;
+
+        public IRoomConfig ToRoomConfig()
         {
-            "FixedRoomConfig" => fixedRoomConfig,
-            "RandomRoomConfig" => randomRoomConfig,
-            _ => throw new NotImplementedException(),
-        };
+            return selectedType switch
+            {
+                "FixedRoomConfig" => fixedRoomConfig,
+                "RandomRoomConfig" => randomRoomConfig,
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }

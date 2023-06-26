@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TileBuilder;
 using UnityEngine;
 
 namespace Level
@@ -7,7 +8,7 @@ namespace Level
     public class OfficeMonitoring : MonoBehaviour
     {
         [SerializeField]
-        private TileBuilder tileBuilder;
+        private TileBuilderImpl tileBuilder;
 
         public struct OfficeInfo
         {

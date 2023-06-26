@@ -1,3 +1,4 @@
+using Location;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -5,7 +6,7 @@ using UnityEngine.AI;
 namespace Employee
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class EmployeeController : MonoBehaviour, IEffectExecutor<Controller>
+    public class EmployeeController : MonoBehaviour, IEffectExecutor<ControllerEffect>
     {
         private enum State
         {
@@ -114,15 +115,15 @@ namespace Employee
         }
 
         private float maxVelocityMultiplierByEffects = 1.0f;
-        private readonly List<Controller> registeredEffects = new();
+        private readonly List<ControllerEffect> registeredEffects = new();
 
-        public void RegisterEffect(Controller effect)
+        public void RegisterEffect(ControllerEffect effect)
         {
             registeredEffects.Add(effect);
             maxVelocityMultiplierByEffects *= effect.SpeedMultiplier;
         }
 
-        public void UnregisterEffect(Controller effect)
+        public void UnregisterEffect(ControllerEffect effect)
         {
             if (!registeredEffects.Remove(effect))
             {
@@ -131,7 +132,7 @@ namespace Employee
             }
 
             maxVelocityMultiplierByEffects = 1.0f;
-            foreach (Controller eff in registeredEffects)
+            foreach (ControllerEffect eff in registeredEffects)
             {
                 maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
             }

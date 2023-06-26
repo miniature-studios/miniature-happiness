@@ -1,3 +1,4 @@
+using Employee;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,16 +18,16 @@ namespace Location
         [Serializable]
         public class Filter
         {
-            public Filter(List<Employee> employees, FilterType filter_type)
+            public Filter(List<EmployeeImpl> employees, FilterType filter_type)
             {
                 Employees = employees;
                 FilterType = filter_type;
             }
 
-            public List<Employee> Employees = new();
+            public List<EmployeeImpl> Employees = new();
             public FilterType FilterType;
 
-            public bool IsEmployeeAllowed(Employee employee)
+            public bool IsEmployeeAllowed(EmployeeImpl employee)
             {
                 switch (FilterType)
                 {
@@ -44,7 +45,7 @@ namespace Location
                 }
             }
 
-            public void Take(Employee employee)
+            public void Take(EmployeeImpl employee)
             {
                 switch (FilterType)
                 {
@@ -72,9 +73,9 @@ namespace Location
 
         public NeedType NeedType;
 
-        private Employee currentEmployee = null;
+        private EmployeeImpl currentEmployee = null;
 
-        public bool TryTake(Employee employee)
+        public bool TryTake(EmployeeImpl employee)
         {
             if (!IsAvailable(employee))
             {
@@ -101,7 +102,7 @@ namespace Location
             }
         }
 
-        public bool IsAvailable(Employee employee)
+        public bool IsAvailable(EmployeeImpl employee)
         {
             return filter.IsEmployeeAllowed(employee);
         }

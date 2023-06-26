@@ -2,6 +2,7 @@ using Common;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder.Command;
+using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder
@@ -13,9 +14,9 @@ namespace TileBuilder
 
     public class BuildModeValidator : IValidator
     {
-        private readonly TileBuilder tileBuilder;
+        private readonly TileBuilderImpl tileBuilder;
 
-        public BuildModeValidator(TileBuilder tileBuilder)
+        public BuildModeValidator(TileBuilderImpl tileBuilder)
         {
             this.tileBuilder = tileBuilder;
         }
@@ -28,7 +29,8 @@ namespace TileBuilder
             }
             if (command is AddTileToScene add_command)
             {
-                TileUnion creatingtile_union = add_command.TilePrefab.GetComponent<TileUnion>();
+                TileUnionImpl creatingtile_union =
+                    add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
                     tileBuilder.GetFreeSpaceInsideListPositions();
 
@@ -59,7 +61,7 @@ namespace TileBuilder
                         {
                             choosed = true;
                             float calc_dictance = Vector2.Distance(
-                                TileUnionTools.GetCenterOfMass(future_places.ToList()),
+                                CenterOfMassTools.GetCenterOfMass(future_places.ToList()),
                                 picked_position
                             );
                             if (calc_dictance < buffer_dictance)
@@ -146,9 +148,9 @@ namespace TileBuilder
 
     public class GodModeValidator : IValidator
     {
-        private readonly TileBuilder tileBuilder;
+        private readonly TileBuilderImpl tileBuilder;
 
-        public GodModeValidator(TileBuilder tileBuilder)
+        public GodModeValidator(TileBuilderImpl tileBuilder)
         {
             this.tileBuilder = tileBuilder;
         }
@@ -157,7 +159,8 @@ namespace TileBuilder
         {
             if (command is AddTileToScene add_command)
             {
-                TileUnion creatingtile_union = add_command.TilePrefab.GetComponent<TileUnion>();
+                TileUnionImpl creatingtile_union =
+                    add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
                     tileBuilder.GetFreeSpaceInsideListPositions();
                 int rotation = 0;

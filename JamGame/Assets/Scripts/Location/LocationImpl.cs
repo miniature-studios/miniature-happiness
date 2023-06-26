@@ -1,14 +1,15 @@
+using Employee;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Location
 {
-    public class Location : MonoBehaviour
+    public class LocationImpl : MonoBehaviour
     {
         [SerializeField]
-        private Employee employeePrototype;
+        private EmployeeImpl employeePrototype;
         private List<NeedProvider> needProviders;
-        private readonly List<Employee> employees = new();
+        private readonly List<EmployeeImpl> employees = new();
 
         private void Start()
         {
@@ -24,7 +25,7 @@ namespace Location
 
         public void AddEmployee()
         {
-            Employee new_employee = Instantiate(
+            EmployeeImpl new_employee = Instantiate(
                 employeePrototype,
                 employeePrototype.transform.parent
             );
@@ -33,7 +34,7 @@ namespace Location
         }
 
         public IEnumerable<NeedProvider> FindAllAvailableProviders(
-            Employee employee,
+            EmployeeImpl employee,
             NeedType need_type
         )
         {

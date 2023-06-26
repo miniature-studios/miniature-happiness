@@ -1,4 +1,5 @@
 ﻿using Common;
+using Level;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,10 +13,10 @@ namespace TileBuilder
         Play
     }
 
-    public class TileBuilderController : MonoBehaviour
+    public class ControllerImpl : MonoBehaviour
     {
         [SerializeField]
-        private TileBuilder tileBuilder;
+        private TileBuilderImpl tileBuilder;
 
         [SerializeField]
         private InventoryController inventoryController;
@@ -63,10 +64,10 @@ namespace TileBuilder
                 if (!isOverUI)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    Result response = Execute(new SelectTileCommand(ray));
+                    Result response = Execute(new Command.SelectTile(ray));
                     if (response.Failure)
                     {
-                        _ = Execute(new CompletePlacingCommand());
+                        _ = Execute(new Command.CompletePlacing());
                     }
                 }
             }
@@ -74,13 +75,13 @@ namespace TileBuilder
             if (Input.GetMouseButtonUp(0))
             {
                 mousePressed = false;
-                _ = Execute(new CompletePlacingCommand());
+                _ = Execute(new Command.CompletePlacing());
             }
 
             if (mouseDelta.magnitude > 0 && mousePressed && !isOverUI)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                MoveSelectedTileCommand command =
+                Command.MoveSelectedTile command =
                     new(
                         ray,
                         tileBuilder.BuilderMatrix,
@@ -93,7 +94,7 @@ namespace TileBuilder
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _ = Execute(new RotateSelectedTileCommand(RotationDirection.Clockwise));
+                _ = Execute(new Command.RotateSelectedTile(RotationDirection.Clockwise));
             }
         }
 
@@ -102,7 +103,7 @@ namespace TileBuilder
             if (over)
             {
                 RoomInventoryUI destroyed_tile_ui_prefab = null;
-                DeleteSelectedTileCommand command = new((arg) => destroyed_tile_ui_prefab = arg);
+                Command.DeleteSelectedTile command = new((arg) => destroyed_tile_ui_prefab = arg);
                 Result result = Execute(command);
                 if (result.Success)
                 {
@@ -115,13 +116,13 @@ namespace TileBuilder
         private Result TryPlace(RoomInventoryUI room_inventory_ui)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            AddTileToSceneCommand command = new(room_inventory_ui.TileUnion, ray);
+            Command.AddTileToScene command = new(room_inventory_ui.TileUnion, ray);
             return Execute(command);
         }
 
         public void ValidateBuilding()
         {
-            Result result = Execute(new ValidateBuildingCommand());
+            Result result = Execute(new Command.ValidateBuilding());
             if (result.Success)
             {
                 BuildedValidatedOffice?.Invoke();

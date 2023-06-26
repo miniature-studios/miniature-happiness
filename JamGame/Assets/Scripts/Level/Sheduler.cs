@@ -1,3 +1,4 @@
+using Level.Config;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,10 +7,10 @@ namespace Level
     public class Sheduler : MonoBehaviour
     {
         [SerializeField]
-        private Level levelActionsConfig;
+        private LevelConfig levelActionsConfig;
 
         [SerializeField]
-        private LevelExecutor levelExecuter;
+        private Executor levelExecutor;
 
         private IEnumerator<DayConfig> dayEnumerator;
         private IEnumerator<IDayAction> actionEnumerator;
@@ -22,14 +23,14 @@ namespace Level
                 _ = (
                     actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
                 ).MoveNext();
-                actionEnumerator.Current.Execute(levelExecuter, PlayPlannedActions);
+                actionEnumerator.Current.Execute(levelExecutor, PlayPlannedActions);
             }
             else
             {
                 _ = (
                     actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
                 ).MoveNext();
-                actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
+                actionEnumerator.Current.Execute(levelExecutor, PlayDefaultDay);
             }
         }
 
@@ -42,14 +43,14 @@ namespace Level
                     _ = (
                         actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
                     ).MoveNext();
-                    actionEnumerator.Current.Execute(levelExecuter, PlayPlannedActions);
+                    actionEnumerator.Current.Execute(levelExecutor, PlayPlannedActions);
                 }
                 else
                 {
                     _ = (
                         actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
                     ).MoveNext();
-                    actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
+                    actionEnumerator.Current.Execute(levelExecutor, PlayDefaultDay);
                 }
             }
         }
@@ -61,7 +62,7 @@ namespace Level
                 actionEnumerator.Reset();
                 _ = actionEnumerator.MoveNext();
             }
-            actionEnumerator.Current.Execute(levelExecuter, PlayDefaultDay);
+            actionEnumerator.Current.Execute(levelExecutor, PlayDefaultDay);
         }
     }
 }

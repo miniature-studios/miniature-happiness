@@ -1,20 +1,23 @@
 ﻿using System;
 using UnityEngine;
+|=USINGS=|
 
-[Serializable]
-public class Serialized|=INTERFACE_CLASS_NAME=|
-{
-    [SerializeField] 
-    private string selectedType;
-
-|=FIELDS=|
-
-    public |=INTERFACE_NAME=| To|=INTERFACE_CLASS_NAME=|()
+namespace |=NAMESPACE=| {
+    [Serializable]
+    public class Serialized|=INTERFACE_CLASS_NAME=|
     {
-        return selectedType switch
+        [SerializeField] 
+        private string selectedType;
+
+    |=FIELDS=|
+
+        public |=INTERFACE_NAME=| To|=INTERFACE_CLASS_NAME=|()
         {
-|=SWITCH_VARIANTS=|
-            _ => throw new NotImplementedException(),
-        };
+            return selectedType switch
+            {
+    |=SWITCH_VARIANTS=|
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }

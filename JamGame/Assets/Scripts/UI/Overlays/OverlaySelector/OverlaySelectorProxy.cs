@@ -1,3 +1,4 @@
+using Overlay;
 using UnityEngine;
 
 // Used to proxy calls from concrete overlay buttons to Location.

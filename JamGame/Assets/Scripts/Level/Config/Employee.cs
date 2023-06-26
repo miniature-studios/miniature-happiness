@@ -1,4 +1,5 @@
 using Common;
+using Employee;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ namespace Level.Config
     public class EmployeeConfig
     {
         public string Name { get; }
-        public Employee Employee { get; }
+        public EmployeeImpl Employee { get; }
 
-        public EmployeeConfig(Employee employee, string name)
+        public EmployeeConfig(EmployeeImpl employee, string name)
         {
             Name = name;
             Employee = employee;
@@ -31,7 +32,7 @@ namespace Level.Config
         private string name;
 
         [SerializeField]
-        private Employee employee;
+        private EmployeeImpl employee;
 
         public EmployeeConfig GetEmployeeConfig()
         {
@@ -43,7 +44,7 @@ namespace Level.Config
     public class EmployeeWeights
     {
         public float Weight;
-        public Employee Employee;
+        public EmployeeImpl Employee;
     }
 
     [Serializable]
@@ -58,7 +59,9 @@ namespace Level.Config
         public EmployeeConfig GetEmployeeConfig()
         {
             List<float> list = employeeWeights.Select(x => x.Weight).ToList();
-            Employee result = employeeWeights[RandomTools.RandomlyChooseWithWeights(list)].Employee;
+            EmployeeImpl result = employeeWeights[
+                RandomTools.RandomlyChooseWithWeights(list)
+            ].Employee;
 
             string first_name = nameList.FirstNames[
                 UnityEngine.Random.Range(0, nameList.FirstNames.Count)

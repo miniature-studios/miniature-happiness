@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Level.Config
@@ -7,13 +8,13 @@ namespace Level.Config
     [InterfaceEditor]
     public interface IDayAction
     {
-        public void Execute(LevelExecutor executor, Action next_action);
+        public void Execute(Executor executor, Action next_action);
     }
 
     [Serializable]
     public class DayEnd : IDayAction
     {
-        public void Execute(LevelExecutor executor, Action next_action)
+        public void Execute(Executor executor, Action next_action)
         {
             executor.Execute(this, next_action);
         }
@@ -26,7 +27,7 @@ namespace Level.Config
         private int morningMoney;
         public int MorningMoney => morningMoney;
 
-        public void Execute(LevelExecutor executor, Action next_action)
+        public void Execute(Executor executor, Action next_action)
         {
             executor.Execute(this, next_action);
         }
@@ -46,7 +47,7 @@ namespace Level.Config
         public IEnumerable<RoomConfig> ShopRooms =>
             shopRooms.Select(x => x.ToRoomConfig().GetRoomConfig());
 
-        public void Execute(LevelExecutor executor, Action next_action)
+        public void Execute(Executor executor, Action next_action)
         {
             executor.Execute(this, next_action);
         }
@@ -59,7 +60,7 @@ namespace Level.Config
         private float workingTime;
         public float WorkingTime => workingTime;
 
-        public void Execute(LevelExecutor executor, Action next_action)
+        public void Execute(Executor executor, Action next_action)
         {
             executor.Execute(this, next_action);
         }

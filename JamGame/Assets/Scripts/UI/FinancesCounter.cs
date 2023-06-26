@@ -1,7 +1,9 @@
 ﻿using Common;
+using Level;
 using System;
 using TMPro;
 using UnityEngine;
+using FinancesController = Level.Finances;
 
 public class FinancesCounter : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class FinancesCounter : MonoBehaviour
     private float lerpSpeed;
 
     [SerializeField]
-    private Finances finances;
+    private FinancesController finances;
     private int buffer_count;
     private float lerpCount = 0;
 

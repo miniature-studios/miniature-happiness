@@ -1,11 +1,13 @@
 #if UNITY_EDITOR
+using System.Linq;
+using TileUnion;
 using UnityEditor;
 using UnityEngine;
 
-namespace TileBuilder.Inspector
+namespace TileBuilder
 {
-    [CustomEditor(typeof(TileBuilder))]
-    public partial class TileBuilderInspector : Editor
+    // TODO: Move this to Inspector.
+    public partial class TileBuilderImpl : MonoBehaviour
     {
         [HideInInspector]
         public GameObject LoadingPrefab;
@@ -14,22 +16,22 @@ namespace TileBuilder.Inspector
         public string SavingName = "SampleBuilding";
 
         [HideInInspector]
-        public TileUnion StairsPrefab;
+        public TileUnionImpl StairsPrefab;
 
         [HideInInspector]
-        public TileUnion WindowPrefab;
+        public TileUnionImpl WindowPrefab;
 
         [HideInInspector]
-        public TileUnion OutdoorPrefab;
+        public TileUnionImpl OutdoorPrefab;
 
         [HideInInspector]
-        public TileUnion CorridoorPrefab;
+        public TileUnionImpl CorridoorPrefab;
 
         [HideInInspector]
-        public TileUnion WorkingPlaceFree;
+        public TileUnionImpl WorkingPlaceFree;
 
         [HideInInspector]
-        public TileUnion WorkingPlace;
+        public TileUnionImpl WorkingPlace;
 
         [HideInInspector]
         public int SquareSideLength = 30;
@@ -37,171 +39,12 @@ namespace TileBuilder.Inspector
         [HideInInspector]
         public bool LoadFromSceneComposition;
 
-        public override void OnInspectorGUI()
+        private void InspectorStart()
         {
-            TileBuilder tile_builder = serializedObject.targetObject as TileBuilder;
-
-            ShowLocationBuildingButtons(tile_builder);
-            DisplaySaveLoadTiles(tile_builder);
-
-            _ = DrawDefaultInspector();
-
-            _ = serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DisplaySaveLoadTiles(TileBuilder tile_builder)
-        {
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.LoadingPrefab = (GameObject)
-                EditorGUILayout.ObjectField(
-                    "Loading prefab: ",
-                    tile_builder.LoadingPrefab,
-                    typeof(GameObject),
-                    false
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.SavingName = EditorGUILayout.TextField(
-                "Saveing name: ",
-                tile_builder.SavingName
-            );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Save scene composition into prefab."))
+            if (LoadFromSceneComposition && LoadingPrefab != null)
             {
-                string localPath =
-                    "Assets/Prefabs/SceneCompositions/" + tile_builder.SavingName + ".prefab";
-                localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
-                _ = PrefabUtility.SaveAsPrefabAsset(
-                    tile_builder.RootObject,
-                    localPath,
-                    out bool prefabSuccess
-                );
-                if (prefabSuccess == true)
-                {
-                    Debug.Log("Prefab was saved successfully");
-                }
-                else
-                {
-                    Debug.Log("Prefab failed to save");
-                }
+                LoadSceneComposition(LoadingPrefab);
             }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.LoadFromSceneComposition = EditorGUILayout.Toggle(
-                "Load from prefab on start?",
-                tile_builder.LoadFromSceneComposition
-            );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Load scene composition from prefab."))
-            {
-                tile_builder.LoadSceneComposition(tile_builder.LoadingPrefab);
-            }
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void ShowLocationBuildingButtons(TileBuilder tile_builder)
-        {
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.SquareSideLength = EditorGUILayout.IntField(
-                "Square side length: ",
-                tile_builder.SquareSideLength
-            );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.StairsPrefab = (TileUnion)
-                EditorGUILayout.ObjectField(
-                    "Stairs prefab: ",
-                    tile_builder.StairsPrefab,
-                    typeof(TileUnion),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.WindowPrefab = (TileUnion)
-                EditorGUILayout.ObjectField(
-                    "Window prefab: ",
-                    tile_builder.WindowPrefab,
-                    typeof(TileUnion),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.OutdoorPrefab = (TileUnion)
-                EditorGUILayout.ObjectField(
-                    "Outdoor prefab: ",
-                    tile_builder.OutdoorPrefab,
-                    typeof(TileUnion),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.CorridoorPrefab = (TileUnion)
-                EditorGUILayout.ObjectField(
-                    "Corridoor prefab: ",
-                    tile_builder.CorridoorPrefab,
-                    typeof(TileUnion),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.WorkingPlaceFree = (TileUnion)
-                EditorGUILayout.ObjectField(
-                    "Working place free prefab: ",
-                    tile_builder.WorkingPlaceFree,
-                    typeof(TileUnion),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.WorkingPlace = (TileUnion)
-                EditorGUILayout.ObjectField(
-                    "Working place prefab: ",
-                    tile_builder.WorkingPlace,
-                    typeof(TileUnion),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Create random building"))
-            {
-                tile_builder.CreateRandomBuilding();
-            }
-            if (GUILayout.Button("Create normal building"))
-            {
-                tile_builder.CreateNormalBuilding();
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Clear Scene"))
-            {
-                tile_builder.DeleteAllTiles();
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Add 4 Tiles"))
-            {
-                tile_builder.CreateFourTiles();
-            }
-            if (GUILayout.Button("Update All"))
-            {
-                tile_builder.UpdateAllTiles();
-            }
-            EditorGUILayout.EndHorizontal();
         }
 
         public void CreateRandomBuilding()
@@ -290,6 +133,204 @@ namespace TileBuilder.Inspector
             CreateTileAndBind(OutdoorPrefab, new(0, 1), 0);
             CreateTileAndBind(WorkingPlaceFree, new(1, 0), 0);
             CreateTileAndBind(WorkingPlace, new(1, 1), 0);
+        }
+
+        public void LoadSceneComposition(GameObject scene_composition_prefab)
+        {
+            DeleteAllTiles();
+            if (rootObject != null)
+            {
+                DestroyImmediate(rootObject);
+            }
+            rootObject = Instantiate(scene_composition_prefab, transform);
+            foreach (TileUnionImpl union in rootObject.GetComponentsInChildren<TileUnionImpl>())
+            {
+                foreach (Vector2Int pos in union.TilesPositions)
+                {
+                    TileUnionDictionary.Add(pos, union);
+                }
+            }
+            UpdateAllTiles();
+        }
+
+        public void DeleteAllTiles()
+        {
+            while (TileUnionDictionary.Values.Count() > 0)
+            {
+                _ = DeleteTile(TileUnionDictionary.Values.Last());
+            }
+            TileUnionDictionary.Clear();
+        }
+    }
+
+    [CustomEditor(typeof(TileBuilderImpl))]
+    public partial class TileBuilderInspector : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            TileBuilderImpl tile_builder = serializedObject.targetObject as TileBuilderImpl;
+
+            ShowLocationBuildingButtons(tile_builder);
+            DisplaySaveLoadTiles(tile_builder);
+
+            _ = DrawDefaultInspector();
+
+            _ = serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DisplaySaveLoadTiles(TileBuilderImpl tile_builder)
+        {
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.LoadingPrefab = (GameObject)
+                EditorGUILayout.ObjectField(
+                    "Loading prefab: ",
+                    tile_builder.LoadingPrefab,
+                    typeof(GameObject),
+                    false
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.SavingName = EditorGUILayout.TextField(
+                "Saveing name: ",
+                tile_builder.SavingName
+            );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Save scene composition into prefab."))
+            {
+                string localPath =
+                    "Assets/Prefabs/SceneCompositions/" + tile_builder.SavingName + ".prefab";
+                localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+                _ = PrefabUtility.SaveAsPrefabAsset(
+                    tile_builder.RootObject,
+                    localPath,
+                    out bool prefabSuccess
+                );
+                if (prefabSuccess == true)
+                {
+                    Debug.Log("Prefab was saved successfully");
+                }
+                else
+                {
+                    Debug.Log("Prefab failed to save");
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.LoadFromSceneComposition = EditorGUILayout.Toggle(
+                "Load from prefab on start?",
+                tile_builder.LoadFromSceneComposition
+            );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Load scene composition from prefab."))
+            {
+                tile_builder.LoadSceneComposition(tile_builder.LoadingPrefab);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void ShowLocationBuildingButtons(TileBuilderImpl tile_builder)
+        {
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.SquareSideLength = EditorGUILayout.IntField(
+                "Square side length: ",
+                tile_builder.SquareSideLength
+            );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.StairsPrefab = (TileUnionImpl)
+                EditorGUILayout.ObjectField(
+                    "Stairs prefab: ",
+                    tile_builder.StairsPrefab,
+                    typeof(TileUnionImpl),
+                    true
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.WindowPrefab = (TileUnionImpl)
+                EditorGUILayout.ObjectField(
+                    "Window prefab: ",
+                    tile_builder.WindowPrefab,
+                    typeof(TileUnionImpl),
+                    true
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.OutdoorPrefab = (TileUnionImpl)
+                EditorGUILayout.ObjectField(
+                    "Outdoor prefab: ",
+                    tile_builder.OutdoorPrefab,
+                    typeof(TileUnionImpl),
+                    true
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.CorridoorPrefab = (TileUnionImpl)
+                EditorGUILayout.ObjectField(
+                    "Corridoor prefab: ",
+                    tile_builder.CorridoorPrefab,
+                    typeof(TileUnionImpl),
+                    true
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.WorkingPlaceFree = (TileUnionImpl)
+                EditorGUILayout.ObjectField(
+                    "Working place free prefab: ",
+                    tile_builder.WorkingPlaceFree,
+                    typeof(TileUnionImpl),
+                    true
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tile_builder.WorkingPlace = (TileUnionImpl)
+                EditorGUILayout.ObjectField(
+                    "Working place prefab: ",
+                    tile_builder.WorkingPlace,
+                    typeof(TileUnionImpl),
+                    true
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Create random building"))
+            {
+                tile_builder.CreateRandomBuilding();
+            }
+            if (GUILayout.Button("Create normal building"))
+            {
+                tile_builder.CreateNormalBuilding();
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Clear Scene"))
+            {
+                tile_builder.DeleteAllTiles();
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Add 4 Tiles"))
+            {
+                tile_builder.CreateFourTiles();
+            }
+            if (GUILayout.Button("Update All"))
+            {
+                tile_builder.UpdateAllTiles();
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 }

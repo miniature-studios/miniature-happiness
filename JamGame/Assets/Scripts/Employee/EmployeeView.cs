@@ -1,15 +1,16 @@
+using Overlay;
 using UnityEngine;
 
 namespace Employee
 {
-    [RequireComponent(typeof(Employee))]
+    [RequireComponent(typeof(EmployeeImpl))]
     public partial class EmployeeView : MonoBehaviour
     {
-        private Employee employee;
+        private EmployeeImpl employee;
 
         private void Start()
         {
-            employee = GetComponent<Employee>();
+            employee = GetComponent<EmployeeImpl>();
             meshRenderer = GetComponent<MeshRenderer>();
         }
 
@@ -26,12 +27,12 @@ namespace Employee
     }
 
     [RequireComponent(typeof(MeshRenderer))]
-    public partial class EmployeeView : IOverlayRenderer<StressOverlay>
+    public partial class EmployeeView : IOverlayRenderer<Overlay.Stress>
     {
         private MeshRenderer meshRenderer;
-        private StressOverlay appliedStressOverlay;
+        private Overlay.Stress appliedStressOverlay;
 
-        public void ApplyOverlay(StressOverlay overlay)
+        public void ApplyOverlay(Overlay.Stress overlay)
         {
             appliedStressOverlay = overlay;
         }
@@ -67,11 +68,11 @@ namespace Employee
         }
     }
 
-    public partial class EmployeeView : IOverlayRenderer<ExtendedEmployeeInfoOverlay>
+    public partial class EmployeeView : IOverlayRenderer<Overlay.ExtendedEmployeeInfo>
     {
         private GameObject overlayUI;
 
-        public void ApplyOverlay(ExtendedEmployeeInfoOverlay overlay)
+        public void ApplyOverlay(Overlay.ExtendedEmployeeInfo overlay)
         {
             if (overlayUI == null)
             {

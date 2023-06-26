@@ -2,14 +2,15 @@ using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder
 {
-    public partial class TileBuilder : MonoBehaviour
+    public partial class TileBuilderImpl : MonoBehaviour
     {
         [SerializeField]
-        private TileUnion freespacePrefab;
+        private TileUnionImpl freespacePrefab;
 
         [SerializeField]
         private GameObject rootObject;
@@ -21,18 +22,18 @@ namespace TileBuilder
         private int previousRotation = 0;
         private bool justCreated = false;
 
-        public TileUnion SelectedTile { get; private set; } = null;
+        public TileUnionImpl SelectedTile { get; private set; } = null;
         public GameObject RootObject
         {
             get => rootObject;
             set => rootObject = value;
         }
         public BuilderMatrix BuilderMatrix => builderMatrix;
-        public Dictionary<Vector2Int, TileUnion> TileUnionDictionary { get; } = new();
+        public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
         public void Start()
         {
-            foreach (TileUnion union in rootObject.GetComponentsInChildren<TileUnion>())
+            foreach (TileUnionImpl union in rootObject.GetComponentsInChildren<TileUnionImpl>())
             {
                 if (!TileUnionDictionary.Values.Contains(union))
                 {
@@ -42,28 +43,8 @@ namespace TileBuilder
                     }
                 }
             }
-            if (LoadFromSceneComposition && LoadingPrefab != null)
-            {
-                LoadSceneComposition(LoadingPrefab);
-            }
-            UpdateAllTiles();
-        }
 
-        public void LoadSceneComposition(GameObject scene_composition_prefab)
-        {
-            DeleteAllTiles();
-            if (rootObject != null)
-            {
-                DestroyImmediate(rootObject);
-            }
-            rootObject = Instantiate(scene_composition_prefab, transform);
-            foreach (TileUnion union in rootObject.GetComponentsInChildren<TileUnion>())
-            {
-                foreach (Vector2Int pos in union.TilesPositions)
-                {
-                    TileUnionDictionary.Add(pos, union);
-                }
-            }
+            InspectorStart();
             UpdateAllTiles();
         }
 
@@ -74,9 +55,9 @@ namespace TileBuilder
                 return new FailResult("Complete placing first");
             }
 
-            Stack<KeyValuePair<Vector2Int, TileUnion>> points_stack =
+            Stack<KeyValuePair<Vector2Int, TileUnionImpl>> points_stack =
                 new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("door")));
-            List<KeyValuePair<Vector2Int, TileUnion>> tiles_to_check = TileUnionDictionary
+            List<KeyValuePair<Vector2Int, TileUnionImpl>> tiles_to_check = TileUnionDictionary
                 .Where(
                     x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("freespace")
                 )
@@ -84,16 +65,16 @@ namespace TileBuilder
 
             while (points_stack.Count > 0)
             {
-                KeyValuePair<Vector2Int, TileUnion> point = points_stack.Pop();
+                KeyValuePair<Vector2Int, TileUnionImpl> point = points_stack.Pop();
                 foreach (
                     Direction dir in point.Value.GetAccessibleDirectionsFromPosition(point.Key)
                 )
                 {
-                    List<KeyValuePair<Vector2Int, TileUnion>> near_tiles =
+                    List<KeyValuePair<Vector2Int, TileUnionImpl>> near_tiles =
                         new(tiles_to_check.Where(x => x.Key == dir.ToVector2Int() + point.Key));
                     if (near_tiles.Count() > 0)
                     {
-                        foreach (KeyValuePair<Vector2Int, TileUnion> founded_tile in near_tiles)
+                        foreach (KeyValuePair<Vector2Int, TileUnionImpl> founded_tile in near_tiles)
                         {
                             _ = tiles_to_check.Remove(founded_tile);
                             points_stack.Push(founded_tile);
@@ -104,7 +85,7 @@ namespace TileBuilder
 
             if (tiles_to_check.Count > 0)
             {
-                foreach (TileUnion union in tiles_to_check.Select(x => x.Value).Distinct())
+                foreach (TileUnionImpl union in tiles_to_check.Select(x => x.Value).Distinct())
                 {
                     union.ShowInvalidPlacing();
                 }
@@ -116,7 +97,7 @@ namespace TileBuilder
             }
         }
 
-        public Result SelectTile(TileUnion tile)
+        public Result SelectTile(TileUnionImpl tile)
         {
             if (SelectedTile == tile)
             {
@@ -225,7 +206,7 @@ namespace TileBuilder
                 SelectedTile = null;
                 return new SuccessResult();
             }
-            List<TileUnion> tilesUnder = TileUnionDictionary
+            List<TileUnionImpl> tilesUnder = TileUnionDictionary
                 .Where(x => SelectedTile.TilesPositions.Contains(x.Key))
                 .Select(x => x.Value)
                 .Distinct()
@@ -241,7 +222,7 @@ namespace TileBuilder
             }
             while (tilesUnder.Count > 0)
             {
-                TileUnion buffer = tilesUnder.Last();
+                TileUnionImpl buffer = tilesUnder.Last();
                 _ = tilesUnder.Remove(buffer);
                 _ = DeleteTile(buffer);
             }
@@ -266,7 +247,7 @@ namespace TileBuilder
             }
             foreach (Vector2Int pos in SelectedTile.TilesPositions)
             {
-                if (TileUnionDictionary.TryGetValue(pos, out TileUnion tileUnion))
+                if (TileUnionDictionary.TryGetValue(pos, out TileUnionImpl tileUnion))
                 {
                     RemoveTileFromDictionary(tileUnion);
                 }
@@ -283,39 +264,36 @@ namespace TileBuilder
             return new SuccessResult();
         }
 
-        public Result AddTileIntoBuilding(TileUnion tile_prefab, Vector2Int position, int rotation)
+        public Result AddTileIntoBuilding(
+            TileUnionImpl tile_prefab,
+            Vector2Int position,
+            int rotation
+        )
         {
             if (SelectedTile != null)
             {
                 return new FailResult("Complete placing previous tile");
             }
             justCreated = true;
-            TileUnion tile = CreateTile(tile_prefab, position, rotation);
+            TileUnionImpl tile = CreateTile(tile_prefab, position, rotation);
             return SelectTile(tile);
-        }
-
-        public void DeleteAllTiles()
-        {
-            while (TileUnionDictionary.Values.Count() > 0)
-            {
-                _ = DeleteTile(TileUnionDictionary.Values.Last());
-            }
-            TileUnionDictionary.Clear();
         }
 
         public void UpdateAllTiles()
         {
-            foreach (KeyValuePair<Vector2Int, TileUnion> pair in TileUnionDictionary)
+            foreach (KeyValuePair<Vector2Int, TileUnionImpl> pair in TileUnionDictionary)
             {
                 pair.Value.UpdateWalls(this, pair.Key);
             }
-            foreach (KeyValuePair<Vector2Int, TileUnion> pair in TileUnionDictionary)
+            foreach (KeyValuePair<Vector2Int, TileUnionImpl> pair in TileUnionDictionary)
             {
                 pair.Value.UpdateCorners(this, pair.Key);
             }
         }
 
-        public IEnumerable<TileUnion> GetTileUnionsInPositions(IEnumerable<Vector2Int> positions)
+        public IEnumerable<TileUnionImpl> GetTileUnionsInPositions(
+            IEnumerable<Vector2Int> positions
+        )
         {
             return TileUnionDictionary
                 .Where(x => positions.Contains(x.Key))
@@ -338,9 +316,9 @@ namespace TileBuilder
                 .Select(x => x.Key);
         }
 
-        public void CreateTileAndBind(TileUnion tile_prefab, Vector2Int position, int rotation)
+        public void CreateTileAndBind(TileUnionImpl tile_prefab, Vector2Int position, int rotation)
         {
-            TileUnion tileUnion = CreateTile(tile_prefab, position, rotation);
+            TileUnionImpl tileUnion = CreateTile(tile_prefab, position, rotation);
             foreach (Vector2Int pos in tileUnion.TilesPositions)
             {
                 TileUnionDictionary.Add(pos, tileUnion);
@@ -348,15 +326,19 @@ namespace TileBuilder
             UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
         }
 
-        private TileUnion CreateTile(TileUnion tile_prefab, Vector2Int position, int rotation)
+        private TileUnionImpl CreateTile(
+            TileUnionImpl tile_prefab,
+            Vector2Int position,
+            int rotation
+        )
         {
-            TileUnion tileUnion = Instantiate(tile_prefab, rootObject.transform);
+            TileUnionImpl tileUnion = Instantiate(tile_prefab, rootObject.transform);
             tileUnion.SetPosition(position);
             tileUnion.SetRotation(rotation);
             return tileUnion;
         }
 
-        private RoomInventoryUI DeleteTile(TileUnion tile_union)
+        private RoomInventoryUI DeleteTile(TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {
@@ -368,9 +350,9 @@ namespace TileBuilder
             return UIPrefab;
         }
 
-        private void RemoveTileFromDictionary(TileUnion tile_union)
+        private void RemoveTileFromDictionary(TileUnionImpl tile_union)
         {
-            foreach (KeyValuePair<Vector2Int, TileUnion> item in TileUnionDictionary)
+            foreach (KeyValuePair<Vector2Int, TileUnionImpl> item in TileUnionDictionary)
             {
                 if (item.Value == tile_union)
                 {
@@ -382,16 +364,16 @@ namespace TileBuilder
 
         private void UpdateSidesInPositions(IEnumerable<Vector2Int> positions)
         {
-            List<(TileUnion, Vector2Int)> queue = new();
+            List<(TileUnionImpl, Vector2Int)> queue = new();
             foreach (Vector2Int position in positions)
             {
-                if (TileUnionDictionary.TryGetValue(position, out TileUnion tile))
+                if (TileUnionDictionary.TryGetValue(position, out TileUnionImpl tile))
                 {
                     tile.UpdateWalls(this, position);
                     queue.Add((tile, position));
                 }
             }
-            foreach ((TileUnion, Vector2Int) pair in queue)
+            foreach ((TileUnionImpl, Vector2Int) pair in queue)
             {
                 pair.Item1.UpdateCorners(this, pair.Item2);
             }

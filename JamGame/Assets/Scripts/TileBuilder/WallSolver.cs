@@ -1,6 +1,6 @@
-﻿using Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using TileUnion.Tile;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,28 +10,28 @@ namespace TileBuilder
     public class WallSolver : ScriptableObject
     {
         [SerializeField]
-        private List<TileWallType> forSameTilesPriorityQueue;
+        private List<WallType> forSameTilesPriorityQueue;
 
         [SerializeField]
-        private List<TileWallType> forSameTilesPriorityQueueForCoridoor;
+        private List<WallType> forSameTilesPriorityQueueForCoridoor;
 
         [SerializeField]
-        private List<TileWallType> forDifferentTilesPriorityQueue;
+        private List<WallType> forDifferentTilesPriorityQueue;
 
         [SerializeField]
         private List<string> ignoringMarks;
 
-        public TileWallType? ChooseWall(
+        public WallType? ChooseWall(
             IEnumerable<string> my_marks,
-            IEnumerable<TileWallType> my_walls,
+            IEnumerable<WallType> my_walls,
             IEnumerable<string> out_marks,
-            IEnumerable<TileWallType> out_walls
+            IEnumerable<WallType> out_walls
         )
         {
             IEnumerable<string> my_new_marks = my_marks.Where(x => !ignoringMarks.Contains(x));
             IEnumerable<string> out_new_marks = out_marks.Where(x => !ignoringMarks.Contains(x));
 
-            IEnumerable<TileWallType> wall_type_intersect = my_walls.Intersect(out_walls).ToList();
+            IEnumerable<WallType> wall_type_intersect = my_walls.Intersect(out_walls).ToList();
             if (wall_type_intersect.Count() == 1)
             {
                 return wall_type_intersect.First();
@@ -48,7 +48,7 @@ namespace TileBuilder
                     && (my_marks.Contains("Corridor") || out_marks.Contains("Corridor"))
                 )
                 {
-                    foreach (TileWallType iterator in forSameTilesPriorityQueueForCoridoor)
+                    foreach (WallType iterator in forSameTilesPriorityQueueForCoridoor)
                     {
                         if (wall_type_intersect.Contains(iterator))
                         {
@@ -59,7 +59,7 @@ namespace TileBuilder
                 else // Gather rule
                 {
                     foreach (
-                        TileWallType iterator in marks_intersect.Count() == 0
+                        WallType iterator in marks_intersect.Count() == 0
                             ? forDifferentTilesPriorityQueue
                             : forSameTilesPriorityQueue
                     )

@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace TileUnion.Tile.Inspector
 {
-    [CustomEditor(typeof(Tile))]
+    [CustomEditor(typeof(TileImpl))]
     public class TileInspector : Editor
     {
-        private void ShowCornersFilling(Tile tile)
+        private void ShowCornersFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
 
@@ -37,7 +37,7 @@ namespace TileUnion.Tile.Inspector
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowPrefabsFilling(Tile tile)
+        private void ShowPrefabsFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
 
@@ -157,7 +157,7 @@ namespace TileUnion.Tile.Inspector
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowWallsFilling(Tile tile)
+        private void ShowWallsFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
 
@@ -184,7 +184,7 @@ namespace TileUnion.Tile.Inspector
 
         public override void OnInspectorGUI()
         {
-            Tile tile = serializedObject.targetObject as Tile;
+            TileImpl tile = serializedObject.targetObject as TileImpl;
 
             ShowWallsFilling(tile);
             ShowCornersFilling(tile);
