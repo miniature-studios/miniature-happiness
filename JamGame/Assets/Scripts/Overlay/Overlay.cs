@@ -10,7 +10,7 @@ namespace Overlay
     }
 
     [Serializable]
-    public class Default : IOverlay
+    public class No : IOverlay
     {
         public void Activate(IOverlayManager overlay_manager)
         {

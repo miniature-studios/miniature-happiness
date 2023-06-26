@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 |=USINGS=|
-
 namespace |=NAMESPACE=| {
     [Serializable]
     public class Serialized|=INTERFACE_CLASS_NAME=|
@@ -9,13 +8,13 @@ namespace |=NAMESPACE=| {
         [SerializeField] 
         private string selectedType;
 
-    |=FIELDS=|
+|=FIELDS=|
 
         public |=INTERFACE_NAME=| To|=INTERFACE_CLASS_NAME=|()
         {
             return selectedType switch
             {
-    |=SWITCH_VARIANTS=|
+|=SWITCH_VARIANTS=|
                 _ => throw new NotImplementedException(),
             };
         }

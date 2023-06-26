@@ -1,12 +1,12 @@
 #if UNITY_EDITOR
-using Level.Config;
 using UnityEditor;
 using UnityEngine;
+using Level.Config;
 
 [CustomPropertyDrawer(typeof(SerializedRoomConfig))]
 public class SerializedRoomConfigDrawer : PropertyDrawer
 {
-    private readonly string[] implementingTypeNames = { "FixedRoomConfig", "RandomRoomConfig" };
+    private string[] implementingTypeNames = { "FixedRoomConfig", "RandomRoomConfig" };
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -60,7 +60,7 @@ public class SerializedRoomConfigDrawer : PropertyDrawer
         float height = 0.0f;
         if (selected_type != "")
         {
-            SerializedProperty typed_prop = property.FindPropertyRelative(
+            var typed_prop = property.FindPropertyRelative(
                 PascalToCamelCase(selected_type)
             );
             height = EditorGUI.GetPropertyHeight(typed_prop);

@@ -1,30 +1,29 @@
 using System;
 using UnityEngine;
 
-namespace Employee.Effect
-{
+namespace Employee {
     [Serializable]
     public class SerializedEffect
     {
-        [SerializeField]
+        [SerializeField] 
         private string selectedType;
 
         [SerializeField]
-        private ControllerEffect controllerEffect;
+        private StressEffect stressEffect;
 
         [SerializeField]
         private NeedModifierEffect needModifierEffect;
 
         [SerializeField]
-        private StressEffect stressEffect;
+        private ControllerEffect controllerEffect;
 
         public IEffect ToEffect()
         {
             return selectedType switch
             {
-                "ControllerEffect" => controllerEffect,
-                "NeedModifierEffect" => needModifierEffect,
                 "StressEffect" => stressEffect,
+                "NeedModifierEffect" => needModifierEffect,
+                "ControllerEffect" => controllerEffect,
                 _ => throw new NotImplementedException(),
             };
         }
