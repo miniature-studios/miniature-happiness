@@ -1,6 +1,8 @@
 ﻿using Common;
 using Level.Config;
+using System.Collections.Generic;
 using System.Linq;
+using TileBuilder;
 using UnityEngine;
 
 namespace Level
@@ -18,18 +20,21 @@ namespace Level
     public class TarrifsCounter : MonoBehaviour
     {
         [SerializeField]
-        private OfficeMonitoring officeMonitoring;
+        private TileBuilderImpl tileBuilder;
 
         public Check GetCheck(Tariffs tariffs)
         {
-            OfficeMonitoring.OfficeInfo info = officeMonitoring.GetOfficeInfo();
+            int inside_tiles_count = tileBuilder.GetAllInsideListPositions().Count();
+            IEnumerable<RoomProperties> room_properties = tileBuilder
+                .GetTileUnionsInPositions(tileBuilder.GetAllInsideListPositions())
+                .Where(x => x.TryGetComponent(out RoomProperties roomProperties))
+                .Select(x => x.GetComponent<RoomProperties>());
+
             return new()
             {
-                Rent = info.InsideTilesCount * tariffs.RentCost,
-                Water = info.RoomProperties
-                    .Select(x => x.WaterConsumption * tariffs.WaterCost)
-                    .Sum(),
-                Electricity = info.RoomProperties
+                Rent = inside_tiles_count * tariffs.RentCost,
+                Water = room_properties.Select(x => x.WaterConsumption * tariffs.WaterCost).Sum(),
+                Electricity = room_properties
                     .Select(x => x.ElectricityComsumption * tariffs.ElectricityCost)
                     .Sum(),
             };

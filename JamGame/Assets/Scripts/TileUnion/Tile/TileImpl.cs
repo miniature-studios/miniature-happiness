@@ -14,7 +14,7 @@ namespace TileUnion.Tile
     public class TileImpl : MonoBehaviour
     {
         [SerializeField]
-        private BuilderMatrix builderMatrix;
+        private Matrix builderMatrix;
 
         [SerializeField]
         private WallSolver wallSolver;

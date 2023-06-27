@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace TileBuilder
 {
+    // TODO: Can it be moved into TileBuilder.cs?
     [CreateAssetMenu(fileName = "BuilderMatrix", menuName = "Builder/BuilderMatrix", order = 2)]
-    public class BuilderMatrix : ScriptableObject
+    public class Matrix : ScriptableObject
     {
         [SerializeField]
         private float selectingPlaneHeight;

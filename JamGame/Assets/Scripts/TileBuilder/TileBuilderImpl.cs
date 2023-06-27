@@ -16,7 +16,7 @@ namespace TileBuilder
         private GameObject rootObject;
 
         [SerializeField]
-        private BuilderMatrix builderMatrix;
+        private Matrix builderMatrix;
 
         private List<Vector2Int> previousPlaces = new();
         private int previousRotation = 0;
@@ -28,7 +28,7 @@ namespace TileBuilder
             get => rootObject;
             set => rootObject = value;
         }
-        public BuilderMatrix BuilderMatrix => builderMatrix;
+        public Matrix BuilderMatrix => builderMatrix;
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
         public void Start()

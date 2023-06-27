@@ -21,7 +21,7 @@ namespace TileUnion
         private int rotation;
 
         [SerializeField]
-        private BuilderMatrix builderMatrix;
+        private Matrix builderMatrix;
 
         public RoomInventoryUI UIPrefab;
         public List<TileImpl> Tiles = new();

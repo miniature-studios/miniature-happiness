@@ -5,18 +5,18 @@ using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
 
-namespace TileBuilder
+namespace TileBuilder.Validator
 {
     public interface IValidator
     {
         public Result ValidateCommand(ICommand command);
     }
 
-    public class BuildModeValidator : IValidator
+    public class BuildMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
 
-        public BuildModeValidator(TileBuilderImpl tileBuilder)
+        public BuildMode(TileBuilderImpl tileBuilder)
         {
             this.tileBuilder = tileBuilder;
         }
@@ -138,7 +138,7 @@ namespace TileBuilder
         }
     }
 
-    public class GameModeValidator : IValidator
+    public class GameMode : IValidator
     {
         public Result ValidateCommand(ICommand command)
         {
@@ -146,11 +146,11 @@ namespace TileBuilder
         }
     }
 
-    public class GodModeValidator : IValidator
+    public class GodMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
 
-        public GodModeValidator(TileBuilderImpl tileBuilder)
+        public GodMode(TileBuilderImpl tileBuilder)
         {
             this.tileBuilder = tileBuilder;
         }

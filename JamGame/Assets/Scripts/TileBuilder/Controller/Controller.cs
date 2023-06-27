@@ -20,7 +20,7 @@ namespace TileBuilder
         [SerializeField]
         private Level.Inventory.Controller inventoryController;
 
-        private IValidator validator = new GameModeValidator();
+        private Validator.IValidator validator = new Validator.GameMode();
         private Vector2 previousMousePosition;
         private bool mousePressed = false;
 
@@ -42,9 +42,9 @@ namespace TileBuilder
         {
             validator = gamemode switch
             {
-                GameMode.God => new GodModeValidator(tileBuilder),
-                GameMode.Build => new BuildModeValidator(tileBuilder),
-                GameMode.Play => new GameModeValidator(),
+                GameMode.God => new Validator.GodMode(tileBuilder),
+                GameMode.Build => new Validator.BuildMode(tileBuilder),
+                GameMode.Play => new Validator.GameMode(),
                 _ => throw new ArgumentException(),
             };
         }

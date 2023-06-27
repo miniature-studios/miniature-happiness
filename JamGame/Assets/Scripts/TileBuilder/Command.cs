@@ -75,11 +75,7 @@ namespace TileBuilder.Command
             Direction = direction;
         }
 
-        public MoveSelectedTile(
-            Ray ray,
-            BuilderMatrix builder_matrix,
-            Vector2Int? selected_tile_position
-        )
+        public MoveSelectedTile(Ray ray, Matrix builder_matrix, Vector2Int? selected_tile_position)
         {
             Result<Vector2Int> result = builder_matrix.GetMatrixPosition(ray);
             if (selected_tile_position != null && result.Success)
