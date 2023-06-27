@@ -1,9 +1,6 @@
-﻿using Common;
-using Level;
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
-using FinancesController = Level.Finances;
 
 public class FinancesCounter : MonoBehaviour
 {
@@ -14,7 +11,7 @@ public class FinancesCounter : MonoBehaviour
     private float lerpSpeed;
 
     [SerializeField]
-    private FinancesController finances;
+    private Level.Finances.Model finances;
     private int buffer_count;
     private float lerpCount = 0;
 
@@ -24,8 +21,8 @@ public class FinancesCounter : MonoBehaviour
         countText.text = Convert.ToString(Mathf.RoundToInt(lerpCount));
     }
 
-    public void OnChanged(IReadonlyData<Money> data)
+    public void OnChanged(int money)
     {
-        buffer_count = data.Data.Count;
+        buffer_count = money;
     }
 }

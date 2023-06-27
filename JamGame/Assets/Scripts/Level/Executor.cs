@@ -12,13 +12,13 @@ namespace Level
         private LevelConfig levelConfig;
 
         [SerializeField]
-        private TileBuilder.ControllerImpl tileBuilderController;
+        private TileBuilder.Controller tileBuilderController;
 
         [SerializeField]
-        private Finances financesController;
+        private Finances.Model financesController;
 
         [SerializeField]
-        private ShopController shopController;
+        private Shop.Controller shopController;
 
         [SerializeField]
         private UIController uIController;

@@ -1,3 +1,4 @@
+using Common;
 using System;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Overlay
     }
 
     [Serializable]
-    public class No : IOverlay
+    public class None : IOverlay
     {
         public void Activate(IOverlayManager overlay_manager)
         {

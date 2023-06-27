@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TileUnion.Tile
 {
-    public class TileView : MonoBehaviour
+    public class View : MonoBehaviour
     {
         [SerializeField]
         private Material defaultMaterial;

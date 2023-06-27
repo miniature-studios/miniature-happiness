@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CameraController
 {
-    public class CameraController : MonoBehaviour
+    public class CameraControllerImpl : MonoBehaviour
     {
         [SerializeField]
         private Vector2 moveSensitivity;

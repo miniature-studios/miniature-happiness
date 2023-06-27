@@ -1,5 +1,4 @@
 ﻿using Common;
-using Level;
 using System;
 using TMPro;
 using UnityEngine;
@@ -32,7 +31,7 @@ public class RoomShopUI : MonoBehaviour
 
     private void Awake()
     {
-        roomBuying = GetComponentInParent<ShopController>().TryBuyRoom;
+        roomBuying = GetComponentInParent<Level.Shop.Controller>().TryBuyRoom;
         UpdateView();
     }
 

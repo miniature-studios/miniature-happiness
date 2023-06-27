@@ -4,9 +4,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Level
+namespace Level.Inventory
 {
-    public class InventoryModel : MonoBehaviour
+    public class Model : MonoBehaviour
     {
         private readonly ObservableCollection<RoomInventoryUI> roomsInInventory = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();

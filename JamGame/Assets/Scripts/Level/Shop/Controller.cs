@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Level
+namespace Level.Shop
 {
-    public class ShopController : MonoBehaviour
+    public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private InventoryController inventoryController;
+        private Inventory.Controller inventoryController;
 
         [SerializeField]
-        private ShopModel shopModel;
+        private Model shopModel;
 
         [SerializeField]
-        private Finances financesController;
+        private Finances.Model financesController;
 
         public void SetShopRooms(IEnumerable<RoomConfig> room_configs)
         {

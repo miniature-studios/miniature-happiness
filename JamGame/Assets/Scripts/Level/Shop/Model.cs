@@ -4,9 +4,9 @@ using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Level
+namespace Level.Shop
 {
-    public class ShopModel : MonoBehaviour
+    public class Model : MonoBehaviour
     {
         private readonly ObservableCollection<RoomShopUI> roomsInShop = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();

@@ -2,15 +2,14 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Level
+namespace Level.Inventory.Inspector
 {
-    [CustomEditor(typeof(InventoryController))]
-    public class InventoryControllerEditor : Editor
+    [CustomEditor(typeof(Controller))]
+    public class ControllerEditor : Editor
     {
         public override void OnInspectorGUI()
         {
-            InventoryController inventory_controller =
-                serializedObject.targetObject as InventoryController;
+            Controller inventory_controller = serializedObject.targetObject as Controller;
 
             foreach (NamedRoomInventoryUI item in inventory_controller.NamedRoomInventoryUIs)
             {

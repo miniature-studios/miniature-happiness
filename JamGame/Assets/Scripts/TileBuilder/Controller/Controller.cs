@@ -1,5 +1,4 @@
 ﻿using Common;
-using Level;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,13 +12,13 @@ namespace TileBuilder
         Play
     }
 
-    public class ControllerImpl : MonoBehaviour
+    public class Controller : MonoBehaviour
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
-        private InventoryController inventoryController;
+        private Level.Inventory.Controller inventoryController;
 
         private IValidator validator = new GameModeValidator();
         private Vector2 previousMousePosition;

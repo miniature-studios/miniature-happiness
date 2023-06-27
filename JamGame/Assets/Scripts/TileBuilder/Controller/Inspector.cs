@@ -2,14 +2,14 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace TileBuilder.Controller.Inspector
+namespace TileBuilder.ControllerInspector
 {
-    [CustomEditor(typeof(ControllerImpl))]
+    [CustomEditor(typeof(Controller))]
     public class Inspector : Editor
     {
         private GameMode gamemode_to_change = GameMode.God;
 
-        public void DisplayGameModeChange(ControllerImpl tile_builder)
+        public void DisplayGameModeChange(Controller tile_builder)
         {
             _ = EditorGUILayout.BeginHorizontal();
             gamemode_to_change = (GameMode)
@@ -26,8 +26,7 @@ namespace TileBuilder.Controller.Inspector
 
         public override void OnInspectorGUI()
         {
-            ControllerImpl tile_builder_controller =
-                serializedObject.targetObject as ControllerImpl;
+            Controller tile_builder_controller = serializedObject.targetObject as Controller;
 
             DisplayGameModeChange(tile_builder_controller);
 

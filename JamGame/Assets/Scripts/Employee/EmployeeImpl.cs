@@ -1,3 +1,4 @@
+using Common;
 using Location;
 using System;
 using System.Collections.Generic;
@@ -6,51 +7,6 @@ using UnityEngine;
 
 namespace Employee
 {
-    internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
-    {
-        private readonly List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
-        private readonly EmployeeImpl employee;
-
-        public BuffsNeedModifiersPool(EmployeeImpl employee)
-        {
-            this.employee = employee;
-        }
-
-        public void RegisterEffect(NeedModifierEffect effect)
-        {
-            GameObject mods_go = new("_buff_need_modifiers", typeof(NeedModifiers));
-            mods_go.transform.SetParent(employee.transform);
-            NeedModifiers mods = mods_go.GetComponent<NeedModifiers>();
-            mods.SetRawModifiers(effect.NeedModifiers.ToList());
-
-            registeredModifiers.Add((effect, mods));
-            employee.RegisterModifier(mods);
-        }
-
-        public void UnregisterEffect(NeedModifierEffect effect)
-        {
-            int to_remove = -1;
-            for (int i = 0; i < registeredModifiers.Count; i++)
-            {
-                if (registeredModifiers[i].Item1 == effect)
-                {
-                    to_remove = i;
-                    break;
-                }
-            }
-
-            if (to_remove == -1)
-            {
-                Debug.LogError("Failed to unregister NeedModifierEffect: Not registered");
-                return;
-            }
-
-            employee.UnregisterModifier(registeredModifiers[to_remove].Item2);
-            GameObject.Destroy(registeredModifiers[to_remove].Item2.gameObject);
-            registeredModifiers.RemoveAt(to_remove);
-        }
-    }
-
     [RequireComponent(typeof(EmployeeController))]
     [RequireComponent(typeof(StressEffect))]
     public class EmployeeImpl : MonoBehaviour
@@ -326,6 +282,51 @@ namespace Employee
             }
 
             Debug.LogError("Failed to unregister buff: not registered");
+        }
+    }
+
+    internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
+    {
+        private readonly List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
+        private readonly EmployeeImpl employee;
+
+        public BuffsNeedModifiersPool(EmployeeImpl employee)
+        {
+            this.employee = employee;
+        }
+
+        public void RegisterEffect(NeedModifierEffect effect)
+        {
+            GameObject mods_go = new("_buff_need_modifiers", typeof(NeedModifiers));
+            mods_go.transform.SetParent(employee.transform);
+            NeedModifiers mods = mods_go.GetComponent<NeedModifiers>();
+            mods.SetRawModifiers(effect.NeedModifiers.ToList());
+
+            registeredModifiers.Add((effect, mods));
+            employee.RegisterModifier(mods);
+        }
+
+        public void UnregisterEffect(NeedModifierEffect effect)
+        {
+            int to_remove = -1;
+            for (int i = 0; i < registeredModifiers.Count; i++)
+            {
+                if (registeredModifiers[i].Item1 == effect)
+                {
+                    to_remove = i;
+                    break;
+                }
+            }
+
+            if (to_remove == -1)
+            {
+                Debug.LogError("Failed to unregister NeedModifierEffect: Not registered");
+                return;
+            }
+
+            employee.UnregisterModifier(registeredModifiers[to_remove].Item2);
+            GameObject.Destroy(registeredModifiers[to_remove].Item2.gameObject);
+            registeredModifiers.RemoveAt(to_remove);
         }
     }
 }

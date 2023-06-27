@@ -2,31 +2,25 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Level
+namespace Level.Finances
 {
-    public struct Money : IReadonlyData<Money>
-    {
-        public int Count { get; set; }
-        public readonly Money Data => this;
-    }
-
-    public class Finances : MonoBehaviour
+    public class Model : MonoBehaviour
     {
         [SerializeField, InspectorReadOnly]
-        private Money money;
-        public UnityEvent<IReadonlyData<Money>> MoneyChange;
+        private int money;
+        public UnityEvent<int> MoneyChange;
 
         public void SetMoney(int money_count)
         {
-            money.Count = money_count;
+            money = money_count;
             MoneyChange?.Invoke(money);
         }
 
         public Result TryTakeMoney(int money_count)
         {
-            if (money.Count >= money_count)
+            if (money >= money_count)
             {
-                money.Count -= money_count;
+                money -= money_count;
                 MoneyChange?.Invoke(money);
                 return new SuccessResult();
             }
@@ -38,7 +32,7 @@ namespace Level
 
         public void AddMoney(int money_count)
         {
-            money.Count += money_count;
+            money += money_count;
             MoneyChange?.Invoke(money);
         }
     }

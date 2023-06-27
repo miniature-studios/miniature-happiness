@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Level
+namespace Level.Inventory
 {
     [Serializable]
     public class NamedRoomInventoryUI
@@ -13,10 +13,10 @@ namespace Level
         public RoomInventoryUI RoomInventoryUI;
     }
 
-    public class InventoryController : MonoBehaviour
+    public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private InventoryModel inventoryModel;
+        private Model inventoryModel;
         private RoomInventoryUI selectedRoom = null;
         private bool pointerOverView = false;
 

@@ -8,81 +8,8 @@ using UnityEngine;
 
 namespace TileUnion.Tile
 {
-    public enum WallType
-    {
-        Window,
-        Wall,
-        Door,
-        None
-    }
-
-    public static class WallTypeTools
-    {
-        public static bool IsPassable(this WallType wallType)
-        {
-            return wallType is WallType.None or WallType.Door;
-        }
-
-        public static bool IsWall(this WallType wallType)
-        {
-            return wallType is not WallType.None;
-        }
-    }
-
-    public enum CornerType
-    {
-        Inside,
-        WallLeft,
-        WallRight,
-        OutsideLeft,
-        OutsideMiddle,
-        OutsideRight,
-        None
-    }
-
-    [Serializable]
-    public class WallPrefabHandler
-    {
-        public WallType Type;
-        public GameObject Prefab;
-    }
-
-    [Serializable]
-    public class WallCollection
-    {
-        public Direction Place;
-        public List<WallPrefabHandler> Handlers;
-        public WallType ActiveWallType { get; private set; }
-
-        public void SetWall(WallType type)
-        {
-            ActiveWallType = type;
-            Handlers.ForEach(x => x.Prefab.SetActive(x.Type == type));
-        }
-    }
-
-    [Serializable]
-    public class CornerPrefabHandler
-    {
-        public CornerType Type;
-        public GameObject Prefab;
-    }
-
-    [Serializable]
-    public class CornerCollection
-    {
-        public Direction Place;
-        public List<CornerPrefabHandler> Handlers;
-
-        public void SetCorner(CornerType type)
-        {
-            Handlers.ForEach(x => x.Prefab.SetActive(x.Type == type));
-        }
-    }
-
-    // TODO: Move enums outside of TileImpl.
     [SelectionBase]
-    [RequireComponent(typeof(TileView))]
+    [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
     public class TileImpl : MonoBehaviour
     {
@@ -101,10 +28,12 @@ namespace TileUnion.Tile
         [SerializeField, Range(0, 3)]
         private int rotation = 0;
 
-        public ElementsHandler ElementsHandler;
+        public List<WallPrefabHandler> WallPrefabHandlers;
+        public List<CornerPrefabHandler> CornerPrefabHandlers;
+
         public List<WallCollection> RawWalls = new();
         public List<CornerCollection> Corners = new();
-        public TileView TileView;
+        public View TileView;
 
         private Dictionary<Direction, List<WallType>> cachedWalls;
         private TileState currentState = TileState.Normal;
@@ -270,7 +199,7 @@ namespace TileUnion.Tile
                         unselectedYPosition,
                         transform.position.z
                     );
-                    TileView.SetMaterial(TileView.State.Default);
+                    TileView.SetMaterial(View.State.Default);
                     break;
                 case TileState.Selected:
                     transform.position = new Vector3(
@@ -278,7 +207,7 @@ namespace TileUnion.Tile
                         selectedYPosition,
                         transform.position.z
                     );
-                    TileView.SetMaterial(TileView.State.Selected);
+                    TileView.SetMaterial(View.State.Selected);
                     break;
                 case TileState.SelectedAndErrored:
                     transform.position = new Vector3(
@@ -286,7 +215,7 @@ namespace TileUnion.Tile
                         selectedYPosition,
                         transform.position.z
                     );
-                    TileView.SetMaterial(TileView.State.SelectedOverlapping);
+                    TileView.SetMaterial(View.State.SelectedOverlapping);
                     break;
             }
         }
@@ -344,6 +273,78 @@ namespace TileUnion.Tile
                 list.Add(imagine_place, wall.Handlers.Select(x => x.Type).ToList());
             }
             cachedWalls = list;
+        }
+    }
+
+    public enum WallType
+    {
+        Window,
+        Wall,
+        Door,
+        None
+    }
+
+    public static class WallTypeTools
+    {
+        public static bool IsPassable(this WallType wallType)
+        {
+            return wallType is WallType.None or WallType.Door;
+        }
+
+        public static bool IsWall(this WallType wallType)
+        {
+            return wallType is not WallType.None;
+        }
+    }
+
+    public enum CornerType
+    {
+        Inside,
+        WallLeft,
+        WallRight,
+        OutsideLeft,
+        OutsideMiddle,
+        OutsideRight,
+        None
+    }
+
+    [Serializable]
+    public class WallPrefabHandler
+    {
+        public WallType Type;
+        public GameObject Prefab;
+    }
+
+    [Serializable]
+    public class WallCollection
+    {
+        public Direction Place;
+        public List<WallPrefabHandler> Handlers;
+        public WallType ActiveWallType { get; private set; }
+
+        public void SetWall(WallType type)
+        {
+            ActiveWallType = type;
+            Handlers.ForEach(x => x.Prefab.SetActive(x.Type == type));
+        }
+    }
+
+    [Serializable]
+    public class CornerPrefabHandler
+    {
+        public CornerType Type;
+        public GameObject Prefab;
+    }
+
+    [Serializable]
+    public class CornerCollection
+    {
+        public Direction Place;
+        public List<CornerPrefabHandler> Handlers;
+
+        public void SetCorner(CornerType type)
+        {
+            Handlers.ForEach(x => x.Prefab.SetActive(x.Type == type));
         }
     }
 }

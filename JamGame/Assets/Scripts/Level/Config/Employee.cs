@@ -74,4 +74,17 @@ namespace Level.Config
             return new EmployeeConfig(result, full_name);
         }
     }
+
+    [Serializable]
+    [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList", order = 0)]
+    public class EmployeeNameList : ScriptableObject
+    {
+        // TODO: Wrap fields as readonly.
+
+        [SerializeField]
+        public List<string> FirstNames;
+
+        [SerializeField]
+        public List<string> LastNames;
+    }
 }

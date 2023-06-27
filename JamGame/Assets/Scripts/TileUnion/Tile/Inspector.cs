@@ -63,10 +63,9 @@ namespace TileUnion.Tile.Inspector
                     float degrees = wall_collection.Place.GetDegrees();
                     foreach (WallPrefabHandler handler in wall_collection.Handlers)
                     {
-                        WallPrefabHandler prefab_handler =
-                            tile.ElementsHandler.WallPrefabHandlers.Find(
-                                x => x.Type == handler.Type
-                            );
+                        WallPrefabHandler prefab_handler = tile.WallPrefabHandlers.Find(
+                            x => x.Type == handler.Type
+                        );
                         if (prefab_handler != null)
                         {
                             if (handler.Prefab != null)
@@ -112,10 +111,9 @@ namespace TileUnion.Tile.Inspector
                     float degrees = corner_collection.Place.GetDegrees() - 45;
                     foreach (CornerPrefabHandler handler in corner_collection.Handlers)
                     {
-                        CornerPrefabHandler prefab_handler =
-                            tile.ElementsHandler.CornerPrefabHandlers.Find(
-                                x => x.Type == handler.Type
-                            );
+                        CornerPrefabHandler prefab_handler = tile.CornerPrefabHandlers.Find(
+                            x => x.Type == handler.Type
+                        );
                         if (prefab_handler != null)
                         {
                             if (handler.Prefab != null)
