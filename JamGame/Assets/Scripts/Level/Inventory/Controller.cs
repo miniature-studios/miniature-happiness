@@ -13,6 +13,7 @@ namespace Level.Inventory
         public RoomInventoryUI RoomInventoryUI;
     }
 
+    [AddComponentMenu("Level.Inventory.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]

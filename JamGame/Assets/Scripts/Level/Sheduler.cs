@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Level
 {
+    [AddComponentMenu("Level.Sheduler")]
     public class Sheduler : MonoBehaviour
     {
         [SerializeField]

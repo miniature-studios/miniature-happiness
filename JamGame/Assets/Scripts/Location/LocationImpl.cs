@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Location
 {
+    [AddComponentMenu("Location.Location")]
     public class LocationImpl : MonoBehaviour
     {
         [SerializeField]

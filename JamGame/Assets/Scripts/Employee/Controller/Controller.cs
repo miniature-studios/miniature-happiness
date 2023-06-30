@@ -6,7 +6,8 @@ using UnityEngine.AI;
 namespace Employee
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class EmployeeController : MonoBehaviour, IEffectExecutor<ControllerEffect>
+    [AddComponentMenu("Employee.Controller")]
+    public class Controller : MonoBehaviour, IEffectExecutor<ControllerEffect>
     {
         private enum State
         {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -168,19 +168,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518be29018dfac24681fc56b5a8c4789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LoadingPrefab: {fileID: 0}
+  SavingName: SampleBuilding
+  StairsPrefab: {fileID: 0}
+  WindowPrefab: {fileID: 0}
+  OutdoorPrefab: {fileID: 0}
+  CorridoorPrefab: {fileID: 0}
+  WorkingPlaceFree: {fileID: 0}
+  WorkingPlace: {fileID: 0}
+  SquareSideLength: 30
+  LoadFromSceneComposition: 0
   freespacePrefab: {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
   rootObject: {fileID: 665495718}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  loadingPrefab: {fileID: 837739598059282929, guid: 3d910847de4f85a499198ebaa77813fc, type: 3}
-  savingName: SampleScene
-  stairsPrefab: {fileID: 9058891122285443271, guid: a4d06f29c95bafc4bb2680359a078ed8, type: 3}
-  windowPrefab: {fileID: 8143707441816155107, guid: 2f51a1aaddcffe54aaa11da4257f39b4, type: 3}
-  outdoorPrefab: {fileID: 8676573656510189661, guid: c1f209f52ddf6584a912baa55f578d0e, type: 3}
-  corridoorPrefab: {fileID: 1583034983851126799, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
-  workingPlaceFree: {fileID: 721046682041479169, guid: 9376253a30395b340a27ac99b7697059, type: 3}
-  workingPlace: {fileID: 8812810329888060661, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
-  squareSideLength: 30
-  loadFromSceneComposition: 0
 --- !u!1 &124202641
 GameObject:
   m_ObjectHideFlags: 0
@@ -2175,21 +2175,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dailyBillText: {fileID: 825985574}
-  continueButtonPress:
+  ContinueButtonPressEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1067622715}
-        m_TargetAssemblyTypeName: LevelExecutor, Assembly-CSharp
-        m_MethodName: CompleteDayEnd
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!95 &961603836
 Animator:
   serializedVersion: 5
@@ -2516,7 +2504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelActionsConfig: {fileID: 11400000, guid: 19ab13551420d8643b9e4f350eef08e6, type: 2}
-  levelExecuter: {fileID: 1067622715}
+  levelExecutor: {fileID: 0}
 --- !u!4 &1067622713
 Transform:
   m_ObjectHideFlags: 0
@@ -2556,7 +2544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelProportiesConfig: {fileID: 11400000, guid: 6349cb7c3067f4046860306c82a53dc3, type: 2}
+  levelConfig: {fileID: 0}
   tileBuilderController: {fileID: 1067622721}
   financesController: {fileID: 1125594364}
   shopController: {fileID: 1671638923}
@@ -2595,153 +2583,13 @@ MonoBehaviour:
       Animator: {fileID: 1395078487}
     InterfaceMatcher:
     - InterfaceName: DayEnd
-      animatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 2
-        StartIsActive: 0
-        EndDelay: 2
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 2
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+      AnimatorBools: []
     - InterfaceName: DayStart
-      animatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 2
-        StartIsActive: 0
-        EndDelay: 2
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+      AnimatorBools: []
     - InterfaceName: Meeting
-      animatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 2
-        StartIsActive: 0
-        EndDelay: 2
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 2
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 2
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 2
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 2
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
-      - AnimatorName: Inventory
-        StartDelay: 2
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 0
+      AnimatorBools: []
     - InterfaceName: Working
-      animatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 2
-        StartIsActive: 0
-        EndDelay: 2
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
-      - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+      AnimatorBools: []
 --- !u!114 &1067622717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2754,7 +2602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50a88a541785f5e469c202a39c744953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  officeMonitoring: {fileID: 1067622718}
+  tileBuilder: {fileID: 0}
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3502,33 +3350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryModel: {fileID: 1395078490}
-  namedRoomInventoriUIs:
-  - Name: Working Place
-    RIUI: {fileID: 7606936360430423353, guid: dc1a62b24ebede14d9ce49d7c5d6e6c7, type: 3}
-  - Name: Triple Working Place
-    RIUI: {fileID: 7606936360430423353, guid: 35ea348930cbbdf41bb901647599a0c3, type: 3}
-  - Name: Toilet
-    RIUI: {fileID: 7606936360430423353, guid: f1440cad1afca294bb59bdc1da10fc68, type: 3}
-  - Name: Smoking Room
-    RIUI: {fileID: 7606936360430423353, guid: eda091c342cd4a1499fb8320a184def6, type: 3}
-  - Name: Meeting Room
-    RIUI: {fileID: 7606936360430423353, guid: 0d05684e431656940a17b24ac15adfe3, type: 3}
-  - Name: Kitchen
-    RIUI: {fileID: 7606936360430423353, guid: 35822aff102aeb744b074e5020203af4, type: 3}
-  - Name: Free Space
-    RIUI: {fileID: 7606936360430423353, guid: 32858c7307f455d48a4957f9ea2f9eb6, type: 3}
-  - Name: Corridor
-    RIUI: {fileID: 7606936360430423353, guid: c64e33f649924034fa7310e5db878cd6, type: 3}
-  - Name: Clear Working Place
-    RIUI: {fileID: 7606936360430423353, guid: 9fa931fe74c05ad49b30eea3585c513b, type: 3}
-  - Name: Boss Office
-    RIUI: {fileID: 7606936360430423353, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
-  - Name: Outside
-    RIUI: {fileID: 7606936360430423353, guid: cc9682de5cc62984db9d4fd1e53b00b5, type: 3}
-  - Name: Outside Stairs
-    RIUI: {fileID: 7606936360430423353, guid: 28bd73668b24b8b4f86f5a2a33f79579, type: 3}
-  - Name: Outside Window
-    RIUI: {fileID: 7606936360430423353, guid: 127e7effae6c0a441b66ce105ed89672, type: 3}
+  NamedRoomInventoryUIs: []
 --- !u!114 &1395078489
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 namespace Level.Shop
 {
+    [AddComponentMenu("Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
         private readonly ObservableCollection<RoomShopUI> roomsInShop = new();

@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 namespace Level.Inventory
 {
+    [AddComponentMenu("Level.Inventory.Model")]
     public class Model : MonoBehaviour
     {
         private readonly ObservableCollection<RoomInventoryUI> roomsInInventory = new();

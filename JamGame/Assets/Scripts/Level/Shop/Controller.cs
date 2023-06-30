@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Level.Shop
 {
+    [AddComponentMenu("Level.Shop.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]

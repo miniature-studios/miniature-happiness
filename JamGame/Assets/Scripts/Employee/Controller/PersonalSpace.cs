@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Employee
 {
     [RequireComponent(typeof(SphereCollider))]
+    [AddComponentMenu("Employee.PersonalSpace")]
     public class PersonalSpace : MonoBehaviour
     {
         [SerializeField]
@@ -13,7 +14,7 @@ namespace Employee
         private float movelessVelocityThreshold;
 
         private SphereCollider personalSpaceTrigger;
-        private EmployeeController controller;
+        private Controller controller;
         private float radius;
 
         private void Start()
@@ -21,14 +22,14 @@ namespace Employee
             personalSpaceTrigger = GetComponent<SphereCollider>();
             radius = personalSpaceTrigger.radius;
 
-            controller = GetComponentInParent<EmployeeController>();
+            controller = GetComponentInParent<Controller>();
         }
 
-        private readonly HashSet<EmployeeController> employeesInPersonalSpace = new();
+        private readonly HashSet<Controller> employeesInPersonalSpace = new();
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out EmployeeController employee))
+            if (other.TryGetComponent(out Controller employee))
             {
                 _ = employeesInPersonalSpace.Add(employee);
             }
@@ -36,13 +37,13 @@ namespace Employee
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out EmployeeController employee))
+            if (other.TryGetComponent(out Controller employee))
             {
                 _ = employeesInPersonalSpace.Remove(employee);
             }
         }
 
-        private float SlowDownFactorByDistance(EmployeeController employee)
+        private float SlowDownFactorByDistance(Controller employee)
         {
             float distance = (transform.position - employee.transform.position).magnitude;
             return (radius - distance) / (radius - (2.0f * actorRadius));
@@ -56,7 +57,7 @@ namespace Employee
             }
 
             float max_metrics = 0.0f;
-            foreach (EmployeeController employee in employeesInPersonalSpace)
+            foreach (Controller employee in employeesInPersonalSpace)
             {
                 float metrics;
                 bool employee_standing =
@@ -94,8 +95,8 @@ namespace Employee
             }
 
             float min_distance = float.PositiveInfinity;
-            EmployeeController closest_employee = null;
-            foreach (EmployeeController employee in employeesInPersonalSpace)
+            Controller closest_employee = null;
+            foreach (Controller employee in employeesInPersonalSpace)
             {
                 Vector3 employee_to_this = transform.position - employee.transform.position;
 

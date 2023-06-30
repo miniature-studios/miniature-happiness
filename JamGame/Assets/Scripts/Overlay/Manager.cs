@@ -12,7 +12,8 @@ namespace Overlay
             where O : class, IOverlay;
     }
 
-    public class OverlayManager : MonoBehaviour, IOverlayManager
+    [AddComponentMenu("Overlay.Manager")]
+    public class Manager : MonoBehaviour, IOverlayManager
     {
         // TODO: Update in runtime.
         private List<IOverlayRenderer> overlayRenderers;

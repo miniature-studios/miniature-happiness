@@ -6,6 +6,7 @@ namespace Employee
     // TODO: Can we place Quirk here or even make it to be not SO.
 
     [RequireComponent(typeof(EmployeeImpl))]
+    [AddComponentMenu("Employee.Personality")]
     public class Personality : MonoBehaviour
     {
         [SerializeField]

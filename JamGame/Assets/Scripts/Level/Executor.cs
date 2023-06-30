@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Level
 {
+    [AddComponentMenu("Level.Executor")]
     public class Executor : MonoBehaviour
     {
         [SerializeField]
@@ -30,7 +31,7 @@ namespace Level
         private DailyBillPanel dailyBillPanel;
 
         [SerializeField]
-        private LevelTemporaryData levelTemperaryData;
+        private TemporaryData levelTemperaryData;
 
         [SerializeField]
         private TransitionPanel transitionPanel;

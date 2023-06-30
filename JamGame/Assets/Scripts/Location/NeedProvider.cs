@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Location
 {
+    [AddComponentMenu("Location.NeedProvider")]
     public class NeedProvider : MonoBehaviour
     {
         public enum FilterType

@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace Employee
 {
-    [RequireComponent(typeof(EmployeeController))]
+    [RequireComponent(typeof(Controller))]
     [RequireComponent(typeof(StressEffect))]
+    [AddComponentMenu("Employee.Employee")]
     public class EmployeeImpl : MonoBehaviour
     {
         private enum State
@@ -29,7 +30,7 @@ namespace Employee
         private float satisfyingNeedRemaining = 0.0f;
         private NeedProvider targetNeedProvider = null;
 
-        private EmployeeController controller;
+        private Controller controller;
 
         private readonly List<NeedModifiers> registeredModifiers = new();
 
@@ -55,7 +56,7 @@ namespace Employee
 
         private void Start()
         {
-            controller = GetComponent<EmployeeController>();
+            controller = GetComponent<Controller>();
             Stress = GetComponent<StressMeter>();
 
             buffsNeedModifiers = new BuffsNeedModifiersPool(this);
@@ -221,7 +222,7 @@ namespace Employee
 
         private void OnEnable()
         {
-            controller ??= GetComponent<EmployeeController>();
+            controller ??= GetComponent<Controller>();
 
             controller.OnFinishedMoving += FinishedMoving;
         }

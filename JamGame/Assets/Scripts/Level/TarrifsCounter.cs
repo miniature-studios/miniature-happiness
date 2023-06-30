@@ -17,6 +17,7 @@ namespace Level
         public readonly Check Data => this;
     }
 
+    [AddComponentMenu("Level.TariffsCounter")]
     public class TarrifsCounter : MonoBehaviour
     {
         [SerializeField]

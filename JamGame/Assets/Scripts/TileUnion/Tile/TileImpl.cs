@@ -11,6 +11,7 @@ namespace TileUnion.Tile
     [SelectionBase]
     [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
+    [AddComponentMenu("TileUnion.Tile.Tile")]
     public class TileImpl : MonoBehaviour
     {
         [SerializeField]

@@ -12,6 +12,7 @@ namespace TileBuilder
         Play
     }
 
+    [AddComponentMenu("TileBuilder.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]

@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace TileBuilder
 {
+    [AddComponentMenu("TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
         [SerializeField]

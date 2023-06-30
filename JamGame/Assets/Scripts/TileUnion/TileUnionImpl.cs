@@ -12,6 +12,7 @@ namespace TileUnion
     [SelectionBase]
     [RequireComponent(typeof(RoomProperties))]
     [RequireComponent(typeof(RoomViewProperties))]
+    [AddComponentMenu("TileUnion.TileUnion")]
     public class TileUnionImpl : MonoBehaviour
     {
         [SerializeField]
