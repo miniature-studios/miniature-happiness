@@ -1,29 +1,32 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class SerializedOverlay
+namespace Overlay
 {
-    [SerializeField]
-    private string selectedType;
-
-    [SerializeField]
-    private DefaultOverlay defaultOverlay;
-
-    [SerializeField]
-    private ExtendedEmployeeInfoOverlay extendedEmployeeInfoOverlay;
-
-    [SerializeField]
-    private StressOverlay stressOverlay;
-
-    public IOverlay ToOverlay()
+    [Serializable]
+    public class SerializedOverlay
     {
-        return selectedType switch
+        [SerializeField]
+        private string selectedType;
+
+        [SerializeField]
+        private None no;
+
+        [SerializeField]
+        private ExtendedEmployeeInfo extendedEmployeeInfo;
+
+        [SerializeField]
+        private Stress stress;
+
+        public IOverlay ToOverlay()
         {
-            "DefaultOverlay" => defaultOverlay,
-            "ExtendedEmployeeInfoOverlay" => extendedEmployeeInfoOverlay,
-            "StressOverlay" => stressOverlay,
-            _ => throw new NotImplementedException(),
-        };
+            return selectedType switch
+            {
+                "No" => no,
+                "ExtendedEmployeeInfo" => extendedEmployeeInfo,
+                "Stress" => stress,
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }

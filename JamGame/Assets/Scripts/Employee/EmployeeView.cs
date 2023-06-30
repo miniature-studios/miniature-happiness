@@ -1,88 +1,96 @@
+using Overlay;
 using UnityEngine;
 
-[RequireComponent(typeof(Employee))]
-public partial class EmployeeView : MonoBehaviour
+namespace Employee
 {
-    private Employee employee;
-
-    private void Start()
+    [RequireComponent(typeof(EmployeeImpl))]
+    [AddComponentMenu("Employee.View")]
+    public partial class View : MonoBehaviour
     {
-        employee = GetComponent<Employee>();
-        meshRenderer = GetComponent<MeshRenderer>();
-    }
+        private EmployeeImpl employee;
 
-    private void Update()
-    {
-        UpdateStressOverlay();
-    }
-
-    public void RevertOverlays()
-    {
-        RevertStressOverlay();
-        RevertExtendedInfoOverlay();
-    }
-}
-
-[RequireComponent(typeof(MeshRenderer))]
-public partial class EmployeeView : IOverlayRenderer<StressOverlay>
-{
-    private MeshRenderer meshRenderer;
-    private StressOverlay appliedStressOverlay;
-
-    public void ApplyOverlay(StressOverlay overlay)
-    {
-        appliedStressOverlay = overlay;
-    }
-
-    private void UpdateStressOverlay()
-    {
-        if (appliedStressOverlay == null)
+        private void Start()
         {
-            return;
+            employee = GetComponent<EmployeeImpl>();
+            meshRenderer = GetComponent<MeshRenderer>();
         }
 
-        float normalized_stress = employee.Stress.Value;
-
-        normalized_stress =
-            (normalized_stress - appliedStressOverlay.MinimalStressBound)
-            / (appliedStressOverlay.MaximalStressBound - appliedStressOverlay.MinimalStressBound);
-        normalized_stress = Mathf.Clamp01(normalized_stress);
-
-        meshRenderer.materials[0].color = Color.Lerp(
-            appliedStressOverlay.MinimalStressColor,
-            appliedStressOverlay.MaximalStressColor,
-            normalized_stress
-        );
-    }
-
-    public void RevertStressOverlay()
-    {
-        appliedStressOverlay = null;
-        meshRenderer.materials[0].color = Color.white;
-    }
-}
-
-public partial class EmployeeView : IOverlayRenderer<ExtendedEmployeeInfoOverlay>
-{
-    private GameObject overlayUI;
-
-    public void ApplyOverlay(ExtendedEmployeeInfoOverlay overlay)
-    {
-        if (overlayUI == null)
+        private void Update()
         {
-            overlayUI = Instantiate(overlay.UIPrefab, transform, false);
+            UpdateStressOverlay();
         }
 
-        overlayUI.SetActive(true);
+        public void RevertOverlays()
+        {
+            RevertStressOverlay();
+            RevertExtendedInfoOverlay();
+        }
     }
 
-    public void RevertExtendedInfoOverlay()
+    [RequireComponent(typeof(MeshRenderer))]
+    public partial class View : IOverlayRenderer<Overlay.Stress>
     {
-        if (overlayUI == null)
+        private MeshRenderer meshRenderer;
+        private Overlay.Stress appliedStressOverlay;
+
+        public void ApplyOverlay(Overlay.Stress overlay)
         {
-            return;
+            appliedStressOverlay = overlay;
         }
 
-        overlayUI.SetActive(false);
+        private void UpdateStressOverlay()
+        {
+            if (appliedStressOverlay == null)
+            {
+                return;
+            }
+
+            float normalized_stress = employee.Stress.Value;
+
+            normalized_stress =
+                (normalized_stress - appliedStressOverlay.MinimalStressBound)
+                / (
+                    appliedStressOverlay.MaximalStressBound
+                    - appliedStressOverlay.MinimalStressBound
+                );
+            normalized_stress = Mathf.Clamp01(normalized_stress);
+
+            meshRenderer.materials[0].color = Color.Lerp(
+                appliedStressOverlay.MinimalStressColor,
+                appliedStressOverlay.MaximalStressColor,
+                normalized_stress
+            );
+        }
+
+        public void RevertStressOverlay()
+        {
+            appliedStressOverlay = null;
+            meshRenderer.materials[0].color = Color.white;
+        }
+    }
+
+    public partial class View : IOverlayRenderer<Overlay.ExtendedEmployeeInfo>
+    {
+        private GameObject overlayUI;
+
+        public void ApplyOverlay(Overlay.ExtendedEmployeeInfo overlay)
+        {
+            if (overlayUI == null)
+            {
+                overlayUI = Instantiate(overlay.UIPrefab, transform, false);
+            }
+
+            overlayUI.SetActive(true);
+        }
+
+        public void RevertExtendedInfoOverlay()
+        {
+            if (overlayUI == null)
+            {
+                return;
+            }
+
+            overlayUI.SetActive(false);
+        }
     }
 }

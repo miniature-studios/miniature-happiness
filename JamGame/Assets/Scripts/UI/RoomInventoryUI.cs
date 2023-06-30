@@ -1,10 +1,11 @@
 using System;
+using TileUnion;
 using TMPro;
 using UnityEngine;
 
 public class RoomInventoryUI : MonoBehaviour
 {
-    public TileUnion TileUnion;
+    public TileUnionImpl TileUnion;
 
     [SerializeField]
     private TMP_Text counterText;

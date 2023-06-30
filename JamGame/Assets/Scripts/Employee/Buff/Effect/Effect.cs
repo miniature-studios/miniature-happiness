@@ -1,2 +1,0 @@
-[InterfaceEditor]
-public interface IEffect { }

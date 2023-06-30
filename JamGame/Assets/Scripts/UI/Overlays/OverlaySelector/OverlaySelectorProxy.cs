@@ -1,10 +1,11 @@
+using Overlay;
 using UnityEngine;
 
 // Used to proxy calls from concrete overlay buttons to Location.
 public class OverlaySelectorProxy : MonoBehaviour
 {
     [SerializeField]
-    private OverlayManager overlayManager;
+    private Manager overlayManager;
 
     public void ActivateOverlay(IOverlay overlay)
     {

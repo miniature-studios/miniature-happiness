@@ -916,7 +916,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0}
-  rotation: 21
+  rotation: 54
+  builderMatrix: {fileID: 0}
   UIPrefab: {fileID: 7606936360430423353, guid: 32858c7307f455d48a4957f9ea2f9eb6, type: 3}
   Tiles:
   - {fileID: 7469511929702345568}
@@ -1036,7 +1037,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7469511929702345573}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1072,9 +1073,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5468c1783e6285d46913079e510b080c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  builderMatrix: {fileID: 0}
+  wallSolver: {fileID: 0}
+  marks: []
   position: {x: 0, y: 0}
-  rotation: 1
-  ElementsHandler: {fileID: 11400000, guid: a6fd4adfb654f5d48af13ff1b959be75, type: 2}
+  rotation: 2
+  WallPrefabHandlers: []
+  CornerPrefabHandlers: []
   RawWalls:
   - Place: 0
     Handlers:

@@ -1,127 +1,132 @@
+using Employee;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NeedProvider : MonoBehaviour
+namespace Location
 {
-    public enum FilterType
+    [AddComponentMenu("Location.NeedProvider")]
+    public class NeedProvider : MonoBehaviour
     {
-        None,
-        BlackList,
-        WhiteList,
-        FirstToTake,
-    }
-
-    [Serializable]
-    public class Filter
-    {
-        public Filter(List<Employee> employees, FilterType filter_type)
+        public enum FilterType
         {
-            Employees = employees;
-            FilterType = filter_type;
+            None,
+            BlackList,
+            WhiteList,
+            FirstToTake,
         }
 
-        public List<Employee> Employees = new();
-        public FilterType FilterType;
-
-        public bool IsEmployeeAllowed(Employee employee)
+        [Serializable]
+        public class Filter
         {
-            switch (FilterType)
+            public Filter(List<EmployeeImpl> employees, FilterType filter_type)
             {
-                case FilterType.None:
-                    return true;
-                case FilterType.WhiteList:
-                    return Employees.Contains(employee);
-                case FilterType.BlackList:
-                    return !Employees.Contains(employee);
-                case FilterType.FirstToTake:
-                    return Employees.Contains(employee) || Employees.Count == 0;
-                default:
-                    Debug.LogError("Unknown NeedProviderFilterType!");
-                    return false;
+                Employees = employees;
+                FilterType = filter_type;
             }
-        }
 
-        public void Take(Employee employee)
-        {
-            switch (FilterType)
+            public List<EmployeeImpl> Employees = new();
+            public FilterType FilterType;
+
+            public bool IsEmployeeAllowed(EmployeeImpl employee)
             {
-                case FilterType.FirstToTake:
-                    if (Employees.Count == 0)
-                    {
-                        Employees.Add(employee);
-                    }
+                switch (FilterType)
+                {
+                    case FilterType.None:
+                        return true;
+                    case FilterType.WhiteList:
+                        return Employees.Contains(employee);
+                    case FilterType.BlackList:
+                        return !Employees.Contains(employee);
+                    case FilterType.FirstToTake:
+                        return Employees.Contains(employee) || Employees.Count == 0;
+                    default:
+                        Debug.LogError("Unknown NeedProviderFilterType!");
+                        return false;
+                }
+            }
 
-                    if (Employees.Count > 1 || !Employees.Contains(employee))
-                    {
-                        Debug.LogError("Place is already assigned to other employee");
+            public void Take(EmployeeImpl employee)
+            {
+                switch (FilterType)
+                {
+                    case FilterType.FirstToTake:
+                        if (Employees.Count == 0)
+                        {
+                            Employees.Add(employee);
+                        }
+
+                        if (Employees.Count > 1 || !Employees.Contains(employee))
+                        {
+                            Debug.LogError("Place is already assigned to other employee");
+                            break;
+                        }
+
                         break;
-                    }
-
-                    break;
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
-    }
 
-    [SerializeField]
-    private Filter filter;
+        [SerializeField]
+        private Filter filter;
 
-    public NeedType NeedType;
+        public NeedType NeedType;
 
-    private Employee currentEmployee = null;
+        private EmployeeImpl currentEmployee = null;
 
-    public bool TryTake(Employee employee)
-    {
-        if (!IsAvailable(employee))
+        public bool TryTake(EmployeeImpl employee)
         {
-            return false;
+            if (!IsAvailable(employee))
+            {
+                return false;
+            }
+
+            filter.Take(employee);
+            currentEmployee = employee;
+
+            foreach (NeedModifiers modifier in registeredModifiers)
+            {
+                currentEmployee.RegisterModifier(modifier);
+            }
+
+            return true;
         }
 
-        filter.Take(employee);
-        currentEmployee = employee;
-
-        foreach (NeedModifiers modifier in registeredModifiers)
+        // TODO: Control release inside NeedProvider
+        public void Release()
         {
-            currentEmployee.RegisterModifier(modifier);
+            foreach (NeedModifiers modifier in registeredModifiers)
+            {
+                currentEmployee.UnregisterModifier(modifier);
+            }
         }
 
-        return true;
-    }
-
-    // TODO: Control release inside NeedProvider
-    public void Release()
-    {
-        foreach (NeedModifiers modifier in registeredModifiers)
+        public bool IsAvailable(EmployeeImpl employee)
         {
-            currentEmployee.UnregisterModifier(modifier);
-        }
-    }
-
-    public bool IsAvailable(Employee employee)
-    {
-        return filter.IsEmployeeAllowed(employee);
-    }
-
-    private readonly List<NeedModifiers> registeredModifiers = new();
-
-    public void RegisterModifier(NeedModifiers modifiers)
-    {
-        if (registeredModifiers.Contains(modifiers))
-        {
-            Debug.LogWarning("Modifiers already registered");
-            return;
+            return filter.IsEmployeeAllowed(employee);
         }
 
-        registeredModifiers.Add(modifiers);
-    }
+        private readonly List<NeedModifiers> registeredModifiers = new();
 
-    public void UnregisterModifier(NeedModifiers modifiers)
-    {
-        if (!registeredModifiers.Remove(modifiers))
+        public void RegisterModifier(NeedModifiers modifiers)
         {
-            Debug.LogWarning("Modifiers to unregister not found");
+            if (registeredModifiers.Contains(modifiers))
+            {
+                Debug.LogWarning("Modifiers already registered");
+                return;
+            }
+
+            registeredModifiers.Add(modifiers);
+        }
+
+        public void UnregisterModifier(NeedModifiers modifiers)
+        {
+            if (!registeredModifiers.Remove(modifiers))
+            {
+                Debug.LogWarning("Modifiers to unregister not found");
+            }
         }
     }
 }

@@ -1,3 +1,6 @@
 ﻿using System;
 
-public class InterfaceEditorAttribute : Attribute { }
+namespace Common
+{
+    public class InterfaceEditorAttribute : Attribute { }
+}

@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-// For checking if clicked on ui in future
+// TODO: Move to Common.
 public static class RaycastUtilities
 {
     public static bool PointerIsOverUI(Vector2 screenPos)

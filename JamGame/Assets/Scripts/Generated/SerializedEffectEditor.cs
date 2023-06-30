@@ -1,75 +1,74 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
+using Employee;
 
-[CustomPropertyDrawer(typeof(SerializedEffect))]
-public class SerializedEffectDrawer : PropertyDrawer
+namespace SerializedInterface.Inspector 
 {
-    private readonly string[] implementingTypeNames =
+    [CustomPropertyDrawer(typeof(SerializedEffect))]
+    public class SerializedEffectDrawer : PropertyDrawer
     {
-        "ControllerEffect",
-        "NeedModifierEffect",
-        "StressEffect"
-    };
+        private string[] implementingTypeNames = { "StressEffect", "NeedModifierEffect", "ControllerEffect" };
 
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
-        SerializedProperty selected_type_prop = property.FindPropertyRelative("selectedType");
-        string selected_type = selected_type_prop.stringValue;
-        if (selected_type == "")
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            selected_type_prop.stringValue = implementingTypeNames[0];
-            selected_type = selected_type_prop.stringValue;
-        }
-
-        Rect pos = position;
-        pos.height = EditorGUIUtility.singleLineHeight;
-
-        EditorGUI.BeginChangeCheck();
-        int selected_index = 0;
-        for (int i = 0; i < implementingTypeNames.Length; i++)
-        {
-            if (implementingTypeNames[i] == selected_type)
+            SerializedProperty selected_type_prop = property.FindPropertyRelative("selectedType");
+            string selected_type = selected_type_prop.stringValue;
+            if (selected_type == "")
             {
-                selected_index = i;
-                break;
+                selected_type_prop.stringValue = implementingTypeNames[0];
+                selected_type = selected_type_prop.stringValue;
             }
-        }
 
-        int new_selected_index = EditorGUI.Popup(pos, selected_index, implementingTypeNames);
-        if (EditorGUI.EndChangeCheck())
-        {
-            selected_type_prop.stringValue = implementingTypeNames[new_selected_index];
-            selected_type = selected_type_prop.stringValue;
-        }
+            Rect pos = position;
+            pos.height = EditorGUIUtility.singleLineHeight;
 
-        pos.y += EditorGUIUtility.singleLineHeight;
-        pos.height = position.height - EditorGUIUtility.singleLineHeight;
+            EditorGUI.BeginChangeCheck();
+            int selected_index = 0;
+            for (int i = 0; i < implementingTypeNames.Length; i++)
+            {
+                if (implementingTypeNames[i] == selected_type)
+                {
+                    selected_index = i;
+                    break;
+                }
+            }
 
-        SerializedProperty typed_prop = property.FindPropertyRelative(
-            PascalToCamelCase(selected_type)
-        );
-        _ = EditorGUI.PropertyField(pos, typed_prop, true);
-    }
+            int new_selected_index = EditorGUI.Popup(pos, selected_index, implementingTypeNames);
+            if (EditorGUI.EndChangeCheck())
+            {
+                selected_type_prop.stringValue = implementingTypeNames[new_selected_index];
+                selected_type = selected_type_prop.stringValue;
+            }
 
-    private string PascalToCamelCase(string pascal)
-    {
-        return pascal[..1].ToLower() + pascal[1..];
-    }
+            pos.y += EditorGUIUtility.singleLineHeight;
+            pos.height = position.height - EditorGUIUtility.singleLineHeight;
 
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        SerializedProperty selected_type_prop = property.FindPropertyRelative("selectedType");
-        string selected_type = selected_type_prop.stringValue;
-        float height = 0.0f;
-        if (selected_type != "")
-        {
             SerializedProperty typed_prop = property.FindPropertyRelative(
                 PascalToCamelCase(selected_type)
             );
-            height = EditorGUI.GetPropertyHeight(typed_prop);
+            _ = EditorGUI.PropertyField(pos, typed_prop, true);
         }
-        return EditorGUIUtility.singleLineHeight + height;
+
+        private string PascalToCamelCase(string pascal)
+        {
+            return pascal[..1].ToLower() + pascal[1..];
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            SerializedProperty selected_type_prop = property.FindPropertyRelative("selectedType");
+            string selected_type = selected_type_prop.stringValue;
+            float height = 0.0f;
+            if (selected_type != "")
+            {
+                var typed_prop = property.FindPropertyRelative(
+                    PascalToCamelCase(selected_type)
+                );
+                height = EditorGUI.GetPropertyHeight(typed_prop);
+            }
+            return EditorGUIUtility.singleLineHeight + height;
+        }
     }
 }
 #endif

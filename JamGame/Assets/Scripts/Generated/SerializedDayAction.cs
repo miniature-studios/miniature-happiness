@@ -1,33 +1,35 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class SerializedDayAction
-{
-    [SerializeField]
-    private string selectedType;
-
-    [SerializeField]
-    private DayEnd dayEnd;
-
-    [SerializeField]
-    private DayStart dayStart;
-
-    [SerializeField]
-    private Meeting meeting;
-
-    [SerializeField]
-    private Working working;
-
-    public IDayAction ToDayAction()
+namespace Level.Config {
+    [Serializable]
+    public class SerializedDayAction
     {
-        return selectedType switch
+        [SerializeField] 
+        private string selectedType;
+
+        [SerializeField]
+        private DayEnd dayEnd;
+
+        [SerializeField]
+        private DayStart dayStart;
+
+        [SerializeField]
+        private Meeting meeting;
+
+        [SerializeField]
+        private Working working;
+
+        public IDayAction ToDayAction()
         {
-            "DayEnd" => dayEnd,
-            "DayStart" => dayStart,
-            "Meeting" => meeting,
-            "Working" => working,
-            _ => throw new NotImplementedException(),
-        };
+            return selectedType switch
+            {
+                "DayEnd" => dayEnd,
+                "DayStart" => dayStart,
+                "Meeting" => meeting,
+                "Working" => working,
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }

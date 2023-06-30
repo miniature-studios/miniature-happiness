@@ -1,25 +1,27 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class SerializedEmployeeConfig
-{
-    [SerializeField]
-    private string selectedType;
-
-    [SerializeField]
-    private FixedEmployeeConfig fixedEmployeeConfig;
-
-    [SerializeField]
-    private RandomEmployeeConfig randomEmployeeConfig;
-
-    public IEmployeeConfig ToEmployeeConfig()
+namespace Level.Config {
+    [Serializable]
+    public class SerializedEmployeeConfig
     {
-        return selectedType switch
+        [SerializeField] 
+        private string selectedType;
+
+        [SerializeField]
+        private FixedEmployeeConfig fixedEmployeeConfig;
+
+        [SerializeField]
+        private RandomEmployeeConfig randomEmployeeConfig;
+
+        public IEmployeeConfig ToEmployeeConfig()
         {
-            "FixedEmployeeConfig" => fixedEmployeeConfig,
-            "RandomEmployeeConfig" => randomEmployeeConfig,
-            _ => throw new NotImplementedException(),
-        };
+            return selectedType switch
+            {
+                "FixedEmployeeConfig" => fixedEmployeeConfig,
+                "RandomEmployeeConfig" => randomEmployeeConfig,
+                _ => throw new NotImplementedException(),
+            };
+        }
     }
 }
