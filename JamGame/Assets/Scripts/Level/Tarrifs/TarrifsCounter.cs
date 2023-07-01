@@ -21,7 +21,7 @@ namespace Level
     public class TarrifsCounter : MonoBehaviour
     {
         [SerializeField]
-        private TileBuilderImpl tileBuilder;
+        private readonly TileBuilderImpl tileBuilder;
 
         public Check GetCheck(Tariffs tariffs)
         {

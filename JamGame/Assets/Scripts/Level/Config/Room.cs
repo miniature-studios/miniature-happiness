@@ -16,7 +16,7 @@ namespace Level.Config
     public class FixedRoomConfig : IRoomConfig
     {
         [SerializeField]
-        private RoomShopUI roomShopUI;
+        private Shop.Room.View roomShopUI;
 
         public RoomConfig GetRoomConfig()
         {
@@ -28,7 +28,7 @@ namespace Level.Config
     public class RoomWeights
     {
         public float Weight;
-        public RoomShopUI RoomShopUI;
+        public Shop.Room.View RoomShopUI;
     }
 
     [Serializable]
@@ -40,16 +40,18 @@ namespace Level.Config
         public RoomConfig GetRoomConfig()
         {
             List<float> list = roomWeights.Select(x => x.Weight).ToList();
-            RoomShopUI result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].RoomShopUI;
+            Shop.Room.View result = roomWeights[
+                RandomTools.RandomlyChooseWithWeights(list)
+            ].RoomShopUI;
             return new RoomConfig(result);
         }
     }
 
     public class RoomConfig
     {
-        public RoomShopUI RoomShopUI { get; }
+        public Shop.Room.View RoomShopUI { get; }
 
-        public RoomConfig(RoomShopUI room_shop_ui)
+        public RoomConfig(Shop.Room.View room_shop_ui)
         {
             RoomShopUI = room_shop_ui;
         }
