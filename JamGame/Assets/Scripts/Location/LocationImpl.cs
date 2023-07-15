@@ -1,11 +1,12 @@
 using Employee;
+using Level.Boss.Task;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Location
 {
     [AddComponentMenu("Location.Location")]
-    public class LocationImpl : MonoBehaviour
+    public class LocationImpl : MonoBehaviour, IDataProvider<EmployeeAmount>
     {
         [SerializeField]
         private EmployeeImpl employeePrototype;
@@ -46,6 +47,16 @@ namespace Location
                     yield return provider;
                 }
             }
+        }
+
+        public EmployeeAmount GetData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        EmployeeAmount IDataProvider<EmployeeAmount>.GetData()
+        {
+            return new EmployeeAmount { Amount = employees.Count };
         }
     }
 }
