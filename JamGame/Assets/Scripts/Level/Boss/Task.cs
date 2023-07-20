@@ -8,13 +8,10 @@ namespace Level.Boss.Task
     public interface ITask
     {
         public void ValidateProviders();
-        public bool IsComplete();
-    }
 
-    // TODO: Make it global? (to use in the systems that collect global data)
-    public interface IDataProvider<D>
-    {
-        D GetData();
+        public void Update(float delta_time) { }
+
+        public bool IsComplete();
     }
 
     public struct EmployeeAmount
@@ -25,7 +22,7 @@ namespace Level.Boss.Task
     [Serializable]
     public class TargetEmployeeAmount : ITask
     {
-        [SerializeField] private MonoBehaviour employeeCountProvider;
+        [SerializeField] private GameObject employeeCountProvider;
         private IDataProvider<EmployeeAmount> employeeCount;
 
         [SerializeField] private int employeeCountTarget;
@@ -37,13 +34,92 @@ namespace Level.Boss.Task
 
         public void ValidateProviders()
         {
-            if (employeeCountProvider is not null and IDataProvider<EmployeeAmount> dp)
+            employeeCount = employeeCountProvider.GetComponent<IDataProvider<EmployeeAmount>>();
+            if (employeeCount == null)
             {
-                employeeCount = dp;
+                Debug.LogError("IDataProvider<EmployeeAmount>  not found in employeeCountProvider");
+            }
+        }
+    }
+
+    public struct Rooms
+    {
+        // TODO
+    }
+
+    [Serializable]
+    public class RoomsBuilt : ITask
+    {
+        [SerializeField] private GameObject roomDataProvider;
+        private IDataProvider<Rooms> roomData;
+
+        [SerializeField] private int employeeCountTarget;
+
+        public bool IsComplete()
+        {
+            // TODO
+            return true;
+        }
+
+        public void ValidateProviders()
+        {
+            roomData = roomDataProvider.GetComponent<IDataProvider<Rooms>>();
+            if (roomData == null)
+            {
+                Debug.LogError("IDataProvider<Rooms>  not found in roomDataProvider");
+            }
+        }
+    }
+
+    public struct MaxStress
+    {
+        public float Stress;
+    }
+
+    [Serializable]
+    public class MaxStressBound : ITask
+    {
+        [SerializeField] private GameObject maxStressProvider;
+        private IDataProvider<MaxStress> maxStress;
+
+        [SerializeField] private float maxStressTarget;
+        [SerializeField] private float targetDuration;
+
+        private float currentDuration = .0f;
+        private bool complete = false;
+
+        public bool IsComplete()
+        {
+            return complete;
+        }
+
+        public void ValidateProviders()
+        {
+            maxStress = maxStressProvider.GetComponent<IDataProvider<MaxStress>>();
+            if (maxStress == null)
+            {
+                Debug.LogError("IDataProvider<MaxStress> not found in maxStressProvider");
+            }
+        }
+
+        public void Update(float delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            if (currentDuration > targetDuration)
+            {
+                complete = true;
+            }
+            else if (maxStress.GetData().Stress < maxStressTarget)
+            {
+                currentDuration += delta_time;
             }
             else
             {
-                Debug.LogError("IDataProvider<EmployeeAmount> is not implemented for employeeCountProvider or employeeCountProvider is null");
+                currentDuration = 0.0f;
             }
         }
     }

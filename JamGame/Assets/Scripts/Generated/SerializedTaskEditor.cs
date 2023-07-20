@@ -1,14 +1,14 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Overlay;
+using Level.Boss.Task;
 
 namespace SerializedInterface.Inspector 
 {
-    [CustomPropertyDrawer(typeof(SerializedOverlay))]
-    public class SerializedOverlayDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SerializedTask))]
+    public class SerializedTaskDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames = { "None", "ExtendedEmployeeInfo", "Stress" };
+        private string[] implementingTypeNames = { "TargetEmployeeAmount", "RoomsBuilt", "MaxStressBound" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
 
-namespace Employee {
+namespace Employee 
+{
     [Serializable]
     public class SerializedEffect
     {

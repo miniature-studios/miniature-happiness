@@ -270,16 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f537fc5b16e949f419424d617a26b749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlay:
-    selectedType: DefaultOverlay
-    extendedEmployeeInfoOverlay:
-      uiPrefab: {fileID: 0}
-    stressOverlay:
-      minimalStressColor: {r: 0, g: 0, b: 0, a: 0}
-      minimalStressBound: 0
-      maximalStressColor: {r: 0, g: 0, b: 0, a: 0}
-      maximalStressBound: 0
-  proxy: {fileID: 1438400534}
 --- !u!1 &126215527
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,7 +987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb0936cf4a277141a91bbee56c6f17c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 11400000, guid: 2284901046f37554f84b4105d43b4bab, type: 2}
+  actorRadius: 0
+  movelessVelocityThreshold: 0
 --- !u!135 &826715925
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1397,16 +1388,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f537fc5b16e949f419424d617a26b749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlay:
-    selectedType: ExtendedEmployeeInfoOverlay
-    extendedEmployeeInfoOverlay:
-      uiPrefab: {fileID: 5139304311717389809, guid: 8503484fa4611e4469c4b3ec89b10b0d, type: 3}
-    stressOverlay:
-      minimalStressColor: {r: 0, g: 0, b: 0, a: 0}
-      minimalStressBound: 0
-      maximalStressColor: {r: 0, g: 0, b: 0, a: 0}
-      maximalStressBound: 0
-  proxy: {fileID: 1438400534}
 --- !u!1 &1144950715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1553,15 +1534,13 @@ MonoBehaviour:
       SatisfactionTime: 2
       SatisfactionGained: 800
       DecreaseSpeed: 2
-    satisfied: 1
-    registeredModifiers: []
+    Satisfied: 0
   - properties:
       NeedType: 1
       SatisfactionTime: 2
       SatisfactionGained: 400
       DecreaseSpeed: 1
-    satisfied: 0
-    registeredModifiers: []
+    Satisfied: 0
   appliedBuffs: []
 --- !u!114 &1144950722
 MonoBehaviour:
@@ -1618,7 +1597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3a921a269683844adf1acfc030e74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: John II
+  name_: 
   quirks:
   - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
 --- !u!114 &1144950725
@@ -1751,7 +1730,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   employeePrototype: {fileID: 0}
-  employeeNeeds: {fileID: 0}
 --- !u!114 &1205510199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2718,16 +2696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f537fc5b16e949f419424d617a26b749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overlay:
-    selectedType: StressOverlay
-    extendedEmployeeInfoOverlay:
-      uiPrefab: {fileID: 0}
-    stressOverlay:
-      minimalStressColor: {r: 0, g: 1, b: 0.049598217, a: 1}
-      minimalStressBound: 0
-      maximalStressColor: {r: 1, g: 0, b: 0, a: 1}
-      maximalStressBound: 100
-  proxy: {fileID: 1438400534}
 --- !u!1 &1701117704
 GameObject:
   m_ObjectHideFlags: 0
