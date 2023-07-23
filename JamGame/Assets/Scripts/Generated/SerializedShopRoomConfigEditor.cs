@@ -5,8 +5,8 @@ using Level.Config;
 
 namespace SerializedInterface.Inspector 
 {
-    [CustomPropertyDrawer(typeof(SerializedRoomConfig))]
-    public class SerializedRoomConfigDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SerializedShopRoomConfig))]
+    public class SerializedShopRoomConfigDrawer : PropertyDrawer
     {
         private string[] implementingTypeNames = { "FixedRoomConfig", "RandomRoomConfig" };
 

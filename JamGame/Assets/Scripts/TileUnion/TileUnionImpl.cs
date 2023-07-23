@@ -24,7 +24,7 @@ namespace TileUnion
         [SerializeField]
         private Matrix builderMatrix;
 
-        public Level.Inventory.Room.View UIPrefab;
+        public Level.Inventory.Room.Model InventoryModel;
         public List<TileImpl> Tiles = new();
 
         private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration = null;

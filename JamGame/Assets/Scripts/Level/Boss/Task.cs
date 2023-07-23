@@ -42,35 +42,6 @@ namespace Level.Boss.Task
         }
     }
 
-    public struct Rooms
-    {
-        // TODO
-    }
-
-    [Serializable]
-    public class RoomsBuilt : ITask
-    {
-        [SerializeField] private GameObject roomDataProvider;
-        private IDataProvider<Rooms> roomData;
-
-        [SerializeField] private int employeeCountTarget;
-
-        public bool IsComplete()
-        {
-            // TODO
-            return true;
-        }
-
-        public void ValidateProviders()
-        {
-            roomData = roomDataProvider.GetComponent<IDataProvider<Rooms>>();
-            if (roomData == null)
-            {
-                Debug.LogError("IDataProvider<Rooms>  not found in roomDataProvider");
-            }
-        }
-    }
-
     public struct MaxStress
     {
         public float Stress;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Level.Config 
 {
     [Serializable]
-    public class SerializedRoomConfig
+    public class SerializedShopRoomConfig
     {
         [SerializeField] 
         private string selectedType;
@@ -15,7 +15,7 @@ namespace Level.Config
         [SerializeField]
         private RandomRoomConfig randomRoomConfig;
 
-        public IRoomConfig ToRoomConfig()
+        public IShopRoomConfig ToShopRoomConfig()
         {
             return selectedType switch
             {

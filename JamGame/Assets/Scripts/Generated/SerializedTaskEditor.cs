@@ -8,7 +8,7 @@ namespace SerializedInterface.Inspector
     [CustomPropertyDrawer(typeof(SerializedTask))]
     public class SerializedTaskDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames = { "TargetEmployeeAmount", "RoomsBuilt", "MaxStressBound" };
+        private string[] implementingTypeNames = { "TargetEmployeeAmount", "MaxStressBound" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

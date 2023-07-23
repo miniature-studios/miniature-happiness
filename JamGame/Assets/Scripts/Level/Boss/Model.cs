@@ -44,53 +44,62 @@ namespace Level.Boss
 
         [SerializeField]
         private List<MeetingTasks> meetingTasks;
-        private readonly List<TaskWithCost> scheduledTasks = new();
+        private readonly List<List<TaskWithCost>> scheduledTasks = new();
 
         private readonly Dictionary<ITask, TaskState> taskState = new();
-        private int taskToActivateNext = 0;
+        private int taskBunchToActivateNext = 0;
 
         private void Start()
         {
             foreach (MeetingTasks meeting_tasks in meetingTasks)
             {
-                scheduledTasks.AddRange(meeting_tasks.Tasks.Select(x => x));
+                scheduledTasks.Add(meeting_tasks.Tasks.Select(x => x).ToList());
             }
 
-            foreach (TaskWithCost task in scheduledTasks)
+            foreach (List<TaskWithCost> task_bunch in scheduledTasks)
             {
-                task.Task.ValidateProviders();
-                taskState.Add(task.Task, TaskState.Scheduled);
+                foreach (TaskWithCost task in task_bunch)
+                {
+                    task.Task.ValidateProviders();
+                    taskState.Add(task.Task, TaskState.Scheduled);
+                }
             }
         }
 
-        public void ActivateNextTask()
+        public void ActivateNextTaskBunch()
         {
-            if (taskToActivateNext == scheduledTasks.Count)
+            if (taskBunchToActivateNext == scheduledTasks.Count)
             {
                 return;
             }
 
-            taskState[scheduledTasks[taskToActivateNext].Task] = TaskState.Active;
-            taskToActivateNext++;
+            foreach (TaskWithCost task in scheduledTasks[taskBunchToActivateNext])
+            {
+                taskState[task.Task] = TaskState.Active;
+            }
+
+            taskBunchToActivateNext++;
         }
 
         private void Update()
         {
             stress += stressGatherSpeed;
 
-            for (int i = 0; i < scheduledTasks.Count; i++)
+            for (int i = 0; i < taskBunchToActivateNext; i++)
             {
-                ITask task = scheduledTasks[i].Task;
-                if (taskState[task] == TaskState.Active)
+                foreach (TaskWithCost task in scheduledTasks[i])
                 {
-                    if (task.IsComplete())
+                    if (taskState[task.Task] == TaskState.Active)
                     {
-                        taskState[task] = TaskState.Complete;
-                        stress -= scheduledTasks[i].Cost;
-                    }
-                    else
-                    {
-                        task.Update(Time.deltaTime);
+                        if (task.Task.IsComplete())
+                        {
+                            taskState[task.Task] = TaskState.Complete;
+                            stress -= task.Cost;
+                        }
+                        else
+                        {
+                            task.Task.Update(Time.deltaTime);
+                        }
                     }
                 }
             }
