@@ -1,6 +1,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using UnityEngine;
 
@@ -41,12 +42,19 @@ namespace Level.Config
         private List<SerializedEmployeeConfig> shopEmployees;
 
         [SerializeField]
-        private List<SerializedRoomConfig> shopRooms;
+        private List<SerializedShopRoomConfig> shopRooms;
+
+        [SerializeField]
+        private List<InventoryRoomConfig> mandatoryRooms;
 
         public IEnumerable<EmployeeConfig> ShopEmployees =>
             shopEmployees.Select(x => x.ToEmployeeConfig().GetEmployeeConfig());
-        public IEnumerable<RoomConfig> ShopRooms =>
-            shopRooms.Select(x => x.ToRoomConfig().GetRoomConfig());
+
+        public IEnumerable<ShopRoomConfig> ShopRooms =>
+            shopRooms.Select(x => x.ToShopRoomConfig().GetRoomConfig());
+
+        public ImmutableList<InventoryRoomConfig> MandatoryRooms =>
+            mandatoryRooms.ToImmutableList();
 
         public void Execute(Executor executor, Action next_action)
         {

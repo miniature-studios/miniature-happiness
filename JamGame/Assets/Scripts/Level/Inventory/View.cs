@@ -38,10 +38,10 @@ namespace Level.Inventory
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItem(e.NewItems[0] as Room.View);
+                    AddNewItem(e.NewItems[0] as Room.Model);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItem(e.OldItems[0] as Room.View);
+                    RemoveOldItem(e.OldItems[0] as Room.Model);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllItems();
@@ -56,31 +56,32 @@ namespace Level.Inventory
 
         private void DeleteAllItems()
         {
-            foreach (Room.View old_item in container.transform.GetComponentsInChildren<Room.View>())
+            foreach (Room.Model old_item in container.transform.GetComponentsInChildren<Room.Model>())
             {
-                old_item.Counter = 0;
+                old_item.Count = 0;
             }
         }
 
-        private void RemoveOldItem(Room.View old_item)
+        private void RemoveOldItem(Room.Model old_item)
         {
-            Room.View[] room_inventorys = container.transform.GetComponentsInChildren<Room.View>();
-            room_inventorys.First(x => x.TileUnion == old_item.TileUnion).Counter--;
+            Room.Model[] room_models = container.transform.GetComponentsInChildren<Room.Model>();
+            room_models.First(x => x.TileUnion == old_item.TileUnion).Count--;
         }
 
-        private void AddNewItem(Room.View new_item)
+        private void AddNewItem(Room.Model new_item)
         {
-            Room.View[] room_inventorys = container.transform.GetComponentsInChildren<Room.View>();
-            Room.View existed = room_inventorys.FirstOrDefault(
+            Room.Model[] room_inventorys = container.transform.GetComponentsInChildren<Room.Model>();
+            Room.Model existed = room_inventorys.FirstOrDefault(
                 x => x.TileUnion == new_item.TileUnion
             );
             if (existed != null)
             {
-                existed.Counter++;
+                existed.Count++;
             }
             else
             {
-                _ = Instantiate(new_item, container).GetComponent<Room.View>();
+                Room.View new_room_view = Instantiate(new_item, container).GetComponent<Room.View>();
+                new_room_view.enabled = true;
             }
         }
 

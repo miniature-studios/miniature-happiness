@@ -1,11 +1,13 @@
+using Common;
 using Employee;
+using Level.Boss.Task;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Location
 {
     [AddComponentMenu("Location.Location")]
-    public class LocationImpl : MonoBehaviour
+    public class LocationImpl : MonoBehaviour, IDataProvider<EmployeeAmount>, IDataProvider<MaxStress>
     {
         [SerializeField]
         private EmployeeImpl employeePrototype;
@@ -46,6 +48,25 @@ namespace Location
                     yield return provider;
                 }
             }
+        }
+
+        EmployeeAmount IDataProvider<EmployeeAmount>.GetData()
+        {
+            return new EmployeeAmount { Amount = employees.Count };
+        }
+
+        MaxStress IDataProvider<MaxStress>.GetData()
+        {
+            float max_stress = float.NegativeInfinity;
+            foreach (EmployeeImpl emp in employees)
+            {
+                if (emp.Stress.Value > max_stress)
+                {
+                    max_stress = emp.Stress.Value;
+                }
+            }
+
+            return new MaxStress { Stress = max_stress };
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Level.Inventory
     [AddComponentMenu("Level.Inventory.Model")]
     public class Model : MonoBehaviour
     {
-        private readonly ObservableCollection<Room.View> roomsInInventory = new();
+        private readonly ObservableCollection<Room.Model> roomsInInventory = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
         private void Awake()
@@ -17,12 +17,12 @@ namespace Level.Inventory
             roomsInInventory.CollectionChanged += CollectionChanged.Invoke;
         }
 
-        public void AddNewRoom(Room.View room_in_inventory)
+        public void AddNewRoom(Room.Model room_in_inventory)
         {
             roomsInInventory.Add(room_in_inventory);
         }
 
-        public void RemoveRoom(Room.View room_in_inventory)
+        public void RemoveRoom(Room.Model room_in_inventory)
         {
             _ = roomsInInventory.Remove(
                 roomsInInventory.First(x => x.TileUnion == room_in_inventory.TileUnion)

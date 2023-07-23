@@ -8,7 +8,7 @@ namespace Level.Shop
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private readonly Transform roomsUIContainer;
+        private Transform roomsUIContainer;
         private Animator shopAnimator;
 
         public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -16,10 +16,10 @@ namespace Level.Shop
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItems(e.NewItems[0] as Room.View);
+                    AddNewItems(e.NewItems[0] as Room.Model);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItems(e.OldItems[0] as Room.View);
+                    RemoveOldItems(e.OldItems[0] as Room.Model);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllItems();
@@ -32,25 +32,26 @@ namespace Level.Shop
         private void DeleteAllItems()
         {
             foreach (
-                Room.View old_item in roomsUIContainer.transform.GetComponentsInChildren<Room.View>()
+                Room.Model old_item in roomsUIContainer.transform.GetComponentsInChildren<Room.Model>()
             )
             {
                 Destroy(old_item.gameObject);
             }
         }
 
-        private void RemoveOldItems(Room.View old_item)
+        private void RemoveOldItems(Room.Model old_item)
         {
-            Room.View[] room_inventorys =
-                roomsUIContainer.transform.GetComponentsInChildren<Room.View>();
+            Room.Model[] room_models =
+                roomsUIContainer.transform.GetComponentsInChildren<Room.Model>();
             Destroy(
-                room_inventorys.First(x => x.RoomInventoryUI == old_item.RoomInventoryUI).gameObject
+                room_models.First(x => x == old_item).gameObject
             );
         }
 
-        private void AddNewItems(Room.View new_item)
+        private void AddNewItems(Room.Model new_item)
         {
-            _ = Instantiate(new_item, roomsUIContainer).GetComponent<Room.View>();
+            Room.View new_room_view = Instantiate(new_item, roomsUIContainer).GetComponent<Room.View>();
+            new_room_view.enabled = true;
         }
 
         private void Awake()

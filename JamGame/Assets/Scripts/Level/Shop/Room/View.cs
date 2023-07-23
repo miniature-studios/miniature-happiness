@@ -9,23 +9,23 @@ namespace Level.Shop.Room
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private readonly Inventory.Room.View tileUIPrefab;
+        private Model model;
 
         [SerializeField]
-        private readonly TMP_Text moneyText;
+        private TMP_Text moneyText;
 
         [SerializeField]
-        private readonly TMP_Text waterText;
+        private TMP_Text waterText;
 
         [SerializeField]
-        private readonly TMP_Text electricityText;
+        private TMP_Text electricityText;
 
         [SerializeField]
-        private readonly TMP_Text roomNameText;
-        public Inventory.Room.View RoomInventoryUI => tileUIPrefab;
+        private TMP_Text roomNameText;
+        public Model Model => model;
 
         private RoomProperties roomProperties;
-        private Func<RoomProperties, Inventory.Room.View, Result> roomBuying;
+        private Func<RoomProperties, Model, Result> roomBuying;
 
         private void OnValidate()
         {
@@ -41,8 +41,8 @@ namespace Level.Shop.Room
         private void UpdateView()
         {
             if (
-                tileUIPrefab.TileUnion.TryGetComponent(out roomProperties)
-                && tileUIPrefab.TileUnion.TryGetComponent(out RoomViewProperties roomViewProperties)
+                model.TileUnion.TryGetComponent(out roomProperties)
+                && model.TileUnion.TryGetComponent(out RoomViewProperties roomViewProperties)
             )
             {
                 roomNameText.text = roomViewProperties.RoomName;
@@ -53,13 +53,13 @@ namespace Level.Shop.Room
             }
             else
             {
-                Debug.LogError($"No room properties in {tileUIPrefab.name}");
+                Debug.LogError($"No room properties in {model.name}");
             }
         }
 
         public void TryBuyRoom()
         {
-            if (roomBuying(roomProperties, tileUIPrefab).Success)
+            if (roomBuying(roomProperties, model).Success)
             {
                 Destroy(gameObject);
             }
