@@ -71,6 +71,6 @@ namespace Utils
     [AddComponentMenu("Utils.IgnoreAnimatorTimeScaleSetter")]
     public class AnimatorTimeScaleSetter : MonoBehaviour
     {
-        // Not called IgnoreAnimatorTimeScaleSetter because file name should math the class name.
+        // Not called IgnoreAnimatorTimeScaleSetter because file name should match the class name.
     }
 }
