@@ -10,13 +10,13 @@ namespace Level.Shop
     public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private readonly Inventory.Controller inventoryController;
+        private Inventory.Controller inventoryController;
 
         [SerializeField]
-        private readonly Model shopModel;
+        private Model shopModel;
 
         [SerializeField]
-        private readonly Finances.Model financesController;
+        private Finances.Model financesController;
 
         public void SetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
         {
