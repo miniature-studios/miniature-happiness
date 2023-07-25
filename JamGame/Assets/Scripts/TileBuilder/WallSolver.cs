@@ -43,7 +43,7 @@ namespace TileBuilder
                     .ToList();
                 // Unique rule
                 if (
-                    !(my_marks.Contains("freespace") || out_marks.Contains("freespace"))
+                    !(my_marks.Contains("Freespace") || out_marks.Contains("Freespace"))
                     && !(my_marks.Contains("Outside") || out_marks.Contains("Outside"))
                     && (my_marks.Contains("Corridor") || out_marks.Contains("Corridor"))
                 )

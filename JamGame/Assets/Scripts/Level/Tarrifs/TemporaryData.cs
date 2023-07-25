@@ -5,7 +5,7 @@ using UnityEngine.Events;
 namespace Level
 {
     // TODO: Remove this.
-    [AddComponentMenu("Level.TeporaryData")]
+    [AddComponentMenu("Level.TemporaryData")]
     public class TemporaryData : MonoBehaviour
     {
         [InspectorReadOnly]

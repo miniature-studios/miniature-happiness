@@ -60,7 +60,7 @@ namespace TileBuilder
                 new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("door")));
             List<KeyValuePair<Vector2Int, TileUnionImpl>> tiles_to_check = TileUnionDictionary
                 .Where(
-                    x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("freespace")
+                    x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("Freespace")
                 )
                 .ToList();
 
@@ -213,7 +213,7 @@ namespace TileBuilder
                 .Distinct()
                 .ToList();
             _ = tilesUnder.Remove(SelectedTile);
-            if (!tilesUnder.All(x => x.IsAllWithMark("freespace")))
+            if (!tilesUnder.All(x => x.IsAllWithMark("Freespace")))
             {
                 return new FailResult("Not free spaces under");
             }
@@ -305,7 +305,7 @@ namespace TileBuilder
         public IEnumerable<Vector2Int> GetFreeSpaceInsideListPositions()
         {
             return TileUnionDictionary
-                .Where(x => x.Value.IsAllWithMark("freespace"))
+                .Where(x => x.Value.IsAllWithMark("Freespace"))
                 .Select(x => x.Key)
                 .OrderBy(x => Vector2Int.Distance(x, new(0, 0)));
         }

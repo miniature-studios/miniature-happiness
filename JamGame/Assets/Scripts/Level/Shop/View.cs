@@ -8,7 +8,7 @@ namespace Level.Shop
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private readonly Transform roomsUIContainer;
+        private Transform roomsUIContainer;
         private Animator shopAnimator;
 
         public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)

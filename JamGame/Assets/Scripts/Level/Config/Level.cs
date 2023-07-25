@@ -11,7 +11,7 @@ namespace Level.Config
     {
         [SerializeField]
         private List<SerializedDayAction> rawDayActions;
-        private List<IDayAction> dayActions;
+        private List<IDayAction> dayActions = null;
         public ReadOnlyCollection<IDayAction> DayActions
         {
             get
@@ -40,26 +40,5 @@ namespace Level.Config
         public int WaterCost => waterCost;
         public int ElectricityCost => electricityCost;
         public int RentCost => rentCost;
-    }
-
-    [Serializable]
-    [CreateAssetMenu(fileName = "LevelConfig", menuName = "Level/LevelConfig", order = 0)]
-    public class LevelConfig : ScriptableObject
-    {
-        [SerializeField]
-        private List<DayConfig> days;
-
-        [SerializeField]
-        private DayConfig defaultDay;
-        public ReadOnlyCollection<DayConfig> Days => days.AsReadOnly();
-        public DayConfig DefaultDay => defaultDay;
-
-        [SerializeField]
-        private float bossStressSpeed;
-
-        [SerializeField]
-        private Tariffs tariffs;
-        public float BossStressSpeed => bossStressSpeed;
-        public Tariffs Tariffs => tariffs;
     }
 }

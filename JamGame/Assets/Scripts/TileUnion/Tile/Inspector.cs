@@ -10,6 +10,30 @@ namespace TileUnion.Tile.Inspector
     [CustomEditor(typeof(TileImpl))]
     public class TileInspector : Editor
     {
+        private void ShowWallsFilling(TileImpl tile)
+        {
+            _ = EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Fill walls"))
+            {
+                tile.RawWalls = new();
+                foreach (Direction direction in Direction.Up.GetCircle90())
+                {
+                    WallCollection walls_collection = new() { Place = direction, Handlers = new() };
+                    foreach (
+                        WallType wall_type in Enum.GetValues(typeof(WallType)).Cast<WallType>()
+                    )
+                    {
+                        walls_collection.Handlers.Add(
+                            new WallPrefabHandler() { Type = wall_type, Prefab = null }
+                        );
+                    }
+                    tile.RawWalls.Add(walls_collection);
+                }
+                tile.CreateWallsCache();
+            }
+            EditorGUILayout.EndHorizontal();
+        }
         private void ShowCornersFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
@@ -36,7 +60,6 @@ namespace TileUnion.Tile.Inspector
 
             EditorGUILayout.EndHorizontal();
         }
-
         private void ShowPrefabsFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
@@ -154,32 +177,6 @@ namespace TileUnion.Tile.Inspector
 
             EditorGUILayout.EndHorizontal();
         }
-
-        private void ShowWallsFilling(TileImpl tile)
-        {
-            _ = EditorGUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("Fill walls"))
-            {
-                tile.RawWalls = new();
-                foreach (Direction direction in Direction.Up.GetCircle90())
-                {
-                    WallCollection walls_collection = new() { Place = direction, Handlers = new() };
-                    foreach (
-                        WallType wall_type in Enum.GetValues(typeof(WallType)).Cast<WallType>()
-                    )
-                    {
-                        walls_collection.Handlers.Add(
-                            new WallPrefabHandler() { Type = wall_type, Prefab = null }
-                        );
-                    }
-                    tile.RawWalls.Add(walls_collection);
-                }
-                tile.CreateWallsCache();
-            }
-            EditorGUILayout.EndHorizontal();
-        }
-
         public override void OnInspectorGUI()
         {
             TileImpl tile = serializedObject.targetObject as TileImpl;
