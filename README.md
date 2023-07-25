@@ -2,7 +2,7 @@
 
 Office Architecture (the name is to be chaged in future) is the game abount micro- and macro- office management.
 
-## Game desing
+## Game design
 
 Desing document of the game can be found [here](https://docs.google.com/document/d/1oU3gORNEXA_aJ2D055r1h3WZCSSdT0YQW9pyKb6h8tQ/edit?pli=1#heading=h.ds7p1dprpmt8)[RUS]
 
