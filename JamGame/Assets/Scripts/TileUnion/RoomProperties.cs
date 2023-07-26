@@ -13,6 +13,7 @@ public class RoomProperties : MonoBehaviour
 
     [SerializeField]
     private int electricityComsumption;
+
     public int Cost => cost;
     public int WaterConsumption => waterConsumption;
     public int ElectricityComsumption => electricityComsumption;

@@ -13,6 +13,8 @@ namespace Level.Finances
         [SerializeField]
         private float lerpSpeed;
 
+        [SerializeField]
+        private Model finances;
         private int buffer_count;
         private float lerpCount = 0;
 

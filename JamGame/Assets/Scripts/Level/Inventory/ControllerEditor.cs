@@ -16,7 +16,7 @@ namespace Level.Inventory.Inspector
                 _ = EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button(item.Name))
                 {
-                    inventory_controller.AddNewRoom(item.RoomInventoryUI);
+                    inventory_controller.AddNewRoom(item.Room);
                 }
                 EditorGUILayout.EndHorizontal();
             }
@@ -27,7 +27,7 @@ namespace Level.Inventory.Inspector
                 {
                     for (int i = 0; i < 666; i++)
                     {
-                        inventory_controller.AddNewRoom(item.RoomInventoryUI);
+                        inventory_controller.AddNewRoom(item.Room);
                     }
                 }
             }

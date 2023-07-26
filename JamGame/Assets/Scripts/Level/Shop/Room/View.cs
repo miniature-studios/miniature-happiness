@@ -9,7 +9,7 @@ namespace Level.Shop.Room
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private Inventory.Room.View tileUIPrefab;
+        private Model model;
 
         [SerializeField]
         private TMP_Text moneyText;
@@ -22,10 +22,10 @@ namespace Level.Shop.Room
 
         [SerializeField]
         private TMP_Text roomNameText;
-        public Inventory.Room.View RoomInventoryUI => tileUIPrefab;
+        public Model Model => model;
 
         private RoomProperties roomProperties;
-        private Func<RoomProperties, Inventory.Room.View, Result> roomBuying;
+        private Func<RoomProperties, Model, Result> roomBuying;
 
         private void OnValidate()
         {
@@ -41,8 +41,8 @@ namespace Level.Shop.Room
         private void UpdateView()
         {
             if (
-                tileUIPrefab.TileUnion.TryGetComponent(out roomProperties)
-                && tileUIPrefab.TileUnion.TryGetComponent(out RoomViewProperties roomViewProperties)
+                model.TileUnion.TryGetComponent(out roomProperties)
+                && model.TileUnion.TryGetComponent(out RoomViewProperties roomViewProperties)
             )
             {
                 roomNameText.text = roomViewProperties.RoomName;
@@ -53,13 +53,13 @@ namespace Level.Shop.Room
             }
             else
             {
-                Debug.LogError($"No room properties in {tileUIPrefab.name}");
+                Debug.LogError($"No room properties in {model.name}");
             }
         }
 
         public void TryBuyRoom()
         {
-            if (roomBuying(roomProperties, tileUIPrefab).Success)
+            if (roomBuying(roomProperties, model).Success)
             {
                 Destroy(gameObject);
             }

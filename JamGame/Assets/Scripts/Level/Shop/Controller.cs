@@ -18,17 +18,18 @@ namespace Level.Shop
         [SerializeField]
         private Finances.Model financesController;
 
-        public void SetShopRooms(IEnumerable<RoomConfig> room_configs)
+        public void SetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
         {
-            shopModel.SetRooms(room_configs.Select(x => x.RoomShopUI).ToList());
+            shopModel.SetRooms(room_configs.Select(x => x.Room).ToList());
         }
 
-        public Result TryBuyRoom(RoomProperties roomProporties, Inventory.Room.View tile_ui)
+        public Result TryBuyRoom(RoomProperties roomProporties, Room.Model room)
         {
             Result result = financesController.TryTakeMoney(roomProporties.Cost);
             if (result.Success)
             {
-                inventoryController.AddNewRoom(tile_ui);
+                Inventory.Room.Model inventory_room = room.GetComponent<Inventory.Room.Model>();
+                inventoryController.AddNewRoom(inventory_room);
                 return new SuccessResult();
             }
             else

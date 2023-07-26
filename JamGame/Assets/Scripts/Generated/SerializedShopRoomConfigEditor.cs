@@ -1,14 +1,14 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Overlay;
+using Level.Config;
 
 namespace SerializedInterface.Inspector 
 {
-    [CustomPropertyDrawer(typeof(SerializedOverlay))]
-    public class SerializedOverlayDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SerializedShopRoomConfig))]
+    public class SerializedShopRoomConfigDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames = { "None", "ExtendedEmployeeInfo", "Stress" };
+        private string[] implementingTypeNames = { "FixedRoomConfig", "RandomRoomConfig" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

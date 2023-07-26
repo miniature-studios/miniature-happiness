@@ -1,14 +1,14 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using Level.Config;
+using Level.Boss.Task;
 
 namespace SerializedInterface.Inspector 
 {
-    [CustomPropertyDrawer(typeof(SerializedRoomConfig))]
-    public class SerializedRoomConfigDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SerializedTask))]
+    public class SerializedTaskDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames = { "FixedRoomConfig", "RandomRoomConfig" };
+        private string[] implementingTypeNames = { "TargetEmployeeAmount", "MaxStressBound" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

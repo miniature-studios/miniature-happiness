@@ -25,7 +25,7 @@ namespace TileBuilder
         private Vector2 previousMousePosition;
         private bool mousePressed = false;
 
-        public UnityEvent<Level.Inventory.Room.View> JustAddedUI; // FIXME
+        public UnityEvent<Level.Inventory.Room.Model> JustAddedUI;
         public UnityEvent BuildedValidatedOffice;
 
         private void Awake()
@@ -102,21 +102,21 @@ namespace TileBuilder
         {
             if (over)
             {
-                Level.Inventory.Room.View destroyed_tile_ui_prefab = null;
-                Command.DeleteSelectedTile command = new((arg) => destroyed_tile_ui_prefab = arg);
+                Level.Inventory.Room.Model destroyed_tile = null;
+                Command.DeleteSelectedTile command = new((arg) => destroyed_tile = arg);
                 Result result = Execute(command);
                 if (result.Success)
                 {
-                    inventoryController.AddNewRoom(destroyed_tile_ui_prefab);
-                    JustAddedUI?.Invoke(destroyed_tile_ui_prefab);
+                    inventoryController.AddNewRoom(destroyed_tile);
+                    JustAddedUI?.Invoke(destroyed_tile);
                 }
             }
         }
 
-        private Result TryPlace(Level.Inventory.Room.View room_inventory_ui)
+        private Result TryPlace(Level.Inventory.Room.Model room)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.AddTileToScene command = new(room_inventory_ui.TileUnion, ray);
+            Command.AddTileToScene command = new(room.TileUnion, ray);
             return Execute(command);
         }
 

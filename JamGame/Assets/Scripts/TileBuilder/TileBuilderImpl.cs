@@ -127,24 +127,25 @@ namespace TileBuilder
             }
         }
 
-        public Result DeleteSelectedTile(out Level.Inventory.Room.View deleted_tile_ui)
+        public Result DeleteSelectedTile(out Level.Inventory.Room.Model deleted_tile)
         {
             if (SelectedTile == null)
             {
-                deleted_tile_ui = null;
+                deleted_tile = null;
                 return new FailResult("Not selected Tile");
             }
             if (justCreated)
             {
                 justCreated = false;
-                deleted_tile_ui = DeleteTile(SelectedTile);
+                _ = DeleteTile(SelectedTile);
                 SelectedTile = null;
+                deleted_tile = null;
                 return new SuccessResult();
             }
             else
             {
                 justCreated = false;
-                deleted_tile_ui = DeleteTile(SelectedTile);
+                deleted_tile = DeleteTile(SelectedTile);
                 foreach (Vector2Int pos in previousPlaces)
                 {
                     _ = TileUnionDictionary.Remove(pos);
@@ -155,6 +156,7 @@ namespace TileBuilder
                 }
                 UpdateSidesInPositions(previousPlaces);
                 SelectedTile = null;
+                deleted_tile = null;
                 return new SuccessResult();
             }
         }
@@ -339,13 +341,13 @@ namespace TileBuilder
             return tileUnion;
         }
 
-        private Level.Inventory.Room.View DeleteTile(TileUnionImpl tile_union)
+        private Level.Inventory.Room.Model DeleteTile(TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {
                 return null;
             }
-            Level.Inventory.Room.View UIPrefab = tile_union.UIPrefab;
+            Level.Inventory.Room.Model UIPrefab = tile_union.InventoryModel;
             DestroyImmediate(tile_union.gameObject);
             RemoveTileFromDictionary(tile_union);
             return UIPrefab;

@@ -37,6 +37,9 @@ namespace Level
         [SerializeField]
         private TransitionPanel transitionPanel;
 
+        [SerializeField]
+        private Boss.Model boss;
+
         private Action bufferAction;
 
         public void Execute(DayEnd day_end, Action next_action)
@@ -87,6 +90,7 @@ namespace Level
             shopController.SetShopEmployees(meeting.ShopEmployees);
             transitionPanel.SetText("Meeting start.");
             uiController.PlayDayActionStart(meeting.GetType(), null);
+            boss.ActivateNextTaskBunch();
             bufferAction = next_action;
         }
 

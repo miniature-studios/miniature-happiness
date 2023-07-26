@@ -1,16 +1,16 @@
 using System;
 using UnityEngine;
 
-namespace Overlay
+namespace Overlay 
 {
     [Serializable]
     public class SerializedOverlay
     {
-        [SerializeField]
+        [SerializeField] 
         private string selectedType;
 
         [SerializeField]
-        private None no;
+        private None none;
 
         [SerializeField]
         private ExtendedEmployeeInfo extendedEmployeeInfo;
@@ -22,7 +22,7 @@ namespace Overlay
         {
             return selectedType switch
             {
-                "No" => no,
+                "None" => none,
                 "ExtendedEmployeeInfo" => extendedEmployeeInfo,
                 "Stress" => stress,
                 _ => throw new NotImplementedException(),

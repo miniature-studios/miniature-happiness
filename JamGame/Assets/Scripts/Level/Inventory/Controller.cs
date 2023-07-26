@@ -10,7 +10,7 @@ namespace Level.Inventory
     public class NamedRoomInventoryUI
     {
         public string Name;
-        public Room.View RoomInventoryUI;
+        public Room.Model Room;
     }
 
     [AddComponentMenu("Level.Inventory.Controller")]
@@ -18,10 +18,10 @@ namespace Level.Inventory
     {
         [SerializeField]
         private Model inventoryModel;
-        private Room.View selectedRoom = null;
+        private Room.Model selectedRoom = null;
         private bool pointerOverView = false;
 
-        public event Func<Room.View, Result> TryPlace;
+        public event Func<Room.Model, Result> TryPlace;
 
         public List<NamedRoomInventoryUI> NamedRoomInventoryUIs;
 
@@ -33,8 +33,8 @@ namespace Level.Inventory
                 {
                     selectedRoom = RaycastUtilities
                         .UIRaycast(Input.mousePosition)
-                        ?.Where(x => x.GetComponent<Room.View>())
-                        ?.Select(x => x.GetComponent<Room.View>())
+                        ?.Where(x => x.GetComponent<Room.Model>())
+                        ?.Select(x => x.GetComponent<Room.Model>())
                         .First();
                 }
             }
@@ -45,9 +45,9 @@ namespace Level.Inventory
             }
         }
 
-        public void AddNewRoom(Room.View room_inventory_ui)
+        public void AddNewRoom(Room.Model room)
         {
-            inventoryModel.AddNewRoom(room_inventory_ui);
+            inventoryModel.AddNewRoom(room);
         }
 
         public void PointerOverView(bool over)
@@ -63,7 +63,7 @@ namespace Level.Inventory
             }
         }
 
-        public void JustAddedNewRoom(Room.View new_room)
+        public void JustAddedNewRoom(Room.Model new_room)
         {
             selectedRoom = new_room;
         }
