@@ -50,10 +50,10 @@ namespace TileBuilder.Command
 
     public class DeleteSelectedTile : ICommand
     {
-        private Level.Inventory.Room.View tileUIPrefab;
-        private readonly Action<Level.Inventory.Room.View> sendUIPrefab;
+        private Level.Inventory.Room.MenuView tileUIPrefab;
+        private readonly Action<Level.Inventory.Room.MenuView> sendUIPrefab;
 
-        public DeleteSelectedTile(Action<Level.Inventory.Room.View> send_ui_prefab)
+        public DeleteSelectedTile(Action<Level.Inventory.Room.MenuView> send_ui_prefab)
         {
             sendUIPrefab = send_ui_prefab;
         }

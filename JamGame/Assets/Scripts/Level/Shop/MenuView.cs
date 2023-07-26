@@ -5,27 +5,27 @@ using UnityEngine;
 
 namespace Level.Shop.Room
 {
-    [AddComponentMenu("Level.Shop.Room.View")]
-    public class View : MonoBehaviour
+    [AddComponentMenu("Level.Shop.Room.MenuView")]
+    public class MenuView : MonoBehaviour
     {
         [SerializeField]
-        private readonly Inventory.Room.View tileUIPrefab;
+        private Inventory.Room.MenuView tileUIPrefab;
 
         [SerializeField]
-        private readonly TMP_Text moneyText;
+        private TMP_Text moneyText;
 
         [SerializeField]
-        private readonly TMP_Text waterText;
+        private TMP_Text waterText;
 
         [SerializeField]
-        private readonly TMP_Text electricityText;
+        private TMP_Text electricityText;
 
         [SerializeField]
-        private readonly TMP_Text roomNameText;
-        public Inventory.Room.View RoomInventoryUI => tileUIPrefab;
+        private TMP_Text roomNameText;
+        public Inventory.Room.MenuView RoomInventoryUI => tileUIPrefab;
 
         private RoomProperties roomProperties;
-        private Func<RoomProperties, Inventory.Room.View, Result> roomBuying;
+        private Func<RoomProperties, Inventory.Room.MenuView, Result> roomBuying;
 
         private void OnValidate()
         {

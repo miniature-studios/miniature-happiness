@@ -23,7 +23,7 @@ namespace Level.Shop
             shopModel.SetRooms(room_configs.Select(x => x.RoomShopUI).ToList());
         }
 
-        public Result TryBuyRoom(RoomProperties roomProporties, Inventory.Room.View tile_ui)
+        public Result TryBuyRoom(RoomProperties roomProporties, Inventory.Room.MenuView tile_ui)
         {
             Result result = financesController.TryTakeMoney(roomProporties.Cost);
             if (result.Success)
@@ -44,7 +44,7 @@ namespace Level.Shop
             // TODO
         }
 
-        public bool TryBuyEmployee(int cost, Room.View tile_ui)
+        public bool TryBuyEmployee(int cost, Room.MenuView tile_ui)
         {
             // TODO
             throw new System.NotImplementedException();

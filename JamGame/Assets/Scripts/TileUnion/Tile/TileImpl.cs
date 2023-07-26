@@ -9,6 +9,7 @@ using UnityEngine;
 namespace TileUnion.Tile
 {
     [SelectionBase]
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
     [AddComponentMenu("TileUnion.Tile.Tile")]

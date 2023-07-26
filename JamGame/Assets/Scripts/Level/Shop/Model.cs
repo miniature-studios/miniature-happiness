@@ -9,7 +9,7 @@ namespace Level.Shop
     [AddComponentMenu("Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
-        private readonly ObservableCollection<Room.View> roomsInShop = new();
+        private readonly ObservableCollection<Room.MenuView> roomsInShop = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
         private void Awake()
@@ -17,10 +17,10 @@ namespace Level.Shop
             roomsInShop.CollectionChanged += CollectionChanged.Invoke;
         }
 
-        public void SetRooms(List<Room.View> room_in_inventory)
+        public void SetRooms(List<Room.MenuView> room_in_inventory)
         {
             roomsInShop.Clear();
-            foreach (Room.View room in room_in_inventory)
+            foreach (Room.MenuView room in room_in_inventory)
             {
                 roomsInShop.Add(room);
             }

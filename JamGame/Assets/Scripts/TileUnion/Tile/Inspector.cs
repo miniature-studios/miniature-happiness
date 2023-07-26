@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace TileUnion.Tile.Inspector
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(TileImpl))]
     public class TileInspector : Editor
     {
