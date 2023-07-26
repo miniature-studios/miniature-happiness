@@ -2475,8 +2475,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8368415304887353142}
   - component: {fileID: 9058891122285443271}
-  - component: {fileID: 7513005684843302404}
-  - component: {fileID: 7219926068475135685}
   m_Layer: 0
   m_Name: OutsideStairs
   m_TagString: Untagged
@@ -2512,40 +2510,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cost:
+    cost: 0
+  tarrifProperties:
+    waterConsumption: 0
+    electricityConsumption: 0
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   InventoryModel: {fileID: 2742550895613413213, guid: 28bd73668b24b8b4f86f5a2a33f79579, type: 3}
   Tiles:
   - {fileID: 8374785168588562266}
---- !u!114 &7513005684843302404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8368415304887353141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cost: 0
-  waterConsumption: 0
-  electricityComsumption: 0
---- !u!114 &7219926068475135685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8368415304887353141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomName: Outside Door
 --- !u!1 &8374785168588562271
 GameObject:
   m_ObjectHideFlags: 0

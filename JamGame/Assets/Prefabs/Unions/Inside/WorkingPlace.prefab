@@ -4061,8 +4061,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8812810329888060660}
   - component: {fileID: 8812810329888060661}
-  - component: {fileID: 8145493792244014611}
-  - component: {fileID: -7414770468872496184}
   m_Layer: 0
   m_Name: WorkingPlace
   m_TagString: Untagged
@@ -4098,40 +4096,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cost:
+    cost: 0
+  tarrifProperties:
+    waterConsumption: 0
+    electricityConsumption: 0
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   InventoryModel: {fileID: 2742550895613413213, guid: dc1a62b24ebede14d9ce49d7c5d6e6c7, type: 3}
   Tiles:
   - {fileID: 5391749692599207981}
---- !u!114 &8145493792244014611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8812810329888060619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cost: 50
-  waterConsumption: 1
-  electricityComsumption: 1
---- !u!114 &-7414770468872496184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8812810329888060619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomName: Working Place
 --- !u!1 &9051290024445104228
 GameObject:
   m_ObjectHideFlags: 0

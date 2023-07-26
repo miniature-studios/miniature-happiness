@@ -8918,8 +8918,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3198020651115359956}
-  - component: {fileID: 7175890049491509971}
-  - component: {fileID: 3198020651115359958}
   - component: {fileID: 3198020651115359959}
   m_Layer: 0
   m_Name: MeetingRoom
@@ -8947,34 +8945,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7175890049491509971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3198020651115359957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e3bfb846fddee449706301cea9261c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomName: Meeting room
---- !u!114 &3198020651115359958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3198020651115359957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da16d62b0b7f1cd4bbf457bc2bdb317d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cost: 88
-  waterConsumption: 0
-  electricityComsumption: 0
 --- !u!114 &3198020651115359959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8987,6 +8957,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed7636ba581e13449a2f33dfc04cb66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cost:
+    cost: 0
+  tarrifProperties:
+    waterConsumption: 0
+    electricityConsumption: 0
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder;
+using TileUnion;
 using UnityEngine;
 
 namespace Level
@@ -25,17 +26,20 @@ namespace Level
         public Check GetCheck(Tariffs tariffs)
         {
             int inside_tiles_count = tileBuilder.GetAllInsideListPositions().Count();
-            IEnumerable<RoomProperties> room_properties = tileBuilder
-                .GetTileUnionsInPositions(tileBuilder.GetAllInsideListPositions())
-                .Where(x => x.TryGetComponent(out RoomProperties roomProperties))
-                .Select(x => x.GetComponent<RoomProperties>());
+            IEnumerable<TileUnionImpl> room_properties = tileBuilder.GetTileUnionsInPositions(
+                tileBuilder.GetAllInsideListPositions()
+            );
 
             return new()
             {
                 Rent = inside_tiles_count * tariffs.RentCost,
-                Water = room_properties.Select(x => x.WaterConsumption * tariffs.WaterCost).Sum(),
+                Water = room_properties
+                    .Select(x => x.TarrifProperties.WaterConsumption * tariffs.WaterCost)
+                    .Sum(),
                 Electricity = room_properties
-                    .Select(x => x.ElectricityComsumption * tariffs.ElectricityCost)
+                    .Select(
+                        x => x.TarrifProperties.ElectricityConsumption * tariffs.ElectricityCost
+                    )
                     .Sum(),
             };
         }

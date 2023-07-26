@@ -12,6 +12,7 @@ namespace TileUnion
     [Serializable]
     public struct Cost
     {
+        [SerializeField]
         private int cost;
         public int Value => cost;
     }

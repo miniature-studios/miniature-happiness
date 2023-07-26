@@ -23,13 +23,12 @@ namespace Level.Shop
             shopModel.SetRooms(room_configs.Select(x => x.Room).ToList());
         }
 
-        public Result TryBuyRoom(RoomProperties roomProporties, Room.Model room)
+        public Result TryBuyRoom(TileUnion.Cost cost, Room.Model room)
         {
-            Result result = financesController.TryTakeMoney(roomProporties.Cost);
+            Result result = financesController.TryTakeMoney(cost.Value);
             if (result.Success)
             {
-                Inventory.Room.Model inventory_room = room.GetComponent<Inventory.Room.Model>();
-                inventoryController.AddNewRoom(inventory_room);
+                inventoryController.AddNewRoom(room.InventoryRoomModel);
                 return new SuccessResult();
             }
             else
