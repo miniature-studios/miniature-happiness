@@ -16,10 +16,10 @@ namespace Level.Shop
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItems(e.NewItems[0] as Room.MenuView);
+                    AddNewItems(e.NewItems[0] as Room.View);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItems(e.OldItems[0] as Room.MenuView);
+                    RemoveOldItems(e.OldItems[0] as Room.View);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllItems();
@@ -32,25 +32,25 @@ namespace Level.Shop
         private void DeleteAllItems()
         {
             foreach (
-                Room.MenuView old_item in roomsUIContainer.transform.GetComponentsInChildren<Room.MenuView>()
+                Room.View old_item in roomsUIContainer.transform.GetComponentsInChildren<Room.View>()
             )
             {
                 Destroy(old_item.gameObject);
             }
         }
 
-        private void RemoveOldItems(Room.MenuView old_item)
+        private void RemoveOldItems(Room.View old_item)
         {
-            Room.MenuView[] room_inventorys =
-                roomsUIContainer.transform.GetComponentsInChildren<Room.MenuView>();
+            Room.View[] room_inventorys =
+                roomsUIContainer.transform.GetComponentsInChildren<Room.View>();
             Destroy(
                 room_inventorys.First(x => x.RoomInventoryUI == old_item.RoomInventoryUI).gameObject
             );
         }
 
-        private void AddNewItems(Room.MenuView new_item)
+        private void AddNewItems(Room.View new_item)
         {
-            _ = Instantiate(new_item, roomsUIContainer).GetComponent<Room.MenuView>();
+            _ = Instantiate(new_item, roomsUIContainer).GetComponent<Room.View>();
         }
 
         private void Awake()

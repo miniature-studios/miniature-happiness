@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Level.Shop.Room
 {
-    [AddComponentMenu("Level.Shop.Room.MenuView")]
-    public class MenuView : MonoBehaviour
+    [AddComponentMenu("Level.Shop.Room.View")]
+    public class View : MonoBehaviour
     {
         [SerializeField]
-        private Inventory.Room.MenuView tileUIPrefab;
+        private Inventory.Room.View tileUIPrefab;
 
         [SerializeField]
         private TMP_Text moneyText;
@@ -22,10 +22,10 @@ namespace Level.Shop.Room
 
         [SerializeField]
         private TMP_Text roomNameText;
-        public Inventory.Room.MenuView RoomInventoryUI => tileUIPrefab;
+        public Inventory.Room.View RoomInventoryUI => tileUIPrefab;
 
         private RoomProperties roomProperties;
-        private Func<RoomProperties, Inventory.Room.MenuView, Result> roomBuying;
+        private Func<RoomProperties, Inventory.Room.View, Result> roomBuying;
 
         private void OnValidate()
         {

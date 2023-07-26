@@ -38,10 +38,10 @@ namespace Level.Inventory
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItem(e.NewItems[0] as Room.MenuView);
+                    AddNewItem(e.NewItems[0] as Room.View);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItem(e.OldItems[0] as Room.MenuView);
+                    RemoveOldItem(e.OldItems[0] as Room.View);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllItems();
@@ -56,22 +56,22 @@ namespace Level.Inventory
 
         private void DeleteAllItems()
         {
-            foreach (Room.MenuView old_item in container.transform.GetComponentsInChildren<Room.MenuView>())
+            foreach (Room.View old_item in container.transform.GetComponentsInChildren<Room.View>())
             {
                 old_item.Counter = 0;
             }
         }
 
-        private void RemoveOldItem(Room.MenuView old_item)
+        private void RemoveOldItem(Room.View old_item)
         {
-            Room.MenuView[] room_inventorys = container.transform.GetComponentsInChildren<Room.MenuView>();
+            Room.View[] room_inventorys = container.transform.GetComponentsInChildren<Room.View>();
             room_inventorys.First(x => x.TileUnion == old_item.TileUnion).Counter--;
         }
 
-        private void AddNewItem(Room.MenuView new_item)
+        private void AddNewItem(Room.View new_item)
         {
-            Room.MenuView[] room_inventorys = container.transform.GetComponentsInChildren<Room.MenuView>();
-            Room.MenuView existed = room_inventorys.FirstOrDefault(
+            Room.View[] room_inventorys = container.transform.GetComponentsInChildren<Room.View>();
+            Room.View existed = room_inventorys.FirstOrDefault(
                 x => x.TileUnion == new_item.TileUnion
             );
             if (existed != null)
@@ -80,7 +80,7 @@ namespace Level.Inventory
             }
             else
             {
-                _ = Instantiate(new_item, container).GetComponent<Room.MenuView>();
+                _ = Instantiate(new_item, container).GetComponent<Room.View>();
             }
         }
 

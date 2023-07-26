@@ -127,7 +127,7 @@ namespace TileBuilder
             }
         }
 
-        public Result DeleteSelectedTile(out Level.Inventory.Room.MenuView deleted_tile_ui)
+        public Result DeleteSelectedTile(out Level.Inventory.Room.View deleted_tile_ui)
         {
             if (SelectedTile == null)
             {
@@ -339,13 +339,13 @@ namespace TileBuilder
             return tileUnion;
         }
 
-        private Level.Inventory.Room.MenuView DeleteTile(TileUnionImpl tile_union)
+        private Level.Inventory.Room.View DeleteTile(TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {
                 return null;
             }
-            Level.Inventory.Room.MenuView UIPrefab = tile_union.UIPrefab;
+            Level.Inventory.Room.View UIPrefab = tile_union.UIPrefab;
             DestroyImmediate(tile_union.gameObject);
             RemoveTileFromDictionary(tile_union);
             return UIPrefab;
