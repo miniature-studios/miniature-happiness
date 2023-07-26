@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using UnityEngine;
 
 namespace Level.Config
@@ -14,7 +14,7 @@ namespace Level.Config
 
         [SerializeField]
         private DayConfig defaultDay;
-        public ReadOnlyCollection<DayConfig> Days => days.AsReadOnly();
+        public ImmutableList<DayConfig> Days => days.ToImmutableList();
         public DayConfig DefaultDay => defaultDay;
 
         [SerializeField]

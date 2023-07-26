@@ -6,7 +6,11 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    [CreateAssetMenu(fileName = "WallSolver", menuName = "Builder/WallSolver", order = 1)]
+    [CreateAssetMenu(
+        fileName = "TileBuilder.WallSolver",
+        menuName = "TileBuilder/WallSolver",
+        order = 1
+    )]
     public class WallSolver : ScriptableObject
     {
         [SerializeField]

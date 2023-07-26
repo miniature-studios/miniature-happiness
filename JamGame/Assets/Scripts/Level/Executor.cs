@@ -29,9 +29,6 @@ namespace Level
         private TarrifsCounter tarrifsCounter;
 
         [SerializeField]
-        private Tarrifs.View dailyBillPanel;
-
-        [SerializeField]
         private TemporaryData levelTemperaryData;
 
         [SerializeField]

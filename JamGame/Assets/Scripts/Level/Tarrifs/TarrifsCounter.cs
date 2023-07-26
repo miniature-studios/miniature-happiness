@@ -1,5 +1,4 @@
-﻿using Common;
-using Level.Config;
+﻿using Level.Config;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder;
@@ -8,7 +7,7 @@ using UnityEngine;
 namespace Level
 {
     [SerializeField]
-    public struct Check : IReadonlyData<Check>
+    public struct Check
     {
         public int Water;
         public int Electricity;

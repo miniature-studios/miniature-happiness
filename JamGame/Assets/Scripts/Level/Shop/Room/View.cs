@@ -27,11 +27,6 @@ namespace Level.Shop.Room
         private RoomProperties roomProperties;
         private Func<RoomProperties, Model, Result> roomBuying;
 
-        private void OnValidate()
-        {
-            UpdateView();
-        }
-
         private void Awake()
         {
             roomBuying = GetComponentInParent<Controller>().TryBuyRoom;

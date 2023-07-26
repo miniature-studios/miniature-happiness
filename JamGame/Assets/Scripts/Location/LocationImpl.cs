@@ -12,7 +12,7 @@ namespace Location
         [SerializeField]
         private EmployeeImpl employeePrototype;
         private List<NeedProvider> needProviders;
-        private readonly List<EmployeeImpl> employees = new();
+        private List<EmployeeImpl> employees = new();
 
         private void Start()
         {

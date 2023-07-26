@@ -116,7 +116,7 @@ namespace Employee
         }
 
         private float maxVelocityMultiplierByEffects = 1.0f;
-        private readonly List<ControllerEffect> registeredEffects = new();
+        private List<ControllerEffect> registeredEffects = new();
 
         public void RegisterEffect(ControllerEffect effect)
         {

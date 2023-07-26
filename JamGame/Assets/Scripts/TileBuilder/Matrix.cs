@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    // TODO: Can it be moved into TileBuilder.cs?
-    [CreateAssetMenu(fileName = "BuilderMatrix", menuName = "Builder/BuilderMatrix", order = 2)]
+    [CreateAssetMenu(fileName = "TileBuilder.Matrix", menuName = "TileBuilder/Matrix", order = 2)]
     public class Matrix : ScriptableObject
     {
         [SerializeField]

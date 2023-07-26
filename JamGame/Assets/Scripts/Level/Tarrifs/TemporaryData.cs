@@ -11,7 +11,7 @@ namespace Level
         [InspectorReadOnly]
         private Check check;
 
-        public UnityEvent<IReadonlyData<Check>> CheckChanged;
+        public UnityEvent<Check> CheckChanged;
 
         public void CreateCheck(Check new_check)
         {

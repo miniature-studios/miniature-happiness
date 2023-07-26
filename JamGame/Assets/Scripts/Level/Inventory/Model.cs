@@ -9,7 +9,7 @@ namespace Level.Inventory
     [AddComponentMenu("Level.Inventory.Model")]
     public class Model : MonoBehaviour
     {
-        private readonly ObservableCollection<Room.Model> roomsInInventory = new();
+        private ObservableCollection<Room.Model> roomsInInventory = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
         private void Awake()

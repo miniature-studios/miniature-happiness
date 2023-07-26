@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using UnityEngine;
 
 namespace Employee
@@ -9,8 +9,8 @@ namespace Employee
     {
         [SerializeField]
         private List<Need.NeedProperties> additionalNeeds;
-        public ReadOnlyCollection<Need.NeedProperties> AdditionalNeeds =>
-            additionalNeeds.AsReadOnly();
+        public ImmutableList<Need.NeedProperties> AdditionalNeeds =>
+            additionalNeeds.ToImmutableList();
 
         // TODO: Move to QuirkView
         // TODO: Change to Image

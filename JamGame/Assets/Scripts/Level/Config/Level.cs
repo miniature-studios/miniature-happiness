@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using System.Linq;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace Level.Config
         [SerializeField]
         private List<SerializedDayAction> rawDayActions;
         private List<IDayAction> dayActions = null;
-        public ReadOnlyCollection<IDayAction> DayActions
+        public ImmutableList<IDayAction> DayActions
         {
             get
             {
@@ -21,7 +21,7 @@ namespace Level.Config
                     dayActions = new();
                     dayActions.AddRange(rawDayActions.Select(x => x.ToDayAction()));
                 }
-                return dayActions.AsReadOnly();
+                return dayActions.ToImmutableList();
             }
         }
     }

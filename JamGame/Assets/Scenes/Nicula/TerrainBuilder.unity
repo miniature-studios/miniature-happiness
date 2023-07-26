@@ -602,7 +602,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 89df6ceff530ae649a6a6ab8682457e1, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -701,7 +701,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: dedf5a506990dbb4ba3a63bbeb0f5285, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -2211,7 +2211,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: a13a1e42d6da7234d8a062005917163a, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -2502,7 +2502,6 @@ GameObject:
   - component: {fileID: 1067622714}
   - component: {fileID: 1067622717}
   - component: {fileID: 1067622716}
-  - component: {fileID: 1067622719}
   - component: {fileID: 1067622718}
   m_Layer: 0
   m_Name: LevelSystem
@@ -2566,13 +2565,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelConfig: {fileID: 11400000, guid: 48a0fe130b90cd64081843fa771c12d2, type: 2}
   tileBuilderController: {fileID: 40476290}
-  financesModel: {fileID: 1067622719}
+  financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
   uiController: {fileID: 1067622716}
   tarrifsCounter: {fileID: 1067622717}
   dailyBillPanel: {fileID: 961603835}
   levelTemperaryData: {fileID: 1067622718}
   transitionPanel: {fileID: 285264314}
+  boss: {fileID: 1442314976}
 --- !u!114 &1067622716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2610,8 +2610,8 @@ MonoBehaviour:
         EndDelay: 2
         EndIsActive: 1
       - AnimatorName: Daily Bill panel
-        StartDelay: 1
-        StartIsActive: 1
+        StartDelay: 0
+        StartIsActive: 0
         EndDelay: 0
         EndIsActive: 0
       - AnimatorName: Button Open Shop
@@ -2790,34 +2790,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1067622719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067622708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e36492de23c73ee4fbe44ed9d7284c44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  money: 0
-  MoneyChange:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1125594363}
-        m_TargetAssemblyTypeName: Level.Finances.View, Assembly-CSharp
-        m_MethodName: OnChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1088033067
 GameObject:
   m_ObjectHideFlags: 0
@@ -2920,6 +2892,7 @@ GameObject:
   - component: {fileID: 1125594362}
   - component: {fileID: 1125594363}
   - component: {fileID: 1125594365}
+  - component: {fileID: 1125594366}
   m_Layer: 5
   m_Name: OfficeFinances
   m_TagString: Untagged
@@ -2963,6 +2936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countText: {fileID: 1243994321}
   lerpSpeed: 10
+  finances: {fileID: 0}
 --- !u!95 &1125594365
 Animator:
   serializedVersion: 5
@@ -2975,7 +2949,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 6b7fd8f8a223bcb4ca9beff0759f7375, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -2983,6 +2957,34 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &1125594366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125594361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36492de23c73ee4fbe44ed9d7284c44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  money: 0
+  MoneyChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1125594363}
+        m_TargetAssemblyTypeName: Level.Finances.View, Assembly-CSharp
+        m_MethodName: OnChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1243994319
 GameObject:
   m_ObjectHideFlags: 0
@@ -3431,7 +3433,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: cb64766006444274e80f652e7df15ec6, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -3644,6 +3646,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440722300}
   m_CullTransparentMesh: 1
+--- !u!1 &1442314974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1442314975}
+  - component: {fileID: 1442314976}
+  m_Layer: 0
+  m_Name: Boss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1442314975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442314974}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1442314976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442314974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e8aed811bd2ef342a96a47cbf50b5d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStressGatherTime:
+    Days_: 0
+  stress: 0
+  meetingTasks: []
 --- !u!1 &1494997326
 GameObject:
   m_ObjectHideFlags: 0
@@ -3907,7 +3957,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryController: {fileID: 1395078488}
   shopModel: {fileID: 1671638925}
-  financesController: {fileID: 1067622719}
+  financesController: {fileID: 1125594366}
 --- !u!95 &1671638924
 Animator:
   serializedVersion: 5
@@ -3920,7 +3970,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 4b0e98a98ceaf2a408327e2f67d91d1e, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -4349,7 +4399,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 370b81340b0e3d94183178a1966540e3, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -4846,7 +4896,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: aa0cd3b6ac73ce8409ccbc605fcdc391, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
