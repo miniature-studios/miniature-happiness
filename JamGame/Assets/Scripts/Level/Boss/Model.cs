@@ -1,5 +1,6 @@
 using Common;
 using Level.Boss.Task;
+using Level.GlobalTime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,11 +34,10 @@ namespace Level.Boss
             public float Cost;
         }
 
-        // TODO: Implement some global time manager and store all the time constants e.g. how much seconds there is in day
-        // and compute this according to it.
         [SerializeField]
-        private float stressGatherSpeed;
+        private Days maxStressGatherTime;
 
+        // Normalized (0..1)
         [SerializeField]
         [InspectorReadOnly]
         private float stress;
@@ -83,7 +83,7 @@ namespace Level.Boss
 
         private void Update()
         {
-            stress += stressGatherSpeed;
+            stress += Time.deltaTime / maxStressGatherTime.RealTimeSeconds;
 
             for (int i = 0; i < taskBunchToActivateNext; i++)
             {

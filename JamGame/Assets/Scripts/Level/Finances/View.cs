@@ -8,13 +8,13 @@ namespace Level.Finances
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private readonly TMP_Text countText;
+        private TMP_Text countText;
 
         [SerializeField]
-        private readonly float lerpSpeed;
+        private float lerpSpeed;
 
         [SerializeField]
-        private readonly Model finances;
+        private Model finances;
         private int buffer_count;
         private float lerpCount = 0;
 

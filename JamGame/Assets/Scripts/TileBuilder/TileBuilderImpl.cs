@@ -11,13 +11,13 @@ namespace TileBuilder
     public partial class TileBuilderImpl : MonoBehaviour
     {
         [SerializeField]
-        private readonly TileUnionImpl freespacePrefab;
+        private TileUnionImpl freespacePrefab;
 
         [SerializeField]
         private GameObject rootObject;
 
         [SerializeField]
-        private readonly Matrix builderMatrix;
+        private Matrix builderMatrix;
 
         private List<Vector2Int> previousPlaces = new();
         private int previousRotation = 0;

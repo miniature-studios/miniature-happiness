@@ -5,10 +5,10 @@ namespace Overlay
     public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private readonly SerializedOverlay overlay;
+        private SerializedOverlay overlay;
 
         [SerializeField]
-        private readonly OverlaySelectorProxy proxy;
+        private OverlaySelectorProxy proxy;
 
         public void Activate()
         {
