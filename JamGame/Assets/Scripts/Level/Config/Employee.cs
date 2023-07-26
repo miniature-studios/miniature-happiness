@@ -2,6 +2,7 @@ using Common;
 using Employee;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using UnityEngine;
 
@@ -79,12 +80,12 @@ namespace Level.Config
     [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList", order = 0)]
     public class EmployeeNameList : ScriptableObject
     {
-        // TODO: Wrap fields as readonly.
+        [SerializeField]
+        private List<string> firstNames;
+        public ImmutableList<string> FirstNames => firstNames.ToImmutableList();
 
         [SerializeField]
-        public List<string> FirstNames;
-
-        [SerializeField]
-        public List<string> LastNames;
+        private List<string> lastNames;
+        public ImmutableList<string> LastNames => lastNames.ToImmutableList();
     }
 }

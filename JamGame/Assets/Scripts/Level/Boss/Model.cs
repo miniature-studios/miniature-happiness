@@ -44,9 +44,9 @@ namespace Level.Boss
 
         [SerializeField]
         private List<MeetingTasks> meetingTasks;
-        private readonly List<List<TaskWithCost>> scheduledTasks = new();
+        private List<List<TaskWithCost>> scheduledTasks = new();
 
-        private readonly Dictionary<ITask, TaskState> taskState = new();
+        private Dictionary<ITask, TaskState> taskState = new();
         private int taskBunchToActivateNext = 0;
 
         private void Start()

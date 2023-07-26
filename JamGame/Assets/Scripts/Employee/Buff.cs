@@ -1,7 +1,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using UnityEngine;
 
 namespace Employee
@@ -15,7 +15,7 @@ namespace Employee
         [SerializeField]
         private List<SerializedEffect> rawEffects;
         private List<IEffect> effects;
-        public ReadOnlyCollection<IEffect> Effects
+        public ImmutableList<IEffect> Effects
         {
             get
             {
@@ -27,8 +27,7 @@ namespace Employee
                         effects.Add(effect.ToEffect());
                     }
                 }
-
-                return effects.AsReadOnly();
+                return effects.ToImmutableList();
             }
         }
 
@@ -64,7 +63,7 @@ namespace Employee
     {
         [SerializeField]
         private List<Need.NeedProperties> needModifiers;
-        public ReadOnlyCollection<Need.NeedProperties> NeedModifiers => needModifiers.AsReadOnly();
+        public ImmutableList<Need.NeedProperties> NeedModifiers => needModifiers.ToImmutableList();
     }
 
     [Serializable]

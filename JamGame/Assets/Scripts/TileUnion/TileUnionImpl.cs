@@ -9,12 +9,39 @@ using UnityEngine;
 
 namespace TileUnion
 {
+    [Serializable]
+    public struct Cost
+    {
+        [SerializeField]
+        private int cost;
+        public int Value => cost;
+    }
+
+    [Serializable]
+    public struct TarrifProperties
+    {
+        [SerializeField]
+        private int waterConsumption;
+        public int WaterConsumption => waterConsumption;
+
+        [SerializeField]
+        private int electricityConsumption;
+        public int ElectricityConsumption => electricityConsumption;
+    }
+
     [SelectionBase]
-    [RequireComponent(typeof(RoomProperties))]
-    [RequireComponent(typeof(RoomViewProperties))]
     [AddComponentMenu("TileUnion.TileUnion")]
     public class TileUnionImpl : MonoBehaviour
     {
+        [SerializeField]
+        private Cost cost;
+        public Cost Cost => cost;
+
+        [SerializeField]
+        private TarrifProperties tarrifProperties;
+        public TarrifProperties TarrifProperties => tarrifProperties;
+
+        [Space(20)]
         [SerializeField]
         private Vector2Int position;
 

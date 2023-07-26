@@ -9,6 +9,7 @@ namespace Level
     [AddComponentMenu("Level.Executor")]
     public class Executor : MonoBehaviour
     {
+        // FIXME: dublication with sheduler, whant tarrifs
         [SerializeField]
         private LevelConfig levelConfig;
 
@@ -16,7 +17,7 @@ namespace Level
         private TileBuilder.Controller tileBuilderController;
 
         [SerializeField]
-        private Finances.Model financesController;
+        private Finances.Model financesModel;
 
         [SerializeField]
         private Shop.Controller shopController;
@@ -26,9 +27,6 @@ namespace Level
 
         [SerializeField]
         private TarrifsCounter tarrifsCounter;
-
-        [SerializeField]
-        private Tarrifs.View dailyBillPanel;
 
         [SerializeField]
         private TemporaryData levelTemperaryData;
@@ -44,7 +42,7 @@ namespace Level
         public void Execute(DayEnd day_end, Action next_action)
         {
             Check check = tarrifsCounter.GetCheck(levelConfig.Tariffs);
-            Result result = financesController.TryTakeMoney(check.Sum);
+            Result result = financesModel.TryTakeMoney(check.Sum);
             if (result.Success)
             {
                 levelTemperaryData.CreateCheck(check);
@@ -67,11 +65,11 @@ namespace Level
 
         public void Execute(DayStart day_start, Action next_action)
         {
-            financesController.AddMoney(day_start.MorningMoney);
+            financesModel.AddMoney(day_start.MorningMoney);
             transitionPanel.SetText("Day start start.");
             uiController.PlayDayActionStart(
                 day_start.GetType(),
-                () => _ = StartCoroutine(DayStartRoutine(1, next_action))
+                () => _ = StartCoroutine(DayStartRoutine(3, next_action))
             );
         }
 

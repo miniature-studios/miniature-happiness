@@ -22,44 +22,30 @@ namespace Level.Shop.Room
 
         [SerializeField]
         private TMP_Text roomNameText;
-        public Model Model => model;
 
-        private RoomProperties roomProperties;
-        private Func<RoomProperties, Model, Result> roomBuying;
-
-        private void OnValidate()
-        {
-            UpdateView();
-        }
+        private TileUnion.Cost roomCost;
+        private Func<TileUnion.Cost, Model, Result> roomBuying;
 
         private void Awake()
         {
             roomBuying = GetComponentInParent<Controller>().TryBuyRoom;
-            UpdateView();
-        }
-
-        private void UpdateView()
-        {
-            if (
-                model.TileUnion.TryGetComponent(out roomProperties)
-                && model.TileUnion.TryGetComponent(out RoomViewProperties roomViewProperties)
-            )
-            {
-                roomNameText.text = roomViewProperties.RoomName;
-                moneyText.text = "Money cost: " + Convert.ToString(roomProperties.Cost);
-                waterText.text = "Water: " + Convert.ToString(roomProperties.WaterConsumption);
-                electricityText.text =
-                    "Electro: " + Convert.ToString(roomProperties.ElectricityComsumption);
-            }
-            else
-            {
-                Debug.LogError($"No room properties in {model.name}");
-            }
+            moneyText.text =
+                "Money cost: " + Convert.ToString(model.InventoryRoomModel.TileUnion.Cost.Value);
+            waterText.text =
+                "Water: "
+                + Convert.ToString(
+                    model.InventoryRoomModel.TileUnion.TarrifProperties.WaterConsumption
+                );
+            electricityText.text =
+                "Electro: "
+                + Convert.ToString(
+                    model.InventoryRoomModel.TileUnion.TarrifProperties.ElectricityConsumption
+                );
         }
 
         public void TryBuyRoom()
         {
-            if (roomBuying(roomProperties, model).Success)
+            if (roomBuying(roomCost, model).Success)
             {
                 Destroy(gameObject);
             }

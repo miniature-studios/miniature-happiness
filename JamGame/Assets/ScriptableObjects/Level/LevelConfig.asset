@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c39a70600ea274ebd8278a07991c85, type: 3}
+  m_Name: LevelConfig
+  m_EditorClassIdentifier: 
+  days: []
+  defaultDay:
+    rawDayActions:
+    - selectedType: DayStart
+      dayStart:
+        morningMoney: 1500
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+    - selectedType: Meeting
+      dayStart:
+        morningMoney: 0
+      meeting:
+        shopEmployees: []
+        shopRooms:
+        - selectedType: FixedRoomConfig
+          fixedRoomConfig:
+            room: {fileID: 8333423796753621638, guid: f577b4ad07466364bb5aa76c838616b4, type: 3}
+          randomRoomConfig:
+            roomWeights: []
+        - selectedType: FixedRoomConfig
+          fixedRoomConfig:
+            room: {fileID: 8333423796753621638, guid: c948183e6d43c6b4ba81c523c0b43f3c, type: 3}
+          randomRoomConfig:
+            roomWeights: []
+        - selectedType: FixedRoomConfig
+          fixedRoomConfig:
+            room: {fileID: 8333423796753621638, guid: baed59ddab48a4a4fbb4037298ecab28, type: 3}
+          randomRoomConfig:
+            roomWeights: []
+        - selectedType: FixedRoomConfig
+          fixedRoomConfig:
+            room: {fileID: 8333423796753621638, guid: b350aad814001b24e993d0ec71d4a73f, type: 3}
+          randomRoomConfig:
+            roomWeights: []
+        - selectedType: FixedRoomConfig
+          fixedRoomConfig:
+            room: {fileID: 8333423796753621638, guid: 1d7a0b24a3723564fa377e95f6ce35c2, type: 3}
+          randomRoomConfig:
+            roomWeights: []
+        - selectedType: FixedRoomConfig
+          fixedRoomConfig:
+            room: {fileID: 8333423796753621638, guid: 51b5a2f986ea2a44e899c29ee9016e6f, type: 3}
+          randomRoomConfig:
+            roomWeights: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+    - selectedType: Working
+      dayStart:
+        morningMoney: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 10
+    - selectedType: DayEnd
+      dayStart:
+        morningMoney: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+  bossStressSpeed: 2
+  tariffs:
+    waterCost: 2
+    electricityCost: 2
+    rentCost: 2

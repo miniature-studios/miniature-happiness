@@ -1,5 +1,4 @@
-﻿using Common;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +10,7 @@ namespace Level.Tarrifs
         private TMP_Text dailyBillText;
         public UnityEvent ContinueButtonPressEvent;
 
-        public void OnChanged(IReadonlyData<Check> data)
+        public void OnChanged(Check data)
         {
             dailyBillText.text =
                 $"Rent: {data.Data.Rent} coins\r\n"

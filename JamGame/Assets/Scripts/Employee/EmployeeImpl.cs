@@ -32,7 +32,7 @@ namespace Employee
 
         private Controller controller;
 
-        private readonly List<NeedModifiers> registeredModifiers = new();
+        private List<NeedModifiers> registeredModifiers = new();
 
         public StressMeter Stress { get; private set; }
 
@@ -288,8 +288,8 @@ namespace Employee
 
     internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
     {
-        private readonly List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
-        private readonly EmployeeImpl employee;
+        private List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
+        private EmployeeImpl employee;
 
         public BuffsNeedModifiersPool(EmployeeImpl employee)
         {

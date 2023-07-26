@@ -101,7 +101,7 @@ public class AnimatorListDrawer : PropertyDrawer
             );
             SerializedProperty _array = interface_matcher_array
                 .GetArrayElementAtIndex(i)
-                .FindPropertyRelative("animatorBools");
+                .FindPropertyRelative("AnimatorBools");
             for (int j = 0; j < _array.arraySize; j++)
             {
                 SerializedProperty _arr_element = _array.GetArrayElementAtIndex(j);
@@ -124,7 +124,7 @@ public class AnimatorListDrawer : PropertyDrawer
             interface_matcher_array.InsertArrayElementAtIndex(i);
             interface_matcher_array
                 .GetArrayElementAtIndex(i)
-                .FindPropertyRelative("animatorBools")
+                .FindPropertyRelative("AnimatorBools")
                 .ClearArray();
             interface_matcher_array
                 .GetArrayElementAtIndex(i)
@@ -132,7 +132,7 @@ public class AnimatorListDrawer : PropertyDrawer
                 .stringValue = ActionNames[i];
             SerializedProperty animator_bools_array = interface_matcher_array
                 .GetArrayElementAtIndex(i)
-                .FindPropertyRelative("animatorBools");
+                .FindPropertyRelative("AnimatorBools");
 
             for (int j = 0; j < animatorsNames.Count(); j++)
             {
@@ -196,7 +196,7 @@ public class AnimatorListDrawer : PropertyDrawer
                         SerializedProperty element = listProperty.GetArrayElementAtIndex(index);
                         ReorderableList animator_bool_list = GetAnimatorBoolList(
                             element,
-                            element.FindPropertyRelative("animatorBools"),
+                            element.FindPropertyRelative("AnimatorBools"),
                             element.FindPropertyRelative("InterfaceName").stringValue
                         );
                         animator_bool_list.DoList(rect);
@@ -209,7 +209,7 @@ public class AnimatorListDrawer : PropertyDrawer
                         ? 0
                         : GetAnimatorBoolList(
                                 element,
-                                element.FindPropertyRelative("animatorBools"),
+                                element.FindPropertyRelative("AnimatorBools"),
                                 element.FindPropertyRelative("InterfaceName").stringValue
                             )
                             .GetHeight() - EditorGUIUtility.singleLineHeight;

@@ -5,13 +5,13 @@ using UnityEngine.Events;
 namespace Level
 {
     // TODO: Remove this.
-    [AddComponentMenu("Level.TeporaryData")]
+    [AddComponentMenu("Level.TemporaryData")]
     public class TemporaryData : MonoBehaviour
     {
         [InspectorReadOnly]
         private Check check;
 
-        public UnityEvent<IReadonlyData<Check>> CheckChanged;
+        public UnityEvent<Check> CheckChanged;
 
         public void CreateCheck(Check new_check)
         {
