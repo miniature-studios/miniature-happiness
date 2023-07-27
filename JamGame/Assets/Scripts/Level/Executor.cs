@@ -1,8 +1,8 @@
 ﻿using Common;
 using Level.Config;
-using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level
 {
@@ -37,16 +37,15 @@ namespace Level
         [SerializeField]
         private Boss.Model boss;
 
-        private Action bufferAction;
+        public UnityEvent ActionEndNotify;
 
-        public void Execute(DayEnd day_end, Action next_action)
+        public void Execute(DayEnd day_end)
         {
             Check check = tarrifsCounter.GetCheck(levelConfig.Tariffs);
             Result result = financesModel.TryTakeMoney(check.Sum);
             if (result.Success)
             {
                 levelTemperaryData.CreateCheck(check);
-                bufferAction = next_action;
                 animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
             }
             else
@@ -58,62 +57,60 @@ namespace Level
         // Calls by button continue on daily bill panel
         public void CompleteDayEnd()
         {
-            bufferAction();
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(DayStart day_start, Action next_action)
+        public void Execute(DayStart day_start)
         {
             financesModel.AddMoney(day_start.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
-            _ = StartCoroutine(DayStartRoutine(3, next_action));
+            _ = StartCoroutine(DayStartRoutine(day_start.Duration));
         }
 
-        private IEnumerator DayStartRoutine(float time, Action next_action)
+        private IEnumerator DayStartRoutine(float time)
         {
             yield return new WaitForSeconds(time);
-            next_action();
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(Meeting meeting, Action next_action)
+        public void Execute(Meeting meeting)
         {
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             animatorSwitcher.SetAnimatorStates(typeof(Meeting));
             boss.ActivateNextTaskBunch();
-            bufferAction = next_action;
         }
 
         // Calls by button complete meeting
         public void CompleteMeeting()
         {
-            bufferAction();
-            bufferAction = null;
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(Working working, Action next_action)
+        public void Execute(Working working)
         {
             animatorSwitcher.SetAnimatorStates(typeof(Working));
-            _ = StartCoroutine(WorkingTime(working.WorkingTime, next_action));
+            _ = StartCoroutine(WorkingTime(working.WorkingTime));
         }
 
-        private IEnumerator WorkingTime(float time, Action endWorkingTime)
+        private IEnumerator WorkingTime(float time)
         {
             yield return new WaitForSeconds(time);
-            endWorkingTime();
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(Cutscene cutscene, Action next_action)
+        public void Execute(Cutscene cutscene)
         {
             transitionPanel.SetText(cutscene.Text);
             animatorSwitcher.SetAnimatorStates(typeof(Cutscene));
-            _ = StartCoroutine(CutsceneRoutine(cutscene.Duration, next_action));
+            _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
         }
 
-        public IEnumerator CutsceneRoutine(float time, Action nextAction)
+        public IEnumerator CutsceneRoutine(float time)
         {
             yield return new WaitForSeconds(time);
-            nextAction();
+            ActionEndNotify?.Invoke();
         }
     }
 }

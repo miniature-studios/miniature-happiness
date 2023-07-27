@@ -10,15 +10,15 @@ namespace Level.Config
     [InterfaceEditor]
     public interface IDayAction
     {
-        public void Execute(Executor executor, Action next_action);
+        public void Execute(Executor executor);
     }
 
     [Serializable]
     public class DayEnd : IDayAction
     {
-        public void Execute(Executor executor, Action next_action)
+        public void Execute(Executor executor)
         {
-            executor.Execute(this, next_action);
+            executor.Execute(this);
         }
     }
 
@@ -29,9 +29,13 @@ namespace Level.Config
         private int morningMoney;
         public int MorningMoney => morningMoney;
 
-        public void Execute(Executor executor, Action next_action)
+        [SerializeField]
+        private float duration;
+        public float Duration => duration;
+
+        public void Execute(Executor executor)
         {
-            executor.Execute(this, next_action);
+            executor.Execute(this);
         }
     }
 
@@ -56,9 +60,9 @@ namespace Level.Config
         public ImmutableList<InventoryRoomConfig> MandatoryRooms =>
             mandatoryRooms.ToImmutableList();
 
-        public void Execute(Executor executor, Action next_action)
+        public void Execute(Executor executor)
         {
-            executor.Execute(this, next_action);
+            executor.Execute(this);
         }
     }
 
@@ -69,9 +73,9 @@ namespace Level.Config
         private float workingTime;
         public float WorkingTime => workingTime;
 
-        public void Execute(Executor executor, Action next_action)
+        public void Execute(Executor executor)
         {
-            executor.Execute(this, next_action);
+            executor.Execute(this);
         }
     }
 
@@ -86,9 +90,9 @@ namespace Level.Config
         private string text;
         public string Text => text;
 
-        public void Execute(Executor executor, Action next_action)
+        public void Execute(Executor executor)
         {
-            executor.Execute(this, next_action);
+            executor.Execute(this);
         }
     }
 }
