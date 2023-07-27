@@ -7,29 +7,26 @@ namespace Level.Inventory.Inspector
     [CustomEditor(typeof(Controller))]
     public class ControllerEditor : Editor
     {
+        private Room.Model room;
+
         public override void OnInspectorGUI()
         {
             Controller inventory_controller = serializedObject.targetObject as Controller;
 
-            foreach (NamedRoomInventoryUI item in inventory_controller.NamedRoomInventoryUIs)
-            {
-                _ = EditorGUILayout.BeginHorizontal();
-                if (GUILayout.Button(item.Name))
-                {
-                    inventory_controller.AddNewRoom(item.Room);
-                }
-                EditorGUILayout.EndHorizontal();
-            }
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Add gods inventory"))
+            room = (Room.Model)
+                EditorGUILayout.ObjectField(
+                    "Select inv room to add: ",
+                    room,
+                    typeof(Room.Model),
+                    false
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Add selected room"))
             {
-                foreach (NamedRoomInventoryUI item in inventory_controller.NamedRoomInventoryUIs)
-                {
-                    for (int i = 0; i < 666; i++)
-                    {
-                        inventory_controller.AddNewRoom(item.Room);
-                    }
-                }
+                inventory_controller.AddNewRoom(room);
             }
             EditorGUILayout.EndHorizontal();
 

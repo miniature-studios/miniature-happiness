@@ -19,8 +19,13 @@ namespace TileBuilder
         [SerializeField]
         private Matrix builderMatrix;
 
+        [SerializeField, HideInInspector]
         private List<Vector2Int> previousPlaces = new();
+
+        [SerializeField, HideInInspector]
         private int previousRotation = 0;
+
+        [SerializeField, HideInInspector]
         private bool justCreated = false;
 
         public GameObject RootObject
