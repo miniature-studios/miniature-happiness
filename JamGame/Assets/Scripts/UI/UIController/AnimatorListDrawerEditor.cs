@@ -22,7 +22,7 @@ public class AnimatorListDrawer : PropertyDrawer
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         return (
-            property.FindPropertyRelative("NamedAnimators").isExpanded,
+            property.FindPropertyRelative("Animators").isExpanded,
             property.FindPropertyRelative("InterfaceMatcher").isExpanded
         ) switch
         {
@@ -47,12 +47,12 @@ public class AnimatorListDrawer : PropertyDrawer
         int indent = EditorGUI.indentLevel;
         EditorGUI.indentLevel = 0;
 
-        ReorderableList named_animators_list = GetNamedAnimatorsList(
+        ReorderableList animators_list = GetAnimatorsList(
             property,
-            property.FindPropertyRelative("NamedAnimators")
+            property.FindPropertyRelative("Animators")
         );
-        namedAnimatorsListLength = named_animators_list.GetHeight();
-        named_animators_list.DoList(position);
+        namedAnimatorsListLength = animators_list.GetHeight();
+        animators_list.DoList(position);
 
         ReorderableList interface_matcher_list = GetInterfaceMatcherList(
             property,
@@ -62,7 +62,7 @@ public class AnimatorListDrawer : PropertyDrawer
         interface_matcher_list.DoList(
             new Rect(
                 position.x,
-                position.y + named_animators_list.GetHeight(),
+                position.y + animators_list.GetHeight(),
                 position.width,
                 position.height
             )
@@ -75,12 +75,16 @@ public class AnimatorListDrawer : PropertyDrawer
         EditorGUI.EndProperty();
 
         List<string> animatorsNames = new();
-        for (int x = 0; x < property.FindPropertyRelative("NamedAnimators").arraySize; x++)
+        for (int x = 0; x < property.FindPropertyRelative("Animators").arraySize; x++)
         {
             SerializedProperty array_value = property
-                .FindPropertyRelative("NamedAnimators")
+                .FindPropertyRelative("Animators")
                 .GetArrayElementAtIndex(x);
-            animatorsNames.Add(array_value.FindPropertyRelative("Name").stringValue);
+            animatorsNames.Add(
+                (array_value.objectReferenceValue as Animator) != null
+                    ? (array_value.objectReferenceValue as Animator).name
+                    : "Unknown animator"
+            );
         }
 
         List<InterfaceMatch> buffer_interface_matcher = new();
@@ -101,30 +105,28 @@ public class AnimatorListDrawer : PropertyDrawer
             );
             SerializedProperty _array = interface_matcher_array
                 .GetArrayElementAtIndex(i)
-                .FindPropertyRelative("AnimatorBools");
+                .FindPropertyRelative("Bools");
             for (int j = 0; j < _array.arraySize; j++)
             {
                 SerializedProperty _arr_element = _array.GetArrayElementAtIndex(j);
                 buffer_interface_matcher
                     .Last()
-                    .AnimatorBools.Add(
+                    .Bools.Add(
                         new(
                             _arr_element.FindPropertyRelative("AnimatorName").stringValue,
-                            _arr_element.FindPropertyRelative("StartDelay").floatValue,
-                            _arr_element.FindPropertyRelative("StartIsActive").boolValue,
-                            _arr_element.FindPropertyRelative("EndDelay").floatValue,
-                            _arr_element.FindPropertyRelative("EndIsActive").boolValue
+                            _arr_element.FindPropertyRelative("Bool").boolValue
                         )
                     );
             }
         }
+
         interface_matcher_array.ClearArray();
         for (int i = 0; i < ActionNames.Count(); i++)
         {
             interface_matcher_array.InsertArrayElementAtIndex(i);
             interface_matcher_array
                 .GetArrayElementAtIndex(i)
-                .FindPropertyRelative("AnimatorBools")
+                .FindPropertyRelative("Bools")
                 .ClearArray();
             interface_matcher_array
                 .GetArrayElementAtIndex(i)
@@ -132,39 +134,30 @@ public class AnimatorListDrawer : PropertyDrawer
                 .stringValue = ActionNames[i];
             SerializedProperty animator_bools_array = interface_matcher_array
                 .GetArrayElementAtIndex(i)
-                .FindPropertyRelative("AnimatorBools");
+                .FindPropertyRelative("Bools");
 
             for (int j = 0; j < animatorsNames.Count(); j++)
             {
                 InterfaceMatch founded_interface_matcher = buffer_interface_matcher
                     .Where(x => x.InterfaceName == ActionNames[i])
                     .FirstOrDefault();
-                float start_delay = 0;
-                bool start_is_active = false;
-                float end_delay = 0;
-                bool end_is_active = false;
+                bool _bool = false;
                 if (founded_interface_matcher != null)
                 {
-                    List<AnimatorBool> founded_animator_bool_array =
-                        founded_interface_matcher.AnimatorBools;
+                    List<AnematorWithBool> founded_animator_bool_array =
+                        founded_interface_matcher.Bools;
                     for (int k = 0; k < founded_animator_bool_array.Count; k++)
                     {
                         if (founded_animator_bool_array[k].AnimatorName == animatorsNames[j])
                         {
-                            start_delay = founded_animator_bool_array[k].StartDelay;
-                            start_is_active = founded_animator_bool_array[k].StartIsActive;
-                            end_delay = founded_animator_bool_array[k].EndDelay;
-                            end_is_active = founded_animator_bool_array[k].EndIsActive;
+                            _bool = founded_animator_bool_array[k].Bool;
                         }
                     }
                 }
                 animator_bools_array.InsertArrayElementAtIndex(j);
                 SerializedProperty _arr_element = animator_bools_array.GetArrayElementAtIndex(j);
                 _arr_element.FindPropertyRelative("AnimatorName").stringValue = animatorsNames[j];
-                _arr_element.FindPropertyRelative("StartDelay").floatValue = start_delay;
-                _arr_element.FindPropertyRelative("StartIsActive").boolValue = start_is_active;
-                _arr_element.FindPropertyRelative("EndDelay").floatValue = end_delay;
-                _arr_element.FindPropertyRelative("EndIsActive").boolValue = end_is_active;
+                _arr_element.FindPropertyRelative("Bool").boolValue = _bool;
             }
         }
     }
@@ -196,7 +189,7 @@ public class AnimatorListDrawer : PropertyDrawer
                         SerializedProperty element = listProperty.GetArrayElementAtIndex(index);
                         ReorderableList animator_bool_list = GetAnimatorBoolList(
                             element,
-                            element.FindPropertyRelative("AnimatorBools"),
+                            element.FindPropertyRelative("Bools"),
                             element.FindPropertyRelative("InterfaceName").stringValue
                         );
                         animator_bool_list.DoList(rect);
@@ -209,7 +202,7 @@ public class AnimatorListDrawer : PropertyDrawer
                         ? 0
                         : GetAnimatorBoolList(
                                 element,
-                                element.FindPropertyRelative("AnimatorBools"),
+                                element.FindPropertyRelative("Bools"),
                                 element.FindPropertyRelative("InterfaceName").stringValue
                             )
                             .GetHeight() - EditorGUIUtility.singleLineHeight;
@@ -258,105 +251,16 @@ public class AnimatorListDrawer : PropertyDrawer
                             text
                         );
 
-                        text = "On start: Showed ";
-                        position.x += length;
-                        length = GUI.skin.label.CalcSize(new GUIContent(text)).x;
-                        EditorGUI.LabelField(
-                            new Rect(
-                                position.x,
-                                position.y,
-                                length,
-                                EditorGUIUtility.singleLineHeight
-                            ),
-                            text
-                        );
-
                         position.x += length;
                         length = 20;
-                        element.FindPropertyRelative("StartIsActive").boolValue = EditorGUI.Toggle(
+                        element.FindPropertyRelative("Bool").boolValue = EditorGUI.Toggle(
                             new Rect(
                                 position.x,
                                 position.y,
                                 length,
                                 EditorGUIUtility.singleLineHeight
                             ),
-                            element.FindPropertyRelative("StartIsActive").boolValue
-                        );
-
-                        text = "Delay ";
-                        position.x += length;
-                        length = GUI.skin.label.CalcSize(new GUIContent(text)).x;
-                        EditorGUI.LabelField(
-                            new Rect(
-                                position.x,
-                                position.y,
-                                length,
-                                EditorGUIUtility.singleLineHeight
-                            ),
-                            text
-                        );
-
-                        position.x += length;
-                        length = 30;
-                        element.FindPropertyRelative("StartDelay").floatValue =
-                            EditorGUI.FloatField(
-                                new Rect(
-                                    position.x,
-                                    position.y,
-                                    length,
-                                    EditorGUIUtility.singleLineHeight
-                                ),
-                                element.FindPropertyRelative("StartDelay").floatValue
-                            );
-
-                        text = "On end: Showed ";
-                        position.x += length + 10;
-                        length = GUI.skin.label.CalcSize(new GUIContent(text)).x;
-                        EditorGUI.LabelField(
-                            new Rect(
-                                position.x,
-                                position.y,
-                                length,
-                                EditorGUIUtility.singleLineHeight
-                            ),
-                            text
-                        );
-
-                        position.x += length;
-                        length = 20;
-                        element.FindPropertyRelative("EndIsActive").boolValue = EditorGUI.Toggle(
-                            new Rect(
-                                position.x,
-                                position.y,
-                                length,
-                                EditorGUIUtility.singleLineHeight
-                            ),
-                            element.FindPropertyRelative("EndIsActive").boolValue
-                        );
-
-                        text = "Delay ";
-                        position.x += length;
-                        length = GUI.skin.label.CalcSize(new GUIContent(text)).x;
-                        EditorGUI.LabelField(
-                            new Rect(
-                                position.x,
-                                position.y,
-                                length,
-                                EditorGUIUtility.singleLineHeight
-                            ),
-                            text
-                        );
-
-                        position.x += length;
-                        length = 30;
-                        element.FindPropertyRelative("EndDelay").floatValue = EditorGUI.FloatField(
-                            new Rect(
-                                position.x,
-                                position.y,
-                                length,
-                                EditorGUIUtility.singleLineHeight
-                            ),
-                            element.FindPropertyRelative("EndDelay").floatValue
+                            element.FindPropertyRelative("Bool").boolValue
                         );
                     }
                 }
@@ -368,7 +272,7 @@ public class AnimatorListDrawer : PropertyDrawer
         return list;
     }
 
-    private ReorderableList GetNamedAnimatorsList(
+    private ReorderableList GetAnimatorsList(
         SerializedProperty property,
         SerializedProperty listProperty
     )
@@ -395,7 +299,9 @@ public class AnimatorListDrawer : PropertyDrawer
 
                         Vector2 position = rect.position;
                         string text =
-                            $"{(element.FindPropertyRelative("Animator").objectReferenceValue as Animator).name}: ";
+                            element.objectReferenceValue != null
+                                ? $"{(element.objectReferenceValue as Animator).name}: "
+                                : "Unknown animator: ";
                         float length = 110;
                         EditorGUI.LabelField(
                             new Rect(
@@ -407,34 +313,20 @@ public class AnimatorListDrawer : PropertyDrawer
                             text
                         );
 
-                        position.x += length;
-                        length = 150;
+                        position.x += length + 10;
+                        length = 300;
 
-                        element.FindPropertyRelative("Name").stringValue = EditorGUI.TextField(
+                        element.objectReferenceValue = EditorGUI.ObjectField(
                             new Rect(
                                 position.x,
                                 position.y,
                                 length,
                                 EditorGUIUtility.singleLineHeight
                             ),
-                            element.FindPropertyRelative("Name").stringValue
+                            element.objectReferenceValue,
+                            typeof(Animator),
+                            true
                         );
-
-                        position.x += length + 10;
-                        length = 300;
-
-                        element.FindPropertyRelative("Animator").objectReferenceValue =
-                            EditorGUI.ObjectField(
-                                new Rect(
-                                    position.x,
-                                    position.y,
-                                    length,
-                                    EditorGUIUtility.singleLineHeight
-                                ),
-                                element.FindPropertyRelative("Animator").objectReferenceValue,
-                                typeof(Animator),
-                                true
-                            );
                     }
                 }
             };

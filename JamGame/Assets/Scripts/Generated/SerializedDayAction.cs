@@ -21,6 +21,9 @@ namespace Level.Config
         [SerializeField]
         private Working working;
 
+        [SerializeField]
+        private Cutscene cutscene;
+
         public IDayAction ToDayAction()
         {
             return selectedType switch
@@ -29,6 +32,7 @@ namespace Level.Config
                 "DayStart" => dayStart,
                 "Meeting" => meeting,
                 "Working" => working,
+                "Cutscene" => cutscene,
                 _ => throw new NotImplementedException(),
             };
         }

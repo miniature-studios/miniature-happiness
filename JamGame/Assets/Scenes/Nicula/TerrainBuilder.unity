@@ -2567,7 +2567,7 @@ MonoBehaviour:
   tileBuilderController: {fileID: 40476290}
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
-  uiController: {fileID: 1067622716}
+  animatorSwitcher: {fileID: 1067622716}
   tarrifsCounter: {fileID: 1067622717}
   levelTemperaryData: {fileID: 1067622718}
   transitionPanel: {fileID: 285264314}
@@ -2585,170 +2585,106 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatorList:
-    NamedAnimators:
-    - Name: Transition panel
-      Animator: {fileID: 285264313}
-    - Name: Daily Bill panel
-      Animator: {fileID: 961603836}
-    - Name: Button Open Shop
-      Animator: {fileID: 1711617369}
-    - Name: Inventory Button
-      Animator: {fileID: 262105753}
-    - Name: Button Complete Meeting
-      Animator: {fileID: 2055214695}
-    - Name: Finances
-      Animator: {fileID: 1125594365}
-    - Name: Inventory
-      Animator: {fileID: 1395078487}
+    Animators:
+    - {fileID: 1671638924}
+    - {fileID: 961603836}
+    - {fileID: 1395078487}
+    - {fileID: 1711617369}
+    - {fileID: 262105753}
+    - {fileID: 2055214695}
+    - {fileID: 1125594365}
+    - {fileID: 285264313}
     InterfaceMatcher:
     - InterfaceName: DayEnd
-      AnimatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 1
-        StartIsActive: 0
-        EndDelay: 2
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+      Bools:
+      - AnimatorName: Shop
+        Bool: 0
+      - AnimatorName: DailyBillPanel
+        Bool: 1
       - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+        Bool: 0
+      - AnimatorName: ButtonOpenShop
+        Bool: 0
+      - AnimatorName: InvButton
+        Bool: 0
+      - AnimatorName: BTNEndMeeting
+        Bool: 0
+      - AnimatorName: OfficeFinances
+        Bool: 0
+      - AnimatorName: TransitionPanel
+        Bool: 0
     - InterfaceName: DayStart
-      AnimatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 1
-        StartIsActive: 0
-        EndDelay: 1
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+      Bools:
+      - AnimatorName: Shop
+        Bool: 0
+      - AnimatorName: DailyBillPanel
+        Bool: 0
       - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+        Bool: 0
+      - AnimatorName: ButtonOpenShop
+        Bool: 0
+      - AnimatorName: InvButton
+        Bool: 0
+      - AnimatorName: BTNEndMeeting
+        Bool: 0
+      - AnimatorName: OfficeFinances
+        Bool: 0
+      - AnimatorName: TransitionPanel
+        Bool: 0
     - InterfaceName: Meeting
-      AnimatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 1
-        StartIsActive: 0
-        EndDelay: 1
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
+      Bools:
+      - AnimatorName: Shop
+        Bool: 0
+      - AnimatorName: DailyBillPanel
+        Bool: 0
       - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 1
-        EndDelay: 0
-        EndIsActive: 1
+        Bool: 1
+      - AnimatorName: ButtonOpenShop
+        Bool: 1
+      - AnimatorName: InvButton
+        Bool: 1
+      - AnimatorName: BTNEndMeeting
+        Bool: 1
+      - AnimatorName: OfficeFinances
+        Bool: 1
+      - AnimatorName: TransitionPanel
+        Bool: 0
     - InterfaceName: Working
-      AnimatorBools:
-      - AnimatorName: Transition panel
-        StartDelay: 1
-        StartIsActive: 0
-        EndDelay: 1
-        EndIsActive: 1
-      - AnimatorName: Daily Bill panel
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Open Shop
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Inventory Button
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Button Complete Meeting
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
-      - AnimatorName: Finances
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+      Bools:
+      - AnimatorName: Shop
+        Bool: 0
+      - AnimatorName: DailyBillPanel
+        Bool: 0
       - AnimatorName: Inventory
-        StartDelay: 0
-        StartIsActive: 0
-        EndDelay: 0
-        EndIsActive: 0
+        Bool: 0
+      - AnimatorName: ButtonOpenShop
+        Bool: 0
+      - AnimatorName: InvButton
+        Bool: 0
+      - AnimatorName: BTNEndMeeting
+        Bool: 0
+      - AnimatorName: OfficeFinances
+        Bool: 1
+      - AnimatorName: TransitionPanel
+        Bool: 0
+    - InterfaceName: Cutscene
+      Bools:
+      - AnimatorName: Shop
+        Bool: 0
+      - AnimatorName: DailyBillPanel
+        Bool: 0
+      - AnimatorName: Inventory
+        Bool: 0
+      - AnimatorName: ButtonOpenShop
+        Bool: 0
+      - AnimatorName: InvButton
+        Bool: 0
+      - AnimatorName: BTNEndMeeting
+        Bool: 0
+      - AnimatorName: OfficeFinances
+        Bool: 0
+      - AnimatorName: TransitionPanel
+        Bool: 1
 --- !u!114 &1067622717
 MonoBehaviour:
   m_ObjectHideFlags: 0
