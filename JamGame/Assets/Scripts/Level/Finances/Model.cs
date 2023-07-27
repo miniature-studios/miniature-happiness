@@ -10,7 +10,6 @@ namespace Level.Finances
         [SerializeField, InspectorReadOnly]
         private int money;
         public UnityEvent<int> MoneyChange;
-        public TarrifsCounter TarrifsCounter;
 
         public void SetMoney(int money_count)
         {

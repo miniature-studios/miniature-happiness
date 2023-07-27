@@ -18,13 +18,13 @@ namespace Level
         private Shop.Controller shopController;
 
         [SerializeField]
-        private AnimatorsSwitcher animatorSwitcher;
+        private AnimatorsSwitcher.Model animatorSwitcher;
 
         [SerializeField]
         private TarrifsCounter tarrifsCounter;
 
         [SerializeField]
-        private TransitionPanel transitionPanel;
+        private TransitionPanel.Model transitionPanel;
 
         [SerializeField]
         private Boss.Model boss;
@@ -89,7 +89,7 @@ namespace Level
 
         public void Execute(Cutscene cutscene)
         {
-            transitionPanel.SetText(cutscene.Text);
+            transitionPanel.PanelText = cutscene.Text;
             animatorSwitcher.SetAnimatorStates(typeof(Cutscene));
             _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
         }
