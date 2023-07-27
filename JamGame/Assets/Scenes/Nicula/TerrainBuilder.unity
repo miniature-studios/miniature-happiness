@@ -2502,7 +2502,6 @@ GameObject:
   - component: {fileID: 1067622714}
   - component: {fileID: 1067622717}
   - component: {fileID: 1067622716}
-  - component: {fileID: 1067622718}
   m_Layer: 0
   m_Name: LevelSystem
   m_TagString: Untagged
@@ -2563,13 +2562,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelConfig: {fileID: 11400000, guid: 48a0fe130b90cd64081843fa771c12d2, type: 2}
   tileBuilderController: {fileID: 40476290}
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
   animatorSwitcher: {fileID: 1067622716}
   tarrifsCounter: {fileID: 1067622717}
-  levelTemperaryData: {fileID: 1067622718}
   transitionPanel: {fileID: 285264314}
   boss: {fileID: 1442314976}
   ActionEndNotify:
@@ -2713,18 +2710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBuilder: {fileID: 40476289}
---- !u!114 &1067622718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067622708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f01e483ec64a244bb4684902e2d8ff8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  config: {fileID: 11400000, guid: 48a0fe130b90cd64081843fa771c12d2, type: 2}
   CheckChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2935,6 +2921,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  TarrifsCounter: {fileID: 0}
 --- !u!1 &1243994319
 GameObject:
   m_ObjectHideFlags: 0

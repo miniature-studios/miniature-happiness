@@ -1,5 +1,4 @@
-﻿using Common;
-using Level.Config;
+﻿using Level.Config;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,10 +8,6 @@ namespace Level
     [AddComponentMenu("Level.Executor")]
     public class Executor : MonoBehaviour
     {
-        // FIXME: dublication with sheduler, whant tarrifs
-        [SerializeField]
-        private LevelConfig levelConfig;
-
         [SerializeField]
         private TileBuilder.Controller tileBuilderController;
 
@@ -29,9 +24,6 @@ namespace Level
         private TarrifsCounter tarrifsCounter;
 
         [SerializeField]
-        private TemporaryData levelTemperaryData;
-
-        [SerializeField]
         private TransitionPanel transitionPanel;
 
         [SerializeField]
@@ -41,17 +33,12 @@ namespace Level
 
         public void Execute(DayEnd day_end)
         {
-            Check check = tarrifsCounter.GetCheck(levelConfig.Tariffs);
-            Result result = financesModel.TryTakeMoney(check.Sum);
-            if (result.Success)
-            {
-                levelTemperaryData.CreateCheck(check);
-                animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
-            }
-            else
+            tarrifsCounter.UpdateCheck();
+            if (financesModel.TryTakeMoney(tarrifsCounter.Check.Sum).Failure)
             {
                 // TODO lose game
             }
+            animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
         }
 
         // Calls by button continue on daily bill panel
