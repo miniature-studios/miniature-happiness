@@ -10,8 +10,8 @@ namespace TileBuilder
     [AddComponentMenu("TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
-        [SerializeField]
-        private TileUnionImpl freespacePrefab;
+        // Public for inspector`
+        public TileUnionImpl FreespacePrefab;
 
         [SerializeField]
         private GameObject rootObject;
@@ -43,8 +43,6 @@ namespace TileBuilder
                     }
                 }
             }
-
-            InspectorStart();
             UpdateAllTiles();
         }
 
@@ -125,7 +123,7 @@ namespace TileBuilder
                 }
                 foreach (Vector2Int position in previousPlaces)
                 {
-                    CreateTileAndBind(freespacePrefab, position, 0);
+                    CreateTileAndBind(FreespacePrefab, position, 0);
                 }
                 UpdateSidesInPositions(previousPlaces);
                 selected_tile = null;
@@ -204,7 +202,7 @@ namespace TileBuilder
                 }
                 foreach (Vector2Int pos in bufferPositions)
                 {
-                    CreateTileAndBind(freespacePrefab, pos, 0);
+                    CreateTileAndBind(FreespacePrefab, pos, 0);
                 }
             }
             foreach (Vector2Int pos in selected_tile.TilesPositions)
@@ -297,7 +295,8 @@ namespace TileBuilder
             return tileUnion;
         }
 
-        private Level.Inventory.Room.Model DeleteTile(ref TileUnionImpl tile_union)
+        // Public for inspector
+        public Level.Inventory.Room.Model DeleteTile(ref TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {

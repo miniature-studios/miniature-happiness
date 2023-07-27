@@ -41,7 +41,6 @@ public class AnimatorsSwitcher : MonoBehaviour
     private AnimatorList animatorList;
     private InterfaceMatch interfaceMatch;
 
-    // TODO: Better transition
     public void SetAnimatorStates(Type day_type)
     {
         interfaceMatch = animatorList.InterfaceMatcher.Find(x => x.InterfaceName == day_type.Name);
