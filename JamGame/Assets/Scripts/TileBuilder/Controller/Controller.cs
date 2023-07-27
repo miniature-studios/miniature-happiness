@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,6 +19,9 @@ namespace TileBuilder
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
+        [SerializeField, InspectorReadOnly]
+        private TileUnionImpl selectedTile = null;
+
         [SerializeField]
         private Level.Inventory.Controller inventoryController;
 
@@ -35,8 +39,8 @@ namespace TileBuilder
 
         public Result Execute(Command.ICommand command)
         {
-            Result response = validator.ValidateCommand(command);
-            return response.Success ? command.Execute(tileBuilder) : response;
+            Result response = validator.ValidateCommand(command, ref selectedTile);
+            return response.Success ? command.Execute(tileBuilder, ref selectedTile) : response;
         }
 
         public void ChangeGameMode(GameMode gamemode)
@@ -64,6 +68,7 @@ namespace TileBuilder
                 if (!isOverUI)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    _ = Execute(new Command.CompletePlacing());
                     Result response = Execute(new Command.SelectTile(ray));
                     if (response.Failure)
                     {
@@ -85,9 +90,7 @@ namespace TileBuilder
                     new(
                         ray,
                         tileBuilder.BuilderMatrix,
-                        tileBuilder.SelectedTile == null
-                            ? Vector2Int.zero
-                            : tileBuilder.SelectedTile.CenterPosition
+                        selectedTile == null ? Vector2Int.zero : selectedTile.CenterPosition
                     );
                 _ = Execute(command);
             }

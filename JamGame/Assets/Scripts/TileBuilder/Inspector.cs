@@ -157,7 +157,8 @@ namespace TileBuilder
         {
             while (TileUnionDictionary.Values.Count() > 0)
             {
-                _ = DeleteTile(TileUnionDictionary.Values.Last());
+                TileUnionImpl value = TileUnionDictionary.Values.Last();
+                _ = DeleteTile(ref value);
             }
             TileUnionDictionary.Clear();
         }

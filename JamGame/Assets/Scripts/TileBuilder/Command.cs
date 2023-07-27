@@ -9,7 +9,7 @@ namespace TileBuilder.Command
 {
     public interface ICommand
     {
-        public Result Execute(TileBuilderImpl tile_builder);
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile);
     }
 
     public class AddTileToScene : ICommand
@@ -34,17 +34,22 @@ namespace TileBuilder.Command
             CreatingRotation = 0;
         }
 
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            return tile_builder.AddTileIntoBuilding(TilePrefab, CreatingPosition, CreatingRotation);
+            return tile_builder.AddTileIntoBuilding(
+                TilePrefab,
+                ref selected_tile,
+                CreatingPosition,
+                CreatingRotation
+            );
         }
     }
 
     public class CompletePlacing : ICommand
     {
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            return tile_builder.ComletePlacing();
+            return tile_builder.ComletePlacing(ref selected_tile);
         }
     }
 
@@ -58,9 +63,9 @@ namespace TileBuilder.Command
             sendUIPrefab = send_ui_prefab;
         }
 
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            Result response = tile_builder.DeleteSelectedTile(out tileUIPrefab);
+            Result response = tile_builder.DeleteSelectedTile(out tileUIPrefab, ref selected_tile);
             sendUIPrefab(tileUIPrefab);
             return response;
         }
@@ -99,11 +104,9 @@ namespace TileBuilder.Command
             }
         }
 
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            return Direction == null
-                ? new FailResult("Null diraction")
-                : tile_builder.MoveSelectedTile((Direction)Direction);
+            return tile_builder.MoveSelectedTile((Direction)Direction, ref selected_tile);
         }
     }
 
@@ -116,9 +119,9 @@ namespace TileBuilder.Command
             Direction = direction;
         }
 
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            return tile_builder.RotateSelectedTile(Direction);
+            return tile_builder.RotateSelectedTile(Direction, ref selected_tile);
         }
     }
 
@@ -135,15 +138,15 @@ namespace TileBuilder.Command
             Tile = tiles.Count() != 0 ? tiles.First() : null;
         }
 
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            return Tile == null ? new FailResult("No hits") : tile_builder.SelectTile(Tile);
+            return tile_builder.SelectTile(Tile, ref selected_tile);
         }
     }
 
     public class ValidateBuilding : ICommand
     {
-        public Result Execute(TileBuilderImpl tile_builder)
+        public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
             return tile_builder.Validate();
         }

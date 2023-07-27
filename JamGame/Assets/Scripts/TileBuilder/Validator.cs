@@ -9,7 +9,7 @@ namespace TileBuilder.Validator
 {
     public interface IValidator
     {
-        public Result ValidateCommand(ICommand command);
+        public Result ValidateCommand(ICommand command, ref TileUnionImpl selectedTile);
     }
 
     public class BuildMode : IValidator
@@ -21,14 +21,20 @@ namespace TileBuilder.Validator
             this.tileBuilder = tileBuilder;
         }
 
-        public Result ValidateCommand(ICommand command)
+        public Result ValidateCommand(ICommand command, ref TileUnionImpl selectedTile)
         {
             if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
             {
-                return new SuccessResult();
+                return selectedTile == null
+                    ? new FailResult("SelectedTile is Null")
+                    : new SuccessResult();
             }
             if (command is AddTileToScene add_command)
             {
+                if (selectedTile != null)
+                {
+                    return new FailResult("Complete placing previous tile");
+                }
                 TileUnionImpl creatingtile_union =
                     add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
@@ -87,17 +93,23 @@ namespace TileBuilder.Validator
             }
             if (command is SelectTile select_command)
             {
-                return select_command.Tile == null
-                    ? new FailResult("No hits")
-                    : select_command.Tile.IsAllWithMark("Immutable")
-                        ? new FailResult("Immutable Tile")
-                        : select_command.Tile.IsAllWithMark("freespace")
-                            ? new FailResult("Free space Tile")
-                            : new SuccessResult();
+                return (
+                    select_command.Tile == selectedTile,
+                    select_command.Tile == null,
+                    select_command.Tile.IsAllWithMark("Immutable"),
+                    select_command.Tile.IsAllWithMark("Freespace")
+                ) switch
+                {
+                    (true, _, _, _) => new FailResult("Selected already selected tile"),
+                    (_, true, _, _) => new FailResult("No hits"),
+                    (_, _, true, _) => new FailResult("Immutable Tile"),
+                    (_, _, _, true) => new FailResult("Free space Tile"),
+                    _ => new SuccessResult()
+                };
             }
             if (command is MoveSelectedTile move_command)
             {
-                if (tileBuilder.SelectedTile == null)
+                if (selectedTile == null)
                 {
                     return new FailResult("Not selected Tile");
                 }
@@ -107,10 +119,10 @@ namespace TileBuilder.Validator
                 }
 
                 Vector2Int new_union_position =
-                    tileBuilder.SelectedTile.Position + move_command.Direction.Value.ToVector2Int();
-                IEnumerable<Vector2Int> newPositions = tileBuilder.SelectedTile.GetImaginePlaces(
+                    selectedTile.Position + move_command.Direction.Value.ToVector2Int();
+                IEnumerable<Vector2Int> newPositions = selectedTile.GetImaginePlaces(
                     new_union_position,
-                    tileBuilder.SelectedTile.Rotation
+                    selectedTile.Rotation
                 );
                 return !tileBuilder
                     .GetTileUnionsInPositions(newPositions)
@@ -120,13 +132,13 @@ namespace TileBuilder.Validator
             }
             if (command is RotateSelectedTile rotate_command)
             {
-                if (tileBuilder.SelectedTile == null)
+                if (selectedTile == null)
                 {
                     return new FailResult("Not selected Tile");
                 }
-                IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(
-                    tileBuilder.SelectedTile.Position,
-                    tileBuilder.SelectedTile.Rotation + (int)rotate_command.Direction
+                IEnumerable<Vector2Int> newPosition = selectedTile.GetImaginePlaces(
+                    selectedTile.Position,
+                    selectedTile.Rotation + (int)rotate_command.Direction
                 );
                 return !tileBuilder
                     .GetTileUnionsInPositions(newPosition)
@@ -140,7 +152,7 @@ namespace TileBuilder.Validator
 
     public class GameMode : IValidator
     {
-        public Result ValidateCommand(ICommand command)
+        public Result ValidateCommand(ICommand command, ref TileUnionImpl selectedTile)
         {
             return new FailResult("Cannot do anything in Game Mode");
         }
@@ -155,10 +167,14 @@ namespace TileBuilder.Validator
             this.tileBuilder = tileBuilder;
         }
 
-        public Result ValidateCommand(ICommand command)
+        public Result ValidateCommand(ICommand command, ref TileUnionImpl selectedTile)
         {
             if (command is AddTileToScene add_command)
             {
+                if (selectedTile != null)
+                {
+                    return new FailResult("Complete placing previous tile");
+                }
                 TileUnionImpl creatingtile_union =
                     add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
