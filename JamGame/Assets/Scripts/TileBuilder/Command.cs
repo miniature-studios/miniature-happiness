@@ -49,7 +49,9 @@ namespace TileBuilder.Command
     {
         public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
-            return tile_builder.ComletePlacing(ref selected_tile);
+            return selected_tile == null
+                ? new SuccessResult()
+                : tile_builder.ComletePlacing(ref selected_tile);
         }
     }
 
@@ -65,6 +67,10 @@ namespace TileBuilder.Command
 
         public Result Execute(TileBuilderImpl tile_builder, ref TileUnionImpl selected_tile)
         {
+            if (selected_tile == null)
+            {
+                return new SuccessResult();
+            }
             Result response = tile_builder.DeleteSelectedTile(out tileUIPrefab, ref selected_tile);
             sendUIPrefab(tileUIPrefab);
             return response;

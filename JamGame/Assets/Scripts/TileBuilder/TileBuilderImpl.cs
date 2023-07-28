@@ -10,7 +10,7 @@ namespace TileBuilder
     [AddComponentMenu("TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
-        // Public for inspector`
+        // Public for inspector
         public TileUnionImpl FreespacePrefab;
 
         [SerializeField]

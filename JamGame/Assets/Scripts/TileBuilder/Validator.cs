@@ -25,11 +25,6 @@ namespace TileBuilder.Validator
 
         public Result ValidateCommand(ICommand command, ref TileUnionImpl selectedTile)
         {
-            Result validator_result = godModeValidator.ValidateCommand(command, ref selectedTile);
-            if (validator_result.Failure)
-            {
-                return validator_result;
-            }
             if (command is AddTileToScene add_command)
             {
                 if (selectedTile != null)
@@ -92,6 +87,15 @@ namespace TileBuilder.Validator
                     return new FailResult("Cannot place, not enough free place");
                 }
             }
+            Result validator_result = godModeValidator.ValidateCommand(command, ref selectedTile);
+            if (validator_result.Failure)
+            {
+                return validator_result;
+            }
+            else if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
+            {
+                return new SuccessResult();
+            }
             if (command is SelectTile select_command)
             {
                 return (
@@ -153,10 +157,10 @@ namespace TileBuilder.Validator
 
         public Result ValidateCommand(ICommand command, ref TileUnionImpl selectedTile)
         {
-            if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
+            if (command is ValidateBuilding)
             {
-                return selectedTile == null
-                    ? new FailResult("SelectedTile is Null")
+                return selectedTile != null
+                    ? new FailResult("SelectedTile is not Null")
                     : new SuccessResult();
             }
             if (command is SelectTile select_command)

@@ -68,11 +68,14 @@ namespace TileBuilder
                 if (!isOverUI)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    _ = Execute(new Command.CompletePlacing());
-                    Result response = Execute(new Command.SelectTile(ray));
-                    if (response.Failure)
+                    Result result = Execute(new Command.CompletePlacing());
+                    if (result.Success)
                     {
-                        _ = Execute(new Command.CompletePlacing());
+                        Result response = Execute(new Command.SelectTile(ray));
+                        if (response.Failure)
+                        {
+                            _ = Execute(new Command.CompletePlacing());
+                        }
                     }
                 }
             }
