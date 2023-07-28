@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Common;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Level.TransitionPanel
@@ -6,7 +7,7 @@ namespace Level.TransitionPanel
     [AddComponentMenu("Level.TransitionPanel.Model")]
     public class Model : MonoBehaviour
     {
-        [SerializeField, HideInInspector]
+        [SerializeField, InspectorReadOnly]
         private string panelText;
         public UnityEvent<string> TextChange;
         public string PanelText

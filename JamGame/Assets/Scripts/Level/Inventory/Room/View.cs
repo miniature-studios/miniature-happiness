@@ -10,9 +10,6 @@ namespace Level.Inventory.Room
         [SerializeField]
         private TMP_Text counterText;
 
-        [SerializeField]
-        private Model model;
-
         public void CountUpdated(int count)
         {
             counterText.text = Convert.ToString(count);

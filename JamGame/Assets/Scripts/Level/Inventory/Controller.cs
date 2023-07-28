@@ -11,10 +11,10 @@ namespace Level.Inventory
         [SerializeField]
         private Model inventoryModel;
 
-        [SerializeField, HideInInspector]
+        [SerializeField, InspectorReadOnly]
         private Room.Model selectedRoom = null;
 
-        [SerializeField, HideInInspector]
+        [SerializeField, InspectorReadOnly]
         private bool pointerOverView = false;
 
         public event Func<Room.Model, Result> TryPlace;

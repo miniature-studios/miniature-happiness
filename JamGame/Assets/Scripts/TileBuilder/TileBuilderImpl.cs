@@ -19,13 +19,12 @@ namespace TileBuilder
         [SerializeField]
         private Matrix builderMatrix;
 
-        [SerializeField, HideInInspector]
         private List<Vector2Int> previousPlaces = new();
 
-        [SerializeField, HideInInspector]
+        [SerializeField, InspectorReadOnly]
         private int previousRotation = 0;
 
-        [SerializeField, HideInInspector]
+        [SerializeField, InspectorReadOnly]
         private bool justCreated = false;
 
         public GameObject RootObject
@@ -95,33 +94,33 @@ namespace TileBuilder
             }
         }
 
-        public Result SelectTile(TileUnionImpl tile, ref TileUnionImpl selectedTile)
+        public Result SelectTile(TileUnionImpl tile, SelectedTileCover selectedTileCover)
         {
-            selectedTile = tile;
-            selectedTile.ApplySelecting();
-            selectedTile.IsolateUpdate();
-            previousPlaces = selectedTile.TilesPositions.ToList();
-            previousRotation = selectedTile.Rotation;
+            selectedTileCover.Value = tile;
+            selectedTileCover.Value.ApplySelecting();
+            selectedTileCover.Value.IsolateUpdate();
+            previousPlaces = selectedTileCover.Value.TilesPositions.ToList();
+            previousRotation = selectedTileCover.Value.Rotation;
             return new SuccessResult();
         }
 
         public Result DeleteSelectedTile(
             out Level.Inventory.Room.Model deleted_tile,
-            ref TileUnionImpl selected_tile
+            SelectedTileCover selectedTileCover
         )
         {
             if (justCreated)
             {
                 justCreated = false;
-                _ = DeleteTile(ref selected_tile);
-                selected_tile = null;
+                _ = DeleteTile(selectedTileCover.Value);
+                selectedTileCover.Value = null;
                 deleted_tile = null;
                 return new SuccessResult();
             }
             else
             {
                 justCreated = false;
-                deleted_tile = DeleteTile(ref selected_tile);
+                deleted_tile = DeleteTile(selectedTileCover.Value);
                 foreach (Vector2Int pos in previousPlaces)
                 {
                     _ = TileUnionDictionary.Remove(pos);
@@ -131,57 +130,56 @@ namespace TileBuilder
                     CreateTileAndBind(FreespacePrefab, position, 0);
                 }
                 UpdateSidesInPositions(previousPlaces);
-                selected_tile = null;
-                deleted_tile = null;
+                selectedTileCover.Value = null;
                 return new SuccessResult();
             }
         }
 
-        public Result MoveSelectedTile(Direction direction, ref TileUnionImpl selected_tile)
+        public Result MoveSelectedTile(Direction direction, SelectedTileCover selectedTileCover)
         {
-            selected_tile.Move(direction);
-            selected_tile.ApplySelecting();
-            _ = selected_tile.TryApplyErrorTiles(this);
+            selectedTileCover.Value.Move(direction);
+            selectedTileCover.Value.ApplySelecting();
+            _ = selectedTileCover.Value.TryApplyErrorTiles(this);
             return new SuccessResult();
         }
 
         public Result RotateSelectedTile(
             RotationDirection direction,
-            ref TileUnionImpl selected_tile
+            SelectedTileCover selectedTileCover
         )
         {
-            selected_tile.SetRotation(selected_tile.Rotation + (int)direction);
-            selected_tile.ApplySelecting();
-            _ = selected_tile.TryApplyErrorTiles(this);
+            selectedTileCover.Value.SetRotation(selectedTileCover.Value.Rotation + (int)direction);
+            selectedTileCover.Value.ApplySelecting();
+            _ = selectedTileCover.Value.TryApplyErrorTiles(this);
             return new SuccessResult();
         }
 
-        public Result ComletePlacing(ref TileUnionImpl selected_tile)
+        public Result ComletePlacing(SelectedTileCover selectedTileCover)
         {
             if (
-                previousPlaces.Intersect(selected_tile.TilesPositions).Count()
+                previousPlaces.Intersect(selectedTileCover.Value.TilesPositions).Count()
                     == previousPlaces.Count
-                && previousRotation == selected_tile.Rotation
+                && previousRotation == selectedTileCover.Value.Rotation
                 && !justCreated
             )
             {
-                UpdateSidesInPositions(selected_tile.TilesPositionsForUpdating);
-                selected_tile.CancelSelecting();
-                selected_tile = null;
+                UpdateSidesInPositions(selectedTileCover.Value.TilesPositionsForUpdating);
+                selectedTileCover.Value.CancelSelecting();
+                selectedTileCover.Value = null;
                 return new SuccessResult();
             }
-            IEnumerable<Vector2Int> vector2Ints = selected_tile.TilesPositions;
+            IEnumerable<Vector2Int> vector2Ints = selectedTileCover.Value.TilesPositions;
             List<TileUnionImpl> tilesUnder = TileUnionDictionary
                 .Where(x => vector2Ints.Contains(x.Key))
                 .Select(x => x.Value)
                 .Distinct()
                 .ToList();
-            _ = tilesUnder.Remove(selected_tile);
+            _ = tilesUnder.Remove(selectedTileCover.Value);
             if (!tilesUnder.All(x => x.IsAllWithMark("Freespace")))
             {
                 return new FailResult("Not free spaces under");
             }
-            if (selected_tile.TryApplyErrorTiles(this).Success)
+            if (selectedTileCover.Value.TryApplyErrorTiles(this).Success)
             {
                 return new FailResult("Cannot place tiles");
             }
@@ -189,7 +187,7 @@ namespace TileBuilder
             {
                 TileUnionImpl buffer = tilesUnder.Last();
                 _ = tilesUnder.Remove(buffer);
-                _ = DeleteTile(ref buffer);
+                _ = DeleteTile(buffer);
             }
             if (!justCreated)
             {
@@ -199,7 +197,7 @@ namespace TileBuilder
                     if (TileUnionDictionary.ContainsKey(position))
                     {
                         _ = TileUnionDictionary.Remove(position);
-                        if (!selected_tile.TilesPositions.Contains(position))
+                        if (!selectedTileCover.Value.TilesPositions.Contains(position))
                         {
                             bufferPositions.Add(position);
                         }
@@ -210,35 +208,35 @@ namespace TileBuilder
                     CreateTileAndBind(FreespacePrefab, pos, 0);
                 }
             }
-            foreach (Vector2Int pos in selected_tile.TilesPositions)
+            foreach (Vector2Int pos in selectedTileCover.Value.TilesPositions)
             {
                 if (TileUnionDictionary.TryGetValue(pos, out TileUnionImpl tileUnion))
                 {
                     RemoveTileFromDictionary(tileUnion);
                 }
-                TileUnionDictionary.Add(pos, selected_tile);
+                TileUnionDictionary.Add(pos, selectedTileCover.Value);
             }
-            UpdateSidesInPositions(selected_tile.TilesPositionsForUpdating);
+            UpdateSidesInPositions(selectedTileCover.Value.TilesPositionsForUpdating);
             if (!justCreated)
             {
                 UpdateSidesInPositions(previousPlaces);
             }
-            selected_tile.CancelSelecting();
-            selected_tile = null;
+            selectedTileCover.Value.CancelSelecting();
+            selectedTileCover.Value = null;
             justCreated = false;
             return new SuccessResult();
         }
 
         public Result AddTileIntoBuilding(
             TileUnionImpl tile_prefab,
-            ref TileUnionImpl selectedTile,
+            SelectedTileCover selectedTileCover,
             Vector2Int position,
             int rotation
         )
         {
             justCreated = true;
             TileUnionImpl tile = CreateTile(tile_prefab, position, rotation);
-            return SelectTile(tile, ref selectedTile);
+            return SelectTile(tile, selectedTileCover);
         }
 
         public void UpdateAllTiles()
@@ -301,7 +299,7 @@ namespace TileBuilder
         }
 
         // Public for inspector
-        public Level.Inventory.Room.Model DeleteTile(ref TileUnionImpl tile_union)
+        public Level.Inventory.Room.Model DeleteTile(TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {

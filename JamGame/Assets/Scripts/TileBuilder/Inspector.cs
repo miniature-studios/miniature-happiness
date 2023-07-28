@@ -78,7 +78,7 @@ namespace TileBuilder
             while (tile_builder.TileUnionDictionary.Values.Count() > 0)
             {
                 TileUnionImpl value = tile_builder.TileUnionDictionary.Values.Last();
-                _ = tile_builder.DeleteTile(ref value);
+                _ = tile_builder.DeleteTile(value);
             }
             tile_builder.TileUnionDictionary.Clear();
         }
