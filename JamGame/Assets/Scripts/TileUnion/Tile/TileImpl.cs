@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using TileBuilder;
+using UnityEditor;
 using UnityEngine;
 
 namespace TileUnion.Tile
@@ -37,7 +38,10 @@ namespace TileUnion.Tile
         public List<CornerCollection> Corners = new();
         public View TileView;
 
+        [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;
+
+        [SerializeField, InspectorReadOnly]
         private TileState currentState = TileState.Normal;
 
         public Vector2Int Position => position;
@@ -70,6 +74,28 @@ namespace TileUnion.Tile
         {
             SetPosition(Position);
             SetRotation(Rotation);
+        }
+
+        private void OnDrawGizmos()
+        {
+            /*
+            Handles.Label(
+                transform.position + transform.TransformDirection(new Vector3(0, 0, -1) * 2),
+                "Right"
+            );
+            Handles.Label(
+                transform.position + transform.TransformDirection(new Vector3(0, 0, 1) * 2),
+                "Left"
+            );
+            Handles.Label(
+                transform.position + transform.TransformDirection(new Vector3(1, 0, 0) * 2),
+                "Up"
+            );
+            Handles.Label(
+                transform.position + transform.TransformDirection(new Vector3(-1, 0, 0) * 2),
+                "Down"
+            );
+            */
         }
 
         public struct WallTypeMatch

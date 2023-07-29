@@ -35,6 +35,7 @@ namespace TileUnion.Tile.Inspector
             }
             EditorGUILayout.EndHorizontal();
         }
+
         private void ShowCornersFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
@@ -61,10 +62,14 @@ namespace TileUnion.Tile.Inspector
 
             EditorGUILayout.EndHorizontal();
         }
+
         private void ShowPrefabsFilling(TileImpl tile)
         {
             _ = EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("PRESS THIS BUTTON ONLY IF ROTATION IS ZERO!");
+            EditorGUILayout.EndHorizontal();
 
+            _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Fill tile with prefabs"))
             {
                 GameObject walls_handler;
@@ -175,9 +180,13 @@ namespace TileUnion.Tile.Inspector
                     center_handler = tile.transform.Find("Center").gameObject;
                 }
             }
+            EditorGUILayout.EndHorizontal();
 
+            _ = EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("PRESS THIS BUTTON ONLY IF ROTATION IS ZERO!");
             EditorGUILayout.EndHorizontal();
         }
+
         public override void OnInspectorGUI()
         {
             TileImpl tile = serializedObject.targetObject as TileImpl;

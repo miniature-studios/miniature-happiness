@@ -15,10 +15,10 @@ namespace TileBuilder.Validator
     public class BuildMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
-        private readonly SelectedTileCover selectedTileCover;
+        private readonly SelectedTileWrapper selectedTileCover;
         private GodMode godModeValidator;
 
-        public BuildMode(TileBuilderImpl tileBuilder, SelectedTileCover selectedTileCover)
+        public BuildMode(TileBuilderImpl tileBuilder, SelectedTileWrapper selectedTileCover)
         {
             this.tileBuilder = tileBuilder;
             godModeValidator = new(tileBuilder, selectedTileCover);
@@ -27,12 +27,17 @@ namespace TileBuilder.Validator
 
         public Result ValidateCommand(ICommand command)
         {
+            Result validator_result = godModeValidator.ValidateCommand(command);
+            if (validator_result.Failure)
+            {
+                return validator_result;
+            }
+            if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
+            {
+                return new SuccessResult();
+            }
             if (command is AddTileToScene add_command)
             {
-                if (selectedTileCover.Value != null)
-                {
-                    return new FailResult("Complete placing previous tile");
-                }
                 TileUnionImpl creatingtile_union =
                     add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
@@ -89,15 +94,6 @@ namespace TileBuilder.Validator
                     return new FailResult("Cannot place, not enough free place");
                 }
             }
-            Result validator_result = godModeValidator.ValidateCommand(command);
-            if (validator_result.Failure)
-            {
-                return validator_result;
-            }
-            else if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
-            {
-                return new SuccessResult();
-            }
             if (command is SelectTile select_command)
             {
                 return (
@@ -151,9 +147,9 @@ namespace TileBuilder.Validator
     public class GodMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
-        private readonly SelectedTileCover selectedTileCover;
+        private readonly SelectedTileWrapper selectedTileCover;
 
-        public GodMode(TileBuilderImpl tileBuilder, SelectedTileCover selectedTileCover)
+        public GodMode(TileBuilderImpl tileBuilder, SelectedTileWrapper selectedTileCover)
         {
             this.tileBuilder = tileBuilder;
             this.selectedTileCover = selectedTileCover;

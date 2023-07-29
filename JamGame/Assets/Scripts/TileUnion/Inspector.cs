@@ -12,6 +12,9 @@ namespace TileUnion.Inspector
             TileUnionImpl tile_union = serializedObject.targetObject as TileUnionImpl;
 
             _ = EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Must be pressed before usage!");
+            EditorGUILayout.EndHorizontal();
+            _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Update cache"))
             {
                 tile_union.CreateCache();
@@ -43,6 +46,17 @@ namespace TileUnion.Inspector
             if (GUILayout.Button("Set rotation 3 from ceche"))
             {
                 tile_union.SetRotation(3);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("For testing");
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Isolate Update"))
+            {
+                tile_union.IsolateUpdate();
             }
             EditorGUILayout.EndHorizontal();
 

@@ -18,7 +18,7 @@ namespace Level
         private bool isPlanned = true;
 
         // Must be catched by Executor
-        public void ActionEndRealese()
+        public void ActionEndRelese()
         {
             if (isPlanned)
             {

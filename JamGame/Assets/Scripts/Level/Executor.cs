@@ -18,7 +18,7 @@ namespace Level
         private Shop.Controller shopController;
 
         [SerializeField]
-        private AnimatorsSwitcher.Model animatorSwitcher;
+        private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
 
         [SerializeField]
         private TarrifsCounter tarrifsCounter;

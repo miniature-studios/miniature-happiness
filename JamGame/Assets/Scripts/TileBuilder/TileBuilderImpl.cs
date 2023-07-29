@@ -94,7 +94,7 @@ namespace TileBuilder
             }
         }
 
-        public Result SelectTile(TileUnionImpl tile, SelectedTileCover selectedTileCover)
+        public Result SelectTile(TileUnionImpl tile, SelectedTileWrapper selectedTileCover)
         {
             selectedTileCover.Value = tile;
             selectedTileCover.Value.ApplySelecting();
@@ -106,7 +106,7 @@ namespace TileBuilder
 
         public Result DeleteSelectedTile(
             out Level.Inventory.Room.Model deleted_tile,
-            SelectedTileCover selectedTileCover
+            SelectedTileWrapper selectedTileCover
         )
         {
             if (justCreated)
@@ -135,7 +135,7 @@ namespace TileBuilder
             }
         }
 
-        public Result MoveSelectedTile(Direction direction, SelectedTileCover selectedTileCover)
+        public Result MoveSelectedTile(Direction direction, SelectedTileWrapper selectedTileCover)
         {
             selectedTileCover.Value.Move(direction);
             selectedTileCover.Value.ApplySelecting();
@@ -145,7 +145,7 @@ namespace TileBuilder
 
         public Result RotateSelectedTile(
             RotationDirection direction,
-            SelectedTileCover selectedTileCover
+            SelectedTileWrapper selectedTileCover
         )
         {
             selectedTileCover.Value.SetRotation(selectedTileCover.Value.Rotation + (int)direction);
@@ -154,7 +154,7 @@ namespace TileBuilder
             return new SuccessResult();
         }
 
-        public Result ComletePlacing(SelectedTileCover selectedTileCover)
+        public Result ComletePlacing(SelectedTileWrapper selectedTileCover)
         {
             if (
                 previousPlaces.Intersect(selectedTileCover.Value.TilesPositions).Count()
@@ -229,7 +229,7 @@ namespace TileBuilder
 
         public Result AddTileIntoBuilding(
             TileUnionImpl tile_prefab,
-            SelectedTileCover selectedTileCover,
+            SelectedTileWrapper selectedTileCover,
             Vector2Int position,
             int rotation
         )

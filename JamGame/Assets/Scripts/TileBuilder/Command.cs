@@ -18,12 +18,12 @@ namespace TileBuilder.Command
         public Vector2Int CreatingPosition;
         public int CreatingRotation;
         public Ray Ray;
-        private SelectedTileCover selectedTileCover;
+        private SelectedTileWrapper selectedTileCover;
 
         public AddTileToScene(
             TileUnionImpl tile_prefab,
             Ray ray,
-            SelectedTileCover selected_tile_cover
+            SelectedTileWrapper selected_tile_cover
         )
         {
             TilePrefab = tile_prefab;
@@ -33,11 +33,12 @@ namespace TileBuilder.Command
             selectedTileCover = selected_tile_cover;
         }
 
-        public AddTileToScene(TileUnionImpl tile_prefab)
+        public AddTileToScene(TileUnionImpl tile_prefab, SelectedTileWrapper selected_tile_cover)
         {
             TilePrefab = tile_prefab;
             CreatingPosition = new();
             CreatingRotation = 0;
+            selectedTileCover = selected_tile_cover;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
@@ -53,9 +54,9 @@ namespace TileBuilder.Command
 
     public class CompletePlacing : ICommand
     {
-        private SelectedTileCover selectedTileCover;
+        private SelectedTileWrapper selectedTileCover;
 
-        public CompletePlacing(SelectedTileCover selectedTileCover)
+        public CompletePlacing(SelectedTileWrapper selectedTileCover)
         {
             this.selectedTileCover = selectedTileCover;
         }
@@ -72,11 +73,11 @@ namespace TileBuilder.Command
     {
         private Level.Inventory.Room.Model tileUIPrefab;
         private Action<Level.Inventory.Room.Model> sendUIPrefab;
-        private SelectedTileCover selectedTileCover;
+        private SelectedTileWrapper selectedTileCover;
 
         public DeleteSelectedTile(
             Action<Level.Inventory.Room.Model> send_ui_prefab,
-            SelectedTileCover selectedTileCover
+            SelectedTileWrapper selectedTileCover
         )
         {
             sendUIPrefab = send_ui_prefab;
@@ -98,9 +99,9 @@ namespace TileBuilder.Command
     public class MoveSelectedTile : ICommand
     {
         public Direction? Direction { get; }
-        private SelectedTileCover selectedTileCover;
+        private SelectedTileWrapper selectedTileCover;
 
-        public MoveSelectedTile(Direction direction, SelectedTileCover selectedTileCover)
+        public MoveSelectedTile(Direction direction, SelectedTileWrapper selectedTileCover)
         {
             Direction = direction;
             this.selectedTileCover = selectedTileCover;
@@ -110,7 +111,7 @@ namespace TileBuilder.Command
             Ray ray,
             Matrix builder_matrix,
             Vector2Int? selected_tile_position,
-            SelectedTileCover selectedTileCover
+            SelectedTileWrapper selectedTileCover
         )
         {
             Result<Vector2Int> result = builder_matrix.GetMatrixPosition(ray);
@@ -146,9 +147,12 @@ namespace TileBuilder.Command
     {
         public RotationDirection Direction { get; }
 
-        private SelectedTileCover selectedTileCover;
+        private SelectedTileWrapper selectedTileCover;
 
-        public RotateSelectedTile(RotationDirection direction, SelectedTileCover selectedTileCover)
+        public RotateSelectedTile(
+            RotationDirection direction,
+            SelectedTileWrapper selectedTileCover
+        )
         {
             Direction = direction;
             this.selectedTileCover = selectedTileCover;
@@ -163,9 +167,9 @@ namespace TileBuilder.Command
     public class SelectTile : ICommand
     {
         public TileUnionImpl Tile;
-        private SelectedTileCover selectedTileCover;
+        private SelectedTileWrapper selectedTileCover;
 
-        public SelectTile(Ray ray, SelectedTileCover selectedTileCover)
+        public SelectTile(Ray ray, SelectedTileWrapper selectedTileCover)
         {
             RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
             IEnumerable<TileUnionImpl> tiles = hits.ToList()
