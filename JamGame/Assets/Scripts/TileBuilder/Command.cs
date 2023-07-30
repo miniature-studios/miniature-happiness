@@ -18,34 +18,34 @@ namespace TileBuilder.Command
         public Vector2Int CreatingPosition;
         public int CreatingRotation;
         public Ray Ray;
-        private SelectedTileWrapper selectedTileCover;
+        private SelectedTileWrapper selectedTileWrapper;
 
         public AddTileToScene(
             TileUnionImpl tile_prefab,
             Ray ray,
-            SelectedTileWrapper selected_tile_cover
+            SelectedTileWrapper selected_tile_wrapper
         )
         {
             TilePrefab = tile_prefab;
             CreatingPosition = new();
             CreatingRotation = 0;
             Ray = ray;
-            selectedTileCover = selected_tile_cover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
-        public AddTileToScene(TileUnionImpl tile_prefab, SelectedTileWrapper selected_tile_cover)
+        public AddTileToScene(TileUnionImpl tile_prefab, SelectedTileWrapper selected_tile_wrapper)
         {
             TilePrefab = tile_prefab;
             CreatingPosition = new();
             CreatingRotation = 0;
-            selectedTileCover = selected_tile_cover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
         {
             return tile_builder.AddTileIntoBuilding(
                 TilePrefab,
-                selectedTileCover,
+                selectedTileWrapper,
                 CreatingPosition,
                 CreatingRotation
             );
@@ -54,18 +54,18 @@ namespace TileBuilder.Command
 
     public class CompletePlacing : ICommand
     {
-        private SelectedTileWrapper selectedTileCover;
+        private SelectedTileWrapper selectedTileWrapper;
 
-        public CompletePlacing(SelectedTileWrapper selectedTileCover)
+        public CompletePlacing(SelectedTileWrapper selected_tile_wrapper)
         {
-            this.selectedTileCover = selectedTileCover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
         {
-            return selectedTileCover.Value == null
+            return selectedTileWrapper.Value == null
                 ? new SuccessResult()
-                : tile_builder.ComletePlacing(selectedTileCover);
+                : tile_builder.ComletePlacing(selectedTileWrapper);
         }
     }
 
@@ -73,24 +73,27 @@ namespace TileBuilder.Command
     {
         private Level.Inventory.Room.Model tileUIPrefab;
         private Action<Level.Inventory.Room.Model> sendUIPrefab;
-        private SelectedTileWrapper selectedTileCover;
+        private SelectedTileWrapper selectedTileWrapper;
 
         public DeleteSelectedTile(
             Action<Level.Inventory.Room.Model> send_ui_prefab,
-            SelectedTileWrapper selectedTileCover
+            SelectedTileWrapper selected_tile_wrapper
         )
         {
             sendUIPrefab = send_ui_prefab;
-            this.selectedTileCover = selectedTileCover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
         {
-            if (selectedTileCover.Value == null)
+            if (selectedTileWrapper.Value == null)
             {
                 return new SuccessResult();
             }
-            Result response = tile_builder.DeleteSelectedTile(out tileUIPrefab, selectedTileCover);
+            Result response = tile_builder.DeleteSelectedTile(
+                out tileUIPrefab,
+                selectedTileWrapper
+            );
             sendUIPrefab(tileUIPrefab);
             return response;
         }
@@ -99,19 +102,19 @@ namespace TileBuilder.Command
     public class MoveSelectedTile : ICommand
     {
         public Direction? Direction { get; }
-        private SelectedTileWrapper selectedTileCover;
+        private SelectedTileWrapper selectedTileWrapper;
 
-        public MoveSelectedTile(Direction direction, SelectedTileWrapper selectedTileCover)
+        public MoveSelectedTile(Direction direction, SelectedTileWrapper selected_tile_wrapper)
         {
             Direction = direction;
-            this.selectedTileCover = selectedTileCover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public MoveSelectedTile(
             Ray ray,
             Matrix builder_matrix,
             Vector2Int? selected_tile_position,
-            SelectedTileWrapper selectedTileCover
+            SelectedTileWrapper selected_tile_wrapper
         )
         {
             Result<Vector2Int> result = builder_matrix.GetMatrixPosition(ray);
@@ -134,12 +137,12 @@ namespace TileBuilder.Command
             {
                 Direction = null;
             }
-            this.selectedTileCover = selectedTileCover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
         {
-            return tile_builder.MoveSelectedTile((Direction)Direction, selectedTileCover);
+            return tile_builder.MoveSelectedTile((Direction)Direction, selectedTileWrapper);
         }
     }
 
@@ -147,41 +150,41 @@ namespace TileBuilder.Command
     {
         public RotationDirection Direction { get; }
 
-        private SelectedTileWrapper selectedTileCover;
+        private SelectedTileWrapper selectedTileWrapper;
 
         public RotateSelectedTile(
             RotationDirection direction,
-            SelectedTileWrapper selectedTileCover
+            SelectedTileWrapper selected_tile_wrapper
         )
         {
             Direction = direction;
-            this.selectedTileCover = selectedTileCover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
         {
-            return tile_builder.RotateSelectedTile(Direction, selectedTileCover);
+            return tile_builder.RotateSelectedTile(Direction, selectedTileWrapper);
         }
     }
 
     public class SelectTile : ICommand
     {
         public TileUnionImpl Tile;
-        private SelectedTileWrapper selectedTileCover;
+        private SelectedTileWrapper selectedTileWrapper;
 
-        public SelectTile(Ray ray, SelectedTileWrapper selectedTileCover)
+        public SelectTile(Ray ray, SelectedTileWrapper selected_tile_wrapper)
         {
             RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
             IEnumerable<TileUnionImpl> tiles = hits.ToList()
                 .Where(x => x.collider.GetComponentInParent<TileUnionImpl>() != null)
                 .Select(x => x.collider.GetComponentInParent<TileUnionImpl>());
             Tile = tiles.Count() != 0 ? tiles.First() : null;
-            this.selectedTileCover = selectedTileCover;
+            selectedTileWrapper = selected_tile_wrapper;
         }
 
         public Result Execute(TileBuilderImpl tile_builder)
         {
-            return tile_builder.SelectTile(Tile, selectedTileCover);
+            return tile_builder.SelectTile(Tile, selectedTileWrapper);
         }
     }
 

@@ -17,6 +17,9 @@ namespace TileUnion.Tile
     public class TileImpl : MonoBehaviour
     {
         [SerializeField]
+        private bool showGizmo = false;
+
+        [SerializeField]
         private Matrix builderMatrix;
 
         [SerializeField]
@@ -78,24 +81,25 @@ namespace TileUnion.Tile
 
         private void OnDrawGizmos()
         {
-            /*
-            Handles.Label(
-                transform.position + transform.TransformDirection(new Vector3(0, 0, -1) * 2),
-                "Right"
-            );
-            Handles.Label(
-                transform.position + transform.TransformDirection(new Vector3(0, 0, 1) * 2),
-                "Left"
-            );
-            Handles.Label(
-                transform.position + transform.TransformDirection(new Vector3(1, 0, 0) * 2),
-                "Up"
-            );
-            Handles.Label(
-                transform.position + transform.TransformDirection(new Vector3(-1, 0, 0) * 2),
-                "Down"
-            );
-            */
+            if (showGizmo)
+            {
+                Handles.Label(
+                    transform.position + transform.TransformDirection(new Vector3(0, 0, -1) * 2),
+                    "Right"
+                );
+                Handles.Label(
+                    transform.position + transform.TransformDirection(new Vector3(0, 0, 1) * 2),
+                    "Left"
+                );
+                Handles.Label(
+                    transform.position + transform.TransformDirection(new Vector3(1, 0, 0) * 2),
+                    "Up"
+                );
+                Handles.Label(
+                    transform.position + transform.TransformDirection(new Vector3(-1, 0, 0) * 2),
+                    "Down"
+                );
+            }
         }
 
         public struct WallTypeMatch
