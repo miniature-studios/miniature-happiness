@@ -15,14 +15,23 @@ namespace TileBuilder.Validator
     public class BuildMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
+        private readonly SelectedTileWrapper selectedTileCover;
+        private GodMode godModeValidator;
 
-        public BuildMode(TileBuilderImpl tileBuilder)
+        public BuildMode(TileBuilderImpl tileBuilder, SelectedTileWrapper selectedTileCover)
         {
             this.tileBuilder = tileBuilder;
+            godModeValidator = new(tileBuilder, selectedTileCover);
+            this.selectedTileCover = selectedTileCover;
         }
 
         public Result ValidateCommand(ICommand command)
         {
+            Result validator_result = godModeValidator.ValidateCommand(command);
+            if (validator_result.Failure)
+            {
+                return validator_result;
+            }
             if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
             {
                 return new SuccessResult();
@@ -87,30 +96,23 @@ namespace TileBuilder.Validator
             }
             if (command is SelectTile select_command)
             {
-                return select_command.Tile == null
-                    ? new FailResult("No hits")
-                    : select_command.Tile.IsAllWithMark("Immutable")
-                        ? new FailResult("Immutable Tile")
-                        : select_command.Tile.IsAllWithMark("freespace")
-                            ? new FailResult("Free space Tile")
-                            : new SuccessResult();
+                return (
+                    select_command.Tile.IsAllWithMark("Immutable"),
+                    select_command.Tile.IsAllWithMark("Freespace")
+                ) switch
+                {
+                    (true, _) => new FailResult("Immutable Tile"),
+                    (_, true) => new FailResult("Free space Tile"),
+                    _ => new SuccessResult()
+                };
             }
             if (command is MoveSelectedTile move_command)
             {
-                if (tileBuilder.SelectedTile == null)
-                {
-                    return new FailResult("Not selected Tile");
-                }
-                if (move_command.Direction == null)
-                {
-                    return new FailResult("Null direction");
-                }
-
                 Vector2Int new_union_position =
-                    tileBuilder.SelectedTile.Position + move_command.Direction.Value.ToVector2Int();
-                IEnumerable<Vector2Int> newPositions = tileBuilder.SelectedTile.GetImaginePlaces(
+                    selectedTileCover.Value.Position + move_command.Direction.Value.ToVector2Int();
+                IEnumerable<Vector2Int> newPositions = selectedTileCover.Value.GetImaginePlaces(
                     new_union_position,
-                    tileBuilder.SelectedTile.Rotation
+                    selectedTileCover.Value.Rotation
                 );
                 return !tileBuilder
                     .GetTileUnionsInPositions(newPositions)
@@ -120,13 +122,9 @@ namespace TileBuilder.Validator
             }
             if (command is RotateSelectedTile rotate_command)
             {
-                if (tileBuilder.SelectedTile == null)
-                {
-                    return new FailResult("Not selected Tile");
-                }
-                IEnumerable<Vector2Int> newPosition = tileBuilder.SelectedTile.GetImaginePlaces(
-                    tileBuilder.SelectedTile.Position,
-                    tileBuilder.SelectedTile.Rotation + (int)rotate_command.Direction
+                IEnumerable<Vector2Int> newPosition = selectedTileCover.Value.GetImaginePlaces(
+                    selectedTileCover.Value.Position,
+                    selectedTileCover.Value.Rotation + (int)rotate_command.Direction
                 );
                 return !tileBuilder
                     .GetTileUnionsInPositions(newPosition)
@@ -149,20 +147,66 @@ namespace TileBuilder.Validator
     public class GodMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
+        private readonly SelectedTileWrapper selectedTileCover;
 
-        public GodMode(TileBuilderImpl tileBuilder)
+        public GodMode(TileBuilderImpl tileBuilder, SelectedTileWrapper selectedTileCover)
         {
             this.tileBuilder = tileBuilder;
+            this.selectedTileCover = selectedTileCover;
         }
 
         public Result ValidateCommand(ICommand command)
         {
+            if (command is DeleteSelectedTile)
+            {
+                return selectedTileCover.Value == null
+                    ? new FailResult("SelectedTile is Null")
+                    : new SuccessResult();
+            }
+            if (command is ValidateBuilding)
+            {
+                return selectedTileCover.Value != null
+                    ? new FailResult("SelectedTile is not Null")
+                    : new SuccessResult();
+            }
+            if (command is SelectTile select_command)
+            {
+                return (
+                    select_command.Tile == selectedTileCover.Value,
+                    select_command.Tile == null
+                ) switch
+                {
+                    (true, _) => new FailResult("Selected already selected tile"),
+                    (_, true) => new FailResult("No hits"),
+                    _ => new SuccessResult()
+                };
+            }
+            if (command is MoveSelectedTile move_command)
+            {
+                return (selectedTileCover.Value == null, move_command.Direction == null) switch
+                {
+                    (true, _) => new FailResult("Not selected Tile"),
+                    (_, true) => new FailResult("Null direction"),
+                    _ => new SuccessResult()
+                };
+            }
+            if (command is RotateSelectedTile)
+            {
+                return selectedTileCover.Value == null
+                    ? new FailResult("Not selected Tile")
+                    : new SuccessResult();
+            }
             if (command is AddTileToScene add_command)
             {
+                if (selectedTileCover.Value != null)
+                {
+                    return new FailResult("Complete placing previous tile");
+                }
                 TileUnionImpl creatingtile_union =
                     add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
                     tileBuilder.GetFreeSpaceInsideListPositions();
+
                 int rotation = 0;
                 while (rotation < 4)
                 {

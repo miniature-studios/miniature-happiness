@@ -54,7 +54,8 @@ namespace TileUnion
         public Level.Inventory.Room.Model InventoryModel;
         public List<TileImpl> Tiles = new();
 
-        private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration = null;
+        [SerializeField]
+        private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration;
 
         private class TileUnionConfiguration
         {
@@ -110,13 +111,6 @@ namespace TileUnion
             Configuration[rotation].TilesPositions.Select(x => x + position);
         public int TilesCount => Tiles.Count;
         public Vector2Int CenterPosition => Configuration[rotation].CenterTilePosition + position;
-
-        private void OnValidate()
-        {
-            CreateCache();
-            SetPosition(Position);
-            SetRotation(Rotation);
-        }
 
         public void Move(Direction direction)
         {

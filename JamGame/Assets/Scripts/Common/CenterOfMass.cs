@@ -19,10 +19,10 @@ namespace Common
                 {
                     new(Mathf.RoundToInt(vector_sum.x), Mathf.RoundToInt(vector_sum.y)),
                     new(
-                        Mathf.RoundToInt(vector_sum.x + (vector_sum.normalized.x / 2))
-                            - (vector_sum.normalized.x / 2),
-                        Mathf.RoundToInt(vector_sum.y + (vector_sum.normalized.y / 2))
-                            - (vector_sum.normalized.x / 2)
+                        Mathf.RoundToInt(vector_sum.x + (Mathf.Sign(vector_sum.normalized.x) / 2))
+                            - (Mathf.Sign(vector_sum.normalized.x) / 2),
+                        Mathf.RoundToInt(vector_sum.y + (Mathf.Sign(vector_sum.normalized.y) / 2))
+                            - (Mathf.Sign(vector_sum.normalized.y) / 2)
                     )
                 };
             return variants.OrderBy(x => Vector2.Distance(x, vector_sum)).First();

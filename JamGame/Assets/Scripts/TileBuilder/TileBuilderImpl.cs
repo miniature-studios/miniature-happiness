@@ -10,8 +10,8 @@ namespace TileBuilder
     [AddComponentMenu("TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
-        [SerializeField]
-        private TileUnionImpl freespacePrefab;
+        // Public for inspector
+        public TileUnionImpl FreespacePrefab;
 
         [SerializeField]
         private GameObject rootObject;
@@ -20,10 +20,13 @@ namespace TileBuilder
         private Matrix builderMatrix;
 
         private List<Vector2Int> previousPlaces = new();
+
+        [SerializeField, InspectorReadOnly]
         private int previousRotation = 0;
+
+        [SerializeField, InspectorReadOnly]
         private bool justCreated = false;
 
-        public TileUnionImpl SelectedTile { get; private set; } = null;
         public GameObject RootObject
         {
             get => rootObject;
@@ -44,18 +47,11 @@ namespace TileBuilder
                     }
                 }
             }
-
-            InspectorStart();
             UpdateAllTiles();
         }
 
         public Result Validate()
         {
-            if (SelectedTile != null)
-            {
-                return new FailResult("Complete placing first");
-            }
-
             Stack<KeyValuePair<Vector2Int, TileUnionImpl>> points_stack =
                 new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("door")));
             List<KeyValuePair<Vector2Int, TileUnionImpl>> tiles_to_check = TileUnionDictionary
@@ -98,128 +94,92 @@ namespace TileBuilder
             }
         }
 
-        public Result SelectTile(TileUnionImpl tile)
+        public Result SelectTile(TileUnionImpl tile, SelectedTileWrapper selectedTileCover)
         {
-            if (SelectedTile == tile)
-            {
-                return new FailResult("Selected already selected tile");
-            }
-            else if (tile == null)
-            {
-                return new FailResult("Null");
-            }
-            else
-            {
-                if (SelectedTile != null)
-                {
-                    Result result = ComletePlacing();
-                    if (result.Failure)
-                    {
-                        return result;
-                    }
-                }
-                SelectedTile = tile;
-                SelectedTile.ApplySelecting();
-                SelectedTile.IsolateUpdate();
-                previousPlaces = SelectedTile.TilesPositions.ToList();
-                previousRotation = SelectedTile.Rotation;
-                return new SuccessResult();
-            }
+            selectedTileCover.Value = tile;
+            selectedTileCover.Value.ApplySelecting();
+            selectedTileCover.Value.IsolateUpdate();
+            previousPlaces = selectedTileCover.Value.TilesPositions.ToList();
+            previousRotation = selectedTileCover.Value.Rotation;
+            return new SuccessResult();
         }
 
-        public Result DeleteSelectedTile(out Level.Inventory.Room.Model deleted_tile)
+        public Result DeleteSelectedTile(
+            out Level.Inventory.Room.Model deleted_tile,
+            SelectedTileWrapper selectedTileCover
+        )
         {
-            if (SelectedTile == null)
-            {
-                deleted_tile = null;
-                return new FailResult("Not selected Tile");
-            }
             if (justCreated)
             {
                 justCreated = false;
-                _ = DeleteTile(SelectedTile);
-                SelectedTile = null;
+                _ = DeleteTile(selectedTileCover.Value);
+                selectedTileCover.Value = null;
                 deleted_tile = null;
                 return new SuccessResult();
             }
             else
             {
                 justCreated = false;
-                deleted_tile = DeleteTile(SelectedTile);
+                deleted_tile = DeleteTile(selectedTileCover.Value);
                 foreach (Vector2Int pos in previousPlaces)
                 {
                     _ = TileUnionDictionary.Remove(pos);
                 }
                 foreach (Vector2Int position in previousPlaces)
                 {
-                    CreateTileAndBind(freespacePrefab, position, 0);
+                    CreateTileAndBind(FreespacePrefab, position, 0);
                 }
                 UpdateSidesInPositions(previousPlaces);
-                SelectedTile = null;
-                deleted_tile = null;
+                selectedTileCover.Value = null;
                 return new SuccessResult();
             }
         }
 
-        public Result MoveSelectedTile(Direction direction)
+        public Result MoveSelectedTile(Direction direction, SelectedTileWrapper selectedTileCover)
         {
-            if (SelectedTile == null)
-            {
-                return new FailResult("Not selected Tile");
-            }
-            else
-            {
-                SelectedTile.Move(direction);
-                SelectedTile.ApplySelecting();
-                _ = SelectedTile.TryApplyErrorTiles(this);
-                return new SuccessResult();
-            }
+            selectedTileCover.Value.Move(direction);
+            selectedTileCover.Value.ApplySelecting();
+            _ = selectedTileCover.Value.TryApplyErrorTiles(this);
+            return new SuccessResult();
         }
 
-        public Result RotateSelectedTile(RotationDirection direction)
+        public Result RotateSelectedTile(
+            RotationDirection direction,
+            SelectedTileWrapper selectedTileCover
+        )
         {
-            if (SelectedTile == null)
-            {
-                return new FailResult("Not selected Tile");
-            }
-            else
-            {
-                SelectedTile.SetRotation(SelectedTile.Rotation + (int)direction);
-                SelectedTile.ApplySelecting();
-                _ = SelectedTile.TryApplyErrorTiles(this);
-                return new SuccessResult();
-            }
+            selectedTileCover.Value.SetRotation(selectedTileCover.Value.Rotation + (int)direction);
+            selectedTileCover.Value.ApplySelecting();
+            _ = selectedTileCover.Value.TryApplyErrorTiles(this);
+            return new SuccessResult();
         }
 
-        public Result ComletePlacing()
+        public Result ComletePlacing(SelectedTileWrapper selectedTileCover)
         {
-            if (SelectedTile == null)
-            {
-                return new FailResult("Not selected Tile");
-            }
             if (
-                previousPlaces.Intersect(SelectedTile.TilesPositions).Count()
+                previousPlaces.Intersect(selectedTileCover.Value.TilesPositions).Count()
                     == previousPlaces.Count
-                && previousRotation == SelectedTile.Rotation
+                && previousRotation == selectedTileCover.Value.Rotation
                 && !justCreated
             )
             {
-                UpdateSidesInPositions(SelectedTile.TilesPositionsForUpdating);
-                SelectedTile.CancelSelecting();
-                SelectedTile = null;
+                UpdateSidesInPositions(selectedTileCover.Value.TilesPositionsForUpdating);
+                selectedTileCover.Value.CancelSelecting();
+                selectedTileCover.Value = null;
                 return new SuccessResult();
             }
+            IEnumerable<Vector2Int> vector2Ints = selectedTileCover.Value.TilesPositions;
             List<TileUnionImpl> tilesUnder = TileUnionDictionary
-                .Where(x => SelectedTile.TilesPositions.Contains(x.Key))
+                .Where(x => vector2Ints.Contains(x.Key))
                 .Select(x => x.Value)
                 .Distinct()
                 .ToList();
-            _ = tilesUnder.Remove(SelectedTile);
+            _ = tilesUnder.Remove(selectedTileCover.Value);
             if (!tilesUnder.All(x => x.IsAllWithMark("Freespace")))
             {
                 return new FailResult("Not free spaces under");
             }
-            if (SelectedTile.TryApplyErrorTiles(this).Success)
+            if (selectedTileCover.Value.TryApplyErrorTiles(this).Success)
             {
                 return new FailResult("Cannot place tiles");
             }
@@ -237,7 +197,7 @@ namespace TileBuilder
                     if (TileUnionDictionary.ContainsKey(position))
                     {
                         _ = TileUnionDictionary.Remove(position);
-                        if (!SelectedTile.TilesPositions.Contains(position))
+                        if (!selectedTileCover.Value.TilesPositions.Contains(position))
                         {
                             bufferPositions.Add(position);
                         }
@@ -245,41 +205,38 @@ namespace TileBuilder
                 }
                 foreach (Vector2Int pos in bufferPositions)
                 {
-                    CreateTileAndBind(freespacePrefab, pos, 0);
+                    CreateTileAndBind(FreespacePrefab, pos, 0);
                 }
             }
-            foreach (Vector2Int pos in SelectedTile.TilesPositions)
+            foreach (Vector2Int pos in selectedTileCover.Value.TilesPositions)
             {
                 if (TileUnionDictionary.TryGetValue(pos, out TileUnionImpl tileUnion))
                 {
                     RemoveTileFromDictionary(tileUnion);
                 }
-                TileUnionDictionary.Add(pos, SelectedTile);
+                TileUnionDictionary.Add(pos, selectedTileCover.Value);
             }
-            UpdateSidesInPositions(SelectedTile.TilesPositionsForUpdating);
+            UpdateSidesInPositions(selectedTileCover.Value.TilesPositionsForUpdating);
             if (!justCreated)
             {
                 UpdateSidesInPositions(previousPlaces);
             }
-            SelectedTile.CancelSelecting();
-            SelectedTile = null;
+            selectedTileCover.Value.CancelSelecting();
+            selectedTileCover.Value = null;
             justCreated = false;
             return new SuccessResult();
         }
 
         public Result AddTileIntoBuilding(
             TileUnionImpl tile_prefab,
+            SelectedTileWrapper selectedTileCover,
             Vector2Int position,
             int rotation
         )
         {
-            if (SelectedTile != null)
-            {
-                return new FailResult("Complete placing previous tile");
-            }
             justCreated = true;
             TileUnionImpl tile = CreateTile(tile_prefab, position, rotation);
-            return SelectTile(tile);
+            return SelectTile(tile, selectedTileCover);
         }
 
         public void UpdateAllTiles()
@@ -341,7 +298,8 @@ namespace TileBuilder
             return tileUnion;
         }
 
-        private Level.Inventory.Room.Model DeleteTile(TileUnionImpl tile_union)
+        // Public for inspector
+        public Level.Inventory.Room.Model DeleteTile(TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {

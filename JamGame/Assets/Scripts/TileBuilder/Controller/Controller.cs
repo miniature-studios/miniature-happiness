@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,11 +13,25 @@ namespace TileBuilder
         Play
     }
 
+    public class SelectedTileWrapper
+    {
+        private TileUnionImpl selectedTile = null;
+        public TileUnionImpl Value
+        {
+            get => selectedTile;
+            set => selectedTile = value;
+        }
+    }
+
     [AddComponentMenu("TileBuilder.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;
+
+        // public for inspector
+        [InspectorReadOnly]
+        public SelectedTileWrapper SelectedTileWrapper = new();
 
         [SerializeField]
         private Level.Inventory.Controller inventoryController;
@@ -43,8 +58,8 @@ namespace TileBuilder
         {
             validator = gamemode switch
             {
-                GameMode.God => new Validator.GodMode(tileBuilder),
-                GameMode.Build => new Validator.BuildMode(tileBuilder),
+                GameMode.God => new Validator.GodMode(tileBuilder, SelectedTileWrapper),
+                GameMode.Build => new Validator.BuildMode(tileBuilder, SelectedTileWrapper),
                 GameMode.Play => new Validator.GameMode(),
                 _ => throw new ArgumentException(),
             };
@@ -64,10 +79,14 @@ namespace TileBuilder
                 if (!isOverUI)
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    Result response = Execute(new Command.SelectTile(ray));
-                    if (response.Failure)
+                    Result result = Execute(new Command.CompletePlacing(SelectedTileWrapper));
+                    if (result.Success)
                     {
-                        _ = Execute(new Command.CompletePlacing());
+                        Result response = Execute(new Command.SelectTile(ray, SelectedTileWrapper));
+                        if (response.Failure)
+                        {
+                            _ = Execute(new Command.CompletePlacing(SelectedTileWrapper));
+                        }
                     }
                 }
             }
@@ -75,7 +94,7 @@ namespace TileBuilder
             if (Input.GetMouseButtonUp(0))
             {
                 mousePressed = false;
-                _ = Execute(new Command.CompletePlacing());
+                _ = Execute(new Command.CompletePlacing(SelectedTileWrapper));
             }
 
             if (mouseDelta.magnitude > 0 && mousePressed && !isOverUI)
@@ -85,16 +104,19 @@ namespace TileBuilder
                     new(
                         ray,
                         tileBuilder.BuilderMatrix,
-                        tileBuilder.SelectedTile == null
+                        SelectedTileWrapper.Value == null
                             ? Vector2Int.zero
-                            : tileBuilder.SelectedTile.CenterPosition
+                            : SelectedTileWrapper.Value.CenterPosition,
+                        SelectedTileWrapper
                     );
                 _ = Execute(command);
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _ = Execute(new Command.RotateSelectedTile(RotationDirection.Clockwise));
+                _ = Execute(
+                    new Command.RotateSelectedTile(RotationDirection.Clockwise, SelectedTileWrapper)
+                );
             }
         }
 
@@ -103,7 +125,8 @@ namespace TileBuilder
             if (over)
             {
                 Level.Inventory.Room.Model destroyed_tile = null;
-                Command.DeleteSelectedTile command = new((arg) => destroyed_tile = arg);
+                Command.DeleteSelectedTile command =
+                    new((arg) => destroyed_tile = arg, SelectedTileWrapper);
                 Result result = Execute(command);
                 if (result.Success)
                 {
@@ -116,7 +139,7 @@ namespace TileBuilder
         private Result TryPlace(Level.Inventory.Room.Model room)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.AddTileToScene command = new(room.TileUnion, ray);
+            Command.AddTileToScene command = new(room.TileUnion, ray, SelectedTileWrapper);
             return Execute(command);
         }
 

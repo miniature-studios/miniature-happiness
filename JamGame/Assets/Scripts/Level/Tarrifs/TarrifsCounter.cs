@@ -1,9 +1,11 @@
-﻿using Level.Config;
+﻿using Common;
+using Level.Config;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder;
 using TileUnion;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level
 {
@@ -14,7 +16,6 @@ namespace Level
         public int Electricity;
         public int Rent;
         public readonly int Sum => Water + Electricity + Rent;
-        public readonly Check Data => this;
     }
 
     [AddComponentMenu("Level.TariffsCounter")]
@@ -23,25 +24,38 @@ namespace Level
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
-        public Check GetCheck(Tariffs tariffs)
+        [SerializeField]
+        private LevelConfig config;
+
+        [SerializeField, InspectorReadOnly]
+        private Check check;
+        public Check Check => check;
+
+        public UnityEvent<Check> CheckChanged;
+
+        public void UpdateCheck()
         {
             int inside_tiles_count = tileBuilder.GetAllInsideListPositions().Count();
             IEnumerable<TileUnionImpl> room_properties = tileBuilder.GetTileUnionsInPositions(
                 tileBuilder.GetAllInsideListPositions()
             );
 
-            return new()
+            check = new()
             {
-                Rent = inside_tiles_count * tariffs.RentCost,
+                Rent = inside_tiles_count * config.Tariffs.RentCost,
                 Water = room_properties
-                    .Select(x => x.TarrifProperties.WaterConsumption * tariffs.WaterCost)
+                    .Select(x => x.TarrifProperties.WaterConsumption * config.Tariffs.WaterCost)
                     .Sum(),
                 Electricity = room_properties
                     .Select(
-                        x => x.TarrifProperties.ElectricityConsumption * tariffs.ElectricityCost
+                        x =>
+                            x.TarrifProperties.ElectricityConsumption
+                            * config.Tariffs.ElectricityCost
                     )
                     .Sum(),
             };
+
+            CheckChanged?.Invoke(Check);
         }
     }
 }

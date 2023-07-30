@@ -15,18 +15,49 @@ MonoBehaviour:
   days: []
   defaultDay:
     rawDayActions:
-    - selectedType: DayStart
+    - selectedType: Cutscene
       dayStart:
-        morningMoney: 1500
+        morningMoney: 0
+        duration: 0
       meeting:
         shopEmployees: []
         shopRooms: []
         mandatoryRooms: []
       working:
         workingTime: 0
+      cutscene:
+        duration: 1
+        text: Morning
+    - selectedType: DayStart
+      dayStart:
+        morningMoney: 1500
+        duration: 1
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+      cutscene:
+        duration: 0
+        text: 
+    - selectedType: Cutscene
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+      cutscene:
+        duration: 1
+        text: Meeting
     - selectedType: Meeting
       dayStart:
         morningMoney: 0
+        duration: 0
       meeting:
         shopEmployees: []
         shopRooms:
@@ -63,24 +94,74 @@ MonoBehaviour:
         mandatoryRooms: []
       working:
         workingTime: 0
-    - selectedType: Working
+      cutscene:
+        duration: 0
+        text: 
+    - selectedType: Cutscene
       dayStart:
         morningMoney: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        workingTime: 10
-    - selectedType: DayEnd
-      dayStart:
-        morningMoney: 0
+        duration: 0
       meeting:
         shopEmployees: []
         shopRooms: []
         mandatoryRooms: []
       working:
         workingTime: 0
+      cutscene:
+        duration: 2
+        text: Working
+    - selectedType: Working
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 5
+      cutscene:
+        duration: 0
+        text: 
+    - selectedType: Cutscene
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+      cutscene:
+        duration: 2
+        text: Evening
+    - selectedType: DayEnd
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+      cutscene:
+        duration: 0
+        text: 
+    - selectedType: Cutscene
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        workingTime: 0
+      cutscene:
+        duration: 2
+        text: Night
   bossStressSpeed: 2
   tariffs:
     waterCost: 2

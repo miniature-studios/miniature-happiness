@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    // TODO: Move this to Inspector.
     public partial class TileBuilderImpl : MonoBehaviour
     {
         [HideInInspector]
@@ -38,138 +37,54 @@ namespace TileBuilder
 
         [HideInInspector]
         public bool LoadFromSceneComposition;
-
-        private void InspectorStart()
-        {
-            if (LoadFromSceneComposition && LoadingPrefab != null)
-            {
-                LoadSceneComposition(LoadingPrefab);
-            }
-        }
-
-        public void CreateRandomBuilding()
-        {
-            int x = 0;
-            int y = 0;
-            DeleteAllTiles();
-            for (int i = 0; i < SquareSideLength * SquareSideLength; i++)
-            {
-                float value = Random.value * 100;
-                if (value < 50)
-                {
-                    CreateTileAndBind(freespacePrefab, new(x, y), 0);
-                }
-                else if (value is > 50 and < 65)
-                {
-                    CreateTileAndBind(StairsPrefab, new(x, y), 0);
-                }
-                else if (value is > 65 and < 80)
-                {
-                    CreateTileAndBind(WindowPrefab, new(x, y), 0);
-                }
-                else if (value > 80)
-                {
-                    CreateTileAndBind(OutdoorPrefab, new(x, y), 0);
-                }
-                y++;
-                if (y >= SquareSideLength)
-                {
-                    y = 0;
-                    x++;
-                }
-            }
-        }
-
-        public void CreateNormalBuilding()
-        {
-            DeleteAllTiles();
-            for (int i = 0; i < 9; i++)
-            {
-                CreateTileAndBind(OutdoorPrefab, new(0, i), 0);
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                if (i == 1)
-                {
-                    CreateTileAndBind(StairsPrefab, new(i + 1, 0), 0);
-                }
-                else
-                {
-                    CreateTileAndBind(OutdoorPrefab, new(i + 1, 0), 0);
-                }
-
-                for (int j = 0; j < 7; j++)
-                {
-                    if (j == 2)
-                    {
-                        CreateTileAndBind(CorridoorPrefab, new(i + 1, j + 1), 0);
-                    }
-                    else if (j == 3)
-                    {
-                        CreateTileAndBind(WorkingPlace, new(i + 1, j + 1), 0);
-                    }
-                    else if (j == 4)
-                    {
-                        CreateTileAndBind(WorkingPlaceFree, new(i + 1, j + 1), 0);
-                    }
-                    else
-                    {
-                        CreateTileAndBind(freespacePrefab, new(i + 1, j + 1), 0);
-                    }
-                }
-                CreateTileAndBind(OutdoorPrefab, new(i + 1, 8), 0);
-            }
-            for (int i = 0; i < 9; i++)
-            {
-                CreateTileAndBind(OutdoorPrefab, new(9, i), 0);
-            }
-        }
-
-        public void CreateFourTiles()
-        {
-            DeleteAllTiles();
-            CreateTileAndBind(OutdoorPrefab, new(0, 0), 0);
-            CreateTileAndBind(OutdoorPrefab, new(0, 1), 0);
-            CreateTileAndBind(WorkingPlaceFree, new(1, 0), 0);
-            CreateTileAndBind(WorkingPlace, new(1, 1), 0);
-        }
-
-        public void LoadSceneComposition(GameObject scene_composition_prefab)
-        {
-            DeleteAllTiles();
-            if (rootObject != null)
-            {
-                DestroyImmediate(rootObject);
-            }
-            rootObject = Instantiate(scene_composition_prefab, transform);
-            foreach (TileUnionImpl union in rootObject.GetComponentsInChildren<TileUnionImpl>())
-            {
-                foreach (Vector2Int pos in union.TilesPositions)
-                {
-                    TileUnionDictionary.Add(pos, union);
-                }
-            }
-            UpdateAllTiles();
-        }
-
-        public void DeleteAllTiles()
-        {
-            while (TileUnionDictionary.Values.Count() > 0)
-            {
-                _ = DeleteTile(TileUnionDictionary.Values.Last());
-            }
-            TileUnionDictionary.Clear();
-        }
     }
 
     [CustomEditor(typeof(TileBuilderImpl))]
     public partial class TileBuilderInspector : Editor
     {
+        private TileBuilderImpl tile_builder;
+
+        private void Awake()
+        {
+            tile_builder = serializedObject.targetObject as TileBuilderImpl;
+            if (tile_builder.LoadFromSceneComposition && tile_builder.LoadingPrefab != null)
+            {
+                LoadSceneComposition(tile_builder.LoadingPrefab);
+            }
+        }
+
+        public void LoadSceneComposition(GameObject scene_composition_prefab)
+        {
+            DeleteAllTiles();
+            if (tile_builder.RootObject != null)
+            {
+                DestroyImmediate(tile_builder.RootObject);
+            }
+            tile_builder.RootObject = Instantiate(scene_composition_prefab, tile_builder.transform);
+            foreach (
+                TileUnionImpl union in tile_builder.RootObject.GetComponentsInChildren<TileUnionImpl>()
+            )
+            {
+                foreach (Vector2Int pos in union.TilesPositions)
+                {
+                    tile_builder.TileUnionDictionary.Add(pos, union);
+                }
+            }
+            tile_builder.UpdateAllTiles();
+        }
+
+        public void DeleteAllTiles()
+        {
+            while (tile_builder.TileUnionDictionary.Values.Count() > 0)
+            {
+                TileUnionImpl value = tile_builder.TileUnionDictionary.Values.Last();
+                _ = tile_builder.DeleteTile(value);
+            }
+            tile_builder.TileUnionDictionary.Clear();
+        }
+
         public override void OnInspectorGUI()
         {
-            TileBuilderImpl tile_builder = serializedObject.targetObject as TileBuilderImpl;
-
             ShowLocationBuildingButtons(tile_builder);
             DisplaySaveLoadTiles(tile_builder);
 
@@ -229,7 +144,7 @@ namespace TileBuilder
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load scene composition from prefab."))
             {
-                tile_builder.LoadSceneComposition(tile_builder.LoadingPrefab);
+                LoadSceneComposition(tile_builder.LoadingPrefab);
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -306,25 +221,122 @@ namespace TileBuilder
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Create random building"))
             {
-                tile_builder.CreateRandomBuilding();
+                int x = 0;
+                int y = 0;
+                DeleteAllTiles();
+                for (
+                    int i = 0;
+                    i < tile_builder.SquareSideLength * tile_builder.SquareSideLength;
+                    i++
+                )
+                {
+                    float value = Random.value * 100;
+                    if (value < 50)
+                    {
+                        tile_builder.CreateTileAndBind(tile_builder.FreespacePrefab, new(x, y), 0);
+                    }
+                    else if (value is > 50 and < 65)
+                    {
+                        tile_builder.CreateTileAndBind(tile_builder.StairsPrefab, new(x, y), 0);
+                    }
+                    else if (value is > 65 and < 80)
+                    {
+                        tile_builder.CreateTileAndBind(tile_builder.WindowPrefab, new(x, y), 0);
+                    }
+                    else if (value > 80)
+                    {
+                        tile_builder.CreateTileAndBind(tile_builder.OutdoorPrefab, new(x, y), 0);
+                    }
+                    y++;
+                    if (y >= tile_builder.SquareSideLength)
+                    {
+                        y = 0;
+                        x++;
+                    }
+                }
             }
             if (GUILayout.Button("Create normal building"))
             {
-                tile_builder.CreateNormalBuilding();
+                DeleteAllTiles();
+                for (int i = 0; i < 9; i++)
+                {
+                    tile_builder.CreateTileAndBind(tile_builder.OutdoorPrefab, new(0, i), 0);
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    if (i == 1)
+                    {
+                        tile_builder.CreateTileAndBind(tile_builder.StairsPrefab, new(i + 1, 0), 0);
+                    }
+                    else
+                    {
+                        tile_builder.CreateTileAndBind(
+                            tile_builder.OutdoorPrefab,
+                            new(i + 1, 0),
+                            0
+                        );
+                    }
+
+                    for (int j = 0; j < 7; j++)
+                    {
+                        if (j == 2)
+                        {
+                            tile_builder.CreateTileAndBind(
+                                tile_builder.CorridoorPrefab,
+                                new(i + 1, j + 1),
+                                0
+                            );
+                        }
+                        else if (j == 3)
+                        {
+                            tile_builder.CreateTileAndBind(
+                                tile_builder.WorkingPlace,
+                                new(i + 1, j + 1),
+                                0
+                            );
+                        }
+                        else if (j == 4)
+                        {
+                            tile_builder.CreateTileAndBind(
+                                tile_builder.WorkingPlaceFree,
+                                new(i + 1, j + 1),
+                                0
+                            );
+                        }
+                        else
+                        {
+                            tile_builder.CreateTileAndBind(
+                                tile_builder.FreespacePrefab,
+                                new(i + 1, j + 1),
+                                0
+                            );
+                        }
+                    }
+                    tile_builder.CreateTileAndBind(tile_builder.OutdoorPrefab, new(i + 1, 8), 0);
+                }
+                for (int i = 0; i < 9; i++)
+                {
+                    tile_builder.CreateTileAndBind(tile_builder.OutdoorPrefab, new(9, i), 0);
+                }
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Clear Scene"))
             {
-                tile_builder.DeleteAllTiles();
+                DeleteAllTiles();
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add 4 Tiles"))
             {
-                tile_builder.CreateFourTiles();
+                DeleteAllTiles();
+                tile_builder.CreateTileAndBind(tile_builder.OutdoorPrefab, new(0, 0), 0);
+                tile_builder.CreateTileAndBind(tile_builder.OutdoorPrefab, new(0, 1), 0);
+                tile_builder.CreateTileAndBind(tile_builder.WorkingPlaceFree, new(1, 0), 0);
+                tile_builder.CreateTileAndBind(tile_builder.WorkingPlace, new(1, 1), 0);
             }
             if (GUILayout.Button("Update All"))
             {

@@ -1,29 +1,23 @@
 ﻿using Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Level.Inventory
 {
-    [Serializable]
-    public class NamedRoomInventoryUI
-    {
-        public string Name;
-        public Room.Model Room;
-    }
-
     [AddComponentMenu("Level.Inventory.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]
         private Model inventoryModel;
+
+        [SerializeField, InspectorReadOnly]
         private Room.Model selectedRoom = null;
+
+        [SerializeField, InspectorReadOnly]
         private bool pointerOverView = false;
 
         public event Func<Room.Model, Result> TryPlace;
-
-        public List<NamedRoomInventoryUI> NamedRoomInventoryUIs;
 
         private void Update()
         {

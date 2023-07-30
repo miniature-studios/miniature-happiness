@@ -15,6 +15,20 @@ namespace Level
 
         private IEnumerator<DayConfig> dayEnumerator;
         private IEnumerator<IDayAction> actionEnumerator;
+        private bool isPlanned = true;
+
+        // Must be catched by Executor
+        public void ActionEndActivation()
+        {
+            if (isPlanned)
+            {
+                PlayPlannedActions();
+            }
+            else
+            {
+                PlayDefaultDay();
+            }
+        }
 
         private void Start()
         {
@@ -24,14 +38,15 @@ namespace Level
                 _ = (
                     actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
                 ).MoveNext();
-                actionEnumerator.Current.Execute(levelExecutor, PlayPlannedActions);
+                actionEnumerator.Current.Execute(levelExecutor);
             }
             else
             {
                 _ = (
                     actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
                 ).MoveNext();
-                actionEnumerator.Current.Execute(levelExecutor, PlayDefaultDay);
+                isPlanned = false;
+                actionEnumerator.Current.Execute(levelExecutor);
             }
         }
 
@@ -44,14 +59,15 @@ namespace Level
                     _ = (
                         actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
                     ).MoveNext();
-                    actionEnumerator.Current.Execute(levelExecutor, PlayPlannedActions);
+                    actionEnumerator.Current.Execute(levelExecutor);
                 }
                 else
                 {
                     _ = (
                         actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
                     ).MoveNext();
-                    actionEnumerator.Current.Execute(levelExecutor, PlayDefaultDay);
+                    isPlanned = false;
+                    actionEnumerator.Current.Execute(levelExecutor);
                 }
             }
         }
@@ -63,7 +79,7 @@ namespace Level
                 actionEnumerator.Reset();
                 _ = actionEnumerator.MoveNext();
             }
-            actionEnumerator.Current.Execute(levelExecutor, PlayDefaultDay);
+            actionEnumerator.Current.Execute(levelExecutor);
         }
     }
 }

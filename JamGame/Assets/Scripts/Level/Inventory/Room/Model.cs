@@ -1,3 +1,4 @@
+using Common;
 using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,6 +12,7 @@ namespace Level.Inventory.Room
 
         public UnityEvent<int> CountUpdated;
 
+        [SerializeField, InspectorReadOnly]
         private int count = 1;
         public int Count
         {
@@ -18,6 +20,7 @@ namespace Level.Inventory.Room
             set
             {
                 count = value;
+                CountUpdated?.Invoke(count);
                 if (count <= 0)
                 {
                     Destroy(gameObject);

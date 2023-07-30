@@ -1,18 +1,13 @@
-﻿using Common;
-using Level.Config;
-using System;
+﻿using Level.Config;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level
 {
     [AddComponentMenu("Level.Executor")]
     public class Executor : MonoBehaviour
     {
-        // FIXME: dublication with sheduler, whant tarrifs
-        [SerializeField]
-        private LevelConfig levelConfig;
-
         [SerializeField]
         private TileBuilder.Controller tileBuilderController;
 
@@ -23,96 +18,86 @@ namespace Level
         private Shop.Controller shopController;
 
         [SerializeField]
-        private UIController uiController;
+        private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
 
         [SerializeField]
         private TarrifsCounter tarrifsCounter;
 
         [SerializeField]
-        private TemporaryData levelTemperaryData;
-
-        [SerializeField]
-        private TransitionPanel transitionPanel;
+        private TransitionPanel.Model transitionPanel;
 
         [SerializeField]
         private Boss.Model boss;
 
-        private Action bufferAction;
+        public UnityEvent ActionEndNotify;
 
-        public void Execute(DayEnd day_end, Action next_action)
+        public void Execute(DayEnd day_end)
         {
-            Check check = tarrifsCounter.GetCheck(levelConfig.Tariffs);
-            Result result = financesModel.TryTakeMoney(check.Sum);
-            if (result.Success)
-            {
-                levelTemperaryData.CreateCheck(check);
-                bufferAction = next_action;
-                transitionPanel.SetText("Day end start.");
-                uiController.PlayDayActionStart(day_end.GetType(), null);
-            }
-            else
+            tarrifsCounter.UpdateCheck();
+            if (financesModel.TryTakeMoney(tarrifsCounter.Check.Sum).Failure)
             {
                 // TODO lose game
             }
+            animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
         }
 
         // Calls by button continue on daily bill panel
         public void CompleteDayEnd()
         {
-            transitionPanel.SetText("Day end end.");
-            uiController.PlayDayActionEnd(bufferAction);
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(DayStart day_start, Action next_action)
+        public void Execute(DayStart day_start)
         {
             financesModel.AddMoney(day_start.MorningMoney);
-            transitionPanel.SetText("Day start start.");
-            uiController.PlayDayActionStart(
-                day_start.GetType(),
-                () => _ = StartCoroutine(DayStartRoutine(3, next_action))
-            );
+            animatorSwitcher.SetAnimatorStates(typeof(DayStart));
+            _ = StartCoroutine(DayStartRoutine(day_start.Duration));
         }
 
-        private IEnumerator DayStartRoutine(float time, Action next_action)
+        private IEnumerator DayStartRoutine(float time)
         {
             yield return new WaitForSeconds(time);
-            transitionPanel.SetText("Day start end.");
-            uiController.PlayDayActionEnd(next_action);
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(Meeting meeting, Action next_action)
+        public void Execute(Meeting meeting)
         {
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
-            transitionPanel.SetText("Meeting start.");
-            uiController.PlayDayActionStart(meeting.GetType(), null);
+            animatorSwitcher.SetAnimatorStates(typeof(Meeting));
             boss.ActivateNextTaskBunch();
-            bufferAction = next_action;
         }
 
         // Calls by button complete meeting
         public void CompleteMeeting()
         {
-            transitionPanel.SetText("Meeting end.");
-            uiController.PlayDayActionEnd(bufferAction);
-            bufferAction = null;
+            ActionEndNotify?.Invoke();
         }
 
-        public void Execute(Working working, Action next_action)
+        public void Execute(Working working)
         {
-            transitionPanel.SetText("Working start.");
-            uiController.PlayDayActionStart(
-                working.GetType(),
-                () => _ = StartCoroutine(WorkingTime(working.WorkingTime, next_action))
-            );
+            animatorSwitcher.SetAnimatorStates(typeof(Working));
+            _ = StartCoroutine(WorkingTime(working.WorkingTime));
         }
 
-        private IEnumerator WorkingTime(float time, Action endWorkingTime)
+        private IEnumerator WorkingTime(float time)
         {
             yield return new WaitForSeconds(time);
-            transitionPanel.SetText("Working end.");
-            uiController.PlayDayActionEnd(endWorkingTime);
+            ActionEndNotify?.Invoke();
+        }
+
+        public void Execute(Cutscene cutscene)
+        {
+            transitionPanel.PanelText = cutscene.Text;
+            animatorSwitcher.SetAnimatorStates(typeof(Cutscene));
+            _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
+        }
+
+        public IEnumerator CutsceneRoutine(float time)
+        {
+            yield return new WaitForSeconds(time);
+            ActionEndNotify?.Invoke();
         }
     }
 }

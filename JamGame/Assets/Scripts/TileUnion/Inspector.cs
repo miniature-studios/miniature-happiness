@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,40 +7,62 @@ namespace TileUnion.Inspector
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-        private TileUnionImpl tile_union;
-
         public override void OnInspectorGUI()
         {
-            tile_union = serializedObject.targetObject as TileUnionImpl;
+            TileUnionImpl tile_union = serializedObject.targetObject as TileUnionImpl;
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Show rotating"))
+            GUILayout.Label("Must be pressed before usage!");
+            EditorGUILayout.EndHorizontal();
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Update cache"))
             {
                 tile_union.CreateCache();
-                _ = tile_union.StartCoroutine(RotateAfterWait(0));
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set rotation 0 from ceche"))
+            {
+                tile_union.SetRotation(0);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set rotation 1 from ceche"))
+            {
+                tile_union.SetRotation(1);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set rotation 2 from ceche"))
+            {
+                tile_union.SetRotation(2);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set rotation 3 from ceche"))
+            {
+                tile_union.SetRotation(3);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("For testing");
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Isolate Update"))
+            {
+                tile_union.IsolateUpdate();
             }
             EditorGUILayout.EndHorizontal();
 
             _ = DrawDefaultInspector();
 
             _ = serializedObject.ApplyModifiedProperties();
-        }
-
-        private IEnumerator RotateAfterWait(int counter)
-        {
-            Debug.Log($"Rotation {counter}");
-            tile_union.SetRotation(counter);
-            counter++;
-            yield return new WaitForSecondsRealtime(1);
-            if (counter <= 3)
-            {
-                _ = tile_union.StartCoroutine(RotateAfterWait(counter));
-            }
-            else if (counter == 4)
-            {
-                tile_union.SetRotation(0);
-                Debug.Log("End Rotation");
-            }
         }
     }
 }
