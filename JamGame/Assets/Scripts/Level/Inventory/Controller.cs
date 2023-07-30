@@ -1,5 +1,6 @@
 ﻿using Common;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,11 +26,13 @@ namespace Level.Inventory
             {
                 if (pointerOverView)
                 {
-                    selectedRoom = RaycastUtilities
+                    IEnumerable<GameObject> collection = RaycastUtilities
                         .UIRaycast(Input.mousePosition)
-                        ?.Where(x => x.GetComponent<Room.Model>())
-                        ?.Select(x => x.GetComponent<Room.Model>())
-                        .First();
+                        .Where(x => x.GetComponent<Room.Model>());
+                    selectedRoom =
+                        collection.Count() > 0
+                            ? collection.Select(x => x.GetComponent<Room.Model>()).First()
+                            : null;
                 }
             }
 
