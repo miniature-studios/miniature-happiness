@@ -112,17 +112,9 @@ namespace TileBuilder
             SelectedTileWrapper selectedTileCover
         )
         {
-            if (justCreated)
+            deleted_tile = DeleteTile(selectedTileCover.Value);
+            if (!justCreated)
             {
-                justCreated = false;
-                deleted_tile = DeleteTile(selectedTileCover.Value);
-                selectedTileCover.Value = null;
-                return new SuccessResult();
-            }
-            else
-            {
-                justCreated = false;
-                deleted_tile = DeleteTile(selectedTileCover.Value);
                 foreach (Vector2Int pos in previousPlaces)
                 {
                     _ = TileUnionDictionary.Remove(pos);
@@ -132,9 +124,10 @@ namespace TileBuilder
                     CreateTileAndBind(FreespacePrefab, position, 0);
                 }
                 UpdateSidesInPositions(previousPlaces);
-                selectedTileCover.Value = null;
-                return new SuccessResult();
             }
+            selectedTileCover.Value = null;
+            justCreated = false;
+            return new SuccessResult();
         }
 
         public Result MoveSelectedTile(Direction direction, SelectedTileWrapper selectedTileCover)
