@@ -115,9 +115,8 @@ namespace TileBuilder
             if (justCreated)
             {
                 justCreated = false;
-                _ = DeleteTile(selectedTileCover.Value);
+                deleted_tile = DeleteTile(selectedTileCover.Value);
                 selectedTileCover.Value = null;
-                deleted_tile = null;
                 return new SuccessResult();
             }
             else
