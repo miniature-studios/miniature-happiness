@@ -35,6 +35,8 @@ namespace TileBuilder
         public Matrix BuilderMatrix => builderMatrix;
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
+        public event Action<TileUnionImpl> OnTileUnionCreated;
+
         public void Start()
         {
             foreach (TileUnionImpl union in rootObject.GetComponentsInChildren<TileUnionImpl>())
@@ -48,6 +50,7 @@ namespace TileBuilder
                 }
             }
             UpdateAllTiles();
+            EditorStart();
         }
 
         public Result Validate()
@@ -295,6 +298,7 @@ namespace TileBuilder
             TileUnionImpl tileUnion = Instantiate(tile_prefab, rootObject.transform);
             tileUnion.SetPosition(position);
             tileUnion.SetRotation(rotation);
+            OnTileUnionCreated?.Invoke(tileUnion);
             return tileUnion;
         }
 

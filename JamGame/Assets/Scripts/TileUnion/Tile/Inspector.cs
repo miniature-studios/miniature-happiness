@@ -5,8 +5,94 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace TileUnion.Tile.Inspector
+namespace TileUnion.Tile
 {
+    public partial class TileImpl
+    {
+        [InspectorReadOnly]
+        public bool ShowDirectionGizmo = false;
+
+        [InspectorReadOnly]
+        public bool ShowPathGizmo = false;
+
+        private float lineThikness = 4;
+        private Vector3 right = new(0, 0, -1);
+        private Vector3 left = new(0, 0, 1);
+        private Vector3 up = new(1, 0, 0);
+        private Vector3 down = new(-1, 0, 0);
+        private GameObject centerCube = null;
+
+        public void SetCubeInCenter(bool value)
+        {
+            switch (centerCube == null, value)
+            {
+                case (true, true):
+                    centerCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    centerCube.transform.parent = CenterObject.transform;
+                    CenterObject.transform.localPosition = Vector3.zero;
+                    break;
+                case (false, false):
+                    Destroy(centerCube);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (ShowDirectionGizmo)
+            {
+                Handles.Label(
+                    transform.position + transform.TransformDirection(right * 2),
+                    "Right"
+                );
+                Handles.Label(transform.position + transform.TransformDirection(left * 2), "Left");
+                Handles.Label(transform.position + transform.TransformDirection(up * 2), "Up");
+                Handles.Label(transform.position + transform.TransformDirection(down * 2), "Down");
+            }
+            if (ShowPathGizmo)
+            {
+                foreach (Direction dir in GetPassableDirections())
+                {
+                    switch (dir)
+                    {
+                        case Direction.Up:
+                            Handles.DrawLine(
+                                transform.position + Vector3.up,
+                                transform.position + (up * 2.5f) + Vector3.up,
+                                lineThikness
+                            );
+                            break;
+                        case Direction.Right:
+                            Handles.DrawLine(
+                                transform.position + Vector3.up,
+                                transform.position + (right * 2.5f) + Vector3.up,
+                                lineThikness
+                            );
+                            break;
+                        case Direction.Down:
+                            Handles.DrawLine(
+                                transform.position + Vector3.up,
+                                transform.position + (down * 2.5f) + Vector3.up,
+                                lineThikness
+                            );
+                            break;
+                        case Direction.Left:
+                            Handles.DrawLine(
+                                transform.position + Vector3.up,
+                                transform.position + (left * 2.5f) + Vector3.up,
+                                lineThikness
+                            );
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
     [CanEditMultipleObjects]
     [CustomEditor(typeof(TileImpl))]
     public class TileInspector : Editor

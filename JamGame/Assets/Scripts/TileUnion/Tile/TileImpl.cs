@@ -14,11 +14,8 @@ namespace TileUnion.Tile
     [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
     [AddComponentMenu("TileUnion.Tile.Tile")]
-    public class TileImpl : MonoBehaviour
+    public partial class TileImpl : MonoBehaviour
     {
-        [SerializeField]
-        private bool showGizmo = false;
-
         [SerializeField]
         private Matrix builderMatrix;
 
@@ -40,6 +37,7 @@ namespace TileUnion.Tile
         public List<WallCollection> RawWalls = new();
         public List<CornerCollection> Corners = new();
         public View TileView;
+        public GameObject CenterObject;
 
         [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;
@@ -77,29 +75,6 @@ namespace TileUnion.Tile
         {
             SetPosition(Position);
             SetRotation(Rotation);
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (showGizmo)
-            {
-                Handles.Label(
-                    transform.position + transform.TransformDirection(new Vector3(0, 0, -1) * 2),
-                    "Right"
-                );
-                Handles.Label(
-                    transform.position + transform.TransformDirection(new Vector3(0, 0, 1) * 2),
-                    "Left"
-                );
-                Handles.Label(
-                    transform.position + transform.TransformDirection(new Vector3(1, 0, 0) * 2),
-                    "Up"
-                );
-                Handles.Label(
-                    transform.position + transform.TransformDirection(new Vector3(-1, 0, 0) * 2),
-                    "Down"
-                );
-            }
         }
 
         public struct WallTypeMatch
