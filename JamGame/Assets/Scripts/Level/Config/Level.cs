@@ -11,19 +11,9 @@ namespace Level.Config
     {
         [SerializeField]
         private List<SerializedDayAction> rawDayActions;
-        private List<IDayAction> dayActions = null;
-        public ImmutableList<IDayAction> DayActions
-        {
-            get
-            {
-                if (dayActions == null)
-                {
-                    dayActions = new();
-                    dayActions.AddRange(rawDayActions.Select(x => x.ToDayAction()));
-                }
-                return dayActions.ToImmutableList();
-            }
-        }
+
+        public ImmutableList<IDayAction> DayActions =>
+            rawDayActions.Select(x => x.ToDayAction()).ToImmutableList();
     }
 
     [Serializable]

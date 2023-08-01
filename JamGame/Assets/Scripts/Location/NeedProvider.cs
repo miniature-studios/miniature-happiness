@@ -76,6 +76,8 @@ namespace Location
 
         private EmployeeImpl currentEmployee = null;
 
+        private readonly List<NeedModifiers> registeredModifiers = new();
+
         public bool TryTake(EmployeeImpl employee)
         {
             if (!IsAvailable(employee))
@@ -107,8 +109,6 @@ namespace Location
         {
             return filter.IsEmployeeAllowed(employee);
         }
-
-        private readonly List<NeedModifiers> registeredModifiers = new();
 
         public void RegisterModifier(NeedModifiers modifiers)
         {

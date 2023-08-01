@@ -117,7 +117,6 @@ namespace TileBuilder
                 TileUnionImpl value = tile_builder.TileUnionDictionary.Values.Last();
                 _ = tile_builder.DeleteTile(value);
             }
-            tile_builder.TileUnionDictionary.Clear();
         }
 
         public override void OnInspectorGUI()

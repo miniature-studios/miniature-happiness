@@ -51,7 +51,7 @@ namespace Employee
         // TODO: refactor
         [SerializeField]
         [HideInInspector]
-        private readonly List<NeedModifiers> registeredModifiers;
+        private List<NeedModifiers> registeredModifiers;
 
         public Need(Need prototype)
         {

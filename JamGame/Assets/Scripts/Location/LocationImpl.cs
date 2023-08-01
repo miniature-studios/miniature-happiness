@@ -7,7 +7,10 @@ using UnityEngine;
 namespace Location
 {
     [AddComponentMenu("Location.Location")]
-    public class LocationImpl : MonoBehaviour, IDataProvider<EmployeeAmount>, IDataProvider<MaxStress>
+    public class LocationImpl
+        : MonoBehaviour,
+            IDataProvider<EmployeeAmount>,
+            IDataProvider<MaxStress>
     {
         [SerializeField]
         private EmployeeImpl employeePrototype;
@@ -26,7 +29,8 @@ namespace Location
             );
         }
 
-        public void AddEmployee()
+        public void AddEmployee( /*TODO: Pass config and apply it to Employee*/
+        )
         {
             EmployeeImpl new_employee = Instantiate(
                 employeePrototype,
