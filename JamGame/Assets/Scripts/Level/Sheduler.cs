@@ -8,7 +8,7 @@ namespace Level
     public class Sheduler : MonoBehaviour
     {
         [SerializeField]
-        private LevelConfig levelActionsConfig;
+        private ConfigHandler levelConfig;
 
         [SerializeField]
         private Executor levelExecutor;
@@ -32,9 +32,9 @@ namespace Level
 
         private void Start()
         {
-            if (levelActionsConfig.Days.Count > 0)
+            if (levelConfig.Config.Days.Count > 0)
             {
-                _ = (dayEnumerator = levelActionsConfig.Days.GetEnumerator()).MoveNext();
+                _ = (dayEnumerator = levelConfig.Config.Days.GetEnumerator()).MoveNext();
                 _ = (
                     actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
                 ).MoveNext();
@@ -43,7 +43,7 @@ namespace Level
             else
             {
                 _ = (
-                    actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
+                    actionEnumerator = levelConfig.Config.DefaultDay.DayActions.GetEnumerator()
                 ).MoveNext();
                 isPlanned = false;
                 actionEnumerator.Current.Execute(levelExecutor);
@@ -64,7 +64,7 @@ namespace Level
                 else
                 {
                     _ = (
-                        actionEnumerator = levelActionsConfig.DefaultDay.DayActions.GetEnumerator()
+                        actionEnumerator = levelConfig.Config.DefaultDay.DayActions.GetEnumerator()
                     ).MoveNext();
                     isPlanned = false;
                     actionEnumerator.Current.Execute(levelExecutor);
