@@ -35,6 +35,8 @@ namespace TileBuilder
         public Matrix BuilderMatrix => builderMatrix;
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
+        public event Action<TileUnionImpl> OnTileUnionCreated;
+
         public void Start()
         {
             foreach (TileUnionImpl union in rootObject.GetComponentsInChildren<TileUnionImpl>())
@@ -48,6 +50,7 @@ namespace TileBuilder
                 }
             }
             UpdateAllTiles();
+            EditorStart();
         }
 
         public Result Validate()
@@ -109,18 +112,9 @@ namespace TileBuilder
             SelectedTileWrapper selectedTileCover
         )
         {
-            if (justCreated)
+            deleted_tile = DeleteTile(selectedTileCover.Value);
+            if (!justCreated)
             {
-                justCreated = false;
-                _ = DeleteTile(selectedTileCover.Value);
-                selectedTileCover.Value = null;
-                deleted_tile = null;
-                return new SuccessResult();
-            }
-            else
-            {
-                justCreated = false;
-                deleted_tile = DeleteTile(selectedTileCover.Value);
                 foreach (Vector2Int pos in previousPlaces)
                 {
                     _ = TileUnionDictionary.Remove(pos);
@@ -130,9 +124,10 @@ namespace TileBuilder
                     CreateTileAndBind(FreespacePrefab, position, 0);
                 }
                 UpdateSidesInPositions(previousPlaces);
-                selectedTileCover.Value = null;
-                return new SuccessResult();
             }
+            selectedTileCover.Value = null;
+            justCreated = false;
+            return new SuccessResult();
         }
 
         public Result MoveSelectedTile(Direction direction, SelectedTileWrapper selectedTileCover)
@@ -295,6 +290,7 @@ namespace TileBuilder
             TileUnionImpl tileUnion = Instantiate(tile_prefab, rootObject.transform);
             tileUnion.SetPosition(position);
             tileUnion.SetRotation(rotation);
+            OnTileUnionCreated?.Invoke(tileUnion);
             return tileUnion;
         }
 

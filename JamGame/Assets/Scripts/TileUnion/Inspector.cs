@@ -2,8 +2,35 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace TileUnion.Inspector
+namespace TileUnion
 {
+    public partial class TileUnionImpl
+    {
+        public void SetDireactionsGizmo(bool value)
+        {
+            foreach (Tile.TileImpl tile in Tiles)
+            {
+                tile.ShowDirectionGizmo = value;
+            }
+        }
+
+        public void SetPathGizmo(bool value)
+        {
+            foreach (Tile.TileImpl tile in Tiles)
+            {
+                tile.ShowPathGizmo = value;
+            }
+        }
+
+        public void SetCenterCube(bool value)
+        {
+            foreach (Tile.TileImpl tile in Tiles)
+            {
+                tile.SetCubeInCenter(value);
+            }
+        }
+    }
+
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
@@ -57,6 +84,28 @@ namespace TileUnion.Inspector
             if (GUILayout.Button("Isolate Update"))
             {
                 tile_union.IsolateUpdate();
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Show Direactions Gizmo"))
+            {
+                tile_union.SetDireactionsGizmo(true);
+            }
+            if (GUILayout.Button("Hide Direactions Gizmo"))
+            {
+                tile_union.SetDireactionsGizmo(false);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Show Path Gizmo"))
+            {
+                tile_union.SetPathGizmo(true);
+            }
+            if (GUILayout.Button("Hide Path Gizmo"))
+            {
+                tile_union.SetPathGizmo(false);
             }
             EditorGUILayout.EndHorizontal();
 

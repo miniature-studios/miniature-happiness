@@ -37,6 +37,46 @@ namespace TileBuilder
 
         [HideInInspector]
         public bool LoadFromSceneComposition;
+
+        [HideInInspector]
+        public bool ShowTileDirectionGizmo;
+
+        [HideInInspector]
+        public bool ShowTilePathGizmo;
+
+        [HideInInspector]
+        public bool ShowTileFreeSpaceCube;
+
+        public void EditorStart()
+        {
+            if (LoadFromSceneComposition && LoadingPrefab != null)
+            {
+                while (TileUnionDictionary.Values.Count() > 0)
+                {
+                    TileUnionImpl value = TileUnionDictionary.Values.Last();
+                    _ = DeleteTile(value);
+                }
+                TileUnionDictionary.Clear();
+                LoadSceneComposition();
+            }
+        }
+
+        public void LoadSceneComposition()
+        {
+            if (RootObject != null)
+            {
+                DestroyImmediate(RootObject);
+            }
+            RootObject = Instantiate(LoadingPrefab, transform);
+            foreach (TileUnionImpl union in RootObject.GetComponentsInChildren<TileUnionImpl>())
+            {
+                foreach (Vector2Int pos in union.TilesPositions)
+                {
+                    TileUnionDictionary.Add(pos, union);
+                }
+            }
+            UpdateAllTiles();
+        }
     }
 
     [CustomEditor(typeof(TileBuilderImpl))]
@@ -47,30 +87,27 @@ namespace TileBuilder
         private void Awake()
         {
             tile_builder = serializedObject.targetObject as TileBuilderImpl;
-            if (tile_builder.LoadFromSceneComposition && tile_builder.LoadingPrefab != null)
-            {
-                LoadSceneComposition(tile_builder.LoadingPrefab);
-            }
+            tile_builder.OnTileUnionCreated += OnTileUnionCreated;
         }
 
-        public void LoadSceneComposition(GameObject scene_composition_prefab)
+        private void OnTileUnionCreated(TileUnionImpl tileUnionImpl)
         {
-            DeleteAllTiles();
-            if (tile_builder.RootObject != null)
+            if (tile_builder.ShowTileDirectionGizmo)
             {
-                DestroyImmediate(tile_builder.RootObject);
+                tileUnionImpl.SetDireactionsGizmo(true);
             }
-            tile_builder.RootObject = Instantiate(scene_composition_prefab, tile_builder.transform);
-            foreach (
-                TileUnionImpl union in tile_builder.RootObject.GetComponentsInChildren<TileUnionImpl>()
+            if (
+                tile_builder.ShowTilePathGizmo
+                && !tileUnionImpl.IsAllWithMark("Freespace")
+                && !tileUnionImpl.IsAllWithMark("Outside")
             )
             {
-                foreach (Vector2Int pos in union.TilesPositions)
-                {
-                    tile_builder.TileUnionDictionary.Add(pos, union);
-                }
+                tileUnionImpl.SetPathGizmo(true);
             }
-            tile_builder.UpdateAllTiles();
+            if (tile_builder.ShowTileFreeSpaceCube && tileUnionImpl.IsAllWithMark("Freespace"))
+            {
+                tileUnionImpl.SetCenterCube(true);
+            }
         }
 
         public void DeleteAllTiles()
@@ -87,10 +124,75 @@ namespace TileBuilder
         {
             ShowLocationBuildingButtons(tile_builder);
             DisplaySaveLoadTiles(tile_builder);
+            DisplayDebuggingTools(tile_builder);
 
             _ = DrawDefaultInspector();
 
             _ = serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DisplayDebuggingTools(TileBuilderImpl tile_builder)
+        {
+            bool buffer_bool;
+
+            _ = EditorGUILayout.BeginHorizontal();
+            buffer_bool = EditorGUILayout.Toggle(
+                "Show Tile Direction Gizmo?",
+                tile_builder.ShowTileDirectionGizmo
+            );
+            if (buffer_bool != tile_builder.ShowTileDirectionGizmo)
+            {
+                foreach (
+                    TileUnionImpl tileUnion in tile_builder.TileUnionDictionary.Values.Distinct()
+                )
+                {
+                    tileUnion.SetDireactionsGizmo(!tile_builder.ShowTileDirectionGizmo);
+                }
+            }
+            tile_builder.ShowTileDirectionGizmo = buffer_bool;
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            buffer_bool = EditorGUILayout.Toggle(
+                "Show Tile FreeSpace Model?",
+                tile_builder.ShowTileFreeSpaceCube
+            );
+            if (buffer_bool != tile_builder.ShowTileFreeSpaceCube)
+            {
+                foreach (
+                    TileUnionImpl tileUnion in tile_builder.TileUnionDictionary.Values.Distinct()
+                )
+                {
+                    if (tileUnion.IsAllWithMark("Freespace"))
+                    {
+                        tileUnion.SetCenterCube(!tile_builder.ShowTileFreeSpaceCube);
+                    }
+                }
+            }
+            tile_builder.ShowTileFreeSpaceCube = buffer_bool;
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            buffer_bool = EditorGUILayout.Toggle(
+                "Show Tile Path Gizmo?",
+                tile_builder.ShowTilePathGizmo
+            );
+            if (buffer_bool != tile_builder.ShowTilePathGizmo)
+            {
+                foreach (
+                    TileUnionImpl tileUnion in tile_builder.TileUnionDictionary.Values.Distinct()
+                )
+                {
+                    if (
+                        !tileUnion.IsAllWithMark("Freespace") && !tileUnion.IsAllWithMark("Outside")
+                    )
+                    {
+                        tileUnion.SetPathGizmo(!tile_builder.ShowTilePathGizmo);
+                    }
+                }
+            }
+            tile_builder.ShowTilePathGizmo = buffer_bool;
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DisplaySaveLoadTiles(TileBuilderImpl tile_builder)
@@ -144,7 +246,7 @@ namespace TileBuilder
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Load scene composition from prefab."))
             {
-                LoadSceneComposition(tile_builder.LoadingPrefab);
+                tile_builder.LoadSceneComposition();
             }
             EditorGUILayout.EndHorizontal();
         }

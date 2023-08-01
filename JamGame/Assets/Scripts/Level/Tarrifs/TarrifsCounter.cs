@@ -1,5 +1,4 @@
 ﻿using Common;
-using Level.Config;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder;
@@ -25,7 +24,7 @@ namespace Level
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
-        private LevelConfig config;
+        private ConfigHandler levelConfig;
 
         [SerializeField, InspectorReadOnly]
         private Check check;
@@ -42,15 +41,19 @@ namespace Level
 
             check = new()
             {
-                Rent = inside_tiles_count * config.Tariffs.RentCost,
+                Rent = inside_tiles_count * levelConfig.Config.Tariffs.RentCost,
                 Water = room_properties
-                    .Select(x => x.TarrifProperties.WaterConsumption * config.Tariffs.WaterCost)
+                    .Select(
+                        x =>
+                            x.TarrifProperties.WaterConsumption
+                            * levelConfig.Config.Tariffs.WaterCost
+                    )
                     .Sum(),
                 Electricity = room_properties
                     .Select(
                         x =>
                             x.TarrifProperties.ElectricityConsumption
-                            * config.Tariffs.ElectricityCost
+                            * levelConfig.Config.Tariffs.ElectricityCost
                     )
                     .Sum(),
             };
