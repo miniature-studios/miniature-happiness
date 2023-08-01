@@ -32,7 +32,12 @@ namespace Level.Inventory.Room
 
         public void Update()
         {
-            switch (RaycastUtilities.PointerIsOverTargetGO(gameObject), targetInfo == null)
+            switch
+                (
+                    RaycastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject),
+                    targetInfo == null
+                )
+
             {
                 case (true, true):
                     targetInfo = Instantiate(

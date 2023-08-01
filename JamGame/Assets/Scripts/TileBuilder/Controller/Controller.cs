@@ -71,7 +71,7 @@ namespace TileBuilder
             Vector2 mouseDelta = mousePosition - previousMousePosition;
             previousMousePosition = mousePosition;
 
-            bool isOverUI = RaycastUtilities.PointerIsOverUI();
+            bool isOverUI = RaycastUtilities.PointerIsOverUI(mousePosition);
 
             if (Input.GetMouseButtonDown(0))
             {
