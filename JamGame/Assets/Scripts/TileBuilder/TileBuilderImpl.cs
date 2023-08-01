@@ -56,7 +56,7 @@ namespace TileBuilder
         public Result Validate()
         {
             Stack<KeyValuePair<Vector2Int, TileUnionImpl>> points_stack =
-                new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("door")));
+                new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("Door")));
             List<KeyValuePair<Vector2Int, TileUnionImpl>> tiles_to_check = TileUnionDictionary
                 .Where(
                     x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("Freespace")
