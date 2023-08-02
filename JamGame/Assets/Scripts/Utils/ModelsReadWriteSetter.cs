@@ -22,7 +22,7 @@ namespace Utils
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             }
 
-            Debug.Log("Hierarchy animators setup done");
+            Debug.Log("Models setup done");
         }
     }
 }
