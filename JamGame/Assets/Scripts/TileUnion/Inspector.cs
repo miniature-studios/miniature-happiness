@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using DynamicNavMesh;
 using UnityEditor;
 using UnityEngine;
 
