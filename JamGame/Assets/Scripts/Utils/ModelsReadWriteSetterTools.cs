@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Utils
 {
-    public class ModelsReadWriteSetterTools
+    public class ModelsReadWriteFlagSetter
     {
-        [MenuItem("Tools/ModelsReadWriteSetter/Set Models Read|Write flag in Assets on true")]
+        [MenuItem("Tools/ModelsReadWriteSetter/Set Models read|write flag")]
         private static void Hierarchy()
         {
             IEnumerable<string> files = Directory
@@ -17,8 +17,8 @@ namespace Utils
 
             foreach (string path in files)
             {
-                ModelImporter A = (ModelImporter)AssetImporter.GetAtPath(path);
-                A.isReadable = true;
+                ModelImporter model_importer = (ModelImporter)AssetImporter.GetAtPath(path);
+                model_importer.isReadable = true;
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             }
 

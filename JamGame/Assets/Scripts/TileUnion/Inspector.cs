@@ -35,32 +35,32 @@ namespace TileUnion
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-        private void AddNavMeshSourseTagToChilds(Transform transform)
+        private void AddNavMeshSourseTagToChildren(Transform transform)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
                 Transform child = transform.GetChild(i);
                 if (
                     child.TryGetComponent(out MeshRenderer _)
-                    && !child.TryGetComponent(out NavMeshSourceTag _)
+                    && !child.TryGetComponent(out SourceTag _)
                 )
                 {
-                    _ = child.gameObject.AddComponent<NavMeshSourceTag>();
+                    _ = child.gameObject.AddComponent<SourceTag>();
                 }
-                AddNavMeshSourseTagToChilds(child);
+                AddNavMeshSourseTagToChildren(child);
             }
         }
 
-        private void DeleteNavMeshSourseTagToChilds(Transform transform)
+        private void DeleteNavMeshSourseTagFromChildren(Transform transform)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
                 Transform child = transform.GetChild(i);
-                if (child.TryGetComponent(out NavMeshSourceTag navMeshSourceTag))
+                if (child.TryGetComponent(out SourceTag navMeshSourceTag))
                 {
                     Destroy(navMeshSourceTag);
                 }
-                DeleteNavMeshSourseTagToChilds(child);
+                DeleteNavMeshSourseTagFromChildren(child);
             }
         }
 
@@ -107,16 +107,16 @@ namespace TileUnion
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set NavMeshSourceTag Component to all childs"))
+            if (GUILayout.Button("Set NavMeshSourceTag Component to all children"))
             {
-                AddNavMeshSourseTagToChilds(tile_union.transform);
+                AddNavMeshSourseTagToChildren(tile_union.transform);
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Delete NavMeshSourceTag Component to all childs"))
+            if (GUILayout.Button("Delete NavMeshSourceTag Component to all children"))
             {
-                DeleteNavMeshSourseTagToChilds(tile_union.transform);
+                DeleteNavMeshSourseTagFromChildren(tile_union.transform);
             }
             EditorGUILayout.EndHorizontal();
 

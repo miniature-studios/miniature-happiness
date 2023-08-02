@@ -9,7 +9,8 @@ namespace DynamicNavMesh
 {
     // Build and update a localized navmesh from the sources marked by NavMeshSourceTag
     [DefaultExecutionOrder(-102)]
-    public class LocalNavMeshBuilder : MonoBehaviour
+    [AddComponentMenu("DynamicNavMesh.Builder")]
+    public class Builder : MonoBehaviour
     {
         // The center of the build
         public Transform Tracked;
@@ -59,7 +60,7 @@ namespace DynamicNavMesh
 
         private void UpdateNavMesh(bool asyncUpdate = false)
         {
-            NavMeshSourceTag.Collect(ref sources);
+            SourceTag.Collect(ref sources);
             NavMeshBuildSettings defaultBuildSettings = NavMesh.GetSettingsByID(0);
             Bounds bounds = QuantizedBounds();
 
