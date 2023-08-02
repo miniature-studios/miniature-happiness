@@ -42,7 +42,7 @@ namespace Level.Inventory.Room
                 case (true, true):
                     targetInfo = Instantiate(
                             extendetUIInfoPrefab,
-                            Input.mousePosition,
+                            Input.mousePosition + new Vector3(20, 20, 0),
                             new Quaternion(),
                             canvas.transform
                         )
@@ -53,7 +53,7 @@ namespace Level.Inventory.Room
                         + $"Cost: {model.TileUnion.Cost.Value}";
                     break;
                 case (true, false):
-                    targetInfo.position = Input.mousePosition;
+                    targetInfo.position = Input.mousePosition + new Vector3(20, 20, 0);
                     break;
                 case (false, false):
                     Destroy(targetInfo.gameObject);

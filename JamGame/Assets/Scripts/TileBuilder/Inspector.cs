@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System.Linq;
 using TileUnion;
 using UnityEditor;
@@ -79,6 +78,7 @@ namespace TileBuilder
         }
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(TileBuilderImpl))]
     public partial class TileBuilderInspector : Editor
     {
@@ -447,5 +447,5 @@ namespace TileBuilder
             EditorGUILayout.EndHorizontal();
         }
     }
-}
 #endif
+}
