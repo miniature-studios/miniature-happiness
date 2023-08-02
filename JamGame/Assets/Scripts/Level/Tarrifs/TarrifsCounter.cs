@@ -45,14 +45,14 @@ namespace Level
                 Water = room_properties
                     .Select(
                         x =>
-                            x.TarrifProperties.WaterConsumption
+                            x.TariffProperties.WaterConsumption
                             * levelConfig.Config.Tariffs.WaterCost
                     )
                     .Sum(),
                 Electricity = room_properties
                     .Select(
                         x =>
-                            x.TarrifProperties.ElectricityConsumption
+                            x.TariffProperties.ElectricityConsumption
                             * levelConfig.Config.Tariffs.ElectricityCost
                     )
                     .Sum(),

@@ -50,8 +50,8 @@ namespace Level.Inventory.Room
                             )
                             .GetComponent<RectTransform>();
                         targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electr. Con.: {model.TileUnion.TarrifProperties.ElectricityConsumption}\n"
-                            + $"Water Con.: {model.TileUnion.TarrifProperties.WaterConsumption}\n"
+                            $"Electr. Con.: {model.TileUnion.TariffProperties.ElectricityConsumption}\n"
+                            + $"Water Con.: {model.TileUnion.TariffProperties.WaterConsumption}\n"
                             + $"Cost: {model.TileUnion.Cost.Value}";
                         break;
                     case (true, false):

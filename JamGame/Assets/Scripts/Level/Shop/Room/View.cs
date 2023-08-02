@@ -34,12 +34,12 @@ namespace Level.Shop.Room
             waterText.text =
                 "Water: "
                 + Convert.ToString(
-                    model.InventoryRoomModel.TileUnion.TarrifProperties.WaterConsumption
+                    model.InventoryRoomModel.TileUnion.TariffProperties.WaterConsumption
                 );
             electricityText.text =
                 "Electro: "
                 + Convert.ToString(
-                    model.InventoryRoomModel.TileUnion.TarrifProperties.ElectricityConsumption
+                    model.InventoryRoomModel.TileUnion.TariffProperties.ElectricityConsumption
                 );
         }
 

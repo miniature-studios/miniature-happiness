@@ -156,119 +156,122 @@ namespace TileUnion.Tile
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Fill tile with prefabs") && tile.Rotation == 0)
+            if (GUILayout.Button("Fill tile with prefabs"))
             {
-                GameObject walls_handler;
-                if (tile.transform.Find("Walls") == null)
+                if (tile.Rotation == 0)
                 {
-                    walls_handler = new GameObject("Walls");
-                    walls_handler.transform.parent = tile.gameObject.transform;
-                }
-                else
-                {
-                    walls_handler = tile.transform.Find("Walls").gameObject;
-                }
-                while (walls_handler.transform.childCount > 0)
-                {
-                    DestroyImmediate(walls_handler.transform.GetChild(0).gameObject);
-                }
-
-                foreach (WallCollection wall_collection in tile.RawWalls)
-                {
-                    float degrees = wall_collection.Place.GetDegrees();
-                    foreach (WallPrefabHandler handler in wall_collection.Handlers)
+                    GameObject walls_handler;
+                    if (tile.transform.Find("Walls") == null)
                     {
-                        WallPrefabHandler prefab_handler = tile.WallPrefabHandlers.Find(
-                            x => x.Type == handler.Type
-                        );
-                        if (prefab_handler != null)
+                        walls_handler = new GameObject("Walls");
+                        walls_handler.transform.parent = tile.gameObject.transform;
+                    }
+                    else
+                    {
+                        walls_handler = tile.transform.Find("Walls").gameObject;
+                    }
+                    while (walls_handler.transform.childCount > 0)
+                    {
+                        DestroyImmediate(walls_handler.transform.GetChild(0).gameObject);
+                    }
+
+                    foreach (WallCollection wall_collection in tile.RawWalls)
+                    {
+                        float degrees = wall_collection.Place.GetDegrees();
+                        foreach (WallPrefabHandler handler in wall_collection.Handlers)
                         {
-                            if (handler.Prefab != null)
-                            {
-                                DestroyImmediate(handler.Prefab);
-                            }
-                            handler.Prefab = Instantiate(
-                                prefab_handler.Prefab,
-                                tile.transform.position,
-                                prefab_handler.Prefab.transform.rotation,
-                                walls_handler.transform
+                            WallPrefabHandler prefab_handler = tile.WallPrefabHandlers.Find(
+                                x => x.Type == handler.Type
                             );
-                            handler.Prefab.transform.Rotate(new(0, degrees, 0));
-                            handler.Prefab.SetActive(false);
-                            handler.Prefab.name =
-                                $"Wall - {handler.Type} - {wall_collection.Place} -| "
-                                + handler.Prefab.name;
-                        }
-                        else
-                        {
-                            Debug.LogError($"Cannot find prefab for {handler.Type}");
+                            if (prefab_handler != null)
+                            {
+                                if (handler.Prefab != null)
+                                {
+                                    DestroyImmediate(handler.Prefab);
+                                }
+                                handler.Prefab = Instantiate(
+                                    prefab_handler.Prefab,
+                                    tile.transform.position,
+                                    prefab_handler.Prefab.transform.rotation,
+                                    walls_handler.transform
+                                );
+                                handler.Prefab.transform.Rotate(new(0, degrees, 0));
+                                handler.Prefab.SetActive(false);
+                                handler.Prefab.name =
+                                    $"Wall - {handler.Type} - {wall_collection.Place} -| "
+                                    + handler.Prefab.name;
+                            }
+                            else
+                            {
+                                Debug.LogError($"Cannot find prefab for {handler.Type}");
+                            }
                         }
                     }
-                }
 
-                GameObject corners_handler;
-                if (tile.transform.Find("Corners") == null)
-                {
-                    corners_handler = new GameObject("Corners");
-                    corners_handler.transform.parent = tile.gameObject.transform;
-                }
-                else
-                {
-                    corners_handler = tile.transform.Find("Corners").gameObject;
-                }
-                while (corners_handler.transform.childCount > 0)
-                {
-                    DestroyImmediate(corners_handler.transform.GetChild(0).gameObject);
-                }
-
-                foreach (CornerCollection corner_collection in tile.Corners)
-                {
-                    float degrees = corner_collection.Place.GetDegrees() - 45;
-                    foreach (CornerPrefabHandler handler in corner_collection.Handlers)
+                    GameObject corners_handler;
+                    if (tile.transform.Find("Corners") == null)
                     {
-                        CornerPrefabHandler prefab_handler = tile.CornerPrefabHandlers.Find(
-                            x => x.Type == handler.Type
-                        );
-                        if (prefab_handler != null)
-                        {
-                            if (handler.Prefab != null)
-                            {
-                                DestroyImmediate(handler.Prefab);
-                            }
+                        corners_handler = new GameObject("Corners");
+                        corners_handler.transform.parent = tile.gameObject.transform;
+                    }
+                    else
+                    {
+                        corners_handler = tile.transform.Find("Corners").gameObject;
+                    }
+                    while (corners_handler.transform.childCount > 0)
+                    {
+                        DestroyImmediate(corners_handler.transform.GetChild(0).gameObject);
+                    }
 
-                            handler.Prefab = Instantiate(
-                                prefab_handler.Prefab,
-                                tile.transform.position,
-                                prefab_handler.Prefab.transform.rotation,
-                                corners_handler.transform
-                            );
-                            handler.Prefab.transform.Rotate(new(0, degrees, 0));
-                            handler.Prefab.SetActive(false);
-                            handler.Prefab.name =
-                                $"Corner - {handler.Type} - {corner_collection.Place} -| "
-                                + handler.Prefab.name;
-                        }
-                        else
+                    foreach (CornerCollection corner_collection in tile.Corners)
+                    {
+                        float degrees = corner_collection.Place.GetDegrees() - 45;
+                        foreach (CornerPrefabHandler handler in corner_collection.Handlers)
                         {
-                            Debug.LogError($"Cannot find prefab for {handler.Type}");
+                            CornerPrefabHandler prefab_handler = tile.CornerPrefabHandlers.Find(
+                                x => x.Type == handler.Type
+                            );
+                            if (prefab_handler != null)
+                            {
+                                if (handler.Prefab != null)
+                                {
+                                    DestroyImmediate(handler.Prefab);
+                                }
+
+                                handler.Prefab = Instantiate(
+                                    prefab_handler.Prefab,
+                                    tile.transform.position,
+                                    prefab_handler.Prefab.transform.rotation,
+                                    corners_handler.transform
+                                );
+                                handler.Prefab.transform.Rotate(new(0, degrees, 0));
+                                handler.Prefab.SetActive(false);
+                                handler.Prefab.name =
+                                    $"Corner - {handler.Type} - {corner_collection.Place} -| "
+                                    + handler.Prefab.name;
+                            }
+                            else
+                            {
+                                Debug.LogError($"Cannot find prefab for {handler.Type}");
+                            }
                         }
                     }
-                }
 
-                GameObject center_handler;
-                if (tile.transform.Find("Center") == null)
-                {
-                    center_handler = new GameObject("Center");
-                    center_handler.transform.parent = tile.gameObject.transform;
+                    GameObject center_handler;
+                    if (tile.transform.Find("Center") == null)
+                    {
+                        center_handler = new GameObject("Center");
+                        center_handler.transform.parent = tile.gameObject.transform;
+                    }
+                    else
+                    {
+                        center_handler = tile.transform.Find("Center").gameObject;
+                    }
                 }
-                else
+                else if (tile.Rotation != 0)
                 {
-                    center_handler = tile.transform.Find("Center").gameObject;
+                    Debug.LogError("Press this only if rotation is zero!");
                 }
-            }
-            else if (tile.Rotation != 0)
-            {
-                Debug.LogError("Press this only if rotation is zero!");
             }
             EditorGUILayout.EndHorizontal();
         }

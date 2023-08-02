@@ -41,7 +41,7 @@ namespace Common
                 case (0, 0):
                     return Direction.Center;
                 default:
-                    Debug.LogError("Invald vector");
+                    Debug.LogError("Invalid vector");
                     return Direction.Center;
             }
         }

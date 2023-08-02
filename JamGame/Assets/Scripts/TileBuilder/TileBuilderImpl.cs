@@ -149,8 +149,9 @@ namespace TileBuilder
             return new SuccessResult();
         }
 
-        public Result ComletePlacing(SelectedTileWrapper selectedTileCover)
+        public Result CompletePlacing(SelectedTileWrapper selectedTileCover)
         {
+            Debug.Log(previousRotation == selectedTileCover.Value.Rotation);
             if (
                 previousPlaces.Intersect(selectedTileCover.Value.TilesPositions).Count()
                     == previousPlaces.Count
@@ -176,6 +177,7 @@ namespace TileBuilder
             }
             if (selectedTileCover.Value.TryApplyErrorTiles(this).Success)
             {
+                Debug.Log("Try - true");
                 return new FailResult("Cannot place tiles");
             }
             while (tilesUnder.Count > 0)

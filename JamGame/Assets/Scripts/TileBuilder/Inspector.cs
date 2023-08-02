@@ -94,7 +94,7 @@ namespace TileBuilder
         {
             if (tile_builder.ShowTileDirectionGizmo)
             {
-                tileUnionImpl.SetDireactionsGizmo(true);
+                tileUnionImpl.SetDirectionsGizmo(true);
             }
             if (
                 tile_builder.ShowTilePathGizmo
@@ -145,7 +145,7 @@ namespace TileBuilder
                     TileUnionImpl tileUnion in tile_builder.TileUnionDictionary.Values.Distinct()
                 )
                 {
-                    tileUnion.SetDireactionsGizmo(!tile_builder.ShowTileDirectionGizmo);
+                    tileUnion.SetDirectionsGizmo(!tile_builder.ShowTileDirectionGizmo);
                 }
             }
             tile_builder.ShowTileDirectionGizmo = buffer_bool;

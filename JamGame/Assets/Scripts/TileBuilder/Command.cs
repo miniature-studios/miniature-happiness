@@ -65,7 +65,7 @@ namespace TileBuilder.Command
         {
             return selectedTileWrapper.Value == null
                 ? new SuccessResult()
-                : tile_builder.ComletePlacing(selectedTileWrapper);
+                : tile_builder.CompletePlacing(selectedTileWrapper);
         }
     }
 
