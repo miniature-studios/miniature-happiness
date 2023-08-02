@@ -35,7 +35,7 @@ namespace TileUnion
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-        private void AddNavMeshSourseTagToChildren(Transform transform)
+        private void AddNavMeshSourceTagToChildren(Transform transform)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -47,11 +47,11 @@ namespace TileUnion
                 {
                     _ = child.gameObject.AddComponent<SourceTag>();
                 }
-                AddNavMeshSourseTagToChildren(child);
+                AddNavMeshSourceTagToChildren(child);
             }
         }
 
-        private void DeleteNavMeshSourseTagFromChildren(Transform transform)
+        private void DeleteNavMeshSourceTagFromChildren(Transform transform)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -60,7 +60,7 @@ namespace TileUnion
                 {
                     Destroy(navMeshSourceTag);
                 }
-                DeleteNavMeshSourseTagFromChildren(child);
+                DeleteNavMeshSourceTagFromChildren(child);
             }
         }
 
@@ -109,14 +109,14 @@ namespace TileUnion
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Set NavMeshSourceTag Component to all children"))
             {
-                AddNavMeshSourseTagToChildren(tile_union.transform);
+                AddNavMeshSourceTagToChildren(tile_union.transform);
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Delete NavMeshSourceTag Component to all children"))
             {
-                DeleteNavMeshSourseTagFromChildren(tile_union.transform);
+                DeleteNavMeshSourceTagFromChildren(tile_union.transform);
             }
             EditorGUILayout.EndHorizontal();
 
