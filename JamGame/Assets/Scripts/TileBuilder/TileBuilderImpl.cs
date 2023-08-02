@@ -302,21 +302,27 @@ namespace TileBuilder
                 return null;
             }
             Level.Inventory.Room.Model UIPrefab = tile_union.InventoryModel;
-            DestroyImmediate(tile_union.gameObject);
             RemoveTileFromDictionary(tile_union);
+            DestroyImmediate(tile_union.gameObject);
             return UIPrefab;
         }
 
         private void RemoveTileFromDictionary(TileUnionImpl tile_union)
         {
-            foreach (KeyValuePair<Vector2Int, TileUnionImpl> item in TileUnionDictionary)
+            bool flag;
+            do
             {
-                if (item.Value == tile_union)
+                flag = false;
+                foreach (KeyValuePair<Vector2Int, TileUnionImpl> item in TileUnionDictionary)
                 {
-                    _ = TileUnionDictionary.Remove(item.Key);
-                    break;
+                    if (item.Value == tile_union)
+                    {
+                        _ = TileUnionDictionary.Remove(item.Key);
+                        flag = true;
+                        break;
+                    }
                 }
-            }
+            } while (flag);
         }
 
         private void UpdateSidesInPositions(IEnumerable<Vector2Int> positions)
