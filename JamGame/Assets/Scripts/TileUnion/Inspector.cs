@@ -34,6 +34,35 @@ namespace TileUnion
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
+        private void AddNavMeshSourseTagToChilds(Transform transform)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                if (
+                    child.TryGetComponent(out MeshRenderer _)
+                    && !child.TryGetComponent(out NavMeshSourceTag _)
+                )
+                {
+                    _ = child.gameObject.AddComponent<NavMeshSourceTag>();
+                }
+                AddNavMeshSourseTagToChilds(child);
+            }
+        }
+
+        private void DeleteNavMeshSourseTagToChilds(Transform transform)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                if (child.TryGetComponent(out NavMeshSourceTag navMeshSourceTag))
+                {
+                    Destroy(navMeshSourceTag);
+                }
+                DeleteNavMeshSourseTagToChilds(child);
+            }
+        }
+
         public override void OnInspectorGUI()
         {
             TileUnionImpl tile_union = serializedObject.targetObject as TileUnionImpl;
@@ -49,30 +78,44 @@ namespace TileUnion
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 0 from ceche"))
+            if (GUILayout.Button("Set rotation 0 from cache"))
             {
                 tile_union.SetRotation(0);
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 1 from ceche"))
+            if (GUILayout.Button("Set rotation 1 from cache"))
             {
                 tile_union.SetRotation(1);
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 2 from ceche"))
+            if (GUILayout.Button("Set rotation 2 from cache"))
             {
                 tile_union.SetRotation(2);
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 3 from ceche"))
+            if (GUILayout.Button("Set rotation 3 from cache"))
             {
                 tile_union.SetRotation(3);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set NavMeshSourceTag Component to all childs"))
+            {
+                AddNavMeshSourseTagToChilds(tile_union.transform);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Delete NavMeshSourceTag Component to all childs"))
+            {
+                DeleteNavMeshSourseTagToChilds(tile_union.transform);
             }
             EditorGUILayout.EndHorizontal();
 

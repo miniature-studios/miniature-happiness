@@ -156,7 +156,7 @@ namespace TileUnion.Tile
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Fill tile with prefabs"))
+            if (GUILayout.Button("Fill tile with prefabs") && tile.Rotation == 0)
             {
                 GameObject walls_handler;
                 if (tile.transform.Find("Walls") == null)
@@ -266,10 +266,10 @@ namespace TileUnion.Tile
                     center_handler = tile.transform.Find("Center").gameObject;
                 }
             }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("PRESS THIS BUTTON ONLY IF ROTATION IS ZERO!");
+            else if (tile.Rotation != 0)
+            {
+                Debug.LogError("Press this only if rotation is zero!");
+            }
             EditorGUILayout.EndHorizontal();
         }
 
