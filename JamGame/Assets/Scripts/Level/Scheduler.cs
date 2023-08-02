@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Level
 {
-    [AddComponentMenu("Level.Sheduler")]
-    public class Sheduler : MonoBehaviour
+    [AddComponentMenu("Level.Scheduler")]
+    public class Scheduler : MonoBehaviour
     {
         [SerializeField]
         private ConfigHandler levelConfig;
@@ -17,7 +17,7 @@ namespace Level
         private IEnumerator<IDayAction> actionEnumerator;
         private bool isPlanned = true;
 
-        // Must be catched by Executor
+        // Must be cached by Executor
         public void ActionEndActivation()
         {
             if (isPlanned)

@@ -21,7 +21,7 @@ namespace Level
         private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
 
         [SerializeField]
-        private TarrifsCounter tarrifsCounter;
+        private TariffsCounter tariffsCounter;
 
         [SerializeField]
         private TransitionPanel.Model transitionPanel;
@@ -33,8 +33,8 @@ namespace Level
 
         public void Execute(DayEnd day_end)
         {
-            tarrifsCounter.UpdateCheck();
-            if (financesModel.TryTakeMoney(tarrifsCounter.Check.Sum).Failure)
+            tariffsCounter.UpdateCheck();
+            if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
             {
                 // TODO lose game
             }

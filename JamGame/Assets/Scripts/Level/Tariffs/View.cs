@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Level.Tarrifs
+namespace Level.Tariffs
 {
     public class View : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace Level.Tarrifs
                 + $"Water {data.Water} coins\r\n"
                 + $"Electricity: {data.Electricity} coins\r\n"
                 + "\r\n"
-                + $"Summ: {data.Sum} coins";
+                + $"Sum: {data.Sum} coins";
         }
 
         public void ContinueButtonPress()

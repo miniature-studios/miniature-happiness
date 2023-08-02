@@ -18,7 +18,7 @@ namespace Level
     }
 
     [AddComponentMenu("Level.TariffsCounter")]
-    public class TarrifsCounter : MonoBehaviour
+    public class TariffsCounter : MonoBehaviour
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;
