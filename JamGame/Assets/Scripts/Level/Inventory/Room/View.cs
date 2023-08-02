@@ -15,7 +15,7 @@ namespace Level.Inventory.Room
         private Model model;
 
         [SerializeField]
-        private GameObject extendetUIInfoPrefab;
+        private GameObject extendedUIInfoPrefab;
 
         private RectTransform targetInfo = null;
         private Canvas canvas;
@@ -36,21 +36,21 @@ namespace Level.Inventory.Room
             {
                 switch
                     (
-                        RaycastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject),
+                        RayCastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject),
                         targetInfo == null
                     )
 
                 {
                     case (true, true):
                         targetInfo = Instantiate(
-                                extendetUIInfoPrefab,
+                                extendedUIInfoPrefab,
                                 Input.mousePosition + new Vector3(20, 20, 0),
                                 new Quaternion(),
                                 canvas.transform
                             )
                             .GetComponent<RectTransform>();
                         targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electr. Con.: {model.TileUnion.TariffProperties.ElectricityConsumption}\n"
+                            $"Electricity. Con.: {model.TileUnion.TariffProperties.ElectricityConsumption}\n"
                             + $"Water Con.: {model.TileUnion.TariffProperties.WaterConsumption}\n"
                             + $"Cost: {model.TileUnion.Cost.Value}";
                         break;

@@ -95,7 +95,7 @@ namespace Employee
         {
             foreach (Need need in needs)
             {
-                need.Desatisfy(delta_time);
+                need.Dissatisfy(delta_time);
             }
         }
 

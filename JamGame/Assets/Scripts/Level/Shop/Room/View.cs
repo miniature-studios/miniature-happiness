@@ -20,9 +20,6 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text electricityText;
 
-        [SerializeField]
-        private TMP_Text roomNameText;
-
         private TileUnion.Cost roomCost;
         private Func<TileUnion.Cost, Model, Result> roomBuying;
 

@@ -7,7 +7,7 @@ using NavMeshBuilder = UnityEngine.AI.NavMeshBuilder;
 
 namespace DynamicNavMesh
 {
-    // Build and update a localized navmesh from the sources marked by NavMeshSourceTag
+    // Build and update a localized nav mesh from the sources marked by NavMeshSourceTag
     [DefaultExecutionOrder(-102)]
     [AddComponentMenu("DynamicNavMesh.Builder")]
     public class Builder : MonoBehaviour
@@ -41,7 +41,7 @@ namespace DynamicNavMesh
 
         private void OnEnable()
         {
-            // Construct and add navmesh
+            // Construct and add nav mesh
             navMesh = new NavMeshData();
             instance = NavMesh.AddNavMeshData(navMesh);
             if (Tracked == null)
@@ -54,7 +54,7 @@ namespace DynamicNavMesh
 
         private void OnDisable()
         {
-            // Unload navmesh and clear handle
+            // Unload nav mesh and clear handle
             instance.Remove();
         }
 
@@ -94,7 +94,7 @@ namespace DynamicNavMesh
 
         private Bounds QuantizedBounds()
         {
-            // Quantize the bounds to update only when theres a 10% change in size
+            // Quantize the bounds to update only when there is a 10% change in size
             Vector3 center = Tracked ? Tracked.position : transform.position;
             return new Bounds(Quantize(center, 0.1f * Size), Size);
         }

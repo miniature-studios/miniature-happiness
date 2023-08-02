@@ -38,7 +38,7 @@ namespace TileBuilder.Validator
             }
             if (command is AddTileToScene add_command)
             {
-                TileUnionImpl creatingtile_union =
+                TileUnionImpl creating_tile_union =
                     add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
                     tileBuilder.GetFreeSpaceInsideListPositions();
@@ -50,40 +50,40 @@ namespace TileBuilder.Validator
                 picked_position = result.Success ? result.Data : Vector2Int.zero;
 
                 int rotation = 0;
-                bool choosed = false;
+                bool chose = false;
                 Vector2Int buffer_position = Vector2Int.zero;
                 int buffer_rotation = 0;
-                float buffer_dictance = float.MaxValue;
+                float buffer_distance = float.MaxValue;
 
                 while (rotation < 4)
                 {
                     foreach (Vector2Int free_position in inside_list_positions)
                     {
-                        IEnumerable<Vector2Int> future_places = creatingtile_union.GetImaginePlaces(
+                        IEnumerable<Vector2Int> future_places = creating_tile_union.GetImaginePlaces(
                             free_position,
-                            creatingtile_union.Rotation + rotation
+                            creating_tile_union.Rotation + rotation
                         );
                         if (
                             inside_list_positions.Intersect(future_places).Count()
-                            == creatingtile_union.TilesCount
+                            == creating_tile_union.TilesCount
                         )
                         {
-                            choosed = true;
-                            float calc_dictance = Vector2.Distance(
+                            chose = true;
+                            float calc_distance = Vector2.Distance(
                                 CenterOfMassTools.GetCenterOfMass(future_places.ToList()),
                                 picked_position
                             );
-                            if (calc_dictance < buffer_dictance)
+                            if (calc_distance < buffer_distance)
                             {
                                 buffer_position = free_position;
                                 buffer_rotation = rotation;
-                                buffer_dictance = calc_dictance;
+                                buffer_distance = calc_distance;
                             }
                         }
                     }
                     rotation++;
                 }
-                if (choosed)
+                if (chose)
                 {
                     add_command.CreatingPosition = buffer_position;
                     add_command.CreatingRotation = buffer_rotation;
@@ -202,7 +202,7 @@ namespace TileBuilder.Validator
                 {
                     return new FailResult("Complete placing previous tile");
                 }
-                TileUnionImpl creatingtile_union =
+                TileUnionImpl creating_tile_union =
                     add_command.TilePrefab.GetComponent<TileUnionImpl>();
                 IEnumerable<Vector2Int> inside_list_positions =
                     tileBuilder.GetFreeSpaceInsideListPositions();
@@ -212,13 +212,13 @@ namespace TileBuilder.Validator
                 {
                     foreach (Vector2Int free_position in inside_list_positions)
                     {
-                        IEnumerable<Vector2Int> futurePlaces = creatingtile_union.GetImaginePlaces(
+                        IEnumerable<Vector2Int> futurePlaces = creating_tile_union.GetImaginePlaces(
                             free_position,
-                            creatingtile_union.Rotation + rotation
+                            creating_tile_union.Rotation + rotation
                         );
                         if (
                             inside_list_positions.Intersect(futurePlaces).Count()
-                            == creatingtile_union.TilesCount
+                            == creating_tile_union.TilesCount
                         )
                         {
                             add_command.CreatingPosition = free_position;
@@ -235,15 +235,15 @@ namespace TileBuilder.Validator
                 } while (
                     tileBuilder
                         .GetTileUnionsInPositions(
-                            creatingtile_union.GetImaginePlaces(
+                            creating_tile_union.GetImaginePlaces(
                                 position,
-                                creatingtile_union.Rotation
+                                creating_tile_union.Rotation
                             )
                         )
                         .Count() > 0
                 );
                 add_command.CreatingPosition = position;
-                add_command.CreatingRotation = creatingtile_union.Rotation;
+                add_command.CreatingRotation = creating_tile_union.Rotation;
                 return new SuccessResult();
             }
             return new SuccessResult();

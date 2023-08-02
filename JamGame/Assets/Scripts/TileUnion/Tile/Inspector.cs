@@ -15,7 +15,7 @@ namespace TileUnion.Tile
         [InspectorReadOnly]
         public bool ShowPathGizmo = false;
 
-        private float lineThikness = 4;
+        private float lineThickness = 4;
         private Vector3 right = new(0, 0, -1);
         private Vector3 left = new(0, 0, 1);
         private Vector3 up = new(1, 0, 0);
@@ -61,28 +61,28 @@ namespace TileUnion.Tile
                             Handles.DrawLine(
                                 transform.position + Vector3.up,
                                 transform.position + (up * 2.5f) + Vector3.up,
-                                lineThikness
+                                lineThickness
                             );
                             break;
                         case Direction.Right:
                             Handles.DrawLine(
                                 transform.position + Vector3.up,
                                 transform.position + (right * 2.5f) + Vector3.up,
-                                lineThikness
+                                lineThickness
                             );
                             break;
                         case Direction.Down:
                             Handles.DrawLine(
                                 transform.position + Vector3.up,
                                 transform.position + (down * 2.5f) + Vector3.up,
-                                lineThikness
+                                lineThickness
                             );
                             break;
                         case Direction.Left:
                             Handles.DrawLine(
                                 transform.position + Vector3.up,
                                 transform.position + (left * 2.5f) + Vector3.up,
-                                lineThikness
+                                lineThickness
                             );
                             break;
                         default:

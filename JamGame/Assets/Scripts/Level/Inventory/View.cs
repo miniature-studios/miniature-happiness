@@ -70,8 +70,8 @@ namespace Level.Inventory
 
         private void AddNewItem(Room.Model new_item)
         {
-            Room.Model[] room_inventorys = container.transform.GetComponentsInChildren<Room.Model>();
-            Room.Model existed = room_inventorys.FirstOrDefault(
+            Room.Model[] room_inventories = container.transform.GetComponentsInChildren<Room.Model>();
+            Room.Model existed = room_inventories.FirstOrDefault(
                 x => x.TileUnion == new_item.TileUnion
             );
             if (existed != null)

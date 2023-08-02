@@ -41,7 +41,7 @@ namespace TileBuilder
         private bool mousePressed = false;
 
         public UnityEvent<Level.Inventory.Room.Model> JustAddedUI;
-        public UnityEvent BuildedValidatedOffice;
+        public UnityEvent BuiltValidatedOffice;
 
         private void Awake()
         {
@@ -54,9 +54,9 @@ namespace TileBuilder
             return response.Success ? command.Execute(tileBuilder) : response;
         }
 
-        public void ChangeGameMode(GameMode gamemode)
+        public void ChangeGameMode(GameMode game_mode)
         {
-            validator = gamemode switch
+            validator = game_mode switch
             {
                 GameMode.God => new Validator.GodMode(tileBuilder, SelectedTileWrapper),
                 GameMode.Build => new Validator.BuildMode(tileBuilder, SelectedTileWrapper),
@@ -71,7 +71,7 @@ namespace TileBuilder
             Vector2 mouseDelta = mousePosition - previousMousePosition;
             previousMousePosition = mousePosition;
 
-            bool isOverUI = RaycastUtilities.PointerIsOverUI(mousePosition);
+            bool isOverUI = RayCastUtilities.PointerIsOverUI(mousePosition);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -148,7 +148,7 @@ namespace TileBuilder
             Result result = Execute(new Command.ValidateBuilding());
             if (result.Success)
             {
-                BuildedValidatedOffice?.Invoke();
+                BuiltValidatedOffice?.Invoke();
             }
         }
     }

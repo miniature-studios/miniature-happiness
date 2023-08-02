@@ -67,7 +67,7 @@ namespace Employee
         }
 
         // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
-        public void Desatisfy(float delta_time)
+        public void Dissatisfy(float delta_time)
         {
             Satisfied -= delta_time * GetProperties().DecreaseSpeed;
         }

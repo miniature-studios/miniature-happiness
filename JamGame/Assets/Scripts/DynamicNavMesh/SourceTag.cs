@@ -29,7 +29,7 @@ namespace DynamicNavMesh
             }
         }
 
-        // Collect all the navmesh build sources for enabled objects tagged by this component
+        // Collect all the nav mesh build sources for enabled objects tagged by this component
         public static void Collect(ref List<NavMeshBuildSource> sources)
         {
             sources.Clear();
