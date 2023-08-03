@@ -56,8 +56,8 @@ namespace TileUnion
         public List<TileImpl> Tiles = new();
 
         [SerializeField]
-        private List<SerializedPlaceCondition> serializedPlaceConditions;
-        public ImmutableList<IPlaceCondition> PlaceConditions =>
+        private List<PlaceCondition.SerializedPlaceCondition> serializedPlaceConditions;
+        public ImmutableList<PlaceCondition.IPlaceCondition> PlaceConditions =>
             serializedPlaceConditions.Select(x => x.ToPlaceCondition()).ToImmutableList();
 
         [SerializeField]
@@ -165,14 +165,13 @@ namespace TileUnion
                 {
                     _ = invalidTiles.Add(tile);
                 }
-                foreach (IPlaceCondition condition in PlaceConditions)
+                foreach (PlaceCondition.IPlaceCondition condition in PlaceConditions)
                 {
-                    Result result = condition.ApplyCondition(
+                    List<TileImpl> errorTiles = condition.ApplyCondition(
                         this,
-                        tile_builder,
-                        out List<TileImpl> errorTiles
+                        tile_builder
                     );
-                    if (result.Failure)
+                    if (errorTiles != null)
                     {
                         foreach (TileImpl errorTile in errorTiles)
                         {
@@ -358,7 +357,13 @@ namespace TileUnion
             );
         }
 
-        public TileImpl GetTile(Vector2Int global_position)
+        public ImmutableList<TileImpl> GetImmutableTile(Vector2Int global_position)
+        {
+            global_position -= position;
+            return Tiles.Where(x => x.Position == global_position).ToImmutableList();
+        }
+
+        private TileImpl GetTile(Vector2Int global_position)
         {
             global_position -= position;
             return Tiles.FirstOrDefault(x => x.Position == global_position);

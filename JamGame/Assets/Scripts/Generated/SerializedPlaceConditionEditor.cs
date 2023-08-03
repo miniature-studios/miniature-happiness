@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using TileUnion;
+using TileUnion.PlaceCondition;
 
 namespace SerializedInterface.Inspector 
 {

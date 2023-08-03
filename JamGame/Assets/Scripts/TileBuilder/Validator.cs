@@ -50,7 +50,7 @@ namespace TileBuilder.Validator
                 picked_position = result.Success ? result.Data : Vector2Int.zero;
 
                 int rotation = 0;
-                bool chose = false;
+                bool selected = false;
                 Vector2Int buffer_position = Vector2Int.zero;
                 int buffer_rotation = 0;
                 float buffer_distance = float.MaxValue;
@@ -68,7 +68,7 @@ namespace TileBuilder.Validator
                             == creating_tile_union.TilesCount
                         )
                         {
-                            chose = true;
+                            selected = true;
                             float calc_distance = Vector2.Distance(
                                 CenterOfMassTools.GetCenterOfMass(future_places.ToList()),
                                 picked_position
@@ -83,7 +83,7 @@ namespace TileBuilder.Validator
                     }
                     rotation++;
                 }
-                if (chose)
+                if (selected)
                 {
                     add_command.CreatingPosition = buffer_position;
                     add_command.CreatingRotation = buffer_rotation;

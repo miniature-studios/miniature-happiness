@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace TileUnion 
+namespace TileUnion.PlaceCondition 
 {
     [Serializable]
     public class SerializedPlaceCondition

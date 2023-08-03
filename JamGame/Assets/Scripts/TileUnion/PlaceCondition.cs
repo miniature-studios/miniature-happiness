@@ -1,20 +1,20 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using TileBuilder;
 using TileUnion.Tile;
 using UnityEngine;
 
-namespace TileUnion
+namespace TileUnion.PlaceCondition
 {
     [InterfaceEditor]
     public interface IPlaceCondition
     {
-        public Result ApplyCondition(
+        public List<TileImpl> ApplyCondition(
             TileUnionImpl targetTileUnion,
-            TileBuilderImpl tileBuilderImpl,
-            out List<TileImpl> erroredTiles
+            TileBuilderImpl tileBuilderImpl
         );
     }
 
@@ -30,10 +30,9 @@ namespace TileUnion
         [SerializeField]
         private List<string> requiredTags;
 
-        public Result ApplyCondition(
+        public List<TileImpl> ApplyCondition(
             TileUnionImpl targetTileUnion,
-            TileBuilderImpl tileBuilderImpl,
-            out List<TileImpl> erroredTiles
+            TileBuilderImpl tileBuilderImpl
         )
         {
             Direction bufferDirection = direction;
@@ -43,22 +42,13 @@ namespace TileUnion
                 .ForEach(x => bufferDirection = bufferDirection.Rotate90());
             Vector2Int outTargetPosition =
                 targetTile.Position + targetTileUnion.Position + bufferDirection.ToVector2Int();
-            TileImpl outTargetTile = tileBuilderImpl.TileUnionDictionary[outTargetPosition].GetTile(
+            ImmutableList<TileImpl> outTargetTile = tileBuilderImpl.TileUnionDictionary[outTargetPosition].GetImmutableTile(
                 outTargetPosition
             );
-            if (
-                outTargetTile == null
-                || outTargetTile.Marks.Intersect(requiredTags).Count() != requiredTags.Count()
-            )
-            {
-                erroredTiles = new List<TileImpl>() { targetTile };
-                return new FailResult("No required tile");
-            }
-            else
-            {
-                erroredTiles = null;
-                return new SuccessResult();
-            }
+            return outTargetTile.Count == 0
+                || outTargetTile.First().Marks.Intersect(requiredTags).Count() != requiredTags.Count()
+                ? new List<TileImpl>() { targetTile }
+                : null;
         }
     }
 }
