@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Level
 {
-    [AddComponentMenu("Level.Executor")]
+    [AddComponentMenu("Scripts/Level.Executor")]
     public class Executor : MonoBehaviour
     {
         [SerializeField]

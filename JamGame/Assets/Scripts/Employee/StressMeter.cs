@@ -27,7 +27,7 @@ namespace Employee
     }
 
     [RequireComponent(typeof(EmployeeImpl))]
-    [AddComponentMenu("Employee.StressMeter")]
+    [AddComponentMenu("Scripts/Employee.StressMeter")]
     public class StressMeter : MonoBehaviour, IEffectExecutor<StressEffect>
     {
         private EmployeeImpl employee;

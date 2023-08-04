@@ -7,7 +7,7 @@ namespace DynamicNavMesh
     // Tagging component for use with the LocalNavMeshBuilder
     // Supports mesh-filter - can be extended to physics and/or primitives
     [DefaultExecutionOrder(-200)]
-    [AddComponentMenu("DynamicNavMesh.SourceTag")]
+    [AddComponentMenu("Scripts/DynamicNavMesh.SourceTag")]
     public class SourceTag : MonoBehaviour
     {
         // Global containers for all active mesh tags

@@ -9,7 +9,7 @@ namespace DynamicNavMesh
 {
     // Build and update a localized nav mesh from the sources marked by NavMeshSourceTag
     [DefaultExecutionOrder(-102)]
-    [AddComponentMenu("DynamicNavMesh.Builder")]
+    [AddComponentMenu("Scripts/DynamicNavMesh.Builder")]
     public class Builder : MonoBehaviour
     {
         // The center of the build

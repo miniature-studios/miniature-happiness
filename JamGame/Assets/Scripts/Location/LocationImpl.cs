@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Location
 {
-    [AddComponentMenu("Location.Location")]
+    [AddComponentMenu("Scripts/Location.Location")]
     public class LocationImpl
         : MonoBehaviour,
             IDataProvider<EmployeeAmount>,

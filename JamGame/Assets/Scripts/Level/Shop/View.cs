@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Level.Shop
 {
-    [AddComponentMenu("Level.Shop.View")]
+    [AddComponentMenu("Scripts/Level.Shop.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]
@@ -43,14 +43,13 @@ namespace Level.Shop
         {
             Room.Model[] room_models =
                 roomsUIContainer.transform.GetComponentsInChildren<Room.Model>();
-            Destroy(
-                room_models.First(x => x == old_item).gameObject
-            );
+            Destroy(room_models.First(x => x == old_item).gameObject);
         }
 
         private void AddNewItems(Room.Model new_item)
         {
-            Room.View new_room_view = Instantiate(new_item, roomsUIContainer).GetComponent<Room.View>();
+            Room.View new_room_view = Instantiate(new_item, roomsUIContainer)
+                .GetComponent<Room.View>();
             new_room_view.enabled = true;
         }
 

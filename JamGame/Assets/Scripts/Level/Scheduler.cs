@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Level
 {
-    [AddComponentMenu("Level.Scheduler")]
+    [AddComponentMenu("Scripts/Level.Scheduler")]
     public class Scheduler : MonoBehaviour
     {
         [SerializeField]

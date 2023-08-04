@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Level.Inventory.Room
 {
-    [AddComponentMenu("Level.Inventory.Room.Model")]
+    [AddComponentMenu("Scripts/Level.Inventory.Room.Model")]
     public class Model : MonoBehaviour
     {
         public TileUnionImpl TileUnion;

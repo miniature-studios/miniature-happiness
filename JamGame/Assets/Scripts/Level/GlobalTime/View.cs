@@ -5,13 +5,20 @@ using UnityEngine.UI;
 
 namespace Level.GlobalTime
 {
-    [AddComponentMenu("Level.GlobalTime.View")]
+    [AddComponentMenu("Scripts/Level.GlobalTime.View")]
     public class View : MonoBehaviour
     {
-        [SerializeField] private Button buttonX05;
-        [SerializeField] private Button buttonX1;
-        [SerializeField] private Button buttonX2;
-        [SerializeField] private Button buttonX3;
+        [SerializeField]
+        private Button buttonX05;
+
+        [SerializeField]
+        private Button buttonX1;
+
+        [SerializeField]
+        private Button buttonX2;
+
+        [SerializeField]
+        private Button buttonX3;
 
         private List<Button> buttons;
 

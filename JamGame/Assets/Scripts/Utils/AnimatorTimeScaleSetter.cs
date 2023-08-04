@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 
 using System.IO;
 using UnityEditor;
@@ -22,7 +22,8 @@ namespace Utils
                 }
 
                 Canvas canvas = animator.GetComponentInParent<Canvas>(true);
-                animator.updateMode = canvas == null ? AnimatorUpdateMode.Normal : AnimatorUpdateMode.UnscaledTime;
+                animator.updateMode =
+                    canvas == null ? AnimatorUpdateMode.Normal : AnimatorUpdateMode.UnscaledTime;
             }
 
             Debug.Log("Hierarchy animators setup done");
@@ -39,7 +40,8 @@ namespace Utils
                 Animator[] animators = prefab.GetComponentsInChildren<Animator>();
                 foreach (Animator animator in animators)
                 {
-                    AnimatorTimeScaleSetter ignore = animator.GetComponent<AnimatorTimeScaleSetter>();
+                    AnimatorTimeScaleSetter ignore =
+                        animator.GetComponent<AnimatorTimeScaleSetter>();
                     if (ignore != null)
                     {
                         continue;
@@ -47,7 +49,9 @@ namespace Utils
 
                     bool ui_folder = file.Contains("Assets\\Prefabs\\UI");
 
-                    animator.updateMode = ui_folder ? AnimatorUpdateMode.UnscaledTime : AnimatorUpdateMode.Normal;
+                    animator.updateMode = ui_folder
+                        ? AnimatorUpdateMode.UnscaledTime
+                        : AnimatorUpdateMode.Normal;
                     dirty = true;
                 }
 
@@ -63,12 +67,11 @@ namespace Utils
         }
     }
 }
-
 #endif
 
 namespace Utils
 {
-    [AddComponentMenu("Utils.IgnoreAnimatorTimeScaleSetter")]
+    [AddComponentMenu("Scripts/Utils.IgnoreAnimatorTimeScaleSetter")]
     public class AnimatorTimeScaleSetter : MonoBehaviour
     {
         // Not called IgnoreAnimatorTimeScaleSetter because file name should match the class name.

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Level.Finances
 {
-    [AddComponentMenu("Level.Finances.View")]
+    [AddComponentMenu("Scripts/Level.Finances.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

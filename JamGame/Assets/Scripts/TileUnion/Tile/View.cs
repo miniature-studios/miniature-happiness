@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TileUnion.Tile
 {
-    [AddComponentMenu("TileUnion.Tile.View")]
+    [AddComponentMenu("Scripts/TileUnion.Tile.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

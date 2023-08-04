@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Level.Inventory.Controller")]
+    [AddComponentMenu("Scripts/Level.Inventory.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]

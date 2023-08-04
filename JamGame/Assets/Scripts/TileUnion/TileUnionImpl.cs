@@ -31,7 +31,7 @@ namespace TileUnion
     }
 
     [SelectionBase]
-    [AddComponentMenu("TileUnion.TileUnion")]
+    [AddComponentMenu("Scripts/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
         [SerializeField]

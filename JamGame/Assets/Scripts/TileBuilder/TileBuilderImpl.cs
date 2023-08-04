@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    [AddComponentMenu("TileBuilder.TileBuilder")]
+    [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
         // Public for inspector

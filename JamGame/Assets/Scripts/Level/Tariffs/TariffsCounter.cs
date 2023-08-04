@@ -17,7 +17,7 @@ namespace Level
         public readonly int Sum => Water + Electricity + Rent;
     }
 
-    [AddComponentMenu("Level.TariffsCounter")]
+    [AddComponentMenu("Scripts/Level.TariffsCounter")]
     public class TariffsCounter : MonoBehaviour
     {
         [SerializeField]

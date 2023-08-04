@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Level.Finances
 {
-    [AddComponentMenu("Level.Finances.Model")]
+    [AddComponentMenu("Scripts/Level.Finances.Model")]
     public class Model : MonoBehaviour
     {
         [SerializeField, InspectorReadOnly]

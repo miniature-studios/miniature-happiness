@@ -23,7 +23,7 @@ namespace TileBuilder
         }
     }
 
-    [AddComponentMenu("TileBuilder.Controller")]
+    [AddComponentMenu("Scripts/TileBuilder.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]
