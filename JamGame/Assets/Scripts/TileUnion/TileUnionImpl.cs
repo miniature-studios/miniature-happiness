@@ -167,13 +167,13 @@ namespace TileUnion
                 }
                 foreach (PlaceCondition.IPlaceCondition condition in PlaceConditions)
                 {
-                    List<TileImpl> errorTiles = condition.ApplyCondition(
+                    Result<List<TileImpl>> errorTiles = condition.ApplyCondition(
                         this,
                         tile_builder
                     );
-                    if (errorTiles != null)
+                    if (errorTiles.Success)
                     {
-                        foreach (TileImpl errorTile in errorTiles)
+                        foreach (TileImpl errorTile in errorTiles.Data)
                         {
                             _ = invalidTiles.Add(errorTile);
                         }
@@ -357,10 +357,9 @@ namespace TileUnion
             );
         }
 
-        public ImmutableList<TileImpl> GetImmutableTile(Vector2Int global_position)
+        public IEnumerable<string> GetTileMarks(Vector2Int global_position)
         {
-            global_position -= position;
-            return Tiles.Where(x => x.Position == global_position).ToImmutableList();
+            return GetTile(global_position).Marks;
         }
 
         private TileImpl GetTile(Vector2Int global_position)
