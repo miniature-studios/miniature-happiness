@@ -54,7 +54,7 @@ namespace TileUnion.PlaceCondition
             }
             return marks == null || marks.Intersect(requiredTags).Count() != requiredTags.Count()
                 ? new SuccessResult<List<TileImpl>>(new List<TileImpl>() { targetTile })
-                : new FailResult<List<TileImpl>>("");
+                : new FailResult<List<TileImpl>>("Condition pass");
         }
     }
 }

@@ -151,7 +151,6 @@ namespace TileBuilder
 
         public Result CompletePlacing(SelectedTileWrapper selectedTileCover)
         {
-            Debug.Log(previousRotation == selectedTileCover.Value.Rotation);
             if (
                 previousPlaces.Intersect(selectedTileCover.Value.TilesPositions).Count()
                     == previousPlaces.Count
