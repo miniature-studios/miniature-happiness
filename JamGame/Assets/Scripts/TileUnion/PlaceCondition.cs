@@ -8,37 +8,22 @@ using UnityEngine;
 
 namespace TileUnion.PlaceCondition
 {
-    public class Result
+    public struct ConditionResult
     {
-        public bool Success { get; protected set; }
+        public bool Success;
         public bool Failure => !Success;
-
-        protected List<TileImpl> FailedTiles_ = null;
-        public List<TileImpl> FailedTiles =>
-            Success ? throw new Exception("Condition pass, no failed tiles.") : FailedTiles_;
-    }
-
-    public class SuccessResult : Result
-    {
-        public SuccessResult()
+        public List<TileImpl> FailedTiles;
+        public ConditionResult(bool success, List<TileImpl> failedTiles)
         {
-            Success = true;
-        }
-    }
-
-    public class FailResult : Result
-    {
-        public FailResult(List<TileImpl> failedTiles)
-        {
-            FailedTiles_ = failedTiles;
-            Success = false;
+            Success = success;
+            FailedTiles = failedTiles;
         }
     }
 
     [InterfaceEditor]
     public interface IPlaceCondition
     {
-        public Result ApplyCondition(
+        public ConditionResult ApplyCondition(
             TileUnionImpl targetTileUnion,
             TileBuilderImpl tileBuilderImpl
         );
@@ -56,7 +41,7 @@ namespace TileUnion.PlaceCondition
         [SerializeField]
         private List<string> requiredTags;
 
-        public Result ApplyCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl)
+        public ConditionResult ApplyCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl)
         {
             Direction bufferDirection = direction;
             Enumerable
@@ -77,8 +62,8 @@ namespace TileUnion.PlaceCondition
                 marks = outTargetTile.GetTileMarks(outTargetPosition);
             }
             return marks == null || marks.Intersect(requiredTags).Count() != requiredTags.Count()
-                ? new FailResult(new List<TileImpl>() { targetTile })
-                : new SuccessResult();
+                ? new ConditionResult(false, new List<TileImpl>() { targetTile })
+                : new ConditionResult(true, null);
         }
     }
 }
