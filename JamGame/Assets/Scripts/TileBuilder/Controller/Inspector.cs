@@ -8,20 +8,20 @@ namespace TileBuilder.ControllerInspector
     [CustomEditor(typeof(Controller))]
     public class Inspector : Editor
     {
-        private GameMode gamemode_to_change = GameMode.God;
+        private GameMode game_mode_to_change = GameMode.God;
         private TileUnionImpl unionImpl_to_create = null;
 
         public void DisplayGameModeChange(Controller tile_builder_controller)
         {
             _ = EditorGUILayout.BeginHorizontal();
-            gamemode_to_change = (GameMode)
-                EditorGUILayout.EnumPopup("Gamemode To Change:", gamemode_to_change);
+            game_mode_to_change = (GameMode)
+                EditorGUILayout.EnumPopup("Game mode To Change:", game_mode_to_change);
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Change game mode"))
             {
-                tile_builder_controller.ChangeGameMode(gamemode_to_change);
+                tile_builder_controller.ChangeGameMode(game_mode_to_change);
             }
             EditorGUILayout.EndHorizontal();
 

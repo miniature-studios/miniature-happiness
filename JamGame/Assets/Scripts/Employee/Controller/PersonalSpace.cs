@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Employee
 {
     [RequireComponent(typeof(SphereCollider))]
-    [AddComponentMenu("Employee.PersonalSpace")]
+    [AddComponentMenu("Scripts/Employee.PersonalSpace")]
     public class PersonalSpace : MonoBehaviour
     {
         [SerializeField]

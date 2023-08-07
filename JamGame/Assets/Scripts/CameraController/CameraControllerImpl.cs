@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CameraController
 {
-    [AddComponentMenu("CameraController.PlayMode")]
+    [AddComponentMenu("Scripts/CameraController.PlayMode")]
     public class CameraControllerImpl : MonoBehaviour
     {
         [SerializeField]
@@ -91,9 +91,9 @@ namespace CameraController
 
         private void SetDistance()
         {
-            float dist = (transform.position - lookAt.position).magnitude;
+            float distance = (transform.position - lookAt.position).magnitude;
             transform.position =
-                lookAt.position + ((transform.position - lookAt.position) / dist * Distance);
+                lookAt.position + ((transform.position - lookAt.position) / distance * Distance);
         }
 
         private void SetPitchYaw()

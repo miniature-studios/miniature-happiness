@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Level.Shop.Room
 {
-    [AddComponentMenu("Level.Shop.Room.View")]
+    [AddComponentMenu("Scripts/Level.Shop.Room.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]
@@ -20,9 +20,6 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text electricityText;
 
-        [SerializeField]
-        private TMP_Text roomNameText;
-
         private TileUnion.Cost roomCost;
         private Func<TileUnion.Cost, Model, Result> roomBuying;
 
@@ -34,12 +31,12 @@ namespace Level.Shop.Room
             waterText.text =
                 "Water: "
                 + Convert.ToString(
-                    model.InventoryRoomModel.TileUnion.TarrifProperties.WaterConsumption
+                    model.InventoryRoomModel.TileUnion.TariffProperties.WaterConsumption
                 );
             electricityText.text =
                 "Electro: "
                 + Convert.ToString(
-                    model.InventoryRoomModel.TileUnion.TarrifProperties.ElectricityConsumption
+                    model.InventoryRoomModel.TileUnion.TariffProperties.ElectricityConsumption
                 );
         }
 

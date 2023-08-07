@@ -48,11 +48,11 @@ namespace AnimatorsSwitcher
             interfaceMatch = animatorList.InterfaceMatcher.Find(
                 x => x.InterfaceName == day_type.Name
             );
-            foreach (AnimatorWithBool anim_bools in interfaceMatch.Bools)
+            foreach (AnimatorWithBool bools in interfaceMatch.Bools)
             {
                 animatorList.Animators
-                    .Find(x => x.name == anim_bools.AnimatorName)
-                    .SetBool("Showed", anim_bools.Bool);
+                    .Find(x => x.name == bools.AnimatorName)
+                    .SetBool("Showed", bools.Bool);
             }
         }
     }

@@ -9,7 +9,7 @@ namespace Employee
 {
     [RequireComponent(typeof(Controller))]
     [RequireComponent(typeof(StressEffect))]
-    [AddComponentMenu("Employee.Employee")]
+    [AddComponentMenu("Scripts/Employee.Employee")]
     public class EmployeeImpl : MonoBehaviour
     {
         private enum State
@@ -95,7 +95,7 @@ namespace Employee
         {
             foreach (Need need in needs)
             {
-                need.Desatisfy(delta_time);
+                need.Dissatisfy(delta_time);
             }
         }
 

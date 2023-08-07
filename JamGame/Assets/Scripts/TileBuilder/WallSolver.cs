@@ -16,7 +16,7 @@ namespace TileBuilder
         private List<WallType> forSameTilesPriorityQueue;
 
         [SerializeField]
-        private List<WallType> forSameTilesPriorityQueueForCoridoor;
+        private List<WallType> forSameTilesPriorityQueueForCorridor;
 
         [SerializeField]
         private List<WallType> forDifferentTilesPriorityQueue;
@@ -51,7 +51,7 @@ namespace TileBuilder
                     && (my_marks.Contains("Corridor") || out_marks.Contains("Corridor"))
                 )
                 {
-                    foreach (WallType iterator in forSameTilesPriorityQueueForCoridoor)
+                    foreach (WallType iterator in forSameTilesPriorityQueueForCorridor)
                     {
                         if (wall_type_intersect.Contains(iterator))
                         {

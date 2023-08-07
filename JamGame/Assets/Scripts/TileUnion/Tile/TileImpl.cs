@@ -13,7 +13,7 @@ namespace TileUnion.Tile
     [DisallowMultipleComponent]
     [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
-    [AddComponentMenu("TileUnion.Tile.Tile")]
+    [AddComponentMenu("Scripts/TileUnion.Tile.Tile")]
     public partial class TileImpl : MonoBehaviour
     {
         [SerializeField]
@@ -155,9 +155,9 @@ namespace TileUnion.Tile
 
         // Walls means:
         // 0 - own left wall
-        // 1 - left neighbour up wall
-        // 2 - left up neighbour right wall
-        // 3 - up neigbour down wall
+        // 1 - left neighbor up wall
+        // 2 - left up neighbor right wall
+        // 3 - up neighbor down wall
         private CornerType ChooseCorner(WallType[] walls)
         {
             Contract.Requires(walls.Length == 4); // HOW

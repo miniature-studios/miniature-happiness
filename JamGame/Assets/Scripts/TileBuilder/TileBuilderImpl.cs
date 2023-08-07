@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    [AddComponentMenu("TileBuilder.TileBuilder")]
+    [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
         // Public for inspector
-        public TileUnionImpl FreespacePrefab;
+        public TileUnionImpl FreeSpacePrefab;
 
         [SerializeField]
         private GameObject rootObject;
@@ -121,7 +121,7 @@ namespace TileBuilder
                 }
                 foreach (Vector2Int position in previousPlaces)
                 {
-                    CreateTileAndBind(FreespacePrefab, position, 0);
+                    CreateTileAndBind(FreeSpacePrefab, position, 0);
                 }
                 UpdateSidesInPositions(previousPlaces);
             }
@@ -149,7 +149,7 @@ namespace TileBuilder
             return new SuccessResult();
         }
 
-        public Result ComletePlacing(SelectedTileWrapper selectedTileCover)
+        public Result CompletePlacing(SelectedTileWrapper selectedTileCover)
         {
             if (
                 previousPlaces.Intersect(selectedTileCover.Value.TilesPositions).Count()
@@ -163,9 +163,9 @@ namespace TileBuilder
                 selectedTileCover.Value = null;
                 return new SuccessResult();
             }
-            IEnumerable<Vector2Int> vector2Ints = selectedTileCover.Value.TilesPositions;
+            IEnumerable<Vector2Int> vector2Integers = selectedTileCover.Value.TilesPositions;
             List<TileUnionImpl> tilesUnder = TileUnionDictionary
-                .Where(x => vector2Ints.Contains(x.Key))
+                .Where(x => vector2Integers.Contains(x.Key))
                 .Select(x => x.Value)
                 .Distinct()
                 .ToList();
@@ -176,6 +176,7 @@ namespace TileBuilder
             }
             if (selectedTileCover.Value.TryApplyErrorTiles(this).Success)
             {
+                Debug.Log("Try - true");
                 return new FailResult("Cannot place tiles");
             }
             while (tilesUnder.Count > 0)
@@ -200,7 +201,7 @@ namespace TileBuilder
                 }
                 foreach (Vector2Int pos in bufferPositions)
                 {
-                    CreateTileAndBind(FreespacePrefab, pos, 0);
+                    CreateTileAndBind(FreeSpacePrefab, pos, 0);
                 }
             }
             foreach (Vector2Int pos in selectedTileCover.Value.TilesPositions)

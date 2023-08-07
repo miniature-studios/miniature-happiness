@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Level.Inventory.View")]
+    [AddComponentMenu("Scripts/Level.Inventory.View")]
     public class View : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField]
@@ -56,7 +56,9 @@ namespace Level.Inventory
 
         private void DeleteAllItems()
         {
-            foreach (Room.Model old_item in container.transform.GetComponentsInChildren<Room.Model>())
+            foreach (
+                Room.Model old_item in container.transform.GetComponentsInChildren<Room.Model>()
+            )
             {
                 old_item.Count = 0;
             }
@@ -70,8 +72,9 @@ namespace Level.Inventory
 
         private void AddNewItem(Room.Model new_item)
         {
-            Room.Model[] room_inventorys = container.transform.GetComponentsInChildren<Room.Model>();
-            Room.Model existed = room_inventorys.FirstOrDefault(
+            Room.Model[] room_inventories =
+                container.transform.GetComponentsInChildren<Room.Model>();
+            Room.Model existed = room_inventories.FirstOrDefault(
                 x => x.TileUnion == new_item.TileUnion
             );
             if (existed != null)
@@ -80,7 +83,8 @@ namespace Level.Inventory
             }
             else
             {
-                Room.View new_room_view = Instantiate(new_item, container).GetComponent<Room.View>();
+                Room.View new_room_view = Instantiate(new_item, container)
+                    .GetComponent<Room.View>();
                 new_room_view.enabled = true;
             }
         }

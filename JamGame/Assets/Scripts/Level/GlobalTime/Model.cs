@@ -11,13 +11,14 @@ namespace Level.GlobalTime
         public readonly float RealTimeSeconds => Days_ * Model.DayLength;
     }
 
-    [AddComponentMenu("Level.GlobalTime.Model")]
+    [AddComponentMenu("Scripts/Level.GlobalTime.Model")]
     public class Model : MonoBehaviour
     {
         private static float dayLength_ = 0.0f;
         public static float DayLength => dayLength_;
 
-        [SerializeField] private float dayLength;
+        [SerializeField]
+        private float dayLength;
 
         private float scale = 1.0f;
 
@@ -25,7 +26,9 @@ namespace Level.GlobalTime
         {
             if (dayLength_ != 0.0f)
             {
-                Debug.LogError("Two or more instances of Level.GlobalTime.Model are detected in scene! Deleting current instance...");
+                Debug.LogError(
+                    "Two or more instances of Level.GlobalTime.Model are detected in scene! Deleting current instance..."
+                );
                 Destroy(this);
             }
 

@@ -7,7 +7,7 @@ namespace TileUnion
 {
     public partial class TileUnionImpl
     {
-        public void SetDireactionsGizmo(bool value)
+        public void SetDirectionsGizmo(bool value)
         {
             foreach (Tile.TileImpl tile in Tiles)
             {
@@ -132,13 +132,13 @@ namespace TileUnion
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Show Direactions Gizmo"))
+            if (GUILayout.Button("Show Directions Gizmo"))
             {
-                tile_union.SetDireactionsGizmo(true);
+                tile_union.SetDirectionsGizmo(true);
             }
-            if (GUILayout.Button("Hide Direactions Gizmo"))
+            if (GUILayout.Button("Hide Directions Gizmo"))
             {
-                tile_union.SetDireactionsGizmo(false);
+                tile_union.SetDirectionsGizmo(false);
             }
             EditorGUILayout.EndHorizontal();
 

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Level.Inventory.Controller")]
+    [AddComponentMenu("Scripts/Level.Inventory.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]
@@ -26,8 +26,8 @@ namespace Level.Inventory
             {
                 if (pointerOverView)
                 {
-                    IEnumerable<GameObject> collection = RaycastUtilities
-                        .UIRaycast(Input.mousePosition)
+                    IEnumerable<GameObject> collection = RayCastUtilities
+                        .UIRayCast(Input.mousePosition)
                         .Where(x => x.GetComponent<Room.Model>());
                     selectedRoom =
                         collection.Count() > 0

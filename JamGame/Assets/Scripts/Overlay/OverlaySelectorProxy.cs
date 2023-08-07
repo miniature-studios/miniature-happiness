@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Overlay
 {
     // Used to proxy calls from concrete overlay buttons to Location.
-    [AddComponentMenu("Overlay.OverlaySelectorProxy")]
+    [AddComponentMenu("Scripts/Overlay.OverlaySelectorProxy")]
     public class OverlaySelectorProxy : MonoBehaviour
     {
         [SerializeField]

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Employee.ExtendedInfo
 {
-    [AddComponentMenu("Employee.ExtendedInfo.View")]
+    [AddComponentMenu("Scripts/Employee.ExtendedInfo.View")]
     public class View : MonoBehaviour
     {
         private Camera cam;

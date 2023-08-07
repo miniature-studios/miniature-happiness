@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Employee
 {
     [RequireComponent(typeof(EmployeeImpl))]
-    [AddComponentMenu("Employee.View")]
+    [AddComponentMenu("Scripts/Employee.View")]
     public partial class View : MonoBehaviour
     {
         private EmployeeImpl employee;

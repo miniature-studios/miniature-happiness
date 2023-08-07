@@ -23,7 +23,7 @@ namespace TileBuilder
         public TileUnionImpl OutdoorPrefab;
 
         [HideInInspector]
-        public TileUnionImpl CorridoorPrefab;
+        public TileUnionImpl CorridorPrefab;
 
         [HideInInspector]
         public TileUnionImpl WorkingPlaceFree;
@@ -94,7 +94,7 @@ namespace TileBuilder
         {
             if (tile_builder.ShowTileDirectionGizmo)
             {
-                tileUnionImpl.SetDireactionsGizmo(true);
+                tileUnionImpl.SetDirectionsGizmo(true);
             }
             if (
                 tile_builder.ShowTilePathGizmo
@@ -145,7 +145,7 @@ namespace TileBuilder
                     TileUnionImpl tileUnion in tile_builder.TileUnionDictionary.Values.Distinct()
                 )
                 {
-                    tileUnion.SetDireactionsGizmo(!tile_builder.ShowTileDirectionGizmo);
+                    tileUnion.SetDirectionsGizmo(!tile_builder.ShowTileDirectionGizmo);
                 }
             }
             tile_builder.ShowTileDirectionGizmo = buffer_bool;
@@ -208,7 +208,7 @@ namespace TileBuilder
 
             _ = EditorGUILayout.BeginHorizontal();
             tile_builder.SavingName = EditorGUILayout.TextField(
-                "Saveing name: ",
+                "Saving name: ",
                 tile_builder.SavingName
             );
             EditorGUILayout.EndHorizontal();
@@ -290,10 +290,10 @@ namespace TileBuilder
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.CorridoorPrefab = (TileUnionImpl)
+            tile_builder.CorridorPrefab = (TileUnionImpl)
                 EditorGUILayout.ObjectField(
-                    "Corridoor prefab: ",
-                    tile_builder.CorridoorPrefab,
+                    "Corridor prefab: ",
+                    tile_builder.CorridorPrefab,
                     typeof(TileUnionImpl),
                     true
                 );
@@ -334,7 +334,7 @@ namespace TileBuilder
                     float value = Random.value * 100;
                     if (value < 50)
                     {
-                        tile_builder.CreateTileAndBind(tile_builder.FreespacePrefab, new(x, y), 0);
+                        tile_builder.CreateTileAndBind(tile_builder.FreeSpacePrefab, new(x, y), 0);
                     }
                     else if (value is > 50 and < 65)
                     {
@@ -384,7 +384,7 @@ namespace TileBuilder
                         if (j == 2)
                         {
                             tile_builder.CreateTileAndBind(
-                                tile_builder.CorridoorPrefab,
+                                tile_builder.CorridorPrefab,
                                 new(i + 1, j + 1),
                                 0
                             );
@@ -408,7 +408,7 @@ namespace TileBuilder
                         else
                         {
                             tile_builder.CreateTileAndBind(
-                                tile_builder.FreespacePrefab,
+                                tile_builder.FreeSpacePrefab,
                                 new(i + 1, j + 1),
                                 0
                             );
