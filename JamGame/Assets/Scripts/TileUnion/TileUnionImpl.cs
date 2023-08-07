@@ -167,13 +167,10 @@ namespace TileUnion
                 }
                 foreach (PlaceCondition.IPlaceCondition condition in PlaceConditions)
                 {
-                    Result<List<TileImpl>> errorTiles = condition.ApplyCondition(
-                        this,
-                        tile_builder
-                    );
-                    if (errorTiles.Success)
+                    PlaceCondition.Result errorTiles = condition.ApplyCondition(this, tile_builder);
+                    if (errorTiles.Failure)
                     {
-                        foreach (TileImpl errorTile in errorTiles.Data)
+                        foreach (TileImpl errorTile in errorTiles.FailedTiles)
                         {
                             _ = invalidTiles.Add(errorTile);
                         }

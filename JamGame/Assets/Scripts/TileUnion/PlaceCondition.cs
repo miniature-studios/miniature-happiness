@@ -8,10 +8,37 @@ using UnityEngine;
 
 namespace TileUnion.PlaceCondition
 {
+    public class Result
+    {
+        public bool Success { get; protected set; }
+        public bool Failure => !Success;
+
+        protected List<TileImpl> FailedTiles_ = null;
+        public List<TileImpl> FailedTiles =>
+            Success ? throw new Exception("Condition pass, no failed tiles.") : FailedTiles_;
+    }
+
+    public class SuccessResult : Result
+    {
+        public SuccessResult()
+        {
+            Success = true;
+        }
+    }
+
+    public class FailResult : Result
+    {
+        public FailResult(List<TileImpl> failedTiles)
+        {
+            FailedTiles_ = failedTiles;
+            Success = false;
+        }
+    }
+
     [InterfaceEditor]
     public interface IPlaceCondition
     {
-        public Result<List<TileImpl>> ApplyCondition(
+        public Result ApplyCondition(
             TileUnionImpl targetTileUnion,
             TileBuilderImpl tileBuilderImpl
         );
@@ -29,10 +56,7 @@ namespace TileUnion.PlaceCondition
         [SerializeField]
         private List<string> requiredTags;
 
-        public Result<List<TileImpl>> ApplyCondition(
-            TileUnionImpl targetTileUnion,
-            TileBuilderImpl tileBuilderImpl
-        )
+        public Result ApplyCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl)
         {
             Direction bufferDirection = direction;
             Enumerable
@@ -53,8 +77,8 @@ namespace TileUnion.PlaceCondition
                 marks = outTargetTile.GetTileMarks(outTargetPosition);
             }
             return marks == null || marks.Intersect(requiredTags).Count() != requiredTags.Count()
-                ? new SuccessResult<List<TileImpl>>(new List<TileImpl>() { targetTile })
-                : new FailResult<List<TileImpl>>("Condition pass");
+                ? new FailResult(new List<TileImpl>() { targetTile })
+                : new SuccessResult();
         }
     }
 }
