@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using DynamicNavMesh;
+using Location;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +29,32 @@ namespace TileUnion
             foreach (Tile.TileImpl tile in Tiles)
             {
                 tile.SetCubeInCenter(value);
+            }
+        }
+
+        [HideInInspector]
+        public bool DrawNeedProviderGizmo = false;
+
+        private void OnDrawGizmos()
+        {
+            if (DrawNeedProviderGizmo)
+            {
+                DrawGizmoRecursively(transform);
+            }
+        }
+
+        private void DrawGizmoRecursively(Transform transform)
+        {
+            foreach (Transform child in transform)
+            {
+                if (child.TryGetComponent<NeedProvider>(out _))
+                {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawSphere(child.position, 0.2f);
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawSphere(child.position, 0.1f);
+                }
+                DrawGizmoRecursively(child);
             }
         }
     }
@@ -150,6 +177,17 @@ namespace TileUnion
             if (GUILayout.Button("Hide Path Gizmo"))
             {
                 tile_union.SetPathGizmo(false);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Show Need Provider Gizmo"))
+            {
+                tile_union.DrawNeedProviderGizmo = true;
+            }
+            if (GUILayout.Button("Hide Need Provider Gizmo"))
+            {
+                tile_union.DrawNeedProviderGizmo = false;
             }
             EditorGUILayout.EndHorizontal();
 
