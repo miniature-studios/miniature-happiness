@@ -8,7 +8,9 @@ namespace Employee
     {
         Work,
         Piss,
-        Eat
+        Eat,
+        Meeting,
+        Leave
     }
 
     [Serializable]
@@ -21,6 +23,8 @@ namespace Employee
             public float SatisfactionTime;
             public float SatisfactionGained;
             public float DecreaseSpeed;
+            public bool OverrideSatisfaction;
+            public float OverrideSatisfactionValue;
 
             public NeedProperties(NeedType ty)
             {
@@ -28,6 +32,8 @@ namespace Employee
                 SatisfactionTime = 5.0f;
                 SatisfactionGained = 1.0f;
                 DecreaseSpeed = 1.0f;
+                OverrideSatisfaction = false;
+                OverrideSatisfactionValue = 0.0f;
             }
 
             public NeedProperties Combine(NeedProperties other)
@@ -38,6 +44,8 @@ namespace Employee
                     SatisfactionTime = SatisfactionTime * other.SatisfactionTime,
                     SatisfactionGained = SatisfactionGained * other.SatisfactionGained,
                     DecreaseSpeed = DecreaseSpeed * other.DecreaseSpeed,
+                    OverrideSatisfaction = OverrideSatisfaction || other.OverrideSatisfaction,
+                    OverrideSatisfactionValue = (OverrideSatisfactionValue * (OverrideSatisfaction ? 1.0f : 0.0f)) + (other.OverrideSatisfactionValue * (other.OverrideSatisfaction ? 1.0f : 0.0f))
                 };
             }
         }
@@ -46,7 +54,10 @@ namespace Employee
         private NeedProperties properties;
         public NeedType NeedType => properties.NeedType;
 
-        public float Satisfied = 0.0f;
+        [SerializeField]
+        private float satisfied = 0.0f;
+
+        public float Satisfied => satisfied;
 
         // TODO: refactor
         [SerializeField]
@@ -55,7 +66,7 @@ namespace Employee
 
         public Need(Need prototype)
         {
-            Satisfied = prototype.Satisfied;
+            satisfied = prototype.satisfied;
             properties = prototype.properties;
             registeredModifiers = new List<NeedModifiers>();
         }
@@ -69,12 +80,30 @@ namespace Employee
         // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
         public void Dissatisfy(float delta_time)
         {
-            Satisfied -= delta_time * GetProperties().DecreaseSpeed;
+            NeedProperties properties = GetProperties();
+
+            if (properties.OverrideSatisfaction)
+            {
+                satisfied = properties.OverrideSatisfactionValue;
+            }
+            else
+            {
+                satisfied -= delta_time * properties.DecreaseSpeed;
+            }
         }
 
         public void Satisfy()
         {
-            Satisfied += GetProperties().SatisfactionGained;
+            NeedProperties properties = GetProperties();
+
+            if (properties.OverrideSatisfaction)
+            {
+                satisfied = properties.OverrideSatisfactionValue;
+            }
+            else
+            {
+                satisfied += properties.SatisfactionGained;
+            }
         }
 
         public NeedProperties GetProperties()

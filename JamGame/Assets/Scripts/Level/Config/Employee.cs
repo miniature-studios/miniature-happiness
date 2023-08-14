@@ -1,5 +1,4 @@
 using Common;
-using Employee;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -17,12 +16,12 @@ namespace Level.Config
     public class EmployeeConfig
     {
         public string Name { get; }
-        public EmployeeImpl Employee { get; }
+        public GameObject Prototype { get; }
 
-        public EmployeeConfig(EmployeeImpl employee, string name)
+        public EmployeeConfig(GameObject prototype, string name)
         {
             Name = name;
-            Employee = employee;
+            Prototype = prototype;
         }
     }
 
@@ -33,11 +32,11 @@ namespace Level.Config
         private string name;
 
         [SerializeField]
-        private EmployeeImpl employee;
+        private GameObject prototype;
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            return new EmployeeConfig(employee, name);
+            return new EmployeeConfig(prototype, name);
         }
     }
 
@@ -45,7 +44,7 @@ namespace Level.Config
     public class EmployeeWeights
     {
         public float Weight;
-        public EmployeeImpl Employee;
+        public GameObject Prototype;
     }
 
     [Serializable]
@@ -60,9 +59,9 @@ namespace Level.Config
         public EmployeeConfig GetEmployeeConfig()
         {
             List<float> list = employeeWeights.Select(x => x.Weight).ToList();
-            EmployeeImpl result = employeeWeights[
+            GameObject result = employeeWeights[
                 RandomTools.RandomlyChooseWithWeights(list)
-            ].Employee;
+            ].Prototype;
 
             string first_name = nameList.FirstNames[
                 UnityEngine.Random.Range(0, nameList.FirstNames.Count)

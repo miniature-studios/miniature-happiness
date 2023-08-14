@@ -77,6 +77,11 @@ namespace Employee
                     controller.SetDestination(targetNeedProvider.transform.position);
                     break;
                 case State.Walking:
+                    if (!targetNeedProvider.IsAvailable(this)
+                        || targetNeedProvider.NeedType != needs[0].NeedType)
+                    {
+                        state = State.Idle;
+                    }
                     break;
                 case State.SatisfyingNeed:
                     satisfyingNeedRemaining -= Time.deltaTime;
@@ -283,6 +288,11 @@ namespace Employee
             }
 
             Debug.LogError("Failed to unregister buff: not registered");
+        }
+
+        public void SetLocation(LocationImpl location)
+        {
+            this.location = location;
         }
     }
 
