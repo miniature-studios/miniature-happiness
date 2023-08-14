@@ -24,7 +24,8 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 1
         text: Morning
@@ -37,10 +38,39 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 0
         text: 
+    - selectedType: Working
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        duration:
+          Days_: 0.5
+      cutscene:
+        duration: 2
+        text: Night
+    - selectedType: Cutscene
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        duration:
+          Days_: 0
+      cutscene:
+        duration: 2
+        text: Meeting
     - selectedType: Meeting
       dayStart:
         morningMoney: 0
@@ -80,7 +110,8 @@ MonoBehaviour:
             roomWeights: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 0
         text: 
@@ -93,7 +124,8 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 1
         text: Meeting
@@ -106,7 +138,8 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 5
+        duration:
+          Days_: 0.5
       cutscene:
         duration: 0
         text: 
@@ -119,7 +152,8 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 2
         text: Evening
@@ -132,7 +166,8 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 0
         text: 
@@ -145,7 +180,8 @@ MonoBehaviour:
         shopRooms: []
         mandatoryRooms: []
       working:
-        workingTime: 0
+        duration:
+          Days_: 0
       cutscene:
         duration: 2
         text: Night

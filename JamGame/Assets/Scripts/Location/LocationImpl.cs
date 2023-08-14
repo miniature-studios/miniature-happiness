@@ -1,6 +1,7 @@
 using Common;
 using Employee;
 using Level.Boss.Task;
+using Level.Config;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,15 +30,12 @@ namespace Location
             );
         }
 
-        public void AddEmployee( /*TODO: Pass config and apply it to Employee*/
-        )
+        public void AddEmployee(EmployeeConfig config)
         {
-            EmployeeImpl new_employee = Instantiate(
-                employeePrototype,
-                employeePrototype.transform.parent
-            );
-            new_employee.gameObject.SetActive(true);
-            employees.Add(new_employee);
+            EmployeeImpl employee = Instantiate(config.Prototype, transform).GetComponent<EmployeeImpl>();
+            employee.SetLocation(this);
+            employee.gameObject.SetActive(true);
+            employees.Add(employee);
         }
 
         public IEnumerable<NeedProvider> FindAllAvailableProviders(

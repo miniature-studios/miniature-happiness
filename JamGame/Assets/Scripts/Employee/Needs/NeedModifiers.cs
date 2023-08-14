@@ -44,6 +44,9 @@ namespace Employee
             if (modifiers.ContainsKey(properties.NeedType))
             {
                 Need.NeedProperties modifier = modifiers[properties.NeedType];
+
+                properties.OverrideSatisfaction = modifier.OverrideSatisfaction;
+                properties.OverrideSatisfactionValue = modifier.OverrideSatisfactionValue;
                 properties.SatisfactionGained *= modifier.SatisfactionGained;
                 properties.SatisfactionTime *= modifier.SatisfactionTime;
                 properties.DecreaseSpeed *= modifier.DecreaseSpeed;

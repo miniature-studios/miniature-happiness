@@ -22,14 +22,15 @@ namespace Level.GlobalTime
 
         private float scale = 1.0f;
 
-        private void Start()
+        private void Awake()
         {
             if (dayLength_ != 0.0f)
             {
                 Debug.LogError(
-                    "Two or more instances of Level.GlobalTime.Model are detected in scene! Deleting current instance..."
+                    "Two or more instances of Level.GlobalTime.Model are detected in scene! Deleting one instance..."
                 );
                 Destroy(this);
+                return;
             }
 
             dayLength_ = dayLength;

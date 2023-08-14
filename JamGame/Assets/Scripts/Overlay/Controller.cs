@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Overlay
 {
+    [AddComponentMenu("Scripts/Overlay.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]

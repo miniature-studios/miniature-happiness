@@ -1,4 +1,5 @@
 using Common;
+using Level.GlobalTime;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -70,8 +71,8 @@ namespace Level.Config
     public class Working : IDayAction
     {
         [SerializeField]
-        private float workingTime;
-        public float WorkingTime => workingTime;
+        private Days duration;
+        public Days Duration => duration;
 
         public void Execute(Executor executor)
         {

@@ -30,6 +30,8 @@ namespace Employee
 
         private State state = State.Idle;
 
+        public Vector3 DesiredVelocityNormalized => (agent.nextPosition - transform.position).normalized;
+
         public delegate void FinishedMovingHandler();
         public event FinishedMovingHandler OnFinishedMoving;
 
@@ -137,6 +139,13 @@ namespace Employee
             {
                 maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            //Debug.Log(DesiredVelocityNormalized * 10);
+            Gizmos.DrawLine(transform.position, transform.position + (DesiredVelocityNormalized * 10));
         }
     }
 }

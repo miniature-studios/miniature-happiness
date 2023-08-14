@@ -39,7 +39,9 @@ namespace Location
                     case FilterType.BlackList:
                         return !Employees.Contains(employee);
                     case FilterType.FirstToTake:
-                        return Employees.Contains(employee) || Employees.Count == 0;
+                        return Employees.Contains(employee)
+                            || Employees.Count == 0
+                            || (Employees.Count == 1 && Employees[0] == null);
                     default:
                         Debug.LogError("Unknown NeedProviderFilterType!");
                         return false;
@@ -55,11 +57,13 @@ namespace Location
                         {
                             Employees.Add(employee);
                         }
-
-                        if (Employees.Count > 1 || !Employees.Contains(employee))
+                        else if (Employees.Count == 1 && Employees[0] == null)
+                        {
+                            Employees[0] = employee;
+                        }
+                        else if (Employees.Count > 1 || !Employees.Contains(employee))
                         {
                             Debug.LogError("Place is already assigned to other employee");
-                            break;
                         }
 
                         break;
