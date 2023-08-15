@@ -44,18 +44,14 @@ namespace Level
 
         public UnityEvent ActionEndNotify;
 
-        public SerializedEmployeeConfig TestEmplotyeeConfig;
+        public SerializedEmployeeConfig TestEmployeeConfig;
 
         public void Execute(DayStart day_start)
         {
-            location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+            for (int i = 0; i < 1; i++)
+            {
+                //location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+            }
 
             financesModel.AddMoney(day_start.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
