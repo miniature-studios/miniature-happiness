@@ -10,7 +10,7 @@ namespace SerializedInterface.Inspector
     [CustomPropertyDrawer(typeof(SerializedDayAction))]
     public class SerializedDayActionDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames = { "DayEnd", "DayStart", "Meeting", "Working", "Cutscene" };
+        private string[] implementingTypeNames = { "Cutscene", "DayStart", "PreMeeting", "Meeting", "Working", "PreDayEnd", "DayEnd" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {

@@ -12,10 +12,13 @@ namespace Level.Config
         private string selectedType;
 
         [SerializeField]
-        private DayEnd dayEnd;
+        private Cutscene cutscene;
 
         [SerializeField]
         private DayStart dayStart;
+
+        [SerializeField]
+        private PreMeeting preMeeting;
 
         [SerializeField]
         private Meeting meeting;
@@ -24,17 +27,22 @@ namespace Level.Config
         private Working working;
 
         [SerializeField]
-        private Cutscene cutscene;
+        private PreDayEnd preDayEnd;
+
+        [SerializeField]
+        private DayEnd dayEnd;
 
         public IDayAction ToDayAction()
         {
             return selectedType switch
             {
-                "DayEnd" => dayEnd,
+                "Cutscene" => cutscene,
                 "DayStart" => dayStart,
+                "PreMeeting" => preMeeting,
                 "Meeting" => meeting,
                 "Working" => working,
-                "Cutscene" => cutscene,
+                "PreDayEnd" => preDayEnd,
+                "DayEnd" => dayEnd,
                 _ => throw new NotImplementedException(),
             };
         }

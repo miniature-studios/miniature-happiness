@@ -1,6 +1,9 @@
-﻿using Level.Config;
+﻿using Common;
+using Level.Config;
 using Location;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,13 +47,20 @@ namespace Level
 
         public UnityEvent ActionEndNotify;
 
+        private ConditionsWaiter conditionsWaiter;
+
         public SerializedEmployeeConfig TestEmployeeConfig;
+
+        private void Update()
+        {
+            conditionsWaiter?.CheckConditions();
+        }
 
         public void Execute(DayStart day_start)
         {
             for (int i = 0; i < 1; i++)
             {
-                //location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+                location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }
 
             financesModel.AddMoney(day_start.MorningMoney);
@@ -62,6 +72,17 @@ namespace Level
         {
             yield return new WaitForSeconds(time);
             ActionEndNotify?.Invoke();
+        }
+
+        public void Execute(PreMeeting preMeeting)
+        {
+            if (location is IDataProvider<LocationImpl.AllEmployeesAtMeeting> dataProvider)
+            {
+                conditionsWaiter = new(
+                    new List<Func<bool>>() { () => dataProvider.GetData().Value },
+                    new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
+                );
+            }
         }
 
         public void Execute(Meeting meeting)
@@ -107,6 +128,17 @@ namespace Level
         {
             yield return new WaitForSeconds(time);
             ActionEndNotify?.Invoke();
+        }
+
+        public void Execute(PreDayEnd preDayEnd)
+        {
+            if (location is IDataProvider<LocationImpl.AllEmployeesAtHome> dataProvider)
+            {
+                conditionsWaiter = new(
+                    new List<Func<bool>>() { () => dataProvider.GetData().Value },
+                    new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
+                );
+            }
         }
 
         public void Execute(DayEnd day_end)
