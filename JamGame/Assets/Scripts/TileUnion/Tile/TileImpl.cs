@@ -36,8 +36,8 @@ namespace TileUnion.Tile
 
         public List<WallCollection> RawWalls = new();
         public List<CornerCollection> Corners = new();
+        public List<GameObject> CenterPrefabs = new();
         public View TileView;
-        public GameObject CenterObject;
 
         [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;

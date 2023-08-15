@@ -137,6 +137,7 @@ namespace TileUnion
             if (GUILayout.Button("Set NavMeshSourceTag Component to all children"))
             {
                 AddNavMeshSourceTagToChildren(tile_union.transform);
+                Debug.Log("NavMeshSourceTag Component stewed");
             }
             EditorGUILayout.EndHorizontal();
 
@@ -144,6 +145,7 @@ namespace TileUnion
             if (GUILayout.Button("Delete NavMeshSourceTag Component to all children"))
             {
                 DeleteNavMeshSourceTagFromChildren(tile_union.transform);
+                Debug.Log("NavMeshSourceTag Component deleted");
             }
             EditorGUILayout.EndHorizontal();
 
