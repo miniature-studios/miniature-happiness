@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 
-public class GlobalInput : MonoBehaviour
+namespace Scripts
 {
-    private void Update()
+    public class GlobalInput : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        private void Update()
         {
-            Application.Quit();
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
         }
     }
 }

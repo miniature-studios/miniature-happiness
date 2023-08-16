@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using DynamicNavMesh;
 using Location;
 using UnityEditor;
 using UnityEngine;
@@ -62,34 +61,6 @@ namespace TileUnion
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-        private void AddNavMeshSourceTagToChildren(Transform transform)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Transform child = transform.GetChild(i);
-                if (
-                    child.TryGetComponent(out MeshRenderer _)
-                    && !child.TryGetComponent(out SourceTag _)
-                )
-                {
-                    _ = child.gameObject.AddComponent<SourceTag>();
-                }
-                AddNavMeshSourceTagToChildren(child);
-            }
-        }
-
-        private void DeleteNavMeshSourceTagFromChildren(Transform transform)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Transform child = transform.GetChild(i);
-                if (child.TryGetComponent(out SourceTag navMeshSourceTag))
-                {
-                    Destroy(navMeshSourceTag);
-                }
-                DeleteNavMeshSourceTagFromChildren(child);
-            }
-        }
 
         public override void OnInspectorGUI()
         {
@@ -130,22 +101,6 @@ namespace TileUnion
             if (GUILayout.Button("Set rotation 3 from cache"))
             {
                 tile_union.SetRotation(3);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set NavMeshSourceTag Component to all children"))
-            {
-                AddNavMeshSourceTagToChildren(tile_union.transform);
-                Debug.Log("NavMeshSourceTag Component stewed");
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Delete NavMeshSourceTag Component to all children"))
-            {
-                DeleteNavMeshSourceTagFromChildren(tile_union.transform);
-                Debug.Log("NavMeshSourceTag Component deleted");
             }
             EditorGUILayout.EndHorizontal();
 
