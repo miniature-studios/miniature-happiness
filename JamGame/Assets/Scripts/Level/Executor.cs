@@ -55,15 +55,27 @@ namespace Level
         [SerializeField]
         private AllChildrenNeedModifiersApplier leaveNeedOverride;
 
+        [SerializeField] private GameObject homeConditionProvider;
+        private IDataProvider<AllEmployeesAtHome> homeCondition;
+
+        [SerializeField] private GameObject meetingConditionProvider;
+        private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
+
         public UnityEvent ActionEndNotify;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
 
-        [SerializeField]
-        private IDataProvider<AllEmployeesAtHome> homeConditionProvider;
-
-        [SerializeField]
-        private IDataProvider<AllEmployeesAtMeeting> meetingConditionProvider;
+        private void Awake()
+        {
+            if (homeConditionProvider.TryGetComponent(out homeCondition))
+            {
+                Debug.LogError("IDataProvider<AllEmployeesAtHome> not found in employeeCountProvider");
+            }
+            if (meetingConditionProvider.TryGetComponent(out meetingCondition))
+            {
+                Debug.LogError("IDataProvider<AllEmployeesAtMeeting> not found in employeeCountProvider");
+            }
+        }
 
         public void Execute(DayStart day_start)
         {
@@ -86,7 +98,7 @@ namespace Level
         public void Execute(PreMeeting preMeeting)
         {
             this.CreateGate(
-                new List<Func<bool>>() { () => meetingConditionProvider.GetData().Value },
+                new List<Func<bool>>() { () => meetingCondition.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
             );
         }
@@ -139,7 +151,7 @@ namespace Level
         public void Execute(PreDayEnd preDayEnd)
         {
             this.CreateGate(
-                new List<Func<bool>>() { () => homeConditionProvider.GetData().Value },
+                new List<Func<bool>>() { () => homeCondition.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
             );
         }
