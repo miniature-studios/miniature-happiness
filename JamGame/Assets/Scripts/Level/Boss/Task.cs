@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Level.Boss.Task
 {
+    public struct Progress
+    {
+        public float Completion;
+        public float Overall;
+        public bool Complete;
+    }
+
     [InterfaceEditor]
     public interface ITask
     {
@@ -11,7 +18,7 @@ namespace Level.Boss.Task
 
         public void Update(float delta_time) { }
 
-        public bool IsComplete();
+        public Progress GetProgress();
     }
 
     public struct EmployeeAmount
@@ -27,11 +34,6 @@ namespace Level.Boss.Task
 
         [SerializeField] private int employeeCountTarget;
 
-        public bool IsComplete()
-        {
-            return employeeCount.GetData().Amount >= employeeCountTarget;
-        }
-
         public void ValidateProviders()
         {
             employeeCount = employeeCountProvider.GetComponent<IDataProvider<EmployeeAmount>>();
@@ -39,6 +41,18 @@ namespace Level.Boss.Task
             {
                 Debug.LogError("IDataProvider<EmployeeAmount>  not found in employeeCountProvider");
             }
+        }
+
+        public Progress GetProgress()
+        {
+            int employee_amount = employeeCount.GetData().Amount;
+
+            return new Progress
+            {
+                Completion = employee_amount,
+                Overall = employeeCountTarget,
+                Complete = employee_amount >= employeeCountTarget
+            };
         }
     }
 
@@ -54,15 +68,12 @@ namespace Level.Boss.Task
         private IDataProvider<MaxStress> maxStress;
 
         [SerializeField] private float maxStressTarget;
+        public float MaxStressTarget => maxStressTarget;
+
         [SerializeField] private float targetDuration;
 
         private float currentDuration = .0f;
         private bool complete = false;
-
-        public bool IsComplete()
-        {
-            return complete;
-        }
 
         public void ValidateProviders()
         {
@@ -92,6 +103,16 @@ namespace Level.Boss.Task
             {
                 currentDuration = 0.0f;
             }
+        }
+
+        public Progress GetProgress()
+        {
+            return new Progress()
+            {
+                Completion = currentDuration,
+                Overall = targetDuration,
+                Complete = complete,
+            };
         }
     }
 }
