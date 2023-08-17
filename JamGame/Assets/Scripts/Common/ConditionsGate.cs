@@ -28,10 +28,7 @@ namespace Common
         {
             if (conditions.All(x => x.Invoke()))
             {
-                conditions.Clear();
-                List<Action> bufferActions = new(actions);
-                actions.Clear();
-                foreach (Action action in bufferActions)
+                foreach (Action action in actions)
                 {
                     action.Invoke();
                 }

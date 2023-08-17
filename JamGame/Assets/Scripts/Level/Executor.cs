@@ -57,27 +57,12 @@ namespace Level
 
         public UnityEvent ActionEndNotify;
 
-        private ConditionsGate conditionsGate;
-
         public SerializedEmployeeConfig TestEmployeeConfig;
 
+        [SerializeField]
         private IDataProvider<AllEmployeesAtHome> homeConditionProvider;
+        [SerializeField]
         private IDataProvider<AllEmployeesAtMeeting> meetingConditionProvider;
-
-        private void Awake()
-        {
-            conditionsGate = new ConditionsGate(this);
-            if (location is not IDataProvider<AllEmployeesAtHome>)
-            {
-                Debug.Log("Location not implement IDataProvider<AllEmployeesAtHome>");
-            }
-            homeConditionProvider = location as IDataProvider<AllEmployeesAtHome>;
-            if (location is not IDataProvider<AllEmployeesAtMeeting>)
-            {
-                Debug.Log("Location not implement IDataProvider<AllEmployeesAtMeeting>");
-            }
-            meetingConditionProvider = location as IDataProvider<AllEmployeesAtMeeting>;
-        }
 
         public void Execute(DayStart day_start)
         {
@@ -99,7 +84,7 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
-            conditionsGate.SetGates(
+            new ConditionsGate(this).SetGates(
                 new List<Func<bool>>() { () => meetingConditionProvider.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
             );
@@ -152,7 +137,7 @@ namespace Level
 
         public void Execute(PreDayEnd preDayEnd)
         {
-            conditionsGate.SetGates(
+            new ConditionsGate(this).SetGates(
                 new List<Func<bool>>() { () => homeConditionProvider.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
             );
