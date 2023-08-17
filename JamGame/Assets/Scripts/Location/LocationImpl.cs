@@ -1,10 +1,10 @@
 using Common;
 using Employee;
+using Level;
 using Level.Boss.Task;
 using Level.Config;
 using System.Collections.Generic;
 using UnityEngine;
-using static Location.LocationImpl;
 
 namespace Location
 {
@@ -74,20 +74,10 @@ namespace Location
             return new MaxStress { Stress = max_stress };
         }
 
-        public struct AllEmployeesAtMeeting
-        {
-            public bool Value;
-        }
-
         AllEmployeesAtMeeting IDataProvider<AllEmployeesAtMeeting>.GetData()
         {
             return new AllEmployeesAtMeeting { Value = true };
             // TODO:Implement
-        }
-
-        public struct AllEmployeesAtHome
-        {
-            public bool Value;
         }
 
         AllEmployeesAtHome IDataProvider<AllEmployeesAtHome>.GetData()

@@ -9,6 +9,16 @@ using UnityEngine.Events;
 
 namespace Level
 {
+    public struct AllEmployeesAtHome
+    {
+        public bool Value;
+    }
+
+    public struct AllEmployeesAtMeeting
+    {
+        public bool Value;
+    }
+
     [AddComponentMenu("Scripts/Level.Executor")]
     public class Executor : MonoBehaviour
     {
@@ -47,13 +57,26 @@ namespace Level
 
         public UnityEvent ActionEndNotify;
 
-        private ConditionsWaiter conditionsWaiter;
+        private ConditionsGate conditionsGate;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
 
-        private void Update()
+        private IDataProvider<AllEmployeesAtHome> homeConditionProvider;
+        private IDataProvider<AllEmployeesAtMeeting> meetingConditionProvider;
+
+        private void Awake()
         {
-            conditionsWaiter?.CheckConditions();
+            conditionsGate = new ConditionsGate(this);
+            if (location is not IDataProvider<AllEmployeesAtHome>)
+            {
+                Debug.Log("Location not implement IDataProvider<AllEmployeesAtHome>");
+            }
+            homeConditionProvider = location as IDataProvider<AllEmployeesAtHome>;
+            if (location is not IDataProvider<AllEmployeesAtMeeting>)
+            {
+                Debug.Log("Location not implement IDataProvider<AllEmployeesAtMeeting>");
+            }
+            meetingConditionProvider = location as IDataProvider<AllEmployeesAtMeeting>;
         }
 
         public void Execute(DayStart day_start)
@@ -76,13 +99,10 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
-            if (location is IDataProvider<LocationImpl.AllEmployeesAtMeeting> dataProvider)
-            {
-                conditionsWaiter = new(
-                    new List<Func<bool>>() { () => dataProvider.GetData().Value },
-                    new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
-                );
-            }
+            conditionsGate.SetGates(
+                new List<Func<bool>>() { () => meetingConditionProvider.GetData().Value },
+                new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
+            );
         }
 
         public void Execute(Meeting meeting)
@@ -132,13 +152,10 @@ namespace Level
 
         public void Execute(PreDayEnd preDayEnd)
         {
-            if (location is IDataProvider<LocationImpl.AllEmployeesAtHome> dataProvider)
-            {
-                conditionsWaiter = new(
-                    new List<Func<bool>>() { () => dataProvider.GetData().Value },
-                    new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
-                );
-            }
+            conditionsGate.SetGates(
+                new List<Func<bool>>() { () => homeConditionProvider.GetData().Value },
+                new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
+            );
         }
 
         public void Execute(DayEnd day_end)

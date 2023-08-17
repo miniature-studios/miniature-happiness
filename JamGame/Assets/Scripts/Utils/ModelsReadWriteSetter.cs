@@ -22,7 +22,7 @@ namespace Utils
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             }
 
-            Debug.Log("Models read|write flag sated");
+            Debug.Log("Models read|write flag is set");
         }
     }
 }
