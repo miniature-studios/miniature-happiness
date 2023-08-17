@@ -61,6 +61,7 @@ namespace Level
 
         [SerializeField]
         private IDataProvider<AllEmployeesAtHome> homeConditionProvider;
+
         [SerializeField]
         private IDataProvider<AllEmployeesAtMeeting> meetingConditionProvider;
 
