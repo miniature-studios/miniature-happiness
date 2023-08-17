@@ -23,17 +23,13 @@ namespace Common
             List<Action> actions
         )
         {
-            if (conditions.All(x => x.Invoke()))
-            {
-                foreach (Action action in actions)
-                {
-                    action.Invoke();
-                }
-            }
-            else
+            while (!conditions.All(x => x.Invoke()))
             {
                 yield return new WaitForEndOfFrame();
-                _ = initiator.StartCoroutine(CheckConditions(initiator, conditions, actions));
+            }
+            foreach (Action action in actions)
+            {
+                action.Invoke();
             }
         }
     }
