@@ -84,7 +84,7 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
-            new ConditionsGate(this).SetGates(
+            this.CreateGate(
                 new List<Func<bool>>() { () => meetingConditionProvider.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
             );
@@ -137,7 +137,7 @@ namespace Level
 
         public void Execute(PreDayEnd preDayEnd)
         {
-            new ConditionsGate(this).SetGates(
+            this.CreateGate(
                 new List<Func<bool>>() { () => homeConditionProvider.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
             );
