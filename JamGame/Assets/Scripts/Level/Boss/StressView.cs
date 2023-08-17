@@ -6,10 +6,11 @@ namespace Level.Boss
     public class StressView : MonoBehaviour
     {
         [SerializeField] private RectTransform bar;
+        [SerializeField] private Model model;
 
-        public void OnStressChanged(float stress)
+        private void Update()
         {
-            bar.localScale = new Vector3(1.0f, Mathf.Clamp01(stress));
+            bar.localScale = new Vector3(1.0f, Mathf.Clamp01(model.Stress));
         }
     }
 }

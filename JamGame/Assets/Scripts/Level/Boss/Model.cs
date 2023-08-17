@@ -44,8 +44,7 @@ namespace Level.Boss
         [SerializeField]
         [InspectorReadOnly]
         private float stress;
-
-        public UnityEvent<float> StressChanged;
+        public float Stress => stress;
 
         [SerializeField]
         private List<MeetingTasks> meetingTasks;
@@ -118,8 +117,6 @@ namespace Level.Boss
                     }
                 }
             }
-
-            StressChanged.Invoke(stress);
         }
     }
 }
