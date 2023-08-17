@@ -28,8 +28,7 @@ namespace TileUnion.Tile
             {
                 case (true, true):
                     centerCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    centerCube.transform.parent = CenterObject.transform;
-                    CenterObject.transform.localPosition = Vector3.zero;
+                    centerCube.transform.parent = transform.Find("Center").transform;
                     break;
                 case (false, false):
                     Destroy(centerCube);
@@ -189,12 +188,18 @@ namespace TileUnion.Tile
                                 {
                                     DestroyImmediate(handler.Prefab);
                                 }
-                                handler.Prefab = Instantiate(
-                                    prefab_handler.Prefab,
+
+                                handler.Prefab =
+                                    PrefabUtility.InstantiatePrefab(
+                                        prefab_handler.Prefab,
+                                        walls_handler.transform
+                                    ) as GameObject;
+
+                                handler.Prefab.transform.SetPositionAndRotation(
                                     tile.transform.position,
-                                    prefab_handler.Prefab.transform.rotation,
-                                    walls_handler.transform
+                                    prefab_handler.Prefab.transform.rotation
                                 );
+
                                 handler.Prefab.transform.Rotate(new(0, degrees, 0));
                                 handler.Prefab.SetActive(false);
                                 handler.Prefab.name =
@@ -238,12 +243,17 @@ namespace TileUnion.Tile
                                     DestroyImmediate(handler.Prefab);
                                 }
 
-                                handler.Prefab = Instantiate(
-                                    prefab_handler.Prefab,
+                                handler.Prefab =
+                                    PrefabUtility.InstantiatePrefab(
+                                        prefab_handler.Prefab,
+                                        corners_handler.transform
+                                    ) as GameObject;
+
+                                handler.Prefab.transform.SetPositionAndRotation(
                                     tile.transform.position,
-                                    prefab_handler.Prefab.transform.rotation,
-                                    corners_handler.transform
+                                    prefab_handler.Prefab.transform.rotation
                                 );
+
                                 handler.Prefab.transform.Rotate(new(0, degrees, 0));
                                 handler.Prefab.SetActive(false);
                                 handler.Prefab.name =
@@ -266,6 +276,18 @@ namespace TileUnion.Tile
                     else
                     {
                         center_handler = tile.transform.Find("Center").gameObject;
+                    }
+                    while (center_handler.transform.childCount > 0)
+                    {
+                        DestroyImmediate(center_handler.transform.GetChild(0).gameObject);
+                    }
+
+                    foreach (GameObject center_object in tile.CenterPrefabs)
+                    {
+                        _ = PrefabUtility.InstantiatePrefab(
+                            center_object,
+                            center_handler.transform
+                        );
                     }
                 }
                 else if (tile.Rotation != 0)

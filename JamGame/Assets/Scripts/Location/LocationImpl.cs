@@ -1,5 +1,6 @@
 using Common;
 using Employee;
+using Level;
 using Level.Boss.Task;
 using Level.Config;
 using System.Collections.Generic;
@@ -11,7 +12,9 @@ namespace Location
     public class LocationImpl
         : MonoBehaviour,
             IDataProvider<EmployeeAmount>,
-            IDataProvider<MaxStress>
+            IDataProvider<MaxStress>,
+            IDataProvider<AllEmployeesAtMeeting>,
+            IDataProvider<AllEmployeesAtHome>
     {
         [SerializeField]
         private EmployeeImpl employeePrototype;
@@ -69,6 +72,18 @@ namespace Location
             }
 
             return new MaxStress { Stress = max_stress };
+        }
+
+        AllEmployeesAtMeeting IDataProvider<AllEmployeesAtMeeting>.GetData()
+        {
+            return new AllEmployeesAtMeeting { Value = true };
+            // TODO:Implement
+        }
+
+        AllEmployeesAtHome IDataProvider<AllEmployeesAtHome>.GetData()
+        {
+            return new AllEmployeesAtHome { Value = true };
+            // TODO:Implement
         }
     }
 }

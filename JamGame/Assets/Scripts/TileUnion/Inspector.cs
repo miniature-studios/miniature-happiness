@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using DynamicNavMesh;
+using Location;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,39 +30,37 @@ namespace TileUnion
                 tile.SetCubeInCenter(value);
             }
         }
+
+        [HideInInspector]
+        public bool DrawNeedProviderGizmo = false;
+
+        private void OnDrawGizmos()
+        {
+            if (DrawNeedProviderGizmo)
+            {
+                DrawGizmoRecursively(transform);
+            }
+        }
+
+        private void DrawGizmoRecursively(Transform transform)
+        {
+            foreach (Transform child in transform)
+            {
+                if (child.TryGetComponent<NeedProvider>(out _))
+                {
+                    Gizmos.color = Color.blue;
+                    Gizmos.DrawSphere(child.position, 0.2f);
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawSphere(child.position, 0.1f);
+                }
+                DrawGizmoRecursively(child);
+            }
+        }
     }
 
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-        private void AddNavMeshSourceTagToChildren(Transform transform)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Transform child = transform.GetChild(i);
-                if (
-                    child.TryGetComponent(out MeshRenderer _)
-                    && !child.TryGetComponent(out SourceTag _)
-                )
-                {
-                    _ = child.gameObject.AddComponent<SourceTag>();
-                }
-                AddNavMeshSourceTagToChildren(child);
-            }
-        }
-
-        private void DeleteNavMeshSourceTagFromChildren(Transform transform)
-        {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Transform child = transform.GetChild(i);
-                if (child.TryGetComponent(out SourceTag navMeshSourceTag))
-                {
-                    Destroy(navMeshSourceTag);
-                }
-                DeleteNavMeshSourceTagFromChildren(child);
-            }
-        }
 
         public override void OnInspectorGUI()
         {
@@ -107,20 +105,6 @@ namespace TileUnion
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set NavMeshSourceTag Component to all children"))
-            {
-                AddNavMeshSourceTagToChildren(tile_union.transform);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Delete NavMeshSourceTag Component to all children"))
-            {
-                DeleteNavMeshSourceTagFromChildren(tile_union.transform);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
             GUILayout.Label("For testing");
             EditorGUILayout.EndHorizontal();
 
@@ -150,6 +134,17 @@ namespace TileUnion
             if (GUILayout.Button("Hide Path Gizmo"))
             {
                 tile_union.SetPathGizmo(false);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Show Need Provider Gizmo"))
+            {
+                tile_union.DrawNeedProviderGizmo = true;
+            }
+            if (GUILayout.Button("Hide Need Provider Gizmo"))
+            {
+                tile_union.DrawNeedProviderGizmo = false;
             }
             EditorGUILayout.EndHorizontal();
 

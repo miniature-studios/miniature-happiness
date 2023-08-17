@@ -1,11 +1,24 @@
-﻿using Level.Config;
+﻿using Common;
+using Level.Config;
 using Location;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Level
 {
+    public struct AllEmployeesAtHome
+    {
+        public bool Value;
+    }
+
+    public struct AllEmployeesAtMeeting
+    {
+        public bool Value;
+    }
+
     [AddComponentMenu("Scripts/Level.Executor")]
     public class Executor : MonoBehaviour
     {
@@ -42,20 +55,36 @@ namespace Level
         [SerializeField]
         private AllChildrenNeedModifiersApplier leaveNeedOverride;
 
+        [SerializeField] private GameObject homeConditionProvider;
+        private IDataProvider<AllEmployeesAtHome> homeCondition;
+
+        [SerializeField] private GameObject meetingConditionProvider;
+        private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
+
         public UnityEvent ActionEndNotify;
 
-        public SerializedEmployeeConfig TestEmplotyeeConfig;
+        public SerializedEmployeeConfig TestEmployeeConfig;
+
+        private void Awake()
+        {
+            homeCondition = homeConditionProvider.GetComponent<IDataProvider<AllEmployeesAtHome>>();
+            if (homeCondition == null)
+            {
+                Debug.LogError("IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider");
+            }
+            meetingCondition = meetingConditionProvider.GetComponent<IDataProvider<AllEmployeesAtMeeting>>();
+            if (meetingCondition == null)
+            {
+                Debug.LogError("IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider");
+            }
+        }
 
         public void Execute(DayStart day_start)
         {
-            location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
-            //location.AddEmployee(TestEmplotyeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+            for (int i = 0; i < 1; i++)
+            {
+                location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+            }
 
             financesModel.AddMoney(day_start.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
@@ -66,6 +95,14 @@ namespace Level
         {
             yield return new WaitForSeconds(time);
             ActionEndNotify?.Invoke();
+        }
+
+        public void Execute(PreMeeting preMeeting)
+        {
+            this.CreateGate(
+                new List<Func<bool>>() { () => meetingCondition.GetData().Value },
+                new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
+            );
         }
 
         public void Execute(Meeting meeting)
@@ -111,6 +148,14 @@ namespace Level
         {
             yield return new WaitForSeconds(time);
             ActionEndNotify?.Invoke();
+        }
+
+        public void Execute(PreDayEnd preDayEnd)
+        {
+            this.CreateGate(
+                new List<Func<bool>>() { () => homeCondition.GetData().Value },
+                new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
+            );
         }
 
         public void Execute(DayEnd day_end)

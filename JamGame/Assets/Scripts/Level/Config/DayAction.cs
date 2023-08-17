@@ -15,8 +15,16 @@ namespace Level.Config
     }
 
     [Serializable]
-    public class DayEnd : IDayAction
+    public class Cutscene : IDayAction
     {
+        [SerializeField]
+        private float duration;
+        public float Duration => duration;
+
+        [SerializeField]
+        private string text;
+        public string Text => text;
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -34,6 +42,15 @@ namespace Level.Config
         private float duration;
         public float Duration => duration;
 
+        public void Execute(Executor executor)
+        {
+            executor.Execute(this);
+        }
+    }
+
+    [Serializable]
+    public class PreMeeting : IDayAction
+    {
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -81,16 +98,17 @@ namespace Level.Config
     }
 
     [Serializable]
-    public class Cutscene : IDayAction
+    public class PreDayEnd : IDayAction
     {
-        [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        public void Execute(Executor executor)
+        {
+            executor.Execute(this);
+        }
+    }
 
-        [SerializeField]
-        private string text;
-        public string Text => text;
-
+    [Serializable]
+    public class DayEnd : IDayAction
+    {
         public void Execute(Executor executor)
         {
             executor.Execute(this);
