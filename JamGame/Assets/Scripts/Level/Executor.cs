@@ -67,13 +67,15 @@ namespace Level
 
         private void Awake()
         {
-            if (homeConditionProvider.TryGetComponent(out homeCondition))
+            homeCondition = homeConditionProvider.GetComponent<IDataProvider<AllEmployeesAtHome>>();
+            if (homeCondition == null)
             {
-                Debug.LogError("IDataProvider<AllEmployeesAtHome> not found in employeeCountProvider");
+                Debug.LogError("IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider");
             }
-            if (meetingConditionProvider.TryGetComponent(out meetingCondition))
+            meetingCondition = meetingConditionProvider.GetComponent<IDataProvider<AllEmployeesAtMeeting>>();
+            if (meetingCondition == null)
             {
-                Debug.LogError("IDataProvider<AllEmployeesAtMeeting> not found in employeeCountProvider");
+                Debug.LogError("IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider");
             }
         }
 
