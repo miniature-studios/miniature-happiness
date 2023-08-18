@@ -104,7 +104,7 @@ namespace Level.Boss
                 {
                     if (taskState[task.Task] == TaskState.Active)
                     {
-                        if (task.Task.GetProgress().Complete)
+                        if (task.Task.Progress.Complete)
                         {
                             taskState[task.Task] = TaskState.Complete;
                             _ = activeTasks.Remove(task.Task);

@@ -16,7 +16,7 @@ namespace Level.Boss
 
         private void UpdateFromTask()
         {
-            Progress progress = task.GetProgress();
+            Progress progress = task.Progress;
             if (task is TargetEmployeeAmount)
             {
                 description.text = $"Hire at least {progress.Overall} employees";
@@ -33,7 +33,7 @@ namespace Level.Boss
 
         private void Update()
         {
-            Progress progress = task.GetProgress();
+            Progress progress = task.Progress;
             float bar_pos = Mathf.Clamp01(progress.Completion / progress.Overall);
             progress_bar.localScale = new Vector3(bar_pos, 1.0f);
             progress_label.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
