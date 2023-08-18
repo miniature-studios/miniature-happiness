@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Level.Boss.Task
 {
+    public struct Progress
+    {
+        public float Completion;
+        public float Overall;
+        public bool Complete;
+    }
+
     [InterfaceEditor]
     public interface ITask
     {
@@ -11,7 +18,7 @@ namespace Level.Boss.Task
 
         public void Update(float delta_time) { }
 
-        public bool IsComplete();
+        public Progress Progress { get; }
     }
 
     public struct EmployeeAmount
@@ -27,11 +34,20 @@ namespace Level.Boss.Task
 
         [SerializeField] private int employeeCountTarget;
 
-        public bool IsComplete()
+        public Progress Progress
         {
-            return employeeCount.GetData().Amount >= employeeCountTarget;
-        }
+            get
+            {
+                int employee_amount = employeeCount.GetData().Amount;
 
+                return new Progress
+                {
+                    Completion = employee_amount,
+                    Overall = employeeCountTarget,
+                    Complete = employee_amount >= employeeCountTarget
+                };
+            }
+        }
         public void ValidateProviders()
         {
             employeeCount = employeeCountProvider.GetComponent<IDataProvider<EmployeeAmount>>();
@@ -54,15 +70,25 @@ namespace Level.Boss.Task
         private IDataProvider<MaxStress> maxStress;
 
         [SerializeField] private float maxStressTarget;
+        public float MaxStressTarget => maxStressTarget;
+
+        public Progress Progress
+        {
+            get
+            {
+                return new Progress()
+                {
+                    Completion = currentDuration,
+                    Overall = targetDuration,
+                    Complete = complete,
+                };
+            }
+        }
+
         [SerializeField] private float targetDuration;
 
         private float currentDuration = .0f;
         private bool complete = false;
-
-        public bool IsComplete()
-        {
-            return complete;
-        }
 
         public void ValidateProviders()
         {

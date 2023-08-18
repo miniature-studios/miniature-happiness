@@ -3,8 +3,11 @@ using Level.Boss.Task;
 using Level.GlobalTime;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level.Boss
 {
@@ -41,13 +44,22 @@ namespace Level.Boss
         [SerializeField]
         [InspectorReadOnly]
         private float stress;
+        public float Stress => stress;
 
         [SerializeField]
         private List<MeetingTasks> meetingTasks;
         private List<List<TaskWithCost>> scheduledTasks = new();
 
         private Dictionary<ITask, TaskState> taskState = new();
+        private ObservableCollection<ITask> activeTasks = new();
+        public UnityEvent<object, NotifyCollectionChangedEventArgs> ActiveTasksChanged = new();
+
         private int taskBunchToActivateNext = 0;
+
+        private void Awake()
+        {
+            activeTasks.CollectionChanged += ActiveTasksChanged.Invoke;
+        }
 
         private void Start()
         {
@@ -76,6 +88,7 @@ namespace Level.Boss
             foreach (TaskWithCost task in scheduledTasks[taskBunchToActivateNext])
             {
                 taskState[task.Task] = TaskState.Active;
+                activeTasks.Add(task.Task);
             }
 
             taskBunchToActivateNext++;
@@ -91,9 +104,10 @@ namespace Level.Boss
                 {
                     if (taskState[task.Task] == TaskState.Active)
                     {
-                        if (task.Task.IsComplete())
+                        if (task.Task.Progress.Complete)
                         {
                             taskState[task.Task] = TaskState.Complete;
+                            _ = activeTasks.Remove(task.Task);
                             stress -= task.Cost;
                         }
                         else
