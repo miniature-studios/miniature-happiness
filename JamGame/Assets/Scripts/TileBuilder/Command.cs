@@ -1,4 +1,5 @@
 using Common;
+using Level.Room;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,12 +72,12 @@ namespace TileBuilder.Command
 
     public class DeleteSelectedTile : ICommand
     {
-        private Level.Inventory.Room.Model tileUIPrefab;
-        private Action<Level.Inventory.Room.Model> sendUIPrefab;
+        private CoreModel tileUIPrefab;
+        private Action<CoreModel> sendUIPrefab;
         private SelectedTileWrapper selectedTileWrapper;
 
         public DeleteSelectedTile(
-            Action<Level.Inventory.Room.Model> send_ui_prefab,
+            Action<CoreModel> send_ui_prefab,
             SelectedTileWrapper selected_tile_wrapper
         )
         {

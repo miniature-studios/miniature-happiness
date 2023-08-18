@@ -108,7 +108,7 @@ namespace TileBuilder
         }
 
         public Result DeleteSelectedTile(
-            out Level.Inventory.Room.Model deleted_tile,
+            out Level.Room.CoreModel deleted_tile,
             SelectedTileWrapper selectedTileCover
         )
         {
@@ -296,13 +296,13 @@ namespace TileBuilder
         }
 
         // Public for inspector
-        public Level.Inventory.Room.Model DeleteTile(TileUnionImpl tile_union)
+        public Level.Room.CoreModel DeleteTile(TileUnionImpl tile_union)
         {
             if (tile_union == null)
             {
                 return null;
             }
-            Level.Inventory.Room.Model UIPrefab = tile_union.InventoryModel;
+            Level.Room.CoreModel UIPrefab = tile_union.InventoryModel;
             RemoveTileFromDictionary(tile_union);
             DestroyImmediate(tile_union.gameObject);
             return UIPrefab;

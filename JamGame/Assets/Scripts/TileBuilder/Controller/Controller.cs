@@ -1,5 +1,7 @@
 ﻿using Common;
+using Level.Room;
 using System;
+using System.Collections.Generic;
 using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,6 +31,9 @@ namespace TileBuilder
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
+        [SerializeField]
+        private List<CoreModel> models;
+
         // public for inspector
         [InspectorReadOnly]
         public SelectedTileWrapper SelectedTileWrapper = new();
@@ -40,7 +45,7 @@ namespace TileBuilder
         private Vector2 previousMousePosition;
         private bool mousePressed = false;
 
-        public UnityEvent<Level.Inventory.Room.Model> JustAddedUI;
+        public UnityEvent<CoreModel> JustAddedUI;
         public UnityEvent BuiltValidatedOffice;
 
         private void Awake()
@@ -124,7 +129,7 @@ namespace TileBuilder
         {
             if (over)
             {
-                Level.Inventory.Room.Model destroyed_tile = null;
+                Level.Room.CoreModel destroyed_tile = null;
                 Command.DeleteSelectedTile command =
                     new((arg) => destroyed_tile = arg, SelectedTileWrapper);
                 Result result = Execute(command);
@@ -136,10 +141,10 @@ namespace TileBuilder
             }
         }
 
-        private Result TryPlace(Level.Inventory.Room.Model room)
+        private Result TryPlace(Level.Room.CoreModel room)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.AddTileToScene command = new(room.TileUnion, ray, SelectedTileWrapper);
+            Command.AddTileToScene command = new(room.TileUnionPrefab, ray, SelectedTileWrapper);
             return Execute(command);
         }
 

@@ -1,61 +1,78 @@
-﻿using System.Collections.Specialized;
-using System.Linq;
+﻿using Common;
+using Level.Room;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 
 namespace Level.Shop
 {
+    [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Scripts/Level.Shop.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]
         private Transform roomsUIContainer;
         private Animator shopAnimator;
+        private Dictionary<UniqueId, Room.View> modelViewMap;
+        private List<Room.View> viewList = new();
+
+        private void Awake()
+        {
+            shopAnimator = GetComponent<Animator>();
+            foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
+            {
+                if (prefab.TryGetComponent(out Room.View view))
+                {
+                    modelViewMap.Add(view.CoreModelUniqueId, view);
+                }
+            }
+        }
 
         public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItems(e.NewItems[0] as Room.Model);
+                    AddNewItem(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItems(e.OldItems[0] as Room.Model);
+                    RemoveOldItem(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllItems();
                     break;
                 default:
+                    Debug.LogError(
+                        $"Unexpected variant of NotifyCollectionChangedAction: {e.Action}"
+                    );
                     break;
             }
         }
 
+        private void AddNewItem(CoreModel newItem)
+        {
+            Room.View newRoomView = Instantiate(modelViewMap[newItem.UniqueId], roomsUIContainer)
+                .GetComponent<Room.View>();
+            newRoomView.Constructor(
+                () => newItem.Cost,
+                () => newItem.TariffProperties,
+                () => newItem
+            );
+            newRoomView.enabled = true;
+            viewList.Add(newRoomView);
+        }
+
+        private void RemoveOldItem(CoreModel oldItem)
+        {
+            Destroy(viewList.Find(x => x.GetCoreModelInstance() == oldItem).gameObject);
+        }
+
         private void DeleteAllItems()
         {
-            foreach (
-                Room.Model old_item in roomsUIContainer.transform.GetComponentsInChildren<Room.Model>()
-            )
+            foreach (Room.View views in viewList)
             {
-                Destroy(old_item.gameObject);
+                Destroy(views.gameObject);
             }
-        }
-
-        private void RemoveOldItems(Room.Model old_item)
-        {
-            Room.Model[] room_models =
-                roomsUIContainer.transform.GetComponentsInChildren<Room.Model>();
-            Destroy(room_models.First(x => x == old_item).gameObject);
-        }
-
-        private void AddNewItems(Room.Model new_item)
-        {
-            Room.View new_room_view = Instantiate(new_item, roomsUIContainer)
-                .GetComponent<Room.View>();
-            new_room_view.enabled = true;
-        }
-
-        private void Awake()
-        {
-            shopAnimator = GetComponent<Animator>();
         }
 
         public void Open()

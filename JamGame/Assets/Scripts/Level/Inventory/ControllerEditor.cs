@@ -10,18 +10,18 @@ namespace Level.Inventory.Inspector
     [CustomEditor(typeof(Controller))]
     public class ControllerEditor : Editor
     {
-        private Room.Model room;
+        private Level.Room.CoreModel room;
 
         public override void OnInspectorGUI()
         {
             Controller inventory_controller = serializedObject.targetObject as Controller;
 
             _ = EditorGUILayout.BeginHorizontal();
-            room = (Room.Model)
+            room = (Level.Room.CoreModel)
                 EditorGUILayout.ObjectField(
                     "Select inv room to add: ",
                     room,
-                    typeof(Room.Model),
+                    typeof(Level.Room.CoreModel),
                     false
                 );
             EditorGUILayout.EndHorizontal();
@@ -55,10 +55,10 @@ namespace Level.Inventory.Inspector
                         .Select(x => x.Replace($"\\", "/"))
                 )
                 {
-                    Object inv_el = AssetDatabase.LoadAssetAtPath(path, typeof(Room.Model));
+                    Object inv_el = AssetDatabase.LoadAssetAtPath(path, typeof(Level.Room.CoreModel));
                     for (int i = 0; i < 50; i++)
                     {
-                        inventory_controller.AddNewRoom(inv_el as Room.Model);
+                        inventory_controller.AddNewRoom(inv_el as Level.Room.CoreModel);
                     }
                 }
             }

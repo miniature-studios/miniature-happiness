@@ -1,4 +1,5 @@
 using Common;
+using Level.Room;
 using System;
 using TMPro;
 using UnityEngine;
@@ -9,10 +10,11 @@ namespace Level.Inventory.Room
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private TMP_Text counterText;
+        private UniqueId coreModelUniqueId;
+        public UniqueId CoreModelUniqueId => coreModelUniqueId;
 
         [SerializeField]
-        private Model model;
+        private TMP_Text counterText;
 
         [SerializeField]
         private GameObject extendedUIInfoPrefab;
@@ -20,26 +22,43 @@ namespace Level.Inventory.Room
         private RectTransform targetInfo = null;
         private Canvas canvas;
 
+        private Func<Cost> getCost = null;
+        private Func<TariffProperties> getTariff = null;
+
+        private Func<int> getCount = null;
+        public Func<int> GetCount => getCount;
+
+        private Func<CoreModel> getCoreModelInstance;
+        public Func<CoreModel> GetCoreModelInstance => getCoreModelInstance;
+
+        private bool pointerOver;
+        public bool PointerOver => pointerOver;
+
         public void Awake()
         {
             canvas = FindObjectOfType<Canvas>();
         }
 
-        public void CountUpdated(int count)
+        public void Constructor(
+            Func<Cost> getCost,
+            Func<TariffProperties> getTariff,
+            Func<int> getCount,
+            Func<CoreModel> getCoreModelInstance
+        )
         {
-            counterText.text = Convert.ToString(count);
+            this.getCost = getCost;
+            this.getTariff = getTariff;
+            this.getCount = getCount;
+            this.getCoreModelInstance = getCoreModelInstance;
         }
 
         public void Update()
         {
+            counterText.text = Convert.ToString(getCount());
+            pointerOver = RayCastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject);
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                switch
-                    (
-                        RayCastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject),
-                        targetInfo == null
-                    )
-
+                switch (pointerOver, targetInfo == null)
                 {
                     case (true, true):
                         targetInfo = Instantiate(
@@ -50,9 +69,9 @@ namespace Level.Inventory.Room
                             )
                             .GetComponent<RectTransform>();
                         targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electricity. Con.: {model.TileUnion.TariffProperties.ElectricityConsumption}\n"
-                            + $"Water Con.: {model.TileUnion.TariffProperties.WaterConsumption}\n"
-                            + $"Cost: {model.TileUnion.Cost.Value}";
+                            $"Electricity. Con.: {getTariff().ElectricityConsumption}\n"
+                            + $"Water Con.: {getTariff().WaterConsumption}\n"
+                            + $"Cost: {getCost().Value}";
                         break;
                     case (true, false):
                         targetInfo.position = Input.mousePosition + new Vector3(20, 20, 0);

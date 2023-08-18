@@ -10,38 +10,10 @@ using UnityEngine;
 
 namespace TileUnion
 {
-    [Serializable]
-    public struct Cost
-    {
-        [SerializeField]
-        private int cost;
-        public int Value => cost;
-    }
-
-    [Serializable]
-    public struct TariffProperties
-    {
-        [SerializeField]
-        private int waterConsumption;
-        public int WaterConsumption => waterConsumption;
-
-        [SerializeField]
-        private int electricityConsumption;
-        public int ElectricityConsumption => electricityConsumption;
-    }
-
     [SelectionBase]
     [AddComponentMenu("Scripts/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
-        [SerializeField]
-        private Cost cost;
-        public Cost Cost => cost;
-
-        [SerializeField]
-        private TariffProperties tariffProperties;
-        public TariffProperties TariffProperties => tariffProperties;
-
         [Space(20)]
         [SerializeField]
         private Vector2Int position;
@@ -52,7 +24,7 @@ namespace TileUnion
         [SerializeField]
         private Matrix builderMatrix;
 
-        public Level.Inventory.Room.Model InventoryModel;
+        public Level.Room.CoreModel InventoryModel;
         public List<TileImpl> Tiles = new();
 
         [SerializeField]
@@ -167,7 +139,10 @@ namespace TileUnion
                 }
                 foreach (PlaceCondition.IPlaceCondition condition in PlaceConditions)
                 {
-                    PlaceCondition.ConditionResult conditionResult = condition.ApplyCondition(this, tile_builder);
+                    PlaceCondition.ConditionResult conditionResult = condition.ApplyCondition(
+                        this,
+                        tile_builder
+                    );
                     if (conditionResult.Failure)
                     {
                         foreach (TileImpl errorTile in conditionResult.FailedTiles)
