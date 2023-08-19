@@ -76,6 +76,8 @@ namespace Location
         [SerializeField]
         private Filter filter;
 
+        [SerializeField] private bool bindToThisProviderOnFirstVisit;
+
         public NeedType NeedType;
 
         private EmployeeImpl currentEmployee = null;
@@ -95,6 +97,11 @@ namespace Location
             foreach (NeedModifiers modifier in registeredModifiers)
             {
                 currentEmployee.RegisterModifier(modifier);
+            }
+
+            if (bindToThisProviderOnFirstVisit)
+            {
+                employee.BindToNeedProvider(this);
             }
 
             return true;

@@ -136,6 +136,9 @@ namespace Employee
             needs.Add(need);
         }
 
+        // NOTE: We may want to preserve it between levels, so we may need to serialize it in this case.
+        private Dictionary<NeedType, NeedProvider> needProviderBindings = new();
+
         private NeedProvider GetTargetNeedProvider()
         {
             needs.Sort((x, y) => x.Satisfied.CompareTo(y.Satisfied));
@@ -155,6 +158,9 @@ namespace Employee
 
                 List<NeedProvider> available_providers = location
                     .FindAllAvailableProviders(this, need.NeedType)
+                    .Where(np => !needProviderBindings.ContainsKey(np.NeedType)
+                        || needProviderBindings[np.NeedType] == np
+                    )
                     .ToList();
 
                 NeedProvider selected_provider = null;
@@ -186,6 +192,21 @@ namespace Employee
 
             Debug.LogError("Failed to select target NeedProvider");
             return null;
+        }
+
+        public void BindToNeedProvider(NeedProvider need_provider)
+        {
+            if (needProviderBindings.ContainsKey(need_provider.NeedType))
+            {
+                if (needProviderBindings[need_provider.NeedType] != need_provider)
+                {
+                    Debug.LogError("Trying to bind NeedProvider when there's already one binding");
+                }
+
+                return;
+            }
+
+            needProviderBindings.Add(need_provider.NeedType, need_provider);
         }
 
         private void FinishedMoving()
