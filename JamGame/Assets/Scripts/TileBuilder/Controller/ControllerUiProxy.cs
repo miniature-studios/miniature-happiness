@@ -11,17 +11,17 @@ namespace TileBuilder
 
         public void Hover(CoreModel coreModel)
         {
-            throw new System.NotImplementedException();
+            controller.Hover(coreModel);
         }
 
         Result<CoreModel> IDragAndDropManager.Borrow()
         {
-            throw new System.NotImplementedException();
+            return controller.Borrow();
         }
 
         Result IDragAndDropManager.Drop(CoreModel coreModel)
         {
-            throw new System.NotImplementedException();
+            return controller.Drop(coreModel);
         }
     }
 }

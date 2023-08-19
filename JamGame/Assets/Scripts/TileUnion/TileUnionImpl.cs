@@ -14,6 +14,10 @@ namespace TileUnion
     [AddComponentMenu("Scripts/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
+        [SerializeField]
+        private UniqueId coreModelUniqueId;
+        public UniqueId CoreModelUniqueId => coreModelUniqueId;
+
         [Space(20)]
         [SerializeField]
         private Vector2Int position;
@@ -24,7 +28,6 @@ namespace TileUnion
         [SerializeField]
         private Matrix builderMatrix;
 
-        public Level.Room.CoreModel InventoryModel;
         public List<TileImpl> Tiles = new();
 
         [SerializeField]

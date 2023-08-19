@@ -16,8 +16,20 @@ namespace Level
     {
         [SerializeField, InspectorReadOnly]
         private CoreModel bufferCoreModel;
+        [SerializeField]
+        private GameObject backupDragAndDropProvider;
+        private IDragAndDropManager backupDragAndDrop;
         private IDragAndDropManager dragAndDrop;
         private bool mousePressed;
+
+        private void Awake()
+        {
+            backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropManager>();
+            if (backupDragAndDrop == null)
+            {
+                Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
+            }
+        }
 
         private void Update()
         {
@@ -33,7 +45,8 @@ namespace Level
             {
                 if (!mousePressed)
                 {
-                    bufferCoreModel = dragAndDrop.Borrow();
+                    Result<CoreModel> result = dragAndDrop.Borrow();
+                    bufferCoreModel = result.Data;
                 }
                 mousePressed = true;
             }
@@ -51,6 +64,11 @@ namespace Level
             {
                 dragAndDrop.Hover(bufferCoreModel);
             }
+        }
+
+        public void BackupDrop(CoreModel coreModel)
+        {
+            _ = backupDragAndDrop.Drop(coreModel);
         }
     }
 }

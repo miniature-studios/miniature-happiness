@@ -32,26 +32,17 @@ namespace TileBuilder
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
-        private List<CoreModel> models;
+        private List<CoreModel> coreModels;
 
         // public for inspector
         [InspectorReadOnly]
         public SelectedTileWrapper SelectedTileWrapper = new();
 
-        [SerializeField]
-        private Level.Inventory.Controller inventoryController;
-
         private Validator.IValidator validator = new Validator.GameMode();
-        private Vector2 previousMousePosition;
-        private bool mousePressed = false;
 
-        public UnityEvent<CoreModel> JustAddedUI;
+        private int temporaryRotation = 0;
+
         public UnityEvent BuiltValidatedOffice;
-
-        private void Awake()
-        {
-            inventoryController.TryPlace += TryPlace;
-        }
 
         public Result Execute(Command.ICommand command)
         {
@@ -70,12 +61,17 @@ namespace TileBuilder
             };
         }
 
+        public void ValidateBuilding()
+        {
+            Result result = Execute(new Command.ValidateBuilding());
+            if (result.Success)
+            {
+                BuiltValidatedOffice?.Invoke();
+            }
+        }
+
         private void Update()
         {
-            Vector2 mousePosition = Input.mousePosition;
-            Vector2 mouseDelta = mousePosition - previousMousePosition;
-            previousMousePosition = mousePosition;
-
             bool isOverUI = RayCastUtilities.PointerIsOverUI(mousePosition);
 
             if (Input.GetMouseButtonDown(0))
@@ -119,9 +115,7 @@ namespace TileBuilder
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _ = Execute(
-                    new Command.RotateSelectedTile(RotationDirection.Clockwise, SelectedTileWrapper)
-                );
+                temporaryRotation++;
             }
         }
 
@@ -141,20 +135,25 @@ namespace TileBuilder
             }
         }
 
-        private Result TryPlace(Level.Room.CoreModel room)
+        public void Hover(CoreModel coreModel)
         {
+            throw new NotImplementedException();
+        }
+
+        public Result Drop(CoreModel coreModel)
+        {
+            temporaryRotation = 0;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.AddTileToScene command = new(room.TileUnionPrefab, ray, SelectedTileWrapper);
+            Command.AddTileToScene command = new(coreModel.TileUnionPrefab, ray, SelectedTileWrapper);
             return Execute(command);
         }
 
-        public void ValidateBuilding()
+        public Result<CoreModel> Borrow()
         {
-            Result result = Execute(new Command.ValidateBuilding());
-            if (result.Success)
-            {
-                BuiltValidatedOffice?.Invoke();
-            }
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            _ = Execute(new Command.SelectTile(ray, SelectedTileWrapper));
+            temporaryRotation = SelectedTileWrapper.Value.Rotation;
+
         }
     }
 }
