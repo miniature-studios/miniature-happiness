@@ -26,7 +26,8 @@ namespace Employee
 
         [SerializeField]
         private List<Need> needs = new();
-        private Need currentNeed;
+        private Need topPriorityNeed;
+        private Need currentlySatisfyingNeed;
         private float satisfyingNeedRemaining = 0.0f;
         private NeedProvider targetNeedProvider = null;
 
@@ -35,6 +36,8 @@ namespace Employee
         private List<NeedModifiers> registeredModifiers = new();
 
         public StressMeter Stress { get; private set; }
+
+        [SerializeField] private IncomeGenerator.Model incomeGenerator;
 
         [Serializable]
         private struct AppliedBuff
@@ -73,12 +76,11 @@ namespace Employee
                 case State.Idle:
                     targetNeedProvider = GetTargetNeedProvider();
                     state = State.Walking;
-                    // TODO: Fetch target position from NeedProvider in future.
                     controller.SetDestination(targetNeedProvider.transform.position);
                     break;
                 case State.Walking:
                     if (!targetNeedProvider.IsAvailable(this)
-                        || targetNeedProvider.NeedType != needs[0].NeedType)
+                        || targetNeedProvider.NeedType != topPriorityNeed.NeedType)
                     {
                         state = State.Idle;
                     }
@@ -88,7 +90,10 @@ namespace Employee
                     if (satisfyingNeedRemaining < 0.0f)
                     {
                         state = State.Idle;
-                        currentNeed.Satisfy();
+                        currentlySatisfyingNeed.Satisfy();
+                        incomeGenerator.NeedComplete(currentlySatisfyingNeed);
+                        currentlySatisfyingNeed = null;
+
                         targetNeedProvider.Release();
                         targetNeedProvider = null;
                     }
@@ -131,6 +136,9 @@ namespace Employee
             needs.Add(need);
         }
 
+        // NOTE: We may want to preserve it between levels, so we may need to serialize it in this case.
+        private Dictionary<NeedType, NeedProvider> needProviderBindings = new();
+
         private NeedProvider GetTargetNeedProvider()
         {
             needs.Sort((x, y) => x.Satisfied.CompareTo(y.Satisfied));
@@ -138,18 +146,21 @@ namespace Employee
             if (state == State.Idle)
             {
                 // Force select top-priority need.
-                currentNeed = null;
+                topPriorityNeed = null;
             }
 
             foreach (Need need in needs)
             {
-                if (need == currentNeed)
+                if (need == topPriorityNeed)
                 {
                     break;
                 }
 
                 List<NeedProvider> available_providers = location
                     .FindAllAvailableProviders(this, need.NeedType)
+                    .Where(np => !needProviderBindings.ContainsKey(np.NeedType)
+                        || needProviderBindings[np.NeedType] == np
+                    )
                     .ToList();
 
                 NeedProvider selected_provider = null;
@@ -175,7 +186,7 @@ namespace Employee
                     continue;
                 }
 
-                currentNeed = need;
+                topPriorityNeed = need;
                 return selected_provider;
             }
 
@@ -183,12 +194,28 @@ namespace Employee
             return null;
         }
 
+        public void BindToNeedProvider(NeedProvider need_provider)
+        {
+            if (needProviderBindings.ContainsKey(need_provider.NeedType))
+            {
+                if (needProviderBindings[need_provider.NeedType] != need_provider)
+                {
+                    Debug.LogError("Trying to bind NeedProvider when there's already one binding");
+                }
+
+                return;
+            }
+
+            needProviderBindings.Add(need_provider.NeedType, need_provider);
+        }
+
         private void FinishedMoving()
         {
             if (targetNeedProvider.TryTake(this))
             {
                 state = State.SatisfyingNeed;
-                satisfyingNeedRemaining = currentNeed.GetProperties().SatisfactionTime;
+                satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
+                currentlySatisfyingNeed = topPriorityNeed;
             }
             else
             {
@@ -288,11 +315,6 @@ namespace Employee
             }
 
             Debug.LogError("Failed to unregister buff: not registered");
-        }
-
-        public void SetLocation(LocationImpl location)
-        {
-            this.location = location;
         }
     }
 
