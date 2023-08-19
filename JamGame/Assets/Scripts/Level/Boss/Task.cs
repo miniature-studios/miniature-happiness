@@ -18,7 +18,7 @@ namespace Level.Boss.Task
 
         public void Update(float delta_time) { }
 
-        public Progress GetProgress();
+        public Progress Progress { get; }
     }
 
     public struct EmployeeAmount
@@ -34,6 +34,20 @@ namespace Level.Boss.Task
 
         [SerializeField] private int employeeCountTarget;
 
+        public Progress Progress
+        {
+            get
+            {
+                int employee_amount = employeeCount.GetData().Amount;
+
+                return new Progress
+                {
+                    Completion = employee_amount,
+                    Overall = employeeCountTarget,
+                    Complete = employee_amount >= employeeCountTarget
+                };
+            }
+        }
         public void ValidateProviders()
         {
             employeeCount = employeeCountProvider.GetComponent<IDataProvider<EmployeeAmount>>();
@@ -41,18 +55,6 @@ namespace Level.Boss.Task
             {
                 Debug.LogError("IDataProvider<EmployeeAmount>  not found in employeeCountProvider");
             }
-        }
-
-        public Progress GetProgress()
-        {
-            int employee_amount = employeeCount.GetData().Amount;
-
-            return new Progress
-            {
-                Completion = employee_amount,
-                Overall = employeeCountTarget,
-                Complete = employee_amount >= employeeCountTarget
-            };
         }
     }
 
@@ -69,6 +71,19 @@ namespace Level.Boss.Task
 
         [SerializeField] private float maxStressTarget;
         public float MaxStressTarget => maxStressTarget;
+
+        public Progress Progress
+        {
+            get
+            {
+                return new Progress()
+                {
+                    Completion = currentDuration,
+                    Overall = targetDuration,
+                    Complete = complete,
+                };
+            }
+        }
 
         [SerializeField] private float targetDuration;
 
@@ -103,16 +118,6 @@ namespace Level.Boss.Task
             {
                 currentDuration = 0.0f;
             }
-        }
-
-        public Progress GetProgress()
-        {
-            return new Progress()
-            {
-                Completion = currentDuration,
-                Overall = targetDuration,
-                Complete = complete,
-            };
         }
     }
 }

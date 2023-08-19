@@ -30,7 +30,7 @@ namespace Employee
 
         private State state = State.Idle;
 
-        public Vector3 DesiredVelocityNormalized => (agent.nextPosition - transform.position).normalized;
+        public Vector3 DesiredVelocityNormalized => Vector3.zero;// (agent.nextPosition - transform.position).normalized;
 
         public delegate void FinishedMovingHandler();
         public event FinishedMovingHandler OnFinishedMoving;

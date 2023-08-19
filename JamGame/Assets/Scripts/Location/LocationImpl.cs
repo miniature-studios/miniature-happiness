@@ -36,7 +36,6 @@ namespace Location
         public void AddEmployee(EmployeeConfig config)
         {
             EmployeeImpl employee = Instantiate(config.Prototype, transform).GetComponent<EmployeeImpl>();
-            employee.SetLocation(this);
             employee.gameObject.SetActive(true);
             employees.Add(employee);
         }
