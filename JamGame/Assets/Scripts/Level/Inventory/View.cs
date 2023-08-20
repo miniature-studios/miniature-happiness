@@ -34,7 +34,7 @@ namespace Level.Inventory
             {
                 if (prefab.TryGetComponent(out Room.View view))
                 {
-                    modelViewMap.Add(view.CoreModelUniqueId, view);
+                    modelViewMap.Add(view.UniqueId, view);
                 }
             }
         }
@@ -75,14 +75,15 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            if (!roomViews.Any(x => x.CoreModelUniqueId == newItem.UniqueId))
+            if (!roomViews.Any(x => x.UniqueId == newItem.UniqueId))
             {
                 Room.View newRoomView = Instantiate(modelViewMap[newItem.UniqueId], container)
                     .GetComponent<Room.View>();
                 newRoomView.Constructor(
                     () => newItem.Cost,
                     () => newItem.TariffProperties,
-                    () => model.GetModelsCount(newRoomView.CoreModelUniqueId)
+                    () => model.GetModelsCount(newRoomView.UniqueId),
+                    () => newItem
                 );
                 newRoomView.enabled = true;
                 roomViews.Add(newRoomView);
@@ -91,7 +92,7 @@ namespace Level.Inventory
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.View existRoom = roomViews.Find(x => x.CoreModelUniqueId != oldItem.UniqueId);
+            Room.View existRoom = roomViews.Find(x => x.UniqueId != oldItem.UniqueId);
             if (existRoom.GetCount() == 0)
             {
                 _ = roomViews.Remove(existRoom);

@@ -16,10 +16,11 @@ namespace Level
     {
         [SerializeField, InspectorReadOnly]
         private CoreModel bufferCoreModel;
+
         [SerializeField]
         private GameObject backupDragAndDropProvider;
         private IDragAndDropManager backupDragAndDrop;
-        private IDragAndDropManager dragAndDrop;
+
         private bool mousePressed;
 
         private void Awake()
@@ -33,6 +34,7 @@ namespace Level
 
         private void Update()
         {
+            IDragAndDropManager dragAndDrop = null;
             GameObject topDragAndDrop = RayCastUtilities
                 .UIRayCast(Input.mousePosition)
                 .First(x => x.GetComponent<IDragAndDropManager>() != null);
@@ -41,26 +43,42 @@ namespace Level
                 dragAndDrop = topDragAndDrop.GetComponent<IDragAndDropManager>();
             }
 
-            if (Input.GetMouseButtonDown(0) && dragAndDrop != null)
+            if (Input.GetMouseButtonDown(0) && !mousePressed)
             {
-                if (!mousePressed)
+                if (dragAndDrop != null)
                 {
                     Result<CoreModel> result = dragAndDrop.Borrow();
-                    bufferCoreModel = result.Data;
+                    bufferCoreModel = result.Success ? result.Data : null;
+                }
+                else
+                {
+                    bufferCoreModel = null;
                 }
                 mousePressed = true;
             }
 
-            if (Input.GetMouseButtonUp(0) && dragAndDrop != null)
+            if (Input.GetMouseButtonUp(0) && mousePressed)
             {
-                if (mousePressed)
+                if (bufferCoreModel != null)
                 {
-                    _ = dragAndDrop.Drop(bufferCoreModel);
+                    if (dragAndDrop != null)
+                    {
+                        Result result = dragAndDrop.Drop(bufferCoreModel);
+                        if (result.Failure)
+                        {
+                            BackupDrop(bufferCoreModel);
+                        }
+                    }
+                    else
+                    {
+                        BackupDrop(bufferCoreModel);
+                    }
+                    bufferCoreModel = null;
                 }
                 mousePressed = false;
             }
 
-            if (mousePressed)
+            if (mousePressed && dragAndDrop != null)
             {
                 dragAndDrop.Hover(bufferCoreModel);
             }

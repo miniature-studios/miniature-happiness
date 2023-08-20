@@ -1,5 +1,8 @@
 ﻿using Common;
+using System.Collections.Generic;
+using System.Linq;
 using TileBuilder;
+using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,28 +34,28 @@ namespace Level
 
         public void UpdateCheck()
         {
-            //int inside_tiles_count = tileBuilder.GetAllInsideListPositions().Count();
-            //IEnumerable<TileUnionImpl> room_properties = tileBuilder.GetTileUnionsInPositions(
-            //    tileBuilder.GetAllInsideListPositions()
-            //);
+            int insideTilesCount = tileBuilder.GetAllInsideListPositions().Count();
+            IEnumerable<TileUnionImpl> roomProperties = tileBuilder.GetTileUnionsInPositions(
+                tileBuilder.GetAllInsideListPositions()
+            );
 
             check = new()
             {
-                //Rent = inside_tiles_count * levelConfig.Config.Tariffs.RentCost,
-                //Water = room_properties
-                //    .Select(
-                //        x =>
-                //            x.TariffProperties.WaterConsumption
-                //            * levelConfig.Config.Tariffs.WaterCost
-                //    )
-                //    .Sum(),
-                //Electricity = room_properties
-                //    .Select(
-                //        x =>
-                //            x.TariffProperties.ElectricityConsumption
-                //            * levelConfig.Config.Tariffs.ElectricityCost
-                //    )
-                //    .Sum(),
+                Rent = insideTilesCount * levelConfig.Config.Tariffs.RentCost,
+                Water = roomProperties
+                    .Select(
+                        x =>
+                            x.GetCoreModel().TariffProperties.WaterConsumption
+                            * levelConfig.Config.Tariffs.WaterCost
+                    )
+                    .Sum(),
+                Electricity = roomProperties
+                    .Select(
+                        x =>
+                            x.GetCoreModel().TariffProperties.ElectricityConsumption
+                            * levelConfig.Config.Tariffs.ElectricityCost
+                    )
+                    .Sum(),
             };
 
             CheckChanged?.Invoke(Check);

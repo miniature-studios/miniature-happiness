@@ -1,3 +1,5 @@
+using Level.Room;
+using Pickle;
 using System.Linq;
 using TileUnion;
 using UnityEditor;
@@ -5,7 +7,7 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    public partial class TileBuilderImpl : MonoBehaviour
+    public partial class TileBuilderImpl
     {
         [HideInInspector]
         public GameObject LoadingPrefab;
@@ -13,23 +15,23 @@ namespace TileBuilder
         [HideInInspector]
         public string SavingName = "SampleBuilding";
 
-        [HideInInspector]
-        public TileUnionImpl StairsPrefab;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel StairsPrefab;
 
-        [HideInInspector]
-        public TileUnionImpl WindowPrefab;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel WindowPrefab;
 
-        [HideInInspector]
-        public TileUnionImpl OutdoorPrefab;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel OutdoorPrefab;
 
-        [HideInInspector]
-        public TileUnionImpl CorridorPrefab;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel CorridorPrefab;
 
-        [HideInInspector]
-        public TileUnionImpl WorkingPlaceFree;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel WorkingPlaceFree;
 
-        [HideInInspector]
-        public TileUnionImpl WorkingPlace;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel WorkingPlace;
 
         [HideInInspector]
         public int SquareSideLength = 30;
@@ -82,29 +84,29 @@ namespace TileBuilder
     [CustomEditor(typeof(TileBuilderImpl))]
     public partial class TileBuilderInspector : Editor
     {
-        private TileBuilderImpl tile_builder;
+        private TileBuilderImpl tileBuilder;
 
         private void Awake()
         {
-            tile_builder = serializedObject.targetObject as TileBuilderImpl;
-            tile_builder.OnTileUnionCreated += OnTileUnionCreated;
+            tileBuilder = serializedObject.targetObject as TileBuilderImpl;
+            tileBuilder.OnTileUnionCreated += OnTileUnionCreated;
         }
 
         private void OnTileUnionCreated(TileUnionImpl tileUnionImpl)
         {
-            if (tile_builder.ShowTileDirectionGizmo)
+            if (tileBuilder.ShowTileDirectionGizmo)
             {
                 tileUnionImpl.SetDirectionsGizmo(true);
             }
             if (
-                tile_builder.ShowTilePathGizmo
+                tileBuilder.ShowTilePathGizmo
                 && !tileUnionImpl.IsAllWithMark("Freespace")
                 && !tileUnionImpl.IsAllWithMark("Outside")
             )
             {
                 tileUnionImpl.SetPathGizmo(true);
             }
-            if (tile_builder.ShowTileFreeSpaceCube && tileUnionImpl.IsAllWithMark("Freespace"))
+            if (tileBuilder.ShowTileFreeSpaceCube && tileUnionImpl.IsAllWithMark("Freespace"))
             {
                 tileUnionImpl.SetCenterCube(true);
             }
@@ -112,18 +114,27 @@ namespace TileBuilder
 
         public void DeleteAllTiles()
         {
-            while (tile_builder.TileUnionDictionary.Values.Count() > 0)
+            if (tileBuilder.RootObject != null)
             {
-                TileUnionImpl value = tile_builder.TileUnionDictionary.Values.Last();
-                _ = tile_builder.DeleteTile(value);
+                DestroyImmediate(tileBuilder.RootObject);
+            }
+            tileBuilder.RootObject = Instantiate(
+                new GameObject("Root object"),
+                tileBuilder.transform
+            );
+            while (tileBuilder.TileUnionDictionary.Values.Contains(null))
+            {
+                _ = tileBuilder.TileUnionDictionary.Remove(
+                    tileBuilder.TileUnionDictionary.First(x => x.Value == null).Key
+                );
             }
         }
 
         public override void OnInspectorGUI()
         {
-            ShowLocationBuildingButtons(tile_builder);
-            DisplaySaveLoadTiles(tile_builder);
-            DisplayDebuggingTools(tile_builder);
+            ShowLocationBuildingButtons(tileBuilder);
+            DisplaySaveLoadTiles(tileBuilder);
+            DisplayDebuggingTools(tileBuilder);
 
             _ = DrawDefaultInspector();
 
@@ -260,66 +271,6 @@ namespace TileBuilder
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.StairsPrefab = (TileUnionImpl)
-                EditorGUILayout.ObjectField(
-                    "Stairs prefab: ",
-                    tile_builder.StairsPrefab,
-                    typeof(TileUnionImpl),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.WindowPrefab = (TileUnionImpl)
-                EditorGUILayout.ObjectField(
-                    "Window prefab: ",
-                    tile_builder.WindowPrefab,
-                    typeof(TileUnionImpl),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.OutdoorPrefab = (TileUnionImpl)
-                EditorGUILayout.ObjectField(
-                    "Outdoor prefab: ",
-                    tile_builder.OutdoorPrefab,
-                    typeof(TileUnionImpl),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.CorridorPrefab = (TileUnionImpl)
-                EditorGUILayout.ObjectField(
-                    "Corridor prefab: ",
-                    tile_builder.CorridorPrefab,
-                    typeof(TileUnionImpl),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.WorkingPlaceFree = (TileUnionImpl)
-                EditorGUILayout.ObjectField(
-                    "Working place free prefab: ",
-                    tile_builder.WorkingPlaceFree,
-                    typeof(TileUnionImpl),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            tile_builder.WorkingPlace = (TileUnionImpl)
-                EditorGUILayout.ObjectField(
-                    "Working place prefab: ",
-                    tile_builder.WorkingPlace,
-                    typeof(TileUnionImpl),
-                    true
-                );
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Create random building"))
             {
                 int x = 0;
@@ -334,7 +285,7 @@ namespace TileBuilder
                     float value = Random.value * 100;
                     if (value < 50)
                     {
-                        tile_builder.CreateTileAndBind(tile_builder.FreeSpacePrefab, new(x, y), 0);
+                        tile_builder.CreateTileAndBind(tile_builder.FreeSpace, new(x, y), 0);
                     }
                     else if (value is > 50 and < 65)
                     {
@@ -408,7 +359,7 @@ namespace TileBuilder
                         else
                         {
                             tile_builder.CreateTileAndBind(
-                                tile_builder.FreeSpacePrefab,
+                                tile_builder.FreeSpace,
                                 new(i + 1, j + 1),
                                 0
                             );

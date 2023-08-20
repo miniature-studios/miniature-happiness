@@ -196,6 +196,11 @@ namespace TileUnion.Tile
 
         public void SetTileState(TileState state)
         {
+            if (state == currentState)
+            {
+                return;
+            }
+
             currentState = state;
             switch (currentState)
             {

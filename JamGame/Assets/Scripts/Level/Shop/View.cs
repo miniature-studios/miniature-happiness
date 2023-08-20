@@ -23,7 +23,7 @@ namespace Level.Shop
             {
                 if (prefab.TryGetComponent(out Room.View view))
                 {
-                    modelViewMap.Add(view.CoreModelUniqueId, view);
+                    modelViewMap.Add(view.UniqueId, view);
                 }
             }
         }

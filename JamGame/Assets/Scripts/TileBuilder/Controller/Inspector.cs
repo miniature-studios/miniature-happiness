@@ -38,12 +38,12 @@ namespace TileBuilder.ControllerInspector
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add selected TileUnion"))
             {
-                _ = tile_builder_controller.Execute(
-                    new Command.AddTileToScene(
-                        unionImpl_to_create,
-                        tile_builder_controller.SelectedTileWrapper
-                    )
-                );
+                //_ = tile_builder_controller.Execute(
+                //    new Command.AddTileToScene(
+                //        unionImpl_to_create,
+                //        tile_builder_controller.SelectedTileWrapper
+                //    )
+                //);
             }
             EditorGUILayout.EndHorizontal();
         }

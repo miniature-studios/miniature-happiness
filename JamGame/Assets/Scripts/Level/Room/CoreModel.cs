@@ -24,6 +24,18 @@ namespace Level.Room
         public int ElectricityConsumption => electricityConsumption;
     }
 
+    [Serializable]
+    public struct PlacingProperties
+    {
+        [SerializeField]
+        private int placingRotation;
+        public int PlacingRotation
+        {
+            get => placingRotation;
+            set => placingRotation = value;
+        }
+    }
+
     [AddComponentMenu("Scripts/Level.Room.CoreModel")]
     public partial class CoreModel : MonoBehaviour
     {
@@ -32,15 +44,25 @@ namespace Level.Room
         public UniqueId UniqueId => uniqueId;
 
         [SerializeField]
-        private TileUnion.TileUnionImpl tileUnionPrefab;
-        public TileUnion.TileUnionImpl TileUnionPrefab => tileUnionPrefab;
-
-        [SerializeField]
         private Cost cost;
         public Cost Cost => cost;
 
         [SerializeField]
         private TariffProperties tariffProperties;
         public TariffProperties TariffProperties => tariffProperties;
+
+        [SerializeField]
+        private PlacingProperties placingProperties;
+        public PlacingProperties PlacingProperties => placingProperties;
+
+        public void ModifyPlacingProperties(RotationDirection rotationDirection)
+        {
+            placingProperties.PlacingRotation += (int)rotationDirection;
+        }
+
+        public void GenerateId()
+        {
+            uniqueId = IdGenerator.Generate();
+        }
     }
 }

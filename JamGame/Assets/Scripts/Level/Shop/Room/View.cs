@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Room;
+using Pickle;
 using System;
 using TMPro;
 using UnityEngine;
@@ -7,11 +8,21 @@ using UnityEngine;
 namespace Level.Shop.Room
 {
     [AddComponentMenu("Scripts/Level.Shop.Room.View")]
-    public class View : MonoBehaviour
+    public class View : MonoBehaviour, IUniqueIdHandler
     {
         [SerializeField]
-        private UniqueId coreModelUniqueId;
-        public UniqueId CoreModelUniqueId => coreModelUniqueId;
+        private UniqueId uniqueId;
+        public UniqueId UniqueId
+        {
+            get => uniqueId;
+            set => uniqueId = value;
+        }
+
+        [SerializeField]
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        private CoreModel coreModel;
+
+        public CoreModel CoreModel => coreModel;
 
         [SerializeField]
         private TMP_Text moneyText;

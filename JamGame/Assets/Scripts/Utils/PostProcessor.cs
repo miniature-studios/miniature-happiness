@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Common;
+using UnityEditor;
 using UnityEngine;
 
 namespace Utils
@@ -15,21 +16,24 @@ namespace Utils
         {
             foreach (string str in importedAssets)
             {
-                Debug.Log("Reimported Asset: " + str);
-            }
-            foreach (string str in deletedAssets)
-            {
-                Debug.Log("Deleted Asset: " + str);
-            }
+                GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(str);
+                if (asset == null)
+                {
+                    continue;
+                }
 
-            for (int i = 0; i < movedAssets.Length; i++)
-            {
-                Debug.Log("Moved Asset: " + movedAssets[i] + " from: " + movedFromAssetPaths[i]);
-            }
-
-            if (didDomainReload)
-            {
-                Debug.Log("Domain has been reloaded");
+                IUniqueIdHandler idHandler = asset.GetComponent<IUniqueIdHandler>();
+                if (idHandler != null)
+                {
+                    if (idHandler.CoreModel == null)
+                    {
+                        Debug.LogError($"No core model link in {str}", asset);
+                    }
+                    else
+                    {
+                        idHandler.UniqueId = idHandler.CoreModel.UniqueId;
+                    }
+                }
             }
         }
     }
