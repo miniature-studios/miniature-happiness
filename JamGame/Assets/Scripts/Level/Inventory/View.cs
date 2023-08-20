@@ -24,7 +24,7 @@ namespace Level.Inventory
         private Animator tilesInventoryAnimator;
         private bool inventoryShowed = false;
 
-        private Dictionary<UniqueId, Room.View> modelViewMap;
+        private Dictionary<UniqueId, Room.View> modelViewMap = new();
         private List<Room.View> roomViews;
 
         private void Awake()
@@ -32,7 +32,8 @@ namespace Level.Inventory
             tilesInventoryAnimator = GetComponent<Animator>();
             foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
             {
-                if (prefab.TryGetComponent(out Room.View view))
+                Room.View view = prefab.GetComponent<Room.View>();
+                if (view != null)
                 {
                     modelViewMap.Add(view.UniqueId, view);
                 }

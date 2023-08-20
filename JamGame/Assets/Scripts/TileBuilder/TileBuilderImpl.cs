@@ -20,6 +20,9 @@ namespace TileBuilder
         private GameObject rootObject;
 
         [SerializeField]
+        private GameObject fakeRootObject;
+
+        [SerializeField]
         private Matrix builderMatrix;
 
         public GameObject RootObject
@@ -42,17 +45,31 @@ namespace TileBuilder
 
         private void Awake()
         {
+            UpdateModelViewMap();
+        }
+
+        public void UpdateModelViewMap()
+        {
+            ModelViewMap.Clear();
+            foreach (KeyValuePair<UniqueId, TileUnionImpl> view in instantiatedViews)
+            {
+                DestroyImmediate(view.Value.gameObject);
+            }
+            instantiatedViews.Clear();
             foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
             {
-                if (prefab.TryGetComponent(out TileUnionImpl view))
+                TileUnionImpl view = prefab.GetComponent<TileUnionImpl>();
+                if (view != null)
                 {
                     ModelViewMap.Add(view.UniqueId, view);
                     instantiatedViews.Add(
                         view.UniqueId,
-                        Instantiate(view, rootObject.transform).GetComponent<TileUnionImpl>()
+                        Instantiate(view, fakeRootObject.transform).GetComponent<TileUnionImpl>()
                     );
                     instantiatedViews[view.UniqueId].SetPosition(stashPosition);
-                    instantiatedViews[view.UniqueId].ApplyTileUnionState(TileImpl.TileState.Selected);
+                    instantiatedViews[view.UniqueId].ApplyTileUnionState(
+                        TileImpl.TileState.Selected
+                    );
                     instantiatedViews[view.UniqueId].IsolateUpdate();
                 }
             }

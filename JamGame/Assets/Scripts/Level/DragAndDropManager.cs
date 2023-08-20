@@ -18,6 +18,7 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
+        [Pickle(typeof(IDragAndDropManager))]
         private GameObject backupDragAndDropProvider;
         private IDragAndDropManager backupDragAndDrop;
 
@@ -36,7 +37,7 @@ namespace Level
         {
             IDragAndDropManager dragAndDrop = null;
             GameObject topDragAndDrop = RayCastUtilities
-                .UIRayCast(Input.mousePosition)
+                .UIRayCast(Input.mousePosition)?
                 .First(x => x.GetComponent<IDragAndDropManager>() != null);
             if (topDragAndDrop != null)
             {

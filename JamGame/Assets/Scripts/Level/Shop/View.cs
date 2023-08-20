@@ -13,7 +13,7 @@ namespace Level.Shop
         [SerializeField]
         private Transform roomsUIContainer;
         private Animator shopAnimator;
-        private Dictionary<UniqueId, Room.View> modelViewMap;
+        private Dictionary<UniqueId, Room.View> modelViewMap = new();
         private List<Room.View> viewList = new();
 
         private void Awake()
@@ -21,7 +21,8 @@ namespace Level.Shop
             shopAnimator = GetComponent<Animator>();
             foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
             {
-                if (prefab.TryGetComponent(out Room.View view))
+                Room.View view = prefab.GetComponent<Room.View>();
+                if (view != null)
                 {
                     modelViewMap.Add(view.UniqueId, view);
                 }

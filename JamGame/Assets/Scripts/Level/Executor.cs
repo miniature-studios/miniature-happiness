@@ -55,10 +55,12 @@ namespace Level
         [SerializeField]
         private AllChildrenNeedModifiersApplier leaveNeedOverride;
 
-        [SerializeField] private GameObject homeConditionProvider;
+        [SerializeField]
+        private GameObject homeConditionProvider;
         private IDataProvider<AllEmployeesAtHome> homeCondition;
 
-        [SerializeField] private GameObject meetingConditionProvider;
+        [SerializeField]
+        private GameObject meetingConditionProvider;
         private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
 
         public UnityEvent ActionEndNotify;
@@ -70,18 +72,24 @@ namespace Level
             homeCondition = homeConditionProvider.GetComponent<IDataProvider<AllEmployeesAtHome>>();
             if (homeCondition == null)
             {
-                Debug.LogError("IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider");
+                Debug.LogError(
+                    "IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider"
+                );
             }
-            meetingCondition = meetingConditionProvider.GetComponent<IDataProvider<AllEmployeesAtMeeting>>();
+            meetingCondition = meetingConditionProvider.GetComponent<
+                IDataProvider<AllEmployeesAtMeeting>
+            >();
             if (meetingCondition == null)
             {
-                Debug.LogError("IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider");
+                Debug.LogError(
+                    "IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider"
+                );
             }
         }
 
         public void Execute(DayStart day_start)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 0; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }

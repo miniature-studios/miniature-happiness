@@ -1,5 +1,6 @@
 using Common;
 using Level.Room;
+using Pickle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Level.Config
     public class FixedRoomConfig : IShopRoomConfig
     {
         [SerializeField]
+        [Pickle(LookupType = ObjectProviderType.Assets)]
         private CoreModel room;
 
         public ShopRoomConfig GetRoomConfig()
@@ -29,6 +31,8 @@ namespace Level.Config
     public class RoomWeights
     {
         public float Weight;
+
+        [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel Room;
     }
 
