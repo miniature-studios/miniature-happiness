@@ -58,6 +58,13 @@ namespace Level.Room
         public void ModifyPlacingProperties(RotationDirection rotationDirection)
         {
             placingProperties.PlacingRotation += (int)rotationDirection;
+            placingProperties.PlacingRotation += 4;
+            placingProperties.PlacingRotation %= 4;
+        }
+
+        public void SetPlacingProperties(int rotation)
+        {
+            placingProperties.PlacingRotation = rotation;
         }
 
         public void GenerateId()

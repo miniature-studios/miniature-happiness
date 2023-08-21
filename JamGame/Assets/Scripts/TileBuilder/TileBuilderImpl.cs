@@ -66,6 +66,8 @@ namespace TileBuilder
                         view.UniqueId,
                         Instantiate(view, fakeRootObject.transform).GetComponent<TileUnionImpl>()
                     );
+                    instantiatedViews[view.UniqueId].Constructor(() => null);
+                    instantiatedViews[view.UniqueId].SetColliderActive(false);
                     instantiatedViews[view.UniqueId].SetPosition(stashPosition);
                     instantiatedViews[view.UniqueId].ApplyTileUnionState(
                         TileImpl.TileState.Selected
@@ -88,7 +90,6 @@ namespace TileBuilder
                 }
             }
             UpdateAllTiles();
-            EditorStart();
         }
 
         public Result Validate()
@@ -135,14 +136,14 @@ namespace TileBuilder
             }
         }
 
-        private void ResetFakeViews()
+        public void ResetFakeViews()
         {
             foreach (KeyValuePair<UniqueId, TileUnionImpl> pair in instantiatedViews)
             {
                 if (pair.Value.Position != stashPosition)
                 {
                     pair.Value.SetPosition(stashPosition);
-                    pair.Value.ApplyTileUnionState(TileImpl.TileState.SelectedAndErrored);
+                    pair.Value.ApplyTileUnionState(TileImpl.TileState.Selected);
                 }
             }
         }
@@ -154,11 +155,11 @@ namespace TileBuilder
             fakeTileUnion.SetPosition(position);
             fakeTileUnion.SetRotation(rotation);
             List<Vector2Int> placingPositions = fakeTileUnion.TilesPositions.ToList();
-            Result result = fakeTileUnion.TryApplyErrorTiles(this);
+            Result result = fakeTileUnion.IsValidPlacing(this);
             ResetFakeViews();
-            if (result.Success)
+            if (result.Failure)
             {
-                return new FailResult("Invalid Placing");
+                return result;
             }
             else
             {
@@ -173,7 +174,7 @@ namespace TileBuilder
                     _ = tilesUnder.Remove(buffer);
                     _ = DeleteTile(buffer);
                 }
-
+                Debug.Log(rotation);
                 CreateTileAndBind(coreModel, position, rotation);
                 UpdateSidesInPositions(placingPositions);
                 return new SuccessResult();
@@ -186,8 +187,15 @@ namespace TileBuilder
             TileUnionImpl fakeTileUnion = instantiatedViews[coreModel.UniqueId];
             fakeTileUnion.SetPosition(position);
             fakeTileUnion.SetRotation(rotation);
-            Result result = fakeTileUnion.TryApplyErrorTiles(this);
-            if (result.Success)
+            Result result = fakeTileUnion.IsValidPlacing(this);
+            if (
+                result.Failure
+                || !fakeTileUnion.TilesPositions.All(
+                    x =>
+                        GetTileUnionsInPositions(new List<Vector2Int>() { x })
+                            .All(x => x.IsAllWithMark("Freespace"))
+                )
+            )
             {
                 fakeTileUnion.ApplyTileUnionState(TileImpl.TileState.SelectedAndErrored);
             }
@@ -259,13 +267,26 @@ namespace TileBuilder
             return tileUnion;
         }
 
-        // Public for inspector
-        public CoreModel DeleteTile(TileUnionImpl tileUnion)
+        private CoreModel DeleteTile(TileUnionImpl tileUnion)
         {
             CoreModel coreModel = tileUnion.GetCoreModel();
+            coreModel.SetPlacingProperties(tileUnion.Rotation);
             RemoveTileFromDictionary(tileUnion);
             DestroyImmediate(tileUnion.gameObject);
             return coreModel;
+        }
+
+        public void DeleteAllTiles()
+        {
+            if (RootObject != null)
+            {
+                DestroyImmediate(RootObject);
+            }
+            RootObject = Instantiate(new GameObject("Root object"), transform);
+            while (TileUnionDictionary.Values.Contains(null))
+            {
+                _ = TileUnionDictionary.Remove(TileUnionDictionary.First(x => x.Value == null).Key);
+            }
         }
 
         private void RemoveTileFromDictionary(TileUnionImpl tileUnion)

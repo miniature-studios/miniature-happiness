@@ -58,10 +58,10 @@ namespace Level.Inventory
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItem(e.NewItems[0] as Level.Room.CoreModel);
+                    AddNewItem(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItem(e.OldItems[0] as Level.Room.CoreModel);
+                    RemoveOldItem(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     RemoveAllItems();
@@ -76,7 +76,8 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            if (!roomViews.Any(x => x.UniqueId == newItem.UniqueId))
+            Room.View view = roomViews.FirstOrDefault(x => x.UniqueId == newItem.UniqueId);
+            if (view == null)
             {
                 Room.View newRoomView = Instantiate(modelViewMap[newItem.UniqueId], container)
                     .GetComponent<Room.View>();
@@ -93,7 +94,7 @@ namespace Level.Inventory
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.View existRoom = roomViews.Find(x => x.UniqueId != oldItem.UniqueId);
+            Room.View existRoom = roomViews.Find(x => x.UniqueId == oldItem.UniqueId);
             if (existRoom.GetCount() == 0)
             {
                 _ = roomViews.Remove(existRoom);

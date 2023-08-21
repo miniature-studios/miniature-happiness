@@ -1,7 +1,6 @@
 using Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using TileBuilder;
 using UnityEditor;
@@ -87,13 +86,13 @@ namespace TileUnion.Tile
             }
         }
 
-        public Result<WallTypeMatch> RequestWallUpdates(Dictionary<Direction, TileImpl> neighbours)
+        public Result<WallTypeMatch> RequestWallUpdates(Dictionary<Direction, TileImpl> neighbors)
         {
             Dictionary<Direction, WallType> configuration = new();
             foreach (Direction direction in Direction.Up.GetCircle90())
             {
                 WallType? wallTypeToPlace = WallType.None;
-                TileImpl outTile = neighbours?[direction];
+                TileImpl outTile = neighbors?[direction];
                 if (outTile != null)
                 {
                     wallTypeToPlace = wallSolver.ChooseWall(
@@ -160,7 +159,6 @@ namespace TileUnion.Tile
         // 3 - up neighbor down wall
         private CornerType ChooseCorner(WallType[] walls)
         {
-            Contract.Requires(walls.Length == 4); // HOW
             return (
                 walls[0].IsWall(),
                 walls[1].IsWall(),

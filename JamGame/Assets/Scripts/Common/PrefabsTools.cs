@@ -11,7 +11,10 @@ namespace Common
             foreach (string guid in AssetDatabase.FindAssets("t:prefab", new string[] { "Assets" }))
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
-                yield return AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (AssetDatabase.LoadAssetAtPath<GameObject>(path) is GameObject asset)
+                {
+                    yield return asset;
+                }
             }
         }
     }

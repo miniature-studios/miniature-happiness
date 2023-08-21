@@ -38,20 +38,20 @@ namespace TileBuilder.Validator
                 IEnumerable<Vector2Int> newPositions = tileBuilder.ModelViewMap[
                     showRoomIllusion.CoreModel.UniqueId
                 ].GetImaginePlaces(showRoomIllusion.Position.Value, showRoomIllusion.Rotation);
-                return tileBuilder
-                    .GetTileUnionsInPositions(newPositions)
-                    .Any(x => x.IsAllWithMark("Outside"))
-                    ? new FailResult("Can not show in outside")
-                    : new SuccessResult();
+                return newPositions.All(x => tileBuilder.GetAllInsideListPositions().Contains(x))
+                    ? new SuccessResult()
+                    : new FailResult("Can not show in outside");
             }
             if (command is DropRoom dropRoom)
             {
                 IEnumerable<Vector2Int> newPositions = tileBuilder.ModelViewMap[
                     dropRoom.CoreModel.UniqueId
                 ].GetImaginePlaces(dropRoom.Position.Value, dropRoom.Rotation);
-                return tileBuilder
-                    .GetTileUnionsInPositions(newPositions)
-                    .All(x => x.IsAllWithMark("FreeSpace"))
+                return
+                    tileBuilder
+                        .GetTileUnionsInPositions(newPositions)
+                        .All(x => x.IsAllWithMark("Freespace"))
+                    && newPositions.All(x => tileBuilder.GetAllInsideListPositions().Contains(x))
                     ? new SuccessResult()
                     : new FailResult("Can not place on other room");
             }

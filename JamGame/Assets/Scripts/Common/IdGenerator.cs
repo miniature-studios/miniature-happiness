@@ -36,12 +36,15 @@ namespace Common
 
         public override bool Equals(object obj)
         {
-            return obj != null && GetType() == obj.GetType() && base.Equals(obj);
+            return obj != null
+                && GetType() == obj.GetType()
+                && ((UniqueId)obj).Id == Id
+                && base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return id.GetHashCode();
         }
     }
 

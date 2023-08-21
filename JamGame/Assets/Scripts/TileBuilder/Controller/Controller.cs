@@ -15,7 +15,7 @@ namespace TileBuilder
     }
 
     [AddComponentMenu("Scripts/TileBuilder.Controller")]
-    public class Controller : MonoBehaviour
+    public partial class Controller : MonoBehaviour
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;
@@ -67,13 +67,23 @@ namespace TileBuilder
                     coreModel.PlacingProperties.PlacingRotation,
                     tileBuilder.BuilderMatrix
                 );
-            _ = Execute(command);
+            Result result = Execute(command);
+            if (result.Failure)
+            {
+                coreModel.ModifyPlacingProperties(RotationDirection.CounterClockwise);
+            }
         }
 
         public Result Drop(CoreModel coreModel)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.DropRoom command = new(coreModel, ray, tileBuilder.BuilderMatrix);
+            Command.DropRoom command =
+                new(
+                    coreModel,
+                    ray,
+                    coreModel.PlacingProperties.PlacingRotation,
+                    tileBuilder.BuilderMatrix
+                );
             Result result = Execute(command);
             if (result.Success)
             {
@@ -97,6 +107,14 @@ namespace TileBuilder
             else
             {
                 return new FailResult<CoreModel>("Cannot borrow");
+            }
+        }
+
+        public void IsHoveredOnUpdate(bool hovered)
+        {
+            if (!hovered)
+            {
+                tileBuilder.ResetFakeViews();
             }
         }
     }

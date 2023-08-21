@@ -21,7 +21,9 @@ namespace TileBuilder.Command
         }
     }
 
-    // Places room directly into building by ray
+    /// <summary>
+    /// Places room directly into building by ray
+    /// </summary>
     public class DropRoom : ICommand
     {
         public Vector2Int? Position { get; private set; }
@@ -35,11 +37,12 @@ namespace TileBuilder.Command
             Rotation = rotation;
         }
 
-        public DropRoom(CoreModel coreModel, Ray ray, Matrix builderMatrix)
+        public DropRoom(CoreModel coreModel, Ray ray, int rotation, Matrix builderMatrix)
         {
             CoreModel = coreModel;
             Result<Vector2Int> result = builderMatrix.GetMatrixPosition(ray);
             Position = result.Success ? result.Data : null;
+            Rotation = rotation;
         }
 
         public Result Execute(TileBuilderImpl tileBuilder)
@@ -48,7 +51,9 @@ namespace TileBuilder.Command
         }
     }
 
-    // Borrows room from building by ray
+    /// <summary>
+    /// Borrows room from building by ray
+    /// </summary>
     public class BorrowRoom : ICommand
     {
         public TileUnionImpl TileUnionImpl { get; private set; }
@@ -70,7 +75,9 @@ namespace TileBuilder.Command
         }
     }
 
-    // Shows selecting room in building
+    /// <summary>
+    /// Shows selecting room in building
+    /// </summary>
     public class ShowRoomIllusion : ICommand
     {
         public Vector2Int? Position { get; private set; }

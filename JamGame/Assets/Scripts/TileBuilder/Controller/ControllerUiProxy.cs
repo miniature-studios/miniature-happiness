@@ -7,11 +7,17 @@ namespace TileBuilder
 {
     public class ControllerUiProxy : MonoBehaviour, IDragAndDropManager
     {
-        [SerializeField] private Controller controller;
+        [SerializeField]
+        private Controller controller;
 
         public void Hover(CoreModel coreModel)
         {
             controller.Hover(coreModel);
+        }
+
+        public void HoveredOnUpdate(IDragAndDropManager dragAndDrop)
+        {
+            controller.IsHoveredOnUpdate(dragAndDrop != null && dragAndDrop.GetType() == GetType());
         }
 
         Result<CoreModel> IDragAndDropManager.Borrow()

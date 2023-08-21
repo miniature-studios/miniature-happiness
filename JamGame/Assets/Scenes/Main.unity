@@ -157,7 +157,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 114062191}
+  - {fileID: 844552069}
   m_Father: {fileID: 42303833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &40476289
@@ -172,22 +172,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518be29018dfac24681fc56b5a8c4789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadingPrefab: {fileID: 1376763742, guid: e88b214b5a0c062459612602cd26228b, type: 3}
-  SavingName: SampleBuilding
-  StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
-  WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
-  OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
-  CorridorPrefab: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
-  WorkingPlaceFree: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
-  WorkingPlace: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
-  SquareSideLength: 30
-  LoadFromSceneComposition: 0
   ShowTileDirectionGizmo: 0
   ShowTilePathGizmo: 0
   ShowTileFreeSpaceCube: 0
   FreeSpace: {fileID: 739786844684371711, guid: f287ad33a60c1444e995d045a1008512, type: 3}
-  rootObject: {fileID: 114062190}
-  fakeRootObject: {fileID: 999850108}
+  rootObject: {fileID: 844552068}
+  fakeRootObject: {fileID: 0}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
 --- !u!114 &40476290
 MonoBehaviour:
@@ -202,7 +192,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBuilder: {fileID: 40476289}
-  coreModels: []
+  coreModels:
+  - {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
   BuiltValidatedOffice:
     m_PersistentCalls:
       m_Calls:
@@ -218,6 +209,14 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  GameModeToChange: 0
+  SquareSideLength: 30
+  StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
+  WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
+  OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
+  CorridorPrefab: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
+  WorkingPlaceFree: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
+  WorkingPlace: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
 --- !u!114 &40476291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,37 +327,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   employeePrototype: {fileID: 744904370}
---- !u!1 &114062190
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 114062191}
-  m_Layer: 0
-  m_Name: Root object(Clone)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &114062191
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 114062190}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 40476286}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &115190258
 GameObject:
   m_ObjectHideFlags: 0
@@ -2817,6 +2785,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825985572}
   m_CullTransparentMesh: 1
+--- !u!1 &844552068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844552069}
+  m_Layer: 0
+  m_Name: Root object(Clone)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &844552069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844552068}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 40476286}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &924940278
 GameObject:
   m_ObjectHideFlags: 0
@@ -3160,37 +3159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8aed811bd2ef342a96a47cbf50b5d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &999850108
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 999850109}
-  m_Layer: 0
-  m_Name: FakeRootObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &999850109
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 999850108}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.445528, y: 1.2796211, z: 19.65287}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1043157727
 GameObject:
   m_ObjectHideFlags: 0
@@ -5914,4 +5882,3 @@ SceneRoots:
   - {fileID: 1067622713}
   - {fileID: 429340884}
   - {fileID: 1904627832}
-  - {fileID: 999850109}

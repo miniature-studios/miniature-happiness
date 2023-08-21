@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Room;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Level
         public void Hover(CoreModel coreModel);
         public Result Drop(CoreModel coreModel);
         public Result<CoreModel> Borrow();
+        public void HoveredOnUpdate(IDragAndDropManager dragAndDrop);
     }
 
     public class DragAndDropManager : MonoBehaviour
@@ -23,9 +25,13 @@ namespace Level
         private IDragAndDropManager backupDragAndDrop;
 
         private bool mousePressed;
+        private List<IDragAndDropManager> dragAndDropManagers;
 
         private void Awake()
         {
+            dragAndDropManagers = FindObjectsOfType<MonoBehaviour>()
+                .OfType<IDragAndDropManager>()
+                .ToList();
             backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropManager>();
             if (backupDragAndDrop == null)
             {
@@ -37,8 +43,8 @@ namespace Level
         {
             IDragAndDropManager dragAndDrop = null;
             GameObject topDragAndDrop = RayCastUtilities
-                .UIRayCast(Input.mousePosition)?
-                .First(x => x.GetComponent<IDragAndDropManager>() != null);
+                .UIRayCast(Input.mousePosition)
+                ?.First(x => x.GetComponent<IDragAndDropManager>() != null);
             if (topDragAndDrop != null)
             {
                 dragAndDrop = topDragAndDrop.GetComponent<IDragAndDropManager>();
@@ -79,9 +85,14 @@ namespace Level
                 mousePressed = false;
             }
 
-            if (mousePressed && dragAndDrop != null)
+            if (mousePressed && dragAndDrop != null && bufferCoreModel != null)
             {
                 dragAndDrop.Hover(bufferCoreModel);
+                dragAndDropManagers.ForEach(x => x.HoveredOnUpdate(dragAndDrop));
+            }
+            else
+            {
+                dragAndDropManagers.ForEach(x => x.HoveredOnUpdate(null));
             }
         }
 

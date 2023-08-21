@@ -22,7 +22,7 @@ namespace Level.Inventory
 
         public int GetModelsCount(UniqueId id)
         {
-            return roomsInInventory.Select(x => x.UniqueId == id).Count();
+            return roomsInInventory.Where(x => x.UniqueId == id).Count();
         }
 
         public void ResetRooms(List<CoreModel> newRooms)

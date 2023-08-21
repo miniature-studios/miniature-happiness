@@ -43,5 +43,7 @@ namespace Level.Inventory
                 return new FailResult<CoreModel>("Anything hovered.");
             }
         }
+
+        public void HoveredOnUpdate(IDragAndDropManager dragAndDrop) { }
     }
 }

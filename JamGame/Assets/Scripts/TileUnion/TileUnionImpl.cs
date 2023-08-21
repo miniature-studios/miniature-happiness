@@ -35,6 +35,7 @@ namespace TileUnion
         public void Constructor(Func<CoreModel> getCoreModel)
         {
             GetCoreModel = getCoreModel;
+            CreateCache();
         }
 
         [Space(20)]
@@ -57,6 +58,7 @@ namespace TileUnion
         [SerializeField]
         private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration;
 
+        [Serializable]
         private class TileUnionConfiguration
         {
             public Vector2Int CenterTilePosition;
@@ -78,6 +80,7 @@ namespace TileUnion
             }
         }
 
+        [Serializable]
         private class TileConfiguration
         {
             public TileImpl TargetTile;
@@ -98,6 +101,7 @@ namespace TileUnion
             {
                 if (cachedUnionConfiguration == null)
                 {
+                    Debug.Log("Loh");
                     CreateCache();
                 }
                 return cachedUnionConfiguration;
@@ -124,7 +128,7 @@ namespace TileUnion
             return Configuration[union_rotation % 4].TilesPositions.Select(x => x + union_position);
         }
 
-        public Result TryApplyErrorTiles(TileBuilderImpl tile_builder)
+        public Result IsValidPlacing(TileBuilderImpl tileBuilder)
         {
             HashSet<TileImpl> invalidTiles = new();
             foreach (TileImpl tile in Tiles)
@@ -133,7 +137,7 @@ namespace TileUnion
                 foreach (Direction pos in Direction.Up.GetCircle90())
                 {
                     Vector2Int bufferPosition = Position + pos.ToVector2Int() + tile.Position;
-                    _ = tile_builder.TileUnionDictionary.TryGetValue(
+                    _ = tileBuilder.TileUnionDictionary.TryGetValue(
                         bufferPosition,
                         out TileUnionImpl tileUnion
                     );
@@ -141,7 +145,7 @@ namespace TileUnion
                     {
                         neighbors.Add(
                             pos,
-                            tile_builder.TileUnionDictionary[bufferPosition].GetTile(bufferPosition)
+                            tileBuilder.TileUnionDictionary[bufferPosition].GetTile(bufferPosition)
                         );
                     }
                     else
@@ -157,7 +161,7 @@ namespace TileUnion
                 {
                     PlaceCondition.ConditionResult conditionResult = condition.ApplyCondition(
                         this,
-                        tile_builder
+                        tileBuilder
                     );
                     if (conditionResult.Failure)
                     {
@@ -168,18 +172,9 @@ namespace TileUnion
                     }
                 }
             }
-            if (invalidTiles.Count > 0)
-            {
-                foreach (TileImpl tile in invalidTiles)
-                {
-                    tile.SetTileState(TileImpl.TileState.SelectedAndErrored);
-                }
-                return new SuccessResult();
-            }
-            else
-            {
-                return new FailResult("No error walls");
-            }
+            return invalidTiles.Count > 0
+                ? new FailResult($"{invalidTiles.Count} error walls")
+                : new SuccessResult();
         }
 
         public void ApplyTileUnionState(TileImpl.TileState state)
@@ -210,6 +205,17 @@ namespace TileUnion
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetTileState(TileImpl.TileState.Normal);
+            }
+        }
+
+        public void SetColliderActive(bool active)
+        {
+            foreach (TileImpl tile in Tiles)
+            {
+                foreach (Collider collider in tile.GetComponentsInChildren<Collider>())
+                {
+                    collider.enabled = active;
+                }
             }
         }
 
