@@ -40,10 +40,6 @@ namespace Level.Room
     public partial class CoreModel : MonoBehaviour
     {
         [SerializeField]
-        private UniqueId uniqueId;
-        public UniqueId UniqueId => uniqueId;
-
-        [SerializeField]
         private Cost cost;
         public Cost Cost => cost;
 
@@ -65,11 +61,6 @@ namespace Level.Room
         public void SetPlacingProperties(int rotation)
         {
             placingProperties.PlacingRotation = rotation;
-        }
-
-        public void GenerateId()
-        {
-            uniqueId = IdGenerator.Generate();
         }
     }
 }

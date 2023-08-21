@@ -44,7 +44,7 @@ namespace Level
             IDragAndDropManager dragAndDrop = null;
             GameObject topDragAndDrop = RayCastUtilities
                 .UIRayCast(Input.mousePosition)
-                ?.First(x => x.GetComponent<IDragAndDropManager>() != null);
+                ?.FirstOrDefault(x => x.GetComponent<IDragAndDropManager>() != null);
             if (topDragAndDrop != null)
             {
                 dragAndDrop = topDragAndDrop.GetComponent<IDragAndDropManager>();

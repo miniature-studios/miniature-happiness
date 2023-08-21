@@ -8,16 +8,8 @@ using UnityEngine;
 namespace Level.Shop.Room
 {
     [AddComponentMenu("Scripts/Level.Shop.Room.View")]
-    public class View : MonoBehaviour, IUniqueIdHandler
+    public class View : MonoBehaviour
     {
-        [SerializeField]
-        private UniqueId uniqueId;
-        public UniqueId UniqueId
-        {
-            get => uniqueId;
-            set => uniqueId = value;
-        }
-
         [SerializeField]
         [Pickle(LookupType = ObjectProviderType.Assets)]
         private CoreModel coreModel;

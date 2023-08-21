@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Common;
+using Level.Room;
 using UnityEditor;
 using UnityEngine;
 
@@ -36,29 +35,15 @@ namespace Level.Inventory.Inspector
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add rooms from folder."))
             {
-                List<string> paths = Directory
-                    .GetFiles("Assets/Prefabs/UI/InventoryUI/TileUnionsUI")
-                    .ToList();
-
-                foreach (
-                    string item in Directory.GetDirectories(
-                        "Assets/Prefabs/UI/InventoryUI/TileUnionsUI/"
-                    )
-                )
+                foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
                 {
-                    paths.AddRange(Directory.GetFiles(item));
-                }
-
-                foreach (
-                    string path in paths
-                        .Where(x => !x.EndsWith("meta"))
-                        .Select(x => x.Replace($"\\", "/"))
-                )
-                {
-                    Object inv_el = AssetDatabase.LoadAssetAtPath(path, typeof(Level.Room.CoreModel));
-                    for (int i = 0; i < 50; i++)
+                    CoreModel coreModel = prefab.GetComponent<CoreModel>();
+                    if (coreModel != null)
                     {
-                        inventory_controller.AddNewRoom(inv_el as Level.Room.CoreModel);
+                        for (int i = 0; i < 50; i++)
+                        {
+                            inventory_controller.AddNewRoom(coreModel);
+                        }
                     }
                 }
             }

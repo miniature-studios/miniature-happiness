@@ -2,6 +2,7 @@
 using Level.Room;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using UnityEngine;
 
 namespace Level.Shop
@@ -13,7 +14,7 @@ namespace Level.Shop
         [SerializeField]
         private Transform roomsUIContainer;
         private Animator shopAnimator;
-        private Dictionary<UniqueId, Room.View> modelViewMap = new();
+        private Dictionary<CoreModel, Room.View> modelViewMap = new();
         private List<Room.View> viewList = new();
 
         private void Awake()
@@ -22,9 +23,9 @@ namespace Level.Shop
             foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
             {
                 Room.View view = prefab.GetComponent<Room.View>();
-                if (view != null)
+                if (view != null && view.CoreModel != null)
                 {
-                    modelViewMap.Add(view.UniqueId, view);
+                    modelViewMap.Add(view.CoreModel, view);
                 }
             }
         }
@@ -52,7 +53,7 @@ namespace Level.Shop
 
         private void AddNewItem(CoreModel newItem)
         {
-            Room.View newRoomView = Instantiate(modelViewMap[newItem.UniqueId], roomsUIContainer)
+            Room.View newRoomView = Instantiate(modelViewMap[newItem], roomsUIContainer)
                 .GetComponent<Room.View>();
             newRoomView.Constructor(
                 () => newItem.Cost,
@@ -70,9 +71,11 @@ namespace Level.Shop
 
         private void DeleteAllItems()
         {
-            foreach (Room.View views in viewList)
+            while (viewList.Count > 0)
             {
-                Destroy(views.gameObject);
+                Room.View item = viewList.Last();
+                _ = viewList.Remove(item);
+                Destroy(item.gameObject);
             }
         }
 

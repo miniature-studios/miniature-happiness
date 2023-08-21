@@ -24,7 +24,7 @@ namespace Level.Inventory
         private Animator tilesInventoryAnimator;
         private bool inventoryShowed = false;
 
-        private Dictionary<UniqueId, Room.View> modelViewMap = new();
+        private Dictionary<CoreModel, Room.View> modelViewMap = new();
         private List<Room.View> roomViews;
 
         private void Awake()
@@ -33,9 +33,9 @@ namespace Level.Inventory
             foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
             {
                 Room.View view = prefab.GetComponent<Room.View>();
-                if (view != null)
+                if (view != null && view.CoreModel != null)
                 {
-                    modelViewMap.Add(view.UniqueId, view);
+                    modelViewMap.Add(view.CoreModel, view);
                 }
             }
         }
@@ -76,15 +76,15 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            Room.View view = roomViews.FirstOrDefault(x => x.UniqueId == newItem.UniqueId);
+            Room.View view = roomViews.FirstOrDefault(x => x.CoreModel == newItem);
             if (view == null)
             {
-                Room.View newRoomView = Instantiate(modelViewMap[newItem.UniqueId], container)
+                Room.View newRoomView = Instantiate(modelViewMap[newItem], container)
                     .GetComponent<Room.View>();
                 newRoomView.Constructor(
                     () => newItem.Cost,
                     () => newItem.TariffProperties,
-                    () => model.GetModelsCount(newRoomView.UniqueId),
+                    () => model.GetModelsCount(newRoomView.CoreModel),
                     () => newItem
                 );
                 newRoomView.enabled = true;
@@ -94,7 +94,7 @@ namespace Level.Inventory
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.View existRoom = roomViews.Find(x => x.UniqueId == oldItem.UniqueId);
+            Room.View existRoom = roomViews.Find(x => x.CoreModel == oldItem);
             if (existRoom.GetCount() == 0)
             {
                 _ = roomViews.Remove(existRoom);

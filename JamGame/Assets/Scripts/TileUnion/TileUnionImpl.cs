@@ -14,16 +14,8 @@ namespace TileUnion
 {
     [SelectionBase]
     [AddComponentMenu("Scripts/TileUnion.TileUnion")]
-    public partial class TileUnionImpl : MonoBehaviour, IUniqueIdHandler
+    public partial class TileUnionImpl : MonoBehaviour
     {
-        [SerializeField]
-        private UniqueId uniqueId;
-        public UniqueId UniqueId
-        {
-            get => uniqueId;
-            set => uniqueId = value;
-        }
-
         [SerializeField]
         [Pickle(LookupType = ObjectProviderType.Assets)]
         private CoreModel coreModel;
@@ -101,7 +93,7 @@ namespace TileUnion
             {
                 if (cachedUnionConfiguration == null)
                 {
-                    Debug.Log("Loh");
+                    Debug.LogWarning("Loh, use constructor");
                     CreateCache();
                 }
                 return cachedUnionConfiguration;

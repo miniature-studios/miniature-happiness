@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace TileBuilder
 {
+    [AddComponentMenu("Scripts/TileBuilder.ControllerUiProxy")]
     public class ControllerUiProxy : MonoBehaviour, IDragAndDropManager
     {
         [SerializeField]

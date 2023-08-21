@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace TileBuilder
 {
+#endif
     public partial class Controller
     {
         public TileBuilderImpl TileBuilder => tileBuilder;
@@ -22,7 +23,22 @@ namespace TileBuilder
             tileBuilder.CreateTileAndBind(coreModel, position, rotation);
         }
 
-        [Pickle]
+        public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
+        {
+            buildingConfig.TilePlaceConfigs.ForEach(x => coreModels.Add(x.CoreModel));
+            tileBuilder.LoadBuildingFromConfig(buildingConfig);
+        }
+
+        [HideInInspector]
+        public BuildingConfig BuildingConfig;
+
+        [HideInInspector]
+        public bool LoadConfigFromStart;
+
+        [HideInInspector]
+        public string SavingConfigName = "Sample building";
+
+        [HideInInspector]
         public GameMode GameModeToChange = GameMode.God;
 
         [HideInInspector]
@@ -47,11 +63,16 @@ namespace TileBuilder
         public CoreModel WorkingPlace;
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(Controller))]
     public class Inspector : Editor
     {
         public void DisplayGameModeChange(Controller tileBuilderController)
         {
+            _ = EditorGUILayout.BeginHorizontal();
+            tileBuilderController.GameModeToChange = (GameMode)
+                EditorGUILayout.EnumPopup(tileBuilderController.GameModeToChange);
+            EditorGUILayout.EndHorizontal();
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Change game mode"))
             {
@@ -234,12 +255,61 @@ namespace TileBuilder
             EditorGUILayout.EndHorizontal();
         }
 
+        private void ShowSaveLoading(Controller tileBuilderController)
+        {
+            _ = EditorGUILayout.BeginHorizontal();
+            tileBuilderController.BuildingConfig = (BuildingConfig)
+                EditorGUILayout.ObjectField(
+                    "Loading prefab: ",
+                    tileBuilderController.BuildingConfig,
+                    typeof(BuildingConfig),
+                    false
+                );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tileBuilderController.SavingConfigName = EditorGUILayout.TextField(
+                "Saving config name: ",
+                tileBuilderController.SavingConfigName
+            );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Load building from config."))
+            {
+                tileBuilderController.LoadBuildingFromConfig(tileBuilderController.BuildingConfig);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Save building into config."))
+            {
+                BuildingConfig config = tileBuilderController.TileBuilder.SaveBuildingIntoConfig();
+                string localPath =
+                    "Assets/Prefabs/SceneCompositions/"
+                    + tileBuilderController.SavingConfigName
+                    + ".asset";
+                localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+                AssetDatabase.CreateAsset(config, localPath);
+                Debug.Log("Asset was saved successfully");
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            tileBuilderController.LoadConfigFromStart = EditorGUILayout.Toggle(
+                "Load from config on start?",
+                tileBuilderController.LoadConfigFromStart
+            );
+            EditorGUILayout.EndHorizontal();
+        }
+
         public override void OnInspectorGUI()
         {
             Controller tileBuilderController = serializedObject.targetObject as Controller;
 
             DisplayGameModeChange(tileBuilderController);
             ShowLocationBuildingButtons(tileBuilderController);
+            ShowSaveLoading(tileBuilderController);
 
             _ = DrawDefaultInspector();
 

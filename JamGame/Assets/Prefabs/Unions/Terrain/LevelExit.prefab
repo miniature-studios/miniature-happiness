@@ -79,6 +79,7 @@ MonoBehaviour:
   filter:
     Employees: []
     FilterType: 0
+  bindToThisProviderOnFirstVisit: 0
   NeedType: 4
 --- !u!1 &1730331266849896613
 GameObject:
@@ -146,7 +147,7 @@ Transform:
   m_GameObject: {fileID: 2643889009950285024}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalPosition: {x: 0, y: -0.27, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -521,15 +522,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawNeedProviderGizmo: 0
-  cost:
-    cost: 0
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  coreModel: {fileID: 739786844684371711, guid: 5d9ddf51412f6f049b022415714e0b5b, type: 3}
   position: {x: 0, y: 0}
   rotation: 0
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  InventoryModel: {fileID: 2742550895613413213, guid: cc9682de5cc62984db9d4fd1e53b00b5, type: 3}
   Tiles:
   - {fileID: 3937898064784029771}
   serializedPlaceConditions: []

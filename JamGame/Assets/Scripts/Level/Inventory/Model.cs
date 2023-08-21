@@ -1,5 +1,4 @@
-﻿using Common;
-using Level.Room;
+﻿using Level.Room;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -20,9 +19,9 @@ namespace Level.Inventory
             roomsInInventory.CollectionChanged += CollectionChanged.Invoke;
         }
 
-        public int GetModelsCount(UniqueId id)
+        public int GetModelsCount(CoreModel coreModel)
         {
-            return roomsInInventory.Where(x => x.UniqueId == id).Count();
+            return roomsInInventory.Where(x => x == coreModel).Count();
         }
 
         public void ResetRooms(List<CoreModel> newRooms)

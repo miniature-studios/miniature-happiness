@@ -27,6 +27,14 @@ namespace TileBuilder
 
         public UnityEvent BuiltValidatedOffice;
 
+        private void Start()
+        {
+            if (LoadConfigFromStart)
+            {
+                LoadBuildingFromConfig(BuildingConfig);
+            }
+        }
+
         public Result Execute(Command.ICommand command)
         {
             Result response = validator.ValidateCommand(command);
