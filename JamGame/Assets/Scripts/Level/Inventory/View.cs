@@ -1,11 +1,11 @@
-﻿using Common;
-using Level.Room;
+﻿using Level.Room;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Level.Inventory
 {
@@ -13,7 +13,8 @@ namespace Level.Inventory
     [AddComponentMenu("Scripts/Level.Inventory.View")]
     public class View : MonoBehaviour
     {
-        public const string AddressableLabelName = "InventoryViews";
+        [SerializeField]
+        public AssetLabelReference InventoryViewRef;
 
         [SerializeField]
         private Model model;
@@ -33,11 +34,12 @@ namespace Level.Inventory
         {
             tilesInventoryAnimator = GetComponent<Animator>();
             foreach (
-                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                    AddressableTools.InventoryViewsLabel
-                )
+                GameObject prefab in Addressables
+                    .LoadAssetsAsync<GameObject>(InventoryViewRef, null)
+                    .WaitForCompletion()
             )
             {
+                Debug.LogAssertion(prefab);
                 Room.View view = prefab.GetComponent<Room.View>();
                 if (view != null && view.CoreModel != null)
                 {

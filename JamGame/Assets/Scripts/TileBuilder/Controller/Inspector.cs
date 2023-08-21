@@ -34,7 +34,7 @@ namespace TileBuilder
         public BuildingConfig BuildingConfig;
 
         [HideInInspector]
-        public bool LoadConfigFromStart;
+        public bool LoadConfigFromStart = true;
 
         [HideInInspector]
         public string SavingConfigName = "Sample building";
