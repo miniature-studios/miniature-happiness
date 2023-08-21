@@ -241,10 +241,7 @@ namespace TileBuilder
 
         private TileUnionImpl CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
         {
-            TileUnionImpl tileUnion = Instantiate(
-                ModelViewMap[coreModel],
-                rootObject.transform
-            );
+            TileUnionImpl tileUnion = Instantiate(ModelViewMap[coreModel], rootObject.transform);
             tileUnion.Constructor(() => coreModel);
             tileUnion.SetPosition(position);
             tileUnion.SetRotation(rotation);
@@ -315,19 +312,21 @@ namespace TileBuilder
 
         public BuildingConfig SaveBuildingIntoConfig()
         {
-            BuildingConfig buildingConfig = ScriptableObject.CreateInstance<BuildingConfig>();
+            List<TilePlaceConfig> tilePlaceConfigs = new();
 
             foreach (TileUnionImpl tileUnion in TileUnionDictionary.Values.Distinct())
             {
-                buildingConfig.TilePlaceConfigs.Add(
-                    new TilePlaceConfig()
-                    {
-                        CoreModel = tileUnion.GetCoreModel(),
-                        Position = tileUnion.Position,
-                        Rotation = tileUnion.Rotation,
-                    }
+                tilePlaceConfigs.Add(
+                    new TilePlaceConfig(
+                        tileUnion.GetCoreModel(),
+                        tileUnion.Position,
+                        tileUnion.Rotation
+                    )
                 );
             }
+
+            BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tilePlaceConfigs);
+
             return buildingConfig;
         }
     }
