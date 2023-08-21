@@ -1,7 +1,9 @@
-﻿#if UNITY_EDITOR
-using Location;
-using UnityEditor;
+﻿using Location;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace TileUnion
 {
@@ -58,10 +60,10 @@ namespace TileUnion
         }
     }
 
+#if UNITY_EDITOR
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
-
         public override void OnInspectorGUI()
         {
             TileUnionImpl tileUnion = serializedObject.targetObject as TileUnionImpl;
@@ -153,5 +155,5 @@ namespace TileUnion
             _ = serializedObject.ApplyModifiedProperties();
         }
     }
-}
 #endif
+}

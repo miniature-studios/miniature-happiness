@@ -1,12 +1,13 @@
-#if UNITY_EDITOR
 using Level.Room;
 using Pickle;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace TileBuilder
 {
-#endif
     public partial class Controller
     {
         public TileBuilderImpl TileBuilder => tileBuilder;
@@ -286,7 +287,7 @@ namespace TileBuilder
             {
                 BuildingConfig config = tileBuilderController.TileBuilder.SaveBuildingIntoConfig();
                 string localPath =
-                    "Assets/Prefabs/SceneCompositions/"
+                    "Assets/ScriptableObjects/Building Configs/"
                     + tileBuilderController.SavingConfigName
                     + ".asset";
                 localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
@@ -316,5 +317,5 @@ namespace TileBuilder
             _ = serializedObject.ApplyModifiedProperties();
         }
     }
-}
 #endif
+}

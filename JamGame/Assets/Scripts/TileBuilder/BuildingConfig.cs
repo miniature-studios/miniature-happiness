@@ -10,6 +10,7 @@ namespace TileBuilder
     [Serializable]
     public struct TilePlaceConfig
     {
+        [SerializeField]
         [Pickle(LookupType = ObjectProviderType.Assets)]
         private CoreModel coreModel;
         public readonly CoreModel CoreModel => coreModel;

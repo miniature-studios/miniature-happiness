@@ -56,7 +56,11 @@ namespace TileBuilder
                 DestroyImmediate(view.Value.gameObject);
             }
             instantiatedViews.Clear();
-            foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
+            foreach (
+                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
+                    AddressableTools.TileUnionsLabel
+                )
+            )
             {
                 TileUnionImpl view = prefab.GetComponent<TileUnionImpl>();
                 if (view != null)

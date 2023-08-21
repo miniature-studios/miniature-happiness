@@ -13,6 +13,8 @@ namespace Level.Inventory
     [AddComponentMenu("Scripts/Level.Inventory.View")]
     public class View : MonoBehaviour
     {
+        public const string AddressableLabelName = "InventoryViews";
+
         [SerializeField]
         private Model model;
 
@@ -30,7 +32,11 @@ namespace Level.Inventory
         private void Awake()
         {
             tilesInventoryAnimator = GetComponent<Animator>();
-            foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
+            foreach (
+                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
+                    AddressableTools.InventoryViewsLabel
+                )
+            )
             {
                 Room.View view = prefab.GetComponent<Room.View>();
                 if (view != null && view.CoreModel != null)

@@ -17,20 +17,36 @@ namespace Level.Room
             List<Inventory.Room.View> inventoryViews = new();
             List<TileUnion.TileUnionImpl> tileUnions = new();
 
-            foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
+            foreach (
+                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
+                    AddressableTools.ShopViewsLabel
+                )
+            )
             {
                 Shop.Room.View shopView = prefab.GetComponent<Shop.Room.View>();
                 if (shopView != null && shopView.CoreModel == coreModel)
                 {
                     shopRooms.Add(prefab.GetComponent<Shop.Room.View>());
                 }
-
+            }
+            foreach (
+                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
+                    AddressableTools.InventoryViewsLabel
+                )
+            )
+            {
                 Inventory.Room.View inventoryView = prefab.GetComponent<Inventory.Room.View>();
                 if (inventoryView != null && inventoryView.CoreModel == coreModel)
                 {
                     inventoryViews.Add(prefab.GetComponent<Inventory.Room.View>());
                 }
-
+            }
+            foreach (
+                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
+                    AddressableTools.TileUnionsLabel
+                )
+            )
+            {
                 TileUnion.TileUnionImpl tileUnionImpl =
                     prefab.GetComponent<TileUnion.TileUnionImpl>();
                 if (tileUnionImpl != null && tileUnionImpl.CoreModel == coreModel)

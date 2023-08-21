@@ -20,7 +20,11 @@ namespace Level.Shop
         private void Awake()
         {
             shopAnimator = GetComponent<Animator>();
-            foreach (GameObject prefab in PrefabsTools.GetAllAssetsPrefabs())
+            foreach (
+                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
+                    AddressableTools.ShopViewsLabel
+                )
+            )
             {
                 Room.View view = prefab.GetComponent<Room.View>();
                 if (view != null && view.CoreModel != null)
