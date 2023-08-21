@@ -14,6 +14,7 @@ namespace Level
         public void HoveredOnUpdate(IDragAndDropManager dragAndDrop);
     }
 
+    [AddComponentMenu("Scripts/Level.DragAndDropManager")]
     public class DragAndDropManager : MonoBehaviour
     {
         [SerializeField, InspectorReadOnly]
