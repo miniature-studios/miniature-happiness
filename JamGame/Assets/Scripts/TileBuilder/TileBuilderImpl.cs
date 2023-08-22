@@ -7,6 +7,7 @@ using System.Linq;
 using TileUnion;
 using TileUnion.Tile;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace TileBuilder
 {
@@ -48,6 +49,9 @@ namespace TileBuilder
             UpdateModelViewMap();
         }
 
+        [SerializeField]
+        private AssetLabelReference tileUnionReference;
+
         public void UpdateModelViewMap()
         {
             ModelViewMap.Clear();
@@ -57,9 +61,9 @@ namespace TileBuilder
             }
             instantiatedViews.Clear();
             foreach (
-                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                    AddressableTools.TileUnionsLabel
-                )
+                GameObject prefab in Addressables
+                    .LoadAssetsAsync<GameObject>(tileUnionReference, null)
+                    .WaitForCompletion()
             )
             {
                 TileUnionImpl view = prefab.GetComponent<TileUnionImpl>();

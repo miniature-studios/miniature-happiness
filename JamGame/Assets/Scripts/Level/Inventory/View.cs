@@ -14,7 +14,7 @@ namespace Level.Inventory
     public class View : MonoBehaviour
     {
         [SerializeField]
-        public AssetLabelReference InventoryViewRef;
+        private AssetLabelReference inventoryViewRef;
 
         [SerializeField]
         private Model model;
@@ -35,11 +35,10 @@ namespace Level.Inventory
             tilesInventoryAnimator = GetComponent<Animator>();
             foreach (
                 GameObject prefab in Addressables
-                    .LoadAssetsAsync<GameObject>(InventoryViewRef, null)
+                    .LoadAssetsAsync<GameObject>(inventoryViewRef, null)
                     .WaitForCompletion()
             )
             {
-                Debug.LogAssertion(prefab);
                 Room.View view = prefab.GetComponent<Room.View>();
                 if (view != null && view.CoreModel != null)
                 {
