@@ -1,11 +1,13 @@
 ﻿#if UNITY_EDITOR
 using Common;
 using System.Collections.Generic;
+using TileUnion;
 using UnityEditor;
 using UnityEngine;
 
 namespace Level.Room
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(CoreModel))]
     public class CoreModelInspector : Editor
     {
@@ -13,46 +15,43 @@ namespace Level.Room
         {
             CoreModel coreModel = serializedObject.targetObject as CoreModel;
 
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Set new Hash Code"))
+            {
+                coreModel.SetHashCode();
+                EditorUtility.SetDirty(coreModel);
+            }
+            EditorGUILayout.EndHorizontal();
+
             List<Shop.Room.View> shopRooms = new();
             List<Inventory.Room.View> inventoryViews = new();
-            List<TileUnion.TileUnionImpl> tileUnions = new();
+            List<TileUnionImpl> tileUnions = new();
 
             foreach (
-                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                    AddressableTools.ShopViewsLabel
+                LocationLinkPair<Shop.Room.View> pair in AddressablesTools.LoadAllFromLabel<Shop.Room.View>(
+                    "ShopView"
                 )
             )
             {
-                Shop.Room.View shopView = prefab.GetComponent<Shop.Room.View>();
-                if (shopView != null && shopView.CoreModel == coreModel)
-                {
-                    shopRooms.Add(prefab.GetComponent<Shop.Room.View>());
-                }
+                shopRooms.Add(pair.Link);
             }
+
             foreach (
-                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                    AddressableTools.InventoryViewsLabel
+                LocationLinkPair<Inventory.Room.View> pair in AddressablesTools.LoadAllFromLabel<Inventory.Room.View>(
+                    "InventoryView"
                 )
             )
             {
-                Inventory.Room.View inventoryView = prefab.GetComponent<Inventory.Room.View>();
-                if (inventoryView != null && inventoryView.CoreModel == coreModel)
-                {
-                    inventoryViews.Add(prefab.GetComponent<Inventory.Room.View>());
-                }
+                inventoryViews.Add(pair.Link);
             }
+
             foreach (
-                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                    AddressableTools.TileUnionsLabel
+                LocationLinkPair<TileUnionImpl> pair in AddressablesTools.LoadAllFromLabel<TileUnionImpl>(
+                    "TileUnion"
                 )
             )
             {
-                TileUnion.TileUnionImpl tileUnionImpl =
-                    prefab.GetComponent<TileUnion.TileUnionImpl>();
-                if (tileUnionImpl != null && tileUnionImpl.CoreModel == coreModel)
-                {
-                    tileUnions.Add(prefab.GetComponent<TileUnion.TileUnionImpl>());
-                }
+                tileUnions.Add(pair.Link);
             }
 
             _ = EditorGUILayout.BeginHorizontal();
@@ -114,13 +113,13 @@ namespace Level.Room
             }
             else
             {
-                foreach (TileUnion.TileUnionImpl item in tileUnions)
+                foreach (TileUnionImpl item in tileUnions)
                 {
                     _ = EditorGUILayout.BeginHorizontal();
                     _ = EditorGUILayout.ObjectField(
                         "Inventory.Room.View: ",
                         item,
-                        typeof(TileUnion.TileUnionImpl),
+                        typeof(TileUnionImpl),
                         false
                     );
                     EditorGUILayout.EndHorizontal();

@@ -8,6 +8,7 @@ using TileUnion;
 using TileUnion.Tile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace TileBuilder
 {
@@ -26,6 +27,9 @@ namespace TileBuilder
         [SerializeField]
         private Matrix builderMatrix;
 
+        [SerializeField]
+        private AssetLabelReference tileUnionReference;
+
         public GameObject RootObject
         {
             get => rootObject;
@@ -36,52 +40,46 @@ namespace TileBuilder
 
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
-        public Dictionary<CoreModel, TileUnionImpl> ModelViewMap { get; } = new();
+        private Dictionary<string, IResourceLocation> modelViewMap = new();
 
-        private Dictionary<CoreModel, TileUnionImpl> instantiatedViews = new();
+        public Dictionary<string, TileUnionImpl> InstantiatedViews { get; } = new();
 
         public event Action<TileUnionImpl> OnTileUnionCreated;
 
         private Vector2Int stashPosition = new(-10, -10);
 
-        private void Awake()
+        private void Start()
         {
             UpdateModelViewMap();
         }
 
-        [SerializeField]
-        private AssetLabelReference tileUnionReference;
-
         public void UpdateModelViewMap()
         {
-            ModelViewMap.Clear();
-            foreach (KeyValuePair<CoreModel, TileUnionImpl> view in instantiatedViews)
+            modelViewMap.Clear();
+            foreach (TileUnionImpl view in InstantiatedViews.Values)
             {
-                DestroyImmediate(view.Value.gameObject);
+                DestroyImmediate(view.gameObject);
             }
-            instantiatedViews.Clear();
+            InstantiatedViews.Clear();
+
             foreach (
-                GameObject prefab in Addressables
-                    .LoadAssetsAsync<GameObject>(tileUnionReference, null)
-                    .WaitForCompletion()
+                LocationLinkPair<TileUnionImpl> pair in AddressablesTools.LoadAllFromLabel<TileUnionImpl>(
+                    tileUnionReference
+                )
             )
             {
-                TileUnionImpl view = prefab.GetComponent<TileUnionImpl>();
-                if (view != null)
-                {
-                    ModelViewMap.Add(view.CoreModel, view);
-                    instantiatedViews.Add(
-                        view.CoreModel,
-                        Instantiate(view, fakeRootObject.transform).GetComponent<TileUnionImpl>()
-                    );
-                    instantiatedViews[view.CoreModel].Constructor(() => null);
-                    instantiatedViews[view.CoreModel].SetColliderActive(false);
-                    instantiatedViews[view.CoreModel].SetPosition(stashPosition);
-                    instantiatedViews[view.CoreModel].ApplyTileUnionState(
-                        TileImpl.TileState.Selected
-                    );
-                    instantiatedViews[view.CoreModel].IsolateUpdate();
-                }
+                modelViewMap.Add(pair.Link.CoreModel.HashCode, pair.ResourceLocation);
+                InstantiatedViews.Add(
+                    pair.Link.CoreModel.HashCode,
+                    Instantiate(pair.Link, fakeRootObject.transform)
+                );
+
+                TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
+                unionInstance.Constructor(() => null);
+                unionInstance.SetColliderActive(false);
+                unionInstance.SetPosition(stashPosition);
+                unionInstance.ApplyTileUnionState(TileImpl.TileState.Selected);
+                unionInstance.IsolateUpdate();
             }
         }
 
@@ -131,12 +129,12 @@ namespace TileBuilder
 
         public void ResetFakeViews()
         {
-            foreach (KeyValuePair<CoreModel, TileUnionImpl> pair in instantiatedViews)
+            foreach (TileUnionImpl union in InstantiatedViews.Values)
             {
-                if (pair.Value.Position != stashPosition)
+                if (union.Position != stashPosition)
                 {
-                    pair.Value.SetPosition(stashPosition);
-                    pair.Value.ApplyTileUnionState(TileImpl.TileState.Selected);
+                    union.SetPosition(stashPosition);
+                    union.ApplyTileUnionState(TileImpl.TileState.Selected);
                 }
             }
         }
@@ -144,7 +142,7 @@ namespace TileBuilder
         public Result DropTileUnion(CoreModel coreModel, Vector2Int position, int rotation)
         {
             ResetFakeViews();
-            TileUnionImpl fakeTileUnion = instantiatedViews[coreModel];
+            TileUnionImpl fakeTileUnion = InstantiatedViews[coreModel.HashCode];
             fakeTileUnion.SetPosition(position);
             fakeTileUnion.SetRotation(rotation);
             List<Vector2Int> placingPositions = fakeTileUnion.TilesPositions.ToList();
@@ -176,7 +174,7 @@ namespace TileBuilder
         public Result ShowTileUnionIllusion(CoreModel coreModel, Vector2Int position, int rotation)
         {
             ResetFakeViews();
-            TileUnionImpl fakeTileUnion = instantiatedViews[coreModel];
+            TileUnionImpl fakeTileUnion = InstantiatedViews[coreModel.HashCode];
             fakeTileUnion.SetPosition(position);
             fakeTileUnion.SetRotation(rotation);
             Result result = fakeTileUnion.IsValidPlacing(this);
@@ -249,7 +247,10 @@ namespace TileBuilder
 
         private TileUnionImpl CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
         {
-            TileUnionImpl tileUnion = Instantiate(ModelViewMap[coreModel], rootObject.transform);
+            TileUnionImpl tileUnion = Instantiate(
+                AddressablesTools.LoadAsset<TileUnionImpl>(modelViewMap[coreModel.HashCode]),
+                rootObject.transform
+            );
             tileUnion.Constructor(() => coreModel);
             tileUnion.SetPosition(position);
             tileUnion.SetRotation(rotation);

@@ -40,6 +40,12 @@ namespace Level.Room
     public partial class CoreModel : MonoBehaviour
     {
         [SerializeField]
+        [InspectorReadOnly]
+        private string hashCode;
+
+        public string HashCode => hashCode;
+
+        [SerializeField]
         private Cost cost;
         public Cost Cost => cost;
 
@@ -61,6 +67,11 @@ namespace Level.Room
         public void SetPlacingProperties(int rotation)
         {
             placingProperties.PlacingRotation = rotation;
+        }
+
+        public void SetHashCode()
+        {
+            hashCode = Convert.ToString(Guid.NewGuid());
         }
     }
 }

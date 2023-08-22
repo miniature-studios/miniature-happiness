@@ -36,18 +36,14 @@ namespace Level.Inventory.Inspector
             if (GUILayout.Button("Add rooms from folder."))
             {
                 foreach (
-                    GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                        AddressableTools.CoreModelsLabel
+                    LocationLinkPair<CoreModel> pair in AddressablesTools.LoadAllFromLabel<CoreModel>(
+                        "CoreModel"
                     )
                 )
                 {
-                    CoreModel coreModel = prefab.GetComponent<CoreModel>();
-                    if (coreModel != null)
+                    for (int i = 0; i < 50; i++)
                     {
-                        for (int i = 0; i < 50; i++)
-                        {
-                            inventory_controller.AddNewRoom(coreModel);
-                        }
+                        inventory_controller.AddNewRoom(pair.Link);
                     }
                 }
             }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Shop
 {
@@ -13,24 +15,23 @@ namespace Level.Shop
     {
         [SerializeField]
         private Transform roomsUIContainer;
+
+        [SerializeField]
+        private AssetLabelReference shopViewReference;
         private Animator shopAnimator;
-        private Dictionary<CoreModel, Room.View> modelViewMap = new();
+        private Dictionary<string, IResourceLocation> modelViewMap = new();
         private List<Room.View> viewList = new();
 
         private void Awake()
         {
             shopAnimator = GetComponent<Animator>();
             foreach (
-                GameObject prefab in AddressableTools.GetAllAssetsByLabel(
-                    AddressableTools.ShopViewsLabel
+                LocationLinkPair<Room.View> pair in AddressablesTools.LoadAllFromLabel<Room.View>(
+                    shopViewReference
                 )
             )
             {
-                Room.View view = prefab.GetComponent<Room.View>();
-                if (view != null && view.CoreModel != null)
-                {
-                    modelViewMap.Add(view.CoreModel, view);
-                }
+                modelViewMap.Add(pair.Link.CoreModel.HashCode, pair.ResourceLocation);
             }
         }
 
@@ -57,15 +58,21 @@ namespace Level.Shop
 
         private void AddNewItem(CoreModel newItem)
         {
-            Room.View newRoomView = Instantiate(modelViewMap[newItem], roomsUIContainer)
-                .GetComponent<Room.View>();
-            newRoomView.Constructor(
-                () => newItem.Cost,
-                () => newItem.TariffProperties,
-                () => newItem
-            );
-            newRoomView.enabled = true;
-            viewList.Add(newRoomView);
+            if (modelViewMap.TryGetValue(newItem.HashCode, out IResourceLocation location))
+            {
+                Room.View newRoomView = Instantiate(
+                    AddressablesTools.LoadAsset<Room.View>(location),
+                    roomsUIContainer.transform
+                );
+
+                newRoomView.Constructor(
+                    () => newItem.Cost,
+                    () => newItem.TariffProperties,
+                    () => newItem
+                );
+                newRoomView.enabled = true;
+                viewList.Add(newRoomView);
+            }
         }
 
         private void RemoveOldItem(CoreModel oldItem)

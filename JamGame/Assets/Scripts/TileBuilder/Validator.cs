@@ -35,8 +35,8 @@ namespace TileBuilder.Validator
             }
             if (command is ShowRoomIllusion showRoomIllusion)
             {
-                IEnumerable<Vector2Int> newPositions = tileBuilder.ModelViewMap[
-                    showRoomIllusion.CoreModel
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    showRoomIllusion.CoreModel.HashCode
                 ].GetImaginePlaces(showRoomIllusion.Position.Value, showRoomIllusion.Rotation);
                 return newPositions.All(x => tileBuilder.GetAllInsideListPositions().Contains(x))
                     ? new SuccessResult()
@@ -44,8 +44,8 @@ namespace TileBuilder.Validator
             }
             if (command is DropRoom dropRoom)
             {
-                IEnumerable<Vector2Int> newPositions = tileBuilder.ModelViewMap[
-                    dropRoom.CoreModel
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    dropRoom.CoreModel.HashCode
                 ].GetImaginePlaces(dropRoom.Position.Value, dropRoom.Rotation);
                 return
                     tileBuilder
