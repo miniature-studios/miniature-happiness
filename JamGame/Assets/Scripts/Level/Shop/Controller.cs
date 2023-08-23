@@ -21,7 +21,11 @@ namespace Level.Shop
 
         public void ResetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
         {
-            shopModel.ResetRooms(room_configs.Select(x => x.Room).ToList());
+            shopModel.ResetRooms(
+                room_configs.Select(
+                    x => CoreModelsManager.Instance.InstantiateCoreModel(x.Room.HashCode)
+                )
+            );
         }
 
         public Result TryBuyRoom(CoreModel room)
@@ -29,8 +33,7 @@ namespace Level.Shop
             Result result = financesController.TryTakeMoney(room.RoomInformation.Cost.Value);
             if (result.Success)
             {
-                inventoryController.AddNewRoom(room);
-                shopModel.RemoveRoom(room);
+                inventoryController.AddNewRoom(shopModel.BorrowRoom(room));
                 return new SuccessResult();
             }
             else

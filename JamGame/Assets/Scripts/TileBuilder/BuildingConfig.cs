@@ -1,6 +1,4 @@
-﻿using Level.Room;
-using Pickle;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using UnityEngine;
@@ -8,12 +6,11 @@ using UnityEngine;
 namespace TileBuilder
 {
     [Serializable]
-    public struct TilePlaceConfig
+    public struct TileConfig
     {
         [SerializeField]
-        [Pickle(LookupType = ObjectProviderType.Assets)]
-        private CoreModel coreModel;
-        public readonly CoreModel CoreModel => coreModel;
+        private string hashCode;
+        public string HashCode => hashCode;
 
         [SerializeField]
         private Vector2Int position;
@@ -23,9 +20,9 @@ namespace TileBuilder
         private int rotation;
         public readonly int Rotation => rotation;
 
-        public TilePlaceConfig(CoreModel coreModel, Vector2Int position, int rotation)
+        public TileConfig(string hashCode, Vector2Int position, int rotation)
         {
-            this.coreModel = coreModel;
+            this.hashCode = hashCode;
             this.position = position;
             this.rotation = rotation;
         }
@@ -40,16 +37,15 @@ namespace TileBuilder
     public class BuildingConfig : ScriptableObject
     {
         [SerializeField]
-        private List<TilePlaceConfig> tilePlaceConfigs = new();
-        public ImmutableList<TilePlaceConfig> TilePlaceConfigs =>
-            tilePlaceConfigs.ToImmutableList();
+        private List<TileConfig> tilePlaceConfigs = new();
+        public ImmutableList<TileConfig> TilePlaceConfigs => tilePlaceConfigs.ToImmutableList();
 
-        public void Init(List<TilePlaceConfig> tilePlaceConfigs)
+        public void Init(List<TileConfig> tilePlaceConfigs)
         {
             this.tilePlaceConfigs = tilePlaceConfigs;
         }
 
-        public static BuildingConfig CreateInstance(List<TilePlaceConfig> tilePlaceConfigs)
+        public static BuildingConfig CreateInstance(List<TileConfig> tilePlaceConfigs)
         {
             BuildingConfig data = CreateInstance<BuildingConfig>();
             data.Init(tilePlaceConfigs);

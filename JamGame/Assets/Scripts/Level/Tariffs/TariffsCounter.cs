@@ -34,9 +34,9 @@ namespace Level
 
         public void UpdateCheck()
         {
-            int insideTilesCount = tileBuilder.GetAllInsideListPositions().Count();
+            int insideTilesCount = tileBuilder.GetAllInsidePositions().Count();
             IEnumerable<TileUnionImpl> roomProperties = tileBuilder.GetTileUnionsInPositions(
-                tileBuilder.GetAllInsideListPositions()
+                tileBuilder.GetAllInsidePositions()
             );
 
             check = new()

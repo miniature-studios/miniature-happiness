@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using Level.Room;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,18 +15,16 @@ namespace Utils
             bool didDomainReload
         )
         {
-            foreach (string str in importedAssets.Concat(movedAssets))
+            foreach (string str in importedAssets)
             {
                 GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(str);
-                if (asset == null)
+                if (asset != null)
                 {
-                    continue;
-                }
-
-                CoreModel coreModel = asset.GetComponent<CoreModel>();
-                if (coreModel != null)
-                {
-                    coreModel.SetHashCode();
+                    CoreModel coreModel = asset.GetComponent<CoreModel>();
+                    if (coreModel != null && coreModel.HashCode == "")
+                    {
+                        coreModel.SetHashCode();
+                    }
                 }
             }
         }

@@ -1,6 +1,8 @@
 using Level.Room;
 using Pickle;
 using UnityEngine;
+using TileBuilder.Command;
+using Level;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,24 +12,34 @@ namespace TileBuilder
 {
     public partial class Controller
     {
-        public TileBuilderImpl TileBuilder => tileBuilder;
+        public CoreModel FreeSpace => tileBuilder.FreeSpace;
 
         public void DeleteAllTiles()
         {
-            coreModels.Clear();
-            tileBuilder.DeleteAllTiles();
+            _ = model.Execute(new RemoveAllRooms());
         }
 
         public void CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
         {
-            coreModels.Add(coreModel);
-            tileBuilder.CreateTileAndBind(coreModel, position, rotation);
+            CoreModel newCoreModel = CoreModelsManager.Instance.InstantiateCoreModel(
+                new TileConfig(coreModel.HashCode, position, rotation)
+            );
+            _ = model.Execute(new DropRoom(newCoreModel));
         }
 
         public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
         {
-            buildingConfig.TilePlaceConfigs.ForEach(x => coreModels.Add(x.CoreModel));
-            tileBuilder.LoadBuildingFromConfig(buildingConfig);
+            _ = model.Execute(new RemoveAllRooms());
+            foreach (TileConfig tileConfig in buildingConfig.TilePlaceConfigs)
+            {
+                CoreModel core = CoreModelsManager.Instance.InstantiateCoreModel(tileConfig);
+                _ = model.Execute(new DropRoom(core));
+            }
+        }
+
+        public BuildingConfig SaveBuildingIntoConfig()
+        {
+            return tileBuilder.SaveBuildingIntoConfig();
         }
 
         [HideInInspector]
@@ -68,26 +80,26 @@ namespace TileBuilder
     [CustomEditor(typeof(Controller))]
     public class Inspector : Editor
     {
-        public void DisplayGameModeChange(Controller tileBuilderController)
+        public void DisplayGameModeChange(Controller controller)
         {
             _ = EditorGUILayout.BeginHorizontal();
-            tileBuilderController.GameModeToChange = (GameMode)
-                EditorGUILayout.EnumPopup(tileBuilderController.GameModeToChange);
+            controller.GameModeToChange = (GameMode)
+                EditorGUILayout.EnumPopup(controller.GameModeToChange);
             EditorGUILayout.EndHorizontal();
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Change game mode"))
             {
-                tileBuilderController.ChangeGameMode(tileBuilderController.GameModeToChange);
+                controller.ChangeGameMode(controller.GameModeToChange);
             }
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowLocationBuildingButtons(Controller tileBuilderController)
+        private void ShowLocationBuildingButtons(Controller controller)
         {
             _ = EditorGUILayout.BeginHorizontal();
-            tileBuilderController.SquareSideLength = EditorGUILayout.IntField(
+            controller.SquareSideLength = EditorGUILayout.IntField(
                 "Square side length: ",
-                tileBuilderController.SquareSideLength
+                controller.SquareSideLength
             );
             EditorGUILayout.EndHorizontal();
 
@@ -96,50 +108,28 @@ namespace TileBuilder
             {
                 int x = 0;
                 int y = 0;
-                tileBuilderController.DeleteAllTiles();
-                for (
-                    int i = 0;
-                    i
-                        < tileBuilderController.SquareSideLength
-                            * tileBuilderController.SquareSideLength;
-                    i++
-                )
+                controller.DeleteAllTiles();
+                for (int i = 0; i < controller.SquareSideLength * controller.SquareSideLength; i++)
                 {
                     float value = Random.value * 100;
                     if (value < 50)
                     {
-                        tileBuilderController.CreateTile(
-                            tileBuilderController.TileBuilder.FreeSpace,
-                            new(x, y),
-                            0
-                        );
+                        controller.CreateTile(controller.FreeSpace, new(x, y), 0);
                     }
                     else if (value is > 50 and < 65)
                     {
-                        tileBuilderController.CreateTile(
-                            tileBuilderController.StairsPrefab,
-                            new(x, y),
-                            0
-                        );
+                        controller.CreateTile(controller.StairsPrefab, new(x, y), 0);
                     }
                     else if (value is > 65 and < 80)
                     {
-                        tileBuilderController.CreateTile(
-                            tileBuilderController.WindowPrefab,
-                            new(x, y),
-                            0
-                        );
+                        controller.CreateTile(controller.WindowPrefab, new(x, y), 0);
                     }
                     else if (value > 80)
                     {
-                        tileBuilderController.CreateTile(
-                            tileBuilderController.OutdoorPrefab,
-                            new(x, y),
-                            0
-                        );
+                        controller.CreateTile(controller.OutdoorPrefab, new(x, y), 0);
                     }
                     y++;
-                    if (y >= tileBuilderController.SquareSideLength)
+                    if (y >= controller.SquareSideLength)
                     {
                         y = 0;
                         x++;
@@ -148,83 +138,51 @@ namespace TileBuilder
             }
             if (GUILayout.Button("Create normal building"))
             {
-                tileBuilderController.DeleteAllTiles();
+                controller.DeleteAllTiles();
                 for (int i = 0; i < 9; i++)
                 {
-                    tileBuilderController.CreateTile(
-                        tileBuilderController.OutdoorPrefab,
-                        new(0, i),
-                        0
-                    );
+                    controller.CreateTile(controller.OutdoorPrefab, new(0, i), 0);
                 }
 
                 for (int i = 0; i < 8; i++)
                 {
                     if (i == 1)
                     {
-                        tileBuilderController.CreateTile(
-                            tileBuilderController.StairsPrefab,
-                            new(i + 1, 0),
-                            0
-                        );
+                        controller.CreateTile(controller.StairsPrefab, new(i + 1, 0), 0);
                     }
                     else
                     {
-                        tileBuilderController.CreateTile(
-                            tileBuilderController.OutdoorPrefab,
-                            new(i + 1, 0),
-                            0
-                        );
+                        controller.CreateTile(controller.OutdoorPrefab, new(i + 1, 0), 0);
                     }
 
                     for (int j = 0; j < 7; j++)
                     {
                         if (j == 2)
                         {
-                            tileBuilderController.CreateTile(
-                                tileBuilderController.CorridorPrefab,
-                                new(i + 1, j + 1),
-                                0
-                            );
+                            controller.CreateTile(controller.CorridorPrefab, new(i + 1, j + 1), 0);
                         }
                         else if (j == 3)
                         {
-                            tileBuilderController.CreateTile(
-                                tileBuilderController.WorkingPlace,
-                                new(i + 1, j + 1),
-                                1
-                            );
+                            controller.CreateTile(controller.WorkingPlace, new(i + 1, j + 1), 1);
                         }
                         else if (j == 4)
                         {
-                            tileBuilderController.CreateTile(
-                                tileBuilderController.WorkingPlaceFree,
+                            controller.CreateTile(
+                                controller.WorkingPlaceFree,
                                 new(i + 1, j + 1),
                                 0
                             );
                         }
                         else
                         {
-                            tileBuilderController.CreateTile(
-                                tileBuilderController.TileBuilder.FreeSpace,
-                                new(i + 1, j + 1),
-                                0
-                            );
+                            controller.CreateTile(controller.FreeSpace, new(i + 1, j + 1), 0);
                         }
                     }
-                    tileBuilderController.CreateTile(
-                        tileBuilderController.OutdoorPrefab,
-                        new(i + 1, 8),
-                        0
-                    );
+                    controller.CreateTile(controller.OutdoorPrefab, new(i + 1, 8), 0);
                 }
                 for (int i = 0; i < 9; i++)
                 {
-                    tileBuilderController.CreateTile(
-                        tileBuilderController.OutdoorPrefab,
-                        new(9, i),
-                        0
-                    );
+                    controller.CreateTile(controller.OutdoorPrefab, new(9, i), 0);
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -232,26 +190,18 @@ namespace TileBuilder
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Clear Scene"))
             {
-                tileBuilderController.DeleteAllTiles();
+                controller.DeleteAllTiles();
             }
             EditorGUILayout.EndHorizontal();
 
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add 4 Tiles"))
             {
-                tileBuilderController.DeleteAllTiles();
-                tileBuilderController.CreateTile(tileBuilderController.OutdoorPrefab, new(0, 0), 0);
-                tileBuilderController.CreateTile(tileBuilderController.OutdoorPrefab, new(0, 1), 0);
-                tileBuilderController.CreateTile(
-                    tileBuilderController.WorkingPlaceFree,
-                    new(1, 0),
-                    0
-                );
-                tileBuilderController.CreateTile(tileBuilderController.WorkingPlace, new(1, 1), 0);
-            }
-            if (GUILayout.Button("Update All"))
-            {
-                tileBuilderController.TileBuilder.UpdateAllTiles();
+                controller.DeleteAllTiles();
+                controller.CreateTile(controller.OutdoorPrefab, new(0, 0), 0);
+                controller.CreateTile(controller.OutdoorPrefab, new(0, 1), 0);
+                controller.CreateTile(controller.WorkingPlaceFree, new(1, 0), 0);
+                controller.CreateTile(controller.WorkingPlace, new(1, 1), 0);
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -285,7 +235,7 @@ namespace TileBuilder
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Save building into config."))
             {
-                BuildingConfig config = tileBuilderController.TileBuilder.SaveBuildingIntoConfig();
+                BuildingConfig config = tileBuilderController.SaveBuildingIntoConfig();
                 string localPath =
                     "Assets/ScriptableObjects/Building Configs/"
                     + tileBuilderController.SavingConfigName

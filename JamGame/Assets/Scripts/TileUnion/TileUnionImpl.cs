@@ -24,9 +24,10 @@ namespace TileUnion
 
         public Func<CoreModel> GetCoreModel { get; private set; }
 
-        public void Constructor(Func<CoreModel> getCoreModel)
+        public void Constructor(Func<CoreModel> getCoreModel, Matrix builderMatrix)
         {
             GetCoreModel = getCoreModel;
+            this.builderMatrix = builderMatrix;
             CreateCache();
         }
 
@@ -87,6 +88,15 @@ namespace TileUnion
             }
         }
 
+        private void OnValidate()
+        {
+            foreach (TileImpl tile in Tiles)
+            {
+                tile.SetPosition(builderMatrix, tile.Position);
+                tile.SetRotation(tile.Rotation);
+            }
+        }
+
         private Dictionary<int, TileUnionConfiguration> Configuration
         {
             get
@@ -112,12 +122,11 @@ namespace TileUnion
             return Tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
         }
 
-        public IEnumerable<Vector2Int> GetImaginePlaces(
-            Vector2Int union_position,
-            int union_rotation
-        )
+        public IEnumerable<Vector2Int> GetImaginePlaces(PlacingProperties placingProperties)
         {
-            return Configuration[union_rotation % 4].TilesPositions.Select(x => x + union_position);
+            return Configuration[placingProperties.Rotation % 4].TilesPositions.Select(
+                x => x + placingProperties.Position
+            );
         }
 
         public Result IsValidPlacing(TileBuilderImpl tileBuilder)
@@ -320,7 +329,7 @@ namespace TileUnion
             this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
             foreach (TileConfiguration config in Configuration[this.rotation].TilesConfigurations)
             {
-                config.TargetTile.SetPosition(config.Position);
+                config.TargetTile.SetPosition(builderMatrix, config.Position);
                 config.TargetTile.SetRotation(config.Rotation);
             }
         }
@@ -333,6 +342,12 @@ namespace TileUnion
                 transform.localPosition.y,
                 -builderMatrix.Step * position.x
             );
+        }
+
+        public void SetPositionAndRotation(PlacingProperties placingProperties)
+        {
+            SetRotation(placingProperties.Rotation);
+            SetPosition(placingProperties.Position);
         }
 
         public IEnumerable<string> GetTileMarks(Vector2Int globalPosition)
@@ -355,7 +370,7 @@ namespace TileUnion
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
-                tile.SetPosition(new Vector2Int(tile.Position.y, -tile.Position.x));
+                tile.SetPosition(builderMatrix, new Vector2Int(tile.Position.y, -tile.Position.x));
             }
             rotation %= 4;
             Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
@@ -364,7 +379,10 @@ namespace TileUnion
             Vector2 delta = firstCenter - secondCenter;
             foreach (TileImpl tile in Tiles)
             {
-                tile.SetPosition(tile.Position + new Vector2Int((int)delta.x, (int)delta.y));
+                tile.SetPosition(
+                    builderMatrix,
+                    tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
+                );
             }
         }
 

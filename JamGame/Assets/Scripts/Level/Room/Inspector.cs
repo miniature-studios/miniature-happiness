@@ -34,14 +34,6 @@ namespace Level.Room
             CoreModel coreModel = serializedObject.targetObject as CoreModel;
 
             _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set new Hash Code"))
-            {
-                coreModel.SetHashCode();
-                EditorUtility.SetDirty(coreModel);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Catch Models"))
             {
                 coreModel.CatchModels();

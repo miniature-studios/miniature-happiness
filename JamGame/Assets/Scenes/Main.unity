@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 40476286}
   - component: {fileID: 40476289}
   - component: {fileID: 40476290}
+  - component: {fileID: 40476294}
   - component: {fileID: 40476292}
   - component: {fileID: 40476291}
   - component: {fileID: 40476293}
@@ -194,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBuilder: {fileID: 40476289}
-  coreModels: []
+  model: {fileID: 40476294}
   BuiltValidatedOffice:
     m_PersistentCalls:
       m_Calls:
@@ -211,7 +212,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   BuildingConfig: {fileID: 11400000, guid: 7ed0ec60fc238014e8af144a4168d3e8, type: 2}
-  LoadConfigFromStart: 1
+  LoadConfigFromStart: 0
   SavingConfigName: Sample building
   GameModeToChange: 0
   SquareSideLength: 30
@@ -283,6 +284,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b97233979538e246b06dcdfef4e1480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &40476294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40476285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e878d8cae5fa6854691f5ece4ef14748, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileBuilderTransform: {fileID: 634197354}
+  CollectionChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1654659964}
+        m_TargetAssemblyTypeName: Level.CoreModelsManager, Assembly-CSharp
+        m_MethodName: OnTileBuilderRoomsChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  tileBuilder: {fileID: 40476289}
 --- !u!1 &42303832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1654,6 +1684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bufferCoreModel: {fileID: 0}
+  dragAndDropTransform: {fileID: 1744097812}
   backupDragAndDropProvider: {fileID: 1395078480}
 --- !u!1 &500220673
 GameObject:
@@ -1759,7 +1790,7 @@ GameObject:
   m_Component:
   - component: {fileID: 634197354}
   m_Layer: 0
-  m_Name: Buildong
+  m_Name: Builder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4368,12 +4399,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdef159651c6ee64293aefa880fb661f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryTransform: {fileID: 1693086656}
   CollectionChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1395078489}
         m_TargetAssemblyTypeName: InventoryView, Assembly-CSharp
         m_MethodName: OnInventoryChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1654659964}
+        m_TargetAssemblyTypeName: Level.CoreModelsManager, Assembly-CSharp
+        m_MethodName: OnInventoryRoomsChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4891,6 +4935,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1654659963}
+  - component: {fileID: 1654659964}
   m_Layer: 0
   m_Name: ModelsHandler
   m_TagString: Untagged
@@ -4907,15 +4952,30 @@ Transform:
   m_GameObject: {fileID: 1654659962}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -46.423824, y: 10.084661, z: 57.60441}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 634197354}
   - {fileID: 1693086656}
   - {fileID: 1241582339}
+  - {fileID: 1744097812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1654659964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654659962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69a7cdd51d3490f40a0bb9df9d4f6e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coreModelsRef:
+    m_LabelString: CoreModel
 --- !u!1 &1671638921
 GameObject:
   m_ObjectHideFlags: 0
@@ -5004,11 +5064,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3377d109e65ef46b5037bd2c3eb12b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopTransform: {fileID: 1241582339}
   CollectionChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671638926}
         m_TargetAssemblyTypeName: ShopView, Assembly-CSharp
+        m_MethodName: OnShopRoomsChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1654659964}
+        m_TargetAssemblyTypeName: Level.CoreModelsManager, Assembly-CSharp
         m_MethodName: OnShopRoomsChanged
         m_Mode: 0
         m_Arguments:
@@ -5355,6 +5428,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &1744097811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1744097812}
+  m_Layer: 0
+  m_Name: DragAndDrop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1744097812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744097811}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1654659963}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1750729704
 GameObject:
   m_ObjectHideFlags: 0

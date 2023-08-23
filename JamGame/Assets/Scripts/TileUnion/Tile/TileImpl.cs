@@ -70,12 +70,6 @@ namespace TileUnion.Tile
             selectedYPosition = unselectedYPosition + selectLiftingHeight;
         }
 
-        private void OnValidate()
-        {
-            SetPosition(Position);
-            SetRotation(Rotation);
-        }
-
         public struct WallTypeMatch
         {
             public Dictionary<Direction, WallType> Data;
@@ -230,13 +224,13 @@ namespace TileUnion.Tile
             }
         }
 
-        public void SetPosition(Vector2Int _position)
+        public void SetPosition(Matrix builderMatrix, Vector2Int newPosition)
         {
-            position = _position;
+            position = newPosition;
             transform.localPosition = new Vector3(
-                builderMatrix.Step * _position.y,
+                builderMatrix.Step * newPosition.y,
                 transform.localPosition.y,
-                -builderMatrix.Step * _position.x
+                -builderMatrix.Step * newPosition.x
             );
         }
 

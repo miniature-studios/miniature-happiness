@@ -1,4 +1,5 @@
-﻿using Level.Room;
+﻿using Common;
+using Level.Room;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -6,6 +7,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Inventory
 {
@@ -24,23 +26,19 @@ namespace Level.Inventory
         private Animator tilesInventoryAnimator;
         private bool inventoryShowed = false;
 
-        private Dictionary<CoreModel, Room.View> modelViewMap = new();
+        private Dictionary<string, IResourceLocation> modelViewMap = new();
         private List<Room.View> roomViews;
 
         private void Awake()
         {
             tilesInventoryAnimator = GetComponent<Animator>();
             foreach (
-                GameObject prefab in Addressables
-                    .LoadAssetsAsync<GameObject>(inventoryViewRef, null)
-                    .WaitForCompletion()
+                LocationLinkPair<Room.View> pair in AddressablesTools.LoadAllFromLabel<Room.View>(
+                    inventoryViewRef
+                )
             )
             {
-                Room.View view = prefab.GetComponent<Room.View>();
-                if (view != null && view.CoreModel != null)
-                {
-                    modelViewMap.Add(view.CoreModel, view);
-                }
+                modelViewMap.Add(pair.Link.CoreModel.HashCode, pair.ResourceLocation);
             }
         }
 
@@ -80,15 +78,25 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            Room.View newRoomView = Instantiate(modelViewMap[newItem], container)
-                .GetComponent<Room.View>();
-            newRoomView.Constructor(() => newItem);
-            roomViews.Add(newRoomView);
+            if (modelViewMap.TryGetValue(newItem.HashCode, out IResourceLocation location))
+            {
+                Room.View newRoomView = Instantiate(
+                    AddressablesTools.LoadAsset<Room.View>(location),
+                    container
+                );
+
+                newRoomView.Constructor(() => newItem);
+                roomViews.Add(newRoomView);
+            }
+            else
+            {
+                Debug.LogError($"Core model {newItem.name} not presented in Inventory View");
+            }
         }
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.View existRoom = roomViews.Find(x => x.CoreModel == oldItem);
+            Room.View existRoom = roomViews.Find(x => x.GetCoreModelInstance() == oldItem);
             _ = roomViews.Remove(existRoom);
             Destroy(existRoom.gameObject);
         }

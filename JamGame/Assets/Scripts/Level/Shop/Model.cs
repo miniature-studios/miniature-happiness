@@ -10,6 +10,9 @@ namespace Level.Shop
     [AddComponentMenu("Scripts/Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
+        [SerializeField]
+        private Transform shopTransform;
+
         private ObservableCollection<CoreModel> roomsInShop = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
@@ -18,7 +21,7 @@ namespace Level.Shop
             roomsInShop.CollectionChanged += CollectionChanged.Invoke;
         }
 
-        public void ResetRooms(List<CoreModel> rooms)
+        public void ResetRooms(IEnumerable<CoreModel> rooms)
         {
             ClearShop();
             foreach (CoreModel room in rooms)
@@ -29,16 +32,21 @@ namespace Level.Shop
 
         public void AddRoom(CoreModel room)
         {
+            room.transform.parent = shopTransform;
             roomsInShop.Add(room);
         }
 
-        public void RemoveRoom(CoreModel room)
+        public CoreModel BorrowRoom(CoreModel room)
         {
-            _ = roomsInShop.Remove(room);
+            return roomsInShop.Remove(room) ? room : null;
         }
 
         public void ClearShop()
         {
+            foreach (CoreModel room in roomsInShop)
+            {
+                Destroy(room.gameObject);
+            }
             roomsInShop.Clear();
         }
     }

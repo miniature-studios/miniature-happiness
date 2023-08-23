@@ -1,4 +1,5 @@
 ﻿using Common;
+using TileBuilder;
 using UnityEngine;
 
 namespace Level.Room
@@ -34,5 +35,13 @@ namespace Level.Room
         [InspectorReadOnly]
         private TileUnion.Model tileUnionModel;
         public TileUnion.Model TileUnionModel => tileUnionModel;
+
+        public void ConfigurateFromConfig(TileConfig config)
+        {
+            tileUnionModel.PlacingProperties.SetPositionAndRotation(
+                config.Position,
+                config.Rotation
+            );
+        }
     }
 }

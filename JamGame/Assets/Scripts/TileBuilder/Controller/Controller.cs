@@ -1,7 +1,6 @@
 ﻿using Common;
 using Level.Room;
-using System;
-using System.Collections.Generic;
+using TileBuilder.Command;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,9 +20,7 @@ namespace TileBuilder
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
-        private List<CoreModel> coreModels;
-
-        private Validator.IValidator validator = new Validator.GameMode();
+        private Model model;
 
         public UnityEvent BuiltValidatedOffice;
 
@@ -35,26 +32,14 @@ namespace TileBuilder
             }
         }
 
-        public Result Execute(Command.ICommand command)
-        {
-            Result response = validator.ValidateCommand(command);
-            return response.Success ? command.Execute(tileBuilder) : response;
-        }
-
         public void ChangeGameMode(GameMode gameMode)
         {
-            validator = gameMode switch
-            {
-                GameMode.God => new Validator.GodMode(),
-                GameMode.Build => new Validator.BuildMode(tileBuilder),
-                GameMode.Play => new Validator.GameMode(),
-                _ => throw new ArgumentException(),
-            };
+            model.ChangeGameMode(gameMode);
         }
 
         public void ValidateBuilding()
         {
-            Result result = Execute(new Command.ValidateBuilding());
+            Result result = model.Execute(new ValidateBuilding());
             if (result.Success)
             {
                 BuiltValidatedOffice?.Invoke();
@@ -65,62 +50,65 @@ namespace TileBuilder
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                coreModel.TileUnionModel.ModifyPlacingProperties(RotationDirection.Clockwise);
-            }
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.ShowRoomIllusion command =
-                new(
-                    coreModel,
-                    ray,
-                    coreModel.TileUnionModel.PlacingProperties.PlacingRotation,
-                    tileBuilder.BuilderMatrix
+                coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
+                    RotationDirection.Clockwise
                 );
-            Result result = Execute(command);
+            }
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Result<Vector2Int> matrixResult = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
+            if (matrixResult.Failure)
+            {
+                return;
+            }
+
+            coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
+            ShowSelectedRoom command = new(coreModel);
+            Result result = model.Execute(command);
+
             if (result.Failure)
             {
-                coreModel.TileUnionModel.ModifyPlacingProperties(RotationDirection.CounterClockwise);
+                coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
+                    RotationDirection.CounterClockwise
+                );
             }
         }
 
         public Result Drop(CoreModel coreModel)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Command.DropRoom command =
-                new(
-                    coreModel,
-                    ray,
-                    coreModel.TileUnionModel.PlacingProperties.PlacingRotation,
-                    tileBuilder.BuilderMatrix
-                );
-            Result result = Execute(command);
-            if (result.Success)
+            Result<Vector2Int> matrixResult = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
+            if (matrixResult.Success)
             {
-                coreModels.Add(coreModel);
+                coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
+                return model.Execute(new DropRoom(coreModel));
             }
-            return result;
+            else
+            {
+                return new FailResult(matrixResult.Error);
+            }
         }
 
         public Result<CoreModel> Borrow()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            CoreModel coreModel = null;
-            Result result = Execute(
-                new Command.BorrowRoom(ray, (borrowedCoreModel) => coreModel = borrowedCoreModel)
-            );
-            if (result.Success)
+            Result<Vector2Int> matrixResult = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
+            if (matrixResult.Success)
             {
-                _ = coreModels.Remove(coreModel);
-                return new SuccessResult<CoreModel>(coreModel);
+                BorrowRoom command = new(matrixResult.Data);
+                CoreModel core = null;
+                command.RoomBorrowed += (CoreModel coreModel) => core = coreModel;
+                Result result = model.Execute(command);
+                return result.Success
+                    ? new SuccessResult<CoreModel>(core)
+                    : new FailResult<CoreModel>(result.Error);
             }
-            else
-            {
-                return new FailResult<CoreModel>("Cannot borrow");
-            }
+            return new FailResult<CoreModel>(matrixResult.Error);
         }
 
         public void OnHoverLeave()
         {
-            tileBuilder.ResetFakeViews();
+            _ = model.Execute(new HideSelectedRoom());
         }
     }
 }

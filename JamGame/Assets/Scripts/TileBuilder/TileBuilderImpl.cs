@@ -75,7 +75,7 @@ namespace TileBuilder
                 );
 
                 TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
-                unionInstance.Constructor(() => null);
+                unionInstance.Constructor(() => null, BuilderMatrix);
                 unionInstance.SetColliderActive(false);
                 unionInstance.SetPosition(stashPosition);
                 unionInstance.ApplyTileUnionState(TileImpl.TileState.Selected);
@@ -141,84 +141,68 @@ namespace TileBuilder
             }
         }
 
-        public Result DropTileUnion(CoreModel coreModel, Vector2Int position, int rotation)
+        public Result IsValidPlacing(CoreModel coreModel)
         {
-            ResetFakeViews();
             TileUnionImpl fakeTileUnion = InstantiatedViews[coreModel.HashCode];
             fakeTileUnion.gameObject.SetActive(true);
-            fakeTileUnion.SetPosition(position);
-            fakeTileUnion.SetRotation(rotation);
-            List<Vector2Int> placingPositions = fakeTileUnion.TilesPositions.ToList();
+            fakeTileUnion.SetPositionAndRotation(coreModel.TileUnionModel.PlacingProperties);
             Result result = fakeTileUnion.IsValidPlacing(this);
             ResetFakeViews();
-            if (result.Failure)
-            {
-                return result;
-            }
-            else
-            {
-                List<TileUnionImpl> tilesUnder = TileUnionDictionary
-                    .Where(x => placingPositions.Contains(x.Key))
-                    .Select(x => x.Value)
-                    .ToList();
-
-                while (tilesUnder.Count > 0)
-                {
-                    TileUnionImpl buffer = tilesUnder.Last();
-                    _ = tilesUnder.Remove(buffer);
-                    _ = DeleteTile(buffer);
-                }
-                CreateTileAndBind(coreModel, position, rotation);
-                UpdateSidesInPositions(placingPositions);
-                return new SuccessResult();
-            }
+            return result.Failure ? result : new SuccessResult();
         }
 
-        public Result ShowTileUnionIllusion(CoreModel coreModel, Vector2Int position, int rotation)
+        public void DropTileUnion(CoreModel coreModel)
+        {
+            List<Vector2Int> placingPositions = InstantiatedViews[coreModel.HashCode]
+                .GetImaginePlaces(coreModel.TileUnionModel.PlacingProperties)
+                .ToList();
+
+            List<TileUnionImpl> tilesUnder = TileUnionDictionary
+                .Where(x => placingPositions.Contains(x.Key))
+                .Select(x => x.Value)
+                .ToList();
+
+            while (tilesUnder.Count > 0)
+            {
+                TileUnionImpl buffer = tilesUnder.Last();
+                _ = tilesUnder.Remove(buffer);
+                _ = DeleteTile(buffer);
+            }
+            CreateTileAndBind(coreModel);
+            UpdateSidesInPositions(placingPositions);
+        }
+
+        public void ShowSelectedTileUnion(CoreModel coreModel)
         {
             ResetFakeViews();
             TileUnionImpl fakeTileUnion = InstantiatedViews[coreModel.HashCode];
             fakeTileUnion.gameObject.SetActive(true);
-            fakeTileUnion.SetPosition(position);
-            fakeTileUnion.SetRotation(rotation);
+            fakeTileUnion.SetPositionAndRotation(coreModel.TileUnionModel.PlacingProperties);
             Result result = fakeTileUnion.IsValidPlacing(this);
             if (
                 result.Failure
-                || !fakeTileUnion.TilesPositions.All(
-                    x =>
-                        GetTileUnionsInPositions(new List<Vector2Int>() { x })
-                            .All(x => x.IsAllWithMark("Freespace"))
-                )
+                || fakeTileUnion.TilesPositions
+                    .Select(x => !GetTileUnionInPosition(x).IsAllWithMark("Freespace"))
+                    .All(x => x)
             )
             {
                 fakeTileUnion.ApplyTileUnionState(TileImpl.TileState.SelectedAndErrored);
             }
-            return new SuccessResult();
         }
 
-        public Result BorrowTileUnion(TileUnionImpl tileUnion, Action<CoreModel> borrowedCoreModel)
+        public CoreModel BorrowTileUnion(Vector2Int borrowedPosition)
         {
             ResetFakeViews();
+            TileUnionImpl tileUnion = GetTileUnionInPosition(borrowedPosition);
             List<Vector2Int> previousPlaces = tileUnion.TilesPositions.ToList();
-            borrowedCoreModel(DeleteTile(tileUnion));
+            CoreModel coreModel = DeleteTile(tileUnion);
             foreach (Vector2Int position in previousPlaces)
             {
-                CreateTileAndBind(FreeSpace, position, 0);
+                FreeSpace.TileUnionModel.PlacingProperties.SetPosition(position);
+                CreateTileAndBind(FreeSpace);
             }
             UpdateSidesInPositions(previousPlaces);
-            return new SuccessResult();
-        }
-
-        public void UpdateAllTiles()
-        {
-            foreach (KeyValuePair<Vector2Int, TileUnionImpl> pair in TileUnionDictionary)
-            {
-                pair.Value.UpdateWalls(this, pair.Key);
-            }
-            foreach (KeyValuePair<Vector2Int, TileUnionImpl> pair in TileUnionDictionary)
-            {
-                pair.Value.UpdateCorners(this, pair.Key);
-            }
+            return coreModel;
         }
 
         public IEnumerable<TileUnionImpl> GetTileUnionsInPositions(
@@ -231,16 +215,28 @@ namespace TileBuilder
                 .Distinct();
         }
 
-        public IEnumerable<Vector2Int> GetAllInsideListPositions()
+        public TileUnionImpl GetTileUnionInPosition(Vector2Int position)
+        {
+            return TileUnionDictionary.TryGetValue(position, out TileUnionImpl tileUnion)
+                ? tileUnion
+                : null;
+        }
+
+        public IEnumerable<Vector2Int> GetAllInsidePositions()
         {
             return TileUnionDictionary
                 .Where(x => !x.Value.IsAllWithMark("Outside"))
                 .Select(x => x.Key);
         }
 
-        public void CreateTileAndBind(CoreModel coreModel, Vector2Int position, int rotation)
+        public IEnumerable<Vector2Int> GetAllPositions()
         {
-            TileUnionImpl tileUnion = CreateTile(coreModel, position, rotation);
+            return TileUnionDictionary.Select(x => x.Key);
+        }
+
+        public void CreateTileAndBind(CoreModel coreModel)
+        {
+            TileUnionImpl tileUnion = CreateTile(coreModel);
             foreach (Vector2Int pos in tileUnion.TilesPositions)
             {
                 TileUnionDictionary.Add(pos, tileUnion);
@@ -249,22 +245,29 @@ namespace TileBuilder
             OnTileUnionCreated?.Invoke(tileUnion);
         }
 
-        private TileUnionImpl CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
+        private TileUnionImpl CreateTile(CoreModel coreModel)
         {
-            TileUnionImpl tileUnion = Instantiate(
-                AddressablesTools.LoadAsset<TileUnionImpl>(modelViewMap[coreModel.HashCode]),
-                rootObject.transform
-            );
-            tileUnion.Constructor(() => coreModel);
-            tileUnion.SetPosition(position);
-            tileUnion.SetRotation(rotation);
-            return tileUnion;
+            if (modelViewMap.TryGetValue(coreModel.HashCode, out IResourceLocation location))
+            {
+                TileUnionImpl tileUnion = Instantiate(
+                    AddressablesTools.LoadAsset<TileUnionImpl>(location),
+                    rootObject.transform
+                );
+                tileUnion.Constructor(() => coreModel, BuilderMatrix);
+                tileUnion.SetPositionAndRotation(coreModel.TileUnionModel.PlacingProperties);
+                return tileUnion;
+            }
+            else
+            {
+                Debug.LogError($"Core model {coreModel.name} not presented in TileBuilder View");
+                return null;
+            }
         }
 
         private CoreModel DeleteTile(TileUnionImpl tileUnion)
         {
             CoreModel coreModel = tileUnion.GetCoreModel();
-            coreModel.TileUnionModel.SetPlacingProperties(tileUnion.Rotation);
+            coreModel.TileUnionModel.PlacingProperties.SetRotation(tileUnion.Rotation);
             RemoveTileFromDictionary(tileUnion);
             DestroyImmediate(tileUnion.gameObject);
             return coreModel;
@@ -315,30 +318,22 @@ namespace TileBuilder
             }
         }
 
-        public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
-        {
-            foreach (TilePlaceConfig config in buildingConfig.TilePlaceConfigs)
-            {
-                CreateTileAndBind(config.CoreModel, config.Position, config.Rotation);
-            }
-        }
-
         public BuildingConfig SaveBuildingIntoConfig()
         {
-            List<TilePlaceConfig> tilePlaceConfigs = new();
+            List<TileConfig> tileConfigs = new();
 
             foreach (TileUnionImpl tileUnion in TileUnionDictionary.Values.Distinct())
             {
-                tilePlaceConfigs.Add(
-                    new TilePlaceConfig(
-                        tileUnion.GetCoreModel(),
+                tileConfigs.Add(
+                    new TileConfig(
+                        tileUnion.GetCoreModel().HashCode,
                         tileUnion.Position,
                         tileUnion.Rotation
                     )
                 );
             }
 
-            BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tilePlaceConfigs);
+            BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tileConfigs);
 
             return buildingConfig;
         }

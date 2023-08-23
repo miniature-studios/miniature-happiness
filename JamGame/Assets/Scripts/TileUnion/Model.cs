@@ -5,14 +5,36 @@ using UnityEngine;
 namespace TileUnion
 {
     [Serializable]
-    public struct PlacingProperties
+    public class PlacingProperties
     {
         [SerializeField]
-        private int placingRotation;
-        public int PlacingRotation
+        private int rotation;
+        public int Rotation => rotation;
+
+        public void SetRotation(int rotation)
         {
-            get => placingRotation;
-            set => placingRotation = value;
+            this.rotation = rotation + 4;
+            this.rotation %= 4;
+        }
+
+        public void ApplyRotation(RotationDirection rotation)
+        {
+            SetRotation(this.rotation + (int)rotation);
+        }
+
+        [SerializeField]
+        private Vector2Int position;
+        public Vector2Int Position => position;
+
+        public void SetPosition(Vector2Int position)
+        {
+            this.position = position;
+        }
+
+        public void SetPositionAndRotation(Vector2Int position, int rotation)
+        {
+            this.rotation = rotation;
+            this.position = position;
         }
     }
 
@@ -22,17 +44,5 @@ namespace TileUnion
         [SerializeField]
         private PlacingProperties placingProperties;
         public PlacingProperties PlacingProperties => placingProperties;
-
-        public void ModifyPlacingProperties(RotationDirection rotationDirection)
-        {
-            placingProperties.PlacingRotation += (int)rotationDirection;
-            placingProperties.PlacingRotation += 4;
-            placingProperties.PlacingRotation %= 4;
-        }
-
-        public void SetPlacingProperties(int rotation)
-        {
-            placingProperties.PlacingRotation = rotation;
-        }
     }
 }

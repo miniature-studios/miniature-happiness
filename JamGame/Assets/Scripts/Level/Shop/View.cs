@@ -69,6 +69,10 @@ namespace Level.Shop
                 newRoomView.enabled = true;
                 viewList.Add(newRoomView);
             }
+            else
+            {
+                Debug.LogError($"Core model {newItem.name} not presented in Shop View");
+            }
         }
 
         private void RemoveOldItem(CoreModel oldItem)

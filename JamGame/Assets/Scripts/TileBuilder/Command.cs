@@ -1,91 +1,78 @@
-using Common;
 using Level.Room;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder.Command
 {
     public interface ICommand
     {
-        public Result Execute(TileBuilderImpl tileBuilder);
+        public void Execute(TileBuilderImpl tileBuilder);
     }
 
     public class ValidateBuilding : ICommand
     {
-        public Result Execute(TileBuilderImpl tileBuilder)
-        {
-            return tileBuilder.Validate();
-        }
+        public void Execute(TileBuilderImpl tileBuilder) { }
     }
 
     public class DropRoom : ICommand
     {
-        public Vector2Int? Position { get; private set; }
-        public int Rotation { get; private set; }
         public CoreModel CoreModel { get; private set; }
 
-        public DropRoom(CoreModel coreModel, Vector2Int position, int rotation)
+        public DropRoom(CoreModel coreModel)
         {
             CoreModel = coreModel;
-            Position = position;
-            Rotation = rotation;
         }
 
-        public DropRoom(CoreModel coreModel, Ray ray, int rotation, Matrix builderMatrix)
+        public void Execute(TileBuilderImpl tileBuilder)
         {
-            CoreModel = coreModel;
-            Result<Vector2Int> result = builderMatrix.GetMatrixPosition(ray);
-            Position = result.Success ? result.Data : null;
-            Rotation = rotation;
-        }
-
-        public Result Execute(TileBuilderImpl tileBuilder)
-        {
-            return tileBuilder.DropTileUnion(CoreModel, Position.Value, Rotation);
+            tileBuilder.DropTileUnion(CoreModel);
         }
     }
 
     public class BorrowRoom : ICommand
     {
-        public TileUnionImpl TileUnionImpl { get; private set; }
-        public Action<CoreModel> BorrowedModel { get; private set; }
+        public Vector2Int BorrowingPosition { get; private set; }
+        public event Action<CoreModel> RoomBorrowed;
 
-        public BorrowRoom(Ray ray, Action<CoreModel> borrowedModel)
+        public BorrowRoom(Vector2Int borrowingPosition)
         {
-            BorrowedModel = borrowedModel;
-            RaycastHit[] hits = Physics.RaycastAll(ray, float.PositiveInfinity);
-            IEnumerable<TileUnionImpl> tiles = hits.ToList()
-                .Where(x => x.collider.GetComponentInParent<TileUnionImpl>() != null)
-                .Select(x => x.collider.GetComponentInParent<TileUnionImpl>());
-            TileUnionImpl = tiles.Count() != 0 ? tiles.First() : null;
+            BorrowingPosition = borrowingPosition;
         }
 
-        public Result Execute(TileBuilderImpl tileBuilder)
+        public void Execute(TileBuilderImpl tileBuilder)
         {
-            return tileBuilder.BorrowTileUnion(TileUnionImpl, BorrowedModel);
+            RoomBorrowed?.Invoke(tileBuilder.BorrowTileUnion(BorrowingPosition));
         }
     }
 
-    public class ShowRoomIllusion : ICommand
+    public class ShowSelectedRoom : ICommand
     {
-        public Vector2Int? Position { get; private set; }
-        public int Rotation { get; private set; }
         public CoreModel CoreModel { get; private set; }
 
-        public ShowRoomIllusion(CoreModel coreModel, Ray ray, int rotation, Matrix builderMatrix)
+        public ShowSelectedRoom(CoreModel coreModel)
         {
             CoreModel = coreModel;
-            Result<Vector2Int> result = builderMatrix.GetMatrixPosition(ray);
-            Position = result.Success ? result.Data : null;
-            Rotation = rotation;
         }
 
-        public Result Execute(TileBuilderImpl tileBuilder)
+        public void Execute(TileBuilderImpl tileBuilder)
         {
-            return tileBuilder.ShowTileUnionIllusion(CoreModel, Position.Value, Rotation);
+            tileBuilder.ShowSelectedTileUnion(CoreModel);
+        }
+    }
+
+    public class HideSelectedRoom : ICommand
+    {
+        public void Execute(TileBuilderImpl tileBuilder)
+        {
+            tileBuilder.ResetFakeViews();
+        }
+    }
+
+    public class RemoveAllRooms : ICommand
+    {
+        public void Execute(TileBuilderImpl tileBuilder)
+        {
+            tileBuilder.DeleteAllTiles();
         }
     }
 }

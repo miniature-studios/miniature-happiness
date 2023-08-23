@@ -35,8 +35,7 @@ namespace Level.Inventory
             if (hovered != null)
             {
                 CoreModel coreModel = hovered.GetCoreModelInstance();
-                inventoryModel.RemoveRoom(coreModel);
-                return new SuccessResult<CoreModel>(coreModel);
+                return new SuccessResult<CoreModel>(inventoryModel.BorrowRoom(coreModel));
             }
             else
             {
