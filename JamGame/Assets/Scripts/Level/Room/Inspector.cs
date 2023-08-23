@@ -1,13 +1,30 @@
-﻿#if UNITY_EDITOR
-using Common;
+﻿using Common;
 using System.Collections.Generic;
-using TileUnion;
-using UnityEditor;
 using UnityEngine;
+using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Level.Room
 {
-    [CanEditMultipleObjects]
+    public partial class CoreModel
+    {
+        public void SetHashCode()
+        {
+            hashCode = Convert.ToString(Guid.NewGuid());
+        }
+
+        public void CatchModels()
+        {
+            roomInformation = GetComponent<RoomInformation>();
+            shopModel = GetComponent<Shop.Room.Model>();
+            inventoryModel = GetComponent<Inventory.Room.Model>();
+            tileUnionModel = GetComponent<TileUnion.Model>();
+        }
+    }
+
+#if UNITY_EDITOR
     [CustomEditor(typeof(CoreModel))]
     public class CoreModelInspector : Editor
     {
@@ -23,9 +40,17 @@ namespace Level.Room
             }
             EditorGUILayout.EndHorizontal();
 
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Catch Models"))
+            {
+                coreModel.CatchModels();
+                EditorUtility.SetDirty(coreModel);
+            }
+            EditorGUILayout.EndHorizontal();
+
             List<Shop.Room.View> shopRooms = new();
             List<Inventory.Room.View> inventoryViews = new();
-            List<TileUnionImpl> tileUnions = new();
+            List<TileUnion.TileUnionImpl> tileUnions = new();
 
             foreach (
                 LocationLinkPair<Shop.Room.View> pair in AddressablesTools.LoadAllFromLabel<Shop.Room.View>(
@@ -33,7 +58,10 @@ namespace Level.Room
                 )
             )
             {
-                shopRooms.Add(pair.Link);
+                if (pair.Link.CoreModel.HashCode == coreModel.HashCode)
+                {
+                    shopRooms.Add(pair.Link);
+                }
             }
 
             foreach (
@@ -42,16 +70,22 @@ namespace Level.Room
                 )
             )
             {
-                inventoryViews.Add(pair.Link);
+                if (pair.Link.CoreModel.HashCode == coreModel.HashCode)
+                {
+                    inventoryViews.Add(pair.Link);
+                }
             }
 
             foreach (
-                LocationLinkPair<TileUnionImpl> pair in AddressablesTools.LoadAllFromLabel<TileUnionImpl>(
+                LocationLinkPair<TileUnion.TileUnionImpl> pair in AddressablesTools.LoadAllFromLabel<TileUnion.TileUnionImpl>(
                     "TileUnion"
                 )
             )
             {
-                tileUnions.Add(pair.Link);
+                if (pair.Link.CoreModel.HashCode == coreModel.HashCode)
+                {
+                    tileUnions.Add(pair.Link);
+                }
             }
 
             _ = EditorGUILayout.BeginHorizontal();
@@ -113,13 +147,13 @@ namespace Level.Room
             }
             else
             {
-                foreach (TileUnionImpl item in tileUnions)
+                foreach (TileUnion.TileUnionImpl item in tileUnions)
                 {
                     _ = EditorGUILayout.BeginHorizontal();
                     _ = EditorGUILayout.ObjectField(
                         "Inventory.Room.View: ",
                         item,
-                        typeof(TileUnionImpl),
+                        typeof(TileUnion.TileUnionImpl),
                         false
                     );
                     EditorGUILayout.EndHorizontal();
@@ -131,5 +165,5 @@ namespace Level.Room
             _ = serializedObject.ApplyModifiedProperties();
         }
     }
-}
 #endif
+}

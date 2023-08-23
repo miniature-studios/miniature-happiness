@@ -25,9 +25,7 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text electricityText;
 
-        private Func<Cost, CoreModel, Result> roomBuying;
-        private Func<Cost> getCost = null;
-        private Func<TariffProperties> getTariff = null;
+        private Func<CoreModel, Result> roomBuying;
         public Func<CoreModel> GetCoreModelInstance = null;
 
         private void Awake()
@@ -35,32 +33,32 @@ namespace Level.Shop.Room
             roomBuying = GetComponentInParent<Controller>().TryBuyRoom;
         }
 
-        public void Constructor(
-            Func<Cost> getCost,
-            Func<TariffProperties> getTariff,
-            Func<CoreModel> getCoreModelInstance
-        )
+        public void Constructor(Func<CoreModel> getCoreModelInstance)
         {
-            this.getCost = getCost;
-            this.getTariff = getTariff;
             GetCoreModelInstance = getCoreModelInstance;
         }
 
         private void Update()
         {
-            if (getCost != null && getTariff != null)
-            {
-                moneyText.text = "Money cost: " + Convert.ToString(getCost().Value);
-                waterText.text = "Water: " + Convert.ToString(getTariff().WaterConsumption);
-                electricityText.text =
-                    "Electro: " + Convert.ToString(getTariff().ElectricityConsumption);
-            }
+            moneyText.text =
+                "Money cost: "
+                + Convert.ToString(GetCoreModelInstance().RoomInformation.Cost.Value);
+            waterText.text =
+                "Water: "
+                + Convert.ToString(
+                    GetCoreModelInstance().RoomInformation.TariffProperties.WaterConsumption
+                );
+            electricityText.text =
+                "Electro: "
+                + Convert.ToString(
+                    GetCoreModelInstance().RoomInformation.TariffProperties.ElectricityConsumption
+                );
         }
 
         // Called be pressing button
         public void TryBuyRoom()
         {
-            if (roomBuying(getCost(), GetCoreModelInstance()).Success)
+            if (roomBuying(GetCoreModelInstance()).Success)
             {
                 Destroy(gameObject);
             }

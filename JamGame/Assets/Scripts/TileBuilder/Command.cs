@@ -21,9 +21,6 @@ namespace TileBuilder.Command
         }
     }
 
-    /// <summary>
-    /// Places room directly into building by ray
-    /// </summary>
     public class DropRoom : ICommand
     {
         public Vector2Int? Position { get; private set; }
@@ -51,9 +48,6 @@ namespace TileBuilder.Command
         }
     }
 
-    /// <summary>
-    /// Borrows room from building by ray
-    /// </summary>
     public class BorrowRoom : ICommand
     {
         public TileUnionImpl TileUnionImpl { get; private set; }
@@ -75,9 +69,6 @@ namespace TileBuilder.Command
         }
     }
 
-    /// <summary>
-    /// Shows selecting room in building
-    /// </summary>
     public class ShowRoomIllusion : ICommand
     {
         public Vector2Int? Position { get; private set; }

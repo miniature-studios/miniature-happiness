@@ -25,9 +25,6 @@ namespace Level.Inventory.Room
         private RectTransform targetInfo = null;
         private Canvas canvas;
 
-        private Func<Cost> getCost = null;
-        private Func<TariffProperties> getTariff = null;
-
         private Func<int> getCount = null;
         public Func<int> GetCount => getCount;
 
@@ -42,15 +39,8 @@ namespace Level.Inventory.Room
             canvas = FindObjectOfType<Canvas>();
         }
 
-        public void Constructor(
-            Func<Cost> getCost,
-            Func<TariffProperties> getTariff,
-            Func<int> getCount,
-            Func<CoreModel> getCoreModelInstance
-        )
+        public void Constructor(Func<int> getCount, Func<CoreModel> getCoreModelInstance)
         {
-            this.getCost = getCost;
-            this.getTariff = getTariff;
             this.getCount = getCount;
             this.getCoreModelInstance = getCoreModelInstance;
         }
@@ -72,9 +62,9 @@ namespace Level.Inventory.Room
                             )
                             .GetComponent<RectTransform>();
                         targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electricity. Con.: {getTariff().ElectricityConsumption}\n"
-                            + $"Water Con.: {getTariff().WaterConsumption}\n"
-                            + $"Cost: {getCost().Value}";
+                            $"Electricity. Con.: {getCoreModelInstance().RoomInformation.TariffProperties.ElectricityConsumption}\n"
+                            + $"Water Con.: {getCoreModelInstance().RoomInformation.TariffProperties.WaterConsumption}\n"
+                            + $"Cost: {getCoreModelInstance().RoomInformation.Cost}";
                         break;
                     case (true, false):
                         targetInfo.position = Input.mousePosition + new Vector3(20, 20, 0);

@@ -65,11 +65,7 @@ namespace Level.Shop
                     roomsUIContainer.transform
                 );
 
-                newRoomView.Constructor(
-                    () => newItem.Cost,
-                    () => newItem.TariffProperties,
-                    () => newItem
-                );
+                newRoomView.Constructor(() => newItem);
                 newRoomView.enabled = true;
                 viewList.Add(newRoomView);
             }

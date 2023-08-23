@@ -1,77 +1,38 @@
 ﻿using Common;
-using System;
 using UnityEngine;
 
 namespace Level.Room
 {
-    [Serializable]
-    public struct Cost
-    {
-        [SerializeField]
-        private int cost;
-        public int Value => cost;
-    }
-
-    [Serializable]
-    public struct TariffProperties
-    {
-        [SerializeField]
-        private int waterConsumption;
-        public int WaterConsumption => waterConsumption;
-
-        [SerializeField]
-        private int electricityConsumption;
-        public int ElectricityConsumption => electricityConsumption;
-    }
-
-    [Serializable]
-    public struct PlacingProperties
-    {
-        [SerializeField]
-        private int placingRotation;
-        public int PlacingRotation
-        {
-            get => placingRotation;
-            set => placingRotation = value;
-        }
-    }
-
+    [RequireComponent(typeof(RoomInformation))]
+    [RequireComponent(typeof(Shop.Room.Model))]
+    [RequireComponent(typeof(TileUnion.Model))]
+    [RequireComponent(typeof(Inventory.Room.Model))]
     [AddComponentMenu("Scripts/Level.Room.CoreModel")]
     public partial class CoreModel : MonoBehaviour
     {
         [SerializeField]
         [InspectorReadOnly]
         private string hashCode;
-
         public string HashCode => hashCode;
 
         [SerializeField]
-        private Cost cost;
-        public Cost Cost => cost;
+        [InspectorReadOnly]
+        private RoomInformation roomInformation;
+        public RoomInformation RoomInformation => roomInformation;
 
         [SerializeField]
-        private TariffProperties tariffProperties;
-        public TariffProperties TariffProperties => tariffProperties;
+        [InspectorReadOnly]
+        private Shop.Room.Model shopModel;
+        public Shop.Room.Model ShopModel => shopModel;
 
         [SerializeField]
-        private PlacingProperties placingProperties;
-        public PlacingProperties PlacingProperties => placingProperties;
+        [InspectorReadOnly]
+        private Inventory.Room.Model inventoryModel;
+        public Inventory.Room.Model InventoryModel => inventoryModel;
 
-        public void ModifyPlacingProperties(RotationDirection rotationDirection)
-        {
-            placingProperties.PlacingRotation += (int)rotationDirection;
-            placingProperties.PlacingRotation += 4;
-            placingProperties.PlacingRotation %= 4;
-        }
-
-        public void SetPlacingProperties(int rotation)
-        {
-            placingProperties.PlacingRotation = rotation;
-        }
-
-        public void SetHashCode()
-        {
-            hashCode = Convert.ToString(Guid.NewGuid());
-        }
+        [SerializeField]
+        [InspectorReadOnly]
+        private TileUnion.Model tileUnionModel;
+        public TileUnion.Model TileUnionModel => tileUnionModel;
     }
 }

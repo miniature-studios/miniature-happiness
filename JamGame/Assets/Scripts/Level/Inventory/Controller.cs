@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Level.Inventory
 {
     [AddComponentMenu("Scripts/Level.Inventory.Controller")]
-    public class Controller : MonoBehaviour, IDragAndDropManager
+    public class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         private Model inventoryModel;
@@ -44,6 +44,6 @@ namespace Level.Inventory
             }
         }
 
-        public void HoveredOnUpdate(IDragAndDropManager dragAndDrop) { }
+        public void HoveredOnUpdate(IDragAndDropAgent dragAndDrop) { }
     }
 }

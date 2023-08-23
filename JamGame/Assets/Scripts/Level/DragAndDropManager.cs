@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace Level
 {
-    public interface IDragAndDropManager
+    public interface IDragAndDropAgent
     {
         public void Hover(CoreModel coreModel);
         public Result Drop(CoreModel coreModel);
         public Result<CoreModel> Borrow();
-        public void HoveredOnUpdate(IDragAndDropManager dragAndDrop);
+        public void HoveredOnUpdate(IDragAndDropAgent dragAndDrop);
     }
 
     [AddComponentMenu("Scripts/Level.DragAndDropManager")]
@@ -21,19 +21,19 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
-        [Pickle(typeof(IDragAndDropManager))]
+        [Pickle(typeof(IDragAndDropAgent))]
         private GameObject backupDragAndDropProvider;
-        private IDragAndDropManager backupDragAndDrop;
+        private IDragAndDropAgent backupDragAndDrop;
 
         private bool mousePressed;
-        private List<IDragAndDropManager> dragAndDropManagers;
+        private List<IDragAndDropAgent> dragAndDropManagers;
 
         private void Awake()
         {
             dragAndDropManagers = FindObjectsOfType<MonoBehaviour>()
-                .OfType<IDragAndDropManager>()
+                .OfType<IDragAndDropAgent>()
                 .ToList();
-            backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropManager>();
+            backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropAgent>();
             if (backupDragAndDrop == null)
             {
                 Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
@@ -42,13 +42,13 @@ namespace Level
 
         private void Update()
         {
-            IDragAndDropManager dragAndDrop = null;
+            IDragAndDropAgent dragAndDrop = null;
             GameObject topDragAndDrop = RayCastUtilities
                 .UIRayCast(Input.mousePosition)
-                ?.FirstOrDefault(x => x.GetComponent<IDragAndDropManager>() != null);
+                ?.FirstOrDefault(x => x.GetComponent<IDragAndDropAgent>() != null);
             if (topDragAndDrop != null)
             {
-                dragAndDrop = topDragAndDrop.GetComponent<IDragAndDropManager>();
+                dragAndDrop = topDragAndDrop.GetComponent<IDragAndDropAgent>();
             }
 
             if (Input.GetMouseButtonDown(0) && !mousePressed)

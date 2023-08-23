@@ -24,9 +24,9 @@ namespace Level.Shop
             shopModel.ResetRooms(room_configs.Select(x => x.Room).ToList());
         }
 
-        public Result TryBuyRoom(Cost cost, CoreModel room)
+        public Result TryBuyRoom(CoreModel room)
         {
-            Result result = financesController.TryTakeMoney(cost.Value);
+            Result result = financesController.TryTakeMoney(room.RoomInformation.Cost.Value);
             if (result.Success)
             {
                 inventoryController.AddNewRoom(room);
