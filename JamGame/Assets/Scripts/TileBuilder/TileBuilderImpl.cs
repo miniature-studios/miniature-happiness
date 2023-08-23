@@ -81,6 +81,7 @@ namespace TileBuilder
                 unionInstance.ApplyTileUnionState(TileImpl.TileState.Selected);
                 unionInstance.IsolateUpdate();
             }
+            ResetFakeViews();
         }
 
         public Result Validate()
@@ -135,6 +136,7 @@ namespace TileBuilder
                 {
                     union.SetPosition(stashPosition);
                     union.ApplyTileUnionState(TileImpl.TileState.Selected);
+                    union.gameObject.SetActive(false);
                 }
             }
         }
@@ -143,6 +145,7 @@ namespace TileBuilder
         {
             ResetFakeViews();
             TileUnionImpl fakeTileUnion = InstantiatedViews[coreModel.HashCode];
+            fakeTileUnion.gameObject.SetActive(true);
             fakeTileUnion.SetPosition(position);
             fakeTileUnion.SetRotation(rotation);
             List<Vector2Int> placingPositions = fakeTileUnion.TilesPositions.ToList();
@@ -175,6 +178,7 @@ namespace TileBuilder
         {
             ResetFakeViews();
             TileUnionImpl fakeTileUnion = InstantiatedViews[coreModel.HashCode];
+            fakeTileUnion.gameObject.SetActive(true);
             fakeTileUnion.SetPosition(position);
             fakeTileUnion.SetRotation(rotation);
             Result result = fakeTileUnion.IsValidPlacing(this);
@@ -260,7 +264,7 @@ namespace TileBuilder
         private CoreModel DeleteTile(TileUnionImpl tileUnion)
         {
             CoreModel coreModel = tileUnion.GetCoreModel();
-            coreModel.SetPlacingProperties(tileUnion.Rotation);
+            coreModel.TileUnionModel.SetPlacingProperties(tileUnion.Rotation);
             RemoveTileFromDictionary(tileUnion);
             DestroyImmediate(tileUnion.gameObject);
             return coreModel;

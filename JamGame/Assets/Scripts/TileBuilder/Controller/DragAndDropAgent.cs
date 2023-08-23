@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    [AddComponentMenu("Scripts/TileBuilder.ControllerUiProxy")]
-    public class ControllerUiProxy : MonoBehaviour, IDragAndDropAgent
+    [AddComponentMenu("Scripts/TileBuilder.DragAndDropAgent")]
+    public class DragAndDropAgent : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         private Controller controller;
@@ -16,9 +16,9 @@ namespace TileBuilder
             controller.Hover(coreModel);
         }
 
-        public void HoveredOnUpdate(IDragAndDropAgent dragAndDrop)
+        public void OnHoverLeave()
         {
-            controller.IsHoveredOnUpdate(dragAndDrop != null && dragAndDrop.GetType() == GetType());
+            controller.OnHoverLeave();
         }
 
         Result<CoreModel> IDragAndDropAgent.Borrow()

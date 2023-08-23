@@ -41,10 +41,7 @@ namespace Level.Inventory.Inspector
                     )
                 )
                 {
-                    for (int i = 0; i < 50; i++)
-                    {
-                        inventory_controller.AddNewRoom(pair.Link);
-                    }
+                    inventory_controller.AddNewRoom(pair.Link);
                 }
             }
             EditorGUILayout.EndHorizontal();

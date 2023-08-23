@@ -44,6 +44,6 @@ namespace Level.Inventory
             }
         }
 
-        public void HoveredOnUpdate(IDragAndDropAgent dragAndDrop) { }
+        public void OnHoverLeave() { }
     }
 }

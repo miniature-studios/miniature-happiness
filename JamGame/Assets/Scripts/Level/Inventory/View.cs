@@ -17,9 +17,6 @@ namespace Level.Inventory
         private AssetLabelReference inventoryViewRef;
 
         [SerializeField]
-        private Model model;
-
-        [SerializeField]
         private Transform container;
 
         [SerializeField]
@@ -83,30 +80,17 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            Room.View view = roomViews.FirstOrDefault(x => x.CoreModel == newItem);
-            if (view == null)
-            {
-                Room.View newRoomView = Instantiate(modelViewMap[newItem], container)
-                    .GetComponent<Room.View>();
-                newRoomView.Constructor(
-                    () => newItem.Cost,
-                    () => newItem.TariffProperties,
-                    () => model.GetModelsCount(newRoomView.CoreModel),
-                    () => newItem
-                );
-                newRoomView.enabled = true;
-                roomViews.Add(newRoomView);
-            }
+            Room.View newRoomView = Instantiate(modelViewMap[newItem], container)
+                .GetComponent<Room.View>();
+            newRoomView.Constructor(() => newItem);
+            roomViews.Add(newRoomView);
         }
 
         private void RemoveOldItem(CoreModel oldItem)
         {
             Room.View existRoom = roomViews.Find(x => x.CoreModel == oldItem);
-            if (existRoom.GetCount() == 0)
-            {
-                _ = roomViews.Remove(existRoom);
-                Destroy(existRoom.gameObject);
-            }
+            _ = roomViews.Remove(existRoom);
+            Destroy(existRoom.gameObject);
         }
 
         private void RemoveAllItems()

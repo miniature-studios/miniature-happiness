@@ -41,9 +41,9 @@ namespace TileBuilder
             return response.Success ? command.Execute(tileBuilder) : response;
         }
 
-        public void ChangeGameMode(GameMode game_mode)
+        public void ChangeGameMode(GameMode gameMode)
         {
-            validator = game_mode switch
+            validator = gameMode switch
             {
                 GameMode.God => new Validator.GodMode(),
                 GameMode.Build => new Validator.BuildMode(tileBuilder),
@@ -65,20 +65,20 @@ namespace TileBuilder
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                coreModel.ModifyPlacingProperties(RotationDirection.Clockwise);
+                coreModel.TileUnionModel.ModifyPlacingProperties(RotationDirection.Clockwise);
             }
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Command.ShowRoomIllusion command =
                 new(
                     coreModel,
                     ray,
-                    coreModel.PlacingProperties.PlacingRotation,
+                    coreModel.TileUnionModel.PlacingProperties.PlacingRotation,
                     tileBuilder.BuilderMatrix
                 );
             Result result = Execute(command);
             if (result.Failure)
             {
-                coreModel.ModifyPlacingProperties(RotationDirection.CounterClockwise);
+                coreModel.TileUnionModel.ModifyPlacingProperties(RotationDirection.CounterClockwise);
             }
         }
 
@@ -89,7 +89,7 @@ namespace TileBuilder
                 new(
                     coreModel,
                     ray,
-                    coreModel.PlacingProperties.PlacingRotation,
+                    coreModel.TileUnionModel.PlacingProperties.PlacingRotation,
                     tileBuilder.BuilderMatrix
                 );
             Result result = Execute(command);
@@ -118,12 +118,9 @@ namespace TileBuilder
             }
         }
 
-        public void IsHoveredOnUpdate(bool hovered)
+        public void OnHoverLeave()
         {
-            if (!hovered)
-            {
-                tileBuilder.ResetFakeViews();
-            }
+            tileBuilder.ResetFakeViews();
         }
     }
 }

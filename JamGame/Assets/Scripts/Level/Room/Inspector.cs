@@ -25,6 +25,7 @@ namespace Level.Room
     }
 
 #if UNITY_EDITOR
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(CoreModel))]
     public class CoreModelInspector : Editor
     {

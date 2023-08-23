@@ -17,16 +17,10 @@ namespace Level.Inventory.Room
         public CoreModel CoreModel => coreModel;
 
         [SerializeField]
-        private TMP_Text counterText;
-
-        [SerializeField]
         private GameObject extendedUIInfoPrefab;
 
         private RectTransform targetInfo = null;
         private Canvas canvas;
-
-        private Func<int> getCount = null;
-        public Func<int> GetCount => getCount;
 
         private Func<CoreModel> getCoreModelInstance;
         public Func<CoreModel> GetCoreModelInstance => getCoreModelInstance;
@@ -39,15 +33,13 @@ namespace Level.Inventory.Room
             canvas = FindObjectOfType<Canvas>();
         }
 
-        public void Constructor(Func<int> getCount, Func<CoreModel> getCoreModelInstance)
+        public void Constructor(Func<CoreModel> getCoreModelInstance)
         {
-            this.getCount = getCount;
             this.getCoreModelInstance = getCoreModelInstance;
         }
 
         public void Update()
         {
-            counterText.text = Convert.ToString(getCount());
             pointerOver = RayCastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject);
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {

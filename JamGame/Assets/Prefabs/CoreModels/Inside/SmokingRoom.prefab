@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6851675528110734543}
   - component: {fileID: 739786844684371711}
+  - component: {fileID: 2351401125867397392}
+  - component: {fileID: 8624567786751204017}
+  - component: {fileID: 8701682620509132357}
+  - component: {fileID: 4588327520170321208}
   m_Layer: 0
   m_Name: SmokingRoom
   m_TagString: Untagged
@@ -44,11 +48,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb076f9cce233a40a66f5b9849b915f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hashCode: 41870fa2-5d0e-4d69-a0eb-2a55c06fcf3d
+  hashCode: 2d815367-9667-4361-9030-ac3d2ca39d86
+  roomInformation: {fileID: 2351401125867397392}
+  shopModel: {fileID: 8624567786751204017}
+  inventoryModel: {fileID: 4588327520170321208}
+  tileUnionModel: {fileID: 8701682620509132357}
+--- !u!114 &2351401125867397392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6620317014356603924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed09beec14494e4c88330bb7d106c23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   cost:
     cost: 0
   tariffProperties:
     waterConsumption: 0
     electricityConsumption: 0
+--- !u!114 &8624567786751204017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6620317014356603924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5f950c24e7ac64f9f8fef3f0e5bc6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8701682620509132357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6620317014356603924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb3b80836f16c745ab4d6d60e8e6d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   placingProperties:
     placingRotation: 0
+--- !u!114 &4588327520170321208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6620317014356603924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d804f4348d03b41a2a8e8297308245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

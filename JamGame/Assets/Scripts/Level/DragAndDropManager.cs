@@ -1,6 +1,6 @@
 ﻿using Common;
 using Level.Room;
-using System.Collections.Generic;
+using Pickle;
 using System.Linq;
 using UnityEngine;
 
@@ -9,9 +9,9 @@ namespace Level
     public interface IDragAndDropAgent
     {
         public void Hover(CoreModel coreModel);
+        public void OnHoverLeave();
         public Result Drop(CoreModel coreModel);
         public Result<CoreModel> Borrow();
-        public void HoveredOnUpdate(IDragAndDropAgent dragAndDrop);
     }
 
     [AddComponentMenu("Scripts/Level.DragAndDropManager")]
@@ -21,18 +21,15 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
-        [Pickle(typeof(IDragAndDropAgent))]
+        [Pickle(typeof(IDragAndDropAgent), LookupType = ObjectProviderType.Scene)]
         private GameObject backupDragAndDropProvider;
         private IDragAndDropAgent backupDragAndDrop;
 
         private bool mousePressed;
-        private List<IDragAndDropAgent> dragAndDropManagers;
+        private IDragAndDropAgent previousHovered;
 
         private void Awake()
         {
-            dragAndDropManagers = FindObjectsOfType<MonoBehaviour>()
-                .OfType<IDragAndDropAgent>()
-                .ToList();
             backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropAgent>();
             if (backupDragAndDrop == null)
             {
@@ -42,14 +39,10 @@ namespace Level
 
         private void Update()
         {
-            IDragAndDropAgent dragAndDrop = null;
-            GameObject topDragAndDrop = RayCastUtilities
+            IDragAndDropAgent dragAndDrop = RayCastUtilities
                 .UIRayCast(Input.mousePosition)
-                ?.FirstOrDefault(x => x.GetComponent<IDragAndDropAgent>() != null);
-            if (topDragAndDrop != null)
-            {
-                dragAndDrop = topDragAndDrop.GetComponent<IDragAndDropAgent>();
-            }
+                ?.FirstOrDefault(x => x.GetComponent<IDragAndDropAgent>() != null)
+                ?.GetComponent<IDragAndDropAgent>();
 
             if (Input.GetMouseButtonDown(0) && !mousePressed)
             {
@@ -89,11 +82,16 @@ namespace Level
             if (mousePressed && dragAndDrop != null && bufferCoreModel != null)
             {
                 dragAndDrop.Hover(bufferCoreModel);
-                dragAndDropManagers.ForEach(x => x.HoveredOnUpdate(dragAndDrop));
+                if (previousHovered != dragAndDrop && previousHovered != null)
+                {
+                    previousHovered.OnHoverLeave();
+                }
+                previousHovered = dragAndDrop;
             }
-            else
+            else if (previousHovered != null)
             {
-                dragAndDropManagers.ForEach(x => x.HoveredOnUpdate(null));
+                previousHovered.OnHoverLeave();
+                previousHovered = null;
             }
         }
 
