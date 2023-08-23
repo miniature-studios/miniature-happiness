@@ -13,7 +13,7 @@ namespace Level.Inventory.Inspector
 
         public override void OnInspectorGUI()
         {
-            Controller inventory_controller = serializedObject.targetObject as Controller;
+            Controller controller = serializedObject.targetObject as Controller;
 
             _ = EditorGUILayout.BeginHorizontal();
             room = (CoreModel)
@@ -28,7 +28,9 @@ namespace Level.Inventory.Inspector
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add selected room"))
             {
-                inventory_controller.AddNewRoom(room);
+                controller.AddNewRoom(
+                    CoreModelsManager.Instance.InstantiateCoreModel(room.HashCode)
+                );
             }
             EditorGUILayout.EndHorizontal();
 
@@ -41,7 +43,9 @@ namespace Level.Inventory.Inspector
                     )
                 )
                 {
-                    inventory_controller.AddNewRoom(pair.Link);
+                    controller.AddNewRoom(
+                        CoreModelsManager.Instance.InstantiateCoreModel(pair.Link.HashCode)
+                    );
                 }
             }
             EditorGUILayout.EndHorizontal();

@@ -64,14 +64,7 @@ namespace TileBuilder
 
             coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
             ShowSelectedRoom command = new(coreModel);
-            Result result = model.Execute(command);
-
-            if (result.Failure)
-            {
-                coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
-                    RotationDirection.CounterClockwise
-                );
-            }
+            _ = model.Execute(command);
         }
 
         public Result Drop(CoreModel coreModel)
