@@ -4,17 +4,24 @@ using Pickle;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Level.Inventory.Room
 {
     [AddComponentMenu("Scripts/Level.Inventory.Room.View")]
-    public class View : MonoBehaviour
+    public class View : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField]
         [Pickle(LookupType = ObjectProviderType.Assets)]
-        private CoreModel coreModel;
+        public CoreModel CoreModelPrefab;
 
-        public CoreModel CoreModel => coreModel;
+        [SerializeField]
+        [InspectorReadOnly]
+        private string hashCode;
+        public string HashCode
+        {
+            get => hashCode;
+            set => hashCode = value;
+        }
 
         [SerializeField]
         private GameObject extendedUIInfoPrefab;
@@ -25,8 +32,7 @@ namespace Level.Inventory.Room
         private Func<CoreModel> getCoreModelInstance;
         public Func<CoreModel> GetCoreModelInstance => getCoreModelInstance;
 
-        private bool pointerOver;
-        public bool PointerOver => pointerOver;
+        private bool pointerIsOver;
 
         public void Awake()
         {
@@ -40,10 +46,9 @@ namespace Level.Inventory.Room
 
         public void Update()
         {
-            pointerOver = RayCastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject);
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                switch (pointerOver, targetInfo == null)
+                switch (pointerIsOver, targetInfo == null)
                 {
                     case (true, true):
                         targetInfo = Instantiate(
@@ -54,9 +59,9 @@ namespace Level.Inventory.Room
                             )
                             .GetComponent<RectTransform>();
                         targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electricity. Con.: {getCoreModelInstance().RoomInformation.TariffProperties.ElectricityConsumption}\n"
-                            + $"Water Con.: {getCoreModelInstance().RoomInformation.TariffProperties.WaterConsumption}\n"
-                            + $"Cost: {getCoreModelInstance().RoomInformation.Cost}";
+                            $"Electricity. Con.: {getCoreModelInstance().TariffProperties.ElectricityConsumption}\n"
+                            + $"Water Con.: {getCoreModelInstance().TariffProperties.WaterConsumption}\n"
+                            + $"Cost: {getCoreModelInstance().ShopModel.Cost}";
                         break;
                     case (true, false):
                         targetInfo.position = Input.mousePosition + new Vector3(20, 20, 0);
@@ -66,6 +71,16 @@ namespace Level.Inventory.Room
                         break;
                 }
             }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            pointerIsOver = true;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            pointerIsOver = false;
         }
     }
 }

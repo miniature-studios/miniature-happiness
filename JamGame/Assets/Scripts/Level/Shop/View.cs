@@ -17,21 +17,21 @@ namespace Level.Shop
         private Transform roomsUIContainer;
 
         [SerializeField]
-        private AssetLabelReference shopViewReference;
-        private Animator shopAnimator;
+        private AssetLabelReference shopViewsLabel;
+        private Animator animator;
         private Dictionary<string, IResourceLocation> modelViewMap = new();
         private List<Room.View> viewList = new();
 
         private void Awake()
         {
-            shopAnimator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
             foreach (
-                LocationLinkPair<Room.View> pair in AddressablesTools.LoadAllFromLabel<Room.View>(
-                    shopViewReference
+                AssetWithLocation<Room.View> pair in AddressableTools<Room.View>.LoadAllFromAssetLabel(
+                    shopViewsLabel
                 )
             )
             {
-                modelViewMap.Add(pair.Link.CoreModel.HashCode, pair.ResourceLocation);
+                modelViewMap.Add(pair.Asset.HashCode, pair.Location);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Level.Shop
             if (modelViewMap.TryGetValue(newItem.HashCode, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
-                    AddressablesTools.LoadAsset<Room.View>(location),
+                    AddressableTools<Room.View>.LoadAsset(location),
                     roomsUIContainer.transform
                 );
 
@@ -92,12 +92,12 @@ namespace Level.Shop
 
         public void Open()
         {
-            shopAnimator.SetBool("Showed", true);
+            animator.SetBool("Showed", true);
         }
 
         public void Close()
         {
-            shopAnimator.SetBool("Showed", false);
+            animator.SetBool("Showed", false);
         }
     }
 }

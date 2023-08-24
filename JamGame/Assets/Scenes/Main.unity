@@ -157,8 +157,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 844552069}
+  m_Children: []
   m_Father: {fileID: 42303833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &40476289
@@ -177,10 +176,9 @@ MonoBehaviour:
   ShowTilePathGizmo: 0
   ShowTileFreeSpaceCube: 0
   FreeSpace: {fileID: 739786844684371711, guid: f287ad33a60c1444e995d045a1008512, type: 3}
-  rootObject: {fileID: 844552068}
-  fakeRootObject: {fileID: 1936918354}
+  stashRootObject: {fileID: 1936918354}
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  tileUnionReference:
+  tileUnionsLabel:
     m_LabelString: TileUnion
 --- !u!114 &40476290
 MonoBehaviour:
@@ -212,7 +210,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   BuildingConfig: {fileID: 11400000, guid: 7ed0ec60fc238014e8af144a4168d3e8, type: 2}
-  LoadConfigFromStart: 0
+  LoadConfigFromStart: 1
   SavingConfigName: Sample building
   GameModeToChange: 0
   SquareSideLength: 30
@@ -297,22 +295,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBuilderTransform: {fileID: 634197354}
-  CollectionChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1654659964}
-        m_TargetAssemblyTypeName: Level.CoreModelsManager, Assembly-CSharp
-        m_MethodName: OnTileBuilderRoomsChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   tileBuilder: {fileID: 40476289}
+  roomsInTileBuilder: []
 --- !u!1 &42303832
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,37 +2835,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825985572}
   m_CullTransparentMesh: 1
---- !u!1 &844552068
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 844552069}
-  m_Layer: 0
-  m_Name: Root object(Clone)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &844552069
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 844552068}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 40476286}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &924940278
 GameObject:
   m_ObjectHideFlags: 0
@@ -4369,8 +4322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01920a4bdd5d624d8f3c8e7f7a8593e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryModel: {fileID: 1395078490}
-  inventoryView: {fileID: 1395078489}
+  model: {fileID: 1395078490}
 --- !u!114 &1395078489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4383,7 +4335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d29dbaa833b614b944bb4b833b325e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryViewRef:
+  inventoryViewsLabel:
     m_LabelString: InventoryView
   container: {fileID: 806777541}
   buttonText: {fileID: 1893067746}
@@ -4406,18 +4358,6 @@ MonoBehaviour:
       - m_Target: {fileID: 1395078489}
         m_TargetAssemblyTypeName: InventoryView, Assembly-CSharp
         m_MethodName: OnInventoryChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1654659964}
-        m_TargetAssemblyTypeName: Level.CoreModelsManager, Assembly-CSharp
-        m_MethodName: OnInventoryRoomsChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4974,7 +4914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69a7cdd51d3490f40a0bb9df9d4f6e9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coreModelsRef:
+  coreModelsLabel:
     m_LabelString: CoreModel
 --- !u!1 &1671638921
 GameObject:
@@ -5080,18 +5020,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1654659964}
-        m_TargetAssemblyTypeName: Level.CoreModelsManager, Assembly-CSharp
-        m_MethodName: OnShopRoomsChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1671638926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5105,7 +5033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomsUIContainer: {fileID: 1897020500}
-  shopViewReference:
+  shopViewsLabel:
     m_LabelString: ShopView
 --- !u!1 &1693086655
 GameObject:
@@ -5828,7 +5756,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1936918355}
   m_Layer: 0
-  m_Name: FakeRootObject
+  m_Name: StashRootObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

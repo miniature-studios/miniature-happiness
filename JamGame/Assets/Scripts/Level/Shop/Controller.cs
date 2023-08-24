@@ -19,7 +19,7 @@ namespace Level.Shop
         [SerializeField]
         private Finances.Model financesController;
 
-        public void ResetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
+        public void SetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
         {
             shopModel.ResetRooms(
                 room_configs.Select(
@@ -30,7 +30,7 @@ namespace Level.Shop
 
         public Result TryBuyRoom(CoreModel room)
         {
-            Result result = financesController.TryTakeMoney(room.RoomInformation.Cost.Value);
+            Result result = financesController.TryTakeMoney(room.ShopModel.Cost.Value);
             if (result.Success)
             {
                 inventoryController.AddNewRoom(shopModel.BorrowRoom(room));

@@ -16,11 +16,17 @@ namespace TileUnion
     [AddComponentMenu("Scripts/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
-        [SerializeField]
         [Pickle(LookupType = ObjectProviderType.Assets)]
-        private CoreModel coreModel;
+        public CoreModel CoreModelPrefab;
 
-        public CoreModel CoreModel => coreModel;
+        [SerializeField]
+        [InspectorReadOnly]
+        private string hashCode;
+        public string HashCode
+        {
+            get => hashCode;
+            set => hashCode = value;
+        }
 
         public Func<CoreModel> GetCoreModel { get; private set; }
 
@@ -344,7 +350,7 @@ namespace TileUnion
             );
         }
 
-        public void SetPositionAndRotation(PlacingProperties placingProperties)
+        public void ApplyPlacingProperties(PlacingProperties placingProperties)
         {
             SetRotation(placingProperties.Rotation);
             SetPosition(placingProperties.Position);

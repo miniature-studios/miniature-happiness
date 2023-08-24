@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Room;
+using System.Linq;
 using UnityEngine;
 
 namespace Level.Inventory
@@ -8,41 +9,41 @@ namespace Level.Inventory
     public class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
-        private Model inventoryModel;
-
-        [SerializeField]
-        private View inventoryView;
+        private Model model;
 
         public void AddNewRoom(CoreModel room)
         {
-            inventoryModel.AddNewRoom(room);
+            model.AddNewRoom(room);
         }
 
-        public void Hover(CoreModel coreModel)
+        public void Hover(CoreModel room)
         {
             // TODO: implement another view
         }
 
-        public Result Drop(CoreModel coreModel)
+        public Result Drop(CoreModel room)
         {
-            inventoryModel.AddNewRoom(coreModel);
+            model.AddNewRoom(room);
             return new SuccessResult();
         }
 
         public Result<CoreModel> Borrow()
         {
-            Room.View hovered = inventoryView.GetHoveredView();
+            Room.View hovered = RayCastUtilities
+                .UIRayCast(Input.mousePosition)
+                ?.FirstOrDefault(x => x.GetComponent<Room.View>() != null)
+                ?.GetComponent<Room.View>();
             if (hovered != null)
             {
                 CoreModel coreModel = hovered.GetCoreModelInstance();
-                return new SuccessResult<CoreModel>(inventoryModel.BorrowRoom(coreModel));
+                return new SuccessResult<CoreModel>(model.BorrowRoom(coreModel));
             }
             else
             {
-                return new FailResult<CoreModel>("Anything hovered.");
+                return new FailResult<CoreModel>("Nothing hovered.");
             }
         }
 
-        public void OnHoverLeave() { }
+        public void HoverLeave() { }
     }
 }

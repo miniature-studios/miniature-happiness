@@ -11,7 +11,7 @@ namespace TileUnion
         private int rotation;
         public int Rotation => rotation;
 
-        public void SetRotation(int rotation)
+        public void AddRotation(int rotation)
         {
             this.rotation = rotation + 4;
             this.rotation %= 4;
@@ -19,7 +19,7 @@ namespace TileUnion
 
         public void ApplyRotation(RotationDirection rotation)
         {
-            SetRotation(this.rotation + (int)rotation);
+            AddRotation(this.rotation + (int)rotation);
         }
 
         [SerializeField]

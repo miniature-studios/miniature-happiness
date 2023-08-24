@@ -10,11 +10,17 @@ namespace Level.Shop.Room
     [AddComponentMenu("Scripts/Level.Shop.Room.View")]
     public class View : MonoBehaviour
     {
-        [SerializeField]
         [Pickle(LookupType = ObjectProviderType.Assets)]
-        private CoreModel coreModel;
+        public CoreModel CoreModelPrefab;
 
-        public CoreModel CoreModel => coreModel;
+        [SerializeField]
+        [InspectorReadOnly]
+        private string hashCode;
+        public string HashCode
+        {
+            get => hashCode;
+            set => hashCode = value;
+        }
 
         [SerializeField]
         private TMP_Text moneyText;
@@ -41,18 +47,13 @@ namespace Level.Shop.Room
         private void Update()
         {
             moneyText.text =
-                "Money cost: "
-                + Convert.ToString(GetCoreModelInstance().RoomInformation.Cost.Value);
+                "Money cost: " + Convert.ToString(GetCoreModelInstance().ShopModel.Cost.Value);
             waterText.text =
                 "Water: "
-                + Convert.ToString(
-                    GetCoreModelInstance().RoomInformation.TariffProperties.WaterConsumption
-                );
+                + Convert.ToString(GetCoreModelInstance().TariffProperties.WaterConsumption);
             electricityText.text =
                 "Electro: "
-                + Convert.ToString(
-                    GetCoreModelInstance().RoomInformation.TariffProperties.ElectricityConsumption
-                );
+                + Convert.ToString(GetCoreModelInstance().TariffProperties.ElectricityConsumption);
         }
 
         // Called be pressing button

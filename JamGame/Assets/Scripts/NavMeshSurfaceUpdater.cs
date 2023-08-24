@@ -18,4 +18,3 @@ public class NavMeshSurfaceUpdater : MonoBehaviour
         _ = surface.UpdateNavMesh(surface.navMeshData);
     }
 }
-

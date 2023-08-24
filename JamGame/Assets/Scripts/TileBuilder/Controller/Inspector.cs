@@ -6,7 +6,6 @@ using Level;
 
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 namespace TileBuilder
 {
@@ -76,7 +75,6 @@ namespace TileBuilder
         public CoreModel WorkingPlace;
     }
 
-#if UNITY_EDITOR
     [CustomEditor(typeof(Controller))]
     public class Inspector : Editor
     {
@@ -267,5 +265,5 @@ namespace TileBuilder
             _ = serializedObject.ApplyModifiedProperties();
         }
     }
-#endif
 }
+#endif

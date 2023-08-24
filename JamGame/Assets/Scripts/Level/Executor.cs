@@ -118,7 +118,7 @@ namespace Level
             meetingStartNeedOverride.Register();
 
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
-            shopController.ResetShopRooms(meeting.ShopRooms);
+            shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             animatorSwitcher.SetAnimatorStates(typeof(Meeting));
             boss.ActivateNextTaskBunch();

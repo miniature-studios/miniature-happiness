@@ -88,9 +88,8 @@ namespace TileBuilder
             Result<Vector2Int> matrixResult = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
             if (matrixResult.Success)
             {
-                BorrowRoom command = new(matrixResult.Data);
                 CoreModel core = null;
-                command.RoomBorrowed += (CoreModel coreModel) => core = coreModel;
+                BorrowRoom command = new(matrixResult.Data, (coreModel) => core = coreModel);
                 Result result = model.Execute(command);
                 return result.Success
                     ? new SuccessResult<CoreModel>(core)

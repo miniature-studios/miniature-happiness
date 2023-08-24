@@ -1,11 +1,9 @@
 ﻿using Common;
 using Level.Room;
 using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using TileBuilder.Command;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace TileBuilder
 {
@@ -15,18 +13,17 @@ namespace TileBuilder
         [SerializeField]
         private Transform tileBuilderTransform;
 
-        private ObservableCollection<CoreModel> roomsInTileBuilder = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
-
         [SerializeField]
         private TileBuilderImpl tileBuilder;
+
+        [SerializeField]
+        private List<CoreModel> roomsInTileBuilder = new();
 
         private Validator.IValidator validator;
 
         private void Awake()
         {
-            validator = new Validator.GodMode(tileBuilder);
-            roomsInTileBuilder.CollectionChanged += CollectionChanged.Invoke;
+            ChangeGameMode(GameMode.God);
         }
 
         public Result Execute(ICommand command)
@@ -41,7 +38,9 @@ namespace TileBuilder
                 }
                 else if (command is BorrowRoom borrowRoom)
                 {
-                    borrowRoom.RoomBorrowed += (coreModel) => roomsInTileBuilder.Remove(coreModel);
+                    borrowRoom.GetBorrowedRoom.Add(
+                        (coreModel) => roomsInTileBuilder.Remove(coreModel)
+                    );
                 }
                 else if (command is RemoveAllRooms remove)
                 {
@@ -62,7 +61,7 @@ namespace TileBuilder
             {
                 GameMode.God => new Validator.GodMode(tileBuilder),
                 GameMode.Build => new Validator.BuildMode(tileBuilder),
-                GameMode.Play => new Validator.GameMode(tileBuilder),
+                GameMode.Play => new Validator.GameMode(),
                 _ => throw new ArgumentException(),
             };
         }

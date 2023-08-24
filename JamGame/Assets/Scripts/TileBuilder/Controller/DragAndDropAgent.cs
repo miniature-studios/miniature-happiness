@@ -16,7 +16,7 @@ namespace TileBuilder
             controller.Hover(coreModel);
         }
 
-        public void OnHoverLeave()
+        public void HoverLeave()
         {
             controller.OnHoverLeave();
         }

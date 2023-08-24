@@ -38,13 +38,13 @@ namespace Level.Inventory.Inspector
             if (GUILayout.Button("Add rooms from folder."))
             {
                 foreach (
-                    LocationLinkPair<CoreModel> pair in AddressablesTools.LoadAllFromLabel<CoreModel>(
+                    AssetWithLocation<CoreModel> pair in AddressableTools<CoreModel>.LoadAllFromStringLabel(
                         "CoreModel"
                     )
                 )
                 {
                     controller.AddNewRoom(
-                        CoreModelsManager.Instance.InstantiateCoreModel(pair.Link.HashCode)
+                        CoreModelsManager.Instance.InstantiateCoreModel(pair.Asset.HashCode)
                     );
                 }
             }

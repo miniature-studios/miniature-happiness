@@ -5,15 +5,17 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Common
 {
-    public struct LocationLinkPair<T>
+    public struct AssetWithLocation<T>
+        where T : class
     {
-        public IResourceLocation ResourceLocation;
-        public T Link;
+        public IResourceLocation Location;
+        public T Asset;
     }
 
-    public static class AddressablesTools
+    public static class AddressableTools<T>
+        where T : class
     {
-        public static IEnumerable<LocationLinkPair<T>> LoadAllFromLabel<T>(
+        public static IEnumerable<AssetWithLocation<T>> LoadAllFromAssetLabel(
             AssetLabelReference assetLabel
         )
         {
@@ -23,15 +25,15 @@ namespace Common
                     .WaitForCompletion()
             )
             {
-                yield return new LocationLinkPair<T>()
+                yield return new AssetWithLocation<T>()
                 {
-                    ResourceLocation = resourceLocation,
-                    Link = LoadAsset<T>(resourceLocation)
+                    Location = resourceLocation,
+                    Asset = LoadAsset(resourceLocation)
                 };
             }
         }
 
-        public static IEnumerable<LocationLinkPair<T>> LoadAllFromLabel<T>(string assetLabel)
+        public static IEnumerable<AssetWithLocation<T>> LoadAllFromStringLabel(string assetLabel)
         {
             foreach (
                 IResourceLocation resourceLocation in Addressables
@@ -39,15 +41,15 @@ namespace Common
                     .WaitForCompletion()
             )
             {
-                yield return new LocationLinkPair<T>()
+                yield return new AssetWithLocation<T>()
                 {
-                    ResourceLocation = resourceLocation,
-                    Link = LoadAsset<T>(resourceLocation)
+                    Location = resourceLocation,
+                    Asset = LoadAsset(resourceLocation)
                 };
             }
         }
 
-        public static T LoadAsset<T>(IResourceLocation resourceLocation)
+        public static T LoadAsset(IResourceLocation resourceLocation)
         {
             GameObject gameObject = Addressables
                 .LoadAssetAsync<GameObject>(resourceLocation)

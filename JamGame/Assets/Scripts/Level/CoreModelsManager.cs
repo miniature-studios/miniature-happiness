@@ -12,7 +12,7 @@ namespace Level
     public class CoreModelsManager : MonoBehaviour
     {
         [SerializeField]
-        private AssetLabelReference coreModelsRef;
+        private AssetLabelReference coreModelsLabel;
 
         private Dictionary<string, IResourceLocation> hashPrefabsMap = new();
 
@@ -27,22 +27,25 @@ namespace Level
             }
             instance = this;
             foreach (
-                LocationLinkPair<CoreModel> pair in AddressablesTools.LoadAllFromLabel<CoreModel>(
-                    coreModelsRef
+                AssetWithLocation<CoreModel> pair in AddressableTools<CoreModel>.LoadAllFromAssetLabel(
+                    coreModelsLabel
                 )
             )
             {
-                hashPrefabsMap.Add(pair.Link.HashCode, pair.ResourceLocation);
+                hashPrefabsMap.Add(pair.Asset.HashCode, pair.Location);
             }
         }
 
         public CoreModel InstantiateCoreModel(TileConfig config)
         {
             CoreModel core = Instantiate(
-                AddressablesTools.LoadAsset<CoreModel>(hashPrefabsMap[config.HashCode]),
+                AddressableTools<CoreModel>.LoadAsset(hashPrefabsMap[config.HashCode]),
                 transform
             );
-            core.ConfigurateFromConfig(config);
+            core.TileUnionModel.PlacingProperties.SetPositionAndRotation(
+                config.Position,
+                config.Rotation
+            );
             return core;
         }
 

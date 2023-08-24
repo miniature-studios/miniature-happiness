@@ -11,35 +11,39 @@ namespace TileBuilder.Validator
         public Result ValidateCommand(ICommand command);
     }
 
-    public abstract class BaseValidator : IValidator
+    public class Basic : IValidator
     {
-        protected readonly TileBuilderImpl TileBuilder;
+        private readonly TileBuilderImpl tileBuilder;
 
-        public BaseValidator(TileBuilderImpl tileBuilder)
+        public Basic(TileBuilderImpl tileBuilder)
         {
-            TileBuilder = tileBuilder;
+            this.tileBuilder = tileBuilder;
         }
 
-        public abstract Result ValidateCommand(ICommand command);
-
-        public Result BaseValidateCommand(ICommand command)
+        public Result ValidateCommand(ICommand command)
         {
             return command is DropRoom dropRoom
-                ? TileBuilder.IsValidPlacing(dropRoom.CoreModel)
+                ? tileBuilder.IsValidPlacing(dropRoom.CoreModel)
                 : command is ValidateBuilding
-                    ? TileBuilder.Validate()
+                    ? tileBuilder.Validate()
                     : new SuccessResult();
         }
     }
 
-    public class BuildMode : BaseValidator
+    public class BuildMode : IValidator
     {
-        public BuildMode(TileBuilderImpl tileBuilder)
-            : base(tileBuilder) { }
+        private readonly TileBuilderImpl tileBuilder;
+        private readonly Basic basic;
 
-        public override Result ValidateCommand(ICommand command)
+        public BuildMode(TileBuilderImpl tileBuilder)
         {
-            Result baseResult = BaseValidateCommand(command);
+            this.tileBuilder = tileBuilder;
+            basic = new Basic(tileBuilder);
+        }
+
+        public Result ValidateCommand(ICommand command)
+        {
+            Result baseResult = basic.ValidateCommand(command);
             if (baseResult.Failure)
             {
                 return baseResult;
@@ -50,32 +54,32 @@ namespace TileBuilder.Validator
             }
             if (command is ShowSelectedRoom showRoomIllusion)
             {
-                IEnumerable<Vector2Int> newPositions = TileBuilder.InstantiatedViews[
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
                     showRoomIllusion.CoreModel.HashCode
                 ].GetImaginePlaces(showRoomIllusion.CoreModel.TileUnionModel.PlacingProperties);
-                return newPositions.All(x => TileBuilder.GetAllInsidePositions().Contains(x))
+                return newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
                     ? new SuccessResult()
                     : new FailResult("Can not show in outside");
             }
             if (command is DropRoom dropRoom)
             {
-                IEnumerable<Vector2Int> newPositions = TileBuilder.InstantiatedViews[
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
                     dropRoom.CoreModel.HashCode
                 ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
                 return
-                    TileBuilder
+                    tileBuilder
                         .GetTileUnionsInPositions(newPositions)
                         .All(x => x.IsAllWithMark("Freespace"))
-                    && newPositions.All(x => TileBuilder.GetAllInsidePositions().Contains(x))
+                    && newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
                     ? new SuccessResult()
                     : new FailResult("Can not place on another room");
             }
             return command is BorrowRoom borrowRoom
                 ? (
-                    TileBuilder
+                    tileBuilder
                         .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
                         .IsAllWithMark("Immutable"),
-                    TileBuilder
+                    tileBuilder
                         .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
                         .IsAllWithMark("Freespace")
                 ) switch
@@ -88,39 +92,44 @@ namespace TileBuilder.Validator
         }
     }
 
-    public class GameMode : BaseValidator
+    public class GameMode : IValidator
     {
-        public GameMode(TileBuilderImpl tileBuilder)
-            : base(tileBuilder) { }
+        public GameMode() { }
 
-        public override Result ValidateCommand(ICommand command)
+        public Result ValidateCommand(ICommand command)
         {
             return new FailResult("Cannot do anything in Game Mode");
         }
     }
 
-    public class GodMode : BaseValidator
+    public class GodMode : IValidator
     {
-        public GodMode(TileBuilderImpl tileBuilder)
-            : base(tileBuilder) { }
+        private readonly TileBuilderImpl tileBuilder;
+        private readonly Basic basic;
 
-        public override Result ValidateCommand(ICommand command)
+        public GodMode(TileBuilderImpl tileBuilder)
         {
-            Result baseResult = BaseValidateCommand(command);
+            this.tileBuilder = tileBuilder;
+            basic = new Basic(tileBuilder);
+        }
+
+        public Result ValidateCommand(ICommand command)
+        {
+            Result baseResult = basic.ValidateCommand(command);
             if (baseResult.Failure)
             {
                 return baseResult;
             }
             if (command is DropRoom dropRoom)
             {
-                IEnumerable<Vector2Int> newPositions = TileBuilder.InstantiatedViews[
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
                     dropRoom.CoreModel.HashCode
                 ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
                 return
-                    TileBuilder
+                    tileBuilder
                         .GetTileUnionsInPositions(newPositions)
                         .All(x => x.IsAllWithMark("Freespace"))
-                    || newPositions.Intersect(TileBuilder.GetAllPositions()).Count() == 0
+                    || newPositions.Intersect(tileBuilder.GetAllPositions()).Count() == 0
                     ? new SuccessResult()
                     : new FailResult("Can not place on another room");
             }

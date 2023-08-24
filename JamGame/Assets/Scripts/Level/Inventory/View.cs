@@ -16,43 +16,38 @@ namespace Level.Inventory
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private AssetLabelReference inventoryViewRef;
+        private AssetLabelReference inventoryViewsLabel;
 
         [SerializeField]
         private Transform container;
 
         [SerializeField]
         private TMP_Text buttonText;
-        private Animator tilesInventoryAnimator;
-        private bool inventoryShowed = false;
+        private Animator animator;
+        private bool inventoryVisible = false;
 
         private Dictionary<string, IResourceLocation> modelViewMap = new();
         private List<Room.View> roomViews;
 
         private void Awake()
         {
-            tilesInventoryAnimator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
             foreach (
-                LocationLinkPair<Room.View> pair in AddressablesTools.LoadAllFromLabel<Room.View>(
-                    inventoryViewRef
+                AssetWithLocation<Room.View> pair in AddressableTools<Room.View>.LoadAllFromAssetLabel(
+                    inventoryViewsLabel
                 )
             )
             {
-                modelViewMap.Add(pair.Link.CoreModel.HashCode, pair.ResourceLocation);
+                modelViewMap.Add(pair.Asset.HashCode, pair.Location);
             }
         }
 
         // Calls by button that open/closes inventory
         public void InventoryButtonClick()
         {
-            inventoryShowed = !inventoryShowed;
-            tilesInventoryAnimator.SetBool("Showed", inventoryShowed);
-            buttonText.text = inventoryShowed ? "Close" : "Open";
-        }
-
-        public Room.View GetHoveredView()
-        {
-            return roomViews.FirstOrDefault(x => x.PointerOver);
+            inventoryVisible = !inventoryVisible;
+            animator.SetBool("Showed", inventoryVisible);
+            buttonText.text = inventoryVisible ? "Close" : "Open";
         }
 
         public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -81,7 +76,7 @@ namespace Level.Inventory
             if (modelViewMap.TryGetValue(newItem.HashCode, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
-                    AddressablesTools.LoadAsset<Room.View>(location),
+                    AddressableTools<Room.View>.LoadAsset(location),
                     container
                 );
 

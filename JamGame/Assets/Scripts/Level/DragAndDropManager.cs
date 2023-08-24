@@ -9,7 +9,7 @@ namespace Level
     public interface IDragAndDropAgent
     {
         public void Hover(CoreModel coreModel);
-        public void OnHoverLeave();
+        public void HoverLeave();
         public Result Drop(CoreModel coreModel);
         public Result<CoreModel> Borrow();
     }
@@ -27,8 +27,6 @@ namespace Level
         [Pickle(typeof(IDragAndDropAgent), LookupType = ObjectProviderType.Scene)]
         private GameObject backupDragAndDropProvider;
         private IDragAndDropAgent backupDragAndDrop;
-
-        private bool mousePressed;
         private IDragAndDropAgent previousHovered;
 
         private void Awake()
@@ -47,7 +45,7 @@ namespace Level
                 ?.FirstOrDefault(x => x.GetComponent<IDragAndDropAgent>() != null)
                 ?.GetComponent<IDragAndDropAgent>();
 
-            if (Input.GetMouseButtonDown(0) && !mousePressed)
+            if (Input.GetMouseButtonDown(0))
             {
                 if (dragAndDrop != null)
                 {
@@ -66,10 +64,9 @@ namespace Level
                 {
                     bufferCoreModel = null;
                 }
-                mousePressed = true;
             }
 
-            if (Input.GetMouseButtonUp(0) && mousePressed)
+            if (Input.GetMouseButtonUp(0))
             {
                 if (bufferCoreModel != null)
                 {
@@ -87,21 +84,20 @@ namespace Level
                     }
                     bufferCoreModel = null;
                 }
-                mousePressed = false;
             }
 
-            if (mousePressed && dragAndDrop != null && bufferCoreModel != null)
+            if (Input.GetMouseButton(0) && dragAndDrop != null && bufferCoreModel != null)
             {
                 dragAndDrop.Hover(bufferCoreModel);
                 if (previousHovered != dragAndDrop && previousHovered != null)
                 {
-                    previousHovered.OnHoverLeave();
+                    previousHovered.HoverLeave();
                 }
                 previousHovered = dragAndDrop;
             }
             else if (previousHovered != null)
             {
-                previousHovered.OnHoverLeave();
+                previousHovered.HoverLeave();
                 previousHovered = null;
             }
         }
