@@ -7,11 +7,49 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using TileBuilder;
+using TileUnion.PlaceCondition;
 using TileUnion.Tile;
 using UnityEngine;
 
 namespace TileUnion
 {
+    [Serializable]
+    public class TileUnionConfiguration
+    {
+        public Vector2Int CenterTilePosition;
+        public List<Vector2Int> TilesPositionsForUpdating;
+        public List<Vector2Int> TilesPositions;
+        public List<TileConfiguration> TilesConfigurations;
+
+        public TileUnionConfiguration(
+            List<Vector2Int> tilesPositionsForUpdating,
+            List<Vector2Int> tilesPositions,
+            List<TileConfiguration> tilesConfigurations,
+            Vector2Int centerTilePosition
+        )
+        {
+            TilesPositionsForUpdating = tilesPositionsForUpdating;
+            TilesPositions = tilesPositions;
+            TilesConfigurations = tilesConfigurations;
+            CenterTilePosition = centerTilePosition;
+        }
+    }
+
+    [Serializable]
+    public class TileConfiguration
+    {
+        public TileImpl TargetTile;
+        public Vector2Int Position;
+        public int Rotation;
+
+        public TileConfiguration(TileImpl targetTile, Vector2Int position, int rotation)
+        {
+            TargetTile = targetTile;
+            Position = position;
+            Rotation = rotation;
+        }
+    }
+
     [SelectionBase]
     [AddComponentMenu("Scripts/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
@@ -49,50 +87,7 @@ namespace TileUnion
 
         public List<TileImpl> Tiles = new();
 
-        [SerializeField]
-        private List<PlaceCondition.SerializedPlaceCondition> serializedPlaceConditions;
-        public ImmutableList<PlaceCondition.IPlaceCondition> PlaceConditions =>
-            serializedPlaceConditions.Select(x => x.ToPlaceCondition()).ToImmutableList();
-
-        [SerializeField]
         private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration;
-
-        [Serializable]
-        private class TileUnionConfiguration
-        {
-            public Vector2Int CenterTilePosition;
-            public List<Vector2Int> TilesPositionsForUpdating;
-            public List<Vector2Int> TilesPositions;
-            public List<TileConfiguration> TilesConfigurations;
-
-            public TileUnionConfiguration(
-                List<Vector2Int> tilesPositionsForUpdating,
-                List<Vector2Int> tilesPositions,
-                List<TileConfiguration> tilesConfigurations,
-                Vector2Int centerTilePosition
-            )
-            {
-                TilesPositionsForUpdating = tilesPositionsForUpdating;
-                TilesPositions = tilesPositions;
-                TilesConfigurations = tilesConfigurations;
-                CenterTilePosition = centerTilePosition;
-            }
-        }
-
-        [Serializable]
-        private class TileConfiguration
-        {
-            public TileImpl TargetTile;
-            public Vector2Int Position;
-            public int Rotation;
-
-            public TileConfiguration(TileImpl targetTile, Vector2Int position, int rotation)
-            {
-                TargetTile = targetTile;
-                Position = position;
-                Rotation = rotation;
-            }
-        }
 
         private void OnValidate()
         {
@@ -137,7 +132,6 @@ namespace TileUnion
 
         public Result IsValidPlacing(TileBuilderImpl tileBuilder)
         {
-            HashSet<TileImpl> invalidTiles = new();
             foreach (TileImpl tile in Tiles)
             {
                 Dictionary<Direction, TileImpl> neighbors = new();
@@ -162,26 +156,23 @@ namespace TileUnion
                 }
                 if (tile.RequestWallUpdates(neighbors).Failure)
                 {
-                    _ = invalidTiles.Add(tile);
-                }
-                foreach (PlaceCondition.IPlaceCondition condition in PlaceConditions)
-                {
-                    PlaceCondition.ConditionResult conditionResult = condition.ApplyCondition(
-                        this,
-                        tileBuilder
-                    );
-                    if (conditionResult.Failure)
-                    {
-                        foreach (TileImpl errorTile in conditionResult.FailedTiles)
-                        {
-                            _ = invalidTiles.Add(errorTile);
-                        }
-                    }
+                    return new FailResult($"Invalid walls on {tile.name} tile");
                 }
             }
-            return invalidTiles.Count > 0
-                ? new FailResult($"{invalidTiles.Count} error walls")
-                : new SuccessResult();
+            return new SuccessResult();
+        }
+
+        public Result IsPassedConditions(IEnumerable<IPlaceCondition> placeConditions, TileBuilderImpl tileBuilder)
+        {
+            foreach (IPlaceCondition placeCondition in placeConditions)
+            {
+                Result result = placeCondition.PassCondition(this, tileBuilder);
+                if (result.Failure)
+                {
+                    return result;
+                }
+            }
+            return new SuccessResult();
         }
 
         public void ApplyTileUnionState(TileImpl.TileState state)
