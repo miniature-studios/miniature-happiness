@@ -1,11 +1,9 @@
+#if UNITY_EDITOR
 using Common;
 using System;
 using System.Linq;
-using UnityEngine;
-
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace TileUnion.Tile
 {
@@ -39,7 +37,7 @@ namespace TileUnion.Tile
                     break;
             }
         }
-#if UNITY_EDITOR
+
         private void OnDrawGizmos()
         {
             if (ShowDirectionGizmo)
@@ -92,9 +90,8 @@ namespace TileUnion.Tile
                 }
             }
         }
-#endif
     }
-#if UNITY_EDITOR
+
     [CanEditMultipleObjects]
     [CustomEditor(typeof(TileImpl))]
     public class TileInspector : Editor
@@ -314,6 +311,5 @@ namespace TileUnion.Tile
             _ = serializedObject.ApplyModifiedProperties();
         }
     }
-#endif
 }
-
+#endif

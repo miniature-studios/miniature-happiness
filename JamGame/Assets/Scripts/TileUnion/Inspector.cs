@@ -1,9 +1,7 @@
-﻿using Location;
-using UnityEngine;
-
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
+using Location;
 using UnityEditor;
-#endif
+using UnityEngine;
 
 namespace TileUnion
 {
@@ -60,7 +58,6 @@ namespace TileUnion
         }
     }
 
-#if UNITY_EDITOR
     [CustomEditor(typeof(TileUnionImpl))]
     public class TileUnionInspector : Editor
     {
@@ -155,5 +152,5 @@ namespace TileUnion
             _ = serializedObject.ApplyModifiedProperties();
         }
     }
-#endif
 }
+#endif

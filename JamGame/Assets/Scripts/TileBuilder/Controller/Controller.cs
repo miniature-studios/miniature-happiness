@@ -24,14 +24,6 @@ namespace TileBuilder
 
         public UnityEvent BuiltValidatedOffice;
 
-        private void Start()
-        {
-            if (LoadConfigFromStart)
-            {
-                LoadBuildingFromConfig(BuildingConfig);
-            }
-        }
-
         public void ChangeGameMode(GameMode gameMode)
         {
             model.ChangeGameMode(gameMode);

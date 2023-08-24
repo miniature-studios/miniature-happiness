@@ -1,17 +1,24 @@
+#if UNITY_EDITOR
+using Level;
 using Level.Room;
 using Pickle;
-using UnityEngine;
 using TileBuilder.Command;
-using Level;
-
-#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
 
 namespace TileBuilder
 {
-    public partial class Controller
+    public partial class Controller : MonoBehaviour
     {
         public CoreModel FreeSpace => tileBuilder.FreeSpace;
+
+        private void Start()
+        {
+            if (LoadConfigFromStart)
+            {
+                LoadBuildingFromConfig(BuildingConfig);
+            }
+        }
 
         public void DeleteAllTiles()
         {
