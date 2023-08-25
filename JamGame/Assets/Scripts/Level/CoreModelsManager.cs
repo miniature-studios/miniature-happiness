@@ -27,12 +27,12 @@ namespace Level
             }
             instance = this;
             foreach (
-                AssetWithLocation<CoreModel> pair in AddressableTools<CoreModel>.LoadAllFromAssetLabel(
+                AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromAssetLabel(
                     coreModelsLabel
                 )
             )
             {
-                hashPrefabsMap.Add(pair.Asset.HashCode, pair.Location);
+                hashPrefabsMap.Add(core.Asset.HashCode, core.Location);
             }
         }
 

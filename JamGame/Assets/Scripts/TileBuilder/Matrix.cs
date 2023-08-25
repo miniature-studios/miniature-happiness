@@ -19,9 +19,9 @@ namespace TileBuilder
             Plane plane = new(Vector3.up, new Vector3(0, selectingPlaneHeight, 0));
             if (plane.Raycast(ray, out float enter))
             {
-                Vector3 hit_point = ray.GetPoint(enter);
+                Vector3 hitPoint = ray.GetPoint(enter);
                 return new SuccessResult<Vector2Int>(
-                    new(Mathf.RoundToInt(-hit_point.z / Step), Mathf.RoundToInt(hit_point.x / Step))
+                    new(Mathf.RoundToInt(-hitPoint.z / Step), Mathf.RoundToInt(hitPoint.x / Step))
                 );
             }
             else

@@ -74,7 +74,9 @@ namespace TileBuilder.Validator
                     ? new SuccessResult()
                     : new FailResult("Can not place on another room");
             }
-            return command is BorrowRoom borrowRoom
+            return
+                command is BorrowRoom borrowRoom
+                && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null
                 ? (
                     tileBuilder
                         .GetTileUnionInPosition(borrowRoom.BorrowingPosition)

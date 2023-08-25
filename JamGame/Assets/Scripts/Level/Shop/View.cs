@@ -26,12 +26,12 @@ namespace Level.Shop
         {
             animator = GetComponent<Animator>();
             foreach (
-                AssetWithLocation<Room.View> pair in AddressableTools<Room.View>.LoadAllFromAssetLabel(
+                AssetWithLocation<Room.View> shopView in AddressableTools<Room.View>.LoadAllFromAssetLabel(
                     shopViewsLabel
                 )
             )
             {
-                modelViewMap.Add(pair.Asset.HashCode, pair.Location);
+                modelViewMap.Add(shopView.Asset.HashCode, shopView.Location);
             }
         }
 

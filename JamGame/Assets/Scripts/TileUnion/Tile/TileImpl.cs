@@ -107,32 +107,32 @@ namespace TileUnion.Tile
 
         public void ApplyUpdatingWalls(Result<WallTypeMatch> result)
         {
-            foreach (KeyValuePair<Direction, WallType> pair in result.Data.Data)
+            foreach (KeyValuePair<Direction, WallType> directionWall in result.Data.Data)
             {
-                GetWallCollection(pair.Key).SetWall(pair.Value);
+                GetWallCollection(directionWall.Key).SetWall(directionWall.Value);
             }
         }
 
-        private WallCollection GetWallCollection(Direction imagine_place)
+        private WallCollection GetWallCollection(Direction imaginePlace)
         {
             Enumerable
                 .Range(0, rotation)
                 .ToList()
-                .ForEach(x => imagine_place = imagine_place.RotateMinus90());
-            return RawWalls.Find(x => x.Place == imagine_place);
+                .ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
+            return RawWalls.Find(x => x.Place == imaginePlace);
         }
 
-        public void UpdateCorners(Dictionary<Direction, TileImpl> neighbours)
+        public void UpdateCorners(Dictionary<Direction, TileImpl> neighbors)
         {
             foreach (Direction direction in Direction.Left.GetCircle90())
             {
-                CornerType corner_type_to_place = CornerType.None;
-                TileImpl tile1 = neighbours[direction];
-                TileImpl tile2 = neighbours[direction.Rotate45()];
-                TileImpl tile3 = neighbours[direction.Rotate90()];
+                CornerType toPlace = CornerType.None;
+                TileImpl tile1 = neighbors[direction];
+                TileImpl tile2 = neighbors[direction.Rotate45()];
+                TileImpl tile3 = neighbors[direction.Rotate90()];
                 if (tile1 != null && tile2 != null && tile3 != null)
                 {
-                    corner_type_to_place = ChooseCorner(
+                    toPlace = ChooseCorner(
                         new WallType[]
                         {
                             GetActiveWallType(direction),
@@ -142,7 +142,7 @@ namespace TileUnion.Tile
                         }
                     );
                 }
-                GetCornerCollection(direction.Rotate45()).SetCorner(corner_type_to_place);
+                GetCornerCollection(direction.Rotate45()).SetCorner(toPlace);
             }
         }
 
@@ -234,33 +234,33 @@ namespace TileUnion.Tile
             );
         }
 
-        public void SetRotation(int _rotation)
+        public void SetRotation(int newRotation)
         {
-            rotation = _rotation < 0 ? (_rotation % 4) + 4 : _rotation % 4;
+            rotation = newRotation < 0 ? (newRotation % 4) + 4 : newRotation % 4;
             transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
             CreateWallsCache();
         }
 
         public IEnumerable<Direction> GetPassableDirections()
         {
-            foreach (Direction imagine_place in Direction.Up.GetCircle90())
+            foreach (Direction imaginePlace in Direction.Up.GetCircle90())
             {
-                Direction place = imagine_place;
+                Direction place = imaginePlace;
                 Enumerable.Range(0, rotation).ToList().ForEach(x => place = place.RotateMinus90());
                 if (RawWalls.Find(x => x.Place == place).ActiveWallType.IsPassable())
                 {
-                    yield return imagine_place;
+                    yield return imaginePlace;
                 }
             }
         }
 
-        private WallType GetActiveWallType(Direction imagine_place)
+        private WallType GetActiveWallType(Direction imaginePlace)
         {
             Enumerable
                 .Range(0, rotation)
                 .ToList()
-                .ForEach(x => imagine_place = imagine_place.RotateMinus90());
-            WallCollection wall_collection = RawWalls.Find(x => x.Place == imagine_place);
+                .ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
+            WallCollection wall_collection = RawWalls.Find(x => x.Place == imaginePlace);
             return wall_collection.ActiveWallType;
         }
 

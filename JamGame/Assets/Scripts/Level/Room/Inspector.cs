@@ -43,38 +43,38 @@ namespace Level.Room
             List<TileUnion.TileUnionImpl> tileUnions = new();
 
             foreach (
-                AssetWithLocation<Shop.Room.View> pair in AddressableTools<Shop.Room.View>.LoadAllFromStringLabel(
+                AssetWithLocation<Shop.Room.View> shopView in AddressableTools<Shop.Room.View>.LoadAllFromStringLabel(
                     "ShopView"
                 )
             )
             {
-                if (pair.Asset.HashCode == coreModel.HashCode)
+                if (shopView.Asset.HashCode == coreModel.HashCode)
                 {
-                    shopRooms.Add(pair.Asset);
+                    shopRooms.Add(shopView.Asset);
                 }
             }
 
             foreach (
-                AssetWithLocation<Inventory.Room.View> pair in AddressableTools<Inventory.Room.View>.LoadAllFromStringLabel(
+                AssetWithLocation<Inventory.Room.View> invView in AddressableTools<Inventory.Room.View>.LoadAllFromStringLabel(
                     "InventoryView"
                 )
             )
             {
-                if (pair.Asset.HashCode == coreModel.HashCode)
+                if (invView.Asset.HashCode == coreModel.HashCode)
                 {
-                    inventoryViews.Add(pair.Asset);
+                    inventoryViews.Add(invView.Asset);
                 }
             }
 
             foreach (
-                AssetWithLocation<TileUnion.TileUnionImpl> pair in AddressableTools<TileUnion.TileUnionImpl>.LoadAllFromStringLabel(
+                AssetWithLocation<TileUnion.TileUnionImpl> tileUnion in AddressableTools<TileUnion.TileUnionImpl>.LoadAllFromStringLabel(
                     "TileUnion"
                 )
             )
             {
-                if (pair.Asset.HashCode == coreModel.HashCode)
+                if (tileUnion.Asset.HashCode == coreModel.HashCode)
                 {
-                    tileUnions.Add(pair.Asset);
+                    tileUnions.Add(tileUnion.Asset);
                 }
             }
 

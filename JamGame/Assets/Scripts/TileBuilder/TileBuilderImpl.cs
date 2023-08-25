@@ -54,15 +54,15 @@ namespace TileBuilder
             InstantiatedViews.Clear();
 
             foreach (
-                AssetWithLocation<TileUnionImpl> pair in AddressableTools<TileUnionImpl>.LoadAllFromAssetLabel(
+                AssetWithLocation<TileUnionImpl> tileUnion in AddressableTools<TileUnionImpl>.LoadAllFromAssetLabel(
                     tileUnionsLabel
                 )
             )
             {
-                modelViewMap.Add(pair.Asset.HashCode, pair.Location);
+                modelViewMap.Add(tileUnion.Asset.HashCode, tileUnion.Location);
                 InstantiatedViews.Add(
-                    pair.Asset.HashCode,
-                    Instantiate(pair.Asset, stashRootObject.transform)
+                    tileUnion.Asset.HashCode,
+                    Instantiate(tileUnion.Asset, stashRootObject.transform)
                 );
 
                 TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
@@ -78,37 +78,37 @@ namespace TileBuilder
 
         public Result Validate()
         {
-            Stack<KeyValuePair<Vector2Int, TileUnionImpl>> points_stack =
+            Stack<KeyValuePair<Vector2Int, TileUnionImpl>> pointsStack =
                 new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("Door")));
-            List<KeyValuePair<Vector2Int, TileUnionImpl>> tiles_to_check = TileUnionDictionary
+            List<KeyValuePair<Vector2Int, TileUnionImpl>> tilesToCheck = TileUnionDictionary
                 .Where(
                     x => !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("Freespace")
                 )
                 .ToList();
 
-            while (points_stack.Count > 0)
+            while (pointsStack.Count > 0)
             {
-                KeyValuePair<Vector2Int, TileUnionImpl> point = points_stack.Pop();
+                KeyValuePair<Vector2Int, TileUnionImpl> point = pointsStack.Pop();
                 foreach (
                     Direction dir in point.Value.GetAccessibleDirectionsFromPosition(point.Key)
                 )
                 {
-                    List<KeyValuePair<Vector2Int, TileUnionImpl>> near_tiles =
-                        new(tiles_to_check.Where(x => x.Key == dir.ToVector2Int() + point.Key));
-                    if (near_tiles.Count() > 0)
+                    List<KeyValuePair<Vector2Int, TileUnionImpl>> nearTiles =
+                        new(tilesToCheck.Where(x => x.Key == dir.ToVector2Int() + point.Key));
+                    if (nearTiles.Count() > 0)
                     {
-                        foreach (KeyValuePair<Vector2Int, TileUnionImpl> founded_tile in near_tiles)
+                        foreach (KeyValuePair<Vector2Int, TileUnionImpl> foundedTile in nearTiles)
                         {
-                            _ = tiles_to_check.Remove(founded_tile);
-                            points_stack.Push(founded_tile);
+                            _ = tilesToCheck.Remove(foundedTile);
+                            pointsStack.Push(foundedTile);
                         }
                     }
                 }
             }
 
-            if (tiles_to_check.Count > 0)
+            if (tilesToCheck.Count > 0)
             {
-                foreach (TileUnionImpl union in tiles_to_check.Select(x => x.Value).Distinct())
+                foreach (TileUnionImpl union in tilesToCheck.Select(x => x.Value).Distinct())
                 {
                     union.ShowInvalidPlacing();
                 }
@@ -301,7 +301,7 @@ namespace TileBuilder
 
         private void UpdateSidesInPositions(IEnumerable<Vector2Int> positions)
         {
-            List<(TileUnionImpl, Vector2Int)> queue = new();
+            List<(TileUnionImpl union, Vector2Int pos)> queue = new();
             foreach (Vector2Int position in positions)
             {
                 if (TileUnionDictionary.TryGetValue(position, out TileUnionImpl tile))
@@ -310,9 +310,9 @@ namespace TileBuilder
                     queue.Add((tile, position));
                 }
             }
-            foreach ((TileUnionImpl, Vector2Int) pair in queue)
+            foreach ((TileUnionImpl union, Vector2Int pos) in queue)
             {
-                pair.Item1.UpdateCorners(this, pair.Item2);
+                union.UpdateCorners(this, pos);
             }
         }
 

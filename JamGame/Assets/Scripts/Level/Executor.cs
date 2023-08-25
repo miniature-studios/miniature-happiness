@@ -89,7 +89,7 @@ namespace Level
 
         public void Execute(DayStart day_start)
         {
-            for (int i = 0; i < 0; i++)
+            for (int i = 0; i < 1; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }

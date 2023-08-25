@@ -33,12 +33,12 @@ namespace Level.Inventory
         {
             animator = GetComponent<Animator>();
             foreach (
-                AssetWithLocation<Room.View> pair in AddressableTools<Room.View>.LoadAllFromAssetLabel(
+                AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromAssetLabel(
                     inventoryViewsLabel
                 )
             )
             {
-                modelViewMap.Add(pair.Asset.HashCode, pair.Location);
+                modelViewMap.Add(invView.Asset.HashCode, invView.Location);
             }
         }
 
