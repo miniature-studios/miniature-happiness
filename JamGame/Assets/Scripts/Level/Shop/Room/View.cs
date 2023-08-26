@@ -32,34 +32,35 @@ namespace Level.Shop.Room
         private TMP_Text electricityText;
 
         private Func<CoreModel, Result> roomBuying;
-        public Func<CoreModel> GetCoreModelInstance = null;
+
+        [SerializeField]
+        [InspectorReadOnly]
+        private CoreModel coreModel;
+        public CoreModel CoreModel => coreModel;
+
+        public void SetCoreModel(CoreModel coreModel)
+        {
+            this.coreModel = coreModel;
+        }
 
         private void Awake()
         {
             roomBuying = GetComponentInParent<Controller>().TryBuyRoom;
         }
 
-        public void Constructor(Func<CoreModel> getCoreModelInstance)
-        {
-            GetCoreModelInstance = getCoreModelInstance;
-        }
-
         private void Update()
         {
-            moneyText.text =
-                "Money cost: " + Convert.ToString(GetCoreModelInstance().ShopModel.Cost.Value);
+            moneyText.text = "Money cost: " + Convert.ToString(CoreModel.ShopModel.Cost.Value);
             waterText.text =
-                "Water: "
-                + Convert.ToString(GetCoreModelInstance().TariffProperties.WaterConsumption);
+                "Water: " + Convert.ToString(CoreModel.TariffProperties.WaterConsumption);
             electricityText.text =
-                "Electro: "
-                + Convert.ToString(GetCoreModelInstance().TariffProperties.ElectricityConsumption);
+                "Electro: " + Convert.ToString(CoreModel.TariffProperties.ElectricityConsumption);
         }
 
         // Called be pressing button
         public void TryBuyRoom()
         {
-            if (roomBuying(GetCoreModelInstance()).Success)
+            if (roomBuying(CoreModel).Success)
             {
                 Destroy(gameObject);
             }

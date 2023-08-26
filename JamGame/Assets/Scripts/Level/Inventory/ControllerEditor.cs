@@ -28,9 +28,7 @@ namespace Level.Inventory.Inspector
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add selected room"))
             {
-                controller.AddNewRoom(
-                    CoreModelsManager.Instance.InstantiateCoreModel(room.HashCode)
-                );
+                controller.AddNewRoom(CoreModelTools.InstantiateCoreModel(room.HashCode));
             }
             EditorGUILayout.EndHorizontal();
 
@@ -43,9 +41,7 @@ namespace Level.Inventory.Inspector
                     )
                 )
                 {
-                    controller.AddNewRoom(
-                        CoreModelsManager.Instance.InstantiateCoreModel(core.Asset.HashCode)
-                    );
+                    controller.AddNewRoom(CoreModelTools.InstantiateCoreModel(core.Asset.HashCode));
                 }
             }
             EditorGUILayout.EndHorizontal();

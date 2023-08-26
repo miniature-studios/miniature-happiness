@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using Level;
 using Level.Room;
 using Pickle;
 using TileBuilder.Command;
@@ -27,7 +26,7 @@ namespace TileBuilder
 
         public void CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
         {
-            CoreModel newCoreModel = CoreModelsManager.Instance.InstantiateCoreModel(
+            CoreModel newCoreModel = CoreModelTools.InstantiateCoreModel(
                 new TileConfig(coreModel.HashCode, position, rotation)
             );
             _ = model.Execute(new DropRoom(newCoreModel));
@@ -38,7 +37,7 @@ namespace TileBuilder
             _ = model.Execute(new RemoveAllRooms());
             foreach (TileConfig tileConfig in buildingConfig.TilePlaceConfigs)
             {
-                CoreModel core = CoreModelsManager.Instance.InstantiateCoreModel(tileConfig);
+                CoreModel core = CoreModelTools.InstantiateCoreModel(tileConfig);
                 _ = model.Execute(new DropRoom(core));
             }
         }
@@ -80,6 +79,9 @@ namespace TileBuilder
 
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel WorkingPlace;
+
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel BossOffice;
     }
 
     [CustomEditor(typeof(Controller))]
@@ -196,6 +198,25 @@ namespace TileBuilder
             if (GUILayout.Button("Clear Scene"))
             {
                 controller.DeleteAllTiles();
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Fill with boss"))
+            {
+                int x = 0;
+                int y = 0;
+                controller.DeleteAllTiles();
+                for (int i = 0; i < controller.SquareSideLength * controller.SquareSideLength; i++)
+                {
+                    controller.CreateTile(controller.BossOffice, new(x, y), 0);
+                    y++;
+                    if (y >= controller.SquareSideLength)
+                    {
+                        y = 0;
+                        x++;
+                    }
+                }
             }
             EditorGUILayout.EndHorizontal();
 

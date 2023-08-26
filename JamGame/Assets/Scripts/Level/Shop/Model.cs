@@ -10,9 +10,6 @@ namespace Level.Shop
     [AddComponentMenu("Scripts/Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
-        [SerializeField]
-        private Transform shopTransform;
-
         private ObservableCollection<CoreModel> roomsInShop = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
@@ -32,7 +29,7 @@ namespace Level.Shop
 
         public void AddRoom(CoreModel room)
         {
-            room.transform.parent = shopTransform;
+            room.transform.parent = transform;
             roomsInShop.Add(room);
         }
 

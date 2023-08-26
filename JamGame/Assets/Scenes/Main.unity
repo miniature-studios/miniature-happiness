@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 40476286}
   - component: {fileID: 40476289}
-  - component: {fileID: 40476290}
   - component: {fileID: 40476294}
   - component: {fileID: 40476292}
   - component: {fileID: 40476291}
@@ -180,46 +179,6 @@ MonoBehaviour:
   builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   tileUnionsLabel:
     m_LabelString: TileUnion
---- !u!114 &40476290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40476285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7537bea764d80904095ecfa5cc25a732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileBuilder: {fileID: 40476289}
-  model: {fileID: 40476294}
-  BuiltValidatedOffice:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1067622715}
-        m_TargetAssemblyTypeName: Level.Executor, Assembly-CSharp
-        m_MethodName: CompleteMeeting
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  BuildingConfig: {fileID: 11400000, guid: 7ed0ec60fc238014e8af144a4168d3e8, type: 2}
-  LoadConfigFromStart: 1
-  SavingConfigName: Sample building
-  GameModeToChange: 0
-  SquareSideLength: 30
-  StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
-  WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
-  OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
-  CorridorPrefab: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
-  WorkingPlaceFree: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
-  WorkingPlace: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
 --- !u!114 &40476291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +236,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 40476285}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b97233979538e246b06dcdfef4e1480, type: 3}
   m_Name: 
@@ -294,7 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e878d8cae5fa6854691f5ece4ef14748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileBuilderTransform: {fileID: 634197354}
   tileBuilder: {fileID: 40476289}
   roomsInTileBuilder: []
 --- !u!1 &42303832
@@ -358,7 +316,7 @@ GameObject:
   - component: {fileID: 115190260}
   - component: {fileID: 115190262}
   m_Layer: 5
-  m_Name: TileBuilderDADAgent
+  m_Name: TileBuilderController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -430,10 +388,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 115190258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ad3c7e149314a24bb2de8dacf8c49b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 7537bea764d80904095ecfa5cc25a732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 40476290}
+  tileBuilder: {fileID: 40476289}
+  model: {fileID: 40476294}
+  BuiltValidatedOffice:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1067622715}
+        m_TargetAssemblyTypeName: Level.Executor, Assembly-CSharp
+        m_MethodName: CompleteMeeting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  BuildingConfig: {fileID: 11400000, guid: eb454f623dce441449568e137346e3fd, type: 2}
+  LoadConfigFromStart: 1
+  SavingConfigName: Sample building
+  GameModeToChange: 0
+  SquareSideLength: 25
+  StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
+  WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
+  OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
+  CorridorPrefab: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
+  WorkingPlaceFree: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
+  WorkingPlace: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
+  BossOffice: {fileID: 739786844684371711, guid: 21989098aa323754fade5ba42b9439cd, type: 3}
 --- !u!1 &124202641
 GameObject:
   m_ObjectHideFlags: 0
@@ -3572,7 +3558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileBuilderController: {fileID: 40476290}
+  tileBuilderController: {fileID: 115190262}
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
   animatorSwitcher: {fileID: 764846868}
@@ -4875,7 +4861,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1654659963}
-  - component: {fileID: 1654659964}
   m_Layer: 0
   m_Name: ModelsHandler
   m_TagString: Untagged
@@ -4902,20 +4887,6 @@ Transform:
   - {fileID: 1744097812}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1654659964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654659962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69a7cdd51d3490f40a0bb9df9d4f6e9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coreModelsLabel:
-    m_LabelString: CoreModel
 --- !u!1 &1671638921
 GameObject:
   m_ObjectHideFlags: 0
@@ -5004,7 +4975,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3377d109e65ef46b5037bd2c3eb12b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopTransform: {fileID: 1241582339}
   CollectionChanged:
     m_PersistentCalls:
       m_Calls:
@@ -5861,7 +5831,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 40476290}
+      - m_Target: {fileID: 115190262}
         m_TargetAssemblyTypeName: TileBuilder.Controller, Assembly-CSharp
         m_MethodName: ValidateBuilding
         m_Mode: 1

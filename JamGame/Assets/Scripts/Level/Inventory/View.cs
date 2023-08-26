@@ -80,7 +80,7 @@ namespace Level.Inventory
                     container
                 );
 
-                newRoomView.Constructor(() => newItem);
+                newRoomView.SetCoreModel(newItem);
                 roomViews.Add(newRoomView);
             }
             else
@@ -91,7 +91,7 @@ namespace Level.Inventory
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.View existRoom = roomViews.Find(x => x.GetCoreModelInstance() == oldItem);
+            Room.View existRoom = roomViews.Find(x => x.CoreModel == oldItem);
             _ = roomViews.Remove(existRoom);
             Destroy(existRoom.gameObject);
         }

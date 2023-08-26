@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using Common;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -9,9 +8,9 @@ namespace Level.Room
 {
     public partial class CoreModel
     {
-        public void SetHashCode()
+        public void SetHashCode(string hashCode)
         {
-            hashCode = Convert.ToString(Guid.NewGuid());
+            this.hashCode = hashCode;
         }
 
         public void CatchModels()

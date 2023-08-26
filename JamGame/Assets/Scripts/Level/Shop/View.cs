@@ -65,7 +65,7 @@ namespace Level.Shop
                     roomsUIContainer.transform
                 );
 
-                newRoomView.Constructor(() => newItem);
+                newRoomView.SetCoreModel(newItem);
                 newRoomView.enabled = true;
                 viewList.Add(newRoomView);
             }
@@ -77,7 +77,7 @@ namespace Level.Shop
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Destroy(viewList.Find(x => x.GetCoreModelInstance() == oldItem).gameObject);
+            Destroy(viewList.Find(x => x.CoreModel == oldItem).gameObject);
         }
 
         private void DeleteAllItems()

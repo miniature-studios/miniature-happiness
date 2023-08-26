@@ -26,7 +26,10 @@ namespace TileBuilder.Validator
                 ? tileBuilder.IsValidPlacing(dropRoom.CoreModel)
                 : command is ValidateBuilding
                     ? tileBuilder.Validate()
-                    : new SuccessResult();
+                    : command is BorrowRoom borrowRoom
+                    && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) == null
+                        ? new FailResult("No room to borrow")
+                        : new SuccessResult();
         }
     }
 

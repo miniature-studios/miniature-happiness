@@ -35,7 +35,7 @@ namespace Level.Inventory
                 ?.GetComponent<Room.View>();
             if (hovered != null)
             {
-                CoreModel coreModel = hovered.GetCoreModelInstance();
+                CoreModel coreModel = hovered.CoreModel;
                 return new SuccessResult<CoreModel>(model.BorrowRoom(coreModel));
             }
             else

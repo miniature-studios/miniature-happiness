@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Level.Room;
+using System;
 using TileUnion;
 using UnityEditor;
 using UnityEngine;
@@ -22,9 +23,19 @@ namespace Utils
                 if (asset != null)
                 {
                     CoreModel coreModel = asset.GetComponent<CoreModel>();
-                    if (coreModel != null && coreModel.HashCode == "")
+                    if (
+                        coreModel != null
+                        && coreModel.HashCode == ""
+                        && EditorUtility.DisplayDialog(
+                            "Set new HashCode?",
+                            "Are you sure you want to to Set new HashCode?" +
+                            $"\nPrefab: {str}",
+                            "Set",
+                            "Do Not Set"
+                        )
+                    )
                     {
-                        coreModel.SetHashCode();
+                        coreModel.SetHashCode(Convert.ToString(new Guid()));
                         EditorUtility.SetDirty(asset);
                     }
 
@@ -34,7 +45,7 @@ namespace Utils
                     {
                         if (inventoryView.CoreModelPrefab == null)
                         {
-                            Debug.LogError($"No CoreModelPrefab link in {asset.name}");
+                            Debug.LogError($"No CoreModelPrefab link in {str}");
                         }
                         else
                         {
@@ -48,7 +59,7 @@ namespace Utils
                     {
                         if (shopView.CoreModelPrefab == null)
                         {
-                            Debug.LogError($"No CoreModelPrefab link in {asset.name}");
+                            Debug.LogError($"No CoreModelPrefab link in {str}");
                         }
                         else
                         {
@@ -62,7 +73,7 @@ namespace Utils
                     {
                         if (tileUnion.CoreModelPrefab == null)
                         {
-                            Debug.LogError($"No CoreModelPrefab link in {asset.name}");
+                            Debug.LogError($"No CoreModelPrefab link in {str}");
                         }
                         else
                         {

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Level;
 using Level.Room;
 using TileBuilder.Command;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace TileBuilder
     }
 
     [AddComponentMenu("Scripts/TileBuilder.Controller")]
-    public partial class Controller : MonoBehaviour
+    public partial class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;
@@ -80,17 +81,16 @@ namespace TileBuilder
             Result<Vector2Int> matrixResult = tileBuilder.BuilderMatrix.GetMatrixPosition(ray);
             if (matrixResult.Success)
             {
-                CoreModel core = null;
-                BorrowRoom command = new(matrixResult.Data, (coreModel) => core = coreModel);
+                BorrowRoom command = new(matrixResult.Data);
                 Result result = model.Execute(command);
                 return result.Success
-                    ? new SuccessResult<CoreModel>(core)
+                    ? new SuccessResult<CoreModel>(command.BorrowedRoom)
                     : new FailResult<CoreModel>(result.Error);
             }
             return new FailResult<CoreModel>(matrixResult.Error);
         }
 
-        public void OnHoverLeave()
+        public void HoverLeave()
         {
             _ = model.Execute(new HideSelectedRoom());
         }

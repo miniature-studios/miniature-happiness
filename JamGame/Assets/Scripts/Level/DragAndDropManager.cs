@@ -55,14 +55,6 @@ namespace Level
                         bufferCoreModel = result.Data;
                         bufferCoreModel.transform.parent = dragAndDropTransform;
                     }
-                    else
-                    {
-                        bufferCoreModel = null;
-                    }
-                }
-                else
-                {
-                    bufferCoreModel = null;
                 }
             }
 
@@ -70,20 +62,12 @@ namespace Level
             {
                 if (bufferCoreModel != null)
                 {
-                    if (dragAndDrop != null)
+                    if (dragAndDrop != null && dragAndDrop.Drop(bufferCoreModel).Failure)
                     {
-                        Result result = dragAndDrop.Drop(bufferCoreModel);
-                        if (result.Failure)
-                        {
-                            BackupDrop(bufferCoreModel);
-                        }
+                        _ = backupDragAndDrop.Drop(bufferCoreModel);
                     }
-                    else
-                    {
-                        BackupDrop(bufferCoreModel);
-                    }
-                    bufferCoreModel = null;
                 }
+                bufferCoreModel = null;
             }
 
             if (Input.GetMouseButton(0) && dragAndDrop != null && bufferCoreModel != null)
@@ -100,11 +84,6 @@ namespace Level
                 previousHovered.HoverLeave();
                 previousHovered = null;
             }
-        }
-
-        public void BackupDrop(CoreModel coreModel)
-        {
-            _ = backupDragAndDrop.Drop(coreModel);
         }
     }
 }

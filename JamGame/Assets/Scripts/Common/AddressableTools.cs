@@ -19,21 +19,15 @@ namespace Common
             AssetLabelReference assetLabel
         )
         {
-            foreach (
-                IResourceLocation resourceLocation in Addressables
-                    .LoadResourceLocationsAsync(assetLabel, typeof(GameObject))
-                    .WaitForCompletion()
-            )
-            {
-                yield return new AssetWithLocation<T>()
-                {
-                    Location = resourceLocation,
-                    Asset = LoadAsset(resourceLocation)
-                };
-            }
+            return LoadAllFromLabel(assetLabel);
         }
 
         public static IEnumerable<AssetWithLocation<T>> LoadAllFromStringLabel(string assetLabel)
+        {
+            return LoadAllFromLabel(assetLabel);
+        }
+
+        private static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(object assetLabel)
         {
             foreach (
                 IResourceLocation resourceLocation in Addressables

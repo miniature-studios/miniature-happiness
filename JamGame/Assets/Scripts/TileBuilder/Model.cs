@@ -11,9 +11,6 @@ namespace TileBuilder
     public class Model : MonoBehaviour
     {
         [SerializeField]
-        private Transform tileBuilderTransform;
-
-        [SerializeField]
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
@@ -34,15 +31,9 @@ namespace TileBuilder
                 if (command is DropRoom dropRoom)
                 {
                     roomsInTileBuilder.Add(dropRoom.CoreModel);
-                    dropRoom.CoreModel.transform.parent = tileBuilderTransform;
+                    dropRoom.CoreModel.transform.parent = transform;
                 }
-                else if (command is BorrowRoom borrowRoom)
-                {
-                    borrowRoom.GetBorrowedRoom.Add(
-                        (coreModel) => roomsInTileBuilder.Remove(coreModel)
-                    );
-                }
-                else if (command is RemoveAllRooms remove)
+                else if (command is RemoveAllRooms)
                 {
                     foreach (CoreModel room in roomsInTileBuilder)
                     {
@@ -51,6 +42,10 @@ namespace TileBuilder
                     roomsInTileBuilder.Clear();
                 }
                 command.Execute(tileBuilder);
+                if (command is BorrowRoom borrowRoom)
+                {
+                    _ = roomsInTileBuilder.Remove(borrowRoom.BorrowedRoom);
+                }
             }
             return response;
         }

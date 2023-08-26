@@ -66,13 +66,14 @@ namespace TileUnion
             set => hashCode = value;
         }
 
-        public Func<CoreModel> GetCoreModel { get; private set; }
+        [SerializeField]
+        [InspectorReadOnly]
+        private CoreModel coreModel;
+        public CoreModel CoreModel => coreModel;
 
-        public void Constructor(Func<CoreModel> getCoreModel, Matrix builderMatrix)
+        public void SetCoreModel(CoreModel coreModel)
         {
-            GetCoreModel = getCoreModel;
-            this.builderMatrix = builderMatrix;
-            CreateCache();
+            this.coreModel = coreModel;
         }
 
         [Space(20)]
@@ -84,6 +85,11 @@ namespace TileUnion
 
         [SerializeField]
         private Matrix builderMatrix;
+
+        public void SetBuilderMatrix(Matrix builderMatrix)
+        {
+            this.builderMatrix = builderMatrix;
+        }
 
         public List<TileImpl> Tiles = new();
 
@@ -104,7 +110,7 @@ namespace TileUnion
             {
                 if (cachedUnionConfiguration == null)
                 {
-                    Debug.LogWarning("Loh, use constructor");
+                    Debug.LogError("Null configuration");
                     CreateCache();
                 }
                 return cachedUnionConfiguration;
@@ -162,7 +168,10 @@ namespace TileUnion
             return new SuccessResult();
         }
 
-        public Result IsPassedConditions(IEnumerable<IPlaceCondition> placeConditions, TileBuilderImpl tileBuilder)
+        public Result IsPassedConditions(
+            IEnumerable<IPlaceCondition> placeConditions,
+            TileBuilderImpl tileBuilder
+        )
         {
             foreach (IPlaceCondition placeCondition in placeConditions)
             {

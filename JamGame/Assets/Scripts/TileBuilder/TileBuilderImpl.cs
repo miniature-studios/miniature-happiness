@@ -39,12 +39,7 @@ namespace TileBuilder
 
         private Vector2Int stashPosition = new(-10, -10);
 
-        private void Start()
-        {
-            UpdateModelViewMap();
-        }
-
-        public void UpdateModelViewMap()
+        private void Awake()
         {
             modelViewMap.Clear();
             foreach (TileUnionImpl view in InstantiatedViews.Values)
@@ -66,7 +61,8 @@ namespace TileBuilder
                 );
 
                 TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
-                unionInstance.Constructor(() => null, BuilderMatrix);
+                unionInstance.SetBuilderMatrix(builderMatrix);
+                unionInstance.CreateCache();
                 unionInstance.SetColliderActive(false);
                 unionInstance.SetPosition(stashPosition);
                 unionInstance.ApplyTileUnionState(TileImpl.TileState.Selected);
@@ -181,21 +177,23 @@ namespace TileBuilder
             Result result = stashTileUnion.IsValidPlacing(this);
             if (
                 result.Failure
-                || stashTileUnion.TilesPositions
-                    .Select(x => !GetTileUnionInPosition(x).IsAllWithMark("Freespace"))
-                    .All(x => x)
+                || stashTileUnion.TilesPositions.Any(
+                    x =>
+                        GetTileUnionInPosition(x) == null
+                        || !GetTileUnionInPosition(x).IsAllWithMark("Freespace")
+                )
             )
             {
                 stashTileUnion.ApplyTileUnionState(TileImpl.TileState.SelectedAndErrored);
             }
         }
 
-        public void BorrowTileUnion(Vector2Int borrowedPosition, Action<CoreModel> getBorrowedRoom)
+        public void BorrowTileUnion(Vector2Int borrowedPosition, out CoreModel borrowedRoom)
         {
             ResetStashedViews();
             TileUnionImpl tileUnion = GetTileUnionInPosition(borrowedPosition);
             List<Vector2Int> previousPlaces = tileUnion.TilesPositions.ToList();
-            getBorrowedRoom(DeleteTile(tileUnion));
+            borrowedRoom = DeleteTile(tileUnion);
             foreach (Vector2Int position in previousPlaces)
             {
                 FreeSpace.TileUnionModel.PlacingProperties.SetPosition(position);
@@ -252,7 +250,9 @@ namespace TileBuilder
                     AddressableTools<TileUnionImpl>.LoadAsset(location),
                     transform
                 );
-                tileUnion.Constructor(() => coreModel, BuilderMatrix);
+                tileUnion.SetCoreModel(coreModel);
+                tileUnion.SetBuilderMatrix(builderMatrix);
+                tileUnion.CreateCache();
                 tileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
                 return tileUnion;
             }
@@ -265,7 +265,7 @@ namespace TileBuilder
 
         private CoreModel DeleteTile(TileUnionImpl tileUnion)
         {
-            CoreModel coreModel = tileUnion.GetCoreModel();
+            CoreModel coreModel = tileUnion.CoreModel;
             coreModel.TileUnionModel.PlacingProperties.AddRotation(tileUnion.Rotation);
             RemoveTileFromDictionary(tileUnion);
             Destroy(tileUnion.gameObject);
@@ -276,7 +276,7 @@ namespace TileBuilder
         {
             foreach (Transform child in transform)
             {
-                Destroy(child.transform);
+                Destroy(child.transform.gameObject);
             }
             TileUnionDictionary.Clear();
         }
@@ -324,7 +324,7 @@ namespace TileBuilder
             {
                 tileConfigs.Add(
                     new TileConfig(
-                        tileUnion.GetCoreModel().HashCode,
+                        tileUnion.CoreModel.HashCode,
                         tileUnion.Position,
                         tileUnion.Rotation
                     )

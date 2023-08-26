@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TileUnion.Tile
@@ -7,15 +8,12 @@ namespace TileUnion.Tile
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private Material defaultMaterial;
-
-        [SerializeField]
         private Material transparentMaterial;
 
         [SerializeField]
         private Material errorMaterial;
 
-        private Renderer[] renderers;
+        private Dictionary<Renderer, Material[]> initialMaterialsMap = new();
         private Dictionary<State, Material[]> materialsByState;
 
         public enum State
@@ -28,14 +26,17 @@ namespace TileUnion.Tile
         private void Awake()
         {
             SetActiveChilds(transform);
-            renderers = GetComponentsInChildren<Renderer>();
+            Renderer[] renderers = GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in renderers)
+            {
+                initialMaterialsMap.Add(renderer, renderer.materials);
+            }
             materialsByState = new()
             {
-                { State.Default, new Material[1] { defaultMaterial } },
                 { State.Selected, new Material[1] { transparentMaterial } },
                 {
                     State.SelectedOverlapping,
-                    new Material[2] { transparentMaterial, errorMaterial }
+                    new Material[1] { errorMaterial }
                 },
             };
             SetMaterial(State.Default);
@@ -51,11 +52,14 @@ namespace TileUnion.Tile
             }
         }
 
-        public void SetMaterial(State material)
+        public void SetMaterial(State state)
         {
-            foreach (Renderer render in renderers)
+            foreach (KeyValuePair<Renderer, Material[]> materialsMap in initialMaterialsMap)
             {
-                render.materials = materialsByState[material];
+                materialsMap.Key.materials = state == State.Default
+                    ? materialsMap.Value
+                    : Enumerable.Range(0, materialsMap.Value.Count())
+                        .Select(x => materialsByState[state].ToList()).Aggregate((x, y) => x.Concat(y).ToList()).ToArray();
             }
         }
     }

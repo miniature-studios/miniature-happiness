@@ -1,7 +1,6 @@
 using Common;
 using Level.Room;
 using Pickle;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,19 +28,21 @@ namespace Level.Inventory.Room
         private RectTransform targetInfo = null;
         private Canvas canvas;
 
-        private Func<CoreModel> getCoreModelInstance;
-        public Func<CoreModel> GetCoreModelInstance => getCoreModelInstance;
+        [SerializeField]
+        [InspectorReadOnly]
+        private CoreModel coreModel;
+        public CoreModel CoreModel => coreModel;
+
+        public void SetCoreModel(CoreModel coreModel)
+        {
+            this.coreModel = coreModel;
+        }
 
         private bool pointerIsOver;
 
         public void Awake()
         {
             canvas = FindObjectOfType<Canvas>();
-        }
-
-        public void Constructor(Func<CoreModel> getCoreModelInstance)
-        {
-            this.getCoreModelInstance = getCoreModelInstance;
         }
 
         public void Update()
@@ -59,9 +60,9 @@ namespace Level.Inventory.Room
                             )
                             .GetComponent<RectTransform>();
                         targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electricity. Con.: {getCoreModelInstance().TariffProperties.ElectricityConsumption}\n"
-                            + $"Water Con.: {getCoreModelInstance().TariffProperties.WaterConsumption}\n"
-                            + $"Cost: {getCoreModelInstance().ShopModel.Cost}";
+                            $"Electricity. Con.: {CoreModel.TariffProperties.ElectricityConsumption}\n"
+                            + $"Water Con.: {CoreModel.TariffProperties.WaterConsumption}\n"
+                            + $"Cost: {CoreModel.ShopModel.Cost}";
                         break;
                     case (true, false):
                         targetInfo.position = Input.mousePosition + new Vector3(20, 20, 0);

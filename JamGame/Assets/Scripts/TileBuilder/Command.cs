@@ -1,6 +1,4 @@
 using Level.Room;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace TileBuilder.Command
@@ -33,20 +31,17 @@ namespace TileBuilder.Command
     public class BorrowRoom : ICommand
     {
         public Vector2Int BorrowingPosition { get; private set; }
-        public List<Action<CoreModel>> GetBorrowedRoom { get; private set; } = new();
+        private CoreModel borrowedRoom = null;
+        public CoreModel BorrowedRoom => borrowedRoom;
 
-        public BorrowRoom(Vector2Int borrowingPosition, Action<CoreModel> getBorrowedRoom)
+        public BorrowRoom(Vector2Int borrowingPosition)
         {
             BorrowingPosition = borrowingPosition;
-            GetBorrowedRoom.Add(getBorrowedRoom);
         }
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            tileBuilder.BorrowTileUnion(
-                BorrowingPosition,
-                (coreModel) => GetBorrowedRoom.ForEach(x => x.Invoke(coreModel))
-            );
+            tileBuilder.BorrowTileUnion(BorrowingPosition, out borrowedRoom);
         }
     }
 
