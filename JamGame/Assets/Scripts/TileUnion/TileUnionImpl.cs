@@ -84,6 +84,7 @@ namespace TileUnion
         private int rotation;
 
         [SerializeField]
+        [InspectorReadOnly]
         private Matrix builderMatrix;
 
         public void SetBuilderMatrix(Matrix builderMatrix)

@@ -1,6 +1,5 @@
 ﻿using Common;
 using TileBuilder;
-using UnityEditor;
 using UnityEngine;
 
 namespace Utils
@@ -16,7 +15,6 @@ namespace Utils
         public void SetMatrix(Matrix matrix)
         {
             this.matrix = matrix;
-            EditorUtility.SetDirty(this);
         }
     }
 }

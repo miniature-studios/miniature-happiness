@@ -1,7 +1,7 @@
-﻿using TileUnion;
+﻿#if UNITY_EDITOR
+using TileUnion;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 
 namespace Utils
 {
@@ -15,9 +15,8 @@ namespace Utils
 
         private static void OnPrefabStageOpened(PrefabStage prefabStage)
         {
-            Debug.Log("OnPrefabStageOpened " + prefabStage.assetPath);
-
-            TileUnionImpl tileUnion = prefabStage.prefabContentsRoot.gameObject.GetComponent<TileUnionImpl>();
+            TileUnionImpl tileUnion =
+                prefabStage.prefabContentsRoot.gameObject.GetComponent<TileUnionImpl>();
             if (tileUnion != null)
             {
                 tileUnion.SetBuilderMatrix(GlobalGameSettings.GetMatrix());
@@ -25,3 +24,4 @@ namespace Utils
         }
     }
 }
+#endif
