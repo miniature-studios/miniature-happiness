@@ -29,10 +29,12 @@ namespace Level.Boss.Task
     [Serializable]
     public class TargetEmployeeAmount : ITask
     {
-        [SerializeField] private GameObject employeeCountProvider;
+        [SerializeField]
+        private GameObject employeeCountProvider;
         private IDataProvider<EmployeeAmount> employeeCount;
 
-        [SerializeField] private int employeeCountTarget;
+        [SerializeField]
+        private int employeeCountTarget;
 
         public Progress Progress
         {
@@ -48,6 +50,7 @@ namespace Level.Boss.Task
                 };
             }
         }
+
         public void ValidateProviders()
         {
             employeeCount = employeeCountProvider.GetComponent<IDataProvider<EmployeeAmount>>();
@@ -66,10 +69,12 @@ namespace Level.Boss.Task
     [Serializable]
     public class MaxStressBound : ITask
     {
-        [SerializeField] private GameObject maxStressProvider;
+        [SerializeField]
+        private GameObject maxStressProvider;
         private IDataProvider<MaxStress> maxStress;
 
-        [SerializeField] private float maxStressTarget;
+        [SerializeField]
+        private float maxStressTarget;
         public float MaxStressTarget => maxStressTarget;
 
         public Progress Progress
@@ -85,7 +90,8 @@ namespace Level.Boss.Task
             }
         }
 
-        [SerializeField] private float targetDuration;
+        [SerializeField]
+        private float targetDuration;
 
         private float currentDuration = .0f;
         private bool complete = false;

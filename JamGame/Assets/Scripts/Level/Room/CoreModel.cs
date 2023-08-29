@@ -32,6 +32,7 @@ namespace Level.Room
         [InspectorReadOnly]
         private string uid;
         public string Uid => uid;
+
 #if UNITY_EDITOR
         public void SetHashCode(string uid)
         {

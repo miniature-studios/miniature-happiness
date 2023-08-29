@@ -7,14 +7,10 @@ using UnityEngine;
 
 namespace TileUnion.PlaceCondition
 {
-
     [InterfaceEditor]
     public interface IPlaceCondition
     {
-        public Result PassCondition(
-            TileUnionImpl targetTileUnion,
-            TileBuilderImpl tileBuilderImpl
-        );
+        public Result PassCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl);
     }
 
     [Serializable]
@@ -33,15 +29,15 @@ namespace TileUnion.PlaceCondition
                 .Range(0, targetTileUnion.Rotation)
                 .ToList()
                 .ForEach(x => bufferPosition = new Vector2Int(bufferPosition.y, -bufferPosition.x));
-            Vector2Int outTargetPosition =
-                targetTileUnion.Position + bufferPosition;
+            Vector2Int outTargetPosition = targetTileUnion.Position + bufferPosition;
 
             TileUnionImpl outTargetTile = tileBuilderImpl.GetTileUnionInPosition(outTargetPosition);
             return outTargetTile == null
                 ? new FailResult("No target tile")
-                : outTargetTile.GetTileMarks(outTargetPosition).Intersect(requiredTileTags).Count() == requiredTileTags.Count()
-                ? new SuccessResult()
-                : new FailResult("No needed Marks");
+                : outTargetTile.GetTileMarks(outTargetPosition).Intersect(requiredTileTags).Count()
+                == requiredTileTags.Count()
+                    ? new SuccessResult()
+                    : new FailResult("No needed Marks");
         }
     }
 }

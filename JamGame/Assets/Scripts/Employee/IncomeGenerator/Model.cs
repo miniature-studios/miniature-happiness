@@ -6,8 +6,11 @@ namespace Employee.IncomeGenerator
     [AddComponentMenu("Scripts/Employee.IncomeGenerator.Model")]
     public class Model : MonoBehaviour
     {
-        [SerializeField] private Level.Finances.Model finances;
-        [SerializeField] private int incomePerWorkingSession;
+        [SerializeField]
+        private Level.Finances.Model finances;
+
+        [SerializeField]
+        private int incomePerWorkingSession;
 
         private UnityEvent<int> newIncome = new();
         public UnityEvent<int> NewIncome => newIncome;

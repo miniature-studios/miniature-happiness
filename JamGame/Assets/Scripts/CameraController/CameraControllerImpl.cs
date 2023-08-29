@@ -57,11 +57,11 @@ namespace CameraController
         {
             if (movingAround)
             {
-                Vector2 mouse_delta = (Vector2)Input.mousePosition - prevMousePosition;
-                Vector2 delta_move = mouse_delta * moveSensitivity;
+                Vector2 mouseDelta = (Vector2)Input.mousePosition - prevMousePosition;
+                Vector2 deltaMove = mouseDelta * moveSensitivity;
                 prevMousePosition = (Vector2)Input.mousePosition;
 
-                PitchYaw += new Vector2(-delta_move.y, delta_move.x);
+                PitchYaw += new Vector2(-deltaMove.y, deltaMove.x);
                 PitchYaw.x = Mathf.Clamp(PitchYaw.x, bottomLimiter, topLimiter);
                 SetPitchYaw();
 

@@ -3,7 +3,11 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    [CreateAssetMenu(fileName = "GridProperties", menuName = "TileBuilder/GridProperties", order = 2)]
+    [CreateAssetMenu(
+        fileName = "GridProperties",
+        menuName = "TileBuilder/GridProperties",
+        order = 2
+    )]
     public class GridProperties : ScriptableObject
     {
         [SerializeField]

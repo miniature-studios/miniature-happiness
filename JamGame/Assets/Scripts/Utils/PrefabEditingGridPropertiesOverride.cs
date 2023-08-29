@@ -19,7 +19,8 @@ namespace Utils
                 prefabStage.prefabContentsRoot.gameObject.GetComponent<TileUnionImpl>();
             if (tileUnion != null)
             {
-                tileUnion.SetBuilderMatrix(GlobalGameSettings.GetGridProperties());
+                tileUnion.SetGridProperties(GlobalGameSettings.GetGridProperties());
+                EditorUtility.SetDirty(tileUnion);
             }
         }
     }

@@ -38,7 +38,7 @@ namespace Level.Inventory
                 )
             )
             {
-                modelViewMap.Add(invView.Asset.HashCode, invView.Location);
+                modelViewMap.Add(invView.Asset.Uid, invView.Location);
             }
         }
 

@@ -87,16 +87,16 @@ namespace Level
             }
         }
 
-        public void Execute(DayStart day_start)
+        public void Execute(DayStart dayStart)
         {
             for (int i = 0; i < 0; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }
 
-            financesModel.AddMoney(day_start.MorningMoney);
+            financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
-            _ = StartCoroutine(DayStartRoutine(day_start.Duration));
+            _ = StartCoroutine(DayStartRoutine(dayStart.Duration));
         }
 
         private IEnumerator DayStartRoutine(float time)
@@ -166,7 +166,7 @@ namespace Level
             );
         }
 
-        public void Execute(DayEnd day_end)
+        public void Execute(DayEnd dayEnd)
         {
             leaveNeedOverride.Register();
 

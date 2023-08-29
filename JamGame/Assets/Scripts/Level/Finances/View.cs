@@ -13,18 +13,18 @@ namespace Level.Finances
         [SerializeField]
         private float lerpSpeed;
 
-        private int buffer_count;
+        private int bufferCount;
         private float lerpCount = 0;
 
         private void Update()
         {
-            lerpCount = Mathf.Lerp(lerpCount, buffer_count, lerpSpeed * Time.deltaTime);
+            lerpCount = Mathf.Lerp(lerpCount, bufferCount, lerpSpeed * Time.deltaTime);
             countText.text = Convert.ToString(Mathf.RoundToInt(lerpCount));
         }
 
         public void OnChanged(int money)
         {
-            buffer_count = money;
+            bufferCount = money;
         }
     }
 }

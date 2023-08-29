@@ -31,7 +31,7 @@ namespace Level.Shop
                 )
             )
             {
-                modelViewMap.Add(shopView.Asset.HashCode, shopView.Location);
+                modelViewMap.Add(shopView.Asset.Uid, shopView.Location);
             }
         }
 

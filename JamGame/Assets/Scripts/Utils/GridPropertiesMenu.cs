@@ -33,7 +33,8 @@ namespace Utils
             int selected = EditorGUILayout.Popup(
                 "Default GridProperties:",
                 index,
-                gridProperties.Select(x => x.name).ToArray(), GUILayout.Width(300)
+                gridProperties.Select(x => x.name).ToArray(),
+                GUILayout.Width(300)
             );
             if (selected >= 0 && GlobalGameSettings.GetGridProperties() != gridProperties[selected])
             {

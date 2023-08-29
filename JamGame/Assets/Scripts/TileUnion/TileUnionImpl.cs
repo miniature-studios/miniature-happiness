@@ -57,7 +57,7 @@ namespace TileUnion
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        public string HashCode => CoreModelPrefab.Uid;
+        public string Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
         [InspectorReadOnly]
@@ -78,22 +78,22 @@ namespace TileUnion
 
         [SerializeField]
         [InspectorReadOnly]
-        private GridProperties builderMatrix;
+        private GridProperties gridProperties;
 
-        public void SetBuilderMatrix(GridProperties builderMatrix)
+        public void SetGridProperties(GridProperties gridProperties)
         {
-            this.builderMatrix = builderMatrix;
+            this.gridProperties = gridProperties;
         }
 
         public List<TileImpl> Tiles = new();
 
-        private Dictionary<int, CachedConfiguration> cachedUnionConfiguration;
+        private Dictionary<int, CachedConfiguration> cachedConfiguration;
 
         private void OnValidate()
         {
             foreach (TileImpl tile in Tiles)
             {
-                tile.SetPosition(builderMatrix, tile.Position);
+                tile.SetPosition(gridProperties, tile.Position);
                 tile.SetRotation(tile.Rotation);
             }
         }
@@ -102,12 +102,12 @@ namespace TileUnion
         {
             get
             {
-                if (cachedUnionConfiguration == null)
+                if (cachedConfiguration == null)
                 {
                     Debug.LogError("Null configuration");
                     CreateCache();
                 }
-                return cachedUnionConfiguration;
+                return cachedConfiguration;
             }
         }
         public Vector2Int Position => position;
@@ -303,7 +303,7 @@ namespace TileUnion
 
         public void CreateCache()
         {
-            cachedUnionConfiguration = new();
+            cachedConfiguration = new();
             for (int i = 0; i < 4; i++)
             {
                 List<TileCachedConfiguration> tileConfigurations = new();
@@ -311,7 +311,7 @@ namespace TileUnion
                 {
                     tileConfigurations.Add(new(tile, tile.Position, tile.Rotation));
                 }
-                cachedUnionConfiguration.Add(
+                cachedConfiguration.Add(
                     rotation,
                     new(
                         GetTilesPositionsForUpdating().ToList(),
@@ -327,9 +327,11 @@ namespace TileUnion
         public void SetRotation(int rotation)
         {
             this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
-            foreach (TileCachedConfiguration config in Configuration[this.rotation].TilesConfigurations)
+            foreach (
+                TileCachedConfiguration config in Configuration[this.rotation].TilesConfigurations
+            )
             {
-                config.TargetTile.SetPosition(builderMatrix, config.Position);
+                config.TargetTile.SetPosition(gridProperties, config.Position);
                 config.TargetTile.SetRotation(config.Rotation);
             }
         }
@@ -338,9 +340,9 @@ namespace TileUnion
         {
             position = vector;
             transform.localPosition = new Vector3(
-                builderMatrix.Step * position.y,
+                gridProperties.Step * position.y,
                 transform.localPosition.y,
-                -builderMatrix.Step * position.x
+                -gridProperties.Step * position.x
             );
         }
 
@@ -370,7 +372,7 @@ namespace TileUnion
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
-                tile.SetPosition(builderMatrix, new Vector2Int(tile.Position.y, -tile.Position.x));
+                tile.SetPosition(gridProperties, new Vector2Int(tile.Position.y, -tile.Position.x));
             }
             rotation %= 4;
             Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
@@ -380,7 +382,7 @@ namespace TileUnion
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetPosition(
-                    builderMatrix,
+                    gridProperties,
                     tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
                 );
             }

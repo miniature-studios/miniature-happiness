@@ -8,24 +8,24 @@ namespace Common
     {
         public static Vector2 GetCenterOfMass(this List<Vector2Int> positions)
         {
-            Vector2 vector_sum = new();
+            Vector2 vectorSum = new();
             foreach (Vector2Int pos in positions)
             {
-                vector_sum += pos;
+                vectorSum += pos;
             }
-            vector_sum /= positions.Count;
+            vectorSum /= positions.Count;
             List<Vector2> variants =
                 new()
                 {
-                    new(Mathf.RoundToInt(vector_sum.x), Mathf.RoundToInt(vector_sum.y)),
+                    new(Mathf.RoundToInt(vectorSum.x), Mathf.RoundToInt(vectorSum.y)),
                     new(
-                        Mathf.RoundToInt(vector_sum.x + (Mathf.Sign(vector_sum.normalized.x) / 2))
-                            - (Mathf.Sign(vector_sum.normalized.x) / 2),
-                        Mathf.RoundToInt(vector_sum.y + (Mathf.Sign(vector_sum.normalized.y) / 2))
-                            - (Mathf.Sign(vector_sum.normalized.y) / 2)
+                        Mathf.RoundToInt(vectorSum.x + (Mathf.Sign(vectorSum.normalized.x) / 2))
+                            - (Mathf.Sign(vectorSum.normalized.x) / 2),
+                        Mathf.RoundToInt(vectorSum.y + (Mathf.Sign(vectorSum.normalized.y) / 2))
+                            - (Mathf.Sign(vectorSum.normalized.y) / 2)
                     )
                 };
-            return variants.OrderBy(x => Vector2.Distance(x, vector_sum)).First();
+            return variants.OrderBy(x => Vector2.Distance(x, vectorSum)).First();
         }
     }
 }

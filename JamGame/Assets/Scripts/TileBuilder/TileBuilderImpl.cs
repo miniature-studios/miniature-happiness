@@ -22,12 +22,12 @@ namespace TileBuilder
         private GameObject stashRootObject;
 
         [SerializeField]
-        private GridProperties builderMatrix;
+        private GridProperties gridProperties;
 
         [SerializeField]
         private AssetLabelReference tileUnionsLabel;
 
-        public GridProperties BuilderMatrix => builderMatrix;
+        public GridProperties GridProperties => gridProperties;
 
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
@@ -54,14 +54,14 @@ namespace TileBuilder
                 )
             )
             {
-                modelViewMap.Add(tileUnion.Asset.HashCode, tileUnion.Location);
+                modelViewMap.Add(tileUnion.Asset.Uid, tileUnion.Location);
                 InstantiatedViews.Add(
-                    tileUnion.Asset.HashCode,
+                    tileUnion.Asset.Uid,
                     Instantiate(tileUnion.Asset, stashRootObject.transform)
                 );
 
                 TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
-                unionInstance.SetBuilderMatrix(builderMatrix);
+                unionInstance.SetGridProperties(gridProperties);
                 unionInstance.CreateCache();
                 unionInstance.SetColliderActive(false);
                 unionInstance.SetPosition(stashPosition);
@@ -251,7 +251,7 @@ namespace TileBuilder
                     transform
                 );
                 tileUnion.SetCoreModel(coreModel);
-                tileUnion.SetBuilderMatrix(builderMatrix);
+                tileUnion.SetGridProperties(gridProperties);
                 tileUnion.CreateCache();
                 tileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
                 return tileUnion;
@@ -323,11 +323,7 @@ namespace TileBuilder
             foreach (TileUnionImpl tileUnion in TileUnionDictionary.Values.Distinct())
             {
                 tileConfigs.Add(
-                    new TileConfig(
-                        tileUnion.CoreModel.Uid,
-                        tileUnion.Position,
-                        tileUnion.Rotation
-                    )
+                    new TileConfig(tileUnion.CoreModel.Uid, tileUnion.Position, tileUnion.Rotation)
                 );
             }
 

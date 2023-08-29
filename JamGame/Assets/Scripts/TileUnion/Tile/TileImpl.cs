@@ -221,13 +221,13 @@ namespace TileUnion.Tile
             }
         }
 
-        public void SetPosition(GridProperties builderMatrix, Vector2Int newPosition)
+        public void SetPosition(GridProperties gridProperties, Vector2Int newPosition)
         {
             position = newPosition;
             transform.localPosition = new Vector3(
-                builderMatrix.Step * newPosition.y,
+                gridProperties.Step * newPosition.y,
                 transform.localPosition.y,
-                -builderMatrix.Step * newPosition.x
+                -gridProperties.Step * newPosition.x
             );
         }
 
@@ -257,8 +257,8 @@ namespace TileUnion.Tile
                 .Range(0, rotation)
                 .ToList()
                 .ForEach(x => imaginePlace = imaginePlace.RotateMinus90());
-            WallCollection wall_collection = RawWalls.Find(x => x.Place == imaginePlace);
-            return wall_collection.ActiveWallType;
+            WallCollection wallCollection = RawWalls.Find(x => x.Place == imaginePlace);
+            return wallCollection.ActiveWallType;
         }
 
         public void CreateWallsCache()
@@ -266,12 +266,12 @@ namespace TileUnion.Tile
             Dictionary<Direction, List<WallType>> list = new();
             foreach (WallCollection wall in RawWalls)
             {
-                Direction imagine_place = wall.Place;
+                Direction imaginePlace = wall.Place;
                 Enumerable
                     .Range(0, rotation)
                     .ToList()
-                    .ForEach(arg => imagine_place = imagine_place.Rotate90());
-                list.Add(imagine_place, wall.Handlers.Select(x => x.Type).ToList());
+                    .ForEach(arg => imaginePlace = imaginePlace.Rotate90());
+                list.Add(imaginePlace, wall.Handlers.Select(x => x.Type).ToList());
             }
             cachedWalls = list;
         }
