@@ -21,9 +21,6 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
-        private Transform dragAndDropTransform;
-
-        [SerializeField]
         [Pickle(typeof(IDragAndDropAgent), LookupType = ObjectProviderType.Scene)]
         private GameObject backupDragAndDropProvider;
         private IDragAndDropAgent backupDragAndDrop;
@@ -53,7 +50,7 @@ namespace Level
                     if (result.Success)
                     {
                         bufferCoreModel = result.Data;
-                        bufferCoreModel.transform.parent = dragAndDropTransform;
+                        bufferCoreModel.transform.SetParent(transform);
                     }
                 }
             }
