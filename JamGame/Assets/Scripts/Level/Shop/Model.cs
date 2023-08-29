@@ -29,7 +29,6 @@ namespace Level.Shop
 
         public void AddRoom(CoreModel room)
         {
-            room.transform.parent = transform;
             roomsInShop.Add(room);
         }
 

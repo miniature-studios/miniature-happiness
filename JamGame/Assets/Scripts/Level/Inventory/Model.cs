@@ -9,9 +9,6 @@ namespace Level.Inventory
     [AddComponentMenu("Scripts/Level.Inventory.Model")]
     public class Model : MonoBehaviour
     {
-        [SerializeField]
-        private Transform inventoryTransform;
-
         private ObservableCollection<CoreModel> roomsInInventory = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
@@ -22,7 +19,6 @@ namespace Level.Inventory
 
         public void AddNewRoom(CoreModel newRoom)
         {
-            newRoom.transform.parent = inventoryTransform;
             roomsInInventory.Add(newRoom);
         }
 

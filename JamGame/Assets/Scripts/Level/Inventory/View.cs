@@ -82,6 +82,7 @@ namespace Level.Inventory
 
                 newRoomView.SetCoreModel(newItem);
                 roomViews.Add(newRoomView);
+                newItem.transform.SetParent(newRoomView.transform);
             }
             else
             {

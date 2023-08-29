@@ -197,7 +197,7 @@ namespace TileBuilder
             foreach (Vector2Int position in previousPlaces)
             {
                 FreeSpace.TileUnionModel.PlacingProperties.SetPosition(position);
-                CreateTileAndBind(FreeSpace);
+                CreateTileAndBind(FreeSpace, false);
             }
             UpdateSidesInPositions(previousPlaces);
         }
@@ -231,7 +231,7 @@ namespace TileBuilder
             return TileUnionDictionary.Select(x => x.Key);
         }
 
-        public void CreateTileAndBind(CoreModel coreModel)
+        public void CreateTileAndBind(CoreModel coreModel, bool changeParent = true)
         {
             TileUnionImpl tileUnion = CreateTile(coreModel);
             foreach (Vector2Int pos in tileUnion.TilesPositions)
@@ -240,6 +240,10 @@ namespace TileBuilder
             }
             UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
             OnTileUnionCreated?.Invoke(tileUnion);
+            if (changeParent)
+            {
+                coreModel.transform.SetParent(tileUnion.transform);
+            }
         }
 
         private TileUnionImpl CreateTile(CoreModel coreModel)

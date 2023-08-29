@@ -68,6 +68,7 @@ namespace Level.Shop
                 newRoomView.SetCoreModel(newItem);
                 newRoomView.enabled = true;
                 viewList.Add(newRoomView);
+                newItem.transform.SetParent(newRoomView.transform);
             }
             else
             {
