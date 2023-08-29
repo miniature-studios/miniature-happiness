@@ -18,8 +18,8 @@ namespace Utils
 
             foreach (string path in files)
             {
-                ModelImporter model_importer = (ModelImporter)AssetImporter.GetAtPath(path);
-                model_importer.isReadable = true;
+                ModelImporter modeImporter = (ModelImporter)AssetImporter.GetAtPath(path);
+                modeImporter.isReadable = true;
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             }
 

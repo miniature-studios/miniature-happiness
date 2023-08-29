@@ -5,12 +5,17 @@ using UnityEditor;
 using UnityEngine;
 using Employee;
 
-namespace SerializedInterface.Inspector 
+namespace SerializedInterface.Inspector
 {
     [CustomPropertyDrawer(typeof(SerializedEffect))]
     public class SerializedEffectDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames = { "StressEffect", "NeedModifierEffect", "ControllerEffect" };
+        private string[] implementingTypeNames =
+        {
+            "StressEffect",
+            "NeedModifierEffect",
+            "ControllerEffect"
+        };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -64,9 +69,7 @@ namespace SerializedInterface.Inspector
             float height = 0.0f;
             if (selected_type != "")
             {
-                var typed_prop = property.FindPropertyRelative(
-                    PascalToCamelCase(selected_type)
-                );
+                var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
                 height = EditorGUI.GetPropertyHeight(typed_prop);
             }
             return EditorGUIUtility.singleLineHeight + height;

@@ -16,9 +16,9 @@ namespace Utils
             return LoadScriptableObjectFromLabel(gameSettingsLabel).Matrix;
         }
 
-        public static void SetGridProperties(GridProperties matrix)
+        public static void SetGridProperties(GridProperties gridProperties)
         {
-            LoadScriptableObjectFromLabel(gameSettingsLabel).SetMatrix(matrix);
+            LoadScriptableObjectFromLabel(gameSettingsLabel).SetMatrix(gridProperties);
         }
 
         private static GameSettings LoadScriptableObjectFromLabel(string assetLabel)
@@ -26,7 +26,8 @@ namespace Utils
             IList<IResourceLocation> list = Addressables
                 .LoadResourceLocationsAsync(assetLabel, typeof(ScriptableObject))
                 .WaitForCompletion();
-            return Addressables.LoadAssetAsync<ScriptableObject>(list.First()).WaitForCompletion() as GameSettings;
+            return Addressables.LoadAssetAsync<ScriptableObject>(list.First()).WaitForCompletion()
+                as GameSettings;
         }
     }
 }

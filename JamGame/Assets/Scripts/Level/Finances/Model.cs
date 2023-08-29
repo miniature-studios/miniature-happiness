@@ -11,17 +11,17 @@ namespace Level.Finances
         private int money;
         public UnityEvent<int> MoneyChange;
 
-        public void SetMoney(int money_count)
+        public void SetMoney(int moneyCount)
         {
-            money = money_count;
+            money = moneyCount;
             MoneyChange?.Invoke(money);
         }
 
-        public Result TryTakeMoney(int money_count)
+        public Result TryTakeMoney(int moneyCount)
         {
-            if (money >= money_count)
+            if (money >= moneyCount)
             {
-                money -= money_count;
+                money -= moneyCount;
                 MoneyChange?.Invoke(money);
                 return new SuccessResult();
             }
@@ -31,9 +31,9 @@ namespace Level.Finances
             }
         }
 
-        public void AddMoney(int money_count)
+        public void AddMoney(int moneyCount)
         {
-            money += money_count;
+            money += moneyCount;
             MoneyChange?.Invoke(money);
         }
     }

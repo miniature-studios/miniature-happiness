@@ -50,22 +50,22 @@ namespace AnimatorsSwitcher
             int indent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
 
-            ReorderableList animators_list = GetAnimatorsList(
+            ReorderableList animatorsList = GetAnimatorsList(
                 property,
                 property.FindPropertyRelative("Animators")
             );
-            namedAnimatorsListLength = animators_list.GetHeight();
-            animators_list.DoList(position);
+            namedAnimatorsListLength = animatorsList.GetHeight();
+            animatorsList.DoList(position);
 
-            ReorderableList interface_matcher_list = GetInterfaceMatcherList(
+            ReorderableList interfaceMatcherList = GetInterfaceMatcherList(
                 property,
                 property.FindPropertyRelative("InterfaceMatcher")
             );
-            interfaceMatcherListLength = interface_matcher_list.GetHeight();
-            interface_matcher_list.DoList(
+            interfaceMatcherListLength = interfaceMatcherList.GetHeight();
+            interfaceMatcherList.DoList(
                 new Rect(
                     position.x,
-                    position.y + animators_list.GetHeight(),
+                    position.y + animatorsList.GetHeight(),
                     position.width,
                     position.height
                 )
@@ -80,91 +80,89 @@ namespace AnimatorsSwitcher
             List<string> animatorsNames = new();
             for (int x = 0; x < property.FindPropertyRelative("Animators").arraySize; x++)
             {
-                SerializedProperty array_value = property
+                SerializedProperty arrayValue = property
                     .FindPropertyRelative("Animators")
                     .GetArrayElementAtIndex(x);
                 animatorsNames.Add(
-                    (array_value.objectReferenceValue as Animator) != null
-                        ? (array_value.objectReferenceValue as Animator).name
+                    (arrayValue.objectReferenceValue as Animator) != null
+                        ? (arrayValue.objectReferenceValue as Animator).name
                         : "Unknown animator"
                 );
             }
 
-            List<InterfaceMatch> buffer_interface_matcher = new();
+            List<InterfaceMatch> bufferInterfaceMatcher = new();
 
-            SerializedProperty interface_matcher_array = property
+            SerializedProperty interfaceMatcherArray = property
                 .FindPropertyRelative("InterfaceMatcher")
                 .Copy();
-            for (int i = 0; i < interface_matcher_array.arraySize; i++)
+            for (int i = 0; i < interfaceMatcherArray.arraySize; i++)
             {
-                buffer_interface_matcher.Add(
+                bufferInterfaceMatcher.Add(
                     new(
-                        interface_matcher_array
+                        interfaceMatcherArray
                             .GetArrayElementAtIndex(i)
                             .FindPropertyRelative("InterfaceName")
                             .stringValue,
                         new()
                     )
                 );
-                SerializedProperty _array = interface_matcher_array
+                SerializedProperty array = interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
                     .FindPropertyRelative("Bools");
-                for (int j = 0; j < _array.arraySize; j++)
+                for (int j = 0; j < array.arraySize; j++)
                 {
-                    SerializedProperty _arr_element = _array.GetArrayElementAtIndex(j);
-                    buffer_interface_matcher
+                    SerializedProperty arrayElement = array.GetArrayElementAtIndex(j);
+                    bufferInterfaceMatcher
                         .Last()
                         .Bools.Add(
                             new(
-                                _arr_element.FindPropertyRelative("AnimatorName").stringValue,
-                                _arr_element.FindPropertyRelative("Bool").boolValue
+                                arrayElement.FindPropertyRelative("AnimatorName").stringValue,
+                                arrayElement.FindPropertyRelative("Bool").boolValue
                             )
                         );
                 }
             }
 
-            interface_matcher_array.ClearArray();
+            interfaceMatcherArray.ClearArray();
             for (int i = 0; i < ActionNames.Count(); i++)
             {
-                interface_matcher_array.InsertArrayElementAtIndex(i);
-                interface_matcher_array
+                interfaceMatcherArray.InsertArrayElementAtIndex(i);
+                interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
                     .FindPropertyRelative("Bools")
                     .ClearArray();
-                interface_matcher_array
+                interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
                     .FindPropertyRelative("InterfaceName")
                     .stringValue = ActionNames[i];
-                SerializedProperty animator_bools_array = interface_matcher_array
+                SerializedProperty animatorBoolsArray = interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
                     .FindPropertyRelative("Bools");
 
                 for (int j = 0; j < animatorsNames.Count(); j++)
                 {
-                    InterfaceMatch founded_interface_matcher = buffer_interface_matcher
+                    InterfaceMatch foundedInterfaceMatcher = bufferInterfaceMatcher
                         .Where(x => x.InterfaceName == ActionNames[i])
                         .FirstOrDefault();
-                    bool _bool = false;
-                    if (founded_interface_matcher != null)
+                    bool flag = false;
+                    if (foundedInterfaceMatcher != null)
                     {
-                        List<AnimatorWithBool> founded_animator_bool_array =
-                            founded_interface_matcher.Bools;
-                        for (int k = 0; k < founded_animator_bool_array.Count; k++)
+                        List<AnimatorWithBool> foundedAnimatorBoolArray =
+                            foundedInterfaceMatcher.Bools;
+                        for (int k = 0; k < foundedAnimatorBoolArray.Count; k++)
                         {
-                            if (founded_animator_bool_array[k].AnimatorName == animatorsNames[j])
+                            if (foundedAnimatorBoolArray[k].AnimatorName == animatorsNames[j])
                             {
-                                _bool = founded_animator_bool_array[k].Bool;
+                                flag = foundedAnimatorBoolArray[k].Bool;
                             }
                         }
                     }
-                    animator_bools_array.InsertArrayElementAtIndex(j);
-                    SerializedProperty _arr_element = animator_bools_array.GetArrayElementAtIndex(
-                        j
-                    );
-                    _arr_element.FindPropertyRelative("AnimatorName").stringValue = animatorsNames[
+                    animatorBoolsArray.InsertArrayElementAtIndex(j);
+                    SerializedProperty arrayElement = animatorBoolsArray.GetArrayElementAtIndex(j);
+                    arrayElement.FindPropertyRelative("AnimatorName").stringValue = animatorsNames[
                         j
                     ];
-                    _arr_element.FindPropertyRelative("Bool").boolValue = _bool;
+                    arrayElement.FindPropertyRelative("Bool").boolValue = flag;
                 }
             }
         }
@@ -194,12 +192,12 @@ namespace AnimatorsSwitcher
                         if (listProperty.isExpanded)
                         {
                             SerializedProperty element = listProperty.GetArrayElementAtIndex(index);
-                            ReorderableList animator_bool_list = GetAnimatorBoolList(
+                            ReorderableList animatorBoolList = GetAnimatorBoolList(
                                 element,
                                 element.FindPropertyRelative("Bools"),
                                 element.FindPropertyRelative("InterfaceName").stringValue
                             );
-                            animator_bool_list.DoList(rect);
+                            animatorBoolList.DoList(rect);
                         }
                     },
                     elementHeightCallback = (int indexer) =>
@@ -221,7 +219,7 @@ namespace AnimatorsSwitcher
         private ReorderableList GetAnimatorBoolList(
             SerializedProperty property,
             SerializedProperty listProperty,
-            string list_name
+            string listName
         )
         {
             ReorderableList list =
@@ -234,7 +232,7 @@ namespace AnimatorsSwitcher
                         listProperty.isExpanded = EditorGUI.Foldout(
                             newRect,
                             listProperty.isExpanded,
-                            list_name + $" - {listProperty.arraySize}",
+                            listName + $" - {listProperty.arraySize}",
                             true
                         );
                     },

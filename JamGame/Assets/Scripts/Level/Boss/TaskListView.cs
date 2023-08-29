@@ -9,8 +9,11 @@ namespace Level.Boss
     [AddComponentMenu("Scripts/Level.Boss.TaskListView")]
     public class TaskListView : MonoBehaviour
     {
-        [SerializeField] private GameObject tasks_parent;
-        [SerializeField] private TaskView taskViewPrefab;
+        [SerializeField]
+        private GameObject tasks_parent;
+
+        [SerializeField]
+        private TaskView taskViewPrefab;
 
         private List<TaskView> task_views = new();
 

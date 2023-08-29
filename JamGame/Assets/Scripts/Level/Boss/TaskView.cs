@@ -8,11 +8,24 @@ namespace Level.Boss
     public class TaskView : MonoBehaviour
     {
         private ITask task;
-        public ITask Task { get => task; set { task = value; UpdateFromTask(); } }
+        public ITask Task
+        {
+            get => task;
+            set
+            {
+                task = value;
+                UpdateFromTask();
+            }
+        }
 
-        [SerializeField] private TMP_Text description;
-        [SerializeField] private RectTransform progress_bar;
-        [SerializeField] private TMP_Text progress_label;
+        [SerializeField]
+        private TMP_Text description;
+
+        [SerializeField]
+        private RectTransform progress_bar;
+
+        [SerializeField]
+        private TMP_Text progress_label;
 
         private void UpdateFromTask()
         {
@@ -23,7 +36,8 @@ namespace Level.Boss
             }
             else if (task is MaxStressBound mtb)
             {
-                description.text = $"Hold maximum stress of employees less than {mtb.MaxStressTarget} for {progress.Overall} seconds";
+                description.text =
+                    $"Hold maximum stress of employees less than {mtb.MaxStressTarget} for {progress.Overall} seconds";
             }
             else
             {

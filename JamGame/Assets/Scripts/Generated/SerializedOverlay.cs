@@ -3,12 +3,12 @@
 using System;
 using UnityEngine;
 
-namespace Overlay 
+namespace Overlay
 {
     [Serializable]
     public class SerializedOverlay
     {
-        [SerializeField] 
+        [SerializeField]
         private string selectedType;
 
         [SerializeField]

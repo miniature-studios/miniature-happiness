@@ -34,10 +34,7 @@ namespace TileUnion.Tile
             materialsByState = new()
             {
                 { State.Selected, new Material[1] { transparentMaterial } },
-                {
-                    State.SelectedOverlapping,
-                    new Material[1] { errorMaterial }
-                },
+                { State.SelectedOverlapping, new Material[1] { errorMaterial } },
             };
             SetMaterial(State.Default);
         }
@@ -56,10 +53,14 @@ namespace TileUnion.Tile
         {
             foreach (KeyValuePair<Renderer, Material[]> materialsMap in initialMaterialsMap)
             {
-                materialsMap.Key.materials = state == State.Default
-                    ? materialsMap.Value
-                    : Enumerable.Range(0, materialsMap.Value.Count())
-                        .Select(x => materialsByState[state].ToList()).Aggregate((x, y) => x.Concat(y).ToList()).ToArray();
+                materialsMap.Key.materials =
+                    state == State.Default
+                        ? materialsMap.Value
+                        : Enumerable
+                            .Range(0, materialsMap.Value.Count())
+                            .Select(x => materialsByState[state].ToList())
+                            .Aggregate((x, y) => x.Concat(y).ToList())
+                            .ToArray();
             }
         }
     }

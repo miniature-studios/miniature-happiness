@@ -3,12 +3,12 @@
 using System;
 using UnityEngine;
 
-namespace Level.Boss.Task 
+namespace Level.Boss.Task
 {
     [Serializable]
     public class SerializedTask
     {
-        [SerializeField] 
+        [SerializeField]
         private string selectedType;
 
         [SerializeField]

@@ -15,8 +15,10 @@ namespace Common
 
         public static bool PointerIsOverTargetGO(Vector2 screenPosition, GameObject targetUI)
         {
-            IEnumerable<GameObject> go_list = UIRayCast(ScreenPosToPointerData(screenPosition));
-            return go_list != null && go_list.Any((x) => x == targetUI);
+            IEnumerable<GameObject> rayCastedGameObjects = UIRayCast(
+                ScreenPosToPointerData(screenPosition)
+            );
+            return rayCastedGameObjects != null && rayCastedGameObjects.Any((x) => x == targetUI);
         }
 
         public static IEnumerable<GameObject> UIRayCast(Vector2 screenPos)

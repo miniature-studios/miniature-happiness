@@ -15,7 +15,7 @@ namespace Overlay
     [AddComponentMenu("Scripts/Overlay.Manager")]
     public class Manager : MonoBehaviour, IOverlayManager
     {
-        // TODO: Update in runtime. 
+        // TODO: Update in runtime.
         private List<IOverlayRenderer> overlayRenderers;
 
         private void Start()

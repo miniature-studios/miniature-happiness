@@ -12,7 +12,7 @@ namespace Level.Inventory.Room
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        public string HashCode => CoreModelPrefab.Uid;
+        public string Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
         private ExtendedView extendedView;

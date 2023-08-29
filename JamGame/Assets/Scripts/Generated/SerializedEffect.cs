@@ -3,12 +3,12 @@
 using System;
 using UnityEngine;
 
-namespace Employee 
+namespace Employee
 {
     [Serializable]
     public class SerializedEffect
     {
-        [SerializeField] 
+        [SerializeField]
         private string selectedType;
 
         [SerializeField]

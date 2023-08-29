@@ -42,7 +42,7 @@ namespace Level.Room
                 )
             )
             {
-                if (shopView.Asset.HashCode == coreModel.Uid)
+                if (shopView.Asset.Uid == coreModel.Uid)
                 {
                     shopRooms.Add(shopView.Asset);
                 }
@@ -54,7 +54,7 @@ namespace Level.Room
                 )
             )
             {
-                if (invView.Asset.HashCode == coreModel.Uid)
+                if (invView.Asset.Uid == coreModel.Uid)
                 {
                     inventoryViews.Add(invView.Asset);
                 }
@@ -66,7 +66,7 @@ namespace Level.Room
                 )
             )
             {
-                if (tileUnion.Asset.HashCode == coreModel.Uid)
+                if (tileUnion.Asset.Uid == coreModel.Uid)
                 {
                     tileUnions.Add(tileUnion.Asset);
                 }

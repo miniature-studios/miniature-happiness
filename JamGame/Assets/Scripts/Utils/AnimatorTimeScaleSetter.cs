@@ -47,9 +47,9 @@ namespace Utils
                         continue;
                     }
 
-                    bool ui_folder = file.Contains("Assets\\Prefabs\\UI");
+                    bool uiFolder = file.Contains("Assets\\Prefabs\\UI");
 
-                    animator.updateMode = ui_folder
+                    animator.updateMode = uiFolder
                         ? AnimatorUpdateMode.UnscaledTime
                         : AnimatorUpdateMode.Normal;
                     dirty = true;

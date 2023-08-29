@@ -6,8 +6,8 @@ namespace Employee.IncomeGenerator
     [AddComponentMenu("Scripts/Employee.IncomeGenerator.IncomeLabelView")]
     public class IncomeLabelView : MonoBehaviour
     {
-        [SerializeField] private TMP_Text label;
-        [SerializeField] private Animator animator;
+        [SerializeField]
+        private TMP_Text label;
         private Camera cam;
 
         private void Start()

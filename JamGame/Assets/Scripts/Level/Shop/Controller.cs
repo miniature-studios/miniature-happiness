@@ -19,10 +19,10 @@ namespace Level.Shop
         [SerializeField]
         private Finances.Model financesController;
 
-        public void SetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
+        public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {
             shopModel.ResetRooms(
-                room_configs.Select(x => CoreModel.InstantiateCoreModel(x.Room.Uid))
+                roomConfigs.Select(x => CoreModel.InstantiateCoreModel(x.Room.Uid))
             );
         }
 
@@ -42,7 +42,7 @@ namespace Level.Shop
             }
         }
 
-        public void SetShopEmployees(IEnumerable<EmployeeConfig> employee_configs)
+        public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)
         {
             // TODO
         }
