@@ -16,8 +16,7 @@ namespace TileUnion
 
         public void AddRotation(int rotation)
         {
-            this.rotation = rotation + 4;
-            this.rotation %= 4;
+            this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
         }
 
         public void ApplyRotation(RotationDirection rotation)

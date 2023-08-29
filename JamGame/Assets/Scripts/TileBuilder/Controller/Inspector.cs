@@ -21,7 +21,7 @@ namespace TileBuilder.Controller
 
         public void DeleteAllTiles()
         {
-            _ = model.Execute(new RemoveAllRooms());
+            _ = tileBuilder.Execute(new RemoveAllRooms());
         }
 
         public void CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
@@ -29,16 +29,16 @@ namespace TileBuilder.Controller
             CoreModel newCoreModel = CoreModel.InstantiateCoreModel(
                 new TileConfig(coreModel.Uid, position, rotation)
             );
-            _ = model.Execute(new DropRoom(newCoreModel));
+            _ = tileBuilder.Execute(new DropRoom(newCoreModel));
         }
 
         public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
         {
-            _ = model.Execute(new RemoveAllRooms());
+            _ = tileBuilder.Execute(new RemoveAllRooms());
             foreach (TileConfig tileConfig in buildingConfig.TilePlaceConfigs)
             {
                 CoreModel core = CoreModel.InstantiateCoreModel(tileConfig);
-                _ = model.Execute(new DropRoom(core));
+                _ = tileBuilder.Execute(new DropRoom(core));
             }
         }
 

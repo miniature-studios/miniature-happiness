@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Location;
+using TileUnion.Tile;
 using UnityEditor;
 using UnityEngine;
 
@@ -56,6 +57,15 @@ namespace TileUnion
                 DrawGizmoRecursively(child);
             }
         }
+
+        public void UpdateTilesPositionAndRotation()
+        {
+            foreach (TileImpl tile in Tiles)
+            {
+                tile.SetPosition(gridProperties, tile.Position);
+                tile.SetRotation(tile.Rotation);
+            }
+        }
     }
 
     [CustomEditor(typeof(TileUnionImpl))]
@@ -100,6 +110,13 @@ namespace TileUnion
             if (GUILayout.Button("Set rotation 3 from cache"))
             {
                 tileUnion.SetRotation(3);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Update tiles position and rotation"))
+            {
+                tileUnion.UpdateTilesPositionAndRotation();
             }
             EditorGUILayout.EndHorizontal();
 

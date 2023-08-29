@@ -20,19 +20,16 @@ namespace TileBuilder.Controller
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
-        [SerializeField]
-        private Model model;
-
         public UnityEvent BuiltValidatedOffice;
 
         public void ChangeGameMode(GameMode gameMode)
         {
-            model.ChangeGameMode(gameMode);
+            tileBuilder.ChangeGameMode(gameMode);
         }
 
         public void ValidateBuilding()
         {
-            Result result = model.Execute(new ValidateBuilding());
+            Result result = tileBuilder.Execute(new ValidateBuilding());
             if (result.Success)
             {
                 BuiltValidatedOffice?.Invoke();
@@ -57,7 +54,7 @@ namespace TileBuilder.Controller
 
             coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
             ShowSelectedRoom command = new(coreModel);
-            _ = model.Execute(command);
+            _ = tileBuilder.Execute(command);
         }
 
         public Result Drop(CoreModel coreModel)
@@ -67,7 +64,7 @@ namespace TileBuilder.Controller
             if (matrixResult.Success)
             {
                 coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
-                return model.Execute(new DropRoom(coreModel));
+                return tileBuilder.Execute(new DropRoom(coreModel));
             }
             else
             {
@@ -82,7 +79,7 @@ namespace TileBuilder.Controller
             if (matrixResult.Success)
             {
                 BorrowRoom command = new(matrixResult.Data);
-                Result result = model.Execute(command);
+                Result result = tileBuilder.Execute(command);
                 return result.Success
                     ? new SuccessResult<CoreModel>(command.BorrowedRoom)
                     : new FailResult<CoreModel>(result.Error);
@@ -92,7 +89,7 @@ namespace TileBuilder.Controller
 
         public void HoverLeave()
         {
-            _ = model.Execute(new HideSelectedRoom());
+            _ = tileBuilder.Execute(new HideSelectedRoom());
         }
     }
 }

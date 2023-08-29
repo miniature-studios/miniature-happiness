@@ -4,6 +4,7 @@ using Pickle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TileBuilder.Command;
 using TileUnion;
 using TileUnion.Tile;
 using UnityEngine;
@@ -27,6 +28,11 @@ namespace TileBuilder
         [SerializeField]
         private AssetLabelReference tileUnionsLabel;
 
+        [SerializeField]
+        private List<CoreModel> coreModels = new();
+
+        private Validator.IValidator validator;
+
         public GridProperties GridProperties => gridProperties;
 
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
@@ -40,6 +46,23 @@ namespace TileBuilder
         private Vector2Int stashPosition = new(-10, -10);
 
         private void Awake()
+        {
+            ChangeGameMode(Controller.GameMode.God);
+            InitModelViewMap();
+        }
+
+        public void ChangeGameMode(Controller.GameMode gameMode)
+        {
+            validator = gameMode switch
+            {
+                Controller.GameMode.God => new Validator.GodMode(this),
+                Controller.GameMode.Build => new Validator.BuildMode(this),
+                Controller.GameMode.Play => new Validator.GameMode(),
+                _ => throw new ArgumentException(),
+            };
+        }
+
+        private void InitModelViewMap()
         {
             modelViewMap.Clear();
             foreach (TileUnionImpl view in InstantiatedViews.Values)
@@ -70,6 +93,33 @@ namespace TileBuilder
                 unionInstance.gameObject.SetActive(false);
             }
             ResetStashedViews();
+        }
+
+        public Result Execute(ICommand command)
+        {
+            Result response = validator.ValidateCommand(command);
+            if (response.Success)
+            {
+                if (command is DropRoom dropRoom)
+                {
+                    coreModels.Add(dropRoom.CoreModel);
+                    dropRoom.CoreModel.transform.parent = transform;
+                }
+                else if (command is RemoveAllRooms)
+                {
+                    foreach (CoreModel room in coreModels)
+                    {
+                        Destroy(room.gameObject);
+                    }
+                    coreModels.Clear();
+                }
+                command.Execute(this);
+                if (command is BorrowRoom borrowRoom)
+                {
+                    _ = coreModels.Remove(borrowRoom.BorrowedRoom);
+                }
+            }
+            return response;
         }
 
         public Result Validate()
