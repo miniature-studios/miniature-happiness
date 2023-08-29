@@ -16,9 +16,6 @@ namespace TileUnion.Tile
     public partial class TileImpl : MonoBehaviour
     {
         [SerializeField]
-        private Matrix builderMatrix;
-
-        [SerializeField]
         private WallSolver wallSolver;
 
         [SerializeField]
@@ -224,7 +221,7 @@ namespace TileUnion.Tile
             }
         }
 
-        public void SetPosition(Matrix builderMatrix, Vector2Int newPosition)
+        public void SetPosition(GridProperties builderMatrix, Vector2Int newPosition)
         {
             position = newPosition;
             transform.localPosition = new Vector3(

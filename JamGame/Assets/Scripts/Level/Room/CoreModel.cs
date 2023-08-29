@@ -1,6 +1,9 @@
 ﻿using Common;
 using System;
+using System.Collections.Generic;
+using TileBuilder;
 using UnityEngine;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Room
 {
@@ -22,10 +25,19 @@ namespace Level.Room
     [AddComponentMenu("Scripts/Level.Room.CoreModel")]
     public partial class CoreModel : MonoBehaviour
     {
+        private static string coreModelsLabel = "CoreModel";
+        private static Dictionary<string, IResourceLocation> uidPrefabsMap = new();
+
         [SerializeField]
         [InspectorReadOnly]
-        private string hashCode;
-        public string HashCode => hashCode;
+        private string uid;
+        public string Uid => uid;
+#if UNITY_EDITOR
+        public void SetHashCode(string uid)
+        {
+            this.uid = uid;
+        }
+#endif
 
         [SerializeField]
         [InspectorReadOnly]
@@ -45,5 +57,38 @@ namespace Level.Room
         [SerializeField]
         private TariffProperties tariffProperties;
         public TariffProperties TariffProperties => tariffProperties;
+
+        private static void UpdateUidPrefabsMap()
+        {
+            if (uidPrefabsMap.Count == 0)
+            {
+                foreach (
+                    AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
+                        coreModelsLabel
+                    )
+                )
+                {
+                    uidPrefabsMap.Add(core.Asset.Uid, core.Location);
+                }
+            }
+        }
+
+        public static CoreModel InstantiateCoreModel(TileConfig config)
+        {
+            UpdateUidPrefabsMap();
+            CoreModel core = Instantiate(
+                AddressableTools<CoreModel>.LoadAsset(uidPrefabsMap[config.HashCode])
+            );
+            core.TileUnionModel.PlacingProperties.SetPositionAndRotation(
+                config.Position,
+                config.Rotation
+            );
+            return core;
+        }
+
+        public static CoreModel InstantiateCoreModel(string hashCode)
+        {
+            return InstantiateCoreModel(new TileConfig(hashCode, Vector2Int.zero, 0));
+        }
     }
 }

@@ -5,9 +5,9 @@ using TileBuilder.Command;
 using UnityEditor;
 using UnityEngine;
 
-namespace TileBuilder
+namespace TileBuilder.Controller
 {
-    public partial class Controller : MonoBehaviour
+    public partial class ControllerImpl : MonoBehaviour
     {
         public CoreModel FreeSpace => tileBuilder.FreeSpace;
 
@@ -26,8 +26,8 @@ namespace TileBuilder
 
         public void CreateTile(CoreModel coreModel, Vector2Int position, int rotation)
         {
-            CoreModel newCoreModel = CoreModelTools.InstantiateCoreModel(
-                new TileConfig(coreModel.HashCode, position, rotation)
+            CoreModel newCoreModel = CoreModel.InstantiateCoreModel(
+                new TileConfig(coreModel.Uid, position, rotation)
             );
             _ = model.Execute(new DropRoom(newCoreModel));
         }
@@ -37,7 +37,7 @@ namespace TileBuilder
             _ = model.Execute(new RemoveAllRooms());
             foreach (TileConfig tileConfig in buildingConfig.TilePlaceConfigs)
             {
-                CoreModel core = CoreModelTools.InstantiateCoreModel(tileConfig);
+                CoreModel core = CoreModel.InstantiateCoreModel(tileConfig);
                 _ = model.Execute(new DropRoom(core));
             }
         }
@@ -84,10 +84,10 @@ namespace TileBuilder
         public CoreModel BossOffice;
     }
 
-    [CustomEditor(typeof(Controller))]
+    [CustomEditor(typeof(ControllerImpl))]
     public class Inspector : Editor
     {
-        public void DisplayGameModeChange(Controller controller)
+        public void DisplayGameModeChange(ControllerImpl controller)
         {
             _ = EditorGUILayout.BeginHorizontal();
             controller.GameModeToChange = (GameMode)
@@ -101,7 +101,7 @@ namespace TileBuilder
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowLocationBuildingButtons(Controller controller)
+        private void ShowLocationBuildingButtons(ControllerImpl controller)
         {
             _ = EditorGUILayout.BeginHorizontal();
             controller.SquareSideLength = EditorGUILayout.IntField(
@@ -232,7 +232,7 @@ namespace TileBuilder
             EditorGUILayout.EndHorizontal();
         }
 
-        private void ShowSaveLoading(Controller tileBuilderController)
+        private void ShowSaveLoading(ControllerImpl tileBuilderController)
         {
             _ = EditorGUILayout.BeginHorizontal();
             tileBuilderController.BuildingConfig = (BuildingConfig)
@@ -282,7 +282,7 @@ namespace TileBuilder
 
         public override void OnInspectorGUI()
         {
-            Controller tileBuilderController = serializedObject.targetObject as Controller;
+            ControllerImpl tileBuilderController = serializedObject.targetObject as ControllerImpl;
 
             DisplayGameModeChange(tileBuilderController);
             ShowLocationBuildingButtons(tileBuilderController);

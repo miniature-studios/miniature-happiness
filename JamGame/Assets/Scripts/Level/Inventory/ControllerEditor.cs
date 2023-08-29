@@ -28,7 +28,7 @@ namespace Level.Inventory.Inspector
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Add selected room"))
             {
-                controller.AddNewRoom(CoreModelTools.InstantiateCoreModel(room.HashCode));
+                controller.AddNewRoom(CoreModel.InstantiateCoreModel(room.Uid));
             }
             EditorGUILayout.EndHorizontal();
 
@@ -36,12 +36,12 @@ namespace Level.Inventory.Inspector
             if (GUILayout.Button("Add rooms from folder."))
             {
                 foreach (
-                    AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromStringLabel(
+                    AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
                         "CoreModel"
                     )
                 )
                 {
-                    controller.AddNewRoom(CoreModelTools.InstantiateCoreModel(core.Asset.HashCode));
+                    controller.AddNewRoom(CoreModel.InstantiateCoreModel(core.Asset.Uid));
                 }
             }
             EditorGUILayout.EndHorizontal();

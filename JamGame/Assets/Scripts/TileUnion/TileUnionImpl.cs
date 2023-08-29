@@ -13,58 +13,51 @@ using UnityEngine;
 
 namespace TileUnion
 {
-    [Serializable]
-    public class TileUnionConfiguration
-    {
-        public Vector2Int CenterTilePosition;
-        public List<Vector2Int> TilesPositionsForUpdating;
-        public List<Vector2Int> TilesPositions;
-        public List<TileConfiguration> TilesConfigurations;
-
-        public TileUnionConfiguration(
-            List<Vector2Int> tilesPositionsForUpdating,
-            List<Vector2Int> tilesPositions,
-            List<TileConfiguration> tilesConfigurations,
-            Vector2Int centerTilePosition
-        )
-        {
-            TilesPositionsForUpdating = tilesPositionsForUpdating;
-            TilesPositions = tilesPositions;
-            TilesConfigurations = tilesConfigurations;
-            CenterTilePosition = centerTilePosition;
-        }
-    }
-
-    [Serializable]
-    public class TileConfiguration
-    {
-        public TileImpl TargetTile;
-        public Vector2Int Position;
-        public int Rotation;
-
-        public TileConfiguration(TileImpl targetTile, Vector2Int position, int rotation)
-        {
-            TargetTile = targetTile;
-            Position = position;
-            Rotation = rotation;
-        }
-    }
-
     [SelectionBase]
     [AddComponentMenu("Scripts/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
+        [Serializable]
+        private class CachedConfiguration
+        {
+            public Vector2Int CenterTilePosition;
+            public List<Vector2Int> TilesPositionsForUpdating;
+            public List<Vector2Int> TilesPositions;
+            public List<TileCachedConfiguration> TilesConfigurations;
+
+            public CachedConfiguration(
+                List<Vector2Int> tilesPositionsForUpdating,
+                List<Vector2Int> tilesPositions,
+                List<TileCachedConfiguration> tilesConfigurations,
+                Vector2Int centerTilePosition
+            )
+            {
+                TilesPositionsForUpdating = tilesPositionsForUpdating;
+                TilesPositions = tilesPositions;
+                TilesConfigurations = tilesConfigurations;
+                CenterTilePosition = centerTilePosition;
+            }
+        }
+
+        [Serializable]
+        private class TileCachedConfiguration
+        {
+            public TileImpl TargetTile;
+            public Vector2Int Position;
+            public int Rotation;
+
+            public TileCachedConfiguration(TileImpl targetTile, Vector2Int position, int rotation)
+            {
+                TargetTile = targetTile;
+                Position = position;
+                Rotation = rotation;
+            }
+        }
+
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        [SerializeField]
-        [InspectorReadOnly]
-        private string hashCode;
-        public string HashCode
-        {
-            get => hashCode;
-            set => hashCode = value;
-        }
+        public string HashCode => CoreModelPrefab.Uid;
 
         [SerializeField]
         [InspectorReadOnly]
@@ -85,16 +78,16 @@ namespace TileUnion
 
         [SerializeField]
         [InspectorReadOnly]
-        private Matrix builderMatrix;
+        private GridProperties builderMatrix;
 
-        public void SetBuilderMatrix(Matrix builderMatrix)
+        public void SetBuilderMatrix(GridProperties builderMatrix)
         {
             this.builderMatrix = builderMatrix;
         }
 
         public List<TileImpl> Tiles = new();
 
-        private Dictionary<int, TileUnionConfiguration> cachedUnionConfiguration;
+        private Dictionary<int, CachedConfiguration> cachedUnionConfiguration;
 
         private void OnValidate()
         {
@@ -105,7 +98,7 @@ namespace TileUnion
             }
         }
 
-        private Dictionary<int, TileUnionConfiguration> Configuration
+        private Dictionary<int, CachedConfiguration> Configuration
         {
             get
             {
@@ -313,7 +306,7 @@ namespace TileUnion
             cachedUnionConfiguration = new();
             for (int i = 0; i < 4; i++)
             {
-                List<TileConfiguration> tileConfigurations = new();
+                List<TileCachedConfiguration> tileConfigurations = new();
                 foreach (TileImpl tile in Tiles)
                 {
                     tileConfigurations.Add(new(tile, tile.Position, tile.Rotation));
@@ -334,7 +327,7 @@ namespace TileUnion
         public void SetRotation(int rotation)
         {
             this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
-            foreach (TileConfiguration config in Configuration[this.rotation].TilesConfigurations)
+            foreach (TileCachedConfiguration config in Configuration[this.rotation].TilesConfigurations)
             {
                 config.TargetTile.SetPosition(builderMatrix, config.Position);
                 config.TargetTile.SetRotation(config.Rotation);

@@ -22,12 +22,12 @@ namespace TileBuilder
         private GameObject stashRootObject;
 
         [SerializeField]
-        private Matrix builderMatrix;
+        private GridProperties builderMatrix;
 
         [SerializeField]
         private AssetLabelReference tileUnionsLabel;
 
-        public Matrix BuilderMatrix => builderMatrix;
+        public GridProperties BuilderMatrix => builderMatrix;
 
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
@@ -49,7 +49,7 @@ namespace TileBuilder
             InstantiatedViews.Clear();
 
             foreach (
-                AssetWithLocation<TileUnionImpl> tileUnion in AddressableTools<TileUnionImpl>.LoadAllFromAssetLabel(
+                AssetWithLocation<TileUnionImpl> tileUnion in AddressableTools<TileUnionImpl>.LoadAllFromLabel(
                     tileUnionsLabel
                 )
             )
@@ -131,7 +131,7 @@ namespace TileBuilder
 
         public Result IsValidPlacing(CoreModel coreModel)
         {
-            TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.HashCode];
+            TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.Uid];
             stashTileUnion.gameObject.SetActive(true);
             stashTileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
             Result placingResult = stashTileUnion.IsValidPlacing(this);
@@ -149,7 +149,7 @@ namespace TileBuilder
 
         public void DropTileUnion(CoreModel coreModel)
         {
-            List<Vector2Int> placingPositions = InstantiatedViews[coreModel.HashCode]
+            List<Vector2Int> placingPositions = InstantiatedViews[coreModel.Uid]
                 .GetImaginePlaces(coreModel.TileUnionModel.PlacingProperties)
                 .ToList();
 
@@ -171,7 +171,7 @@ namespace TileBuilder
         public void ShowSelectedTileUnion(CoreModel coreModel)
         {
             ResetStashedViews();
-            TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.HashCode];
+            TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.Uid];
             stashTileUnion.gameObject.SetActive(true);
             stashTileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
             Result result = stashTileUnion.IsValidPlacing(this);
@@ -244,7 +244,7 @@ namespace TileBuilder
 
         private TileUnionImpl CreateTile(CoreModel coreModel)
         {
-            if (modelViewMap.TryGetValue(coreModel.HashCode, out IResourceLocation location))
+            if (modelViewMap.TryGetValue(coreModel.Uid, out IResourceLocation location))
             {
                 TileUnionImpl tileUnion = Instantiate(
                     AddressableTools<TileUnionImpl>.LoadAsset(location),
@@ -324,7 +324,7 @@ namespace TileBuilder
             {
                 tileConfigs.Add(
                     new TileConfig(
-                        tileUnion.CoreModel.HashCode,
+                        tileUnion.CoreModel.Uid,
                         tileUnion.Position,
                         tileUnion.Rotation
                     )

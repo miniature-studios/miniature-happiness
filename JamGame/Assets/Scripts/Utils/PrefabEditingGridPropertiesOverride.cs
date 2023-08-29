@@ -6,9 +6,9 @@ using UnityEditor.SceneManagement;
 namespace Utils
 {
     [InitializeOnLoad]
-    public class MatrixSetter
+    public static class PrefabEditingGridPropertiesOverride
     {
-        static MatrixSetter()
+        static PrefabEditingGridPropertiesOverride()
         {
             PrefabStage.prefabStageOpened += OnPrefabStageOpened;
         }
@@ -19,7 +19,7 @@ namespace Utils
                 prefabStage.prefabContentsRoot.gameObject.GetComponent<TileUnionImpl>();
             if (tileUnion != null)
             {
-                tileUnion.SetBuilderMatrix(GlobalGameSettings.GetMatrix());
+                tileUnion.SetBuilderMatrix(GlobalGameSettings.GetGridProperties());
             }
         }
     }

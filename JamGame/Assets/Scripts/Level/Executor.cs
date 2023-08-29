@@ -23,7 +23,7 @@ namespace Level
     public class Executor : MonoBehaviour
     {
         [SerializeField]
-        private TileBuilder.Controller tileBuilderController;
+        private TileBuilder.Controller.ControllerImpl tileBuilderController;
 
         [SerializeField]
         private Finances.Model financesModel;
@@ -117,7 +117,7 @@ namespace Level
         {
             meetingStartNeedOverride.Register();
 
-            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
+            tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             animatorSwitcher.SetAnimatorStates(typeof(Meeting));

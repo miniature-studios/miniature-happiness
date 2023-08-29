@@ -8,11 +8,6 @@ namespace Level.Room
 {
     public partial class CoreModel
     {
-        public void SetHashCode(string hashCode)
-        {
-            this.hashCode = hashCode;
-        }
-
         public void CatchModels()
         {
             shopModel = GetComponent<Shop.Room.Model>();
@@ -42,36 +37,36 @@ namespace Level.Room
             List<TileUnion.TileUnionImpl> tileUnions = new();
 
             foreach (
-                AssetWithLocation<Shop.Room.View> shopView in AddressableTools<Shop.Room.View>.LoadAllFromStringLabel(
+                AssetWithLocation<Shop.Room.View> shopView in AddressableTools<Shop.Room.View>.LoadAllFromLabel(
                     "ShopView"
                 )
             )
             {
-                if (shopView.Asset.HashCode == coreModel.HashCode)
+                if (shopView.Asset.HashCode == coreModel.Uid)
                 {
                     shopRooms.Add(shopView.Asset);
                 }
             }
 
             foreach (
-                AssetWithLocation<Inventory.Room.View> invView in AddressableTools<Inventory.Room.View>.LoadAllFromStringLabel(
+                AssetWithLocation<Inventory.Room.View> invView in AddressableTools<Inventory.Room.View>.LoadAllFromLabel(
                     "InventoryView"
                 )
             )
             {
-                if (invView.Asset.HashCode == coreModel.HashCode)
+                if (invView.Asset.HashCode == coreModel.Uid)
                 {
                     inventoryViews.Add(invView.Asset);
                 }
             }
 
             foreach (
-                AssetWithLocation<TileUnion.TileUnionImpl> tileUnion in AddressableTools<TileUnion.TileUnionImpl>.LoadAllFromStringLabel(
+                AssetWithLocation<TileUnion.TileUnionImpl> tileUnion in AddressableTools<TileUnion.TileUnionImpl>.LoadAllFromLabel(
                     "TileUnion"
                 )
             )
             {
-                if (tileUnion.Asset.HashCode == coreModel.HashCode)
+                if (tileUnion.Asset.HashCode == coreModel.Uid)
                 {
                     tileUnions.Add(tileUnion.Asset);
                 }

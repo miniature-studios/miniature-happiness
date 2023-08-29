@@ -11,12 +11,12 @@ namespace Utils
     {
         private static string gameSettingsLabel = "GameSettings";
 
-        public static Matrix GetMatrix()
+        public static GridProperties GetGridProperties()
         {
             return LoadScriptableObjectFromLabel(gameSettingsLabel).Matrix;
         }
 
-        public static void SetMatrix(Matrix matrix)
+        public static void SetGridProperties(GridProperties matrix)
         {
             LoadScriptableObjectFromLabel(gameSettingsLabel).SetMatrix(matrix);
         }

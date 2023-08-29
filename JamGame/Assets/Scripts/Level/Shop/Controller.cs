@@ -22,7 +22,7 @@ namespace Level.Shop
         public void SetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
         {
             shopModel.ResetRooms(
-                room_configs.Select(x => CoreModelTools.InstantiateCoreModel(x.Room.HashCode))
+                room_configs.Select(x => CoreModel.InstantiateCoreModel(x.Room.Uid))
             );
         }
 

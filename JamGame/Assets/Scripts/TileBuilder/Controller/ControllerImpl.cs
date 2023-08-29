@@ -5,7 +5,7 @@ using TileBuilder.Command;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace TileBuilder
+namespace TileBuilder.Controller
 {
     public enum GameMode
     {
@@ -14,8 +14,8 @@ namespace TileBuilder
         Play
     }
 
-    [AddComponentMenu("Scripts/TileBuilder.Controller")]
-    public partial class Controller : MonoBehaviour, IDragAndDropAgent
+    [AddComponentMenu("Scripts/TileBuilder.Controller.ControllerImpl")]
+    public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;

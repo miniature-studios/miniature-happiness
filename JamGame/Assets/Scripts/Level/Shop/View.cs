@@ -26,7 +26,7 @@ namespace Level.Shop
         {
             animator = GetComponent<Animator>();
             foreach (
-                AssetWithLocation<Room.View> shopView in AddressableTools<Room.View>.LoadAllFromAssetLabel(
+                AssetWithLocation<Room.View> shopView in AddressableTools<Room.View>.LoadAllFromLabel(
                     shopViewsLabel
                 )
             )
@@ -58,7 +58,7 @@ namespace Level.Shop
 
         private void AddNewItem(CoreModel newItem)
         {
-            if (modelViewMap.TryGetValue(newItem.HashCode, out IResourceLocation location))
+            if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),

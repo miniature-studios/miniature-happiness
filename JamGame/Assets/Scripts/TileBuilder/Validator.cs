@@ -58,7 +58,7 @@ namespace TileBuilder.Validator
             if (command is ShowSelectedRoom showRoomIllusion)
             {
                 IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
-                    showRoomIllusion.CoreModel.HashCode
+                    showRoomIllusion.CoreModel.Uid
                 ].GetImaginePlaces(showRoomIllusion.CoreModel.TileUnionModel.PlacingProperties);
                 return newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
                     ? new SuccessResult()
@@ -67,7 +67,7 @@ namespace TileBuilder.Validator
             if (command is DropRoom dropRoom)
             {
                 IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
-                    dropRoom.CoreModel.HashCode
+                    dropRoom.CoreModel.Uid
                 ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
                 return
                     tileBuilder
@@ -128,7 +128,7 @@ namespace TileBuilder.Validator
             if (command is DropRoom dropRoom)
             {
                 IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
-                    dropRoom.CoreModel.HashCode
+                    dropRoom.CoreModel.Uid
                 ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
                 return
                     tileBuilder

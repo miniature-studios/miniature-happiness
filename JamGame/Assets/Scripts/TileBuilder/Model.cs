@@ -20,7 +20,7 @@ namespace TileBuilder
 
         private void Awake()
         {
-            ChangeGameMode(GameMode.God);
+            ChangeGameMode(Controller.GameMode.God);
         }
 
         public Result Execute(ICommand command)
@@ -50,13 +50,13 @@ namespace TileBuilder
             return response;
         }
 
-        public void ChangeGameMode(GameMode gameMode)
+        public void ChangeGameMode(Controller.GameMode gameMode)
         {
             validator = gameMode switch
             {
-                GameMode.God => new Validator.GodMode(tileBuilder),
-                GameMode.Build => new Validator.BuildMode(tileBuilder),
-                GameMode.Play => new Validator.GameMode(),
+                Controller.GameMode.God => new Validator.GodMode(tileBuilder),
+                Controller.GameMode.Build => new Validator.BuildMode(tileBuilder),
+                Controller.GameMode.Play => new Validator.GameMode(),
                 _ => throw new ArgumentException(),
             };
         }

@@ -15,16 +15,16 @@ namespace Common
     public static class AddressableTools<T>
         where T : class
     {
-        public static IEnumerable<AssetWithLocation<T>> LoadAllFromAssetLabel(
+        public static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(
             AssetLabelReference assetLabel
         )
         {
-            return LoadAllFromLabel(assetLabel);
+            return LoadAllFromLabel((object)assetLabel);
         }
 
-        public static IEnumerable<AssetWithLocation<T>> LoadAllFromStringLabel(string assetLabel)
+        public static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(string assetLabel)
         {
-            return LoadAllFromLabel(assetLabel);
+            return LoadAllFromLabel((object)assetLabel);
         }
 
         private static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(object assetLabel)

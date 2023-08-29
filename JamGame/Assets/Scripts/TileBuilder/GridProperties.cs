@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace TileBuilder
 {
-    [CreateAssetMenu(fileName = "TileBuilder.Matrix", menuName = "TileBuilder/Matrix", order = 2)]
-    public class Matrix : ScriptableObject
+    [CreateAssetMenu(fileName = "GridProperties", menuName = "TileBuilder/GridProperties", order = 2)]
+    public class GridProperties : ScriptableObject
     {
         [SerializeField]
         private float selectingPlaneHeight;

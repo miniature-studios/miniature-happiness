@@ -33,7 +33,7 @@ namespace Level.Inventory
         {
             animator = GetComponent<Animator>();
             foreach (
-                AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromAssetLabel(
+                AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
                     inventoryViewsLabel
                 )
             )
@@ -42,10 +42,10 @@ namespace Level.Inventory
             }
         }
 
-        // Calls by button that open/closes inventory
+        // Called by button that open/closes inventory
         public void InventoryButtonClick()
         {
-            inventoryVisible = !inventoryVisible;
+            inventoryVisible ^= true;
             animator.SetBool("Showed", inventoryVisible);
             buttonText.text = inventoryVisible ? "Close" : "Open";
         }
@@ -73,7 +73,7 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            if (modelViewMap.TryGetValue(newItem.HashCode, out IResourceLocation location))
+            if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),

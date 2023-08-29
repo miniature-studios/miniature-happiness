@@ -60,12 +60,13 @@ namespace Level
 
             if (Input.GetMouseButtonUp(0))
             {
-                if (bufferCoreModel != null)
+                if (
+                    bufferCoreModel != null
+                    && dragAndDrop != null
+                    && dragAndDrop.Drop(bufferCoreModel).Failure
+                )
                 {
-                    if (dragAndDrop != null && dragAndDrop.Drop(bufferCoreModel).Failure)
-                    {
-                        _ = backupDragAndDrop.Drop(bufferCoreModel);
-                    }
+                    _ = backupDragAndDrop.Drop(bufferCoreModel);
                 }
                 bufferCoreModel = null;
             }

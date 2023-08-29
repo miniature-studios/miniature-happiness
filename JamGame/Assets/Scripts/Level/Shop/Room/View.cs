@@ -13,14 +13,7 @@ namespace Level.Shop.Room
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        [SerializeField]
-        [InspectorReadOnly]
-        private string hashCode;
-        public string HashCode
-        {
-            get => hashCode;
-            set => hashCode = value;
-        }
+        public string HashCode => CoreModelPrefab.Uid;
 
         [SerializeField]
         private TMP_Text moneyText;
@@ -50,11 +43,9 @@ namespace Level.Shop.Room
 
         private void Update()
         {
-            moneyText.text = "Money cost: " + Convert.ToString(CoreModel.ShopModel.Cost.Value);
-            waterText.text =
-                "Water: " + Convert.ToString(CoreModel.TariffProperties.WaterConsumption);
-            electricityText.text =
-                "Electro: " + Convert.ToString(CoreModel.TariffProperties.ElectricityConsumption);
+            moneyText.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
+            waterText.text = $"Water: {CoreModel.TariffProperties.WaterConsumption}";
+            electricityText.text = $"Electro: {CoreModel.TariffProperties.ElectricityConsumption}";
         }
 
         // Called be pressing button

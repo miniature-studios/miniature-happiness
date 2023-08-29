@@ -9,10 +9,10 @@ namespace Utils
     {
         [SerializeField]
         [InspectorReadOnly]
-        private Matrix matrix;
-        public Matrix Matrix => matrix;
+        private GridProperties matrix;
+        public GridProperties Matrix => matrix;
 
-        public void SetMatrix(Matrix matrix)
+        public void SetMatrix(GridProperties matrix)
         {
             this.matrix = matrix;
         }
