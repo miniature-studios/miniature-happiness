@@ -5,21 +5,12 @@ using UnityEditor;
 using UnityEngine;
 using Level.Config;
 
-namespace SerializedInterface.Inspector
+namespace SerializedInterface.Inspector 
 {
     [CustomPropertyDrawer(typeof(SerializedDayAction))]
     public class SerializedDayActionDrawer : PropertyDrawer
     {
-        private string[] implementingTypeNames =
-        {
-            "Cutscene",
-            "DayStart",
-            "PreMeeting",
-            "Meeting",
-            "Working",
-            "PreDayEnd",
-            "DayEnd"
-        };
+        private string[] implementingTypeNames = { "Cutscene", "DayStart", "PreMeeting", "Meeting", "Working", "PreDayEnd", "DayEnd" };
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -73,7 +64,9 @@ namespace SerializedInterface.Inspector
             float height = 0.0f;
             if (selected_type != "")
             {
-                var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+                var typed_prop = property.FindPropertyRelative(
+                    PascalToCamelCase(selected_type)
+                );
                 height = EditorGUI.GetPropertyHeight(typed_prop);
             }
             return EditorGUIUtility.singleLineHeight + height;

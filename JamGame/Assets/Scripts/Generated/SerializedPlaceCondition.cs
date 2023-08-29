@@ -3,12 +3,12 @@
 using System;
 using UnityEngine;
 
-namespace TileUnion.PlaceCondition
+namespace TileUnion.PlaceCondition 
 {
     [Serializable]
     public class SerializedPlaceCondition
     {
-        [SerializeField]
+        [SerializeField] 
         private string selectedType;
 
         [SerializeField]

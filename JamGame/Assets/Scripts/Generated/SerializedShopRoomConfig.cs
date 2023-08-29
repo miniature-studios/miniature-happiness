@@ -3,12 +3,12 @@
 using System;
 using UnityEngine;
 
-namespace Level.Config
+namespace Level.Config 
 {
     [Serializable]
     public class SerializedShopRoomConfig
     {
-        [SerializeField]
+        [SerializeField] 
         private string selectedType;
 
         [SerializeField]

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Level.Boss.Task;
 
-namespace SerializedInterface.Inspector
+namespace SerializedInterface.Inspector 
 {
     [CustomPropertyDrawer(typeof(SerializedTask))]
     public class SerializedTaskDrawer : PropertyDrawer
@@ -64,7 +64,9 @@ namespace SerializedInterface.Inspector
             float height = 0.0f;
             if (selected_type != "")
             {
-                var typed_prop = property.FindPropertyRelative(PascalToCamelCase(selected_type));
+                var typed_prop = property.FindPropertyRelative(
+                    PascalToCamelCase(selected_type)
+                );
                 height = EditorGUI.GetPropertyHeight(typed_prop);
             }
             return EditorGUIUtility.singleLineHeight + height;
