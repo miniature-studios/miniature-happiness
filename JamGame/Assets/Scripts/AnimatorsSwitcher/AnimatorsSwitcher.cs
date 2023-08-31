@@ -4,18 +4,25 @@ using UnityEngine;
 
 namespace AnimatorsSwitcher
 {
+    public enum OverrideState
+    {
+        DoNotOverride,
+        Hidden,
+        Showed
+    }
+
     [Serializable]
-    public class AnimatorWithBool
+    public class AnimatorProperties
     {
         public string AnimatorName;
-        public bool Bool;
-        public bool Hard;
+        public bool Showed;
+        public OverrideState OverrideState;
 
-        public AnimatorWithBool(string animator, bool flag, bool hard)
+        public AnimatorProperties(string animator, bool showed, OverrideState overrideState)
         {
             AnimatorName = animator;
-            Bool = flag;
-            Hard = hard;
+            Showed = showed;
+            OverrideState = overrideState;
         }
     }
 
@@ -23,12 +30,12 @@ namespace AnimatorsSwitcher
     public class InterfaceMatch
     {
         public string InterfaceName;
-        public List<AnimatorWithBool> Bools;
+        public List<AnimatorProperties> AnimatorsProperties;
 
-        public InterfaceMatch(string interfaceName, List<AnimatorWithBool> bools)
+        public InterfaceMatch(string interfaceName, List<AnimatorProperties> animatorsProperties)
         {
             InterfaceName = interfaceName;
-            Bools = bools;
+            AnimatorsProperties = animatorsProperties;
         }
     }
 
@@ -50,13 +57,22 @@ namespace AnimatorsSwitcher
             interfaceMatch = animatorList.InterfaceMatcher.Find(
                 x => x.InterfaceName == dayType.Name
             );
-            foreach (AnimatorWithBool bools in interfaceMatch.Bools)
+            foreach (AnimatorProperties properties in interfaceMatch.AnimatorsProperties)
             {
-                Animator animator = animatorList.Animators.Find(x => x.name == bools.AnimatorName);
-                animator.SetBool("Showed", bools.Bool);
-                if (bools.Hard)
+                Animator animator = animatorList.Animators.Find(
+                    x => x.name == properties.AnimatorName
+                );
+                animator.SetBool("Showed", properties.Showed);
+                switch (properties.OverrideState)
                 {
-                    animator.Play(bools.Bool ? "Showed" : "Hidden");
+                    case OverrideState.DoNotOverride:
+                        continue;
+                    case OverrideState.Hidden:
+                        animator.Play("Hidden");
+                        break;
+                    case OverrideState.Showed:
+                        animator.Play("Showed");
+                        break;
                 }
             }
         }

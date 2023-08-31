@@ -108,17 +108,17 @@ namespace AnimatorsSwitcher
                 );
                 SerializedProperty array = interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
-                    .FindPropertyRelative("Bools");
+                    .FindPropertyRelative("AnimatorsProperties");
                 for (int j = 0; j < array.arraySize; j++)
                 {
                     SerializedProperty arrayElement = array.GetArrayElementAtIndex(j);
                     bufferInterfaceMatcher
                         .Last()
-                        .Bools.Add(
+                        .AnimatorsProperties.Add(
                             new(
                                 arrayElement.FindPropertyRelative("AnimatorName").stringValue,
-                                arrayElement.FindPropertyRelative("Bool").boolValue,
-                                arrayElement.FindPropertyRelative("Hard").boolValue
+                                arrayElement.FindPropertyRelative("Showed").boolValue,
+                                (OverrideState)arrayElement.FindPropertyRelative("OverrideState").enumValueIndex
                             )
                         );
                 }
@@ -130,43 +130,43 @@ namespace AnimatorsSwitcher
                 interfaceMatcherArray.InsertArrayElementAtIndex(i);
                 interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
-                    .FindPropertyRelative("Bools")
+                    .FindPropertyRelative("AnimatorsProperties")
                     .ClearArray();
                 interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
                     .FindPropertyRelative("InterfaceName")
                     .stringValue = ActionNames[i];
-                SerializedProperty animatorBoolsArray = interfaceMatcherArray
+                SerializedProperty animatorsPropertiesArray = interfaceMatcherArray
                     .GetArrayElementAtIndex(i)
-                    .FindPropertyRelative("Bools");
+                    .FindPropertyRelative("AnimatorsProperties");
 
                 for (int j = 0; j < animatorsNames.Count(); j++)
                 {
                     InterfaceMatch foundedInterfaceMatcher = bufferInterfaceMatcher
                         .Where(x => x.InterfaceName == ActionNames[i])
                         .FirstOrDefault();
-                    bool flagBool = false;
-                    bool flagHard = false;
+                    bool flagShowed = false;
+                    OverrideState overrideState = OverrideState.DoNotOverride;
                     if (foundedInterfaceMatcher != null)
                     {
-                        List<AnimatorWithBool> foundedAnimatorBoolArray =
-                            foundedInterfaceMatcher.Bools;
-                        for (int k = 0; k < foundedAnimatorBoolArray.Count; k++)
+                        List<AnimatorProperties> foundedAnimatorsPropertiesArray =
+                            foundedInterfaceMatcher.AnimatorsProperties;
+                        for (int k = 0; k < foundedAnimatorsPropertiesArray.Count; k++)
                         {
-                            if (foundedAnimatorBoolArray[k].AnimatorName == animatorsNames[j])
+                            if (foundedAnimatorsPropertiesArray[k].AnimatorName == animatorsNames[j])
                             {
-                                flagBool = foundedAnimatorBoolArray[k].Bool;
-                                flagHard = foundedAnimatorBoolArray[k].Hard;
+                                flagShowed = foundedAnimatorsPropertiesArray[k].Showed;
+                                overrideState = foundedAnimatorsPropertiesArray[k].OverrideState;
                             }
                         }
                     }
-                    animatorBoolsArray.InsertArrayElementAtIndex(j);
-                    SerializedProperty arrayElement = animatorBoolsArray.GetArrayElementAtIndex(j);
+                    animatorsPropertiesArray.InsertArrayElementAtIndex(j);
+                    SerializedProperty arrayElement = animatorsPropertiesArray.GetArrayElementAtIndex(j);
                     arrayElement.FindPropertyRelative("AnimatorName").stringValue = animatorsNames[
                         j
                     ];
-                    arrayElement.FindPropertyRelative("Bool").boolValue = flagBool;
-                    arrayElement.FindPropertyRelative("Hard").boolValue = flagHard;
+                    arrayElement.FindPropertyRelative("Showed").boolValue = flagShowed;
+                    arrayElement.FindPropertyRelative("OverrideState").enumValueIndex = (int)overrideState;
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace AnimatorsSwitcher
                             SerializedProperty element = listProperty.GetArrayElementAtIndex(index);
                             ReorderableList animatorBoolList = GetAnimatorBoolList(
                                 element,
-                                element.FindPropertyRelative("Bools"),
+                                element.FindPropertyRelative("AnimatorsProperties"),
                                 element.FindPropertyRelative("InterfaceName").stringValue
                             );
                             animatorBoolList.DoList(rect);
@@ -211,7 +211,7 @@ namespace AnimatorsSwitcher
                             ? 0
                             : GetAnimatorBoolList(
                                     element,
-                                    element.FindPropertyRelative("Bools"),
+                                    element.FindPropertyRelative("AnimatorsProperties"),
                                     element.FindPropertyRelative("InterfaceName").stringValue
                                 )
                                 .GetHeight() - EditorGUIUtility.singleLineHeight;
@@ -261,7 +261,7 @@ namespace AnimatorsSwitcher
                             );
 
                             position.x += length;
-                            length = 40;
+                            length = 60;
                             EditorGUI.LabelField(
                                 new Rect(
                                     position.x,
@@ -269,23 +269,23 @@ namespace AnimatorsSwitcher
                                     length,
                                     EditorGUIUtility.singleLineHeight
                                 ),
-                                "Show:"
+                                "Showed:"
                             );
 
                             position.x += length;
-                            length = 20;
-                            element.FindPropertyRelative("Bool").boolValue = EditorGUI.Toggle(
+                            length = 30;
+                            element.FindPropertyRelative("Showed").boolValue = EditorGUI.Toggle(
                                 new Rect(
                                     position.x,
                                     position.y,
                                     length,
                                     EditorGUIUtility.singleLineHeight
                                 ),
-                                element.FindPropertyRelative("Bool").boolValue
+                                element.FindPropertyRelative("Showed").boolValue
                             );
 
                             position.x += length;
-                            length = 40;
+                            length = 90;
                             EditorGUI.LabelField(
                                 new Rect(
                                     position.x,
@@ -293,19 +293,19 @@ namespace AnimatorsSwitcher
                                     length,
                                     EditorGUIUtility.singleLineHeight
                                 ),
-                                "Hard:"
+                                "OverrideState:"
                             );
 
                             position.x += length;
-                            length = 20;
-                            element.FindPropertyRelative("Hard").boolValue = EditorGUI.Toggle(
+                            length = 120;
+                            element.FindPropertyRelative("OverrideState").enumValueIndex = (int)(OverrideState)EditorGUI.EnumPopup(
                                 new Rect(
                                     position.x,
                                     position.y,
                                     length,
                                     EditorGUIUtility.singleLineHeight
                                 ),
-                                element.FindPropertyRelative("Hard").boolValue
+                                (OverrideState)element.FindPropertyRelative("OverrideState").enumValueIndex
                             );
                         }
                     }
