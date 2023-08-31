@@ -118,7 +118,10 @@ namespace AnimatorsSwitcher
                             new(
                                 arrayElement.FindPropertyRelative("AnimatorName").stringValue,
                                 arrayElement.FindPropertyRelative("Showed").boolValue,
-                                (OverrideState)arrayElement.FindPropertyRelative("OverrideState").enumValueIndex
+                                (OverrideState)
+                                    arrayElement
+                                        .FindPropertyRelative("OverrideState")
+                                        .enumValueIndex
                             )
                         );
                 }
@@ -149,24 +152,26 @@ namespace AnimatorsSwitcher
                     OverrideState overrideState = OverrideState.DoNotOverride;
                     if (foundedInterfaceMatcher != null)
                     {
-                        List<AnimatorProperties> foundedAnimatorsPropertiesArray =
+                        List<AnimatorProperties> foundAnimatorsPropertiesArray =
                             foundedInterfaceMatcher.AnimatorsProperties;
-                        for (int k = 0; k < foundedAnimatorsPropertiesArray.Count; k++)
+                        for (int k = 0; k < foundAnimatorsPropertiesArray.Count; k++)
                         {
-                            if (foundedAnimatorsPropertiesArray[k].AnimatorName == animatorsNames[j])
+                            if (foundAnimatorsPropertiesArray[k].AnimatorName == animatorsNames[j])
                             {
-                                flagShowed = foundedAnimatorsPropertiesArray[k].Showed;
-                                overrideState = foundedAnimatorsPropertiesArray[k].OverrideState;
+                                flagShowed = foundAnimatorsPropertiesArray[k].Showed;
+                                overrideState = foundAnimatorsPropertiesArray[k].OverrideState;
                             }
                         }
                     }
                     animatorsPropertiesArray.InsertArrayElementAtIndex(j);
-                    SerializedProperty arrayElement = animatorsPropertiesArray.GetArrayElementAtIndex(j);
+                    SerializedProperty arrayElement =
+                        animatorsPropertiesArray.GetArrayElementAtIndex(j);
                     arrayElement.FindPropertyRelative("AnimatorName").stringValue = animatorsNames[
                         j
                     ];
                     arrayElement.FindPropertyRelative("Showed").boolValue = flagShowed;
-                    arrayElement.FindPropertyRelative("OverrideState").enumValueIndex = (int)overrideState;
+                    arrayElement.FindPropertyRelative("OverrideState").enumValueIndex =
+                        (int)overrideState;
                 }
             }
         }
@@ -298,15 +303,20 @@ namespace AnimatorsSwitcher
 
                             position.x += length;
                             length = 120;
-                            element.FindPropertyRelative("OverrideState").enumValueIndex = (int)(OverrideState)EditorGUI.EnumPopup(
-                                new Rect(
-                                    position.x,
-                                    position.y,
-                                    length,
-                                    EditorGUIUtility.singleLineHeight
-                                ),
-                                (OverrideState)element.FindPropertyRelative("OverrideState").enumValueIndex
-                            );
+                            element.FindPropertyRelative("OverrideState").enumValueIndex = (int)
+                                (OverrideState)
+                                    EditorGUI.EnumPopup(
+                                        new Rect(
+                                            position.x,
+                                            position.y,
+                                            length,
+                                            EditorGUIUtility.singleLineHeight
+                                        ),
+                                        (OverrideState)
+                                            element
+                                                .FindPropertyRelative("OverrideState")
+                                                .enumValueIndex
+                                    );
                         }
                     }
                 };
