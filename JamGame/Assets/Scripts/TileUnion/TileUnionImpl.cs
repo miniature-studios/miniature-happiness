@@ -88,28 +88,7 @@ namespace TileUnion
         public List<TileImpl> Tiles = new();
 
         private Dictionary<int, CachedConfiguration> cachedConfiguration;
-
-        private void OnValidate()
-        {
-            foreach (TileImpl tile in Tiles)
-            {
-                tile.SetPosition(gridProperties, tile.Position);
-                tile.SetRotation(tile.Rotation);
-            }
-        }
-
-        private Dictionary<int, CachedConfiguration> Configuration
-        {
-            get
-            {
-                if (cachedConfiguration == null)
-                {
-                    Debug.LogError("Null configuration");
-                    CreateCache();
-                }
-                return cachedConfiguration;
-            }
-        }
+        private Dictionary<int, CachedConfiguration> Configuration => cachedConfiguration;
         public Vector2Int Position => position;
         public int Rotation => rotation;
         public IEnumerable<Vector2Int> TilesPositionsForUpdating =>
@@ -326,7 +305,7 @@ namespace TileUnion
 
         public void SetRotation(int rotation)
         {
-            this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
+            this.rotation = ((rotation % 4) + 4) % 4;
             foreach (
                 TileCachedConfiguration config in Configuration[this.rotation].TilesConfigurations
             )

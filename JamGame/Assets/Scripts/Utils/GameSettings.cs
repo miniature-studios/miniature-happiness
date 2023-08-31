@@ -19,6 +19,9 @@ namespace Utils
         public void SetMatrix(GridProperties gridProperties)
         {
             this.gridProperties = gridProperties;
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

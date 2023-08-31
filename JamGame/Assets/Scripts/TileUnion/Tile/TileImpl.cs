@@ -233,7 +233,7 @@ namespace TileUnion.Tile
 
         public void SetRotation(int newRotation)
         {
-            rotation = newRotation < 0 ? (newRotation % 4) + 4 : newRotation % 4;
+            rotation = ((newRotation % 4) + 4) % 4; ;
             transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
             CreateWallsCache();
         }
