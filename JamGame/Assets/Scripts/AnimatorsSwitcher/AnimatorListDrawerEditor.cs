@@ -117,7 +117,8 @@ namespace AnimatorsSwitcher
                         .Bools.Add(
                             new(
                                 arrayElement.FindPropertyRelative("AnimatorName").stringValue,
-                                arrayElement.FindPropertyRelative("Bool").boolValue
+                                arrayElement.FindPropertyRelative("Bool").boolValue,
+                                arrayElement.FindPropertyRelative("Hard").boolValue
                             )
                         );
                 }
@@ -144,7 +145,8 @@ namespace AnimatorsSwitcher
                     InterfaceMatch foundedInterfaceMatcher = bufferInterfaceMatcher
                         .Where(x => x.InterfaceName == ActionNames[i])
                         .FirstOrDefault();
-                    bool flag = false;
+                    bool flagBool = false;
+                    bool flagHard = false;
                     if (foundedInterfaceMatcher != null)
                     {
                         List<AnimatorWithBool> foundedAnimatorBoolArray =
@@ -153,7 +155,8 @@ namespace AnimatorsSwitcher
                         {
                             if (foundedAnimatorBoolArray[k].AnimatorName == animatorsNames[j])
                             {
-                                flag = foundedAnimatorBoolArray[k].Bool;
+                                flagBool = foundedAnimatorBoolArray[k].Bool;
+                                flagHard = foundedAnimatorBoolArray[k].Hard;
                             }
                         }
                     }
@@ -162,7 +165,8 @@ namespace AnimatorsSwitcher
                     arrayElement.FindPropertyRelative("AnimatorName").stringValue = animatorsNames[
                         j
                     ];
-                    arrayElement.FindPropertyRelative("Bool").boolValue = flag;
+                    arrayElement.FindPropertyRelative("Bool").boolValue = flagBool;
+                    arrayElement.FindPropertyRelative("Hard").boolValue = flagHard;
                 }
             }
         }
@@ -257,6 +261,18 @@ namespace AnimatorsSwitcher
                             );
 
                             position.x += length;
+                            length = 40;
+                            EditorGUI.LabelField(
+                                new Rect(
+                                    position.x,
+                                    position.y,
+                                    length,
+                                    EditorGUIUtility.singleLineHeight
+                                ),
+                                "Show:"
+                            );
+
+                            position.x += length;
                             length = 20;
                             element.FindPropertyRelative("Bool").boolValue = EditorGUI.Toggle(
                                 new Rect(
@@ -266,6 +282,30 @@ namespace AnimatorsSwitcher
                                     EditorGUIUtility.singleLineHeight
                                 ),
                                 element.FindPropertyRelative("Bool").boolValue
+                            );
+
+                            position.x += length;
+                            length = 40;
+                            EditorGUI.LabelField(
+                                new Rect(
+                                    position.x,
+                                    position.y,
+                                    length,
+                                    EditorGUIUtility.singleLineHeight
+                                ),
+                                "Hard:"
+                            );
+
+                            position.x += length;
+                            length = 20;
+                            element.FindPropertyRelative("Hard").boolValue = EditorGUI.Toggle(
+                                new Rect(
+                                    position.x,
+                                    position.y,
+                                    length,
+                                    EditorGUIUtility.singleLineHeight
+                                ),
+                                element.FindPropertyRelative("Hard").boolValue
                             );
                         }
                     }

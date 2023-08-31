@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 40476286}
   - component: {fileID: 40476289}
-  - component: {fileID: 40476294}
   - component: {fileID: 40476292}
   - component: {fileID: 40476291}
   - component: {fileID: 40476293}
@@ -179,6 +178,7 @@ MonoBehaviour:
   gridProperties: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   tileUnionsLabel:
     m_LabelString: TileUnion
+  coreModels: []
 --- !u!114 &40476291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,20 +241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b97233979538e246b06dcdfef4e1480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &40476294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 40476285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e878d8cae5fa6854691f5ece4ef14748, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileBuilder: {fileID: 40476289}
-  roomsInTileBuilder: []
 --- !u!1 &42303832
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,7 +378,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBuilder: {fileID: 40476289}
-  model: {fileID: 40476294}
   BuiltValidatedOffice:
     m_PersistentCalls:
       m_Calls:
@@ -1654,7 +1639,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bufferCoreModel: {fileID: 0}
-  dragAndDropTransform: {fileID: 0}
   backupDragAndDropProvider: {fileID: 1395078480}
 --- !u!1 &500220673
 GameObject:
@@ -2238,184 +2222,268 @@ MonoBehaviour:
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 0
       - AnimatorName: DailyBillPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: Inventory
         Bool: 0
+        Hard: 0
       - AnimatorName: ButtonOpenShop
         Bool: 0
+        Hard: 0
       - AnimatorName: InvButton
         Bool: 0
+        Hard: 0
       - AnimatorName: EndMeetingButton
         Bool: 0
+        Hard: 0
       - AnimatorName: OfficeFinances
         Bool: 0
+        Hard: 0
       - AnimatorName: TransitionPanel
         Bool: 1
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 0
+        Hard: 0
       - AnimatorName: OverlaySelector
         Bool: 0
+        Hard: 0
       - AnimatorName: StressBar
         Bool: 0
+        Hard: 0
       - AnimatorName: TaskList
         Bool: 0
+        Hard: 0
     - InterfaceName: DayStart
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 1
       - AnimatorName: DailyBillPanel
         Bool: 0
+        Hard: 1
       - AnimatorName: Inventory
         Bool: 0
+        Hard: 1
       - AnimatorName: ButtonOpenShop
         Bool: 0
+        Hard: 1
       - AnimatorName: InvButton
         Bool: 0
+        Hard: 1
       - AnimatorName: EndMeetingButton
         Bool: 0
+        Hard: 1
       - AnimatorName: OfficeFinances
         Bool: 0
+        Hard: 1
       - AnimatorName: TransitionPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 0
+        Hard: 1
       - AnimatorName: OverlaySelector
         Bool: 0
+        Hard: 1
       - AnimatorName: StressBar
         Bool: 0
+        Hard: 1
       - AnimatorName: TaskList
         Bool: 0
+        Hard: 1
     - InterfaceName: PreMeeting
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 0
       - AnimatorName: DailyBillPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: Inventory
         Bool: 0
+        Hard: 0
       - AnimatorName: ButtonOpenShop
         Bool: 0
+        Hard: 0
       - AnimatorName: InvButton
         Bool: 0
+        Hard: 0
       - AnimatorName: EndMeetingButton
         Bool: 0
+        Hard: 0
       - AnimatorName: OfficeFinances
         Bool: 0
+        Hard: 0
       - AnimatorName: TransitionPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 0
+        Hard: 0
       - AnimatorName: OverlaySelector
         Bool: 0
+        Hard: 0
       - AnimatorName: StressBar
         Bool: 0
+        Hard: 0
       - AnimatorName: TaskList
         Bool: 0
+        Hard: 0
     - InterfaceName: Meeting
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 0
       - AnimatorName: DailyBillPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: Inventory
         Bool: 1
+        Hard: 0
       - AnimatorName: ButtonOpenShop
         Bool: 1
+        Hard: 0
       - AnimatorName: InvButton
         Bool: 1
+        Hard: 0
       - AnimatorName: EndMeetingButton
         Bool: 1
+        Hard: 0
       - AnimatorName: OfficeFinances
         Bool: 1
+        Hard: 0
       - AnimatorName: TransitionPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 0
+        Hard: 0
       - AnimatorName: OverlaySelector
         Bool: 0
+        Hard: 0
       - AnimatorName: StressBar
         Bool: 1
+        Hard: 0
       - AnimatorName: TaskList
         Bool: 1
+        Hard: 0
     - InterfaceName: Working
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 0
       - AnimatorName: DailyBillPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: Inventory
         Bool: 0
+        Hard: 0
       - AnimatorName: ButtonOpenShop
         Bool: 0
+        Hard: 0
       - AnimatorName: InvButton
         Bool: 0
+        Hard: 0
       - AnimatorName: EndMeetingButton
         Bool: 0
+        Hard: 0
       - AnimatorName: OfficeFinances
         Bool: 1
+        Hard: 0
       - AnimatorName: TransitionPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 1
+        Hard: 0
       - AnimatorName: OverlaySelector
         Bool: 1
+        Hard: 0
       - AnimatorName: StressBar
         Bool: 1
+        Hard: 0
       - AnimatorName: TaskList
         Bool: 1
+        Hard: 0
     - InterfaceName: PreDayEnd
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 0
       - AnimatorName: DailyBillPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: Inventory
         Bool: 0
+        Hard: 0
       - AnimatorName: ButtonOpenShop
         Bool: 0
+        Hard: 0
       - AnimatorName: InvButton
         Bool: 0
+        Hard: 0
       - AnimatorName: EndMeetingButton
         Bool: 0
+        Hard: 0
       - AnimatorName: OfficeFinances
         Bool: 0
+        Hard: 0
       - AnimatorName: TransitionPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 0
+        Hard: 0
       - AnimatorName: OverlaySelector
         Bool: 0
+        Hard: 0
       - AnimatorName: StressBar
         Bool: 0
+        Hard: 0
       - AnimatorName: TaskList
         Bool: 0
+        Hard: 0
     - InterfaceName: DayEnd
       Bools:
       - AnimatorName: Shop
         Bool: 0
+        Hard: 0
       - AnimatorName: DailyBillPanel
         Bool: 1
+        Hard: 0
       - AnimatorName: Inventory
         Bool: 0
+        Hard: 0
       - AnimatorName: ButtonOpenShop
         Bool: 0
+        Hard: 0
       - AnimatorName: InvButton
         Bool: 0
+        Hard: 0
       - AnimatorName: EndMeetingButton
         Bool: 0
+        Hard: 0
       - AnimatorName: OfficeFinances
         Bool: 0
+        Hard: 0
       - AnimatorName: TransitionPanel
         Bool: 0
+        Hard: 0
       - AnimatorName: TimeScaleSelector
         Bool: 0
+        Hard: 0
       - AnimatorName: OverlaySelector
         Bool: 0
+        Hard: 0
       - AnimatorName: StressBar
         Bool: 0
+        Hard: 0
       - AnimatorName: TaskList
         Bool: 0
+        Hard: 0
 --- !u!1 &797130036
 GameObject:
   m_ObjectHideFlags: 0
@@ -4275,7 +4343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdef159651c6ee64293aefa880fb661f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryTransform: {fileID: 0}
   CollectionChanged:
     m_PersistentCalls:
       m_Calls:

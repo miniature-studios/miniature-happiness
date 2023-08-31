@@ -9,11 +9,13 @@ namespace AnimatorsSwitcher
     {
         public string AnimatorName;
         public bool Bool;
+        public bool Hard;
 
-        public AnimatorWithBool(string animator, bool flag)
+        public AnimatorWithBool(string animator, bool flag, bool hard)
         {
             AnimatorName = animator;
             Bool = flag;
+            Hard = hard;
         }
     }
 
@@ -50,9 +52,12 @@ namespace AnimatorsSwitcher
             );
             foreach (AnimatorWithBool bools in interfaceMatch.Bools)
             {
-                animatorList.Animators
-                    .Find(x => x.name == bools.AnimatorName)
-                    .SetBool("Showed", bools.Bool);
+                Animator animator = animatorList.Animators.Find(x => x.name == bools.AnimatorName);
+                animator.SetBool("Showed", bools.Bool);
+                if (bools.Hard)
+                {
+                    animator.Play(bools.Bool ? "Showed" : "Hidden");
+                }
             }
         }
     }
