@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Employee
 {
+    [SelectionBase]
     [RequireComponent(typeof(Controller))]
     [RequireComponent(typeof(StressEffect))]
     [AddComponentMenu("Scripts/Employee.Employee")]
@@ -28,6 +29,7 @@ namespace Employee
         private List<Need> needs = new();
         private Need topPriorityNeed;
         private Need currentlySatisfyingNeed;
+        private Need latestSatisfiedNeed;
         private float satisfyingNeedRemaining = 0.0f;
         private NeedProvider targetNeedProvider = null;
 
@@ -35,10 +37,12 @@ namespace Employee
 
         private List<NeedModifiers> registeredModifiers = new();
 
-        public StressMeter Stress { get; private set; }
-
         [SerializeField]
         private IncomeGenerator.Model incomeGenerator;
+
+        public StressMeter Stress { get; private set; }
+
+        public NeedType? LatestSatisfiedNeedType => latestSatisfiedNeed?.NeedType;
 
         [Serializable]
         private struct AppliedBuff
@@ -94,6 +98,7 @@ namespace Employee
                     {
                         state = State.Idle;
                         currentlySatisfyingNeed.Satisfy();
+                        latestSatisfiedNeed = currentlySatisfyingNeed;
                         incomeGenerator.NeedComplete(currentlySatisfyingNeed);
                         currentlySatisfyingNeed = null;
 

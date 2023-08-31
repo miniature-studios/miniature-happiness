@@ -4,6 +4,7 @@ using Level;
 using Level.Boss.Task;
 using Level.Config;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Location
@@ -21,11 +22,7 @@ namespace Location
         private List<NeedProvider> needProviders;
         private List<EmployeeImpl> employees = new();
 
-        private void Start()
-        {
-            InitGameMode();
-        }
-
+        // TODO: Call it each time room added/removed.
         public void InitGameMode()
         {
             needProviders = new List<NeedProvider>(
@@ -48,6 +45,7 @@ namespace Location
         {
             foreach (NeedProvider provider in needProviders)
             {
+
                 if (provider.NeedType == need_type && provider.IsAvailable(employee))
                 {
                     yield return provider;
@@ -76,14 +74,14 @@ namespace Location
 
         AllEmployeesAtMeeting IDataProvider<AllEmployeesAtMeeting>.GetData()
         {
-            return new AllEmployeesAtMeeting { Value = true };
-            // TODO:Implement
+            bool all_at_meeting = employees.All(employee => employee.LatestSatisfiedNeedType == NeedType.Meeting);
+            return new AllEmployeesAtMeeting { Value = all_at_meeting };
         }
 
         AllEmployeesAtHome IDataProvider<AllEmployeesAtHome>.GetData()
         {
-            return new AllEmployeesAtHome { Value = true };
-            // TODO:Implement
+            bool all_go_home = employees.All(employee => employee.LatestSatisfiedNeedType == NeedType.Leave);
+            return new AllEmployeesAtHome { Value = all_go_home };
         }
     }
 }

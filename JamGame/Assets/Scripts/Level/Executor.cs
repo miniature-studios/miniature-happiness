@@ -56,6 +56,9 @@ namespace Level
         private AllChildrenNeedModifiersApplier leaveNeedOverride;
 
         [SerializeField]
+        private AllChildrenNeedModifiersApplier goToWorkNeedOverride;
+
+        [SerializeField]
         private GameObject homeConditionProvider;
         private IDataProvider<AllEmployeesAtHome> homeCondition;
 
@@ -66,6 +69,7 @@ namespace Level
         public UnityEvent ActionEndNotify;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
+        private bool transitionPanelShown = false;
 
         private void Awake()
         {
@@ -89,10 +93,16 @@ namespace Level
 
         public void Execute(DayStart dayStart)
         {
-            for (int i = 0; i < 0; i++)
+            location.InitGameMode();
+
+            for (int i = 0; i < 1; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }
+
+            // NOTE: It's a temportary solution while we don't have proper save/load system.
+            leaveNeedOverride.Unregister();
+            goToWorkNeedOverride.Register();
 
             financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
@@ -107,6 +117,8 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
+            meetingStartNeedOverride.Register();
+
             this.CreateGate(
                 new List<Func<bool>>() { () => meetingCondition.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
@@ -115,8 +127,6 @@ namespace Level
 
         public void Execute(Meeting meeting)
         {
-            meetingStartNeedOverride.Register();
-
             tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
@@ -124,7 +134,7 @@ namespace Level
             boss.ActivateNextTaskBunch();
         }
 
-        // Calls by button complete meeting
+        // Called by button complete meeting.
         public void CompleteMeeting()
         {
             meetingStartNeedOverride.Unregister();
@@ -149,17 +159,19 @@ namespace Level
         {
             transitionPanel.PanelText = cutscene.Text;
             animatorSwitcher.SetAnimatorStates(typeof(Cutscene));
-            _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
-        }
 
-        public IEnumerator CutsceneRoutine(float time)
-        {
-            yield return new WaitForSeconds(time);
-            ActionEndNotify?.Invoke();
+            transitionPanelShown = false;
+
+            this.CreateGate(
+                new List<Func<bool>>() { () => transitionPanelShown },
+                new List<Action>() { ActionEndNotify.Invoke }
+            );
         }
 
         public void Execute(PreDayEnd preDayEnd)
         {
+            leaveNeedOverride.Register();
+
             this.CreateGate(
                 new List<Func<bool>>() { () => homeCondition.GetData().Value },
                 new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
@@ -168,8 +180,6 @@ namespace Level
 
         public void Execute(DayEnd dayEnd)
         {
-            leaveNeedOverride.Register();
-
             tariffsCounter.UpdateCheck();
             if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
             {
@@ -178,10 +188,16 @@ namespace Level
             animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
         }
 
-        // Calls by button continue on daily bill panel
+        // Called by button continue on daily bill panel.
         public void CompleteDayEnd()
         {
             ActionEndNotify?.Invoke();
+        }
+
+        // Called by TransitionPanel animator.
+        public void TransitionPanelShown()
+        {
+            transitionPanelShown = true;
         }
     }
 }
