@@ -14,14 +14,14 @@ namespace TileUnion
         private int rotation;
         public int Rotation => rotation;
 
-        public void AddRotation(int rotation)
+        public void SetRotation(int rotation)
         {
-            this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
+            this.rotation = ((rotation % 4) + 4) % 4;
         }
 
         public void ApplyRotation(RotationDirection rotation)
         {
-            AddRotation(this.rotation + (int)rotation);
+            SetRotation(this.rotation + (int)rotation);
         }
 
         [SerializeField]

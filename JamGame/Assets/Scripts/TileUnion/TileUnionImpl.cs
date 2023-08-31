@@ -305,7 +305,7 @@ namespace TileUnion
 
         public void SetRotation(int rotation)
         {
-            this.rotation = rotation < 0 ? (rotation % 4) + 4 : rotation % 4;
+            this.rotation = ((rotation % 4) + 4) % 4;
             foreach (
                 TileCachedConfiguration config in Configuration[this.rotation].TilesConfigurations
             )

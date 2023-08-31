@@ -95,31 +95,34 @@ namespace TileBuilder
             ResetStashedViews();
         }
 
-        public Result Execute(ICommand command)
+        public Result ExecuteCommand(ICommand command)
         {
             Result response = validator.ValidateCommand(command);
-            if (response.Success)
+            if (response.Failure)
             {
-                if (command is DropRoom dropRoom)
-                {
-                    coreModels.Add(dropRoom.CoreModel);
-                    dropRoom.CoreModel.transform.parent = transform;
-                }
-                else if (command is RemoveAllRooms)
-                {
-                    foreach (CoreModel room in coreModels)
-                    {
-                        Destroy(room.gameObject);
-                    }
-                    coreModels.Clear();
-                }
-                command.Execute(this);
-                if (command is BorrowRoom borrowRoom)
-                {
-                    _ = coreModels.Remove(borrowRoom.BorrowedRoom);
-                }
+                return response;
             }
-            return response;
+
+            if (command is DropRoom dropRoom)
+            {
+                coreModels.Add(dropRoom.CoreModel);
+                dropRoom.CoreModel.transform.parent = transform;
+            }
+            else if (command is RemoveAllRooms)
+            {
+                foreach (CoreModel room in coreModels)
+                {
+                    Destroy(room.gameObject);
+                }
+                coreModels.Clear();
+            }
+            command.Execute(this);
+            if (command is BorrowRoom borrowRoom)
+            {
+                _ = coreModels.Remove(borrowRoom.BorrowedRoom);
+            }
+
+            return new SuccessResult();
         }
 
         public Result Validate()
@@ -316,7 +319,7 @@ namespace TileBuilder
         private CoreModel DeleteTile(TileUnionImpl tileUnion)
         {
             CoreModel coreModel = tileUnion.CoreModel;
-            coreModel.TileUnionModel.PlacingProperties.AddRotation(tileUnion.Rotation);
+            coreModel.TileUnionModel.PlacingProperties.SetRotation(tileUnion.Rotation);
             RemoveTileFromDictionary(tileUnion);
             Destroy(tileUnion.gameObject);
             return coreModel;
