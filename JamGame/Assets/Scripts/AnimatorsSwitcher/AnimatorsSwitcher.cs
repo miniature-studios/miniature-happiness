@@ -4,16 +4,25 @@ using UnityEngine;
 
 namespace AnimatorsSwitcher
 {
+    public enum OverrideState
+    {
+        DoNotOverride,
+        Hidden,
+        Showed
+    }
+
     [Serializable]
-    public class AnimatorWithBool
+    public class AnimatorProperties
     {
         public string AnimatorName;
-        public bool Bool;
+        public bool Showed;
+        public OverrideState OverrideState;
 
-        public AnimatorWithBool(string animator, bool flag)
+        public AnimatorProperties(string animator, bool showed, OverrideState overrideState)
         {
             AnimatorName = animator;
-            Bool = flag;
+            Showed = showed;
+            OverrideState = overrideState;
         }
     }
 
@@ -21,12 +30,12 @@ namespace AnimatorsSwitcher
     public class InterfaceMatch
     {
         public string InterfaceName;
-        public List<AnimatorWithBool> Bools;
+        public List<AnimatorProperties> AnimatorsProperties;
 
-        public InterfaceMatch(string interfaceName, List<AnimatorWithBool> bools)
+        public InterfaceMatch(string interfaceName, List<AnimatorProperties> animatorsProperties)
         {
             InterfaceName = interfaceName;
-            Bools = bools;
+            AnimatorsProperties = animatorsProperties;
         }
     }
 
@@ -48,11 +57,23 @@ namespace AnimatorsSwitcher
             interfaceMatch = animatorList.InterfaceMatcher.Find(
                 x => x.InterfaceName == dayType.Name
             );
-            foreach (AnimatorWithBool bools in interfaceMatch.Bools)
+            foreach (AnimatorProperties properties in interfaceMatch.AnimatorsProperties)
             {
-                animatorList.Animators
-                    .Find(x => x.name == bools.AnimatorName)
-                    .SetBool("Showed", bools.Bool);
+                Animator animator = animatorList.Animators.Find(
+                    x => x.name == properties.AnimatorName
+                );
+                animator.SetBool("Showed", properties.Showed);
+                switch (properties.OverrideState)
+                {
+                    case OverrideState.DoNotOverride:
+                        continue;
+                    case OverrideState.Hidden:
+                        animator.Play("Hidden");
+                        break;
+                    case OverrideState.Showed:
+                        animator.Play("Showed");
+                        break;
+                }
             }
         }
     }
