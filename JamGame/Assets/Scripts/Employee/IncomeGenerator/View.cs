@@ -6,9 +6,11 @@ namespace Employee.IncomeGenerator
     [AddComponentMenu("Scripts/Employee.IncomeGenerator.View")]
     public class View : MonoBehaviour
     {
-        [SerializeField] private Model model;
+        [SerializeField]
+        private Model model;
 
-        [SerializeField] private IncomeLabelView labelViewPrototype;
+        [SerializeField]
+        private IncomeLabelView labelViewPrototype;
         private List<IncomeLabelView> incomeLabelViewPool;
 
         private void Start()

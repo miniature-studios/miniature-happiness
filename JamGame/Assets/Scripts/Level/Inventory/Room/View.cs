@@ -1,67 +1,71 @@
 using Common;
-using System;
-using TMPro;
+using Level.Room;
+using Pickle;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Level.Inventory.Room
 {
     [AddComponentMenu("Scripts/Level.Inventory.Room.View")]
-    public class View : MonoBehaviour
+    public class View : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
-        [SerializeField]
-        private TMP_Text counterText;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel CoreModelPrefab;
+
+        public string Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
-        private Model model;
+        private ExtendedView extendedView;
 
         [SerializeField]
-        private GameObject extendedUIInfoPrefab;
+        [InspectorReadOnly]
+        private CoreModel coreModel;
+        public CoreModel CoreModel => coreModel;
 
-        private RectTransform targetInfo = null;
-        private Canvas canvas;
+        private bool isHovered = false;
+        private RectTransform canvas;
 
-        public void Awake()
+        private void Awake()
         {
-            canvas = FindObjectOfType<Canvas>();
+            canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         }
 
-        public void CountUpdated(int count)
+        public void SetCoreModel(CoreModel coreModel)
         {
-            counterText.text = Convert.ToString(count);
+            this.coreModel = coreModel;
         }
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (Input.GetKey(KeyCode.LeftControl) && isHovered)
             {
-                switch
-                    (
-                        RayCastUtilities.PointerIsOverTargetGO(Input.mousePosition, gameObject),
-                        targetInfo == null
-                    )
-
+                if (!extendedView.gameObject.activeSelf)
                 {
-                    case (true, true):
-                        targetInfo = Instantiate(
-                                extendedUIInfoPrefab,
-                                Input.mousePosition + new Vector3(20, 20, 0),
-                                new Quaternion(),
-                                canvas.transform
-                            )
-                            .GetComponent<RectTransform>();
-                        targetInfo.GetComponentInChildren<TMP_Text>().text =
-                            $"Electricity. Con.: {model.TileUnion.TariffProperties.ElectricityConsumption}\n"
-                            + $"Water Con.: {model.TileUnion.TariffProperties.WaterConsumption}\n"
-                            + $"Cost: {model.TileUnion.Cost.Value}";
-                        break;
-                    case (true, false):
-                        targetInfo.position = Input.mousePosition + new Vector3(20, 20, 0);
-                        break;
-                    case (false, false):
-                        Destroy(targetInfo.gameObject);
-                        break;
+                    extendedView.gameObject.SetActive(true);
+                    extendedView.transform.SetParent(canvas);
                 }
+                extendedView.SetLabelText(
+                    $"Electricity. Con.: {CoreModel.TariffProperties.ElectricityConsumption}\n"
+                        + $"Water Con.: {CoreModel.TariffProperties.WaterConsumption}\n"
+                        + $"Cost: {CoreModel.ShopModel.Cost.Value}"
+                );
+                extendedView.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
             }
+            else if (extendedView.gameObject.activeSelf)
+            {
+                extendedView.gameObject.SetActive(false);
+                extendedView.transform.SetParent(transform);
+            }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            isHovered = true;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            isHovered = false;
         }
     }
 }

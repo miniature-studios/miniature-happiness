@@ -76,7 +76,8 @@ namespace Location
         [SerializeField]
         private Filter filter;
 
-        [SerializeField] private bool bindToThisProviderOnFirstVisit;
+        [SerializeField]
+        private bool bindToThisProviderOnFirstVisit;
 
         public NeedType NeedType;
 

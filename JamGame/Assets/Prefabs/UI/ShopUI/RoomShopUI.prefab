@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3551183341265851568}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -166,7 +165,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3551183342490341109}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -301,7 +299,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3551183341265851568}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -417,7 +414,6 @@ GameObject:
   - component: {fileID: 3551183341265851583}
   - component: {fileID: 3551183341265851582}
   - component: {fileID: 3551183341265851569}
-  - component: {fileID: 480758686129391419}
   m_Layer: 5
   m_Name: RoomShopUI
   m_TagString: Untagged
@@ -443,7 +439,6 @@ RectTransform:
   - {fileID: 3551183342429285865}
   - {fileID: 3551183342490341109}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -500,24 +495,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33eecfec3442d6b4aaced1d5655e95a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 480758686129391419}
+  coreModel: {fileID: 0}
+  model: {fileID: 0}
   moneyText: {fileID: 3551183342429285846}
   waterText: {fileID: 3551183341914469616}
   electricityText: {fileID: 3551183342199431584}
-  roomNameText: {fileID: 3551183341135795740}
---- !u!114 &480758686129391419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3551183342136007324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8eee3563536c60440a5da36abd3f986f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TileUnion: {fileID: 0}
 --- !u!1 &3551183342199431586
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +531,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3551183341265851568}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -684,7 +665,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3551183341265851568}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -821,7 +801,6 @@ RectTransform:
   m_Children:
   - {fileID: 3551183341897802798}
   m_Father: {fileID: 3551183341265851568}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

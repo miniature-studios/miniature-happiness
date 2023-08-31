@@ -1,4 +1,6 @@
 using Common;
+using Level.Room;
+using Pickle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,8 @@ namespace Level.Config
     public class FixedRoomConfig : IShopRoomConfig
     {
         [SerializeField]
-        private Shop.Room.Model room;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        private CoreModel room;
 
         public ShopRoomConfig GetRoomConfig()
         {
@@ -28,7 +31,9 @@ namespace Level.Config
     public class RoomWeights
     {
         public float Weight;
-        public Shop.Room.Model Room;
+
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel Room;
     }
 
     [Serializable]
@@ -40,16 +45,16 @@ namespace Level.Config
         public ShopRoomConfig GetRoomConfig()
         {
             List<float> list = roomWeights.Select(x => x.Weight).ToList();
-            Shop.Room.Model result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].Room;
+            CoreModel result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].Room;
             return new ShopRoomConfig(result);
         }
     }
 
     public class ShopRoomConfig
     {
-        public Shop.Room.Model Room { get; }
+        public CoreModel Room { get; }
 
-        public ShopRoomConfig(Shop.Room.Model model)
+        public ShopRoomConfig(CoreModel model)
         {
             Room = model;
         }

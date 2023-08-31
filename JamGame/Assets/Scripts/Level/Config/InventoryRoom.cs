@@ -1,3 +1,4 @@
+using Level.Room;
 using System;
 
 namespace Level.Config
@@ -5,9 +6,9 @@ namespace Level.Config
     [Serializable]
     public class InventoryRoomConfig
     {
-        public Inventory.Room.Model Room { get; }
+        public CoreModel Room { get; }
 
-        public InventoryRoomConfig(Inventory.Room.Model model)
+        public InventoryRoomConfig(CoreModel model)
         {
             Room = model;
         }

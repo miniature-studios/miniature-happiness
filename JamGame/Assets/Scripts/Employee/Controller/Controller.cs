@@ -30,7 +30,7 @@ namespace Employee
 
         private State state = State.Idle;
 
-        public Vector3 DesiredVelocityNormalized => Vector3.zero;// (agent.nextPosition - transform.position).normalized;
+        public Vector3 DesiredVelocityNormalized => Vector3.zero; // (agent.nextPosition - transform.position).normalized;
 
         public delegate void FinishedMovingHandler();
         public event FinishedMovingHandler OnFinishedMoving;
@@ -145,7 +145,10 @@ namespace Employee
         {
             Gizmos.color = Color.red;
             //Debug.Log(DesiredVelocityNormalized * 10);
-            Gizmos.DrawLine(transform.position, transform.position + (DesiredVelocityNormalized * 10));
+            Gizmos.DrawLine(
+                transform.position,
+                transform.position + (DesiredVelocityNormalized * 10)
+            );
         }
     }
 }

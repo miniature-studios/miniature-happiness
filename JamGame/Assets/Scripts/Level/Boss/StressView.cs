@@ -5,8 +5,11 @@ namespace Level.Boss
     [AddComponentMenu("Scripts/Level.Boss.StressView")]
     public class StressView : MonoBehaviour
     {
-        [SerializeField] private RectTransform bar;
-        [SerializeField] private Model model;
+        [SerializeField]
+        private RectTransform bar;
+
+        [SerializeField]
+        private Model model;
 
         private void Update()
         {

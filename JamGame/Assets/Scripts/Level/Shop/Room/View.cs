@@ -1,4 +1,6 @@
 ﻿using Common;
+using Level.Room;
+using Pickle;
 using System;
 using TMPro;
 using UnityEngine;
@@ -8,8 +10,10 @@ namespace Level.Shop.Room
     [AddComponentMenu("Scripts/Level.Shop.Room.View")]
     public class View : MonoBehaviour
     {
-        [SerializeField]
-        private Model model;
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel CoreModelPrefab;
+
+        public string Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
         private TMP_Text moneyText;
@@ -20,29 +24,34 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text electricityText;
 
-        private TileUnion.Cost roomCost;
-        private Func<TileUnion.Cost, Model, Result> roomBuying;
+        private Func<CoreModel, Result> roomBuying;
+
+        [SerializeField]
+        [InspectorReadOnly]
+        private CoreModel coreModel;
+        public CoreModel CoreModel => coreModel;
+
+        public void SetCoreModel(CoreModel coreModel)
+        {
+            this.coreModel = coreModel;
+        }
 
         private void Awake()
         {
             roomBuying = GetComponentInParent<Controller>().TryBuyRoom;
-            moneyText.text =
-                "Money cost: " + Convert.ToString(model.InventoryRoomModel.TileUnion.Cost.Value);
-            waterText.text =
-                "Water: "
-                + Convert.ToString(
-                    model.InventoryRoomModel.TileUnion.TariffProperties.WaterConsumption
-                );
-            electricityText.text =
-                "Electro: "
-                + Convert.ToString(
-                    model.InventoryRoomModel.TileUnion.TariffProperties.ElectricityConsumption
-                );
         }
 
+        private void Update()
+        {
+            moneyText.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
+            waterText.text = $"Water: {CoreModel.TariffProperties.WaterConsumption}";
+            electricityText.text = $"Electro: {CoreModel.TariffProperties.ElectricityConsumption}";
+        }
+
+        // Called be pressing button
         public void TryBuyRoom()
         {
-            if (roomBuying(roomCost, model).Success)
+            if (roomBuying(CoreModel).Success)
             {
                 Destroy(gameObject);
             }

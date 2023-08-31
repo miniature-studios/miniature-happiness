@@ -1,71 +1,104 @@
-﻿using System.Collections.Specialized;
+﻿using Common;
+using Level.Room;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Shop
 {
+    [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Scripts/Level.Shop.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]
         private Transform roomsUIContainer;
-        private Animator shopAnimator;
+
+        [SerializeField]
+        private AssetLabelReference shopViewsLabel;
+        private Animator animator;
+        private Dictionary<string, IResourceLocation> modelViewMap = new();
+        private List<Room.View> viewList = new();
+
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+            foreach (
+                AssetWithLocation<Room.View> shopView in AddressableTools<Room.View>.LoadAllFromLabel(
+                    shopViewsLabel
+                )
+            )
+            {
+                modelViewMap.Add(shopView.Asset.Uid, shopView.Location);
+            }
+        }
 
         public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItems(e.NewItems[0] as Room.Model);
+                    AddNewItem(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItems(e.OldItems[0] as Room.Model);
+                    RemoveOldItem(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllItems();
                     break;
                 default:
+                    Debug.LogError(
+                        $"Unexpected variant of NotifyCollectionChangedAction: {e.Action}"
+                    );
                     break;
             }
         }
 
-        private void DeleteAllItems()
+        private void AddNewItem(CoreModel newItem)
         {
-            foreach (
-                Room.Model old_item in roomsUIContainer.transform.GetComponentsInChildren<Room.Model>()
-            )
+            if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
             {
-                Destroy(old_item.gameObject);
+                Room.View newRoomView = Instantiate(
+                    AddressableTools<Room.View>.LoadAsset(location),
+                    roomsUIContainer.transform
+                );
+
+                newRoomView.SetCoreModel(newItem);
+                newRoomView.enabled = true;
+                viewList.Add(newRoomView);
+                newItem.transform.SetParent(newRoomView.transform);
+            }
+            else
+            {
+                Debug.LogError($"Core model {newItem.name} not presented in Shop View");
             }
         }
 
-        private void RemoveOldItems(Room.Model old_item)
+        private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.Model[] room_models =
-                roomsUIContainer.transform.GetComponentsInChildren<Room.Model>();
-            Destroy(room_models.First(x => x == old_item).gameObject);
+            Destroy(viewList.Find(x => x.CoreModel == oldItem).gameObject);
         }
 
-        private void AddNewItems(Room.Model new_item)
+        private void DeleteAllItems()
         {
-            Room.View new_room_view = Instantiate(new_item, roomsUIContainer)
-                .GetComponent<Room.View>();
-            new_room_view.enabled = true;
-        }
-
-        private void Awake()
-        {
-            shopAnimator = GetComponent<Animator>();
+            while (viewList.Count > 0)
+            {
+                Room.View item = viewList.Last();
+                _ = viewList.Remove(item);
+                Destroy(item.gameObject);
+            }
         }
 
         public void Open()
         {
-            shopAnimator.SetBool("Showed", true);
+            animator.SetBool("Showed", true);
         }
 
         public void Close()
         {
-            shopAnimator.SetBool("Showed", false);
+            animator.SetBool("Showed", false);
         }
     }
 }

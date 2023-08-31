@@ -37,7 +37,8 @@ namespace Employee
 
         public StressMeter Stress { get; private set; }
 
-        [SerializeField] private IncomeGenerator.Model incomeGenerator;
+        [SerializeField]
+        private IncomeGenerator.Model incomeGenerator;
 
         [Serializable]
         private struct AppliedBuff
@@ -79,8 +80,10 @@ namespace Employee
                     controller.SetDestination(targetNeedProvider.transform.position);
                     break;
                 case State.Walking:
-                    if (!targetNeedProvider.IsAvailable(this)
-                        || targetNeedProvider.NeedType != topPriorityNeed.NeedType)
+                    if (
+                        !targetNeedProvider.IsAvailable(this)
+                        || targetNeedProvider.NeedType != topPriorityNeed.NeedType
+                    )
                     {
                         state = State.Idle;
                     }
@@ -158,8 +161,10 @@ namespace Employee
 
                 List<NeedProvider> available_providers = location
                     .FindAllAvailableProviders(this, need.NeedType)
-                    .Where(np => !needProviderBindings.ContainsKey(np.NeedType)
-                        || needProviderBindings[np.NeedType] == np
+                    .Where(
+                        np =>
+                            !needProviderBindings.ContainsKey(np.NeedType)
+                            || needProviderBindings[np.NeedType] == np
                     )
                     .ToList();
 

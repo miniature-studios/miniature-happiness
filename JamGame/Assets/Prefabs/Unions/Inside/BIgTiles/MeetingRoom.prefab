@@ -208,7 +208,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!65 &8318407623644397488
@@ -246,7 +245,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowDirectionGizmo: 0
   ShowPathGizmo: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
   - Meeting
@@ -418,6 +416,7 @@ MonoBehaviour:
   filter:
     Employees: []
     FilterType: 3
+  bindToThisProviderOnFirstVisit: 0
   NeedType: 3
 --- !u!1 &2133431180693887670
 GameObject:
@@ -541,7 +540,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!65 &8064986393353152893
@@ -579,7 +577,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowDirectionGizmo: 0
   ShowPathGizmo: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
   - Meeting
@@ -796,6 +793,7 @@ MonoBehaviour:
   filter:
     Employees: []
     FilterType: 3
+  bindToThisProviderOnFirstVisit: 0
   NeedType: 3
 --- !u!1 &3148811326908554696
 GameObject:
@@ -846,7 +844,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!65 &6490756892857601519
@@ -884,7 +881,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowDirectionGizmo: 0
   ShowPathGizmo: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
   - Meeting
@@ -1063,21 +1059,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawNeedProviderGizmo: 0
-  cost:
-    cost: 0
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  CoreModelPrefab: {fileID: 739786844684371711, guid: 750fa1a82e6c78744aa3e540e426d996, type: 3}
+  coreModel: {fileID: 0}
   position: {x: 0, y: 0}
   rotation: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  InventoryModel: {fileID: 2742550895613413213, guid: 0d05684e431656940a17b24ac15adfe3, type: 3}
+  gridProperties: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   Tiles:
   - {fileID: 1850657713405631901}
   - {fileID: 6023392488271475129}
   - {fileID: 5241539118009146801}
   - {fileID: 3520567390060003207}
-  serializedPlaceConditions: []
 --- !u!1 &3797532287408629511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,6 +1116,7 @@ MonoBehaviour:
   filter:
     Employees: []
     FilterType: 3
+  bindToThisProviderOnFirstVisit: 0
   NeedType: 3
 --- !u!1 &3852208500263978446
 GameObject:
@@ -1239,7 +1231,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!65 &9169809645065636146
@@ -1277,7 +1268,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowDirectionGizmo: 0
   ShowPathGizmo: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
   - Meeting
@@ -1638,6 +1628,7 @@ MonoBehaviour:
   filter:
     Employees: []
     FilterType: 3
+  bindToThisProviderOnFirstVisit: 0
   NeedType: 3
 --- !u!1 &8247497702297635511
 GameObject:

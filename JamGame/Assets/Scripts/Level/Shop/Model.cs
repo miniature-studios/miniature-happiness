@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Level.Room;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Level.Shop
     [AddComponentMenu("Scripts/Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
-        private ObservableCollection<Room.Model> roomsInShop = new();
+        private ObservableCollection<CoreModel> roomsInShop = new();
         public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
 
         private void Awake()
@@ -17,13 +18,32 @@ namespace Level.Shop
             roomsInShop.CollectionChanged += CollectionChanged.Invoke;
         }
 
-        public void SetRooms(List<Room.Model> rooms)
+        public void ResetRooms(IEnumerable<CoreModel> rooms)
         {
-            roomsInShop.Clear();
-            foreach (Room.Model room in rooms)
+            ClearShop();
+            foreach (CoreModel room in rooms)
             {
-                roomsInShop.Add(room);
+                AddRoom(room);
             }
+        }
+
+        public void AddRoom(CoreModel room)
+        {
+            roomsInShop.Add(room);
+        }
+
+        public CoreModel BorrowRoom(CoreModel room)
+        {
+            return roomsInShop.Remove(room) ? room : null;
+        }
+
+        public void ClearShop()
+        {
+            foreach (CoreModel room in roomsInShop)
+            {
+                Destroy(room.gameObject);
+            }
+            roomsInShop.Clear();
         }
     }
 }

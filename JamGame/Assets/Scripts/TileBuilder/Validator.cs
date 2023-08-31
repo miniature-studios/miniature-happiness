@@ -2,7 +2,6 @@ using Common;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder.Command;
-using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder.Validator
@@ -12,132 +11,96 @@ namespace TileBuilder.Validator
         public Result ValidateCommand(ICommand command);
     }
 
-    public class BuildMode : IValidator
+    public class Basic : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
-        private readonly SelectedTileWrapper selectedTileCover;
-        private GodMode godModeValidator;
 
-        public BuildMode(TileBuilderImpl tileBuilder, SelectedTileWrapper selectedTileCover)
+        public Basic(TileBuilderImpl tileBuilder)
         {
             this.tileBuilder = tileBuilder;
-            godModeValidator = new(tileBuilder, selectedTileCover);
-            this.selectedTileCover = selectedTileCover;
         }
 
         public Result ValidateCommand(ICommand command)
         {
-            Result validator_result = godModeValidator.ValidateCommand(command);
-            if (validator_result.Failure)
+            return command is DropRoom dropRoom
+                ? tileBuilder.IsValidPlacing(dropRoom.CoreModel)
+                : command is ValidateBuilding
+                    ? tileBuilder.Validate()
+                    : command is BorrowRoom borrowRoom
+                    && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) == null
+                        ? new FailResult("No room to borrow")
+                        : new SuccessResult();
+        }
+    }
+
+    public class BuildMode : IValidator
+    {
+        private readonly TileBuilderImpl tileBuilder;
+        private readonly Basic basic;
+
+        public BuildMode(TileBuilderImpl tileBuilder)
+        {
+            this.tileBuilder = tileBuilder;
+            basic = new Basic(tileBuilder);
+        }
+
+        public Result ValidateCommand(ICommand command)
+        {
+            Result baseResult = basic.ValidateCommand(command);
+            if (baseResult.Failure)
             {
-                return validator_result;
+                return baseResult;
             }
-            if (command is CompletePlacing or DeleteSelectedTile or ValidateBuilding)
+            if (command is ValidateBuilding or HideSelectedRoom)
             {
                 return new SuccessResult();
             }
-            if (command is AddTileToScene add_command)
+            if (command is ShowSelectedRoom showRoomIllusion)
             {
-                TileUnionImpl creating_tile_union =
-                    add_command.TilePrefab.GetComponent<TileUnionImpl>();
-                IEnumerable<Vector2Int> inside_list_positions =
-                    tileBuilder.GetFreeSpaceInsideListPositions();
-
-                Vector2Int picked_position;
-                Result<Vector2Int> result = tileBuilder.BuilderMatrix.GetMatrixPosition(
-                    add_command.Ray
-                );
-                picked_position = result.Success ? result.Data : Vector2Int.zero;
-
-                int rotation = 0;
-                bool selected = false;
-                Vector2Int buffer_position = Vector2Int.zero;
-                int buffer_rotation = 0;
-                float buffer_distance = float.MaxValue;
-
-                while (rotation < 4)
-                {
-                    foreach (Vector2Int free_position in inside_list_positions)
-                    {
-                        IEnumerable<Vector2Int> future_places = creating_tile_union.GetImaginePlaces(
-                            free_position,
-                            creating_tile_union.Rotation + rotation
-                        );
-                        if (
-                            inside_list_positions.Intersect(future_places).Count()
-                            == creating_tile_union.TilesCount
-                        )
-                        {
-                            selected = true;
-                            float calc_distance = Vector2.Distance(
-                                CenterOfMassTools.GetCenterOfMass(future_places.ToList()),
-                                picked_position
-                            );
-                            if (calc_distance < buffer_distance)
-                            {
-                                buffer_position = free_position;
-                                buffer_rotation = rotation;
-                                buffer_distance = calc_distance;
-                            }
-                        }
-                    }
-                    rotation++;
-                }
-                if (selected)
-                {
-                    add_command.CreatingPosition = buffer_position;
-                    add_command.CreatingRotation = buffer_rotation;
-                    return new SuccessResult();
-                }
-                else
-                {
-                    return new FailResult("Cannot place, not enough free place");
-                }
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    showRoomIllusion.CoreModel.Uid
+                ].GetImaginePlaces(showRoomIllusion.CoreModel.TileUnionModel.PlacingProperties);
+                return newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
+                    ? new SuccessResult()
+                    : new FailResult("Can not show in outside");
             }
-            if (command is SelectTile select_command)
+            if (command is DropRoom dropRoom)
             {
-                return (
-                    select_command.Tile.IsAllWithMark("Immutable"),
-                    select_command.Tile.IsAllWithMark("Freespace")
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    dropRoom.CoreModel.Uid
+                ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
+                return
+                    tileBuilder
+                        .GetTileUnionsInPositions(newPositions)
+                        .All(x => x.IsAllWithMark("Freespace"))
+                    && newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
+                    ? new SuccessResult()
+                    : new FailResult("Can not place on another room");
+            }
+            return
+                command is BorrowRoom borrowRoom
+                && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null
+                ? (
+                    tileBuilder
+                        .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
+                        .IsAllWithMark("Immutable"),
+                    tileBuilder
+                        .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
+                        .IsAllWithMark("Freespace")
                 ) switch
                 {
                     (true, _) => new FailResult("Immutable Tile"),
                     (_, true) => new FailResult("Free space Tile"),
                     _ => new SuccessResult()
-                };
-            }
-            if (command is MoveSelectedTile move_command)
-            {
-                Vector2Int new_union_position =
-                    selectedTileCover.Value.Position + move_command.Direction.Value.ToVector2Int();
-                IEnumerable<Vector2Int> newPositions = selectedTileCover.Value.GetImaginePlaces(
-                    new_union_position,
-                    selectedTileCover.Value.Rotation
-                );
-                return !tileBuilder
-                    .GetTileUnionsInPositions(newPositions)
-                    .All(x => !x.IsAllWithMark("Outside"))
-                    ? new FailResult("Can not move outside")
-                    : new SuccessResult();
-            }
-            if (command is RotateSelectedTile rotate_command)
-            {
-                IEnumerable<Vector2Int> newPosition = selectedTileCover.Value.GetImaginePlaces(
-                    selectedTileCover.Value.Position,
-                    selectedTileCover.Value.Rotation + (int)rotate_command.Direction
-                );
-                return !tileBuilder
-                    .GetTileUnionsInPositions(newPosition)
-                    .All(x => !x.IsAllWithMark("Outside"))
-                    ? new FailResult("Can not rotate into outside")
-                    : new SuccessResult();
-            }
-            return new FailResult("Can not do this command");
+                }
+                : new FailResult("Cannot do this command");
         }
     }
 
     public class GameMode : IValidator
     {
+        public GameMode() { }
+
         public Result ValidateCommand(ICommand command)
         {
             return new FailResult("Cannot do anything in Game Mode");
@@ -147,104 +110,33 @@ namespace TileBuilder.Validator
     public class GodMode : IValidator
     {
         private readonly TileBuilderImpl tileBuilder;
-        private readonly SelectedTileWrapper selectedTileCover;
+        private readonly Basic basic;
 
-        public GodMode(TileBuilderImpl tileBuilder, SelectedTileWrapper selectedTileCover)
+        public GodMode(TileBuilderImpl tileBuilder)
         {
             this.tileBuilder = tileBuilder;
-            this.selectedTileCover = selectedTileCover;
+            basic = new Basic(tileBuilder);
         }
 
         public Result ValidateCommand(ICommand command)
         {
-            if (command is DeleteSelectedTile)
+            Result baseResult = basic.ValidateCommand(command);
+            if (baseResult.Failure)
             {
-                return selectedTileCover.Value == null
-                    ? new FailResult("SelectedTile is Null")
-                    : new SuccessResult();
+                return baseResult;
             }
-            if (command is ValidateBuilding)
+            if (command is DropRoom dropRoom)
             {
-                return selectedTileCover.Value != null
-                    ? new FailResult("SelectedTile is not Null")
-                    : new SuccessResult();
-            }
-            if (command is SelectTile select_command)
-            {
-                return (
-                    select_command.Tile == selectedTileCover.Value,
-                    select_command.Tile == null
-                ) switch
-                {
-                    (true, _) => new FailResult("Selected already selected tile"),
-                    (_, true) => new FailResult("No hits"),
-                    _ => new SuccessResult()
-                };
-            }
-            if (command is MoveSelectedTile move_command)
-            {
-                return (selectedTileCover.Value == null, move_command.Direction == null) switch
-                {
-                    (true, _) => new FailResult("Not selected Tile"),
-                    (_, true) => new FailResult("Null direction"),
-                    _ => new SuccessResult()
-                };
-            }
-            if (command is RotateSelectedTile)
-            {
-                return selectedTileCover.Value == null
-                    ? new FailResult("Not selected Tile")
-                    : new SuccessResult();
-            }
-            if (command is AddTileToScene add_command)
-            {
-                if (selectedTileCover.Value != null)
-                {
-                    return new FailResult("Complete placing previous tile");
-                }
-                TileUnionImpl creating_tile_union =
-                    add_command.TilePrefab.GetComponent<TileUnionImpl>();
-                IEnumerable<Vector2Int> inside_list_positions =
-                    tileBuilder.GetFreeSpaceInsideListPositions();
-
-                int rotation = 0;
-                while (rotation < 4)
-                {
-                    foreach (Vector2Int free_position in inside_list_positions)
-                    {
-                        IEnumerable<Vector2Int> futurePlaces = creating_tile_union.GetImaginePlaces(
-                            free_position,
-                            creating_tile_union.Rotation + rotation
-                        );
-                        if (
-                            inside_list_positions.Intersect(futurePlaces).Count()
-                            == creating_tile_union.TilesCount
-                        )
-                        {
-                            add_command.CreatingPosition = free_position;
-                            add_command.CreatingRotation = rotation;
-                            return new SuccessResult();
-                        }
-                    }
-                    rotation++;
-                }
-                Vector2Int position = new(0, 0);
-                do
-                {
-                    position.x++;
-                } while (
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    dropRoom.CoreModel.Uid
+                ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
+                return
                     tileBuilder
-                        .GetTileUnionsInPositions(
-                            creating_tile_union.GetImaginePlaces(
-                                position,
-                                creating_tile_union.Rotation
-                            )
-                        )
-                        .Count() > 0
-                );
-                add_command.CreatingPosition = position;
-                add_command.CreatingRotation = creating_tile_union.Rotation;
-                return new SuccessResult();
+                        .GetTileUnionsInPositions(newPositions)
+                        .All(x => x.IsAllWithMark("Freespace"))
+                    || newPositions.Intersect(tileBuilder.GetAllPositions()).Count() == 0
+                    ? new SuccessResult()
+                    : new FailResult("Can not place on another room");
             }
             return new SuccessResult();
         }

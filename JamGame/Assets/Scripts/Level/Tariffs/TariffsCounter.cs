@@ -34,25 +34,25 @@ namespace Level
 
         public void UpdateCheck()
         {
-            int inside_tiles_count = tileBuilder.GetAllInsideListPositions().Count();
-            IEnumerable<TileUnionImpl> room_properties = tileBuilder.GetTileUnionsInPositions(
-                tileBuilder.GetAllInsideListPositions()
+            int insideTilesCount = tileBuilder.GetAllInsidePositions().Count();
+            IEnumerable<TileUnionImpl> roomProperties = tileBuilder.GetTileUnionsInPositions(
+                tileBuilder.GetAllInsidePositions()
             );
 
             check = new()
             {
-                Rent = inside_tiles_count * levelConfig.Config.Tariffs.RentCost,
-                Water = room_properties
+                Rent = insideTilesCount * levelConfig.Config.Tariffs.RentCost,
+                Water = roomProperties
                     .Select(
                         x =>
-                            x.TariffProperties.WaterConsumption
+                            x.CoreModel.TariffProperties.WaterConsumption
                             * levelConfig.Config.Tariffs.WaterCost
                     )
                     .Sum(),
-                Electricity = room_properties
+                Electricity = roomProperties
                     .Select(
                         x =>
-                            x.TariffProperties.ElectricityConsumption
+                            x.CoreModel.TariffProperties.ElectricityConsumption
                             * levelConfig.Config.Tariffs.ElectricityCost
                     )
                     .Sum(),

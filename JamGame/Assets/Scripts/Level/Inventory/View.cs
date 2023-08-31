@@ -1,36 +1,53 @@
-﻿using System;
+﻿using Common;
+using Level.Room;
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Inventory
 {
+    [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Scripts/Level.Inventory.View")]
-    public class View : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class View : MonoBehaviour
     {
+        [SerializeField]
+        private AssetLabelReference inventoryViewsLabel;
+
         [SerializeField]
         private Transform container;
 
         [SerializeField]
-        private TMP_Text button_text;
-        private Animator tilesInventoryAnimator;
-        public UnityEvent<bool> PointerOverEvent;
+        private TMP_Text buttonText;
+        private Animator animator;
+        private bool inventoryVisible = false;
+
+        private Dictionary<string, IResourceLocation> modelViewMap = new();
+        private List<Room.View> roomViews;
 
         private void Awake()
         {
-            tilesInventoryAnimator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
+            foreach (
+                AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
+                    inventoryViewsLabel
+                )
+            )
+            {
+                modelViewMap.Add(invView.Asset.Uid, invView.Location);
+            }
         }
 
-        private bool inventoryShowed = false;
-
+        // Called by button that open/closes inventory
         public void InventoryButtonClick()
         {
-            inventoryShowed = !inventoryShowed;
-            tilesInventoryAnimator.SetBool("Showed", inventoryShowed);
-            button_text.text = inventoryShowed ? "Close" : "Open";
+            inventoryVisible ^= true;
+            animator.SetBool("Showed", inventoryVisible);
+            buttonText.text = inventoryVisible ? "Close" : "Open";
         }
 
         public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -38,13 +55,13 @@ namespace Level.Inventory
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItem(e.NewItems[0] as Room.Model);
+                    AddNewItem(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItem(e.OldItems[0] as Room.Model);
+                    RemoveOldItem(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    DeleteAllItems();
+                    RemoveAllItems();
                     break;
                 default:
                     Debug.LogError(
@@ -54,49 +71,40 @@ namespace Level.Inventory
             }
         }
 
-        private void DeleteAllItems()
+        private void AddNewItem(CoreModel newItem)
         {
-            foreach (
-                Room.Model old_item in container.transform.GetComponentsInChildren<Room.Model>()
-            )
+            if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
             {
-                old_item.Count = 0;
-            }
-        }
+                Room.View newRoomView = Instantiate(
+                    AddressableTools<Room.View>.LoadAsset(location),
+                    container
+                );
 
-        private void RemoveOldItem(Room.Model old_item)
-        {
-            Room.Model[] room_models = container.transform.GetComponentsInChildren<Room.Model>();
-            room_models.First(x => x.TileUnion == old_item.TileUnion).Count--;
-        }
-
-        private void AddNewItem(Room.Model new_item)
-        {
-            Room.Model[] room_inventories =
-                container.transform.GetComponentsInChildren<Room.Model>();
-            Room.Model existed = room_inventories.FirstOrDefault(
-                x => x.TileUnion == new_item.TileUnion
-            );
-            if (existed != null)
-            {
-                existed.Count++;
+                newRoomView.SetCoreModel(newItem);
+                roomViews.Add(newRoomView);
+                newItem.transform.SetParent(newRoomView.transform);
             }
             else
             {
-                Room.View new_room_view = Instantiate(new_item, container)
-                    .GetComponent<Room.View>();
-                new_room_view.enabled = true;
+                Debug.LogError($"Core model {newItem.name} not presented in Inventory View");
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        private void RemoveOldItem(CoreModel oldItem)
         {
-            PointerOverEvent?.Invoke(true);
+            Room.View existRoom = roomViews.Find(x => x.CoreModel == oldItem);
+            _ = roomViews.Remove(existRoom);
+            Destroy(existRoom.gameObject);
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        private void RemoveAllItems()
         {
-            PointerOverEvent?.Invoke(false);
+            while (roomViews.Count > 0)
+            {
+                Room.View buffer = roomViews.Last();
+                _ = roomViews.Remove(buffer);
+                Destroy(buffer.gameObject);
+            }
         }
     }
 }

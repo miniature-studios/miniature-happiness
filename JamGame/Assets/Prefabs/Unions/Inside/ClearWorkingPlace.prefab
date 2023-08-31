@@ -46,18 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DrawNeedProviderGizmo: 0
-  cost:
-    cost: 0
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  CoreModelPrefab: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
+  coreModel: {fileID: 0}
   position: {x: 0, y: 0}
   rotation: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
-  InventoryModel: {fileID: 2742550895613413213, guid: 9fa931fe74c05ad49b30eea3585c513b, type: 3}
+  gridProperties: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   Tiles:
   - {fileID: 4783181086558189131}
-  serializedPlaceConditions: []
 --- !u!1 &4783181086558189133
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +125,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowDirectionGizmo: 0
   ShowPathGizmo: 0
-  builderMatrix: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   wallSolver: {fileID: 11400000, guid: 5f5465019360c1e4eb09c38fb3fde4d2, type: 2}
   marks:
   - Working Place
@@ -282,7 +276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 2100000, guid: 9dd97a15a4e5eb2409535d64e405a269, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
 --- !u!1 &4783181087097005868

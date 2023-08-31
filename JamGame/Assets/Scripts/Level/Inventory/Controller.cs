@@ -1,68 +1,49 @@
 ﻿using Common;
-using System;
-using System.Collections.Generic;
+using Level.Room;
 using System.Linq;
 using UnityEngine;
 
 namespace Level.Inventory
 {
     [AddComponentMenu("Scripts/Level.Inventory.Controller")]
-    public class Controller : MonoBehaviour
+    public class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
-        private Model inventoryModel;
+        private Model model;
 
-        [SerializeField, InspectorReadOnly]
-        private Room.Model selectedRoom = null;
-
-        [SerializeField, InspectorReadOnly]
-        private bool pointerOverView = false;
-
-        public event Func<Room.Model, Result> TryPlace;
-
-        private void Update()
+        public void AddNewRoom(CoreModel room)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (pointerOverView)
-                {
-                    IEnumerable<GameObject> collection = RayCastUtilities
-                        .UIRayCast(Input.mousePosition)
-                        .Where(x => x.GetComponent<Room.Model>());
-                    selectedRoom =
-                        collection.Count() > 0
-                            ? collection.Select(x => x.GetComponent<Room.Model>()).First()
-                            : null;
-                }
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                selectedRoom = null;
-            }
+            model.AddNewRoom(room);
         }
 
-        public void AddNewRoom(Room.Model room)
+        public void Hover(CoreModel room)
         {
-            inventoryModel.AddNewRoom(room);
+            // TODO: implement another view
         }
 
-        public void PointerOverView(bool over)
+        public Result Drop(CoreModel room)
         {
-            pointerOverView = over;
-            if (!over && selectedRoom != null)
+            model.AddNewRoom(room);
+            return new SuccessResult();
+        }
+
+        public Result<CoreModel> Borrow()
+        {
+            Room.View hovered = RayCastUtilities
+                .UIRayCast(Input.mousePosition)
+                ?.FirstOrDefault(x => x.GetComponent<Room.View>() != null)
+                ?.GetComponent<Room.View>();
+            if (hovered != null)
             {
-                if (TryPlace(selectedRoom).Success)
-                {
-                    inventoryModel.RemoveRoom(selectedRoom);
-                }
-                selectedRoom = null;
+                CoreModel coreModel = hovered.CoreModel;
+                return new SuccessResult<CoreModel>(model.BorrowRoom(coreModel));
+            }
+            else
+            {
+                return new FailResult<CoreModel>("Nothing hovered.");
             }
         }
 
-        public void JustAddedNewRoom(Room.Model new_room)
-        {
-            selectedRoom = new_room;
-        }
+        public void HoverLeave() { }
     }
 }

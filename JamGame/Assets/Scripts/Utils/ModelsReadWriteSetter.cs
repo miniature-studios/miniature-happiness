@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -17,8 +18,8 @@ namespace Utils
 
             foreach (string path in files)
             {
-                ModelImporter model_importer = (ModelImporter)AssetImporter.GetAtPath(path);
-                model_importer.isReadable = true;
+                ModelImporter modeImporter = (ModelImporter)AssetImporter.GetAtPath(path);
+                modeImporter.isReadable = true;
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
             }
 
@@ -26,3 +27,4 @@ namespace Utils
         }
     }
 }
+#endif

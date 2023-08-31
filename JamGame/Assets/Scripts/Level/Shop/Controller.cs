@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Config;
+using Level.Room;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,17 +19,19 @@ namespace Level.Shop
         [SerializeField]
         private Finances.Model financesController;
 
-        public void SetShopRooms(IEnumerable<ShopRoomConfig> room_configs)
+        public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {
-            shopModel.SetRooms(room_configs.Select(x => x.Room).ToList());
+            shopModel.ResetRooms(
+                roomConfigs.Select(x => CoreModel.InstantiateCoreModel(x.Room.Uid))
+            );
         }
 
-        public Result TryBuyRoom(TileUnion.Cost cost, Room.Model room)
+        public Result TryBuyRoom(CoreModel room)
         {
-            Result result = financesController.TryTakeMoney(cost.Value);
+            Result result = financesController.TryTakeMoney(room.ShopModel.Cost.Value);
             if (result.Success)
             {
-                inventoryController.AddNewRoom(room.InventoryRoomModel);
+                inventoryController.AddNewRoom(shopModel.BorrowRoom(room));
                 return new SuccessResult();
             }
             else
@@ -39,12 +42,12 @@ namespace Level.Shop
             }
         }
 
-        public void SetShopEmployees(IEnumerable<EmployeeConfig> employee_configs)
+        public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)
         {
             // TODO
         }
 
-        public bool TryBuyEmployee(int cost, Room.View tile_ui)
+        public bool TryBuyEmployee(int cost)
         {
             // TODO
             throw new System.NotImplementedException();

@@ -23,7 +23,7 @@ namespace Level
     public class Executor : MonoBehaviour
     {
         [SerializeField]
-        private TileBuilder.Controller tileBuilderController;
+        private TileBuilder.Controller.ControllerImpl tileBuilderController;
 
         [SerializeField]
         private Finances.Model financesModel;
@@ -55,10 +55,12 @@ namespace Level
         [SerializeField]
         private AllChildrenNeedModifiersApplier leaveNeedOverride;
 
-        [SerializeField] private GameObject homeConditionProvider;
+        [SerializeField]
+        private GameObject homeConditionProvider;
         private IDataProvider<AllEmployeesAtHome> homeCondition;
 
-        [SerializeField] private GameObject meetingConditionProvider;
+        [SerializeField]
+        private GameObject meetingConditionProvider;
         private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
 
         public UnityEvent ActionEndNotify;
@@ -70,25 +72,31 @@ namespace Level
             homeCondition = homeConditionProvider.GetComponent<IDataProvider<AllEmployeesAtHome>>();
             if (homeCondition == null)
             {
-                Debug.LogError("IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider");
+                Debug.LogError(
+                    "IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider"
+                );
             }
-            meetingCondition = meetingConditionProvider.GetComponent<IDataProvider<AllEmployeesAtMeeting>>();
+            meetingCondition = meetingConditionProvider.GetComponent<
+                IDataProvider<AllEmployeesAtMeeting>
+            >();
             if (meetingCondition == null)
             {
-                Debug.LogError("IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider");
+                Debug.LogError(
+                    "IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider"
+                );
             }
         }
 
-        public void Execute(DayStart day_start)
+        public void Execute(DayStart dayStart)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 0; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }
 
-            financesModel.AddMoney(day_start.MorningMoney);
+            financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
-            _ = StartCoroutine(DayStartRoutine(day_start.Duration));
+            _ = StartCoroutine(DayStartRoutine(dayStart.Duration));
         }
 
         private IEnumerator DayStartRoutine(float time)
@@ -109,7 +117,7 @@ namespace Level
         {
             meetingStartNeedOverride.Register();
 
-            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
+            tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             animatorSwitcher.SetAnimatorStates(typeof(Meeting));
@@ -158,7 +166,7 @@ namespace Level
             );
         }
 
-        public void Execute(DayEnd day_end)
+        public void Execute(DayEnd dayEnd)
         {
             leaveNeedOverride.Register();
 

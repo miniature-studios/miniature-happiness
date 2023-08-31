@@ -25,35 +25,33 @@ namespace TileBuilder
         private List<string> ignoringMarks;
 
         public WallType? ChooseWall(
-            IEnumerable<string> my_marks,
-            IEnumerable<WallType> my_walls,
-            IEnumerable<string> out_marks,
-            IEnumerable<WallType> out_walls
+            IEnumerable<string> myMarks,
+            IEnumerable<WallType> myWalls,
+            IEnumerable<string> outMarks,
+            IEnumerable<WallType> outWalls
         )
         {
-            IEnumerable<string> my_new_marks = my_marks.Where(x => !ignoringMarks.Contains(x));
-            IEnumerable<string> out_new_marks = out_marks.Where(x => !ignoringMarks.Contains(x));
+            IEnumerable<string> myNewMarks = myMarks.Where(x => !ignoringMarks.Contains(x));
+            IEnumerable<string> outNewMarks = outMarks.Where(x => !ignoringMarks.Contains(x));
 
-            IEnumerable<WallType> wall_type_intersect = my_walls.Intersect(out_walls).ToList();
-            if (wall_type_intersect.Count() == 1)
+            IEnumerable<WallType> wallTypeIntersect = myWalls.Intersect(outWalls).ToList();
+            if (wallTypeIntersect.Count() == 1)
             {
-                return wall_type_intersect.First();
+                return wallTypeIntersect.First();
             }
-            else if (wall_type_intersect.Count() > 1)
+            else if (wallTypeIntersect.Count() > 1)
             {
-                IEnumerable<string> marks_intersect = my_new_marks
-                    .Intersect(out_new_marks)
-                    .ToList();
+                IEnumerable<string> marksIntersect = myNewMarks.Intersect(outNewMarks).ToList();
                 // Unique rule
                 if (
-                    !(my_marks.Contains("Freespace") || out_marks.Contains("Freespace"))
-                    && !(my_marks.Contains("Outside") || out_marks.Contains("Outside"))
-                    && (my_marks.Contains("Corridor") || out_marks.Contains("Corridor"))
+                    !(myMarks.Contains("Freespace") || outMarks.Contains("Freespace"))
+                    && !(myMarks.Contains("Outside") || outMarks.Contains("Outside"))
+                    && (myMarks.Contains("Corridor") || outMarks.Contains("Corridor"))
                 )
                 {
                     foreach (WallType iterator in forSameTilesPriorityQueueForCorridor)
                     {
-                        if (wall_type_intersect.Contains(iterator))
+                        if (wallTypeIntersect.Contains(iterator))
                         {
                             return iterator;
                         }
@@ -62,12 +60,12 @@ namespace TileBuilder
                 else // Gather rule
                 {
                     foreach (
-                        WallType iterator in marks_intersect.Count() == 0
+                        WallType iterator in marksIntersect.Count() == 0
                             ? forDifferentTilesPriorityQueue
                             : forSameTilesPriorityQueue
                     )
                     {
-                        if (wall_type_intersect.Contains(iterator))
+                        if (wallTypeIntersect.Contains(iterator))
                         {
                             return iterator;
                         }

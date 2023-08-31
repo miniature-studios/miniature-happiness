@@ -45,7 +45,12 @@ namespace Employee
                     SatisfactionGained = SatisfactionGained * other.SatisfactionGained,
                     DecreaseSpeed = DecreaseSpeed * other.DecreaseSpeed,
                     OverrideSatisfaction = OverrideSatisfaction || other.OverrideSatisfaction,
-                    OverrideSatisfactionValue = (OverrideSatisfactionValue * (OverrideSatisfaction ? 1.0f : 0.0f)) + (other.OverrideSatisfactionValue * (other.OverrideSatisfaction ? 1.0f : 0.0f))
+                    OverrideSatisfactionValue =
+                        (OverrideSatisfactionValue * (OverrideSatisfaction ? 1.0f : 0.0f))
+                        + (
+                            other.OverrideSatisfactionValue
+                            * (other.OverrideSatisfaction ? 1.0f : 0.0f)
+                        )
                 };
             }
         }

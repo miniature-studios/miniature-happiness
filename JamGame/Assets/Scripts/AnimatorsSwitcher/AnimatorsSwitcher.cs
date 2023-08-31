@@ -10,10 +10,10 @@ namespace AnimatorsSwitcher
         public string AnimatorName;
         public bool Bool;
 
-        public AnimatorWithBool(string animator, bool _bool)
+        public AnimatorWithBool(string animator, bool flag)
         {
             AnimatorName = animator;
-            Bool = _bool;
+            Bool = flag;
         }
     }
 
@@ -43,10 +43,10 @@ namespace AnimatorsSwitcher
         private AnimatorList animatorList;
         private InterfaceMatch interfaceMatch;
 
-        public void SetAnimatorStates(Type day_type)
+        public void SetAnimatorStates(Type dayType)
         {
             interfaceMatch = animatorList.InterfaceMatcher.Find(
-                x => x.InterfaceName == day_type.Name
+                x => x.InterfaceName == dayType.Name
             );
             foreach (AnimatorWithBool bools in interfaceMatch.Bools)
             {
