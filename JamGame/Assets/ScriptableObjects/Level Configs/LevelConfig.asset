@@ -43,10 +43,10 @@ MonoBehaviour:
       working:
         duration:
           Days_: 0
-    - selectedType: Cutscene
+    - selectedType: PreMeeting
       cutscene:
         duration: 2
-        text: Working
+        text: Night
       dayStart:
         morningMoney: 0
         duration: 0
@@ -57,10 +57,10 @@ MonoBehaviour:
       working:
         duration:
           Days_: 0
-    - selectedType: PreMeeting
+    - selectedType: Cutscene
       cutscene:
         duration: 2
-        text: Night
+        text: Meeting
       dayStart:
         morningMoney: 0
         duration: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
     - selectedType: Cutscene
       cutscene:
         duration: 2
-        text: Meeting
+        text: Working
       dayStart:
         morningMoney: 0
         duration: 0
@@ -243,24 +243,24 @@ MonoBehaviour:
       working:
         duration:
           Days_: 0.5
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Evening
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
     - selectedType: PreDayEnd
       cutscene:
         duration: 2
         text: Night
+      dayStart:
+        morningMoney: 0
+        duration: 0
+      meeting:
+        shopEmployees: []
+        shopRooms: []
+        mandatoryRooms: []
+      working:
+        duration:
+          Days_: 0
+    - selectedType: Cutscene
+      cutscene:
+        duration: 2
+        text: Evening
       dayStart:
         morningMoney: 0
         duration: 0

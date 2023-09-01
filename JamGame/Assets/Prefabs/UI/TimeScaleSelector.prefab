@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8549211195856476716}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -173,7 +172,6 @@ RectTransform:
   - {fileID: 8549211194907965382}
   - {fileID: 8549211195856476716}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -233,7 +231,7 @@ MonoBehaviour:
   buttonX05: {fileID: 8549211195856476717}
   buttonX1: {fileID: 8549211194907965383}
   buttonX2: {fileID: 8549211195168105104}
-  buttonX3: {fileID: 8549211195062993048}
+  buttonX5: {fileID: 8549211195062993048}
 --- !u!114 &8549211194701896215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc14ffd613e08464c8ba78126381b451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayLength: 0
+  dayLength: 60
 --- !u!95 &1400874559
 Animator:
   serializedVersion: 5
@@ -267,6 +265,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8549211194745685335
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,7 +297,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8549211194907965382}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -433,7 +431,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8549211195168105111}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -570,7 +567,6 @@ RectTransform:
   m_Children:
   - {fileID: 8549211194745685328}
   m_Father: {fileID: 8549211194701896212}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -684,7 +680,7 @@ GameObject:
   - component: {fileID: 8549211195062993049}
   - component: {fileID: 8549211195062993048}
   m_Layer: 5
-  m_Name: 3X
+  m_Name: 5X
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -704,7 +700,6 @@ RectTransform:
   m_Children:
   - {fileID: 8549211195836960311}
   m_Father: {fileID: 8549211194701896212}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -801,7 +796,7 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 3
+          m_FloatArgument: 5
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -838,7 +833,6 @@ RectTransform:
   m_Children:
   - {fileID: 8549211194758368244}
   m_Father: {fileID: 8549211194701896212}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -970,7 +964,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8549211195062993055}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1005,7 +998,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3x
+  m_text: 5x
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1107,7 +1100,6 @@ RectTransform:
   m_Children:
   - {fileID: 8549211193893281118}
   m_Father: {fileID: 8549211194701896212}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}

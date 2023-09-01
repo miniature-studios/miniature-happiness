@@ -18,13 +18,13 @@ namespace Level.GlobalTime
         private Button buttonX2;
 
         [SerializeField]
-        private Button buttonX3;
+        private Button buttonX5;
 
         private List<Button> buttons;
 
         private void Start()
         {
-            buttons = new List<Button> { buttonX05, buttonX1, buttonX2, buttonX3 };
+            buttons = new List<Button> { buttonX05, buttonX1, buttonX2, buttonX5 };
 
             foreach (Button button in buttons)
             {
