@@ -7,13 +7,6 @@ using UnityEngine.Events;
 
 namespace TileBuilder.Controller
 {
-    public enum GameMode
-    {
-        God,
-        Build,
-        Play
-    }
-
     [AddComponentMenu("Scripts/TileBuilder.Controller.ControllerImpl")]
     public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TileBuilder.Command;
 using TileUnion;
+using TileUnion.SpecialRooms;
 using TileUnion.Tile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -13,6 +14,13 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace TileBuilder
 {
+    public enum GameMode
+    {
+        God,
+        Build,
+        Play
+    }
+
     [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
@@ -43,21 +51,23 @@ namespace TileBuilder
 
         public event Action<TileUnionImpl> OnTileUnionCreated;
 
+        public GameMode CurrentGameMode => validator.GameMode;
+
         private Vector2Int stashPosition = new(-10, -10);
 
         private void Awake()
         {
-            ChangeGameMode(Controller.GameMode.God);
+            ChangeGameMode(GameMode.God);
             InitModelViewMap();
         }
 
-        public void ChangeGameMode(Controller.GameMode gameMode)
+        public void ChangeGameMode(GameMode gameMode)
         {
             validator = gameMode switch
             {
-                Controller.GameMode.God => new Validator.GodMode(this),
-                Controller.GameMode.Build => new Validator.BuildMode(this),
-                Controller.GameMode.Play => new Validator.GameMode(),
+                GameMode.God => new Validator.GodMode(this),
+                GameMode.Build => new Validator.BuildMode(this),
+                GameMode.Play => new Validator.GameMode(),
                 _ => throw new ArgumentException(),
             };
         }
@@ -287,10 +297,7 @@ namespace TileBuilder
         public void CreateTileAndBind(CoreModel coreModel, bool changeParent = true)
         {
             TileUnionImpl tileUnion = CreateTile(coreModel);
-            foreach (Vector2Int pos in tileUnion.TilesPositions)
-            {
-                TileUnionDictionary.Add(pos, tileUnion);
-            }
+            AddTileUnionToDictionary(tileUnion);
             UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
             OnTileUnionCreated?.Invoke(tileUnion);
             if (changeParent)
@@ -336,6 +343,14 @@ namespace TileBuilder
                 Destroy(child.transform.gameObject);
             }
             TileUnionDictionary.Clear();
+        }
+
+        private void AddTileUnionToDictionary(TileUnionImpl tileUnion)
+        {
+            foreach (Vector2Int pos in tileUnion.TilesPositions)
+            {
+                TileUnionDictionary.Add(pos, tileUnion);
+            }
         }
 
         private void RemoveTileFromDictionary(TileUnionImpl tileUnion)
@@ -387,6 +402,112 @@ namespace TileBuilder
             BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tileConfigs);
 
             return buildingConfig;
+        }
+
+        public Result GrowMeetingRoom(MeetingRoom meetingRoom, Level.Inventory.Controller inventory)
+        {
+            if (meetingRoom.CurrentSize == meetingRoom.MaximumSize)
+            {
+                return new FailResult("Maximum size");
+            }
+            GameMode previousGameMode = CurrentGameMode;
+            ChangeGameMode(GameMode.God);
+
+            Direction tempGrowDirection = meetingRoom.GrowDirection;
+            Enumerable
+                .Range(0, meetingRoom.TileUnion.Rotation)
+                .ToList()
+                .ForEach((x) => tempGrowDirection = tempGrowDirection.Rotate90());
+
+            IEnumerable<Vector2Int> movingTileUnionPositions = tempGrowDirection switch
+            {
+                Direction.Up
+                    => meetingRoom.TileUnion.TilesPositions
+                        .OrderByDescending(pos => pos.y)
+                        .Take(meetingRoom.TilesToAdd.Count()),
+                Direction.Right
+                    => meetingRoom.TileUnion.TilesPositions
+                        .OrderByDescending(pos => pos.x)
+                        .Take(meetingRoom.TilesToAdd.Count()),
+                Direction.Down
+                    => meetingRoom.TileUnion.TilesPositions
+                        .OrderBy(pos => pos.y)
+                        .Take(meetingRoom.TilesToAdd.Count()),
+                Direction.Left
+                    => meetingRoom.TileUnion.TilesPositions
+                        .OrderBy(pos => pos.x)
+                        .Take(meetingRoom.TilesToAdd.Count()),
+                _ => throw new ArgumentException()
+            };
+
+            Vector2Int movingDirection = tempGrowDirection.ToVector2Int();
+
+            IEnumerable<Vector2Int> positionsToTake = movingTileUnionPositions.Select(
+                x => x + movingDirection
+            );
+
+            foreach (Vector2Int position in positionsToTake)
+            {
+                TileUnionImpl targetTileUnion = GetTileUnionInPosition(position);
+                if (
+                    targetTileUnion
+                        .GetAllUniqueMarks()
+                        .Intersect(meetingRoom.IncorrectMarks)
+                        .Count() > 0
+                )
+                {
+                    return new FailResult("Cannot borrow tile with incorrect marks.");
+                }
+            }
+
+            IEnumerable<Vector2Int> positionToBorrow = positionsToTake.Where(
+                x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
+            );
+
+            foreach (Vector2Int position in positionToBorrow)
+            {
+                BorrowRoom command = new(position);
+                Result result = ExecuteCommand(command);
+                if (result.Failure)
+                {
+                    return result;
+                }
+                _ = inventory.Drop(command.BorrowedRoom);
+            }
+
+            foreach (Vector2Int position in positionsToTake)
+            {
+                _ = DeleteTile(GetTileUnionInPosition(position));
+            }
+
+            RemoveTileFromDictionary(meetingRoom.TileUnion);
+            meetingRoom.TileUnion.MoveTiles(movingDirection, movingTileUnionPositions);
+            Dictionary<(Vector2Int position, int roatation), TileImpl> addingConfig = new();
+
+            for (int i = 0; i < movingTileUnionPositions.Count(); i++)
+            {
+                addingConfig.Add(
+                    (movingTileUnionPositions.ToList()[i], meetingRoom.TileUnion.Rotation),
+                    meetingRoom.TilesToAdd[i]
+                );
+            }
+
+            meetingRoom.TileUnion.AddTiles(addingConfig);
+
+            Vector2Int unionPosition = meetingRoom.TileUnion.Position;
+            meetingRoom.TileUnion.CreateCache();
+            meetingRoom.TileUnion.SetPosition(unionPosition);
+
+            DebugTools.LogCollection(meetingRoom.TileUnion.TilesPositions);
+            AddTileUnionToDictionary(meetingRoom.TileUnion);
+
+            ChangeGameMode(previousGameMode);
+
+            UpdateSidesInPositions(GetAllInsidePositions());
+
+            meetingRoom.CurrentSize++;
+
+            return new SuccessResult();
         }
     }
 }

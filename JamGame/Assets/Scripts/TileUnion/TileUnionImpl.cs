@@ -97,6 +97,14 @@ namespace TileUnion
             Configuration[rotation].TilesPositions.Select(x => x + position);
         public int TilesCount => Tiles.Count;
 
+        public IEnumerable<string> GetAllUniqueMarks()
+        {
+            return Tiles
+                .Select(x => x.Marks)
+                .Aggregate(Enumerable.Empty<string>(), (x, y) => x.Concat(y))
+                .Distinct();
+        }
+
         public bool IsAllWithMark(string mark)
         {
             return Tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
@@ -408,6 +416,26 @@ namespace TileUnion
                     )
                 };
             return vectors.OrderBy(x => Vector2.Distance(x, vectorSum)).First();
+        }
+
+        public void MoveTiles(Vector2Int direction, IEnumerable<Vector2Int> movingPositions)
+        {
+            foreach (Vector2Int position in movingPositions)
+            {
+                TileImpl tile = GetTile(position);
+                tile.SetPosition(gridProperties, tile.Position + direction);
+            }
+        }
+
+        public void AddTiles(Dictionary<(Vector2Int globalPosition, int roatation), TileImpl> pairsToAdd)
+        {
+            foreach (KeyValuePair<(Vector2Int globalPosition, int roatation), TileImpl> pair in pairsToAdd)
+            {
+                TileImpl newTile = Instantiate(pair.Value, transform);
+                Tiles.Add(newTile);
+                newTile.SetPosition(gridProperties, pair.Key.globalPosition - position);
+                newTile.SetRotation(pair.Key.roatation);
+            }
         }
     }
 }

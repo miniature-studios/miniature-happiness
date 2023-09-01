@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Linq;
 using TileUnion;
+using TileUnion.SpecialRooms;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace TileBuilder
         public override void OnInspectorGUI()
         {
             DisplayDebuggingTools(tileBuilder);
+            DisplayMeetingRoomTools(tileBuilder);
 
             _ = DrawDefaultInspector();
 
@@ -119,6 +121,23 @@ namespace TileBuilder
                 }
             }
             tileBuilder.ShowTilePathGizmo = bufferBool;
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DisplayMeetingRoomTools(TileBuilderImpl tileBuilder)
+        {
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Grow meeting room"))
+            {
+                Common.Result answer = tileBuilder.GrowMeetingRoom(
+                    FindObjectOfType<MeetingRoom>(),
+                    FindObjectOfType<Level.Inventory.Controller>()
+                );
+                if (answer.Failure)
+                {
+                    Debug.Log(answer.Error);
+                }
+            }
             EditorGUILayout.EndHorizontal();
         }
     }

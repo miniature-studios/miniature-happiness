@@ -1,4 +1,5 @@
 using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder.Command;
@@ -8,6 +9,7 @@ namespace TileBuilder.Validator
 {
     public interface IValidator
     {
+        public TileBuilder.GameMode GameMode { get; }
         public Result ValidateCommand(ICommand command);
     }
 
@@ -19,6 +21,8 @@ namespace TileBuilder.Validator
         {
             this.tileBuilder = tileBuilder;
         }
+
+        TileBuilder.GameMode IValidator.GameMode => throw new InvalidOperationException();
 
         public Result ValidateCommand(ICommand command)
         {
@@ -43,6 +47,8 @@ namespace TileBuilder.Validator
             this.tileBuilder = tileBuilder;
             basic = new Basic(tileBuilder);
         }
+
+        TileBuilder.GameMode IValidator.GameMode => TileBuilder.GameMode.Build;
 
         public Result ValidateCommand(ICommand command)
         {
@@ -101,6 +107,8 @@ namespace TileBuilder.Validator
     {
         public GameMode() { }
 
+        TileBuilder.GameMode IValidator.GameMode => TileBuilder.GameMode.Play;
+
         public Result ValidateCommand(ICommand command)
         {
             return new FailResult("Cannot do anything in Game Mode");
@@ -117,6 +125,8 @@ namespace TileBuilder.Validator
             this.tileBuilder = tileBuilder;
             basic = new Basic(tileBuilder);
         }
+
+        TileBuilder.GameMode IValidator.GameMode => TileBuilder.GameMode.God;
 
         public Result ValidateCommand(ICommand command)
         {
