@@ -12,17 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a969a6942d26104cafddabe80876f63, type: 3}
   m_Name: StressedBuff
   m_EditorClassIdentifier: 
-  time: Infinity
+  Time: Infinity
   rawEffects:
   - selectedType: ControllerEffect
-    controllerEffect:
-      speedMultiplier: 0.2
+    stressEffect:
+      increaseMultiplier: 0
     needModifierEffect:
       needModifiers:
       - NeedType: 0
         SatisfactionTime: 1.5
         SatisfactionGained: 1
         DecreaseSpeed: 1
-    stressEffect:
-      increaseMultiplier: 0
-  _name: stress
+        OverrideSatisfaction: 0
+        OverrideSatisfactionValue: 0
+    controllerEffect:
+      speedMultiplier: 0.2
+  name_: 
