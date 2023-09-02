@@ -3,15 +3,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-namespace Level.EndGamePanel
+namespace Level.WinGamePanel
 {
-    [AddComponentMenu("Scripts/Level.EndGamePanel.Model")]
+    [AddComponentMenu("Scripts/Level.WinGamePanel.Model")]
     public class Model : MonoBehaviour
     {
-        [SerializeField]
-        [InspectorReadOnly]
-        private string panelText;
-
         [SerializeField]
         [InspectorReadOnly]
         private bool shown;
@@ -19,17 +15,26 @@ namespace Level.EndGamePanel
         [SerializeField]
         private string loadingScene;
 
-        public UnityEvent<string> TextChange;
         public UnityEvent<bool> ShownTrigger;
 
-        public string PanelText
+        [SerializeField]
+        [InspectorReadOnly]
+        private int daysLived;
+
+        public int DaysLived
         {
-            get => panelText;
-            set
-            {
-                panelText = value;
-                TextChange?.Invoke(panelText);
-            }
+            get => daysLived;
+            set => daysLived = value;
+        }
+
+        [SerializeField]
+        [InspectorReadOnly]
+        private int moneyEarned;
+
+        public int MoneyEarned
+        {
+            get => moneyEarned;
+            set => moneyEarned = value;
         }
 
         public bool Shown
