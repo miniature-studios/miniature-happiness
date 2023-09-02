@@ -26,14 +26,16 @@ namespace TileBuilder.Validator
 
         public Result ValidateCommand(ICommand command)
         {
-            return command is DropRoom dropRoom
-                ? tileBuilder.IsValidPlacing(dropRoom.CoreModel)
-                : command is ValidateBuilding
-                    ? tileBuilder.Validate()
-                    : command is BorrowRoom borrowRoom
-                    && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) == null
-                        ? new FailResult("No room to borrow")
-                        : new SuccessResult();
+            return command switch
+            {
+                DropRoom dropRoom => tileBuilder.IsValidPlacing(dropRoom.CoreModel),
+                ValidateBuilding => tileBuilder.Validate(),
+                BorrowRoom borrowRoom
+                    when tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) == null
+                    => new FailResult("No room to borrow"),
+                GrowMeetingRoom growMeeting => tileBuilder.CanGrowMeeting(growMeeting.MeetingRoom),
+                _ => new SuccessResult()
+            };
         }
     }
 

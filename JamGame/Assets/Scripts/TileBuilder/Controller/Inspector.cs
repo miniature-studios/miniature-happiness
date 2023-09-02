@@ -2,6 +2,7 @@
 using Level.Room;
 using Pickle;
 using TileBuilder.Command;
+using TileUnion;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,6 +41,9 @@ namespace TileBuilder.Controller
                 CoreModel core = CoreModel.InstantiateCoreModel(tileConfig);
                 _ = tileBuilder.ExecuteCommand(new DropRoom(core));
             }
+
+            // NOTE: Fix when we will introduce save/load.
+            SetCurrentMeetingRoom(FindObjectOfType<MeetingRoomLogics>());
         }
 
         public BuildingConfig SaveBuildingIntoConfig()
@@ -61,6 +65,9 @@ namespace TileBuilder.Controller
 
         [HideInInspector]
         public int SquareSideLength = 30;
+
+        [HideInInspector]
+        public int EmployeeCount = 0;
 
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel StairsPrefab;
@@ -228,6 +235,24 @@ namespace TileBuilder.Controller
                 controller.CreateTile(controller.OutdoorPrefab, new(0, 1), 0);
                 controller.CreateTile(controller.WorkingPlaceFree, new(1, 0), 0);
                 controller.CreateTile(controller.WorkingPlace, new(1, 1), 0);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            controller.EmployeeCount = EditorGUILayout.IntField(
+                "Employee count to extend: ",
+                controller.EmployeeCount
+            );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Grow Meeting room"))
+            {
+                Common.Result result = controller.GrowMeetingRoomForEmployees(controller.EmployeeCount);
+                if (result.Failure)
+                {
+                    Debug.LogError(result.Error);
+                }
             }
             EditorGUILayout.EndHorizontal();
         }

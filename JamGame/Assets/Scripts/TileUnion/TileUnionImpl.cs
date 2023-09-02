@@ -288,7 +288,7 @@ namespace TileUnion
             }
         }
 
-        public void CreateCache()
+        public void CreateCache(bool considerCenterOfMass = true)
         {
             cachedConfiguration = new();
             for (int i = 0; i < 4; i++)
@@ -307,7 +307,7 @@ namespace TileUnion
                         GetCenterTilePosition()
                     )
                 );
-                RotateTileUnion();
+                RotateTileUnion(considerCenterOfMass);
             }
         }
 
@@ -350,28 +350,37 @@ namespace TileUnion
             return Tiles.FirstOrDefault(x => x.Position == globalPosition);
         }
 
-        private void RotateTileUnion()
+        private void RotateTileUnion(bool considerCenterOfMass)
         {
+            Vector2 firstCenter = Vector2.zero;
+            if (considerCenterOfMass)
+            {
+                firstCenter = CenterOfMassTools.GetCenterOfMass(
+                    Tiles.Select(x => x.Position).ToList()
+                );
+            }
+
             rotation++;
-            Vector2 firstCenter = CenterOfMassTools.GetCenterOfMass(
-                Tiles.Select(x => x.Position).ToList()
-            );
+            rotation %= 4;
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
                 tile.SetPosition(gridProperties, new Vector2Int(tile.Position.y, -tile.Position.x));
             }
-            rotation %= 4;
-            Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
+
+            if (considerCenterOfMass)
+            {
+                Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
                 Tiles.Select(x => x.Position).ToList()
             );
-            Vector2 delta = firstCenter - secondCenter;
-            foreach (TileImpl tile in Tiles)
-            {
-                tile.SetPosition(
-                    gridProperties,
-                    tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
-                );
+                Vector2 delta = firstCenter - secondCenter;
+                foreach (TileImpl tile in Tiles)
+                {
+                    tile.SetPosition(
+                        gridProperties,
+                        tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
+                    );
+                }
             }
         }
 

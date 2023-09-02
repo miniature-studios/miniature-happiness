@@ -2,6 +2,7 @@
 using Level;
 using Level.Room;
 using TileBuilder.Command;
+using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,6 +15,18 @@ namespace TileBuilder.Controller
         private TileBuilderImpl tileBuilder;
 
         public UnityEvent BuiltValidatedOffice;
+
+        [SerializeField]
+        [InspectorReadOnly]
+        private MeetingRoomLogics currentMeetingRoom;
+
+        [SerializeField]
+        private Level.Inventory.Controller inventory;
+
+        public void SetCurrentMeetingRoom(MeetingRoomLogics meetingRoom)
+        {
+            currentMeetingRoom = meetingRoom;
+        }
 
         public void ChangeGameMode(GameMode gameMode)
         {
@@ -83,6 +96,33 @@ namespace TileBuilder.Controller
         public void HoverLeave()
         {
             _ = tileBuilder.ExecuteCommand(new HideSelectedRoom());
+        }
+
+        public Result GrowMeetingRoomForEmployees(int employeeCount)
+        {
+            if (currentMeetingRoom.IsCanFitEmployees(employeeCount))
+            {
+                return new FailResult("Cannot add more employee than maximum");
+            }
+            while (!currentMeetingRoom.IsEnoughPlace(employeeCount))
+            {
+                GameMode previousGameMode = tileBuilder.CurrentGameMode;
+                ChangeGameMode(GameMode.God);
+
+                GrowMeetingRoom command = new(currentMeetingRoom);
+                Result result = tileBuilder.ExecuteCommand(command);
+                if (result.Failure)
+                {
+                    return result;
+                }
+                foreach (CoreModel coreModel in command.BorrowedCoreModels)
+                {
+                    _ = inventory.Drop(coreModel);
+                }
+
+                ChangeGameMode(previousGameMode);
+            }
+            return new SuccessResult();
         }
     }
 }

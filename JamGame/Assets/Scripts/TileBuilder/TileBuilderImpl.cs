@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TileBuilder.Command;
 using TileUnion;
-using TileUnion.SpecialRooms;
 using TileUnion.Tile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -404,15 +403,33 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public Result GrowMeetingRoom(MeetingRoom meetingRoom, Level.Inventory.Controller inventory)
+        public Result CanGrowMeeting(MeetingRoomLogics meetingRoom)
         {
-            if (meetingRoom.CurrentSize == meetingRoom.MaximumSize)
+            (_, IEnumerable<Vector2Int> positionsToTake, _) = GetMeetingRoomGrowingInformation(
+                meetingRoom
+            );
+            foreach (Vector2Int position in positionsToTake)
             {
-                return new FailResult("Maximum size");
+                TileUnionImpl targetTileUnion = GetTileUnionInPosition(position);
+                if (
+                    targetTileUnion
+                        .GetAllUniqueMarks()
+                        .Intersect(meetingRoom.IncorrectMarks)
+                        .Count() > 0
+                )
+                {
+                    return new FailResult("Cannot borrow tile with incorrect marks.");
+                }
             }
-            GameMode previousGameMode = CurrentGameMode;
-            ChangeGameMode(GameMode.God);
+            return new SuccessResult();
+        }
 
+        public (
+            IEnumerable<Vector2Int> movingTileUnionPositions,
+            IEnumerable<Vector2Int> positionsToTake,
+            Vector2Int movingDirection
+        ) GetMeetingRoomGrowingInformation(MeetingRoomLogics meetingRoom)
+        {
             Direction tempGrowDirection = meetingRoom.GrowDirection;
             Enumerable
                 .Range(0, meetingRoom.TileUnion.Rotation)
@@ -441,39 +458,34 @@ namespace TileBuilder
             };
 
             Vector2Int movingDirection = tempGrowDirection.ToVector2Int();
-
             IEnumerable<Vector2Int> positionsToTake = movingTileUnionPositions.Select(
                 x => x + movingDirection
             );
 
-            foreach (Vector2Int position in positionsToTake)
-            {
-                TileUnionImpl targetTileUnion = GetTileUnionInPosition(position);
-                if (
-                    targetTileUnion
-                        .GetAllUniqueMarks()
-                        .Intersect(meetingRoom.IncorrectMarks)
-                        .Count() > 0
-                )
-                {
-                    return new FailResult("Cannot borrow tile with incorrect marks.");
-                }
-            }
+            return (movingTileUnionPositions, positionsToTake, movingDirection);
+        }
+
+        public void GrowMeetingRoom(MeetingRoomLogics meetingRoom, out List<CoreModel> borrowedCoreModels)
+        {
+            (
+                IEnumerable<Vector2Int> movingTileUnionPositions,
+                IEnumerable<Vector2Int> positionsToTake,
+                Vector2Int movingDirection
+            ) = GetMeetingRoomGrowingInformation(meetingRoom);
 
             IEnumerable<Vector2Int> positionToBorrow = positionsToTake.Where(
                 x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
             );
 
+            List<CoreModel> coreModels = new();
+
             foreach (Vector2Int position in positionToBorrow)
             {
                 BorrowRoom command = new(position);
-                Result result = ExecuteCommand(command);
-                if (result.Failure)
-                {
-                    return result;
-                }
-                _ = inventory.Drop(command.BorrowedRoom);
+                _ = ExecuteCommand(command);
+                coreModels.Add(command.BorrowedRoom);
             }
+            borrowedCoreModels = coreModels;
 
             foreach (Vector2Int position in positionsToTake)
             {
@@ -495,19 +507,14 @@ namespace TileBuilder
             meetingRoom.TileUnion.AddTiles(addingConfig);
 
             Vector2Int unionPosition = meetingRoom.TileUnion.Position;
-            meetingRoom.TileUnion.CreateCache();
+            meetingRoom.TileUnion.CreateCache(false);
             meetingRoom.TileUnion.SetPosition(unionPosition);
 
-            DebugTools.LogCollection(meetingRoom.TileUnion.TilesPositions);
             AddTileUnionToDictionary(meetingRoom.TileUnion);
-
-            ChangeGameMode(previousGameMode);
 
             UpdateSidesInPositions(GetAllInsidePositions());
 
             meetingRoom.CurrentSize++;
-
-            return new SuccessResult();
         }
     }
 }

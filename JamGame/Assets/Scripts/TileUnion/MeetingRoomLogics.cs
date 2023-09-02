@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using TileUnion.Tile;
 using UnityEngine;
 
-namespace TileUnion.SpecialRooms
+namespace TileUnion
 {
-    [AddComponentMenu("Scripts/TileUnion.SpecialRooms.MeetingRoom")]
-    public class MeetingRoom : MonoBehaviour
+    [AddComponentMenu("Scripts/TileUnion.MeetingRoomLogics")]
+    public class MeetingRoomLogics : MonoBehaviour
     {
         [SerializeField]
         private TileUnionImpl tileUnion;
@@ -40,14 +40,14 @@ namespace TileUnion.SpecialRooms
         private List<string> incorrectMarks = new();
         public IEnumerable<string> IncorrectMarks => incorrectMarks;
 
-        public bool IsNowFitEmployees(int employeeCount)
+        public bool IsEnoughPlace(int employeeCount)
         {
             return employeeCount <= (currentSize * 2) - 1;
         }
 
-        public bool IsPotentiallyFitEmployees(int employeeCount)
+        public bool IsCanFitEmployees(int employeeCount)
         {
-            return employeeCount <= (maximumSize * 2) - 1;
+            return employeeCount >= (maximumSize * 2) - 1;
         }
     }
 }

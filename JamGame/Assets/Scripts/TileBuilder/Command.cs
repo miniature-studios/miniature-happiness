@@ -1,4 +1,6 @@
 using Level.Room;
+using System.Collections.Generic;
+using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder.Command
@@ -73,6 +75,24 @@ namespace TileBuilder.Command
         public void Execute(TileBuilderImpl tileBuilder)
         {
             tileBuilder.DeleteAllTiles();
+        }
+    }
+
+    public class GrowMeetingRoom : ICommand
+    {
+        public MeetingRoomLogics MeetingRoom { get; private set; }
+
+        private List<CoreModel> borrowedCoreModels;
+        public List<CoreModel> BorrowedCoreModels => borrowedCoreModels;
+
+        public GrowMeetingRoom(MeetingRoomLogics meetingRoom)
+        {
+            MeetingRoom = meetingRoom;
+        }
+
+        public void Execute(TileBuilderImpl tileBuilder)
+        {
+            tileBuilder.GrowMeetingRoom(MeetingRoom, out borrowedCoreModels);
         }
     }
 }
