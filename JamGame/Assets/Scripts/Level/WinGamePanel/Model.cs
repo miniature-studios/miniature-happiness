@@ -41,6 +41,7 @@ namespace Level.WinGamePanel
 
         public UnityEvent<Model> OnModelChanged;
 
+        // Called by button Try again on WinGamePanel.
         public void TryAgainClick()
         {
             SceneManager.LoadScene(loadingScene);

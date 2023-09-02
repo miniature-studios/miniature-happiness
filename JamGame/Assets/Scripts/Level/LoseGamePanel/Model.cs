@@ -41,6 +41,7 @@ namespace Level.LoseGamePanel
 
         public UnityEvent<Model> OnModelChanged;
 
+        // Called by button Try again on LoseGamePanel.
         public void TryAgainClick()
         {
             SceneManager.LoadScene(loadingScene);
