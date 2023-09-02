@@ -52,11 +52,14 @@ namespace TileUnion
             return employeeCount >= (maximumSize * 2) - 1;
         }
 
-        public (
-            IEnumerable<Vector2Int> movingTileUnionPositions,
-            IEnumerable<Vector2Int> positionsToTake,
-            Vector2Int movingDirection
-        ) GetMeetingRoomGrowingInformation()
+        public struct MeetingRoomGrowingInformation
+        {
+            public IEnumerable<Vector2Int> MovingTileUnionPositions;
+            public IEnumerable<Vector2Int> PositionsToTake;
+            public Vector2Int MovingDirection;
+        }
+
+        public MeetingRoomGrowingInformation GetMeetingRoomGrowingInformation()
         {
             Direction tempGrowDirection = GrowDirection;
             Enumerable
@@ -86,18 +89,29 @@ namespace TileUnion
                 x => x + movingDirection
             );
 
-            return (movingTileUnionPositions, positionsToTake, movingDirection);
+            return new MeetingRoomGrowingInformation()
+            {
+                MovingTileUnionPositions = movingTileUnionPositions,
+                PositionsToTake = positionsToTake,
+                MovingDirection = movingDirection
+            };
         }
 
-        public void AddTiles(Vector2Int movingDirection, IEnumerable<Vector2Int> movingTileUnionPositions)
+        public void AddTiles(MeetingRoomGrowingInformation meetingRoomGrowingInformation)
         {
-            TileUnion.MoveTiles(movingDirection, movingTileUnionPositions);
+            TileUnion.MoveTiles(
+                meetingRoomGrowingInformation.MovingDirection,
+                meetingRoomGrowingInformation.MovingTileUnionPositions
+            );
             Dictionary<(Vector2Int position, int roatation), TileImpl> addingConfig = new();
 
-            for (int i = 0; i < movingTileUnionPositions.Count(); i++)
+            for (int i = 0; i < meetingRoomGrowingInformation.MovingTileUnionPositions.Count(); i++)
             {
                 addingConfig.Add(
-                    (movingTileUnionPositions.ToList()[i], TileUnion.Rotation),
+                    (
+                        meetingRoomGrowingInformation.MovingTileUnionPositions.ToList()[i],
+                        TileUnion.Rotation
+                    ),
                     TilesToAdd[i]
                 );
             }

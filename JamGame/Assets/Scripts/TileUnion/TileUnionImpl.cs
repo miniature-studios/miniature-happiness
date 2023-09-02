@@ -371,8 +371,8 @@ namespace TileUnion
             if (considerCenterOfMass)
             {
                 Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                Tiles.Select(x => x.Position).ToList()
-            );
+                    Tiles.Select(x => x.Position).ToList()
+                );
                 Vector2 delta = firstCenter - secondCenter;
                 foreach (TileImpl tile in Tiles)
                 {
@@ -436,9 +436,16 @@ namespace TileUnion
             }
         }
 
-        public void AddTiles(Dictionary<(Vector2Int globalPosition, int roatation), TileImpl> pairsToAdd)
+        public void AddTiles(
+            Dictionary<(Vector2Int globalPosition, int roatation), TileImpl> pairsToAdd
+        )
         {
-            foreach (KeyValuePair<(Vector2Int globalPosition, int roatation), TileImpl> pair in pairsToAdd)
+            foreach (
+                KeyValuePair<
+                    (Vector2Int globalPosition, int roatation),
+                    TileImpl
+                > pair in pairsToAdd
+            )
             {
                 TileImpl newTile = Instantiate(pair.Value, transform);
                 Tiles.Add(newTile);

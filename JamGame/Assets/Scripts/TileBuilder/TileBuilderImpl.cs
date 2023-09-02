@@ -10,6 +10,7 @@ using TileUnion.Tile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
+using static TileUnion.MeetingRoomLogics;
 
 namespace TileBuilder
 {
@@ -405,9 +406,9 @@ namespace TileBuilder
 
         public Result CanGrowMeetingRoom(MeetingRoomLogics meetingRoom)
         {
-            (_, IEnumerable<Vector2Int> positionsToTake, _) =
+            MeetingRoomGrowingInformation meetingRoomGrowingInformation =
                 meetingRoom.GetMeetingRoomGrowingInformation();
-            foreach (Vector2Int position in positionsToTake)
+            foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
             {
                 TileUnionImpl targetTileUnion = GetTileUnionInPosition(position);
                 if (
@@ -425,15 +426,13 @@ namespace TileBuilder
 
         public List<CoreModel> GrowMeetingRoom(MeetingRoomLogics meetingRoom)
         {
-            (
-                IEnumerable<Vector2Int> movingTileUnionPositions,
-                IEnumerable<Vector2Int> positionsToTake,
-                Vector2Int movingDirection
-            ) = meetingRoom.GetMeetingRoomGrowingInformation();
+            MeetingRoomGrowingInformation meetingRoomGrowingInformation =
+                meetingRoom.GetMeetingRoomGrowingInformation();
 
-            IEnumerable<Vector2Int> positionToBorrow = positionsToTake.Where(
-                x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
-            );
+            IEnumerable<Vector2Int> positionToBorrow =
+                meetingRoomGrowingInformation.PositionsToTake.Where(
+                    x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
+                );
 
             List<CoreModel> coreModels = new();
 
@@ -444,13 +443,13 @@ namespace TileBuilder
                 coreModels.Add(command.BorrowedRoom);
             }
 
-            foreach (Vector2Int position in positionsToTake)
+            foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
             {
                 _ = DeleteTile(GetTileUnionInPosition(position));
             }
 
             RemoveTileFromDictionary(meetingRoom.TileUnion);
-            meetingRoom.AddTiles(movingDirection, movingTileUnionPositions);
+            meetingRoom.AddTiles(meetingRoomGrowingInformation);
             AddTileUnionToDictionary(meetingRoom.TileUnion);
 
             UpdateSidesInPositions(GetAllInsidePositions());
