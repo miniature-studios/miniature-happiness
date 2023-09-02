@@ -33,7 +33,7 @@ namespace TileBuilder.Validator
                 BorrowRoom borrowRoom
                     when tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) == null
                     => new FailResult("No room to borrow"),
-                GrowMeetingRoom growMeeting => tileBuilder.CanGrowMeeting(growMeeting.MeetingRoom),
+                GrowMeetingRoom growMeeting => tileBuilder.CanGrowMeetingRoom(growMeeting.MeetingRoom),
                 _ => new SuccessResult()
             };
         }

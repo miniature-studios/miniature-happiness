@@ -1,5 +1,6 @@
 using Level.Room;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using TileUnion;
 using UnityEngine;
 
@@ -83,7 +84,7 @@ namespace TileBuilder.Command
         public MeetingRoomLogics MeetingRoom { get; private set; }
 
         private List<CoreModel> borrowedCoreModels;
-        public List<CoreModel> BorrowedCoreModels => borrowedCoreModels;
+        public ImmutableList<CoreModel> BorrowedCoreModels => borrowedCoreModels.ToImmutableList();
 
         public GrowMeetingRoom(MeetingRoomLogics meetingRoom)
         {
@@ -92,7 +93,7 @@ namespace TileBuilder.Command
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            tileBuilder.GrowMeetingRoom(MeetingRoom, out borrowedCoreModels);
+            borrowedCoreModels = tileBuilder.GrowMeetingRoom(MeetingRoom);
         }
     }
 }

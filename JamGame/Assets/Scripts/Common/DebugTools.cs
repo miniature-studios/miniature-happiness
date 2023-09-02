@@ -8,7 +8,7 @@ namespace Common
     {
         public static void LogCollection<T>(IEnumerable<T> collection)
         {
-            Debug.Log(collection.Select(x => x.ToString()).Aggregate((x, y) => x + " " + y));
+            Debug.Log(collection.Select(x => x.ToString()).Aggregate("[ ", (x, y) => x + ", " + y) + " ]");
         }
     }
 }

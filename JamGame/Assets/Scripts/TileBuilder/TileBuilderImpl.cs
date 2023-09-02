@@ -403,11 +403,10 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public Result CanGrowMeeting(MeetingRoomLogics meetingRoom)
+        public Result CanGrowMeetingRoom(MeetingRoomLogics meetingRoom)
         {
-            (_, IEnumerable<Vector2Int> positionsToTake, _) = GetMeetingRoomGrowingInformation(
-                meetingRoom
-            );
+            (_, IEnumerable<Vector2Int> positionsToTake, _) =
+                meetingRoom.GetMeetingRoomGrowingInformation();
             foreach (Vector2Int position in positionsToTake)
             {
                 TileUnionImpl targetTileUnion = GetTileUnionInPosition(position);
@@ -424,54 +423,13 @@ namespace TileBuilder
             return new SuccessResult();
         }
 
-        public (
-            IEnumerable<Vector2Int> movingTileUnionPositions,
-            IEnumerable<Vector2Int> positionsToTake,
-            Vector2Int movingDirection
-        ) GetMeetingRoomGrowingInformation(MeetingRoomLogics meetingRoom)
-        {
-            Direction tempGrowDirection = meetingRoom.GrowDirection;
-            Enumerable
-                .Range(0, meetingRoom.TileUnion.Rotation)
-                .ToList()
-                .ForEach((x) => tempGrowDirection = tempGrowDirection.Rotate90());
-
-            IEnumerable<Vector2Int> movingTileUnionPositions = tempGrowDirection switch
-            {
-                Direction.Up
-                    => meetingRoom.TileUnion.TilesPositions
-                        .OrderByDescending(pos => pos.y)
-                        .Take(meetingRoom.TilesToAdd.Count()),
-                Direction.Right
-                    => meetingRoom.TileUnion.TilesPositions
-                        .OrderByDescending(pos => pos.x)
-                        .Take(meetingRoom.TilesToAdd.Count()),
-                Direction.Down
-                    => meetingRoom.TileUnion.TilesPositions
-                        .OrderBy(pos => pos.y)
-                        .Take(meetingRoom.TilesToAdd.Count()),
-                Direction.Left
-                    => meetingRoom.TileUnion.TilesPositions
-                        .OrderBy(pos => pos.x)
-                        .Take(meetingRoom.TilesToAdd.Count()),
-                _ => throw new ArgumentException()
-            };
-
-            Vector2Int movingDirection = tempGrowDirection.ToVector2Int();
-            IEnumerable<Vector2Int> positionsToTake = movingTileUnionPositions.Select(
-                x => x + movingDirection
-            );
-
-            return (movingTileUnionPositions, positionsToTake, movingDirection);
-        }
-
-        public void GrowMeetingRoom(MeetingRoomLogics meetingRoom, out List<CoreModel> borrowedCoreModels)
+        public List<CoreModel> GrowMeetingRoom(MeetingRoomLogics meetingRoom)
         {
             (
                 IEnumerable<Vector2Int> movingTileUnionPositions,
                 IEnumerable<Vector2Int> positionsToTake,
                 Vector2Int movingDirection
-            ) = GetMeetingRoomGrowingInformation(meetingRoom);
+            ) = meetingRoom.GetMeetingRoomGrowingInformation();
 
             IEnumerable<Vector2Int> positionToBorrow = positionsToTake.Where(
                 x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
@@ -485,7 +443,6 @@ namespace TileBuilder
                 _ = ExecuteCommand(command);
                 coreModels.Add(command.BorrowedRoom);
             }
-            borrowedCoreModels = coreModels;
 
             foreach (Vector2Int position in positionsToTake)
             {
@@ -493,28 +450,12 @@ namespace TileBuilder
             }
 
             RemoveTileFromDictionary(meetingRoom.TileUnion);
-            meetingRoom.TileUnion.MoveTiles(movingDirection, movingTileUnionPositions);
-            Dictionary<(Vector2Int position, int roatation), TileImpl> addingConfig = new();
-
-            for (int i = 0; i < movingTileUnionPositions.Count(); i++)
-            {
-                addingConfig.Add(
-                    (movingTileUnionPositions.ToList()[i], meetingRoom.TileUnion.Rotation),
-                    meetingRoom.TilesToAdd[i]
-                );
-            }
-
-            meetingRoom.TileUnion.AddTiles(addingConfig);
-
-            Vector2Int unionPosition = meetingRoom.TileUnion.Position;
-            meetingRoom.TileUnion.CreateCache(false);
-            meetingRoom.TileUnion.SetPosition(unionPosition);
-
+            meetingRoom.AddTiles(movingDirection, movingTileUnionPositions);
             AddTileUnionToDictionary(meetingRoom.TileUnion);
 
             UpdateSidesInPositions(GetAllInsidePositions());
 
-            meetingRoom.CurrentSize++;
+            return coreModels;
         }
     }
 }
