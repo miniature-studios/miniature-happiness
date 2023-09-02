@@ -47,6 +47,9 @@ namespace Level
         private LocationImpl location;
 
         [SerializeField]
+        private GlobalTime.Model globalTime;
+
+        [SerializeField]
         private AllChildrenNeedModifiersApplier meetingStartNeedOverride;
 
         [SerializeField]
@@ -127,6 +130,12 @@ namespace Level
 
         public void Execute(Meeting meeting)
         {
+            Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
+            if (set_time_scale_lock_result.Failure)
+            {
+                Debug.LogError("Cannot change time scale before meeting: " + set_time_scale_lock_result.Error);
+            }
+
             tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
@@ -139,6 +148,12 @@ namespace Level
         {
             meetingStartNeedOverride.Unregister();
             meetingEndNeedOverride.Register();
+
+            Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
+            if (remove_time_scale_lock_result.Failure)
+            {
+                Debug.LogError("Cannot change time scale before meeting: " + remove_time_scale_lock_result.Error);
+            }
 
             ActionEndNotify?.Invoke();
         }
