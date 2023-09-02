@@ -7,20 +7,13 @@ namespace Level.WinGamePanel
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private Animator animator;
-
-        [SerializeField]
         private TMP_Text daysLabel;
 
         [SerializeField]
         private TMP_Text moneyLabel;
 
-        [SerializeField]
-        private Model model;
-
-        public void ShownTrigger(bool shown)
+        public void OnModelChanged(Model model)
         {
-            animator.SetBool("Shown", shown);
             daysLabel.text = $"Days lived: {model.DaysLived}";
             moneyLabel.text = $"Days lived: {model.MoneyEarned}";
         }

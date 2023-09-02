@@ -9,13 +9,7 @@ namespace Level.WinGamePanel
     public class Model : MonoBehaviour
     {
         [SerializeField]
-        [InspectorReadOnly]
-        private bool shown;
-
-        [SerializeField]
         private string loadingScene;
-
-        public UnityEvent<bool> ShownTrigger;
 
         [SerializeField]
         [InspectorReadOnly]
@@ -24,7 +18,11 @@ namespace Level.WinGamePanel
         public int DaysLived
         {
             get => daysLived;
-            set => daysLived = value;
+            set
+            {
+                daysLived = value;
+                OnModelChanged?.Invoke(this);
+            }
         }
 
         [SerializeField]
@@ -34,18 +32,14 @@ namespace Level.WinGamePanel
         public int MoneyEarned
         {
             get => moneyEarned;
-            set => moneyEarned = value;
-        }
-
-        public bool Shown
-        {
-            get => shown;
             set
             {
-                shown = value;
-                ShownTrigger?.Invoke(shown);
+                moneyEarned = value;
+                OnModelChanged?.Invoke(this);
             }
         }
+
+        public UnityEvent<Model> OnModelChanged;
 
         public void TryAgainClick()
         {

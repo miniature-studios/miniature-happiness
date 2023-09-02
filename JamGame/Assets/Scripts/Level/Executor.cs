@@ -183,7 +183,8 @@ namespace Level
             tariffsCounter.UpdateCheck();
             if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
             {
-                // TODO lose game
+                animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
+                return;
             }
             animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
         }

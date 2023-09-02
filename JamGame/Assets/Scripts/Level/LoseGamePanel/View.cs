@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 namespace Level.LoseGamePanel
 {
@@ -6,11 +7,15 @@ namespace Level.LoseGamePanel
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private Animator animator;
+        private TMP_Text daysLabel;
 
-        public void ShownTrigger(bool shown)
+        [SerializeField]
+        private TMP_Text moneyLabel;
+
+        public void OnModelChanged(Model model)
         {
-            animator.SetBool("Shown", shown);
+            daysLabel.text = $"Days lived: {model.DaysLived}";
+            moneyLabel.text = $"Days lived: {model.MoneyEarned}";
         }
     }
 }

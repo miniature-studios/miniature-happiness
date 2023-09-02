@@ -114,4 +114,22 @@ namespace Level.Config
             executor.Execute(this);
         }
     }
+
+    [Serializable]
+    public class LoseGame : IDayAction
+    {
+        public void Execute(Executor executor)
+        {
+            throw new InvalidOperationException();
+        }
+    }
+
+    [Serializable]
+    public class WinGame : IDayAction
+    {
+        public void Execute(Executor executor)
+        {
+            throw new InvalidOperationException();
+        }
+    }
 }

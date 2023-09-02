@@ -9,23 +9,37 @@ namespace Level.LoseGamePanel
     public class Model : MonoBehaviour
     {
         [SerializeField]
-        [InspectorReadOnly]
-        private bool shown;
-
-        [SerializeField]
         private string loadingScene;
 
-        public UnityEvent<bool> ShownTrigger;
+        [SerializeField]
+        [InspectorReadOnly]
+        private int daysLived;
 
-        public bool Shown
+        public int DaysLived
         {
-            get => shown;
+            get => daysLived;
             set
             {
-                shown = value;
-                ShownTrigger?.Invoke(shown);
+                daysLived = value;
+                OnModelChanged?.Invoke(this);
             }
         }
+
+        [SerializeField]
+        [InspectorReadOnly]
+        private int moneyEarned;
+
+        public int MoneyEarned
+        {
+            get => moneyEarned;
+            set
+            {
+                moneyEarned = value;
+                OnModelChanged?.Invoke(this);
+            }
+        }
+
+        public UnityEvent<Model> OnModelChanged;
 
         public void TryAgainClick()
         {

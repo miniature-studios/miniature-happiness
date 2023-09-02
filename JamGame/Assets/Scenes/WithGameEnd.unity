@@ -1838,6 +1838,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &538465902 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7667068367872830779, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+  m_PrefabInstance: {fileID: 5698402232681726001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &657078262
 GameObject:
   m_ObjectHideFlags: 0
@@ -2324,6 +2335,8 @@ MonoBehaviour:
     - {fileID: 1507591511}
     - {fileID: 1438652223}
     - {fileID: 1895812756}
+    - {fileID: 5698402232681726002}
+    - {fileID: 1523934771012013596}
     InterfaceMatcher:
     - InterfaceName: Cutscene
       AnimatorsProperties:
@@ -2361,6 +2374,12 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
         Showed: 0
         OverrideState: 0
     - InterfaceName: DayStart
@@ -2401,6 +2420,12 @@ MonoBehaviour:
       - AnimatorName: TaskList
         Showed: 0
         OverrideState: 1
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
+        Showed: 0
+        OverrideState: 0
     - InterfaceName: PreMeeting
       AnimatorsProperties:
       - AnimatorName: Shop
@@ -2437,6 +2462,12 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
         Showed: 0
         OverrideState: 0
     - InterfaceName: Meeting
@@ -2477,6 +2508,12 @@ MonoBehaviour:
       - AnimatorName: TaskList
         Showed: 1
         OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
+        Showed: 0
+        OverrideState: 0
     - InterfaceName: Working
       AnimatorsProperties:
       - AnimatorName: Shop
@@ -2513,6 +2550,12 @@ MonoBehaviour:
         Showed: 1
         OverrideState: 0
       - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
         Showed: 0
         OverrideState: 0
     - InterfaceName: PreDayEnd
@@ -2553,6 +2596,12 @@ MonoBehaviour:
       - AnimatorName: TaskList
         Showed: 0
         OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
+        Showed: 0
+        OverrideState: 0
     - InterfaceName: DayEnd
       AnimatorsProperties:
       - AnimatorName: Shop
@@ -2590,6 +2639,100 @@ MonoBehaviour:
         OverrideState: 0
       - AnimatorName: TaskList
         Showed: 0
+        OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
+        Showed: 0
+        OverrideState: 0
+    - InterfaceName: LoseGame
+      AnimatorsProperties:
+      - AnimatorName: Shop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: DailyBillPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: Inventory
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: ButtonOpenShop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: InvButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: EndMeetingButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OfficeFinances
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TransitionPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TimeScaleSelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OverlaySelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: StressBar
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 1
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
+        Showed: 0
+        OverrideState: 0
+    - InterfaceName: WinGame
+      AnimatorsProperties:
+      - AnimatorName: Shop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: DailyBillPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: Inventory
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: ButtonOpenShop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: InvButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: EndMeetingButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OfficeFinances
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TransitionPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TimeScaleSelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OverlaySelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: StressBar
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: LoseGamePanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: WinGamePanel
+        Showed: 1
         OverrideState: 0
 --- !u!1 &797130036
 GameObject:
@@ -4278,6 +4421,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344148174}
   m_CullTransparentMesh: 1
+--- !u!114 &1367587046 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2823817652988005042, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+  m_PrefabInstance: {fileID: 5698402232681726001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1395078480
 GameObject:
   m_ObjectHideFlags: 0
@@ -6038,6 +6192,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+--- !u!95 &1523934771012013596 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5269987558148731555, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+  m_PrefabInstance: {fileID: 1523934771012013595}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3937796279326926745 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 269820494102177653, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
@@ -6051,6 +6210,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 764846867}
     m_Modifications:
+    - target: {fileID: 2049822950996739543, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 155.30002
+      objectReference: {fileID: 0}
+    - target: {fileID: 2496030724709762527, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+      propertyPath: daysLabel
+      value: 
+      objectReference: {fileID: 538465902}
+    - target: {fileID: 2496030724709762527, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+      propertyPath: moneyLabel
+      value: 
+      objectReference: {fileID: 1367587046}
     - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6082,6 +6253,10 @@ PrefabInstance:
     - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6140,6 +6315,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+--- !u!95 &5698402232681726002 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6995104491397157170, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+  m_PrefabInstance: {fileID: 5698402232681726001}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6192141900100439312
 PrefabInstance:
   m_ObjectHideFlags: 0
