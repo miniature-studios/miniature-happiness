@@ -17,7 +17,7 @@ namespace Level
         private IEnumerator<IDayAction> actionEnumerator;
         private bool isPlanned = true;
 
-        // Must be cached by Executor
+        // Called by Executor when action ends.
         public void ActionEndActivation()
         {
             if (isPlanned)

@@ -69,6 +69,7 @@ namespace Level
 
         public UnityEvent ActionEndNotify;
         public UnityEvent<Days> TimeHasPassed;
+        public UnityEvent DayEnds;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
@@ -195,6 +196,7 @@ namespace Level
         // Called by button continue on daily bill panel.
         public void CompleteDayEnd()
         {
+            DayEnds?.Invoke();
             ActionEndNotify?.Invoke();
         }
 

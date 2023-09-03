@@ -1,24 +1,23 @@
-using Common;
 using System;
 using UnityEngine;
 
 namespace Level.GlobalTime
 {
-    public struct DaysLived
-    {
-        public Days Value;
-    }
-
     [Serializable]
     public struct Days
     {
         public float Days_;
 
         public readonly float RealTimeSeconds => Days_ * Model.DayLength;
+
+        public static Days operator +(Days value1, Days value2)
+        {
+            return new Days { Days_ = value1.Days_ + value2.Days_ };
+        }
     }
 
     [AddComponentMenu("Scripts/Level.GlobalTime.Model")]
-    public class Model : MonoBehaviour, IDataProvider<DaysLived>
+    public class Model : MonoBehaviour
     {
         private static float dayLength_ = 0.0f;
         public static float DayLength => dayLength_;
@@ -27,10 +26,6 @@ namespace Level.GlobalTime
         private float dayLength;
 
         private float scale = 1.0f;
-
-        [SerializeField]
-        [InspectorReadOnly]
-        private Days daysLived = new();
 
         private void Awake()
         {
@@ -52,17 +47,6 @@ namespace Level.GlobalTime
         {
             this.scale = scale;
             Time.timeScale = scale;
-        }
-
-        // Called by executor when time has passed
-        public void DaysGone(Days days)
-        {
-            daysLived.Days_ += days.Days_;
-        }
-
-        public DaysLived GetData()
-        {
-            return new DaysLived() { Value = daysLived };
         }
     }
 }
