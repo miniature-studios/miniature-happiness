@@ -1838,17 +1838,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &538465902 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7667068367872830779, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
-  m_PrefabInstance: {fileID: 5698402232681726001}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &657078262
 GameObject:
   m_ObjectHideFlags: 0
@@ -2193,6 +2182,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1083f9a92afa82c48b16e1ef0ce0e708, type: 3}
+--- !u!114 &754294344 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8549211194701896215, guid: 1083f9a92afa82c48b16e1ef0ce0e708, type: 3}
+  m_PrefabInstance: {fileID: 754294343}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc14ffd613e08464c8ba78126381b451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &764846863
 GameObject:
   m_ObjectHideFlags: 0
@@ -3874,6 +3874,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  TimeHasPassed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 754294344}
+        m_TargetAssemblyTypeName: Level.GlobalTime.Model, Assembly-CSharp
+        m_MethodName: DaysGone
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   TestEmployeeConfig:
     selectedType: FixedEmployeeConfig
     fixedEmployeeConfig:
@@ -4421,17 +4436,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344148174}
   m_CullTransparentMesh: 1
---- !u!114 &1367587046 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2823817652988005042, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
-  m_PrefabInstance: {fileID: 5698402232681726001}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1395078480
 GameObject:
   m_ObjectHideFlags: 0
@@ -6169,6 +6173,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 782541710000337309, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+      propertyPath: daysLivedDataProvider
+      value: 
+      objectReference: {fileID: 1067622715}
+    - target: {fileID: 782541710000337309, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+      propertyPath: moneyEarnedDataProvider
+      value: 
+      objectReference: {fileID: 1125594366}
     - target: {fileID: 3776875811722781761, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -6176,16 +6188,6 @@ PrefabInstance:
     - target: {fileID: 5820048645171035353, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
       propertyPath: m_Name
       value: WinGamePanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7941894152984335581, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
-      propertyPath: m_text
-      value: 'YOU WIN!
-
-        and you can try for better result'
-      objectReference: {fileID: 0}
-    - target: {fileID: 8198652958945184816, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 133
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6210,18 +6212,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 764846867}
     m_Modifications:
-    - target: {fileID: 2049822950996739543, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 155.30002
-      objectReference: {fileID: 0}
-    - target: {fileID: 2496030724709762527, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
-      propertyPath: daysLabel
+    - target: {fileID: 2586319431246161776, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+      propertyPath: daysLivedDataProvider
       value: 
-      objectReference: {fileID: 538465902}
-    - target: {fileID: 2496030724709762527, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
-      propertyPath: moneyLabel
+      objectReference: {fileID: 754294344}
+    - target: {fileID: 2586319431246161776, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
+      propertyPath: moneyEarnedDataProvider
       value: 
-      objectReference: {fileID: 1367587046}
+      objectReference: {fileID: 1125594366}
     - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6257,10 +6255,6 @@ PrefabInstance:
     - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3937796279542975031, guid: c7a14111118024c40bb648ceeaa4c14c, type: 3}
       propertyPath: m_LocalPosition.x

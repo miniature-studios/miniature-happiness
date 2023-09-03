@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Finances;
+using Level.GlobalTime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -13,16 +14,20 @@ namespace Level.WinGamePanel
         private string loadingScene;
 
         [SerializeField]
-        private IDataProvider<DaysLived> daysLived;
-        public DaysLived DaysLived => daysLived.GetData();
+        [Pickle(typeof(IDataProvider<DaysLived>), LookupType = Pickle.ObjectProviderType.Scene)]
+        private MonoBehaviour daysLivedDataProvider;
+        public DaysLived DaysLived => (daysLivedDataProvider as IDataProvider<DaysLived>).GetData();
 
         [SerializeField]
-        private IDataProvider<MoneyEarned> moneyEarned;
-        public MoneyEarned MoneyEarned => moneyEarned.GetData();
+        [Pickle(typeof(IDataProvider<MoneyEarned>), LookupType = Pickle.ObjectProviderType.Scene)]
+        private MonoBehaviour moneyEarnedDataProvider;
+        public MoneyEarned MoneyEarned =>
+            (moneyEarnedDataProvider as IDataProvider<MoneyEarned>).GetData();
 
         public UnityEvent<Model> OnModelChanged;
 
-        public void PrepareToShow()
+        // Called by event from animation.
+        public void Showing()
         {
             OnModelChanged?.Invoke(this);
         }

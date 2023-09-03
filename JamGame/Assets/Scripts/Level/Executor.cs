@@ -10,11 +10,6 @@ using UnityEngine.Events;
 
 namespace Level
 {
-    public struct DaysLived
-    {
-        public Days Value;
-    }
-
     public struct AllEmployeesAtHome
     {
         public bool Value;
@@ -26,7 +21,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level.Executor")]
-    public class Executor : MonoBehaviour, IDataProvider<DaysLived>
+    public class Executor : MonoBehaviour
     {
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileBuilderController;
@@ -53,12 +48,6 @@ namespace Level
         private LocationImpl location;
 
         [SerializeField]
-        private LoseGamePanel.Model loseGame;
-
-        [SerializeField]
-        private WinGamePanel.Model winGame;
-
-        [SerializeField]
         private AllChildrenNeedModifiersApplier meetingStartNeedOverride;
 
         [SerializeField]
@@ -79,6 +68,7 @@ namespace Level
         private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
 
         public UnityEvent ActionEndNotify;
+        public UnityEvent<Days> TimeHasPassed;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
@@ -158,12 +148,13 @@ namespace Level
         public void Execute(Working working)
         {
             animatorSwitcher.SetAnimatorStates(typeof(Working));
-            _ = StartCoroutine(WorkingTime(working.Duration.RealTimeSeconds));
+            _ = StartCoroutine(WorkingTime(working.Duration));
         }
 
-        private IEnumerator WorkingTime(float time)
+        private IEnumerator WorkingTime(Days duration)
         {
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(duration.RealTimeSeconds);
+            TimeHasPassed?.Invoke(duration);
             ActionEndNotify?.Invoke();
         }
 
@@ -215,20 +206,12 @@ namespace Level
 
         public void Execute(LoseGame loseGame)
         {
-            this.loseGame.PrepareToShow();
             animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
         }
 
         public void Execute(WinGame winGame)
         {
-            this.winGame.PrepareToShow();
             animatorSwitcher.SetAnimatorStates(typeof(WinGame));
-        }
-
-        public DaysLived GetData()
-        {
-            //TODO: Implement
-            throw new NotImplementedException();
         }
     }
 }
