@@ -1,4 +1,5 @@
 ﻿using Common;
+using Level.Config;
 using Level.Room;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -17,10 +18,19 @@ namespace Level.Shop
         private Transform roomsUIContainer;
 
         [SerializeField]
+        private Transform employeesUIContainer;
+
+        [SerializeField]
         private AssetLabelReference shopViewsLabel;
-        private Animator animator;
         private Dictionary<string, IResourceLocation> modelViewMap = new();
-        private List<Room.View> viewList = new();
+
+        [SerializeField]
+        private EmployeeView employeeViewPrototype;
+
+        private List<Room.View> roomsViewList = new();
+        private List<EmployeeView> employeesViewList = new();
+
+        private Animator animator;
 
         private void Awake()
         {
@@ -35,18 +45,19 @@ namespace Level.Shop
             }
         }
 
+        // Called by model when shop rooms collection changed.
         public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItem(e.NewItems[0] as CoreModel);
+                    AddNewRoom(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItem(e.OldItems[0] as CoreModel);
+                    RemoveOldRoom(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    DeleteAllItems();
+                    DeleteAllRooms();
                     break;
                 default:
                     Debug.LogError(
@@ -56,46 +67,97 @@ namespace Level.Shop
             }
         }
 
-        private void AddNewItem(CoreModel newItem)
+        private void AddNewRoom(CoreModel newRoom)
         {
-            if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
+            if (modelViewMap.TryGetValue(newRoom.Uid, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),
                     roomsUIContainer.transform
                 );
 
-                newRoomView.SetCoreModel(newItem);
+                newRoomView.SetCoreModel(newRoom);
                 newRoomView.enabled = true;
-                viewList.Add(newRoomView);
-                newItem.transform.SetParent(newRoomView.transform);
+                roomsViewList.Add(newRoomView);
+                newRoom.transform.SetParent(newRoomView.transform);
             }
             else
             {
-                Debug.LogError($"Core model {newItem.name} not presented in Shop View");
+                Debug.LogError($"Core model {newRoom.name} not presented in Shop View");
             }
         }
 
-        private void RemoveOldItem(CoreModel oldItem)
+        private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Destroy(viewList.Find(x => x.CoreModel == oldItem).gameObject);
+            Destroy(roomsViewList.Find(x => x.CoreModel == oldRoom).gameObject);
         }
 
-        private void DeleteAllItems()
+        private void DeleteAllRooms()
         {
-            while (viewList.Count > 0)
+            while (roomsViewList.Count > 0)
             {
-                Room.View item = viewList.Last();
-                _ = viewList.Remove(item);
+                Room.View item = roomsViewList.Last();
+                _ = roomsViewList.Remove(item);
                 Destroy(item.gameObject);
             }
         }
 
+        // Called by model when shop employees collection changed.
+        public void OnShopEmployeesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    AddNewEmployee(e.NewItems[0] as EmployeeConfig);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    RemoveOldEmployee(e.OldItems[0] as EmployeeConfig);
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    DeleteAllEmployees();
+                    break;
+                default:
+                    Debug.LogError(
+                        $"Unexpected variant of NotifyCollectionChangedAction: {e.Action}"
+                    );
+                    break;
+            }
+        }
+
+        private void AddNewEmployee(EmployeeConfig newEmployee)
+        {
+            EmployeeView newEmployeeView = Instantiate(
+                employeeViewPrototype,
+                employeesUIContainer.transform
+            );
+
+            newEmployeeView.SetEmployeeConfig(newEmployee);
+            newEmployeeView.enabled = true;
+            employeesViewList.Add(newEmployeeView);
+        }
+
+        private void RemoveOldEmployee(EmployeeConfig oldEmployee)
+        {
+            Destroy(employeesViewList.Find(x => x.EmployeeConfig == oldEmployee).gameObject);
+        }
+
+        private void DeleteAllEmployees()
+        {
+            while (employeesViewList.Count > 0)
+            {
+                EmployeeView item = employeesViewList.Last();
+                _ = employeesViewList.Remove(item);
+                Destroy(item.gameObject);
+            }
+        }
+
+        // Called by button open shop.
         public void Open()
         {
             animator.SetBool("Showed", true);
         }
 
+        // Called by button close shop.
         public void Close()
         {
             animator.SetBool("Showed", false);

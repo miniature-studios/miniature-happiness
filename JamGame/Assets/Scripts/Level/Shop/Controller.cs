@@ -44,10 +44,10 @@ namespace Level.Shop
 
         public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)
         {
-            // TODO
+            shopModel.ResetEmployees(employeeConfigs);
         }
 
-        public bool TryBuyEmployee(int cost)
+        public Result TryBuyEmployee(EmployeeConfig employee)
         {
             // TODO
             throw new System.NotImplementedException();

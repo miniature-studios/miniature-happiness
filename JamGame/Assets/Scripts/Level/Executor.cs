@@ -135,7 +135,9 @@ namespace Level
             Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
             if (set_time_scale_lock_result.Failure)
             {
-                Debug.LogError("Cannot change time scale before meeting: " + set_time_scale_lock_result.Error);
+                Debug.LogError(
+                    "Cannot change time scale before meeting: " + set_time_scale_lock_result.Error
+                );
             }
 
             tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
@@ -154,7 +156,10 @@ namespace Level
             Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
             if (remove_time_scale_lock_result.Failure)
             {
-                Debug.LogError("Cannot change time scale before meeting: " + remove_time_scale_lock_result.Error);
+                Debug.LogError(
+                    "Cannot change time scale before meeting: "
+                        + remove_time_scale_lock_result.Error
+                );
             }
 
             ActionEndNotify?.Invoke();
