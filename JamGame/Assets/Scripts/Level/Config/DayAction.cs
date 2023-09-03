@@ -120,7 +120,7 @@ namespace Level.Config
     {
         public void Execute(Executor executor)
         {
-            throw new InvalidOperationException();
+            executor.Execute(this);
         }
     }
 
@@ -129,7 +129,7 @@ namespace Level.Config
     {
         public void Execute(Executor executor)
         {
-            throw new InvalidOperationException();
+            executor.Execute(this);
         }
     }
 }

@@ -497,14 +497,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d191b6d948be14696595ea0d3c122c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shown: 0
   loadingScene: Main
-  ShownTrigger:
+  OnModelChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2437858257083646075}
         m_TargetAssemblyTypeName: Level.WinGamePanel.View, Assembly-CSharp
-        m_MethodName: ShownTrigger
+        m_MethodName: OnModelChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -514,8 +513,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  daysLived: 0
-  moneyEarned: 0
 --- !u!114 &2437858257083646075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,10 +525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467a75a5c6dc6134696a84d650f1bd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 5269987558148731555}
   daysLabel: {fileID: 390156701790158418}
   moneyLabel: {fileID: 7736234638633515785}
-  model: {fileID: 782541710000337309}
 --- !u!95 &5269987558148731555
 Animator:
   serializedVersion: 5

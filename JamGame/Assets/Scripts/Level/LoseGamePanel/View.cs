@@ -14,8 +14,8 @@ namespace Level.LoseGamePanel
 
         public void OnModelChanged(Model model)
         {
-            daysLabel.text = $"Days lived: {model.DaysLived}";
-            moneyLabel.text = $"Days lived: {model.MoneyEarned}";
+            daysLabel.text = $"Days lived: {model.DaysLived.Value}";
+            moneyLabel.text = $"Days lived: {model.MoneyEarned.Value}";
         }
     }
 }

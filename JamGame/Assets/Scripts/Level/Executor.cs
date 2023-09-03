@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Config;
+using Level.GlobalTime;
 using Location;
 using System;
 using System.Collections;
@@ -9,6 +10,11 @@ using UnityEngine.Events;
 
 namespace Level
 {
+    public struct DaysLived
+    {
+        public Days Value;
+    }
+
     public struct AllEmployeesAtHome
     {
         public bool Value;
@@ -20,7 +26,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level.Executor")]
-    public class Executor : MonoBehaviour
+    public class Executor : MonoBehaviour, IDataProvider<DaysLived>
     {
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileBuilderController;
@@ -45,6 +51,12 @@ namespace Level
 
         [SerializeField]
         private LocationImpl location;
+
+        [SerializeField]
+        private LoseGamePanel.Model loseGame;
+
+        [SerializeField]
+        private WinGamePanel.Model winGame;
 
         [SerializeField]
         private AllChildrenNeedModifiersApplier meetingStartNeedOverride;
@@ -183,7 +195,7 @@ namespace Level
             tariffsCounter.UpdateCheck();
             if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
             {
-                animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
+                Execute(new LoseGame());
                 return;
             }
             animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
@@ -199,6 +211,24 @@ namespace Level
         public void TransitionPanelShown()
         {
             transitionPanelShown = true;
+        }
+
+        public void Execute(LoseGame loseGame)
+        {
+            this.loseGame.PrepareToShow();
+            animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
+        }
+
+        public void Execute(WinGame winGame)
+        {
+            this.winGame.PrepareToShow();
+            animatorSwitcher.SetAnimatorStates(typeof(WinGame));
+        }
+
+        public DaysLived GetData()
+        {
+            //TODO: Implement
+            throw new NotImplementedException();
         }
     }
 }

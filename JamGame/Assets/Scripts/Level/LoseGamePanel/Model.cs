@@ -1,4 +1,5 @@
 ﻿using Common;
+using Level.Finances;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -12,36 +13,21 @@ namespace Level.LoseGamePanel
         private string loadingScene;
 
         [SerializeField]
-        [InspectorReadOnly]
-        private int daysLived;
-
-        public int DaysLived
-        {
-            get => daysLived;
-            set
-            {
-                daysLived = value;
-                OnModelChanged?.Invoke(this);
-            }
-        }
+        private IDataProvider<DaysLived> daysLived;
+        public DaysLived DaysLived => daysLived.GetData();
 
         [SerializeField]
-        [InspectorReadOnly]
-        private int moneyEarned;
-
-        public int MoneyEarned
-        {
-            get => moneyEarned;
-            set
-            {
-                moneyEarned = value;
-                OnModelChanged?.Invoke(this);
-            }
-        }
+        private IDataProvider<MoneyEarned> moneyEarned;
+        public MoneyEarned MoneyEarned => moneyEarned.GetData();
 
         public UnityEvent<Model> OnModelChanged;
 
-        // Called by button Try again on LoseGamePanel.
+        public void PrepareToShow()
+        {
+            OnModelChanged?.Invoke(this);
+        }
+
+        // Called by button Try again on WinGamePanel.
         public void TryAgainClick()
         {
             SceneManager.LoadScene(loadingScene);
