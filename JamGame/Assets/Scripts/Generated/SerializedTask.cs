@@ -17,12 +17,20 @@ namespace Level.Boss.Task
         [SerializeField]
         private MaxStressBound maxStressBound;
 
+        [SerializeField]
+        private TargetRoomCount targetRoomCount;
+
+        [SerializeField]
+        private RoomCountUpperBound roomCountUpperBound;
+
         public ITask ToTask()
         {
             return selectedType switch
             {
                 "TargetEmployeeAmount" => targetEmployeeAmount,
                 "MaxStressBound" => maxStressBound,
+                "TargetRoomCount" => targetRoomCount,
+                "RoomCountUpperBound" => roomCountUpperBound,
                 _ => throw new NotImplementedException(),
             };
         }

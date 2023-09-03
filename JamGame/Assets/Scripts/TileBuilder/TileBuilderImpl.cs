@@ -1,4 +1,5 @@
 using Common;
+using Level.Boss.Task;
 using Level.Room;
 using Pickle;
 using System;
@@ -14,7 +15,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace TileBuilder
 {
     [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
-    public partial class TileBuilderImpl : MonoBehaviour
+    public partial class TileBuilderImpl : MonoBehaviour, IDataProvider<RoomCountByUid>
     {
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel FreeSpace;
@@ -387,6 +388,25 @@ namespace TileBuilder
             BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tileConfigs);
 
             return buildingConfig;
+        }
+
+        public RoomCountByUid GetData()
+        {
+            Dictionary<string, int> count = new();
+
+            foreach (CoreModel core_model in coreModels)
+            {
+                if (count.ContainsKey(core_model.Uid))
+                {
+                    count[core_model.Uid]++;
+                }
+                else
+                {
+                    count.Add(core_model.Uid, 1);
+                }
+            }
+
+            return new RoomCountByUid() { CountByUid = count };
         }
     }
 }

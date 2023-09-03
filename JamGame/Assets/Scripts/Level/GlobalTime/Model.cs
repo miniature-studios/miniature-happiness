@@ -11,9 +11,39 @@ namespace Level.GlobalTime
 
         public readonly float RealTimeSeconds => Days_ * Model.DayLength;
 
-        public static Days operator +(Days value1, Days value2)
+        public static Days FromRealTimeSeconds(float seconds)
         {
-            return new Days { Days_ = value1.Days_ + value2.Days_ };
+            return new Days() { Days_ = seconds / Model.DayLength };
+        }
+
+        public static Days operator +(Days a, Days b)
+        {
+            return new Days() { Days_ = a.Days_ + b.Days_ };
+        }
+
+        public static Days operator -(Days a, Days b)
+        {
+            return new Days() { Days_ = a.Days_ - b.Days_ };
+        }
+
+        public static bool operator >(Days a, Days b)
+        {
+            return a.Days_ > b.Days_;
+        }
+
+        public static bool operator <(Days a, Days b)
+        {
+            return a.Days_ < b.Days_;
+        }
+
+        public static bool operator <=(Days a, Days b)
+        {
+            return a.Days_ <= b.Days_;
+        }
+
+        public static bool operator >=(Days a, Days b)
+        {
+            return a.Days_ >= b.Days_;
         }
     }
 
