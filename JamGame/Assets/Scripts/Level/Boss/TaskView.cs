@@ -1,4 +1,5 @@
 using Level.Boss.Task;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -31,26 +32,18 @@ namespace Level.Boss
         {
             Progress progress = task.Progress;
 
-            switch (task)
+            description.text = task switch
             {
-                case TargetEmployeeAmount:
-                    description.text = $"Hire at least {progress.Overall} employees";
-                    break;
-                case MaxStressBound task:
-                    description.text =
-                    $"Hold maximum stress of employees less than {task.MaxStressTarget} for {progress.Overall} seconds";
-                    break;
-                case TargetRoomCount task:
-                    description.text = $"Build at least {progress.Overall} [{task.RoomTitle}]s";
-                    break;
-                case RoomCountUpperBound task:
-                    description.text =
-                    $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days";
-                    break;
-                default:
-                    Debug.LogError("This task type cannot be displayed: missing implementation");
-                    break;
-            }
+                TargetEmployeeAmount =>
+                    $"Hire at least {progress.Overall} employees",
+                MaxStressBound task =>
+                    $"Hold maximum stress of employees less than {task.MaxStressTarget} for {progress.Overall} seconds",
+                TargetRoomCount task =>
+                    $"Build at least {progress.Overall} [{task.RoomTitle}]s",
+                RoomCountUpperBound task =>
+                    $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days",
+                _ => throw new NotImplementedException("This task type is not supported")
+            };
         }
 
         private void Update()
