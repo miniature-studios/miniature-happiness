@@ -44,11 +44,7 @@ namespace Level.Inventory.Room
                     extendedView.gameObject.SetActive(true);
                     extendedView.transform.SetParent(canvas);
                 }
-                extendedView.SetLabelText(
-                    $"Electricity. Con.: {CoreModel.TariffProperties.ElectricityConsumption}\n"
-                        + $"Water Con.: {CoreModel.TariffProperties.WaterConsumption}\n"
-                        + $"Cost: {CoreModel.ShopModel.Cost.Value}"
-                );
+                extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
                 extendedView.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
             }
             else if (extendedView.gameObject.activeSelf)

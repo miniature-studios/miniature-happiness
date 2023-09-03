@@ -8,15 +8,11 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Room
 {
     [Serializable]
-    public struct TariffProperties
+    public struct RentCost
     {
         [SerializeField]
-        private int waterConsumption;
-        public int WaterConsumption => waterConsumption;
-
-        [SerializeField]
-        private int electricityConsumption;
-        public int ElectricityConsumption => electricityConsumption;
+        private int cost;
+        public int Value => cost;
     }
 
     [RequireComponent(typeof(Shop.Room.Model))]
@@ -61,8 +57,8 @@ namespace Level.Room
         public TileUnion.Model TileUnionModel => tileUnionModel;
 
         [SerializeField]
-        private TariffProperties tariffProperties;
-        public TariffProperties TariffProperties => tariffProperties;
+        private RentCost rentCost;
+        public RentCost RentCost => rentCost;
 
         private static void UpdateUidPrefabsMap()
         {

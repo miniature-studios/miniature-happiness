@@ -32,6 +32,8 @@ namespace TileBuilder
         [SerializeField]
         private List<CoreModel> coreModels = new();
 
+        public IEnumerable<CoreModel> AllRoomsCOreModels => coreModels;
+
         private Validator.IValidator validator;
 
         public GridProperties GridProperties => gridProperties;

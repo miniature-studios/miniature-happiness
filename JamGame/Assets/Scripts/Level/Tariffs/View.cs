@@ -12,12 +12,7 @@ namespace Level.Tariffs
 
         public void OnChanged(Check data)
         {
-            dailyBillText.text =
-                $"Rent: {data.Rent} coins\r\n"
-                + $"Water {data.Water} coins\r\n"
-                + $"Electricity: {data.Electricity} coins\r\n"
-                + "\r\n"
-                + $"Sum: {data.Sum} coins";
+            dailyBillText.text = $"Rent: {data.Rent} coins\r\n";
         }
 
         public void ContinueButtonPress()

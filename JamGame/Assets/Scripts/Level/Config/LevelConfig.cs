@@ -19,10 +19,6 @@ namespace Level.Config
 
         [SerializeField]
         private float bossStressSpeed;
-
-        [SerializeField]
-        private Tariffs tariffs;
         public float BossStressSpeed => bossStressSpeed;
-        public Tariffs Tariffs => tariffs;
     }
 }
