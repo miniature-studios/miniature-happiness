@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TileBuilder.Command;
+using TileUnion;
 using UnityEngine;
+using static TileUnion.MeetingRoomLogics;
 
 namespace TileBuilder.Validator
 {
@@ -33,9 +35,33 @@ namespace TileBuilder.Validator
                 BorrowRoom borrowRoom
                     when tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) == null
                     => new FailResult("No room to borrow"),
-                GrowMeetingRoom growMeeting => tileBuilder.CanGrowMeetingRoom(growMeeting.MeetingRoom),
+                GrowMeetingRoom growMeeting => ValidateGrowMeetingRoom(growMeeting),
                 _ => new SuccessResult()
             };
+        }
+
+        public Result ValidateGrowMeetingRoom(GrowMeetingRoom command)
+        {
+            if (!command.MeetingRoom.IsCanFitEmployees(command.EmployeeToFit))
+            {
+                return new FailResult("Cannot add more employee than maximum");
+            }
+            MeetingRoomGrowingInformation meetingRoomGrowingInformation =
+                command.MeetingRoom.GetMeetingRoomGrowingInformation();
+            foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
+            {
+                TileUnionImpl targetTileUnion = tileBuilder.GetTileUnionInPosition(position);
+                if (
+                    targetTileUnion
+                        .GetAllUniqueMarks()
+                        .Intersect(command.MeetingRoom.IncorrectMarks)
+                        .Count() > 0
+                )
+                {
+                    return new FailResult("Cannot borrow tile with incorrect marks.");
+                }
+            }
+            return new SuccessResult();
         }
     }
 

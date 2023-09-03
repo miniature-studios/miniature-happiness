@@ -39,17 +39,30 @@ namespace TileUnion
         }
 
         [SerializeField]
+        [InspectorReadOnly]
+        private int employeePerGrow = 2;
+
+        [SerializeField]
         private List<string> incorrectMarks = new();
         public IEnumerable<string> IncorrectMarks => incorrectMarks;
 
         public bool IsEnoughPlace(int employeeCount)
         {
-            return employeeCount <= (currentSize * 2) - 1;
+            return employeeCount <= (currentSize * employeePerGrow) - 1;
         }
 
         public bool IsCanFitEmployees(int employeeCount)
         {
-            return employeeCount >= (maximumSize * 2) - 1;
+            return employeeCount >= (maximumSize * employeePerGrow) - 1;
+        }
+
+        public int GetGrowCountForFitEmployees(int employeeCount)
+        {
+            return IsEnoughPlace(employeeCount)
+                ? 0
+                : Mathf.CeilToInt(
+                    (employeeCount - ((currentSize * employeePerGrow) - 1)) / employeePerGrow
+                );
         }
 
         public struct MeetingRoomGrowingInformation

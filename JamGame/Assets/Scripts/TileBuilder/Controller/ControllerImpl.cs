@@ -1,6 +1,7 @@
 ﻿using Common;
 using Level;
 using Level.Room;
+using System.Linq;
 using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
@@ -17,16 +18,7 @@ namespace TileBuilder.Controller
         public UnityEvent BuiltValidatedOffice;
 
         [SerializeField]
-        [InspectorReadOnly]
-        private MeetingRoomLogics currentMeetingRoom;
-
-        [SerializeField]
         private Level.Inventory.Controller inventory;
-
-        public void SetCurrentMeetingRoom(MeetingRoomLogics meetingRoom)
-        {
-            currentMeetingRoom = meetingRoom;
-        }
 
         public void ChangeGameMode(GameMode gameMode)
         {
@@ -100,28 +92,30 @@ namespace TileBuilder.Controller
 
         public Result GrowMeetingRoomForEmployees(int employeeCount)
         {
-            if (currentMeetingRoom.IsCanFitEmployees(employeeCount))
+            MeetingRoomLogics[] meetingRooms = FindObjectsOfType<MeetingRoomLogics>();
+            if (meetingRooms.Count() is > 1 or 0)
             {
-                return new FailResult("Cannot add more employee than maximum");
+                Debug.LogError("Invalid MeetingRoomCount");
+                return new FailResult("Invalid MeetingRoomCount");
             }
-            while (!currentMeetingRoom.IsEnoughPlace(employeeCount))
+            MeetingRoomLogics currentMeetingRoom = meetingRooms.First();
+
+            GameMode previousGameMode = tileBuilder.CurrentGameMode;
+            ChangeGameMode(GameMode.God);
+
+            GrowMeetingRoom command = new(currentMeetingRoom, employeeCount);
+            Result result = tileBuilder.ExecuteCommand(command);
+            if (result.Failure)
             {
-                GameMode previousGameMode = tileBuilder.CurrentGameMode;
-                ChangeGameMode(GameMode.God);
-
-                GrowMeetingRoom command = new(currentMeetingRoom);
-                Result result = tileBuilder.ExecuteCommand(command);
-                if (result.Failure)
-                {
-                    return result;
-                }
-                foreach (CoreModel coreModel in command.BorrowedCoreModels)
-                {
-                    _ = inventory.Drop(coreModel);
-                }
-
                 ChangeGameMode(previousGameMode);
+                return result;
             }
+            foreach (CoreModel coreModel in command.BorrowedCoreModels)
+            {
+                _ = inventory.Drop(coreModel);
+            }
+
+            ChangeGameMode(previousGameMode);
             return new SuccessResult();
         }
     }
