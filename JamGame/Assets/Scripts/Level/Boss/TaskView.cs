@@ -30,28 +30,26 @@ namespace Level.Boss
         private void UpdateFromTask()
         {
             Progress progress = task.Progress;
-            if (task is TargetEmployeeAmount)
+
+            switch (task)
             {
-                description.text = $"Hire at least {progress.Overall} employees";
-            }
-            else if (task is MaxStressBound mtb)
-            {
-                description.text =
-                    $"Hold maximum stress of employees less than {mtb.MaxStressTarget} for {progress.Overall} seconds";
-            }
-            else if (task is TargetRoomCount trc)
-            {
-                description.text =
-                    $"Build at least {progress.Overall} [{trc.RoomTitle}]s";
-            }
-            else if (task is RoomCountUpperBound ub)
-            {
-                description.text =
-                    $"Have at most {ub.UpperBoundInclusive} [{ub.RoomTitle}]s for {progress.Overall} days";
-            }
-            else
-            {
-                Debug.LogError("This task type cannot be displayed: missing implementation");
+                case TargetEmployeeAmount:
+                    description.text = $"Hire at least {progress.Overall} employees";
+                    break;
+                case MaxStressBound task:
+                    description.text =
+                    $"Hold maximum stress of employees less than {task.MaxStressTarget} for {progress.Overall} seconds";
+                    break;
+                case TargetRoomCount task:
+                    description.text = $"Build at least {progress.Overall} [{task.RoomTitle}]s";
+                    break;
+                case RoomCountUpperBound task:
+                    description.text =
+                    $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days";
+                    break;
+                default:
+                    Debug.LogError("This task type cannot be displayed: missing implementation");
+                    break;
             }
         }
 
