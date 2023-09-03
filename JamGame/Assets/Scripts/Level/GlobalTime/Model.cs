@@ -10,6 +10,11 @@ namespace Level.GlobalTime
         public float Days_;
 
         public readonly float RealTimeSeconds => Days_ * Model.DayLength;
+
+        public static Days operator +(Days value1, Days value2)
+        {
+            return new Days { Days_ = value1.Days_ + value2.Days_ };
+        }
     }
 
     [AddComponentMenu("Scripts/Level.GlobalTime.Model")]
@@ -40,7 +45,8 @@ namespace Level.GlobalTime
             Time.timeScale = scale;
         }
 
-        // Called by buttons in UI.
+
+        // Called by buttons that changes time scale.
         public void SetTimeScale(float scale)
         {
             if (setTimeScaleLockHolder != null)
