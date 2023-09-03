@@ -14,7 +14,7 @@ namespace Level.WinGamePanel
 
         public void OnModelChanged(Model model)
         {
-            daysLabel.text = $"Days lived: {model.DaysLived.Days}";
+            daysLabel.text = $"Days lived: {model.DaysLived.Value}";
             moneyLabel.text = $"Money earned: {model.MoneyEarned.Value} Coins";
         }
     }

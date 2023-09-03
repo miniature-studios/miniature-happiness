@@ -71,7 +71,6 @@ namespace Level
         private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
 
         public UnityEvent ActionEndNotify;
-        public UnityEvent<Days> TimeHasPassed;
         public UnityEvent DayEnds;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
@@ -170,7 +169,6 @@ namespace Level
         private IEnumerator WorkingTime(Days duration)
         {
             yield return new WaitForSeconds(duration.RealTimeSeconds);
-            TimeHasPassed?.Invoke(duration);
             ActionEndNotify?.Invoke();
         }
 

@@ -1,13 +1,11 @@
 ﻿using Common;
-using Level.GlobalTime;
 using UnityEngine;
 
 namespace Level
 {
     public struct DaysLived
     {
-        public int Days;
-        public Days GeneralInGameDuration;
+        public int Value;
     }
 
     [AddComponentMenu("Scripts/Level.DurationCounter")]
@@ -16,16 +14,6 @@ namespace Level
         [SerializeField]
         [InspectorReadOnly]
         private int daysLived = 0;
-
-        [SerializeField]
-        [InspectorReadOnly]
-        private Days generalInGameDuration = new();
-
-        // Called by executor when time has passed.
-        public void TimeGone(Days time)
-        {
-            generalInGameDuration += time;
-        }
 
         // Called by executor when day is end.
         public void DayEnds()
@@ -37,8 +25,7 @@ namespace Level
         {
             return new DaysLived()
             {
-                Days = daysLived,
-                GeneralInGameDuration = generalInGameDuration
+                Value = daysLived
             };
         }
     }
