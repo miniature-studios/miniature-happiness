@@ -2019,25 +2019,21 @@ PrefabInstance:
       propertyPath: location
       value: 
       objectReference: {fileID: 42303834}
-    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: needs.Array.data[0].properties.DecreaseSpeed
-      value: 2
+    - target: {fileID: 7027475554387804410, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: restoreSpeed
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: needs.Array.data[0].properties.SatisfactionTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: needs.Array.data[3].properties.SatisfactionTime
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: needs.Array.data[0].properties.SatisfactionGained
-      value: 800
+    - target: {fileID: 7027475554387804410, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: stages.Array.data[1].StartsAt
+      value: -0.001
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_Name
       value: Employee
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2467,7 +2463,7 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - AnimatorName: OverlaySelector
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - AnimatorName: StressBar
         Showed: 1
@@ -4741,18 +4737,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 764846867}
     m_Modifications:
-    - target: {fileID: 6757844557526636994, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757844557526636999, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
-      propertyPath: overlay.selectedType
-      value: ExtendedEmployeeInfo
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757844557526636999, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
-      propertyPath: overlay.extendedEmployeeInfo.uiPrefab
-      value: 
-      objectReference: {fileID: 6796275882172008211, guid: 1de861e40d422ba439a25f279db9dcfc, type: 3}
     - target: {fileID: 6757844557861395285, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: overlayManager
       value: 
@@ -4764,10 +4748,6 @@ PrefabInstance:
     - target: {fileID: 6757844557861395286, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757844557861395286, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6757844557861395286, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4823,11 +4803,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6757844557861395286, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 143.45331
+      value: 419
       objectReference: {fileID: 0}
     - target: {fileID: 6757844557861395286, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -45.49878
+      value: -45.499
       objectReference: {fileID: 0}
     - target: {fileID: 6757844557861395286, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4844,14 +4824,6 @@ PrefabInstance:
     - target: {fileID: 6757844557861395287, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_Name
       value: OverlaySelector
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757844558144903267, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
-      propertyPath: m_Interactable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6757844558657403563, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
-      propertyPath: m_Interactable
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

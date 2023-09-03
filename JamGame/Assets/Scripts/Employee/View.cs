@@ -12,7 +12,6 @@ namespace Employee
         private void Start()
         {
             employee = GetComponent<EmployeeImpl>();
-            meshRenderer = GetComponent<MeshRenderer>();
         }
 
         private void Update()
@@ -27,10 +26,11 @@ namespace Employee
         }
     }
 
-    [RequireComponent(typeof(MeshRenderer))]
     public partial class View : IOverlayRenderer<Overlay.Stress>
     {
+        [SerializeField]
         private MeshRenderer meshRenderer;
+
         private Overlay.Stress appliedStressOverlay;
 
         public void ApplyOverlay(Overlay.Stress overlay)
@@ -46,7 +46,6 @@ namespace Employee
             }
 
             float normalized_stress = employee.Stress.Value;
-
             normalized_stress =
                 (normalized_stress - appliedStressOverlay.MinimalStressBound)
                 / (
@@ -55,17 +54,23 @@ namespace Employee
                 );
             normalized_stress = Mathf.Clamp01(normalized_stress);
 
-            meshRenderer.materials[0].color = Color.Lerp(
-                appliedStressOverlay.MinimalStressColor,
-                appliedStressOverlay.MaximalStressColor,
-                normalized_stress
-            );
+            Color tint = appliedStressOverlay.Gradient.Evaluate(normalized_stress);
+            SetColorTint(tint);
         }
 
         public void RevertStressOverlay()
         {
             appliedStressOverlay = null;
-            meshRenderer.materials[0].color = Color.white;
+
+            SetColorTint(Color.white);
+        }
+
+        private void SetColorTint(Color color)
+        {
+            foreach (Material material in meshRenderer.materials)
+            {
+                material.color = color;
+            }
         }
     }
 
