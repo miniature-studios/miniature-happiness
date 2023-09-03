@@ -39,6 +39,16 @@ namespace Level.Boss
                 description.text =
                     $"Hold maximum stress of employees less than {mtb.MaxStressTarget} for {progress.Overall} seconds";
             }
+            else if (task is TargetRoomCount trc)
+            {
+                description.text =
+                    $"Build at least {progress.Overall} [{trc.RoomTitle}]s";
+            }
+            else if (task is RoomCountUpperBound ub)
+            {
+                description.text =
+                    $"Have at most {ub.UpperBoundInclusive} [{ub.RoomTitle}]s for {progress.Overall} days";
+            }
             else
             {
                 Debug.LogError("This task type cannot be displayed: missing implementation");

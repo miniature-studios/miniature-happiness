@@ -30,6 +30,7 @@ namespace Level.Room
 
         [SerializeField]
         [InspectorReadOnly]
+        // TODO: Wrap it in newtype.
         private string uid;
         public string Uid => uid;
 
@@ -39,6 +40,10 @@ namespace Level.Room
             this.uid = uid;
         }
 #endif
+
+        [SerializeField]
+        private string title;
+        public string Title => title;
 
         [SerializeField]
         [InspectorReadOnly]
