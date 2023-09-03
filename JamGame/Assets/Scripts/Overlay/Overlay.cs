@@ -36,21 +36,15 @@ namespace Overlay
     public class Stress : IOverlay
     {
         [SerializeField]
-        private Color minimalStressColor;
+        private Gradient gradient;
+        public Gradient Gradient => gradient;
 
         [SerializeField]
         private float minimalStressBound;
-
-        public Color MinimalStressColor => minimalStressColor;
         public float MinimalStressBound => minimalStressBound;
 
         [SerializeField]
-        private Color maximalStressColor;
-
-        [SerializeField]
         private float maximalStressBound;
-
-        public Color MaximalStressColor => maximalStressColor;
         public float MaximalStressBound => maximalStressBound;
 
         public void Activate(IOverlayManager overlay_manager)

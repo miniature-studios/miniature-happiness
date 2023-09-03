@@ -1,5 +1,6 @@
 ﻿using Common;
 using Level.Config;
+using Level.GlobalTime;
 using Location;
 using System;
 using System.Collections;
@@ -70,6 +71,7 @@ namespace Level
         private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
 
         public UnityEvent ActionEndNotify;
+        public UnityEvent DayEnds;
 
         public SerializedEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
@@ -161,12 +163,12 @@ namespace Level
         public void Execute(Working working)
         {
             animatorSwitcher.SetAnimatorStates(typeof(Working));
-            _ = StartCoroutine(WorkingTime(working.Duration.RealTimeSeconds));
+            _ = StartCoroutine(WorkingTime(working.Duration));
         }
 
-        private IEnumerator WorkingTime(float time)
+        private IEnumerator WorkingTime(Days duration)
         {
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSeconds(duration.RealTimeSeconds);
             ActionEndNotify?.Invoke();
         }
 
@@ -198,7 +200,8 @@ namespace Level
             tariffsCounter.UpdateCheck();
             if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
             {
-                // TODO lose game
+                Execute(new LoseGame());
+                return;
             }
             animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
         }
@@ -206,6 +209,7 @@ namespace Level
         // Called by button continue on daily bill panel.
         public void CompleteDayEnd()
         {
+            DayEnds?.Invoke();
             ActionEndNotify?.Invoke();
         }
 
@@ -213,6 +217,16 @@ namespace Level
         public void TransitionPanelShown()
         {
             transitionPanelShown = true;
+        }
+
+        public void Execute(LoseGame loseGame)
+        {
+            animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
+        }
+
+        public void Execute(WinGame winGame)
+        {
+            animatorSwitcher.SetAnimatorStates(typeof(WinGame));
         }
     }
 }
