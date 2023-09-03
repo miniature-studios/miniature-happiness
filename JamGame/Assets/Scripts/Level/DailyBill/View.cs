@@ -2,8 +2,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Level.Tariffs
+namespace Level.DailyBill
 {
+    [AddComponentMenu("Scripts/Level.DailyBill.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]
@@ -12,7 +13,7 @@ namespace Level.Tariffs
 
         public void OnChanged(Check data)
         {
-            dailyBillText.text = $"Rent: {data.Rent} coins\r\n";
+            dailyBillText.text = $"Rent: {data.Rent} coins.\r\n\r\nSumma: {data.Sum}";
         }
 
         public void ContinueButtonPress()

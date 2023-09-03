@@ -36,7 +36,7 @@ namespace Level
         private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
 
         [SerializeField]
-        private TariffsCounter tariffsCounter;
+        private DailyBill.Model dailyBill;
 
         [SerializeField]
         private TransitionPanel.Model transitionPanel;
@@ -202,8 +202,8 @@ namespace Level
 
         public void Execute(DayEnd dayEnd)
         {
-            tariffsCounter.UpdateCheck();
-            if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
+            dailyBill.UpdateCheck();
+            if (financesModel.TryTakeMoney(dailyBill.Check.Sum).Failure)
             {
                 Execute(new LoseGame());
                 return;

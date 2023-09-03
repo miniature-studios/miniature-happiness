@@ -4,7 +4,7 @@ using TileBuilder;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Level
+namespace Level.DailyBill
 {
     [SerializeField]
     public struct Check
@@ -13,8 +13,8 @@ namespace Level
         public int Sum => Rent;
     }
 
-    [AddComponentMenu("Scripts/Level.TariffsCounter")]
-    public class TariffsCounter : MonoBehaviour
+    [AddComponentMenu("Scripts/Level.DailyBill.Model")]
+    public class Model : MonoBehaviour
     {
         [SerializeField]
         private TileBuilderImpl tileBuilder;
