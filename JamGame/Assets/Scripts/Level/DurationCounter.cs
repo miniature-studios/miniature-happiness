@@ -21,13 +21,13 @@ namespace Level
         [InspectorReadOnly]
         private Days generalInGameDuration = new();
 
-        // Called by executor when time has passed
+        // Called by executor when time has passed.
         public void TimeGone(Days time)
         {
             generalInGameDuration += time;
         }
 
-        // Called by executor when day is end
+        // Called by executor when day is end.
         public void DayEnds()
         {
             daysLived++;
