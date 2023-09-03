@@ -42,10 +42,6 @@ namespace TileBuilder.Validator
 
         public Result ValidateGrowMeetingRoom(GrowMeetingRoom command)
         {
-            if (!command.MeetingRoom.IsCanFitEmployees(command.EmployeeToFit))
-            {
-                return new FailResult("Cannot add more employee than maximum");
-            }
             MeetingRoomGrowingInformation meetingRoomGrowingInformation =
                 command.MeetingRoom.GetMeetingRoomGrowingInformation();
             foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)

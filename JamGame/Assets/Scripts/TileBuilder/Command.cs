@@ -83,23 +83,19 @@ namespace TileBuilder.Command
     {
         public MeetingRoomLogics MeetingRoom { get; private set; }
 
-        public int EmployeeToFit { get; private set; }
+        public int GrowthCount { get; private set; }
 
         private List<CoreModel> borrowedCoreModels;
         public ImmutableList<CoreModel> BorrowedCoreModels => borrowedCoreModels.ToImmutableList();
 
-        public GrowMeetingRoom(MeetingRoomLogics meetingRoom, int employeeToFit)
+        public GrowMeetingRoom(MeetingRoomLogics meetingRoom, int growthCount)
         {
             MeetingRoom = meetingRoom;
-            EmployeeToFit = employeeToFit;
         }
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            borrowedCoreModels = tileBuilder.GrowMeetingRoom(
-                MeetingRoom,
-                MeetingRoom.GetGrowCountForFitEmployees(EmployeeToFit)
-            );
+            borrowedCoreModels = tileBuilder.GrowMeetingRoom(MeetingRoom, GrowthCount);
         }
     }
 }

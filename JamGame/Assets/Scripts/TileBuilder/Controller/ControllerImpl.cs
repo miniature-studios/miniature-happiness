@@ -93,17 +93,26 @@ namespace TileBuilder.Controller
         public Result GrowMeetingRoomForEmployees(int employeeCount)
         {
             MeetingRoomLogics[] meetingRooms = FindObjectsOfType<MeetingRoomLogics>();
-            if (meetingRooms.Count() is > 1 or 0)
+            if (meetingRooms.Count() != 1)
             {
                 Debug.LogError("Invalid MeetingRoomCount");
                 return new FailResult("Invalid MeetingRoomCount");
             }
             MeetingRoomLogics currentMeetingRoom = meetingRooms.First();
 
+            if (!currentMeetingRoom.IsCanFitEmployees(employeeCount))
+            {
+                return new FailResult("Cannot add more employee than maximum");
+            }
+
             GameMode previousGameMode = tileBuilder.CurrentGameMode;
             ChangeGameMode(GameMode.God);
 
-            GrowMeetingRoom command = new(currentMeetingRoom, employeeCount);
+            GrowMeetingRoom command =
+                new(
+                    currentMeetingRoom,
+                    currentMeetingRoom.GetGrowCountForFitEmployees(employeeCount)
+                );
             Result result = tileBuilder.ExecuteCommand(command);
             if (result.Failure)
             {
