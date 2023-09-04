@@ -49,7 +49,7 @@ namespace Level.Shop
 
         public Result TryBuyEmployee(EmployeeConfig employee)
         {
-            // TODO
+            // TODO Implement
             throw new System.NotImplementedException();
         }
     }

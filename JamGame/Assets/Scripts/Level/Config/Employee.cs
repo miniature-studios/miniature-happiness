@@ -16,12 +16,16 @@ namespace Level.Config
     public class EmployeeConfig
     {
         public string Name { get; }
-        public GameObject Prototype { get; }
+        public int HireCost { get; }
+        public string Profession { get; }
+        public string Quirk { get; }
 
-        public EmployeeConfig(GameObject prototype, string name)
+        public EmployeeConfig(string name, int hireCost, string profession, string quirk)
         {
             Name = name;
-            Prototype = prototype;
+            HireCost = hireCost;
+            Profession = profession;
+            Quirk = quirk;
         }
     }
 
@@ -32,11 +36,17 @@ namespace Level.Config
         private string name;
 
         [SerializeField]
-        private GameObject prototype;
+        private int hireCost;
+
+        [SerializeField]
+        private string profession;
+
+        [SerializeField]
+        private string quirk;
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            return new EmployeeConfig(prototype, name);
+            return new EmployeeConfig(name, hireCost, profession, quirk);
         }
     }
 
@@ -71,7 +81,9 @@ namespace Level.Config
             ];
             string full_name = $"{first_name} {last_name}";
 
-            return new EmployeeConfig(result, full_name);
+            // TODO: refactor
+            //return new EmployeeConfig(result, full_name);
+            return new EmployeeConfig("Fuko", 100, "Proger", "No quirk");
         }
     }
 

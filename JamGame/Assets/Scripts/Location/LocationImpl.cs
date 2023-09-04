@@ -32,7 +32,8 @@ namespace Location
 
         public void AddEmployee(EmployeeConfig config)
         {
-            EmployeeImpl employee = Instantiate(config.Prototype, transform)
+            // TODO: configurate from config
+            EmployeeImpl employee = Instantiate(employeePrototype, transform)
                 .GetComponent<EmployeeImpl>();
             employee.gameObject.SetActive(true);
             employees.Add(employee);
@@ -45,7 +46,6 @@ namespace Location
         {
             foreach (NeedProvider provider in needProviders)
             {
-
                 if (provider.NeedType == need_type && provider.IsAvailable(employee))
                 {
                     yield return provider;
@@ -74,13 +74,17 @@ namespace Location
 
         AllEmployeesAtMeeting IDataProvider<AllEmployeesAtMeeting>.GetData()
         {
-            bool all_at_meeting = employees.All(employee => employee.LatestSatisfiedNeedType == NeedType.Meeting);
+            bool all_at_meeting = employees.All(
+                employee => employee.LatestSatisfiedNeedType == NeedType.Meeting
+            );
             return new AllEmployeesAtMeeting { Value = all_at_meeting };
         }
 
         AllEmployeesAtHome IDataProvider<AllEmployeesAtHome>.GetData()
         {
-            bool all_go_home = employees.All(employee => employee.LatestSatisfiedNeedType == NeedType.Leave);
+            bool all_go_home = employees.All(
+                employee => employee.LatestSatisfiedNeedType == NeedType.Leave
+            );
             return new AllEmployeesAtHome { Value = all_go_home };
         }
     }
