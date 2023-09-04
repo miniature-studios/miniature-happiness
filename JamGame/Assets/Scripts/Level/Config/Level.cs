@@ -15,20 +15,4 @@ namespace Level.Config
         public ImmutableList<IDayAction> DayActions =>
             rawDayActions.Select(x => x.ToDayAction()).ToImmutableList();
     }
-
-    [Serializable]
-    public class Tariffs
-    {
-        [SerializeField]
-        private int waterCost;
-
-        [SerializeField]
-        private int electricityCost;
-
-        [SerializeField]
-        private int rentCost;
-        public int WaterCost => waterCost;
-        public int ElectricityCost => electricityCost;
-        public int RentCost => rentCost;
-    }
 }

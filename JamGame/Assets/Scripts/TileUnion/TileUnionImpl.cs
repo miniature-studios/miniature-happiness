@@ -181,7 +181,7 @@ namespace TileUnion
 
         private IEnumerator ShowInvalidPlacingRoutine()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSecondsRealtime(1);
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetTileState(TileImpl.TileState.Normal);

@@ -16,13 +16,7 @@ namespace Level.Shop.Room
         public string Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
-        private TMP_Text moneyText;
-
-        [SerializeField]
-        private TMP_Text waterText;
-
-        [SerializeField]
-        private TMP_Text electricityText;
+        private TMP_Text costText;
 
         private Func<CoreModel, Result> roomBuying;
 
@@ -43,12 +37,10 @@ namespace Level.Shop.Room
 
         private void Update()
         {
-            moneyText.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
-            waterText.text = $"Water: {CoreModel.TariffProperties.WaterConsumption}";
-            electricityText.text = $"Electro: {CoreModel.TariffProperties.ElectricityConsumption}";
+            costText.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
         }
 
-        // Called be pressing button
+        // Called by pressing button.
         public void TryBuyRoom()
         {
             if (roomBuying(CoreModel).Success)
