@@ -20,14 +20,15 @@ namespace Level.DailyBill
         private TileBuilderImpl tileBuilder;
 
         [SerializeField, InspectorReadOnly]
-        private Check check;
+        private Check check = new();
         public Check Check => check;
 
         public UnityEvent<Check> CheckChanged;
 
-        public void UpdateCheck()
+        // Called by animator when showing.
+        public void ComputeCheck()
         {
-            check = new() { Rent = tileBuilder.AllRoomsCOreModels.Sum(x => x.RentCost.Value) };
+            check.Rent = tileBuilder.AllCoreModels.Sum(x => x.RentCost.Value);
             CheckChanged?.Invoke(Check);
         }
     }

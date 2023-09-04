@@ -11,11 +11,13 @@ namespace Level.DailyBill
         private TMP_Text dailyBillText;
         public UnityEvent ContinueButtonPressEvent;
 
+        // Called by event from model.
         public void OnChanged(Check data)
         {
             dailyBillText.text = $"Rent: {data.Rent} coins.\r\n\r\nSumma: {data.Sum}";
         }
 
+        // Called by button continue.
         public void ContinueButtonPress()
         {
             ContinueButtonPressEvent?.Invoke();
