@@ -9,8 +9,11 @@ namespace Employee
         Work,
         Piss,
         Eat,
+
         Meeting,
-        Leave
+        Leave,
+
+        Smoke
     }
 
     [Serializable]
