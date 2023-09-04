@@ -202,7 +202,7 @@ namespace Level
 
         public void Execute(DayEnd dayEnd)
         {
-            if (financesModel.TryTakeMoney(dailyBill.Check.Sum).Failure)
+            if (financesModel.TryTakeMoney(dailyBill.ComputeCheck().Sum).Failure)
             {
                 Execute(new LoseGame());
                 return;

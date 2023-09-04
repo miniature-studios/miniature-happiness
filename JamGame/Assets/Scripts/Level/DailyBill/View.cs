@@ -9,11 +9,16 @@ namespace Level.DailyBill
     {
         [SerializeField]
         private TMP_Text dailyBillText;
+
+        [SerializeField]
+        private Model model;
+
         public UnityEvent ContinueButtonPressEvent;
 
-        // Called by event from model.
-        public void OnChanged(Check data)
+        // Called by animator.
+        public void Shown()
         {
+            Check data = model.ComputeCheck();
             dailyBillText.text = $"Rent: {data.Rent} coins.\r\n\r\nSumma: {data.Sum}";
         }
 
