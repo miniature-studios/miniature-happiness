@@ -404,9 +404,8 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public List<CoreModel> GrowMeetingRoom(
-            MeetingRoomGrowingInformation meetingRoomGrowingInformation,
-            Action<MeetingRoomGrowingInformation> actualGrow
+        public List<CoreModel> ClearForGrowingMeetingRoom(
+            MeetingRoomGrowingInformation meetingRoomGrowingInformation
         )
         {
             List<CoreModel> coreModels = new();
@@ -429,12 +428,13 @@ namespace TileBuilder
             }
 
             RemoveTileFromDictionary(meetingRoomGrowingInformation.TargetTileUnion);
-            actualGrow(meetingRoomGrowingInformation);
-            AddTileUnionToDictionary(meetingRoomGrowingInformation.TargetTileUnion);
-
-            UpdateSidesInPositions(GetAllInsidePositions());
-
             return coreModels;
+        }
+
+        public void PlaceBackMeetingRoom(TileUnionImpl tileUnionImpl)
+        {
+            AddTileUnionToDictionary(tileUnionImpl);
+            UpdateSidesInPositions(GetAllInsidePositions());
         }
     }
 }

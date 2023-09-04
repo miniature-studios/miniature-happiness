@@ -97,12 +97,11 @@ namespace TileBuilder.Command
         {
             for (int i = 0; i < GrowthCount; i++)
             {
-                borrowedCoreModels.AddRange(
-                    tileBuilder.GrowMeetingRoom(
-                        MeetingRoom.GetMeetingRoomGrowingInformation(),
-                        MeetingRoom.AddTiles
-                    )
-                );
+                MeetingRoomLogics.MeetingRoomGrowingInformation growingInfo =
+                    MeetingRoom.GetMeetingRoomGrowingInformation();
+                borrowedCoreModels.AddRange(tileBuilder.ClearForGrowingMeetingRoom(growingInfo));
+                MeetingRoom.AddTiles(growingInfo);
+                tileBuilder.PlaceBackMeetingRoom(MeetingRoom.TileUnion);
             }
         }
     }
