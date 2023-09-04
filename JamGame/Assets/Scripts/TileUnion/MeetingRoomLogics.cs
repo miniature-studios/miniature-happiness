@@ -70,6 +70,7 @@ namespace TileUnion
             public IEnumerable<Vector2Int> MovingTileUnionPositions;
             public IEnumerable<Vector2Int> PositionsToTake;
             public Vector2Int MovingDirection;
+            public TileUnionImpl TargetTileUnion;
         }
 
         public MeetingRoomGrowingInformation GetMeetingRoomGrowingInformation()
@@ -106,7 +107,8 @@ namespace TileUnion
             {
                 MovingTileUnionPositions = movingTileUnionPositions,
                 PositionsToTake = positionsToTake,
-                MovingDirection = movingDirection
+                MovingDirection = movingDirection,
+                TargetTileUnion = TileUnion
             };
         }
 

@@ -404,37 +404,33 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public List<CoreModel> GrowMeetingRoom(MeetingRoomLogics meetingRoom, int growCount)
+        public List<CoreModel> GrowMeetingRoom(
+            MeetingRoomGrowingInformation meetingRoomGrowingInformation,
+            Action<MeetingRoomGrowingInformation> actualGrow
+        )
         {
             List<CoreModel> coreModels = new();
 
-            for (int i = 0; i < growCount; i++)
+            IEnumerable<Vector2Int> positionToBorrow =
+                meetingRoomGrowingInformation.PositionsToTake.Where(
+                    x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
+                );
+
+            foreach (Vector2Int position in positionToBorrow)
             {
-                MeetingRoomGrowingInformation meetingRoomGrowingInformation =
-                    meetingRoom.GetMeetingRoomGrowingInformation();
-
-                IEnumerable<Vector2Int> positionToBorrow =
-                    meetingRoomGrowingInformation.PositionsToTake.Where(
-                        x =>
-                            GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
-                    );
-
-                foreach (Vector2Int position in positionToBorrow)
-                {
-                    BorrowRoom command = new(position);
-                    _ = ExecuteCommand(command);
-                    coreModels.Add(command.BorrowedRoom);
-                }
-
-                foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
-                {
-                    _ = DeleteTile(GetTileUnionInPosition(position));
-                }
-
-                RemoveTileFromDictionary(meetingRoom.TileUnion);
-                meetingRoom.AddTiles(meetingRoomGrowingInformation);
-                AddTileUnionToDictionary(meetingRoom.TileUnion);
+                BorrowRoom command = new(position);
+                _ = ExecuteCommand(command);
+                coreModels.Add(command.BorrowedRoom);
             }
+
+            foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
+            {
+                _ = DeleteTile(GetTileUnionInPosition(position));
+            }
+
+            RemoveTileFromDictionary(meetingRoomGrowingInformation.TargetTileUnion);
+            actualGrow(meetingRoomGrowingInformation);
+            AddTileUnionToDictionary(meetingRoomGrowingInformation.TargetTileUnion);
 
             UpdateSidesInPositions(GetAllInsidePositions());
 

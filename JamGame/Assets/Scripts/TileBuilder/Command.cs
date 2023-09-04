@@ -85,7 +85,7 @@ namespace TileBuilder.Command
 
         public int GrowthCount { get; private set; }
 
-        private List<CoreModel> borrowedCoreModels;
+        private List<CoreModel> borrowedCoreModels = new();
         public ImmutableList<CoreModel> BorrowedCoreModels => borrowedCoreModels.ToImmutableList();
 
         public GrowMeetingRoom(MeetingRoomLogics meetingRoom, int growthCount)
@@ -95,7 +95,15 @@ namespace TileBuilder.Command
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            borrowedCoreModels = tileBuilder.GrowMeetingRoom(MeetingRoom, GrowthCount);
+            for (int i = 0; i < GrowthCount; i++)
+            {
+                borrowedCoreModels.AddRange(
+                    tileBuilder.GrowMeetingRoom(
+                        MeetingRoom.GetMeetingRoomGrowingInformation(),
+                        MeetingRoom.AddTiles
+                    )
+                );
+            }
         }
     }
 }
