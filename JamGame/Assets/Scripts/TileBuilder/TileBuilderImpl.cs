@@ -10,7 +10,6 @@ using TileUnion.Tile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
-using static TileUnion.MeetingRoomLogics;
 
 namespace TileBuilder
 {
@@ -404,16 +403,16 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public List<CoreModel> ClearForGrowingMeetingRoom(
-            MeetingRoomGrowingInformation meetingRoomGrowingInformation
+        public List<CoreModel> BorrowMeetingRoom(
+            IEnumerable<Vector2Int> positionsToTake,
+            TileUnionImpl tileUnionImpl
         )
         {
             List<CoreModel> coreModels = new();
 
-            IEnumerable<Vector2Int> positionToBorrow =
-                meetingRoomGrowingInformation.PositionsToTake.Where(
-                    x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
-                );
+            IEnumerable<Vector2Int> positionToBorrow = positionsToTake.Where(
+                x => GetTileUnionInPosition(x).GetAllUniqueMarks().All(x => x != "Freespace")
+            );
 
             foreach (Vector2Int position in positionToBorrow)
             {
@@ -422,16 +421,16 @@ namespace TileBuilder
                 coreModels.Add(command.BorrowedRoom);
             }
 
-            foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
+            foreach (Vector2Int position in positionsToTake)
             {
                 _ = DeleteTile(GetTileUnionInPosition(position));
             }
 
-            RemoveTileFromDictionary(meetingRoomGrowingInformation.TargetTileUnion);
+            RemoveTileFromDictionary(tileUnionImpl);
             return coreModels;
         }
 
-        public void PlaceBackMeetingRoom(TileUnionImpl tileUnionImpl)
+        public void AddMeetingRoom(TileUnionImpl tileUnionImpl)
         {
             AddTileUnionToDictionary(tileUnionImpl);
             UpdateSidesInPositions(GetAllInsidePositions());

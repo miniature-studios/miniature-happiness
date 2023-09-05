@@ -104,10 +104,12 @@ namespace TileBuilder.Command
 
             MeetingRoomLogics.MeetingRoomGrowingInformation growingInfo =
                 MeetingRoom.GetMeetingRoomGrowingInformation(GrowthCount);
-
-            borrowedCoreModels.AddRange(tileBuilder.ClearForGrowingMeetingRoom(growingInfo));
             MeetingRoom.AddTiles(growingInfo);
-            tileBuilder.PlaceBackMeetingRoom(MeetingRoom.TileUnion);
+            borrowedCoreModels.AddRange(
+                tileBuilder.BorrowMeetingRoom(growingInfo.PositionsToTake, MeetingRoom.TileUnion)
+            );
+
+            tileBuilder.AddMeetingRoom(MeetingRoom.TileUnion);
         }
     }
 }

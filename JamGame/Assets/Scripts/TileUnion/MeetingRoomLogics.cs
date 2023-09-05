@@ -74,7 +74,6 @@ namespace TileUnion
             public IEnumerable<Vector2Int> PositionsToTake;
             public Vector2Int MovingDirection;
             public int MovingSteps;
-            public TileUnionImpl TargetTileUnion;
         }
 
         public MeetingRoomGrowingInformation GetMeetingRoomGrowingInformation(int growCount)
@@ -86,22 +85,16 @@ namespace TileUnion
                 .ForEach((x) => tempGrowDirection = tempGrowDirection.Rotate90());
             List<Vector2Int> positionsToTake = new();
 
-            IEnumerable<Vector2Int> movingTileUnionPositions = tempGrowDirection switch
-            {
-                Direction.Up
-                    => TileUnion.TilesPositions
-                        .OrderByDescending(pos => pos.y)
-                        .Take(TilesToAdd.Count()),
-                Direction.Right
-                    => TileUnion.TilesPositions
-                        .OrderByDescending(pos => pos.x)
-                        .Take(TilesToAdd.Count()),
-                Direction.Down
-                    => TileUnion.TilesPositions.OrderBy(pos => pos.y).Take(TilesToAdd.Count()),
-                Direction.Left
-                    => TileUnion.TilesPositions.OrderBy(pos => pos.x).Take(TilesToAdd.Count()),
-                _ => throw new ArgumentException()
-            };
+            IEnumerable<Vector2Int> movingTileUnionPositions = (
+                tempGrowDirection switch
+                {
+                    Direction.Up => TileUnion.TilesPositions.OrderByDescending(pos => pos.y),
+                    Direction.Right => TileUnion.TilesPositions.OrderByDescending(pos => pos.x),
+                    Direction.Down => TileUnion.TilesPositions.OrderBy(pos => pos.y),
+                    Direction.Left => TileUnion.TilesPositions.OrderBy(pos => pos.x),
+                    _ => throw new ArgumentException()
+                }
+            ).Take(TilesToAdd.Count());
 
             Vector2Int movingDirection = tempGrowDirection.ToVector2Int();
             positionsToTake.AddRange(movingTileUnionPositions.Select(x => x + movingDirection));
@@ -120,8 +113,7 @@ namespace TileUnion
                 MovingTileUnionPositions = movingTileUnionPositions,
                 PositionsToTake = positionsToTake,
                 MovingDirection = movingDirection,
-                MovingSteps = growCount,
-                TargetTileUnion = TileUnion
+                MovingSteps = growCount
             };
         }
 
