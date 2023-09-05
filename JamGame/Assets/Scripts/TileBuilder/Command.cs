@@ -106,10 +106,10 @@ namespace TileBuilder.Command
                 MeetingRoom.GetMeetingRoomGrowingInformation(GrowthCount);
             MeetingRoom.AddTiles(growingInfo);
             borrowedCoreModels.AddRange(
-                tileBuilder.BorrowMeetingRoom(growingInfo.PositionsToTake, MeetingRoom.TileUnion)
+                tileBuilder.BorrowTileUnions(growingInfo.PositionsToTake, MeetingRoom.TileUnion)
             );
 
-            tileBuilder.AddMeetingRoom(MeetingRoom.TileUnion);
+            tileBuilder.AddTileUnion(MeetingRoom.TileUnion);
         }
     }
 }

@@ -403,7 +403,7 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public List<CoreModel> BorrowMeetingRoom(
+        public List<CoreModel> BorrowTileUnions(
             IEnumerable<Vector2Int> positionsToTake,
             TileUnionImpl tileUnionImpl
         )
@@ -430,7 +430,7 @@ namespace TileBuilder
             return coreModels;
         }
 
-        public void AddMeetingRoom(TileUnionImpl tileUnionImpl)
+        public void AddTileUnion(TileUnionImpl tileUnionImpl)
         {
             AddTileUnionToDictionary(tileUnionImpl);
             UpdateSidesInPositions(GetAllInsidePositions());
