@@ -1566,11 +1566,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
---- !u!1 &744904365 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-  m_PrefabInstance: {fileID: 744904364}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &744904366 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7027475554387804387, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
@@ -1581,7 +1576,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
   m_PrefabInstance: {fileID: 744904364}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744904365}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88412d67d449a7d4abec5659cc45c2c0, type: 3}
@@ -2616,6 +2611,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825985572}
   m_CullTransparentMesh: 1
+--- !u!114 &912607351 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 624730638156074642, guid: 501b4e4cea6edd84c962cd76042fa04c, type: 3}
+  m_PrefabInstance: {fileID: 811559734}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b53ede75c53a8746983e1fb49787ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &924940278
 GameObject:
   m_ObjectHideFlags: 0
@@ -3256,7 +3262,9 @@ MonoBehaviour:
     selectedType: FixedEmployeeConfig
     fixedEmployeeConfig:
       name: Hacha
-      prototype: {fileID: 744904365}
+      hireCost: 0
+      profession: 
+      quirk: 
     randomEmployeeConfig:
       employeeWeights: []
       nameList: {fileID: 0}
@@ -4321,8 +4329,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ShopView, Assembly-CSharp
+      - m_Target: {fileID: 912607351}
+        m_TargetAssemblyTypeName: Level.Shop.View, Assembly-CSharp
         m_MethodName: Open
         m_Mode: 1
         m_Arguments:
