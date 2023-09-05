@@ -42,8 +42,13 @@ namespace TileBuilder.Validator
 
         public Result ValidateGrowMeetingRoom(GrowMeetingRoom command)
         {
+            if (command.GrowthCount == 0)
+            {
+                return new SuccessResult();
+            }
+
             MeetingRoomGrowingInformation meetingRoomGrowingInformation =
-                command.MeetingRoom.GetMeetingRoomGrowingInformation();
+                command.MeetingRoom.GetMeetingRoomGrowingInformation(command.GrowthCount);
             foreach (Vector2Int position in meetingRoomGrowingInformation.PositionsToTake)
             {
                 TileUnionImpl targetTileUnion = tileBuilder.GetTileUnionInPosition(position);

@@ -91,18 +91,23 @@ namespace TileBuilder.Command
         public GrowMeetingRoom(MeetingRoomLogics meetingRoom, int growthCount)
         {
             MeetingRoom = meetingRoom;
+            GrowthCount = growthCount;
+            Debug.Log(GrowthCount);
         }
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            for (int i = 0; i < GrowthCount; i++)
+            if (GrowthCount == 0)
             {
-                MeetingRoomLogics.MeetingRoomGrowingInformation growingInfo =
-                    MeetingRoom.GetMeetingRoomGrowingInformation();
-                borrowedCoreModels.AddRange(tileBuilder.ClearForGrowingMeetingRoom(growingInfo));
-                MeetingRoom.AddTiles(growingInfo);
-                tileBuilder.PlaceBackMeetingRoom(MeetingRoom.TileUnion);
+                return;
             }
+
+            MeetingRoomLogics.MeetingRoomGrowingInformation growingInfo =
+                MeetingRoom.GetMeetingRoomGrowingInformation(GrowthCount);
+
+            borrowedCoreModels.AddRange(tileBuilder.ClearForGrowingMeetingRoom(growingInfo));
+            MeetingRoom.AddTiles(growingInfo);
+            tileBuilder.PlaceBackMeetingRoom(MeetingRoom.TileUnion);
         }
     }
 }
