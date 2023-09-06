@@ -1,19 +1,14 @@
 ﻿using Common;
 using Level;
 using Level.Room;
+using System.Linq;
 using TileBuilder.Command;
+using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace TileBuilder.Controller
 {
-    public enum GameMode
-    {
-        God,
-        Build,
-        Play
-    }
-
     [AddComponentMenu("Scripts/TileBuilder.Controller.ControllerImpl")]
     public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {
@@ -21,6 +16,9 @@ namespace TileBuilder.Controller
         private TileBuilderImpl tileBuilder;
 
         public UnityEvent BuiltValidatedOffice;
+
+        [SerializeField]
+        private Level.Inventory.Controller inventory;
 
         public void ChangeGameMode(GameMode gameMode)
         {
@@ -90,6 +88,39 @@ namespace TileBuilder.Controller
         public void HoverLeave()
         {
             _ = tileBuilder.ExecuteCommand(new HideSelectedRoom());
+        }
+
+        public Result GrowMeetingRoomForEmployees(int employeeCount)
+        {
+            MeetingRoomLogics[] meetingRooms = FindObjectsOfType<MeetingRoomLogics>();
+            if (meetingRooms.Count() != 1)
+            {
+                Debug.LogError("Invalid MeetingRoomCount");
+                return new FailResult("Invalid MeetingRoomCount");
+            }
+            MeetingRoomLogics currentMeetingRoom = meetingRooms.First();
+
+            if (!currentMeetingRoom.IsCanFitEmployees(employeeCount))
+            {
+                return new FailResult("Cannot add more employee than maximum");
+            }
+
+            GrowMeetingRoom command =
+                new(
+                    currentMeetingRoom,
+                    currentMeetingRoom.GetGrowCountForFitEmployees(employeeCount)
+                );
+            Result result = tileBuilder.ExecuteCommand(command);
+            if (result.Failure)
+            {
+                return result;
+            }
+            foreach (CoreModel coreModel in command.BorrowedCoreModels)
+            {
+                _ = inventory.Drop(coreModel);
+            }
+
+            return new SuccessResult();
         }
     }
 }

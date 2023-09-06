@@ -972,6 +972,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3198020651115359956}
   - component: {fileID: 3198020651115359959}
+  - component: {fileID: 2876194145435847856}
   m_Layer: 0
   m_Name: MeetingRoom
   m_TagString: Untagged
@@ -1021,6 +1022,28 @@ MonoBehaviour:
   - {fileID: 6023392488271475129}
   - {fileID: 5241539118009146801}
   - {fileID: 3520567390060003207}
+--- !u!114 &2876194145435847856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3198020651115359957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d541b18f86e195840b995ca95411a45a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileUnion: {fileID: 3198020651115359959}
+  tilesToAdd:
+  - {fileID: 6510072468460812949, guid: f679bb6dc7839c643a44a73d883f0a2f, type: 3}
+  - {fileID: 2788619764603708386, guid: eb0c3a716ed62ad48b730fb27eb390a7, type: 3}
+  growDirection: 6
+  maximumSize: 8
+  currentSize: 2
+  employeePerGrow: 2
+  incorrectMarks:
+  - Immutable
 --- !u!1 &3797532287408629511
 GameObject:
   m_ObjectHideFlags: 0

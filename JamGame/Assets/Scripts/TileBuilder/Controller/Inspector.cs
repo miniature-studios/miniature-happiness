@@ -62,6 +62,9 @@ namespace TileBuilder.Controller
         [HideInInspector]
         public int SquareSideLength = 30;
 
+        [HideInInspector]
+        public int NeededEmployeeCount = 0;
+
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel StairsPrefab;
 
@@ -228,6 +231,24 @@ namespace TileBuilder.Controller
                 controller.CreateTile(controller.OutdoorPrefab, new(0, 1), 0);
                 controller.CreateTile(controller.WorkingPlaceFree, new(1, 0), 0);
                 controller.CreateTile(controller.WorkingPlace, new(1, 1), 0);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            controller.NeededEmployeeCount = EditorGUILayout.IntField(
+                "Employee count to extend: ",
+                controller.NeededEmployeeCount
+            );
+            EditorGUILayout.EndHorizontal();
+
+            _ = EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Grow Meeting room"))
+            {
+                Common.Result result = controller.GrowMeetingRoomForEmployees(controller.NeededEmployeeCount);
+                if (result.Failure)
+                {
+                    Debug.Log(result.Error);
+                }
             }
             EditorGUILayout.EndHorizontal();
         }

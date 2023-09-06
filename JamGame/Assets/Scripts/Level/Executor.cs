@@ -100,12 +100,12 @@ namespace Level
         {
             location.InitGameMode();
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 0; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }
 
-            // NOTE: It's a temportary solution while we don't have proper save/load system.
+            // NOTE: It's a temporary solution while we don't have proper save/load system.
             leaveNeedOverride.Unregister();
             goToWorkNeedOverride.Register();
 
@@ -139,8 +139,8 @@ namespace Level
                     "Cannot change time scale before meeting: " + set_time_scale_lock_result.Error
                 );
             }
-
-            tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
+            
+            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             animatorSwitcher.SetAnimatorStates(typeof(Meeting));

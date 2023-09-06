@@ -97,6 +97,14 @@ namespace TileUnion
             Configuration[rotation].TilesPositions.Select(x => x + position);
         public int TilesCount => Tiles.Count;
 
+        public IEnumerable<string> GetAllUniqueMarks()
+        {
+            return Tiles
+                .Select(x => x.Marks)
+                .Aggregate(Enumerable.Empty<string>(), (x, y) => x.Concat(y))
+                .Distinct();
+        }
+
         public bool IsAllWithMark(string mark)
         {
             return Tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
@@ -280,7 +288,7 @@ namespace TileUnion
             }
         }
 
-        public void CreateCache()
+        public void CreateCache(bool considerCenterOfMass = true)
         {
             cachedConfiguration = new();
             for (int i = 0; i < 4; i++)
@@ -299,7 +307,7 @@ namespace TileUnion
                         GetCenterTilePosition()
                     )
                 );
-                RotateTileUnion();
+                RotateTileUnion(considerCenterOfMass);
             }
         }
 
@@ -342,28 +350,37 @@ namespace TileUnion
             return Tiles.FirstOrDefault(x => x.Position == globalPosition);
         }
 
-        private void RotateTileUnion()
+        private void RotateTileUnion(bool considerCenterOfMass)
         {
+            Vector2 firstCenter = Vector2.zero;
+            if (considerCenterOfMass)
+            {
+                firstCenter = CenterOfMassTools.GetCenterOfMass(
+                    Tiles.Select(x => x.Position).ToList()
+                );
+            }
+
             rotation++;
-            Vector2 firstCenter = CenterOfMassTools.GetCenterOfMass(
-                Tiles.Select(x => x.Position).ToList()
-            );
+            rotation %= 4;
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
                 tile.SetPosition(gridProperties, new Vector2Int(tile.Position.y, -tile.Position.x));
             }
-            rotation %= 4;
-            Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                Tiles.Select(x => x.Position).ToList()
-            );
-            Vector2 delta = firstCenter - secondCenter;
-            foreach (TileImpl tile in Tiles)
+
+            if (considerCenterOfMass)
             {
-                tile.SetPosition(
-                    gridProperties,
-                    tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
+                Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
+                    Tiles.Select(x => x.Position).ToList()
                 );
+                Vector2 delta = firstCenter - secondCenter;
+                foreach (TileImpl tile in Tiles)
+                {
+                    tile.SetPosition(
+                        gridProperties,
+                        tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
+                    );
+                }
             }
         }
 
@@ -408,6 +425,33 @@ namespace TileUnion
                     )
                 };
             return vectors.OrderBy(x => Vector2.Distance(x, vectorSum)).First();
+        }
+
+        public void MoveTiles(Vector2Int direction, IEnumerable<Vector2Int> movingPositions)
+        {
+            foreach (Vector2Int position in movingPositions)
+            {
+                TileImpl tile = GetTile(position);
+                tile.SetPosition(gridProperties, tile.Position + direction);
+            }
+        }
+
+        public void AddTiles(
+            Dictionary<(Vector2Int globalPosition, int roatation), TileImpl> pairsToAdd
+        )
+        {
+            foreach (
+                KeyValuePair<
+                    (Vector2Int globalPosition, int roatation),
+                    TileImpl
+                > pair in pairsToAdd
+            )
+            {
+                TileImpl newTile = Instantiate(pair.Value, transform);
+                Tiles.Add(newTile);
+                newTile.SetPosition(gridProperties, pair.Key.globalPosition - position);
+                newTile.SetRotation(pair.Key.roatation);
+            }
         }
     }
 }
