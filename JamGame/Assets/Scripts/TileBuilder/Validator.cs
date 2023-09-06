@@ -116,16 +116,18 @@ namespace TileBuilder.Validator
             {
                 return new SuccessResult();
             }
-            if (command is BorrowRoom borrowRoom
-                && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null)
+            if (
+                command is BorrowRoom borrowRoom
+                && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null
+            )
             {
                 bool borrowRoomImmutable = tileBuilder
-                        .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                        .IsAllWithMark("Immutable");
+                    .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
+                    .IsAllWithMark("Immutable");
 
                 bool borrowRoomFreespace = tileBuilder
-                        .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                        .IsAllWithMark("Freespace");
+                    .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
+                    .IsAllWithMark("Freespace");
 
                 Result result = (borrowRoomImmutable, borrowRoomFreespace) switch
                 {
