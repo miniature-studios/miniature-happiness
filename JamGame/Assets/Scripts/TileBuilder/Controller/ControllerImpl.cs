@@ -105,9 +105,6 @@ namespace TileBuilder.Controller
                 return new FailResult("Cannot add more employee than maximum");
             }
 
-            GameMode previousGameMode = tileBuilder.CurrentGameMode;
-            ChangeGameMode(GameMode.God);
-
             GrowMeetingRoom command =
                 new(
                     currentMeetingRoom,
@@ -116,7 +113,6 @@ namespace TileBuilder.Controller
             Result result = tileBuilder.ExecuteCommand(command);
             if (result.Failure)
             {
-                ChangeGameMode(previousGameMode);
                 return result;
             }
             foreach (CoreModel coreModel in command.BorrowedCoreModels)
@@ -124,7 +120,6 @@ namespace TileBuilder.Controller
                 _ = inventory.Drop(coreModel);
             }
 
-            ChangeGameMode(previousGameMode);
             return new SuccessResult();
         }
     }

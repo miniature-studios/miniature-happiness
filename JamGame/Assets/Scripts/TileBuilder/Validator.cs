@@ -112,23 +112,32 @@ namespace TileBuilder.Validator
                     ? new SuccessResult()
                     : new FailResult("Can not place on another room");
             }
-            return
-                command is BorrowRoom borrowRoom
-                && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null
-                ? (
-                    tileBuilder
+            if (command is GrowMeetingRoom)
+            {
+                return new SuccessResult();
+            }
+            if (command is BorrowRoom borrowRoom
+                && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null)
+            {
+                bool borrowRoomImmutable = tileBuilder
                         .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                        .IsAllWithMark("Immutable"),
-                    tileBuilder
+                        .IsAllWithMark("Immutable");
+
+                bool borrowRoomFreespace = tileBuilder
                         .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                        .IsAllWithMark("Freespace")
-                ) switch
+                        .IsAllWithMark("Freespace");
+
+                Result result = (borrowRoomImmutable, borrowRoomFreespace) switch
                 {
                     (true, _) => new FailResult("Immutable Tile"),
                     (_, true) => new FailResult("Free space Tile"),
                     _ => new SuccessResult()
-                }
-                : new FailResult("Cannot do this command");
+                };
+
+                return result;
+            }
+
+            return new FailResult("Cannot do this command");
         }
     }
 

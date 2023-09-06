@@ -27,7 +27,7 @@ namespace TileBuilder.Command
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            tileBuilder.DropTileUnion(CoreModel);
+            tileBuilder.InstantiateTileUnion(CoreModel);
         }
     }
 
@@ -44,7 +44,7 @@ namespace TileBuilder.Command
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            tileBuilder.BorrowTileUnion(BorrowingPosition, out borrowedRoom);
+            borrowedRoom = tileBuilder.RemoveTileUnion(BorrowingPosition);
         }
     }
 
@@ -92,7 +92,6 @@ namespace TileBuilder.Command
         {
             MeetingRoom = meetingRoom;
             GrowthCount = growthCount;
-            Debug.Log(GrowthCount);
         }
 
         public void Execute(TileBuilderImpl tileBuilder)
@@ -105,11 +104,19 @@ namespace TileBuilder.Command
             MeetingRoomLogics.MeetingRoomGrowingInformation growingInfo =
                 MeetingRoom.GetMeetingRoomGrowingInformation(GrowthCount);
             MeetingRoom.AddTiles(growingInfo);
-            borrowedCoreModels.AddRange(
-                tileBuilder.BorrowTileUnions(growingInfo.PositionsToTake, MeetingRoom.TileUnion)
-            );
 
-            tileBuilder.AddTileUnion(MeetingRoom.TileUnion);
+            foreach (Vector2Int pos in growingInfo.PositionsToTake)
+            {
+                CoreModel coreModel = tileBuilder.RemoveTileUnion(pos);
+                if (coreModel != null)
+                {
+                    borrowedCoreModels.Add(coreModel);
+                }
+            }
+
+            TileUnionImpl meetingRoom = tileBuilder.BorrowTileUnion(MeetingRoom.TileUnion.Position);
+
+            tileBuilder.PlaceTileUnion(meetingRoom);
         }
     }
 }
