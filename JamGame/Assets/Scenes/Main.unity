@@ -152,7 +152,7 @@ Transform:
   m_GameObject: {fileID: 40476285}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.23, y: 0, z: -1.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -393,14 +393,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  currentMeetingRoom: {fileID: 0}
   inventory: {fileID: 1395078488}
   BuildingConfig: {fileID: 11400000, guid: 77d71122fdedc0447bdcf5400cb7a724, type: 2}
   LoadConfigFromStart: 1
   SavingConfigName: Sample building
   GameModeToChange: 0
   SquareSideLength: 20
-  EmployeeCount: 0
+  NeededEmployeeCount: 0
   StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
   WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
   OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
@@ -2458,6 +2457,82 @@ MonoBehaviour:
       - AnimatorName: TaskList
         Showed: 0
         OverrideState: 0
+    - InterfaceName: LoseGame
+      AnimatorsProperties:
+      - AnimatorName: Shop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: DailyBillPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: Inventory
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: ButtonOpenShop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: InvButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: EndMeetingButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OfficeFinances
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TransitionPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TimeScaleSelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OverlaySelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: StressBar
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
+    - InterfaceName: WinGame
+      AnimatorsProperties:
+      - AnimatorName: Shop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: DailyBillPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: Inventory
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: ButtonOpenShop
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: InvButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: EndMeetingButton
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OfficeFinances
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TransitionPanel
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TimeScaleSelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: OverlaySelector
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: StressBar
+        Showed: 0
+        OverrideState: 0
+      - AnimatorName: TaskList
+        Showed: 0
+        OverrideState: 0
 --- !u!1 &797130036
 GameObject:
   m_ObjectHideFlags: 0
@@ -3180,11 +3255,11 @@ MonoBehaviour:
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
   animatorSwitcher: {fileID: 764846868}
-  dailyBill: {fileID: 0}
+  dailyBill: {fileID: 1470683593}
   transitionPanel: {fileID: 285264315}
   boss: {fileID: 973519813}
   location: {fileID: 42303834}
-  globalTime: {fileID: 0}
+  globalTime: {fileID: 1582707707}
   meetingStartNeedOverride: {fileID: 1055950095}
   meetingEndNeedOverride: {fileID: 924940280}
   leaveNeedOverride: {fileID: 797130039}
@@ -4093,6 +4168,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440722300}
   m_CullTransparentMesh: 1
+--- !u!114 &1470683593 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 811087427928209788, guid: 48a37d07fe01ed944861c9b54318b1f7, type: 3}
+  m_PrefabInstance: {fileID: 6804825181179354682}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4750fc00d060ade4fa7cd5c193bd321d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1494997326
 GameObject:
   m_ObjectHideFlags: 0
@@ -4443,6 +4529,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1580651567}
   m_CullTransparentMesh: 1
+--- !u!114 &1582707707 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8549211194701896215, guid: 1083f9a92afa82c48b16e1ef0ce0e708, type: 3}
+  m_PrefabInstance: {fileID: 754294343}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc14ffd613e08464c8ba78126381b451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1671638921
 GameObject:
   m_ObjectHideFlags: 0

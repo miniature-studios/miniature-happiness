@@ -233,7 +233,8 @@ namespace TileUnion.Tile
 
         public void SetRotation(int newRotation)
         {
-            rotation = ((newRotation % 4) + 4) % 4; ;
+            rotation = ((newRotation % 4) + 4) % 4;
+            ;
             transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
             CreateWallsCache();
         }
@@ -294,7 +295,8 @@ namespace TileUnion.Tile
 
         public static bool IsWall(this WallType wallType)
         {
-            return wallType is not WallType.None;
+            // TODO: refactor
+            return wallType is not WallType.None and WallType.Wall;
         }
     }
 
