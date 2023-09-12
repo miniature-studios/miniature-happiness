@@ -284,6 +284,8 @@ namespace TileUnion.Tile
                     {
                         _ = PrefabUtility.InstantiatePrefab(centerObject, centerHandler.transform);
                     }
+
+                    EditorUtility.SetDirty(tile);
                 }
                 else if (tile.Rotation != 0)
                 {
