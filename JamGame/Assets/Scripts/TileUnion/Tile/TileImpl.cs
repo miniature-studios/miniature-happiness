@@ -170,23 +170,25 @@ namespace TileUnion.Tile
 
         private CornerType ChooseCornerForCorridor(WallType[] walls)
         {
-            return walls[0] is WallType.Door && walls[3] is WallType.Door
-                ? CornerType.OutsideMiddle
-                : (
-                    walls[0].IsWallForCorridor(),
-                    walls[1].IsWallForCorridor(),
-                    walls[2].IsWallForCorridor(),
-                    walls[3].IsWallForCorridor()
-                ) switch
-                {
-                    (true, _, _, true) => CornerType.Inside,
-                    (true, _, true, _) => CornerType.WallRight,
-                    (_, true, _, true) => CornerType.WallLeft,
-                    (_, true, true, _) => CornerType.OutsideMiddle,
-                    (true, true, _, _) => CornerType.OutsideRight,
-                    (_, _, true, true) => CornerType.OutsideLeft,
-                    _ => CornerType.None,
-                };
+            if (walls[0] is WallType.Door && walls[3] is WallType.Door)
+            {
+                return CornerType.OutsideMiddle;
+            }
+            return (
+                walls[0].IsWallForCorridor(),
+                walls[1].IsWallForCorridor(),
+                walls[2].IsWallForCorridor(),
+                walls[3].IsWallForCorridor()
+            ) switch
+            {
+                (true, _, _, true) => CornerType.Inside,
+                (true, _, true, _) => CornerType.WallRight,
+                (_, true, _, true) => CornerType.WallLeft,
+                (_, true, true, _) => CornerType.OutsideMiddle,
+                (true, true, _, _) => CornerType.OutsideRight,
+                (_, _, true, true) => CornerType.OutsideLeft,
+                _ => CornerType.None,
+            };
         }
 
         private CornerCollection GetCornerCollection(Direction imaginePlace)
@@ -311,17 +313,17 @@ namespace TileUnion.Tile
     {
         public static bool IsPassable(this WallType wallType)
         {
-            return wallType is WallType.None or WallType.Door;
+            return wallType == WallType.None || wallType == WallType.Door;
         }
 
         public static bool IsWall(this WallType wallType)
         {
-            return wallType is not WallType.None;
+            return wallType != WallType.None;
         }
 
         public static bool IsWallForCorridor(this WallType wallType)
         {
-            return wallType is not WallType.None and not WallType.Door;
+            return wallType != WallType.None && wallType != WallType.Door;
         }
     }
 
