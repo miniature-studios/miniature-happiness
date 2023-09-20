@@ -129,15 +129,16 @@ namespace TileUnion.Tile
                 TileImpl tile3 = neighbors[direction.Rotate90()];
                 if (tile1 != null && tile2 != null && tile3 != null)
                 {
-                    toPlace = ChooseCorner(
-                        new WallType[]
-                        {
-                            GetActiveWallType(direction),
-                            tile1.GetActiveWallType(direction.Rotate90()),
-                            tile2.GetActiveWallType(direction.GetOpposite()),
-                            tile3.GetActiveWallType(direction.RotateMinus90())
-                        }
-                    );
+                    WallType[] wallTypes = new WallType[]
+                    {
+                        GetActiveWallType(direction),
+                        tile1.GetActiveWallType(direction.Rotate90()),
+                        tile2.GetActiveWallType(direction.GetOpposite()),
+                        tile3.GetActiveWallType(direction.RotateMinus90())
+                    };
+                    toPlace = marks.Contains("Corridor")
+                        ? ChooseCornerForCorridor(wallTypes)
+                        : ChooseCorner(wallTypes);
                 }
                 GetCornerCollection(direction.Rotate45()).SetCorner(toPlace);
             }
@@ -155,6 +156,29 @@ namespace TileUnion.Tile
                 walls[1].IsWall(),
                 walls[2].IsWall(),
                 walls[3].IsWall()
+            ) switch
+            {
+                (true, _, _, true) => CornerType.Inside,
+                (true, _, true, _) => CornerType.WallRight,
+                (_, true, _, true) => CornerType.WallLeft,
+                (_, true, true, _) => CornerType.OutsideMiddle,
+                (true, true, _, _) => CornerType.OutsideRight,
+                (_, _, true, true) => CornerType.OutsideLeft,
+                _ => CornerType.None,
+            };
+        }
+
+        private CornerType ChooseCornerForCorridor(WallType[] walls)
+        {
+            if (walls[0] is WallType.Door && walls[3] is WallType.Door)
+            {
+                return CornerType.OutsideMiddle;
+            }
+            return (
+                walls[0].IsWallForCorridor(),
+                walls[1].IsWallForCorridor(),
+                walls[2].IsWallForCorridor(),
+                walls[3].IsWallForCorridor()
             ) switch
             {
                 (true, _, _, true) => CornerType.Inside,
@@ -233,7 +257,7 @@ namespace TileUnion.Tile
 
         public void SetRotation(int newRotation)
         {
-            rotation = ((newRotation % 4) + 4) % 4; ;
+            rotation = ((newRotation % 4) + 4) % 4;
             transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
             CreateWallsCache();
         }
@@ -289,12 +313,17 @@ namespace TileUnion.Tile
     {
         public static bool IsPassable(this WallType wallType)
         {
-            return wallType is WallType.None or WallType.Door;
+            return wallType == WallType.None || wallType == WallType.Door;
         }
 
         public static bool IsWall(this WallType wallType)
         {
-            return wallType is not WallType.None;
+            return wallType != WallType.None;
+        }
+
+        public static bool IsWallForCorridor(this WallType wallType)
+        {
+            return wallType != WallType.None && wallType != WallType.Door;
         }
     }
 
