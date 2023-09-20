@@ -170,25 +170,23 @@ namespace TileUnion.Tile
 
         private CornerType ChooseCornerForCorridor(WallType[] walls)
         {
-            if (walls[0] is WallType.Door && walls[3] is WallType.Door)
-            {
-                return CornerType.OutsideMiddle;
-            };
-            return (
-                walls[0].IsWallForCorridor(),
-                walls[1].IsWallForCorridor(),
-                walls[2].IsWallForCorridor(),
-                walls[3].IsWallForCorridor()
-            ) switch
-            {
-                (true, _, _, true) => CornerType.Inside,
-                (true, _, true, _) => CornerType.WallRight,
-                (_, true, _, true) => CornerType.WallLeft,
-                (_, true, true, _) => CornerType.OutsideMiddle,
-                (true, true, _, _) => CornerType.OutsideRight,
-                (_, _, true, true) => CornerType.OutsideLeft,
-                _ => CornerType.None,
-            };
+            return walls[0] is WallType.Door && walls[3] is WallType.Door
+                ? CornerType.OutsideMiddle
+                : (
+                    walls[0].IsWallForCorridor(),
+                    walls[1].IsWallForCorridor(),
+                    walls[2].IsWallForCorridor(),
+                    walls[3].IsWallForCorridor()
+                ) switch
+                {
+                    (true, _, _, true) => CornerType.Inside,
+                    (true, _, true, _) => CornerType.WallRight,
+                    (_, true, _, true) => CornerType.WallLeft,
+                    (_, true, true, _) => CornerType.OutsideMiddle,
+                    (true, true, _, _) => CornerType.OutsideRight,
+                    (_, _, true, true) => CornerType.OutsideLeft,
+                    _ => CornerType.None,
+                };
         }
 
         private CornerCollection GetCornerCollection(Direction imaginePlace)
@@ -258,7 +256,6 @@ namespace TileUnion.Tile
         public void SetRotation(int newRotation)
         {
             rotation = ((newRotation % 4) + 4) % 4;
-            ;
             transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
             CreateWallsCache();
         }
