@@ -183,7 +183,6 @@ MonoBehaviour:
       DecreaseSpeed: 2
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
-    satisfied: 0
     registeredModifiers: []
   - properties:
       NeedType: 1
@@ -192,7 +191,6 @@ MonoBehaviour:
       DecreaseSpeed: 1
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
-    satisfied: 0
     registeredModifiers: []
   - properties:
       NeedType: 2
@@ -201,7 +199,6 @@ MonoBehaviour:
       DecreaseSpeed: 1
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
-    satisfied: 0
     registeredModifiers: []
   - properties:
       NeedType: 3
@@ -210,7 +207,6 @@ MonoBehaviour:
       DecreaseSpeed: 0
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
-    satisfied: Infinity
     registeredModifiers: []
   - properties:
       NeedType: 4
@@ -219,7 +215,6 @@ MonoBehaviour:
       DecreaseSpeed: 0
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
-    satisfied: Infinity
     registeredModifiers: []
   incomeGenerator: {fileID: 2575964175689351513}
   appliedBuffs: []
@@ -235,6 +230,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0860aa419fa609840ab7f9ba3ae5657a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: StressValue
+      Entry: 4
+      Data: 0
+    - Name: config
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[Employee.NeedType, Assembly-CSharp],[Employee.StressByNeedDissatisfaction,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Employee.NeedType,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: Employee.StressByNeedDissatisfaction, Assembly-CSharp
+    - Name: Threshold
+      Entry: 4
+      Data: 0
+    - Name: Speed
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   stages:
   - StartsAt: -100000
     Buff: {fileID: 11400000, guid: 660dd337c5077cf489e565759b6864ef, type: 2}
@@ -246,12 +300,6 @@ MonoBehaviour:
     Buff: {fileID: 11400000, guid: b7b6c2bb573ae2d4fac6c2f15f248025, type: 2}
   - StartsAt: 95
     Buff: {fileID: 11400000, guid: 4520cb830b3b3da4eb50861b185c0469, type: 2}
-  configRaw:
-  - NeedType: 0
-    DesatisfactionConfig:
-      Threshold: 0
-      Speed: 0
-  stress: 0
   restoreSpeed: -100
 --- !u!114 &7027475554387804411
 MonoBehaviour:
@@ -266,7 +314,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name_: John
-  quirks: []
+  quirks:
+  - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
 --- !u!114 &7027475554387804412
 MonoBehaviour:
   m_ObjectHideFlags: 0

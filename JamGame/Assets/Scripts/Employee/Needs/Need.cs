@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,10 +11,8 @@ namespace Employee
         Work,
         Piss,
         Eat,
-
         Meeting,
         Leave,
-
         Smoke
     }
 
@@ -59,22 +59,22 @@ namespace Employee
         }
 
         [SerializeField]
+        [FoldoutGroup("@NeedType")]
         private NeedProperties properties;
         public NeedType NeedType => properties.NeedType;
 
-        [SerializeField]
-        private float satisfied = 0.0f;
+        [OdinSerialize]
+        [FoldoutGroup("@NeedType")]
+        public float Satisfied { get; private set; }
 
-        public float Satisfied => satisfied;
-
-        // TODO: refactor
+        [ReadOnly]
         [SerializeField]
-        [HideInInspector]
-        private List<NeedModifiers> registeredModifiers;
+        [FoldoutGroup("@NeedType")]
+        private List<NeedModifiers> registeredModifiers = new();
 
         public Need(Need prototype)
         {
-            satisfied = prototype.satisfied;
+            Satisfied = prototype.Satisfied;
             properties = prototype.properties;
             registeredModifiers = new List<NeedModifiers>();
         }
@@ -92,11 +92,11 @@ namespace Employee
 
             if (properties.OverrideSatisfaction)
             {
-                satisfied = properties.OverrideSatisfactionValue;
+                Satisfied = properties.OverrideSatisfactionValue;
             }
             else
             {
-                satisfied -= delta_time * properties.DecreaseSpeed;
+                Satisfied -= delta_time * properties.DecreaseSpeed;
             }
         }
 
@@ -106,11 +106,11 @@ namespace Employee
 
             if (properties.OverrideSatisfaction)
             {
-                satisfied = properties.OverrideSatisfactionValue;
+                Satisfied = properties.OverrideSatisfactionValue;
             }
             else
             {
-                satisfied += properties.SatisfactionGained;
+                Satisfied += properties.SatisfactionGained;
             }
         }
 

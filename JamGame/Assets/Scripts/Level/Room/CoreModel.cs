@@ -1,6 +1,7 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TileBuilder;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -26,16 +27,15 @@ namespace Level.Room
 
         [SerializeField]
         [InspectorReadOnly]
-        // TODO: Wrap it in newtype.
+        // TODO: Wrap it in new type.
         private string uid;
         public string Uid => uid;
 
-#if UNITY_EDITOR
+        [Discardable]
         public void SetHashCode(string uid)
         {
             this.uid = uid;
         }
-#endif
 
         [SerializeField]
         private string title;

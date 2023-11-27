@@ -10,7 +10,7 @@ namespace Employee
     [SelectionBase]
     [RequireComponent(typeof(Controller))]
     [RequireComponent(typeof(StressEffect))]
-    [AddComponentMenu("Scripts/Employee.Employee")]
+    [AddComponentMenu("Scripts/Employee.EmployeeImpl")]
     public class EmployeeImpl : MonoBehaviour
     {
         private enum State

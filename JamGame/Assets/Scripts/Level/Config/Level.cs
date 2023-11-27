@@ -1,18 +1,15 @@
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using UnityEngine;
 
 namespace Level.Config
 {
     [Serializable]
+    [HideReferenceObjectPicker]
     public class DayConfig
     {
-        [SerializeField]
-        private List<SerializedDayAction> rawDayActions;
-
-        public ImmutableList<IDayAction> DayActions =>
-            rawDayActions.Select(x => x.ToDayAction()).ToImmutableList();
+        [OdinSerialize]
+        public IEnumerable<IDayAction> DayActions { get; private set; } = new List<IDayAction>();
     }
 }

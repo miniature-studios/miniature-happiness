@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1912,11 +1912,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
---- !u!1 &744904365 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-  m_PrefabInstance: {fileID: 744904364}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &744904366 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7027475554387804387, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
@@ -1927,7 +1922,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
   m_PrefabInstance: {fileID: 744904364}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744904365}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88412d67d449a7d4abec5659cc45c2c0, type: 3}
@@ -3251,6 +3246,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: TestEmployeeConfig
+      Entry: 7
+      Data: 0|Level.Config.FixedEmployeeConfig, Assembly-CSharp
+    - Name: name
+      Entry: 1
+      Data: Name
+    - Name: prototype
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   tileBuilderController: {fileID: 115190262}
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
@@ -3284,14 +3300,6 @@ MonoBehaviour:
   DayEnds:
     m_PersistentCalls:
       m_Calls: []
-  TestEmployeeConfig:
-    selectedType: FixedEmployeeConfig
-    fixedEmployeeConfig:
-      name: Hacha
-      prototype: {fileID: 744904365}
-    randomEmployeeConfig:
-      employeeWeights: []
-      nameList: {fileID: 0}
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3444,7 +3452,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -113.100006, y: 6.399994}
+  m_AnchoredPosition: {x: -113.099976, y: 6.4000244}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1125594363
@@ -4304,6 +4312,10 @@ PrefabInstance:
       value: ExtendedEmployeeInfo
       objectReference: {fileID: 0}
     - target: {fileID: 6757844557526636999, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6757844557526636999, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
+    - target: {fileID: 6757844557526636999, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: overlay.extendedEmployeeInfo.uiPrefab
       value: 
       objectReference: {fileID: 6796275882172008211, guid: 1de861e40d422ba439a25f279db9dcfc, type: 3}
@@ -4399,10 +4411,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: OverlaySelector
       objectReference: {fileID: 0}
+    - target: {fileID: 6757844558144903264, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6757844558144903264, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
     - target: {fileID: 6757844558144903267, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_Interactable
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6757844558657403560, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6757844558657403560, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
     - target: {fileID: 6757844558657403563, guid: 39397ee9729f25d4898b0bf964948dfe, type: 3}
       propertyPath: m_Interactable
       value: 1

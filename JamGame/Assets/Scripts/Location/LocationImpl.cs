@@ -63,9 +63,9 @@ namespace Location
             float max_stress = float.NegativeInfinity;
             foreach (EmployeeImpl emp in employees)
             {
-                if (emp.Stress.Value > max_stress)
+                if (emp.Stress.StressValue > max_stress)
                 {
-                    max_stress = emp.Stress.Value;
+                    max_stress = emp.Stress.StressValue;
                 }
             }
 

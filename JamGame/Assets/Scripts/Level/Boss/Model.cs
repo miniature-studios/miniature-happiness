@@ -1,6 +1,8 @@
 using Common;
 using Level.Boss.Task;
 using Level.GlobalTime;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +21,7 @@ namespace Level.Boss
     }
 
     [AddComponentMenu("Scripts/Level.Boss.Model")]
-    public class Model : MonoBehaviour
+    public class Model : SerializedMonoBehaviour
     {
         [Serializable]
         private class MeetingTasks
@@ -30,9 +32,8 @@ namespace Level.Boss
         [Serializable]
         private class TaskWithCost
         {
-            [SerializeField]
-            private SerializedTask task;
-            public ITask Task => task.ToTask();
+            [OdinSerialize]
+            public ITask Task { get; private set; }
 
             public float Cost;
         }
@@ -72,7 +73,6 @@ namespace Level.Boss
             {
                 foreach (TaskWithCost task in task_bunch)
                 {
-                    task.Task.ValidateProviders();
                     taskState.Add(task.Task, TaskState.Scheduled);
                 }
             }

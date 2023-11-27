@@ -1,6 +1,8 @@
-using Common;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Employee
@@ -16,19 +18,25 @@ namespace Employee
     internal struct StressByNeedDissatisfactionWithNeedType
     {
         public NeedType NeedType;
-        public StressByNeedDissatisfaction DesatisfactionConfig;
+        public StressByNeedDissatisfaction DissatisfactionConfig;
     }
 
     [Serializable]
     internal struct StressStage
     {
+        [FoldoutGroup("@Label")]
         public float StartsAt;
+
+        [FoldoutGroup("@Label")]
         public Buff Buff;
+
+        [Discardable]
+        private string Label => Buff?.Name;
     }
 
     [RequireComponent(typeof(EmployeeImpl))]
     [AddComponentMenu("Scripts/Employee.StressMeter")]
-    public class StressMeter : MonoBehaviour, IEffectExecutor<StressEffect>
+    public class StressMeter : SerializedMonoBehaviour, IEffectExecutor<StressEffect>
     {
         private EmployeeImpl employee;
 
@@ -37,27 +45,19 @@ namespace Employee
         private int currentStage = -1;
         private Buff currentBuff;
 
-        [SerializeField]
-        private List<StressByNeedDissatisfactionWithNeedType> configRaw;
-        private Dictionary<NeedType, StressByNeedDissatisfaction> config;
+        [OdinSerialize]
+        [ShowInInspector]
+        private Dictionary<NeedType, StressByNeedDissatisfaction> config = new();
 
-        [InspectorReadOnly]
-        [SerializeField]
-        private float stress = 0.0f;
-        public float Value => stress;
+        [ReadOnly]
+        [OdinSerialize]
+        public float StressValue { get; private set; }
 
         [SerializeField]
         private float restoreSpeed;
 
-        private void OnValidate()
-        {
-            PrepareConfig();
-        }
-
         private void Start()
         {
-            PrepareConfig();
-
             employee = GetComponent<EmployeeImpl>();
         }
 
@@ -77,12 +77,12 @@ namespace Employee
 
             delta *= increaseMultiplierByEffects;
 
-            stress += (delta - restoreSpeed) * delta_time;
+            StressValue += (delta - restoreSpeed) * delta_time;
 
             int new_stage = 0;
             for (int i = stages.Count - 1; i > 0; i--)
             {
-                if (stages[i].StartsAt < stress)
+                if (stages[i].StartsAt < StressValue)
                 {
                     new_stage = i;
                     break;
@@ -104,15 +104,6 @@ namespace Employee
                 {
                     employee.RegisterBuff(currentBuff);
                 }
-            }
-        }
-
-        private void PrepareConfig()
-        {
-            config = new Dictionary<NeedType, StressByNeedDissatisfaction>();
-            foreach (StressByNeedDissatisfactionWithNeedType des in configRaw)
-            {
-                config.Add(des.NeedType, des.DesatisfactionConfig);
             }
         }
 
