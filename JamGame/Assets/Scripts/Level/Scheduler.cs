@@ -1,6 +1,5 @@
 using Level.Config;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Level
@@ -33,7 +32,7 @@ namespace Level
 
         private void Start()
         {
-            if (levelConfig.Config.Days.Count() > 0)
+            if (levelConfig.Config.Days.Count > 0)
             {
                 _ = (dayEnumerator = levelConfig.Config.Days.GetEnumerator()).MoveNext();
                 _ = (

@@ -45,7 +45,7 @@ namespace Employee
                 return;
             }
 
-            float normalized_stress = employee.Stress.StressValue;
+            float normalized_stress = employee.Stress.Value;
             normalized_stress =
                 (normalized_stress - appliedStressOverlay.MinimalStressBound)
                 / (

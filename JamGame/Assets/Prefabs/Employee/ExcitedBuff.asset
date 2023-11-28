@@ -12,29 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a969a6942d26104cafddabe80876f63, type: 3}
   m_Name: ExcitedBuff
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: Time
-      Entry: 4
-      Data: 0
-    - Name: Effects
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[Employee.IEffect, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  name_: Exited Buff
+  Time: Infinity
+  rawEffects:
+  - selectedType: ControllerEffect
+    stressEffect:
+      increaseMultiplier: 0
+    needModifierEffect:
+      needModifiers:
+      - NeedType: 0
+        SatisfactionTime: 0.5
+        SatisfactionGained: 1
+        DecreaseSpeed: 1
+        OverrideSatisfaction: 0
+        OverrideSatisfactionValue: 0
+    controllerEffect:
+      speedMultiplier: 1.4
+  - selectedType: NeedModifierEffect
+    stressEffect:
+      increaseMultiplier: 0
+    needModifierEffect:
+      needModifiers:
+      - NeedType: 0
+        SatisfactionTime: 0.7
+        SatisfactionGained: 1.5
+        DecreaseSpeed: 1
+        OverrideSatisfaction: 0
+        OverrideSatisfactionValue: 0
+    controllerEffect:
+      speedMultiplier: 1.4
+  name_: 

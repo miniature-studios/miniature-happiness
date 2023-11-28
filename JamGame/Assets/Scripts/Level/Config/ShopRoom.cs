@@ -1,16 +1,14 @@
 using Common;
 using Level.Room;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
+using Pickle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Level.Config
 {
-    [HideReferenceObjectPicker]
+    [InterfaceEditor]
     public interface IShopRoomConfig
     {
         public ShopRoomConfig GetRoomConfig();
@@ -20,13 +18,8 @@ namespace Level.Config
     public class FixedRoomConfig : IShopRoomConfig
     {
         [SerializeField]
-        [AssetSelector]
-        [AssetsOnly]
-        [FoldoutGroup("@Label")]
+        [Pickle(LookupType = ObjectProviderType.Assets)]
         private CoreModel room;
-
-        [Discardable]
-        private string Label => $"Fixed Room - {room?.Title}";
 
         public ShopRoomConfig GetRoomConfig()
         {
@@ -37,20 +30,16 @@ namespace Level.Config
     [Serializable]
     public class RoomWeights
     {
-        [OdinSerialize]
-        public float Weight { get; private set; }
+        public float Weight;
 
-        [AssetSelector]
-        [AssetsOnly]
-        [OdinSerialize]
-        public CoreModel Room { get; private set; }
+        [Pickle(LookupType = ObjectProviderType.Assets)]
+        public CoreModel Room;
     }
 
     [Serializable]
     public class RandomRoomConfig : IShopRoomConfig
     {
         [SerializeField]
-        [FoldoutGroup("Random Room")]
         private List<RoomWeights> roomWeights;
 
         public ShopRoomConfig GetRoomConfig()

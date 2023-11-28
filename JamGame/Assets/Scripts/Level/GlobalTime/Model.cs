@@ -75,6 +75,7 @@ namespace Level.GlobalTime
             Time.timeScale = scale;
         }
 
+
         // Called by buttons that changes time scale.
         public void SetTimeScale(float scale)
         {

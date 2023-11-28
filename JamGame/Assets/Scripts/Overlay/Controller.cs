@@ -1,20 +1,19 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Overlay
 {
     [AddComponentMenu("Scripts/Overlay.Controller")]
-    public class Controller : SerializedMonoBehaviour
+    public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private IOverlay overlay;
+        private SerializedOverlay overlay;
 
         [SerializeField]
         private OverlaySelectorProxy proxy;
 
         public void Activate()
         {
-            proxy.ActivateOverlay(overlay);
+            proxy.ActivateOverlay(overlay.ToOverlay());
         }
     }
 }

@@ -2,8 +2,6 @@
 using Level.Config;
 using Level.GlobalTime;
 using Location;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +21,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level.Executor")]
-    public class Executor : SerializedMonoBehaviour
+    public class Executor : MonoBehaviour
     {
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileBuilderController;
@@ -75,8 +73,7 @@ namespace Level
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
-        [OdinSerialize]
-        public IEmployeeConfig TestEmployeeConfig;
+        public SerializedEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
 
         private void Awake()
@@ -105,7 +102,7 @@ namespace Level
 
             for (int i = 0; i < 0; i++)
             {
-                location.AddEmployee(TestEmployeeConfig.GetEmployeeConfig());
+                location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
             }
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
@@ -142,7 +139,7 @@ namespace Level
                     "Cannot change time scale before meeting: " + set_time_scale_lock_result.Error
                 );
             }
-
+            
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
