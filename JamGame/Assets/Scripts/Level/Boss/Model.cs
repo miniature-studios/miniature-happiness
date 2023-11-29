@@ -25,7 +25,7 @@ namespace Level.Boss
         [Serializable]
         private class MeetingTasks
         {
-            public List<TaskWithCost> Tasks = new();
+            public List<TaskWithCost> Tasks;
         }
 
         [Serializable]
@@ -34,12 +34,12 @@ namespace Level.Boss
             [HideLabel]
             [InlineProperty]
             [SerializeReference]
-            [FoldoutGroup("Task With Cost")]
+            [FoldoutGroup("Task")]
             private ITask task;
             public ITask Task => task;
 
             [SerializeField]
-            [FoldoutGroup("Task With Cost")]
+            [FoldoutGroup("Task")]
             public float Cost;
         }
 
