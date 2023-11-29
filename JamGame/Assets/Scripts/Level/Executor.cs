@@ -139,7 +139,7 @@ namespace Level
                     "Cannot change time scale before meeting: " + set_time_scale_lock_result.Error
                 );
             }
-            
+
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
