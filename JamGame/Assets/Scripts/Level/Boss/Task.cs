@@ -5,7 +5,6 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Level.Boss.Task
@@ -41,7 +40,6 @@ namespace Level.Boss.Task
         private IDataProvider<EmployeeAmount> EmployeeCount =>
             dataProviderGameObject.GetComponent<IDataProvider<EmployeeAmount>>();
 
-        [Discardable]
         private bool DataProviderFilter(GameObject gameObject)
         {
             return gameObject != null
@@ -84,7 +82,6 @@ namespace Level.Boss.Task
         private IDataProvider<MaxStress> MaxStress =>
             dataProviderGameObject.GetComponent<IDataProvider<MaxStress>>();
 
-        [Discardable]
         private bool DataProviderFilter(GameObject gameObject)
         {
             return gameObject != null && gameObject.TryGetComponent(out IDataProvider<MaxStress> _);
@@ -152,7 +149,6 @@ namespace Level.Boss.Task
         private IDataProvider<RoomCountByUid> RoomCount =>
             dataProviderGameObject.GetComponent<IDataProvider<RoomCountByUid>>();
 
-        [Discardable]
         private bool DataProviderFilter(GameObject gameObject)
         {
             return gameObject != null
@@ -234,7 +230,6 @@ namespace Level.Boss.Task
         private IDataProvider<RoomCountByUid> RoomCount =>
             dataProviderGameObject.GetComponent<IDataProvider<RoomCountByUid>>();
 
-        [Discardable]
         private bool DataProviderFilter(GameObject gameObject)
         {
             return gameObject != null
