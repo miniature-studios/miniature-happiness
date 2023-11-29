@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3444,7 +3444,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -113.100006, y: 6.399994}
+  m_AnchoredPosition: {x: -113.099976, y: 6.4000244}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1125594363
@@ -5376,37 +5376,77 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].task.maxStressBound.maxStressProvider
+      propertyPath: managedReferences[-2]
       value: 
-      objectReference: {fileID: 42303832}
+      objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[0].task.targetEmployeeAmount.employeeCountProvider
-      value: 
-      objectReference: {fileID: 42303832}
+      propertyPath: meetingTasks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[1].task.targetEmployeeAmount.employeeCountProvider
+      propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 42303832}
+      objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].task.targetEmployeeAmount.employeeCountProvider
+      propertyPath: managedReferences[4306523841130135553]
+      value: Assembly-CSharp Level.Boss.Task.TargetRoomCount
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135554]
+      value: Assembly-CSharp Level.Boss.Task.MaxStressBound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555]
+      value: Assembly-CSharp Level.Boss.Task.RoomCountUpperBound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].room
       value: 
-      objectReference: {fileID: 42303832}
-    - target: {fileID: 6979890537022196198, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: model
+      objectReference: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].room
       value: 
-      objectReference: {fileID: 973519813}
-    - target: {fileID: 7228478050088520735, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: m_AnchorMax.x
+      objectReference: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].targetAmount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[0].task
+      value: 4306523841130135553
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[1].task
+      value: 4306523841130135555
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135554].targetDuration
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7228478050088520735, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].timeToComplete.Days_
+      value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 7228478050088520735, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].dataProviderGameObject
+      value: 
+      objectReference: {fileID: 40476285}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].timeToEnsureCompletion
+      value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135554].dataProviderGameObject
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].dataProviderGameObject
+      value: 
+      objectReference: {fileID: 40476285}
     - target: {fileID: 9223253478089170625, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

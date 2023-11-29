@@ -416,41 +416,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8aed811bd2ef342a96a47cbf50b5d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   maxStressGatherTime:
     Days_: 1
   stress: 0
-  meetingTasks:
-  - Tasks:
-    - task:
-        selectedType: TargetEmployeeAmount
-        targetEmployeeAmount:
-          employeeCountProvider: {fileID: 0}
-          employeeCountTarget: 2
-        maxStressBound:
-          maxStressProvider: {fileID: 0}
-          maxStressTarget: 0
-          targetDuration: 0
-      Cost: 0.1
-    - task:
-        selectedType: TargetEmployeeAmount
-        targetEmployeeAmount:
-          employeeCountProvider: {fileID: 0}
-          employeeCountTarget: 3
-        maxStressBound:
-          maxStressProvider: {fileID: 0}
-          maxStressTarget: 0
-          targetDuration: 0
-      Cost: 0.1
-    - task:
-        selectedType: MaxStressBound
-        targetEmployeeAmount:
-          employeeCountProvider: {fileID: 0}
-          employeeCountTarget: 3
-        maxStressBound:
-          maxStressProvider: {fileID: 0}
-          maxStressTarget: 100
-          targetDuration: 60
-      Cost: 0.1
+  meetingTasks: []
   ActiveTasksChanged:
     m_PersistentCalls:
       m_Calls:
@@ -466,6 +444,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &3980033334316875456
 GameObject:
   m_ObjectHideFlags: 0

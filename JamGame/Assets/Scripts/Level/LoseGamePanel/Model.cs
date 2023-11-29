@@ -1,6 +1,5 @@
 ﻿using Common;
 using Level.Finances;
-using Level.GlobalTime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
