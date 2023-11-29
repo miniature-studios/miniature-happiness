@@ -1,8 +1,11 @@
 using Common;
 using Level.GlobalTime;
 using Level.Room;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Level.Boss.Task
@@ -14,11 +17,9 @@ namespace Level.Boss.Task
         public bool Complete;
     }
 
-    [InterfaceEditor]
+    [HideReferenceObjectPicker]
     public interface ITask
     {
-        public void ValidateProviders();
-
         public void Update(float delta_time) { }
 
         public Progress Progress { get; }
@@ -33,17 +34,29 @@ namespace Level.Boss.Task
     public class TargetEmployeeAmount : ITask
     {
         [SerializeField]
-        private GameObject employeeCountProvider;
-        private IDataProvider<EmployeeAmount> employeeCount;
+        [SceneObjectsOnly]
+        [ValidateInput("DataProviderFilter")]
+        [FoldoutGroup("Target Employee Amount")]
+        private GameObject dataProviderGameObject;
+        private IDataProvider<EmployeeAmount> EmployeeCount =>
+            dataProviderGameObject.GetComponent<IDataProvider<EmployeeAmount>>();
+
+        [Discardable]
+        private bool DataProviderFilter(GameObject gameObject)
+        {
+            return gameObject != null
+                && gameObject.TryGetComponent(out IDataProvider<EmployeeAmount> _);
+        }
 
         [SerializeField]
+        [FoldoutGroup("Target Employee Amount")]
         private int employeeCountTarget;
 
         public Progress Progress
         {
             get
             {
-                int employee_amount = employeeCount.GetData().Amount;
+                int employee_amount = EmployeeCount.GetData().Amount;
 
                 return new Progress
                 {
@@ -51,15 +64,6 @@ namespace Level.Boss.Task
                     Overall = employeeCountTarget,
                     Complete = employee_amount >= employeeCountTarget
                 };
-            }
-        }
-
-        public void ValidateProviders()
-        {
-            employeeCount = employeeCountProvider.GetComponent<IDataProvider<EmployeeAmount>>();
-            if (employeeCount == null)
-            {
-                Debug.LogError("IDataProvider<EmployeeAmount>  not found in employeeCountProvider");
             }
         }
     }
@@ -73,34 +77,37 @@ namespace Level.Boss.Task
     public class MaxStressBound : ITask
     {
         [SerializeField]
-        private GameObject maxStressProvider;
-        private IDataProvider<MaxStress> maxStress;
+        [SceneObjectsOnly]
+        [ValidateInput("DataProviderFilter")]
+        [FoldoutGroup("Max Stress Bound")]
+        private GameObject dataProviderGameObject;
+        private IDataProvider<MaxStress> MaxStress =>
+            dataProviderGameObject.GetComponent<IDataProvider<MaxStress>>();
 
-        [SerializeField]
-        private float maxStressTarget;
-        public float MaxStressTarget => maxStressTarget;
-
-        public Progress Progress => new()
+        [Discardable]
+        private bool DataProviderFilter(GameObject gameObject)
         {
-            Completion = currentDuration,
-            Overall = targetDuration,
-            Complete = complete,
-        };
+            return gameObject != null && gameObject.TryGetComponent(out IDataProvider<MaxStress> _);
+        }
+
+        [OdinSerialize]
+        [FoldoutGroup("Max Stress Bound")]
+        public float MaxStressTarget { get; private set; }
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration,
+                Overall = targetDuration,
+                Complete = complete,
+            };
 
         [SerializeField]
+        [FoldoutGroup("Max Stress Bound")]
         private float targetDuration;
 
         private float currentDuration = .0f;
         private bool complete = false;
-
-        public void ValidateProviders()
-        {
-            maxStress = maxStressProvider.GetComponent<IDataProvider<MaxStress>>();
-            if (maxStress == null)
-            {
-                Debug.LogError("IDataProvider<MaxStress> not found in maxStressProvider");
-            }
-        }
 
         public void Update(float delta_time)
         {
@@ -113,7 +120,7 @@ namespace Level.Boss.Task
             {
                 complete = true;
             }
-            else if (maxStress.GetData().Stress < maxStressTarget)
+            else if (MaxStress.GetData().Stress < MaxStressTarget)
             {
                 currentDuration += delta_time;
             }
@@ -133,24 +140,41 @@ namespace Level.Boss.Task
     public class TargetRoomCount : ITask
     {
         [SerializeField]
+        [MinValue(0)]
+        [FoldoutGroup("Target Room Count")]
         private float timeToEnsureCompletion = 0.5f;
 
         [SerializeField]
-        private GameObject roomCountProvider;
-        private IDataProvider<RoomCountByUid> roomCount;
+        [SceneObjectsOnly]
+        [ValidateInput("DataProviderFilter")]
+        [FoldoutGroup("Target Room Count")]
+        private GameObject dataProviderGameObject;
+        private IDataProvider<RoomCountByUid> RoomCount =>
+            dataProviderGameObject.GetComponent<IDataProvider<RoomCountByUid>>();
 
+        [Discardable]
+        private bool DataProviderFilter(GameObject gameObject)
+        {
+            return gameObject != null
+                && gameObject.TryGetComponent(out IDataProvider<RoomCountByUid> _);
+        }
+
+        [AssetsOnly]
+        [AssetSelector]
         [SerializeField]
+        [FoldoutGroup("Target Room Count")]
         private CoreModel room;
         public string RoomTitle => room.Title;
 
         [SerializeField]
+        [FoldoutGroup("Target Room Count")]
         private int targetAmount;
 
         public Progress Progress
         {
             get
             {
-                roomCountCache = roomCount.GetData();
+                roomCountCache = RoomCount.GetData();
 
                 int completion = 0;
                 if (roomCountCache.CountByUid.ContainsKey(room.Uid))
@@ -167,19 +191,11 @@ namespace Level.Boss.Task
             }
         }
 
-        private RoomCountByUid roomCountCache = new() { CountByUid = new Dictionary<string, int>() };
+        private RoomCountByUid roomCountCache =
+            new() { CountByUid = new Dictionary<string, int>() };
 
         private float currentEnsuringTime = 0.0f;
         private bool complete = false;
-
-        public void ValidateProviders()
-        {
-            roomCount = roomCountProvider.GetComponent<IDataProvider<RoomCountByUid>>();
-            if (roomCount == null)
-            {
-                Debug.LogError("IDataProvider<RoomCountByUid> not found in roomCountProvider");
-            }
-        }
 
         public void Update(float delta_time)
         {
@@ -211,37 +227,44 @@ namespace Level.Boss.Task
     public class RoomCountUpperBound : ITask
     {
         [SerializeField]
-        private GameObject roomCountProvider;
-        private IDataProvider<RoomCountByUid> roomCount;
+        [SceneObjectsOnly]
+        [ValidateInput("DataProviderFilter")]
+        [FoldoutGroup("Room Count Upper Bound")]
+        private GameObject dataProviderGameObject;
+        private IDataProvider<RoomCountByUid> RoomCount =>
+            dataProviderGameObject.GetComponent<IDataProvider<RoomCountByUid>>();
 
+        [Discardable]
+        private bool DataProviderFilter(GameObject gameObject)
+        {
+            return gameObject != null
+                && gameObject.TryGetComponent(out IDataProvider<RoomCountByUid> _);
+        }
+
+        [AssetsOnly]
+        [AssetSelector]
         [SerializeField]
+        [FoldoutGroup("Room Count Upper Bound")]
         private CoreModel room;
         public string RoomTitle => room.Title;
 
-        [SerializeField]
-        private int upperBoundInclusive;
-        public int UpperBoundInclusive => upperBoundInclusive;
+        [OdinSerialize]
+        [FoldoutGroup("Room Count Upper Bound")]
+        public int UpperBoundInclusive { get; private set; }
 
         [SerializeField]
+        [FoldoutGroup("Room Count Upper Bound")]
         private Days timeToComplete;
 
         private Days completeness = Days.FromRealTimeSeconds(0.0f);
 
-        public Progress Progress => new()
-        {
-            Complete = completeness >= timeToComplete,
-            Completion = completeness.Days_,
-            Overall = timeToComplete.Days_
-        };
-
-        public void ValidateProviders()
-        {
-            roomCount = roomCountProvider.GetComponent<IDataProvider<RoomCountByUid>>();
-            if (roomCount == null)
+        public Progress Progress =>
+            new()
             {
-                Debug.LogError("IDataProvider<RoomCountByUid> not found in roomCountProvider");
-            }
-        }
+                Complete = completeness >= timeToComplete,
+                Completion = completeness.Days_,
+                Overall = timeToComplete.Days_
+            };
 
         public void Update(float delta_time)
         {
@@ -250,14 +273,14 @@ namespace Level.Boss.Task
                 return;
             }
 
-            Dictionary<string, int> count_by_id = roomCount.GetData().CountByUid;
+            Dictionary<string, int> count_by_id = RoomCount.GetData().CountByUid;
             int currentCount = 0;
             if (count_by_id.ContainsKey(room.Uid))
             {
                 currentCount = count_by_id[room.Uid];
             }
 
-            if (currentCount <= upperBoundInclusive)
+            if (currentCount <= UpperBoundInclusive)
             {
                 completeness += Days.FromRealTimeSeconds(delta_time);
             }
