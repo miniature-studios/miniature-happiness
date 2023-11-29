@@ -23,14 +23,12 @@ namespace Level.Boss
     public class Model : SerializedMonoBehaviour
     {
         [Serializable]
-        [HideReferenceObjectPicker]
         private class MeetingTasks
         {
             public List<TaskWithCost> Tasks = new();
         }
 
         [Serializable]
-        [HideReferenceObjectPicker]
         private class TaskWithCost
         {
             [HideLabel]
