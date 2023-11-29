@@ -1,35 +1,19 @@
-using Common;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using UnityEngine;
 
 namespace Employee
 {
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
-    public class Buff : ScriptableObject
+    public class Buff : SerializedScriptableObject
     {
         // TODO: refactor
         public float Time;
 
-        [SerializeField]
-        private List<SerializedEffect> rawEffects;
-        private List<IEffect> effects;
-        public ImmutableList<IEffect> Effects
-        {
-            get
-            {
-                if (effects == null)
-                {
-                    effects = new();
-                    foreach (SerializedEffect effect in rawEffects)
-                    {
-                        effects.Add(effect.ToEffect());
-                    }
-                }
-                return effects.ToImmutableList();
-            }
-        }
+        [OdinSerialize]
+        public IEnumerable<IEffect> Effects { get; private set; } = new List<IEffect>();
 
         // TODO: Move to BuffView
         // TODO: Change to Image
@@ -47,30 +31,31 @@ namespace Employee
         public void UnregisterEffect(E effect);
     }
 
-    [InterfaceEditor]
+    [HideReferenceObjectPicker]
     public interface IEffect { }
 
     [Serializable]
     public class StressEffect : IEffect
     {
-        [SerializeField]
-        private float increaseMultiplier;
-        public float IncreaseMultiplier => increaseMultiplier;
+        [OdinSerialize]
+        [FoldoutGroup("Stress Effect")]
+        public float IncreaseMultiplier { get; private set; }
     }
 
     [Serializable]
     public class NeedModifierEffect : IEffect
     {
-        [SerializeField]
-        private List<Need.NeedProperties> needModifiers;
-        public ImmutableList<Need.NeedProperties> NeedModifiers => needModifiers.ToImmutableList();
+        [OdinSerialize]
+        [FoldoutGroup("NeedModifier Effect")]
+        public IEnumerable<Need.NeedProperties> NeedModifiers { get; private set; } =
+            new List<Need.NeedProperties>();
     }
 
     [Serializable]
     public class ControllerEffect : IEffect
     {
-        [SerializeField]
-        private float speedMultiplier;
-        public float SpeedMultiplier => speedMultiplier;
+        [OdinSerialize]
+        [FoldoutGroup("Controller Effect")]
+        public float SpeedMultiplier { get; private set; }
     }
 }
