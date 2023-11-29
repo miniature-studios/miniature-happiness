@@ -1,14 +1,13 @@
-using Common;
 using Level.GlobalTime;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using UnityEngine;
 
 namespace Level.Config
 {
-    [InterfaceEditor]
+    [HideReferenceObjectPicker]
     public interface IDayAction
     {
         public void Execute(Executor executor);
@@ -17,13 +16,13 @@ namespace Level.Config
     [Serializable]
     public class Cutscene : IDayAction
     {
-        [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        [OdinSerialize]
+        [FoldoutGroup("Cutscene")]
+        public float Duration { get; private set; }
 
-        [SerializeField]
-        private string text;
-        public string Text => text;
+        [OdinSerialize]
+        [FoldoutGroup("Cutscene")]
+        public string Text { get; private set; }
 
         public void Execute(Executor executor)
         {
@@ -34,13 +33,13 @@ namespace Level.Config
     [Serializable]
     public class DayStart : IDayAction
     {
-        [SerializeField]
-        private int morningMoney;
-        public int MorningMoney => morningMoney;
+        [OdinSerialize]
+        [FoldoutGroup("Day Start")]
+        public int MorningMoney { get; private set; }
 
-        [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        [OdinSerialize]
+        [FoldoutGroup("Day Start")]
+        public float Duration { get; private set; }
 
         public void Execute(Executor executor)
         {
@@ -51,6 +50,10 @@ namespace Level.Config
     [Serializable]
     public class PreMeeting : IDayAction
     {
+        [ReadOnly]
+        [FoldoutGroup("Pre Meeting")]
+        public string UselessDescription = "UselessDescription";
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -60,23 +63,23 @@ namespace Level.Config
     [Serializable]
     public class Meeting : IDayAction
     {
-        [SerializeField]
-        private List<SerializedEmployeeConfig> shopEmployees;
-
-        [SerializeField]
-        private List<SerializedShopRoomConfig> shopRooms;
-
-        [SerializeField]
-        private List<InventoryRoomConfig> mandatoryRooms;
+        [OdinSerialize]
+        [FoldoutGroup("Meeting")]
+        public List<IEmployeeConfig> ShopEmployeesConfig = new();
 
         public IEnumerable<EmployeeConfig> ShopEmployees =>
-            shopEmployees.Select(x => x.ToEmployeeConfig().GetEmployeeConfig());
+            ShopEmployeesConfig.Select(x => x.GetEmployeeConfig());
 
+        [OdinSerialize]
+        [FoldoutGroup("Meeting")]
+        public List<IShopRoomConfig> ShopRoomsConfig = new();
         public IEnumerable<ShopRoomConfig> ShopRooms =>
-            shopRooms.Select(x => x.ToShopRoomConfig().GetRoomConfig());
+            ShopRoomsConfig.Select(x => x.GetRoomConfig());
 
-        public ImmutableList<InventoryRoomConfig> MandatoryRooms =>
-            mandatoryRooms.ToImmutableList();
+        [OdinSerialize]
+        [FoldoutGroup("Meeting")]
+        public IEnumerable<InventoryRoomConfig> MandatoryRooms { get; private set; } =
+            new List<InventoryRoomConfig>();
 
         public void Execute(Executor executor)
         {
@@ -87,9 +90,9 @@ namespace Level.Config
     [Serializable]
     public class Working : IDayAction
     {
-        [SerializeField]
-        private Days duration;
-        public Days Duration => duration;
+        [OdinSerialize]
+        [FoldoutGroup("Working")]
+        public Days Duration { get; private set; }
 
         public void Execute(Executor executor)
         {
@@ -100,6 +103,10 @@ namespace Level.Config
     [Serializable]
     public class PreDayEnd : IDayAction
     {
+        [ReadOnly]
+        [FoldoutGroup("Pre Day End")]
+        public string UselessDescription = "UselessDescription";
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -109,6 +116,10 @@ namespace Level.Config
     [Serializable]
     public class DayEnd : IDayAction
     {
+        [ReadOnly]
+        [FoldoutGroup("Day End")]
+        public string UselessDescription = "UselessDescription";
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -118,6 +129,10 @@ namespace Level.Config
     [Serializable]
     public class LoseGame : IDayAction
     {
+        [ReadOnly]
+        [FoldoutGroup("Lose Game")]
+        public string UselessDescription = "UselessDescription";
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -127,6 +142,10 @@ namespace Level.Config
     [Serializable]
     public class WinGame : IDayAction
     {
+        [ReadOnly]
+        [FoldoutGroup("Win Game")]
+        public string UselessDescription = "UselessDescription";
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);

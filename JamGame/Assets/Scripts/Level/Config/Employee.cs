@@ -1,13 +1,13 @@
 using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using UnityEngine;
 
 namespace Level.Config
 {
-    [InterfaceEditor]
+    [HideReferenceObjectPicker]
     public interface IEmployeeConfig
     {
         public EmployeeConfig GetEmployeeConfig();
@@ -29,10 +29,16 @@ namespace Level.Config
     public class FixedEmployeeConfig : IEmployeeConfig
     {
         [SerializeField]
+        [FoldoutGroup("@Label")]
         private string name;
 
         [SerializeField]
+        [AssetsOnly]
+        [AssetSelector]
+        [FoldoutGroup("@Label")]
         private GameObject prototype;
+
+        private string Label => $"Employee - {name}";
 
         public EmployeeConfig GetEmployeeConfig()
         {
@@ -41,9 +47,13 @@ namespace Level.Config
     }
 
     [Serializable]
+    [HideReferenceObjectPicker]
     public class EmployeeWeights
     {
         public float Weight;
+
+        [AssetsOnly]
+        [AssetSelector]
         public GameObject Prototype;
     }
 
@@ -51,40 +61,27 @@ namespace Level.Config
     public class RandomEmployeeConfig : IEmployeeConfig
     {
         [SerializeField]
-        private List<EmployeeWeights> employeeWeights;
+        [AssetSelector]
+        [FoldoutGroup("Employee - Random")]
+        private EmployeeWeightList weightList;
 
         [SerializeField]
+        [AssetSelector]
+        [FoldoutGroup("Employee - Random")]
         private EmployeeNameList nameList;
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            List<float> list = employeeWeights.Select(x => x.Weight).ToList();
-            GameObject result = employeeWeights[
+            List<float> list = weightList.EmployeeWeights.Select(x => x.Weight).ToList();
+            GameObject result = weightList.EmployeeWeights.ToList()[
                 RandomTools.RandomlyChooseWithWeights(list)
             ].Prototype;
 
-            string first_name = nameList.FirstNames[
-                UnityEngine.Random.Range(0, nameList.FirstNames.Count)
-            ];
-            string last_name = nameList.LastNames[
-                UnityEngine.Random.Range(0, nameList.LastNames.Count)
-            ];
+            string first_name = nameList.FirstNames.OrderBy(x => UnityEngine.Random.value).First();
+            string last_name = nameList.LastNames.OrderBy(x => UnityEngine.Random.value).First();
             string full_name = $"{first_name} {last_name}";
 
             return new EmployeeConfig(result, full_name);
         }
-    }
-
-    [Serializable]
-    [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList", order = 0)]
-    public class EmployeeNameList : ScriptableObject
-    {
-        [SerializeField]
-        private List<string> firstNames;
-        public ImmutableList<string> FirstNames => firstNames.ToImmutableList();
-
-        [SerializeField]
-        private List<string> lastNames;
-        public ImmutableList<string> LastNames => lastNames.ToImmutableList();
     }
 }

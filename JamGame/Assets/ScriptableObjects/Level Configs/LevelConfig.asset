@@ -12,295 +12,253 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51c39a70600ea274ebd8278a07991c85, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
-  days: []
-  defaultDay:
-    rawDayActions:
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Morning
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: DayStart
-      cutscene:
-        duration: 0
-        text: 
-      dayStart:
-        morningMoney: 1500
-        duration: 1
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: PreMeeting
-      cutscene:
-        duration: 2
-        text: Night
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Meeting
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Meeting
-      cutscene:
-        duration: 0
-        text: 
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms:
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 4268ef250a6f8e04fb48e5ce9734365a, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 6bd11e85959af87498d6e21f7067c96b, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Working
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Working
-      cutscene:
-        duration: 2
-        text: Night
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0.5
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Meeting
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: PreMeeting
-      cutscene:
-        duration: 2
-        text: Night
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Meeting
-      cutscene:
-        duration: 0
-        text: 
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms:
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 8aced41d0ccbaa14d8598ae5c6607a81, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 4268ef250a6f8e04fb48e5ce9734365a, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        - selectedType: FixedRoomConfig
-          fixedRoomConfig:
-            room: {fileID: 739786844684371711, guid: 6bd11e85959af87498d6e21f7067c96b, type: 3}
-          randomRoomConfig:
-            roomWeights: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Working
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Working
-      cutscene:
-        duration: 0
-        text: 
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0.5
-    - selectedType: PreDayEnd
-      cutscene:
-        duration: 2
-        text: Night
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Evening
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: DayEnd
-      cutscene:
-        duration: 0
-        text: 
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-    - selectedType: Cutscene
-      cutscene:
-        duration: 2
-        text: Night
-      dayStart:
-        morningMoney: 0
-        duration: 0
-      meeting:
-        shopEmployees: []
-        shopRooms: []
-        mandatoryRooms: []
-      working:
-        duration:
-          Days_: 0
-  bossStressSpeed: 2
-  tariffs:
-    waterCost: 2
-    electricityCost: 2
-    rentCost: 2
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
+    - {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: Days
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Level.Config.DayConfig, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|Level.Config.DayConfig, Assembly-CSharp
+    - Name: DayActions
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[Level.Config.IDayAction, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|Level.Config.DayConfig, Assembly-CSharp
+    - Name: DayActions
+      Entry: 7
+      Data: 4|System.Collections.Generic.List`1[[Level.Config.IDayAction, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: DefaultDay
+      Entry: 7
+      Data: 5|Level.Config.DayConfig, Assembly-CSharp
+    - Name: DayActions
+      Entry: 7
+      Data: 6|System.Collections.Generic.List`1[[Level.Config.IDayAction, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 7|Level.Config.DayEnd, Assembly-CSharp
+    - Name: UselessDescription
+      Entry: 1
+      Data: UselessDescription
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|Level.Config.PreDayEnd, Assembly-CSharp
+    - Name: UselessDescription
+      Entry: 1
+      Data: UselessDescription
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|Level.Config.Meeting, Assembly-CSharp
+    - Name: MandatoryRooms
+      Entry: 7
+      Data: 10|System.Collections.Generic.List`1[[Level.Config.InventoryRoomConfig,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ShopEmployeesConfig
+      Entry: 7
+      Data: 11|System.Collections.Generic.List`1[[Level.Config.IEmployeeConfig, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 3
+    - Name: 
+      Entry: 7
+      Data: 12|Level.Config.FixedEmployeeConfig, Assembly-CSharp
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: prototype
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|Level.Config.FixedEmployeeConfig, Assembly-CSharp
+    - Name: name
+      Entry: 6
+      Data: 
+    - Name: prototype
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 14|Level.Config.RandomEmployeeConfig, Assembly-CSharp
+    - Name: weightList
+      Entry: 10
+      Data: 0
+    - Name: nameList
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: ShopRoomsConfig
+      Entry: 7
+      Data: 15|System.Collections.Generic.List`1[[Level.Config.IShopRoomConfig, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 16|Level.Config.RandomRoomConfig, Assembly-CSharp
+    - Name: roomWeights
+      Entry: 7
+      Data: 17|System.Collections.Generic.List`1[[Level.Config.RoomWeights, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 18|Level.Config.RoomWeights, Assembly-CSharp
+    - Name: Weight
+      Entry: 4
+      Data: 0
+    - Name: Room
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 19|Level.Config.RoomWeights, Assembly-CSharp
+    - Name: Weight
+      Entry: 4
+      Data: 0
+    - Name: Room
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 20|Level.Config.WinGame, Assembly-CSharp
+    - Name: UselessDescription
+      Entry: 1
+      Data: UselessDescription
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 21|Level.Config.Working, Assembly-CSharp
+    - Name: Duration
+      Entry: 7
+      Data: Level.GlobalTime.Days, Assembly-CSharp
+    - Name: Days_
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: BossStressSpeed
+      Entry: 4
+      Data: 0
