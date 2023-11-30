@@ -1,6 +1,7 @@
 using Common;
 using Level.GlobalTime;
 using Level.Room;
+using Pickle;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
@@ -32,19 +33,12 @@ namespace Level.Boss.Task
     [Serializable]
     public class TargetEmployeeAmount : ITask
     {
-        [SerializeField]
-        [SceneObjectsOnly]
-        [ValidateInput("DataProviderFilter")]
+        [SerializeReference]
+        [Pickle(typeof(IDataProvider<EmployeeAmount>), LookupType = ObjectProviderType.Scene)]
         [FoldoutGroup("Target Employee Amount")]
-        private GameObject dataProviderGameObject;
+        private MonoBehaviour employeeCountProvider;
         private IDataProvider<EmployeeAmount> EmployeeCount =>
-            dataProviderGameObject.GetComponent<IDataProvider<EmployeeAmount>>();
-
-        private bool DataProviderFilter(GameObject gameObject)
-        {
-            return gameObject != null
-                && gameObject.TryGetComponent(out IDataProvider<EmployeeAmount> _);
-        }
+            employeeCountProvider as IDataProvider<EmployeeAmount>;
 
         [SerializeField]
         [FoldoutGroup("Target Employee Amount")]
@@ -75,17 +69,10 @@ namespace Level.Boss.Task
     public class MaxStressBound : ITask
     {
         [SerializeField]
-        [SceneObjectsOnly]
-        [ValidateInput("DataProviderFilter")]
+        [Pickle(typeof(IDataProvider<MaxStress>), LookupType = ObjectProviderType.Scene)]
         [FoldoutGroup("Max Stress Bound")]
-        private GameObject dataProviderGameObject;
-        private IDataProvider<MaxStress> MaxStress =>
-            dataProviderGameObject.GetComponent<IDataProvider<MaxStress>>();
-
-        private bool DataProviderFilter(GameObject gameObject)
-        {
-            return gameObject != null && gameObject.TryGetComponent(out IDataProvider<MaxStress> _);
-        }
+        private MonoBehaviour maxStressProvider;
+        private IDataProvider<MaxStress> MaxStress => maxStressProvider as IDataProvider<MaxStress>;
 
         [OdinSerialize]
         [FoldoutGroup("Max Stress Bound")]
@@ -142,18 +129,11 @@ namespace Level.Boss.Task
         private float timeToEnsureCompletion = 0.5f;
 
         [SerializeField]
-        [SceneObjectsOnly]
-        [ValidateInput("DataProviderFilter")]
+        [Pickle(typeof(IDataProvider<RoomCountByUid>), LookupType = ObjectProviderType.Scene)]
         [FoldoutGroup("Target Room Count")]
-        private GameObject dataProviderGameObject;
+        private MonoBehaviour roomCountProvider;
         private IDataProvider<RoomCountByUid> RoomCount =>
-            dataProviderGameObject.GetComponent<IDataProvider<RoomCountByUid>>();
-
-        private bool DataProviderFilter(GameObject gameObject)
-        {
-            return gameObject != null
-                && gameObject.TryGetComponent(out IDataProvider<RoomCountByUid> _);
-        }
+            roomCountProvider as IDataProvider<RoomCountByUid>;
 
         [AssetsOnly]
         [AssetSelector]
@@ -223,18 +203,11 @@ namespace Level.Boss.Task
     public class RoomCountUpperBound : ITask
     {
         [SerializeField]
-        [SceneObjectsOnly]
-        [ValidateInput("DataProviderFilter")]
+        [Pickle(typeof(IDataProvider<RoomCountByUid>), LookupType = ObjectProviderType.Scene)]
         [FoldoutGroup("Room Count Upper Bound")]
-        private GameObject dataProviderGameObject;
+        private MonoBehaviour roomCountProvider;
         private IDataProvider<RoomCountByUid> RoomCount =>
-            dataProviderGameObject.GetComponent<IDataProvider<RoomCountByUid>>();
-
-        private bool DataProviderFilter(GameObject gameObject)
-        {
-            return gameObject != null
-                && gameObject.TryGetComponent(out IDataProvider<RoomCountByUid> _);
-        }
+            roomCountProvider as IDataProvider<RoomCountByUid>;
 
         [AssetsOnly]
         [AssetSelector]
