@@ -1,4 +1,5 @@
 ﻿using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,8 @@ namespace TileUnion
         [SerializeField]
         private int maximumSize;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private int currentSize = 2;
 
         public int CurrentSize
@@ -37,8 +38,8 @@ namespace TileUnion
             set => currentSize = value;
         }
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private int employeePerGrow = 2;
 
         [SerializeField]

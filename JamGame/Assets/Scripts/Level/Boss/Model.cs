@@ -1,4 +1,3 @@
-using Common;
 using Level.Boss.Task;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
@@ -48,7 +47,7 @@ namespace Level.Boss
 
         // Normalized (0..1)
         [SerializeField]
-        [InspectorReadOnly]
+        [ReadOnly]
         private float stress;
         public float Stress => stress;
 

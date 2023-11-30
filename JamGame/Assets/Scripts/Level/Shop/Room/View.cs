@@ -1,6 +1,7 @@
 ﻿using Common;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using System;
 using TMPro;
 using UnityEngine;
@@ -20,8 +21,8 @@ namespace Level.Shop.Room
 
         private Func<CoreModel, Result> roomBuying;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private CoreModel coreModel;
         public CoreModel CoreModel => coreModel;
 

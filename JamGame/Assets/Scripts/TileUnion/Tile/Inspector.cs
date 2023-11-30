@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Linq;
 using UnityEditor;
@@ -9,10 +10,10 @@ namespace TileUnion.Tile
 {
     public partial class TileImpl
     {
-        [InspectorReadOnly]
+        [ReadOnly]
         public bool ShowDirectionGizmo = false;
 
-        [InspectorReadOnly]
+        [ReadOnly]
         public bool ShowPathGizmo = false;
 
         private float lineThickness = 4;

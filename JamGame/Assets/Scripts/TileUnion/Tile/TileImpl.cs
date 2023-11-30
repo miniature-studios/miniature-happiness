@@ -1,4 +1,5 @@
 using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,8 @@ namespace TileUnion.Tile
         [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;
 
-        [SerializeField, InspectorReadOnly]
+        [ReadOnly]
+        [SerializeField]
         private TileState currentState = TileState.Normal;
 
         public Vector2Int Position => position;
