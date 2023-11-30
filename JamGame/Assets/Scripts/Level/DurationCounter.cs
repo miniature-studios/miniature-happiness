@@ -1,4 +1,5 @@
 ﻿using Common;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level
@@ -11,8 +12,8 @@ namespace Level
     [AddComponentMenu("Scripts/Level.DurationCounter")]
     public class DurationCounter : MonoBehaviour, IDataProvider<DaysLived>
     {
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private int daysLived = 0;
 
         // Called by executor when day is end.
@@ -23,10 +24,7 @@ namespace Level
 
         public DaysLived GetData()
         {
-            return new DaysLived()
-            {
-                Value = daysLived
-            };
+            return new DaysLived() { Value = daysLived };
         }
     }
 }

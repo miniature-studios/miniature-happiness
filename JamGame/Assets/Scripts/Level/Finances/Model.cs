@@ -1,4 +1,5 @@
 ﻿using Common;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,7 +13,8 @@ namespace Level.Finances
     [AddComponentMenu("Scripts/Level.Finances.Model")]
     public class Model : MonoBehaviour, IDataProvider<MoneyEarned>
     {
-        [SerializeField, InspectorReadOnly]
+        [ReadOnly]
+        [SerializeField]
         private int money;
         public UnityEvent<int> MoneyChange;
 

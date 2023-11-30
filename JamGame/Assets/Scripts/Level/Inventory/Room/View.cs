@@ -1,6 +1,6 @@
-using Common;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -17,8 +17,8 @@ namespace Level.Inventory.Room
         [SerializeField]
         private ExtendedView extendedView;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private CoreModel coreModel;
         public CoreModel CoreModel => coreModel;
 

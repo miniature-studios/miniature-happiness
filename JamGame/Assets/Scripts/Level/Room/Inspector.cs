@@ -1,48 +1,34 @@
 ﻿#if UNITY_EDITOR
 using Common;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace Level.Room
 {
     public partial class CoreModel
     {
-        public void CatchModels()
+        [Button]
+        private void CatchModels()
         {
             shopModel = GetComponent<Shop.Room.Model>();
             inventoryModel = GetComponent<Inventory.Room.Model>();
             tileUnionModel = GetComponent<TileUnion.Model>();
         }
-    }
 
-    [CanEditMultipleObjects]
-    [CustomEditor(typeof(CoreModel))]
-    public class CoreModelInspector : Editor
-    {
-        public override void OnInspectorGUI()
+        [OnInspectorGUI]
+        private void FindViews()
         {
-            CoreModel coreModel = serializedObject.targetObject as CoreModel;
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Catch Models"))
-            {
-                coreModel.CatchModels();
-                EditorUtility.SetDirty(coreModel);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            List<Shop.Room.View> shopRooms = new();
-            List<Inventory.Room.View> inventoryViews = new();
-            List<TileUnion.TileUnionImpl> tileUnions = new();
-
+            shopRooms.Clear();
+            inventoryViews.Clear();
+            tileUnions.Clear();
             foreach (
                 AssetWithLocation<Shop.Room.View> shopView in AddressableTools<Shop.Room.View>.LoadAllFromLabel(
                     "ShopView"
                 )
             )
             {
-                if (shopView.Asset.Uid == coreModel.Uid)
+                if (shopView.Asset.Uid == Uid)
                 {
                     shopRooms.Add(shopView.Asset);
                 }
@@ -54,7 +40,7 @@ namespace Level.Room
                 )
             )
             {
-                if (invView.Asset.Uid == coreModel.Uid)
+                if (invView.Asset.Uid == Uid)
                 {
                     inventoryViews.Add(invView.Asset);
                 }
@@ -66,88 +52,27 @@ namespace Level.Room
                 )
             )
             {
-                if (tileUnion.Asset.Uid == coreModel.Uid)
+                if (tileUnion.Asset.Uid == Uid)
                 {
                     tileUnions.Add(tileUnion.Asset);
                 }
             }
-
-            _ = EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("All Shop room views dependencies: ", EditorStyles.boldLabel);
-            EditorGUILayout.EndHorizontal();
-            if (shopRooms.Count == 0)
-            {
-                _ = EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("None dependencies.");
-                EditorGUILayout.EndHorizontal();
-            }
-            else
-            {
-                foreach (Shop.Room.View item in shopRooms)
-                {
-                    _ = EditorGUILayout.BeginHorizontal();
-                    _ = EditorGUILayout.ObjectField(
-                        "Shop.Room.View: ",
-                        item,
-                        typeof(Shop.Room.View),
-                        false
-                    );
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            _ = EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("All Inventory views dependencies: ", EditorStyles.boldLabel);
-            EditorGUILayout.EndHorizontal();
-            if (inventoryViews.Count == 0)
-            {
-                _ = EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("None dependencies.");
-                EditorGUILayout.EndHorizontal();
-            }
-            else
-            {
-                foreach (Inventory.Room.View item in inventoryViews)
-                {
-                    _ = EditorGUILayout.BeginHorizontal();
-                    _ = EditorGUILayout.ObjectField(
-                        "Inventory.Room.View: ",
-                        item,
-                        typeof(Inventory.Room.View),
-                        false
-                    );
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            _ = EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("All TileUnions dependencies: ", EditorStyles.boldLabel);
-            EditorGUILayout.EndHorizontal();
-            if (tileUnions.Count == 0)
-            {
-                _ = EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("None dependencies.");
-                EditorGUILayout.EndHorizontal();
-            }
-            else
-            {
-                foreach (TileUnion.TileUnionImpl item in tileUnions)
-                {
-                    _ = EditorGUILayout.BeginHorizontal();
-                    _ = EditorGUILayout.ObjectField(
-                        "Inventory.Room.View: ",
-                        item,
-                        typeof(TileUnion.TileUnionImpl),
-                        false
-                    );
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            _ = DrawDefaultInspector();
-
-            _ = serializedObject.ApplyModifiedProperties();
         }
+
+        [ReadOnly]
+        [SerializeField]
+        [Title("All Shop room views dependencies: ")]
+        private List<Shop.Room.View> shopRooms = new();
+
+        [ReadOnly]
+        [SerializeField]
+        [Title("All Inventory views dependencies: ")]
+        private List<Inventory.Room.View> inventoryViews = new();
+
+        [ReadOnly]
+        [SerializeField]
+        [Title("All TileUnions dependencies: ")]
+        private List<TileUnion.TileUnionImpl> tileUnions = new();
     }
 }
 #endif

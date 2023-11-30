@@ -1,6 +1,7 @@
 ﻿using Common;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,8 +60,8 @@ namespace TileUnion
 
         public string Uid => CoreModelPrefab.Uid;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private CoreModel coreModel;
         public CoreModel CoreModel => coreModel;
 
@@ -76,8 +77,8 @@ namespace TileUnion
         [SerializeField, Range(0, 3)]
         private int rotation;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private GridProperties gridProperties;
 
         public void SetGridProperties(GridProperties gridProperties)
@@ -263,6 +264,7 @@ namespace TileUnion
             tile.UpdateCorners(neighbors);
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void IsolateUpdate()
         {
             foreach (TileImpl tile in Tiles)
@@ -288,6 +290,8 @@ namespace TileUnion
             }
         }
 
+        [Title("Must be pressed before usage!")]
+        [Button(Style = ButtonStyle.Box)]
         public void CreateCache(bool considerCenterOfMass = true)
         {
             cachedConfiguration = new();
@@ -311,6 +315,7 @@ namespace TileUnion
             }
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void SetRotation(int rotation)
         {
             this.rotation = ((rotation % 4) + 4) % 4;
