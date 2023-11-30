@@ -264,6 +264,7 @@ namespace TileUnion
             tile.UpdateCorners(neighbors);
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void IsolateUpdate()
         {
             foreach (TileImpl tile in Tiles)
@@ -289,6 +290,8 @@ namespace TileUnion
             }
         }
 
+        [Title("Must be pressed before usage!")]
+        [Button(Style = ButtonStyle.Box)]
         public void CreateCache(bool considerCenterOfMass = true)
         {
             cachedConfiguration = new();
@@ -312,6 +315,7 @@ namespace TileUnion
             }
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void SetRotation(int rotation)
         {
             this.rotation = ((rotation % 4) + 4) % 4;

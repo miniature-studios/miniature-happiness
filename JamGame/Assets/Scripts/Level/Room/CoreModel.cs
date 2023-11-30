@@ -9,6 +9,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Room
 {
     [Serializable]
+    [InlineProperty]
     public struct RentCost
     {
         [SerializeField]

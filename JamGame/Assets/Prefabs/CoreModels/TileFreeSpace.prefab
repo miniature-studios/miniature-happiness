@@ -48,12 +48,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: ae36420d-e3ce-4098-af09-81bc71b89210
+  title: 
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
-  tariffProperties:
-    waterConsumption: 1
-    electricityConsumption: 0
+  rentCost:
+    cost: 0
+  shopRooms: []
+  inventoryViews:
+  - {fileID: 7606936360430423353, guid: 32858c7307f455d48a4957f9ea2f9eb6, type: 3}
+  tileUnions:
+  - {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,10 +85,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb3b80836f16c745ab4d6d60e8e6d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: PlaceConditions
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[TileUnion.PlaceCondition.IPlaceCondition,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   placingProperties:
     rotation: 0
     position: {x: 0, y: 0}
-  placeConditions: []
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,13 +1,14 @@
 ﻿#if UNITY_EDITOR
 using Location;
+using Sirenix.OdinInspector;
 using TileUnion.Tile;
-using UnityEditor;
 using UnityEngine;
 
 namespace TileUnion
 {
     public partial class TileUnionImpl
     {
+        [Button(Style = ButtonStyle.Box)]
         public void SetDirectionsGizmo(bool value)
         {
             foreach (Tile.TileImpl tile in Tiles)
@@ -16,6 +17,7 @@ namespace TileUnion
             }
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void SetPathGizmo(bool value)
         {
             foreach (Tile.TileImpl tile in Tiles)
@@ -24,12 +26,19 @@ namespace TileUnion
             }
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void SetCenterCube(bool value)
         {
             foreach (Tile.TileImpl tile in Tiles)
             {
                 tile.SetCubeInCenter(value);
             }
+        }
+
+        [Button(Style = ButtonStyle.Box)]
+        public void SetDrawNeedProviderGizmo(bool value)
+        {
+            DrawNeedProviderGizmo = value;
         }
 
         [HideInInspector]
@@ -58,6 +67,7 @@ namespace TileUnion
             }
         }
 
+        [Button("Update tiles position and rotation", Style = ButtonStyle.Box)]
         public void UpdateTilesPositionAndRotation()
         {
             foreach (TileImpl tile in Tiles)
@@ -65,108 +75,6 @@ namespace TileUnion
                 tile.SetPosition(gridProperties, tile.Position);
                 tile.SetRotation(tile.Rotation);
             }
-        }
-    }
-
-    [CustomEditor(typeof(TileUnionImpl))]
-    public class TileUnionInspector : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            TileUnionImpl tileUnion = serializedObject.targetObject as TileUnionImpl;
-
-            _ = EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Must be pressed before usage!");
-            EditorGUILayout.EndHorizontal();
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Update cache"))
-            {
-                tileUnion.CreateCache();
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 0 from cache"))
-            {
-                tileUnion.SetRotation(0);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 1 from cache"))
-            {
-                tileUnion.SetRotation(1);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 2 from cache"))
-            {
-                tileUnion.SetRotation(2);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Set rotation 3 from cache"))
-            {
-                tileUnion.SetRotation(3);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Update tiles position and rotation"))
-            {
-                tileUnion.UpdateTilesPositionAndRotation();
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("For testing");
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Isolate Update"))
-            {
-                tileUnion.IsolateUpdate();
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Show Directions Gizmo"))
-            {
-                tileUnion.SetDirectionsGizmo(true);
-            }
-            if (GUILayout.Button("Hide Directions Gizmo"))
-            {
-                tileUnion.SetDirectionsGizmo(false);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Show Path Gizmo"))
-            {
-                tileUnion.SetPathGizmo(true);
-            }
-            if (GUILayout.Button("Hide Path Gizmo"))
-            {
-                tileUnion.SetPathGizmo(false);
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Show Need Provider Gizmo"))
-            {
-                tileUnion.DrawNeedProviderGizmo = true;
-            }
-            if (GUILayout.Button("Hide Need Provider Gizmo"))
-            {
-                tileUnion.DrawNeedProviderGizmo = false;
-            }
-            EditorGUILayout.EndHorizontal();
-
-            _ = DrawDefaultInspector();
-
-            _ = serializedObject.ApplyModifiedProperties();
         }
     }
 }
