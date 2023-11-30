@@ -64,17 +64,18 @@ namespace Level.Config
     public class Meeting : IDayAction
     {
         [OdinSerialize]
+        [ShowInInspector]
         [FoldoutGroup("Meeting")]
-        public List<IEmployeeConfig> ShopEmployeesConfig = new();
+        private List<IEmployeeConfig> shopEmployees = new();
 
         public IEnumerable<EmployeeConfig> ShopEmployees =>
-            ShopEmployeesConfig.Select(x => x.GetEmployeeConfig());
+            shopEmployees.Select(x => x.GetEmployeeConfig());
 
         [OdinSerialize]
+        [ShowInInspector]
         [FoldoutGroup("Meeting")]
-        public List<IShopRoomConfig> ShopRoomsConfig = new();
-        public IEnumerable<ShopRoomConfig> ShopRooms =>
-            ShopRoomsConfig.Select(x => x.GetRoomConfig());
+        private List<IShopRoomConfig> shopRooms = new();
+        public IEnumerable<ShopRoomConfig> ShopRooms => shopRooms.Select(x => x.GetRoomConfig());
 
         [OdinSerialize]
         [FoldoutGroup("Meeting")]
