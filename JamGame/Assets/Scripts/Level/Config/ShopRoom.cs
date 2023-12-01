@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace Level.Config
 {
-    [InterfaceEditor]
     [HideReferenceObjectPicker]
     public interface IShopRoomConfig
     {
