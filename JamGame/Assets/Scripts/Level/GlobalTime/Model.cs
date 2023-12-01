@@ -1,10 +1,12 @@
 using Common;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
 namespace Level.GlobalTime
 {
     [Serializable]
+    [InlineProperty]
     public struct Days
     {
         public float Days_;

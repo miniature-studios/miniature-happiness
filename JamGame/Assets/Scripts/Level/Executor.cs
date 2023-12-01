@@ -2,6 +2,8 @@
 using Level.Config;
 using Level.GlobalTime;
 using Location;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +23,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level.Executor")]
-    public class Executor : MonoBehaviour
+    public class Executor : SerializedMonoBehaviour
     {
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileBuilderController;
@@ -73,7 +75,8 @@ namespace Level
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
-        public SerializedEmployeeConfig TestEmployeeConfig;
+        [OdinSerialize]
+        public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
 
         private void Awake()
@@ -102,7 +105,7 @@ namespace Level
 
             for (int i = 0; i < 0; i++)
             {
-                location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+                location.AddEmployee(TestEmployeeConfig.GetEmployeeConfig());
             }
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
