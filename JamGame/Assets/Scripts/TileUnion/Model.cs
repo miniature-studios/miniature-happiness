@@ -1,7 +1,8 @@
 ﻿using Common;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TileUnion.PlaceCondition;
 using UnityEngine;
 
@@ -41,15 +42,14 @@ namespace TileUnion
     }
 
     [AddComponentMenu("Scripts/TileUnion.Model")]
-    public class Model : MonoBehaviour
+    public class Model : SerializedMonoBehaviour
     {
         [SerializeField]
         private PlacingProperties placingProperties;
         public PlacingProperties PlacingProperties => placingProperties;
 
-        [SerializeField]
-        private List<SerializedPlaceCondition> placeConditions;
-        public IEnumerable<IPlaceCondition> PlaceConditions =>
-            placeConditions.Select(x => x.ToPlaceCondition());
+        [OdinSerialize]
+        public IEnumerable<IPlaceCondition> PlaceConditions { get; private set; } =
+            new List<IPlaceCondition>();
     }
 }

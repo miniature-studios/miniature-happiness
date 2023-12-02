@@ -1,6 +1,7 @@
 ﻿using Common;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using System.Linq;
 using UnityEngine;
 
@@ -17,7 +18,8 @@ namespace Level
     [AddComponentMenu("Scripts/Level.DragAndDropManager")]
     public class DragAndDropManager : MonoBehaviour
     {
-        [SerializeField, InspectorReadOnly]
+        [ReadOnly]
+        [SerializeField]
         private CoreModel bufferCoreModel;
 
         [SerializeField]

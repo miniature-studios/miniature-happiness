@@ -1,4 +1,5 @@
 ﻿using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TileBuilder;
@@ -8,15 +9,12 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Room
 {
     [Serializable]
-    public struct TariffProperties
+    [InlineProperty]
+    public struct RentCost
     {
         [SerializeField]
-        private int waterConsumption;
-        public int WaterConsumption => waterConsumption;
-
-        [SerializeField]
-        private int electricityConsumption;
-        public int ElectricityConsumption => electricityConsumption;
+        private int cost;
+        public int Value => cost;
     }
 
     [RequireComponent(typeof(Shop.Room.Model))]
@@ -28,8 +26,8 @@ namespace Level.Room
         private static string coreModelsLabel = "CoreModel";
         private static Dictionary<string, IResourceLocation> uidPrefabsMap = new();
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         // TODO: Wrap it in newtype.
         private string uid;
         public string Uid => uid;
@@ -45,24 +43,24 @@ namespace Level.Room
         private string title;
         public string Title => title;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private Shop.Room.Model shopModel;
         public Shop.Room.Model ShopModel => shopModel;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private Inventory.Room.Model inventoryModel;
         public Inventory.Room.Model InventoryModel => inventoryModel;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private TileUnion.Model tileUnionModel;
         public TileUnion.Model TileUnionModel => tileUnionModel;
 
         [SerializeField]
-        private TariffProperties tariffProperties;
-        public TariffProperties TariffProperties => tariffProperties;
+        private RentCost rentCost;
+        public RentCost RentCost => rentCost;
 
         private static void UpdateUidPrefabsMap()
         {

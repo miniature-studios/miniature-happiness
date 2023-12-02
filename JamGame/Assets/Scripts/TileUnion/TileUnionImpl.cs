@@ -1,6 +1,7 @@
 ﻿using Common;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,8 +60,8 @@ namespace TileUnion
 
         public string Uid => CoreModelPrefab.Uid;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private CoreModel coreModel;
         public CoreModel CoreModel => coreModel;
 
@@ -76,8 +77,8 @@ namespace TileUnion
         [SerializeField, Range(0, 3)]
         private int rotation;
 
+        [ReadOnly]
         [SerializeField]
-        [InspectorReadOnly]
         private GridProperties gridProperties;
 
         public void SetGridProperties(GridProperties gridProperties)
@@ -96,6 +97,14 @@ namespace TileUnion
         public IEnumerable<Vector2Int> TilesPositions =>
             Configuration[rotation].TilesPositions.Select(x => x + position);
         public int TilesCount => Tiles.Count;
+
+        public IEnumerable<string> GetAllUniqueMarks()
+        {
+            return Tiles
+                .Select(x => x.Marks)
+                .Aggregate(Enumerable.Empty<string>(), (x, y) => x.Concat(y))
+                .Distinct();
+        }
 
         public bool IsAllWithMark(string mark)
         {
@@ -181,7 +190,7 @@ namespace TileUnion
 
         private IEnumerator ShowInvalidPlacingRoutine()
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSecondsRealtime(1);
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetTileState(TileImpl.TileState.Normal);
@@ -255,6 +264,7 @@ namespace TileUnion
             tile.UpdateCorners(neighbors);
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void IsolateUpdate()
         {
             foreach (TileImpl tile in Tiles)
@@ -280,7 +290,9 @@ namespace TileUnion
             }
         }
 
-        public void CreateCache()
+        [Title("Must be pressed before usage!")]
+        [Button(Style = ButtonStyle.Box)]
+        public void CreateCache(bool considerCenterOfMass = true)
         {
             cachedConfiguration = new();
             for (int i = 0; i < 4; i++)
@@ -299,10 +311,11 @@ namespace TileUnion
                         GetCenterTilePosition()
                     )
                 );
-                RotateTileUnion();
+                RotateTileUnion(considerCenterOfMass);
             }
         }
 
+        [Button(Style = ButtonStyle.Box)]
         public void SetRotation(int rotation)
         {
             this.rotation = ((rotation % 4) + 4) % 4;
@@ -342,28 +355,37 @@ namespace TileUnion
             return Tiles.FirstOrDefault(x => x.Position == globalPosition);
         }
 
-        private void RotateTileUnion()
+        private void RotateTileUnion(bool considerCenterOfMass)
         {
+            Vector2 firstCenter = Vector2.zero;
+            if (considerCenterOfMass)
+            {
+                firstCenter = CenterOfMassTools.GetCenterOfMass(
+                    Tiles.Select(x => x.Position).ToList()
+                );
+            }
+
             rotation++;
-            Vector2 firstCenter = CenterOfMassTools.GetCenterOfMass(
-                Tiles.Select(x => x.Position).ToList()
-            );
+            rotation %= 4;
             foreach (TileImpl tile in Tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
                 tile.SetPosition(gridProperties, new Vector2Int(tile.Position.y, -tile.Position.x));
             }
-            rotation %= 4;
-            Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                Tiles.Select(x => x.Position).ToList()
-            );
-            Vector2 delta = firstCenter - secondCenter;
-            foreach (TileImpl tile in Tiles)
+
+            if (considerCenterOfMass)
             {
-                tile.SetPosition(
-                    gridProperties,
-                    tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
+                Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
+                    Tiles.Select(x => x.Position).ToList()
                 );
+                Vector2 delta = firstCenter - secondCenter;
+                foreach (TileImpl tile in Tiles)
+                {
+                    tile.SetPosition(
+                        gridProperties,
+                        tile.Position + new Vector2Int((int)delta.x, (int)delta.y)
+                    );
+                }
             }
         }
 
@@ -408,6 +430,33 @@ namespace TileUnion
                     )
                 };
             return vectors.OrderBy(x => Vector2.Distance(x, vectorSum)).First();
+        }
+
+        public void MoveTiles(Vector2Int direction, IEnumerable<Vector2Int> movingPositions)
+        {
+            foreach (Vector2Int position in movingPositions)
+            {
+                TileImpl tile = GetTile(position);
+                tile.SetPosition(gridProperties, tile.Position + direction);
+            }
+        }
+
+        public void AddTiles(
+            Dictionary<(Vector2Int globalPosition, int roatation), TileImpl> pairsToAdd
+        )
+        {
+            foreach (
+                KeyValuePair<
+                    (Vector2Int globalPosition, int roatation),
+                    TileImpl
+                > pair in pairsToAdd
+            )
+            {
+                TileImpl newTile = Instantiate(pair.Value, transform);
+                Tiles.Add(newTile);
+                newTile.SetPosition(gridProperties, pair.Key.globalPosition - position);
+                newTile.SetRotation(pair.Key.roatation);
+            }
         }
     }
 }

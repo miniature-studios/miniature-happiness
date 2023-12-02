@@ -1,14 +1,12 @@
-using Common;
 using Level.GlobalTime;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using UnityEngine;
 
 namespace Level.Config
 {
-    [InterfaceEditor]
     public interface IDayAction
     {
         public void Execute(Executor executor);
@@ -17,13 +15,11 @@ namespace Level.Config
     [Serializable]
     public class Cutscene : IDayAction
     {
-        [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        [OdinSerialize]
+        public float Duration { get; private set; }
 
-        [SerializeField]
-        private string text;
-        public string Text => text;
+        [OdinSerialize]
+        public string Text { get; private set; }
 
         public void Execute(Executor executor)
         {
@@ -34,13 +30,11 @@ namespace Level.Config
     [Serializable]
     public class DayStart : IDayAction
     {
-        [SerializeField]
-        private int morningMoney;
-        public int MorningMoney => morningMoney;
+        [OdinSerialize]
+        public int MorningMoney { get; private set; }
 
-        [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        [OdinSerialize]
+        public float Duration { get; private set; }
 
         public void Execute(Executor executor)
         {
@@ -60,23 +54,21 @@ namespace Level.Config
     [Serializable]
     public class Meeting : IDayAction
     {
-        [SerializeField]
-        private List<SerializedEmployeeConfig> shopEmployees;
-
-        [SerializeField]
-        private List<SerializedShopRoomConfig> shopRooms;
-
-        [SerializeField]
-        private List<InventoryRoomConfig> mandatoryRooms;
+        [OdinSerialize]
+        [ShowInInspector]
+        private List<IEmployeeConfig> shopEmployees = new();
 
         public IEnumerable<EmployeeConfig> ShopEmployees =>
-            shopEmployees.Select(x => x.ToEmployeeConfig().GetEmployeeConfig());
+            shopEmployees.Select(x => x.GetEmployeeConfig());
 
-        public IEnumerable<ShopRoomConfig> ShopRooms =>
-            shopRooms.Select(x => x.ToShopRoomConfig().GetRoomConfig());
+        [OdinSerialize]
+        [ShowInInspector]
+        private List<IShopRoomConfig> shopRooms = new();
+        public IEnumerable<ShopRoomConfig> ShopRooms => shopRooms.Select(x => x.GetRoomConfig());
 
-        public ImmutableList<InventoryRoomConfig> MandatoryRooms =>
-            mandatoryRooms.ToImmutableList();
+        [OdinSerialize]
+        public IEnumerable<InventoryRoomConfig> MandatoryRooms { get; private set; } =
+            new List<InventoryRoomConfig>();
 
         public void Execute(Executor executor)
         {
@@ -87,9 +79,8 @@ namespace Level.Config
     [Serializable]
     public class Working : IDayAction
     {
-        [SerializeField]
-        private Days duration;
-        public Days Duration => duration;
+        [OdinSerialize]
+        public Days Duration { get; private set; }
 
         public void Execute(Executor executor)
         {

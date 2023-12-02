@@ -1,28 +1,27 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using UnityEngine;
 
 namespace Level.Config
 {
     [Serializable]
     [CreateAssetMenu(fileName = "LevelConfig", menuName = "Level/LevelConfig", order = 0)]
-    public class LevelConfig : ScriptableObject
+    public class LevelConfig : SerializedScriptableObject
     {
-        [SerializeField]
-        private List<DayConfig> days;
+        [OdinSerialize]
+        [FoldoutGroup("All Playable Days")]
+        public IEnumerable<DayConfig> Days { get; private set; } = new List<DayConfig>();
 
-        [SerializeField]
-        private DayConfig defaultDay;
-        public ImmutableList<DayConfig> Days => days.ToImmutableList();
-        public DayConfig DefaultDay => defaultDay;
+        [HideLabel]
+        [OdinSerialize]
+        [InlineProperty]
+        [FoldoutGroup("Default Day")]
+        public DayConfig DefaultDay { get; private set; } = new();
 
-        [SerializeField]
-        private float bossStressSpeed;
-
-        [SerializeField]
-        private Tariffs tariffs;
-        public float BossStressSpeed => bossStressSpeed;
-        public Tariffs Tariffs => tariffs;
+        [OdinSerialize]
+        [FoldoutGroup("General Information")]
+        public float BossStressSpeed { get; private set; }
     }
 }

@@ -1,10 +1,10 @@
-using Common;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
 namespace Overlay
 {
-    [InterfaceEditor]
+    [HideReferenceObjectPicker]
     public interface IOverlay
     {
         void Activate(IOverlayManager overlay_manager);
@@ -13,6 +13,9 @@ namespace Overlay
     [Serializable]
     public class None : IOverlay
     {
+        [FoldoutGroup("None")]
+        public string UselessSting;
+
         public void Activate(IOverlayManager overlay_manager)
         {
             overlay_manager.RevertAllOverlays();
@@ -22,7 +25,9 @@ namespace Overlay
     [Serializable]
     public class ExtendedEmployeeInfo : IOverlay
     {
+        [AssetsOnly]
         [SerializeField]
+        [FoldoutGroup("Extended Employee Info")]
         private GameObject uiPrefab;
         public GameObject UIPrefab => uiPrefab;
 
@@ -36,14 +41,19 @@ namespace Overlay
     public class Stress : IOverlay
     {
         [SerializeField]
-        private Gradient gradient;
+        [InlineProperty]
+        [HideReferenceObjectPicker]
+        [FoldoutGroup("Stress")]
+        private Gradient gradient = new();
         public Gradient Gradient => gradient;
 
         [SerializeField]
+        [FoldoutGroup("Stress")]
         private float minimalStressBound;
         public float MinimalStressBound => minimalStressBound;
 
         [SerializeField]
+        [FoldoutGroup("Stress")]
         private float maximalStressBound;
         public float MaximalStressBound => maximalStressBound;
 

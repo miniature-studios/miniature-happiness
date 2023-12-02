@@ -1,10 +1,12 @@
 using Common;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
 namespace Level.GlobalTime
 {
     [Serializable]
+    [InlineProperty]
     public struct Days
     {
         public float Days_;
@@ -74,7 +76,6 @@ namespace Level.GlobalTime
             dayLength_ = dayLength;
             Time.timeScale = scale;
         }
-
 
         // Called by buttons that changes time scale.
         public void SetTimeScale(float scale)

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace TileUnion.PlaceCondition
 {
-    [InterfaceEditor]
+    [HideReferenceObjectPicker]
     public interface IPlaceCondition
     {
         public Result PassCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl);
@@ -17,10 +18,12 @@ namespace TileUnion.PlaceCondition
     public class RequiredTile : IPlaceCondition
     {
         [SerializeField]
+        [FoldoutGroup("RequiredTile")]
         private Vector2Int position;
 
         [SerializeField]
-        private List<string> requiredTileTags;
+        [FoldoutGroup("RequiredTile")]
+        private List<string> requiredTileTags = new();
 
         public Result PassCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl)
         {

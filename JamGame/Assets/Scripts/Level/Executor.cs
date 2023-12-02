@@ -2,6 +2,8 @@
 using Level.Config;
 using Level.GlobalTime;
 using Location;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +23,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level.Executor")]
-    public class Executor : MonoBehaviour
+    public class Executor : SerializedMonoBehaviour
     {
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileBuilderController;
@@ -36,7 +38,7 @@ namespace Level
         private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
 
         [SerializeField]
-        private TariffsCounter tariffsCounter;
+        private DailyBill.Model dailyBill;
 
         [SerializeField]
         private TransitionPanel.Model transitionPanel;
@@ -73,7 +75,8 @@ namespace Level
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
-        public SerializedEmployeeConfig TestEmployeeConfig;
+        [OdinSerialize]
+        public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
 
         private void Awake()
@@ -102,10 +105,10 @@ namespace Level
 
             for (int i = 0; i < 0; i++)
             {
-                location.AddEmployee(TestEmployeeConfig.ToEmployeeConfig().GetEmployeeConfig());
+                location.AddEmployee(TestEmployeeConfig.GetEmployeeConfig());
             }
 
-            // NOTE: It's a temportary solution while we don't have proper save/load system.
+            // NOTE: It's a temporary solution while we don't have proper save/load system.
             leaveNeedOverride.Unregister();
             goToWorkNeedOverride.Register();
 
@@ -140,7 +143,7 @@ namespace Level
                 );
             }
 
-            tileBuilderController.ChangeGameMode(TileBuilder.Controller.GameMode.Build);
+            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
             animatorSwitcher.SetAnimatorStates(typeof(Meeting));
@@ -202,8 +205,7 @@ namespace Level
 
         public void Execute(DayEnd dayEnd)
         {
-            tariffsCounter.UpdateCheck();
-            if (financesModel.TryTakeMoney(tariffsCounter.Check.Sum).Failure)
+            if (financesModel.TryTakeMoney(dailyBill.ComputeCheck().Sum).Failure)
             {
                 Execute(new LoseGame());
                 return;

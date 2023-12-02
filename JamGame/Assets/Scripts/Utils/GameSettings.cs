@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ namespace Utils
     public class GameSettings : ScriptableObject
     {
         [SerializeField]
-        [InspectorReadOnly]
+        [ReadOnly]
         private GridProperties gridProperties;
         public GridProperties Matrix => gridProperties;
 

@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Linq;
 using TileUnion;
 using UnityEditor;
@@ -16,6 +17,8 @@ namespace TileBuilder
 
         [HideInInspector]
         public bool ShowTileFreeSpaceCube;
+
+        public event Action<TileUnionImpl> OnTileUnionCreated;
     }
 
     [CustomEditor(typeof(TileBuilderImpl))]

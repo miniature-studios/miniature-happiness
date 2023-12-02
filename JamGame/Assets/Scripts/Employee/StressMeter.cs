@@ -1,4 +1,4 @@
-using Common;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +41,7 @@ namespace Employee
         private List<StressByNeedDissatisfactionWithNeedType> configRaw;
         private Dictionary<NeedType, StressByNeedDissatisfaction> config;
 
-        [InspectorReadOnly]
+        [ReadOnly]
         [SerializeField]
         private float stress = 0.0f;
         public float Value => stress;

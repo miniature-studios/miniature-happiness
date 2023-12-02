@@ -1,4 +1,7 @@
 using Level.Room;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using TileUnion;
 using UnityEngine;
 
 namespace TileBuilder.Command
@@ -24,7 +27,7 @@ namespace TileBuilder.Command
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            tileBuilder.DropTileUnion(CoreModel);
+            tileBuilder.InstantiateTileUnion(CoreModel);
         }
     }
 
@@ -41,7 +44,7 @@ namespace TileBuilder.Command
 
         public void Execute(TileBuilderImpl tileBuilder)
         {
-            tileBuilder.BorrowTileUnion(BorrowingPosition, out borrowedRoom);
+            borrowedRoom = tileBuilder.RemoveTileUnion(BorrowingPosition);
         }
     }
 
@@ -73,6 +76,47 @@ namespace TileBuilder.Command
         public void Execute(TileBuilderImpl tileBuilder)
         {
             tileBuilder.DeleteAllTiles();
+        }
+    }
+
+    public class GrowMeetingRoom : ICommand
+    {
+        public MeetingRoomLogics MeetingRoom { get; private set; }
+
+        public int GrowthCount { get; private set; }
+
+        private List<CoreModel> borrowedCoreModels = new();
+        public ImmutableList<CoreModel> BorrowedCoreModels => borrowedCoreModels.ToImmutableList();
+
+        public GrowMeetingRoom(MeetingRoomLogics meetingRoom, int growthCount)
+        {
+            MeetingRoom = meetingRoom;
+            GrowthCount = growthCount;
+        }
+
+        public void Execute(TileBuilderImpl tileBuilder)
+        {
+            if (GrowthCount == 0)
+            {
+                return;
+            }
+
+            MeetingRoomLogics.MeetingRoomGrowingInformation growingInfo =
+                MeetingRoom.GetMeetingRoomGrowingInformation(GrowthCount);
+            MeetingRoom.AddTiles(growingInfo);
+
+            foreach (Vector2Int pos in growingInfo.PositionsToTake)
+            {
+                CoreModel coreModel = tileBuilder.RemoveTileUnion(pos);
+                if (coreModel != null)
+                {
+                    borrowedCoreModels.Add(coreModel);
+                }
+            }
+
+            TileUnionImpl meetingRoom = tileBuilder.BorrowTileUnion(MeetingRoom.TileUnion.Position);
+
+            tileBuilder.PlaceTileUnion(meetingRoom);
         }
     }
 }

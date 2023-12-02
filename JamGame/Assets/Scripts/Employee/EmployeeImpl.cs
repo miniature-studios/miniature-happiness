@@ -1,5 +1,5 @@
-using Common;
 using Location;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,10 +47,10 @@ namespace Employee
         [Serializable]
         private struct AppliedBuff
         {
-            [InspectorReadOnly]
+            [ReadOnly]
             public Buff Buff;
 
-            [InspectorReadOnly]
+            [ReadOnly]
             public float RemainingTime;
         }
 
