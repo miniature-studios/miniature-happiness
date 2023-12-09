@@ -10,36 +10,19 @@ jobs:
   check-format-dotnet:
     runs-on: self-hosted
     
-    steps:
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-
-      - name: Install dotnet-format tool
-        run: dotnet tool install -g dotnet-format
-
-      - name: Check out code
-        uses: actions/checkout@v2
+    - name: Check out code
+        uses: actions/checkout@v3
 
       - name: Run dotnet format
-        run: dotnet format '.\' --folder --check --verbosity diagnostic
+        run: dotnet format whitespace "./JamGame/Assets/Scripts/" --folder --verbosity diagnostic --verify-no-changes
 
   check-format-cscharpier:
     runs-on: self-hosted
 
     steps:
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-
-      - name: Install csharpier tool
-        run: dotnet tool install csharpier -g
-
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run csharpier format
-        run: dotnet csharpier 'Assets\' --check
+        run: dotnet csharpier '.\JamGame\Assets\Scripts\' --check
   
