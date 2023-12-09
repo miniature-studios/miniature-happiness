@@ -2,10 +2,10 @@ name: Build Test
 
 on:
   workflow_dispatch: {}
- # on: [push, pull_request]
- # push:
- #   branches:
- #     - 'main'
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   buildForAllSupportedPlatforms:
