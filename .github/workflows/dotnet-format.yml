@@ -14,8 +14,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Creating sln
+        run: dotnet new sln --name JamGame --output ./JamGame
+
       - name: Run dotnet format
-        run: dotnet format whitespace "./JamGame/Assets/Scripts/" --folder --verbosity diagnostic --verify-no-changes
+        run: dotnet format JamGame/JamGame.sln --verbosity diagnostic --verify-no-changes --no-restore
 
   check-format-cscharpier:
     runs-on: self-hosted
