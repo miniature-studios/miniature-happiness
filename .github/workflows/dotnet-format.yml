@@ -7,26 +7,29 @@ on:
     branches: [ "main" ]
 
 jobs:
-  check-format-dotnet:
+  check-code-formatting:
     runs-on: self-hosted
     
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Creating sln
-        run: dotnet new sln --name JamGame --output ./JamGame
+      - name: Creating project
+        run: dotnet new classlib --name JamGame --output ./JamGame
+
+      - name: Deleting garbage
+        run: rm ./JamGame/Class1.cs
+
+      - name: Add .editorconfig
+        run: wget -O JamGame/.editorconfig https://raw.githubusercontent.com/mertwole/JamGame/main/JamGame/.editorconfig
+
+      - name: Check content
+        run: |
+          ls -a -l JamGame
+          cat JamGame/.editorconfig
 
       - name: Run dotnet format
-        run: dotnet format JamGame/JamGame.sln --verbosity diagnostic --verify-no-changes --no-restore
-
-  check-format-cscharpier:
-    runs-on: self-hosted
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
+        run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
+      
       - name: Run csharpier format
-        run: dotnet csharpier '.\JamGame\Assets\Scripts\' --check
-  
+        run: dotnet-csharpier 'JamGame\Assets\Scripts\' --check
