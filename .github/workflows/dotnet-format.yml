@@ -29,7 +29,7 @@ jobs:
           cat JamGame/.editorconfig
 
       - name: Run dotnet format
-        run: dotnet format JamGame/JamGame.csproj --fix-style warn --verify-no-changes --include JamGame/Assets/Scripts -v d
+        run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
       
       - name: Run csharpier format
         run: dotnet-csharpier 'JamGame\Assets\Scripts\' --check
