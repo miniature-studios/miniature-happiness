@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Location;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
