@@ -24,10 +24,7 @@ namespace Level
 
         public DaysLived GetData()
         {
-            return new DaysLived()
-            {
-                Value = daysLived
-            };
+            return new DaysLived() { Value = daysLived };
         }
     }
 }
