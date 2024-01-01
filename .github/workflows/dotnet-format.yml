@@ -42,4 +42,4 @@ jobs:
         run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
       
       - name: Run csharpier format
-        run: dotnet csharpier 'JamGame\Assets\Scripts\' --check
+        run: dotnet csharpier --config-path 'JamGame\.csharpierrc.json' 'JamGame\Assets\Scripts\' --check
