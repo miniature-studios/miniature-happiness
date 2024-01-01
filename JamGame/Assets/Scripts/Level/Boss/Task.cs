@@ -1,11 +1,11 @@
+using System;
+using System.Collections.Generic;
 using Common;
 using Level.GlobalTime;
 using Level.Room;
 using Pickle;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Level.Boss.Task

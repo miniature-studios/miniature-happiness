@@ -1,8 +1,8 @@
-using Common;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Config
@@ -73,9 +73,9 @@ namespace Level.Config
         public EmployeeConfig GetEmployeeConfig()
         {
             List<float> list = weightList.EmployeeWeights.Select(x => x.Weight).ToList();
-            GameObject result = weightList.EmployeeWeights.ToList()[
-                RandomTools.RandomlyChooseWithWeights(list)
-            ].Prototype;
+            GameObject result = weightList
+                .EmployeeWeights.ToList()[RandomTools.RandomlyChooseWithWeights(list)]
+                .Prototype;
 
             string first_name = nameList.FirstNames.OrderBy(x => UnityEngine.Random.value).First();
             string last_name = nameList.LastNames.OrderBy(x => UnityEngine.Random.value).First();

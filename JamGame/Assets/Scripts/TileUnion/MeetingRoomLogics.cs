@@ -1,8 +1,8 @@
-﻿using Common;
-using Sirenix.OdinInspector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
+using Sirenix.OdinInspector;
 using TileUnion.Tile;
 using UnityEngine;
 
@@ -136,8 +136,9 @@ namespace TileUnion
                 {
                     addingConfig.Add(
                         (
-                            info.MovingTileUnionPositions
-                                .Select(x => x + (info.MovingDirection * i))
+                            info.MovingTileUnionPositions.Select(
+                                x => x + (info.MovingDirection * i)
+                            )
                                 .ToList()[j],
                             TileUnion.Rotation
                         ),
