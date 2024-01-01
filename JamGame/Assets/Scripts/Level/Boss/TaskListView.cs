@@ -1,7 +1,7 @@
+using Level.Boss.Task;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Level.Boss.Task;
 using UnityEngine;
 
 namespace Level.Boss

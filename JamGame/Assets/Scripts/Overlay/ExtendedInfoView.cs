@@ -1,5 +1,5 @@
-using System.Linq;
 using Employee;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -29,11 +29,11 @@ namespace Overlay
         {
             transform.LookAt(cam.transform.position);
 
-            string buffs = employee
-                .Buffs.Select(buff => buff.Name)
+            string buffs = employee.Buffs
+                .Select(buff => buff.Name)
                 .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : ", ") + y);
-            string quirks = personality
-                .Quirks.Select(quirk => quirk.Name)
+            string quirks = personality.Quirks
+                .Select(quirk => quirk.Name)
                 .Aggregate("", (x, y) => x + (x.Length == 0 ? "" : ", ") + y);
 
             text.text = $"{personality.Name}\n{buffs}\n{quirks}";

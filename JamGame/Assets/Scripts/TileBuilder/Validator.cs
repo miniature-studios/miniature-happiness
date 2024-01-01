@@ -1,7 +1,7 @@
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common;
 using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
@@ -92,18 +92,18 @@ namespace TileBuilder.Validator
             }
             if (command is ShowSelectedRoom showRoomIllusion)
             {
-                IEnumerable<Vector2Int> newPositions = tileBuilder
-                    .InstantiatedViews[showRoomIllusion.CoreModel.Uid]
-                    .GetImaginePlaces(showRoomIllusion.CoreModel.TileUnionModel.PlacingProperties);
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    showRoomIllusion.CoreModel.Uid
+                ].GetImaginePlaces(showRoomIllusion.CoreModel.TileUnionModel.PlacingProperties);
                 return newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
                     ? new SuccessResult()
                     : new FailResult("Can not show in outside");
             }
             if (command is DropRoom dropRoom)
             {
-                IEnumerable<Vector2Int> newPositions = tileBuilder
-                    .InstantiatedViews[dropRoom.CoreModel.Uid]
-                    .GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    dropRoom.CoreModel.Uid
+                ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
                 return
                     tileBuilder
                         .GetTileUnionsInPositions(newPositions)
@@ -177,9 +177,9 @@ namespace TileBuilder.Validator
             }
             if (command is DropRoom dropRoom)
             {
-                IEnumerable<Vector2Int> newPositions = tileBuilder
-                    .InstantiatedViews[dropRoom.CoreModel.Uid]
-                    .GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
+                IEnumerable<Vector2Int> newPositions = tileBuilder.InstantiatedViews[
+                    dropRoom.CoreModel.Uid
+                ].GetImaginePlaces(dropRoom.CoreModel.TileUnionModel.PlacingProperties);
                 return
                     tileBuilder
                         .GetTileUnionsInPositions(newPositions)

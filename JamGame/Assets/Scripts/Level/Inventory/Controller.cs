@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Common;
+﻿using Common;
 using Level.Room;
+using System.Linq;
 using UnityEngine;
 
 namespace Level.Inventory
