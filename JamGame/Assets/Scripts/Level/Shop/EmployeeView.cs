@@ -3,6 +3,7 @@ using Level.Config;
 using System;
 using TMPro;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace Level.Shop
 {
@@ -10,7 +11,7 @@ namespace Level.Shop
     public class EmployeeView : MonoBehaviour
     {
         [SerializeField]
-        [InspectorReadOnly]
+        [ReadOnly]
         private EmployeeConfig employeeConfig;
         public EmployeeConfig EmployeeConfig => employeeConfig;
 

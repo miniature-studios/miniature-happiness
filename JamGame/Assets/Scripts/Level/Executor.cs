@@ -103,7 +103,7 @@ namespace Level
         {
             location.InitGameMode();
 
-            for (int i = 0; i < 0; i++)
+            for (int i = 0; i < 1; i++)
             {
                 location.AddEmployee(TestEmployeeConfig.GetEmployeeConfig());
             }

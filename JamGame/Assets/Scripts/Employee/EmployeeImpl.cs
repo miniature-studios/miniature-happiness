@@ -80,6 +80,12 @@ namespace Employee
             {
                 case State.Idle:
                     targetNeedProvider = GetTargetNeedProvider();
+
+                    if(targetNeedProvider == null)
+                    {
+                        return;
+                    }
+
                     state = State.Walking;
                     controller.SetDestination(targetNeedProvider.transform.position);
                     break;

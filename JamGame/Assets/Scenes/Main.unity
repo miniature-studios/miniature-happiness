@@ -399,7 +399,7 @@ MonoBehaviour:
   SavingConfigName: Sample building
   GameModeToChange: 0
   SquareSideLength: 20
-  NeededEmployeeCount: 0
+  NeededEmployeeCount: 4
   StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
   WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
   OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
@@ -1883,6 +1883,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804390, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: m_Radius
+      value: 0.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804390, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804390, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: m_Center.y
+      value: 0.91
+      objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: location
       value: 
@@ -1907,16 +1919,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Employee
       objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
---- !u!1 &744904365 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-  m_PrefabInstance: {fileID: 744904364}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &744904366 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7027475554387804387, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
@@ -1927,7 +1938,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
   m_PrefabInstance: {fileID: 744904364}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744904365}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88412d67d449a7d4abec5659cc45c2c0, type: 3}
@@ -3251,6 +3262,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: TestEmployeeConfig
+      Entry: 7
+      Data: 0|Level.Config.FixedEmployeeConfig, Assembly-CSharp
+    - Name: name
+      Entry: 1
+      Data: John
+    - Name: hireCost
+      Entry: 3
+      Data: 10
+    - Name: profession
+      Entry: 1
+      Data: Programmer
+    - Name: quirk
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   tileBuilderController: {fileID: 115190262}
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
@@ -3284,14 +3322,6 @@ MonoBehaviour:
   DayEnds:
     m_PersistentCalls:
       m_Calls: []
-  TestEmployeeConfig:
-    selectedType: FixedEmployeeConfig
-    fixedEmployeeConfig:
-      name: Hacha
-      prototype: {fileID: 744904365}
-    randomEmployeeConfig:
-      employeeWeights: []
-      nameList: {fileID: 0}
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4627,12 +4657,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3377d109e65ef46b5037bd2c3eb12b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollectionChanged:
+  RoomsCollectionChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1671638926}
-        m_TargetAssemblyTypeName: ShopView, Assembly-CSharp
+        m_TargetAssemblyTypeName: Level.Shop.View, Assembly-CSharp
         m_MethodName: OnShopRoomsChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  EmployeeCollectionChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1671638926}
+        m_TargetAssemblyTypeName: Level.Shop.View, Assembly-CSharp
+        m_MethodName: OnShopEmployeesChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4655,8 +4700,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomsUIContainer: {fileID: 1897020500}
+  employeesUIContainer: {fileID: 124202642}
   shopViewsLabel:
     m_LabelString: ShopView
+  employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
 --- !u!1 &1711617364
 GameObject:
   m_ObjectHideFlags: 0

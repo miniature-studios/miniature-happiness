@@ -19,6 +19,7 @@ namespace Location
     {
         [SerializeField]
         private EmployeeImpl employeePrototype;
+
         private List<NeedProvider> needProviders;
         private List<EmployeeImpl> employees = new();
 
