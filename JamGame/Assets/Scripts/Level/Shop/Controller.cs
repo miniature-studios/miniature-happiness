@@ -1,6 +1,7 @@
 ﻿using Common;
 using Level.Config;
 using Level.Room;
+using Location;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace Level.Shop
 
         [SerializeField]
         private Finances.Model financesController;
+
+        [SerializeField]
+        private EmployeeManager employeeManager;
 
         public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {
@@ -44,13 +48,29 @@ namespace Level.Shop
 
         public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)
         {
-            // TODO
+            shopModel.ResetEmployees(employeeConfigs);
         }
 
-        public bool TryBuyEmployee(int cost)
+        public Result TryBuyEmployee(EmployeeConfig employee)
         {
-            // TODO
-            throw new System.NotImplementedException();
+            Result result = financesController.TryTakeMoney(employee.HireCost);
+            if (result.Success)
+            {
+                result = employeeManager.AddEmployee(employee);
+                if(result.Failure) 
+                {
+                    financesController.AddMoney(employee.HireCost);
+                    return result;
+                }
+
+                return new SuccessResult();
+            }
+            else
+            {
+                // TODO show something
+                Debug.Log(result.Error);
+                return result;
+            }
         }
     }
 }

@@ -16,12 +16,16 @@ namespace Level.Config
     public class EmployeeConfig
     {
         public string Name { get; }
-        public GameObject Prototype { get; }
+        public int HireCost { get; }
+        public string Profession { get; }
+        public string Quirk { get; }
 
-        public EmployeeConfig(GameObject prototype, string name)
+        public EmployeeConfig(string name, int hireCost, string profession, string quirk)
         {
             Name = name;
-            Prototype = prototype;
+            HireCost = hireCost;
+            Profession = profession;
+            Quirk = quirk;
         }
     }
 
@@ -33,6 +37,14 @@ namespace Level.Config
         private string name;
 
         [SerializeField]
+        private int hireCost;
+
+        [SerializeField]
+        private string profession;
+
+        [SerializeField]
+        private string quirk;
+        
         [AssetsOnly]
         [AssetSelector]
         [FoldoutGroup("@Label")]
@@ -42,7 +54,7 @@ namespace Level.Config
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            return new EmployeeConfig(prototype, name);
+            return new EmployeeConfig(name, hireCost, profession, quirk);
         }
     }
 
@@ -81,7 +93,9 @@ namespace Level.Config
             string last_name = nameList.LastNames.OrderBy(x => UnityEngine.Random.value).First();
             string full_name = $"{first_name} {last_name}";
 
-            return new EmployeeConfig(result, full_name);
+            // TODO: refactor
+            //return new EmployeeConfig(result, full_name);
+            return new EmployeeConfig("Fuko", 100, "Proger", "No quirk");
         }
     }
 }

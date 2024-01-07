@@ -42,7 +42,7 @@ namespace Employee
             state = State.BuildingPath;
         }
 
-        private void Start()
+        private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
 
@@ -95,6 +95,11 @@ namespace Employee
             {
                 _ = agent.SetDestination(currentDestination);
             }
+        }
+
+        public void Teleport(NeedProvider needProvider)
+        {
+            transform.position = needProvider.transform.position + agent.baseOffset * Vector3.up;
         }
 
         public float? ComputePathLength(NeedProvider need_provider)

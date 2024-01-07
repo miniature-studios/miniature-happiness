@@ -1,4 +1,5 @@
-﻿using Level.Room;
+﻿using Level.Config;
+using Level.Room;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -11,16 +12,21 @@ namespace Level.Shop
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInShop = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
+        public UnityEvent<object, NotifyCollectionChangedEventArgs> RoomsCollectionChanged = new();
+
+        private ObservableCollection<EmployeeConfig> employeesInShop = new();
+        public UnityEvent<object, NotifyCollectionChangedEventArgs> EmployeeCollectionChanged =
+            new();
 
         private void Awake()
         {
-            roomsInShop.CollectionChanged += CollectionChanged.Invoke;
+            roomsInShop.CollectionChanged += RoomsCollectionChanged.Invoke;
+            employeesInShop.CollectionChanged += EmployeeCollectionChanged.Invoke;
         }
 
         public void ResetRooms(IEnumerable<CoreModel> rooms)
         {
-            ClearShop();
+            ClearRooms();
             foreach (CoreModel room in rooms)
             {
                 AddRoom(room);
@@ -37,13 +43,37 @@ namespace Level.Shop
             return roomsInShop.Remove(room) ? room : null;
         }
 
-        public void ClearShop()
+        public void ClearRooms()
         {
             foreach (CoreModel room in roomsInShop)
             {
                 Destroy(room.gameObject);
             }
             roomsInShop.Clear();
+        }
+
+        public void ResetEmployees(IEnumerable<EmployeeConfig> employees)
+        {
+            ClearEmployees();
+            foreach (EmployeeConfig employee in employees)
+            {
+                AddEmployee(employee);
+            }
+        }
+
+        public void AddEmployee(EmployeeConfig employee)
+        {
+            employeesInShop.Add(employee);
+        }
+
+        public EmployeeConfig BorrowEmployee(EmployeeConfig employee)
+        {
+            return employeesInShop.Remove(employee) ? employee : null;
+        }
+
+        public void ClearEmployees()
+        {
+            employeesInShop.Clear();
         }
     }
 }

@@ -47,7 +47,10 @@ namespace Level
         private Boss.Model boss;
 
         [SerializeField]
-        private LocationImpl location;
+        private NeedProviderManager needProviderManager;
+
+        [SerializeField]
+        private EmployeeManager employeeManager;
 
         [SerializeField]
         private GlobalTime.Model globalTime;
@@ -101,12 +104,7 @@ namespace Level
 
         public void Execute(DayStart dayStart)
         {
-            location.InitGameMode();
-
-            for (int i = 0; i < 0; i++)
-            {
-                location.AddEmployee(TestEmployeeConfig.GetEmployeeConfig());
-            }
+            needProviderManager.InitGameMode();
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
             leaveNeedOverride.Unregister();
@@ -155,6 +153,8 @@ namespace Level
         {
             meetingStartNeedOverride.Unregister();
             meetingEndNeedOverride.Register();
+
+            needProviderManager.InitGameMode();
 
             Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
             if (remove_time_scale_lock_result.Failure)
