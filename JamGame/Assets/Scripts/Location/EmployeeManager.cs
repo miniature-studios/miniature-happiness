@@ -35,11 +35,11 @@ namespace Location
 
         public Result AddEmployee(EmployeeConfig config)
         {
-            var res = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
+            var result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
                 
-            if(res.Failure)
+            if(result.Failure)
             {
-                return res;
+                return result;
             }
 
             EmployeeImpl employee = Instantiate(employeePrototype, transform)
