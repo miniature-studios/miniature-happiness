@@ -1,17 +1,25 @@
-using Common;
-using Employee;
-using Level;
+﻿using Common;
 using Level.Boss.Task;
-using Level.Config;
+using Level;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using Employee;
+using Level.Config;
+using System.Linq;
+using TileBuilderController = TileBuilder.Controller.ControllerImpl;
+using Pickle;
+using Sirenix.OdinInspector;
+using TileUnion;
 
 namespace Location
 {
-    [AddComponentMenu("Scripts/Location.Location")]
-    public class LocationImpl
-        : MonoBehaviour,
+    public struct MeetingRoomPlaces
+    {
+        public List<NeedProvider> Places;
+    }
+
+    [AddComponentMenu("Scripts/Location.EmployeeManager")]
+    public class EmployeeManager : MonoBehaviour,
             IDataProvider<EmployeeAmount>,
             IDataProvider<MaxStress>,
             IDataProvider<AllEmployeesAtMeeting>,
@@ -20,38 +28,42 @@ namespace Location
         [SerializeField]
         private EmployeeImpl employeePrototype;
 
-        private List<NeedProvider> needProviders;
+        [SerializeField]
+        private TileBuilderController tileBuilderController;
+
         private List<EmployeeImpl> employees = new();
 
-        // TODO: Call it each time room added/removed.
-        public void InitGameMode()
+        public Result AddEmployee(EmployeeConfig config)
         {
-            needProviders = new List<NeedProvider>(
-                transform.GetComponentsInChildren<NeedProvider>()
-            );
-        }
+            var res = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
+                
+            if(res.Failure)
+            {
+                return res;
+            }
 
-        public void AddEmployee(EmployeeConfig config)
-        {
-            // TODO: configurate from config
             EmployeeImpl employee = Instantiate(employeePrototype, transform)
                 .GetComponent<EmployeeImpl>();
             employee.gameObject.SetActive(true);
-            employees.Add(employee);
-        }
 
-        public IEnumerable<NeedProvider> FindAllAvailableProviders(
-            EmployeeImpl employee,
-            NeedType need_type
-        )
-        {
-            foreach (NeedProvider provider in needProviders)
+            // TODO: Refactor when #45 will be resolved.
+            var meeting_room_places = FindObjectOfType<MeetingRoomLogics>() as IDataProvider<MeetingRoomPlaces>;
+            var place = meeting_room_places
+                .GetData()
+                .Places
+                .Where(place => place.TryTake(employee))
+                .FirstOrDefault();
+
+            if(place == null)
             {
-                if (provider.NeedType == need_type && provider.IsAvailable(employee))
-                {
-                    yield return provider;
-                }
+                Destroy(employee.gameObject);
+                return new FailResult("Cannot find place in meeting room");
             }
+
+            employee.TeleportToNeedProvider(place);
+            employees.Add(employee);
+
+            return new SuccessResult();
         }
 
         EmployeeAmount IDataProvider<EmployeeAmount>.GetData()

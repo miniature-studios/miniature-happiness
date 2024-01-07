@@ -20,10 +20,12 @@ namespace Employee
             SatisfyingNeed
         }
 
+        [SerializeField]
+        [ReadOnly]
         private State state = State.Idle;
 
         [SerializeField]
-        private LocationImpl location;
+        private NeedProviderManager needProviderManager;
 
         [SerializeField]
         private List<Need> needs = new();
@@ -170,7 +172,7 @@ namespace Employee
                     break;
                 }
 
-                List<NeedProvider> available_providers = location
+                List<NeedProvider> available_providers = needProviderManager
                     .FindAllAvailableProviders(this, need.NeedType)
                     .Where(
                         np =>
@@ -208,6 +210,11 @@ namespace Employee
 
             Debug.LogError("Failed to select target NeedProvider");
             return null;
+        }
+
+        public void TeleportToNeedProvider(NeedProvider needProvider)
+        {
+            controller.Teleport(needProvider);
         }
 
         public void BindToNeedProvider(NeedProvider need_provider)

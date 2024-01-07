@@ -250,6 +250,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 42303833}
+  - component: {fileID: 42303835}
   - component: {fileID: 42303834}
   m_Layer: 0
   m_Name: Location
@@ -285,10 +286,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 42303832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82e2aa347fb295a47880fe40ee20e217, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ab770fa7025f75468d044a3e869b6ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &42303835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 42303832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 523059be386ab3b4a935256c107d2b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   employeePrototype: {fileID: 744904370}
+  tileBuilderController: {fileID: 115190262}
 --- !u!1 &115190258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,22 +1912,54 @@ PrefabInstance:
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: location
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needProviderManager
+      value: 
       objectReference: {fileID: 42303834}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[2].satisfied
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[2].properties.NeedType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[3].properties.NeedType
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.DecreaseSpeed
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[2].properties.DecreaseSpeed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.SatisfactionTime
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: needs.Array.data[3].properties.SatisfactionTime
+      propertyPath: needs.Array.data[2].properties.SatisfactionTime
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[3].properties.SatisfactionTime
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.SatisfactionGained
       value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[2].properties.SatisfactionGained
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_Name
@@ -3296,7 +3342,8 @@ MonoBehaviour:
   dailyBill: {fileID: 1470683593}
   transitionPanel: {fileID: 285264315}
   boss: {fileID: 973519813}
-  location: {fileID: 42303834}
+  needProviderManager: {fileID: 42303834}
+  employeeManager: {fileID: 42303835}
   globalTime: {fileID: 1582707707}
   meetingStartNeedOverride: {fileID: 1055950095}
   meetingEndNeedOverride: {fileID: 924940280}
@@ -4624,6 +4671,7 @@ MonoBehaviour:
   inventoryController: {fileID: 1395078488}
   shopModel: {fileID: 1671638925}
   financesController: {fileID: 1125594366}
+  employeeManager: {fileID: 42303835}
 --- !u!95 &1671638924
 Animator:
   serializedVersion: 5
@@ -5474,6 +5522,10 @@ PrefabInstance:
       value: 4306523841130135555
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].Cost
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].task
       value: 4306523859816284160
       objectReference: {fileID: 0}
@@ -5491,7 +5543,7 @@ PrefabInstance:
       objectReference: {fileID: 40476289}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].employeeCountTarget
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135555].timeToComplete.Days_
@@ -5500,7 +5552,7 @@ PrefabInstance:
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].employeeCountProvider
       value: 
-      objectReference: {fileID: 42303834}
+      objectReference: {fileID: 42303835}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135553].dataProviderGameObject
       value: 
@@ -5520,7 +5572,7 @@ PrefabInstance:
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].dataProviderGameObject
       value: 
-      objectReference: {fileID: 42303834}
+      objectReference: {fileID: 0}
     - target: {fileID: 7228478050088520735, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

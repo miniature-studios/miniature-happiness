@@ -1,4 +1,5 @@
 ﻿using Common;
+using Location;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using TileUnion.Tile;
 using UnityEngine;
 
 namespace TileUnion
-{
+{ 
     [AddComponentMenu("Scripts/TileUnion.MeetingRoomLogics")]
-    public class MeetingRoomLogics : MonoBehaviour
+    public class MeetingRoomLogics : MonoBehaviour, IDataProvider<MeetingRoomPlaces>
     {
         [SerializeField]
         private TileUnionImpl tileUnion;
@@ -151,6 +152,15 @@ namespace TileUnion
             Vector2Int unionPosition = TileUnion.Position;
             TileUnion.CreateCache(false);
             TileUnion.SetPosition(unionPosition);
+        }
+
+        public MeetingRoomPlaces GetData()
+        {
+            var need_providers = transform.GetComponentsInChildren<NeedProvider>();
+            return new MeetingRoomPlaces() 
+            { 
+                Places = need_providers.Where(np => np.NeedType == Employee.NeedType.Meeting).ToList() 
+            };
         }
     }
 }

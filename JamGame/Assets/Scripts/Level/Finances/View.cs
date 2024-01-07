@@ -18,7 +18,7 @@ namespace Level.Finances
 
         private void Update()
         {
-            lerpCount = Mathf.Lerp(lerpCount, bufferCount, lerpSpeed * Time.deltaTime);
+            lerpCount = Mathf.Lerp(lerpCount, bufferCount, lerpSpeed * Time.unscaledDeltaTime);
             countText.text = Convert.ToString(Mathf.RoundToInt(lerpCount));
         }
 
