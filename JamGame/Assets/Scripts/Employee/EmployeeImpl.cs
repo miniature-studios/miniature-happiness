@@ -1,8 +1,8 @@
-using Location;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Location;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee
@@ -83,7 +83,7 @@ namespace Employee
                 case State.Idle:
                     targetNeedProvider = GetTargetNeedProvider();
 
-                    if(targetNeedProvider == null)
+                    if (targetNeedProvider == null)
                     {
                         return;
                     }

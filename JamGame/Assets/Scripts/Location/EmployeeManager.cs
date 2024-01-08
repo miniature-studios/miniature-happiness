@@ -1,15 +1,15 @@
-﻿using Common;
-using Level.Boss.Task;
-using Level;
-using System.Collections.Generic;
-using UnityEngine;
-using Employee;
-using Level.Config;
+﻿using System.Collections.Generic;
 using System.Linq;
-using TileBuilderController = TileBuilder.Controller.ControllerImpl;
+using Common;
+using Employee;
+using Level;
+using Level.Boss.Task;
+using Level.Config;
 using Pickle;
 using Sirenix.OdinInspector;
 using TileUnion;
+using UnityEngine;
+using TileBuilderController = TileBuilder.Controller.ControllerImpl;
 
 namespace Location
 {
@@ -19,7 +19,8 @@ namespace Location
     }
 
     [AddComponentMenu("Scripts/Location.EmployeeManager")]
-    public class EmployeeManager : MonoBehaviour,
+    public class EmployeeManager
+        : MonoBehaviour,
             IDataProvider<EmployeeAmount>,
             IDataProvider<MaxStress>,
             IDataProvider<AllEmployeesAtMeeting>,
@@ -36,8 +37,8 @@ namespace Location
         public Result AddEmployee(EmployeeConfig config)
         {
             var result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
-                
-            if(result.Failure)
+
+            if (result.Failure)
             {
                 return result;
             }
@@ -47,14 +48,14 @@ namespace Location
             employee.gameObject.SetActive(true);
 
             // TODO: Refactor when #45 will be resolved.
-            var meeting_room_places = FindObjectOfType<MeetingRoomLogics>() as IDataProvider<MeetingRoomPlaces>;
+            var meeting_room_places =
+                FindObjectOfType<MeetingRoomLogics>() as IDataProvider<MeetingRoomPlaces>;
             var place = meeting_room_places
                 .GetData()
-                .Places
-                .Where(place => place.TryTake(employee))
+                .Places.Where(place => place.TryTake(employee))
                 .FirstOrDefault();
 
-            if(place == null)
+            if (place == null)
             {
                 Destroy(employee.gameObject);
                 return new FailResult("Cannot find place in meeting room");

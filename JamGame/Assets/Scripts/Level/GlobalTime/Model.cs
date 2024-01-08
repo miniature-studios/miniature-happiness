@@ -1,6 +1,6 @@
+using System;
 using Common;
 using Sirenix.OdinInspector;
-using System;
 using UnityEngine;
 
 namespace Level.GlobalTime

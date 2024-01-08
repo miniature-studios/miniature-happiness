@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using Employee;
+using UnityEngine;
 
 namespace Location
 {

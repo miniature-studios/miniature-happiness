@@ -1,14 +1,14 @@
-﻿using Common;
-using Location;
-using Sirenix.OdinInspector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
+using Location;
+using Sirenix.OdinInspector;
 using TileUnion.Tile;
 using UnityEngine;
 
 namespace TileUnion
-{ 
+{
     [AddComponentMenu("Scripts/TileUnion.MeetingRoomLogics")]
     public class MeetingRoomLogics : MonoBehaviour, IDataProvider<MeetingRoomPlaces>
     {
@@ -137,8 +137,9 @@ namespace TileUnion
                 {
                     addingConfig.Add(
                         (
-                            info.MovingTileUnionPositions
-                                .Select(x => x + (info.MovingDirection * i))
+                            info.MovingTileUnionPositions.Select(
+                                x => x + (info.MovingDirection * i)
+                            )
                                 .ToList()[j],
                             TileUnion.Rotation
                         ),
@@ -157,9 +158,11 @@ namespace TileUnion
         public MeetingRoomPlaces GetData()
         {
             var need_providers = transform.GetComponentsInChildren<NeedProvider>();
-            return new MeetingRoomPlaces() 
-            { 
-                Places = need_providers.Where(np => np.NeedType == Employee.NeedType.Meeting).ToList() 
+            return new MeetingRoomPlaces()
+            {
+                Places = need_providers
+                    .Where(np => np.NeedType == Employee.NeedType.Meeting)
+                    .ToList()
             };
         }
     }

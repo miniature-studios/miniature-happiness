@@ -20,10 +20,10 @@ namespace Employee
             modifiers = new Dictionary<NeedType, Need.NeedProperties>();
             foreach (Need.NeedProperties modifier in modifiers_raw)
             {
-                if(modifiers.ContainsKey(modifier.NeedType))
+                if (modifiers.ContainsKey(modifier.NeedType))
                 {
                     modifiers[modifier.NeedType] = modifiers[modifier.NeedType].Combine(modifier);
-                } 
+                }
                 else
                 {
                     modifiers.Add(modifier.NeedType, modifier);
