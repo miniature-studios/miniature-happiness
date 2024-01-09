@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 namespace TileBuilder.Controller
 {
-    [AddComponentMenu("Scripts/TileBuilder/Controller/TileBuilder.Controller.ControllerImpl")]
+    [AddComponentMenu("Scripts/TileBuilder/Controller/TileBuilder.Controller.Controller")]
     public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]

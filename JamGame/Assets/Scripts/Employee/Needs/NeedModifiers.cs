@@ -63,7 +63,7 @@ namespace Employee.Needs
         }
     }
 
-    [AddComponentMenu("Scripts/Employee.NeedModifiers")]
+    [AddComponentMenu("Scripts/Employee/Employee.NeedModifiers")]
     public class NeedModifiers : MonoBehaviour
     {
         [SerializeField]

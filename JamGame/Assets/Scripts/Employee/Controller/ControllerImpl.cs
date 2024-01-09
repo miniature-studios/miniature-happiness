@@ -7,7 +7,7 @@ namespace Employee.Controller
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [AddComponentMenu("Scripts/Employee/Controller/Employee.Controller.Controller")]
-    public class Controller : MonoBehaviour, IEffectExecutor<ControllerEffect>
+    public class ControllerImpl : MonoBehaviour, IEffectExecutor<ControllerEffect>
     {
         private enum State
         {

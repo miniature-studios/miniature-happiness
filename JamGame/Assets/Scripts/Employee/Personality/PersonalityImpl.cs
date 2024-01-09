@@ -8,7 +8,7 @@ namespace Employee.Personality
 
     [RequireComponent(typeof(EmployeeImpl))]
     [AddComponentMenu("Scripts/Employee/Personality/Employee.Personality")]
-    public class Personality : MonoBehaviour
+    public class PersonalityImpl : MonoBehaviour
     {
         [SerializeField]
         private string name_;
