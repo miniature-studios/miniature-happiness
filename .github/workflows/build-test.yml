@@ -37,12 +37,6 @@ jobs:
         with:
           projectPath: JamGame
           targetPlatform: ${{ matrix.targetPlatform }}
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
-        if: github.event.pull_request.merged
       
       - name: Chown files to koala
         run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
