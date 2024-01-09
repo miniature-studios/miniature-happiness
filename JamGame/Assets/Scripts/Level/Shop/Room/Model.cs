@@ -1,5 +1,5 @@
-﻿using Sirenix.OdinInspector;
-using System;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Shop.Room
@@ -13,7 +13,7 @@ namespace Level.Shop.Room
         public int Value => cost;
     }
 
-    [AddComponentMenu("Scripts/Level.Shop.Room.Model")]
+    [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Model")]
     public class Model : MonoBehaviour
     {
         [SerializeField]

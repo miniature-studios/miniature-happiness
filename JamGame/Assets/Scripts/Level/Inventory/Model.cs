@@ -1,12 +1,12 @@
-﻿using Level.Room;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Level.Room;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Scripts/Level.Inventory.Model")]
+    [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.Model")]
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInInventory = new();

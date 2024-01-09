@@ -1,11 +1,11 @@
-﻿using Common;
+﻿using System.Linq;
+using Common;
 using Level.Room;
-using System.Linq;
 using UnityEngine;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Scripts/Level.Inventory.Controller")]
+    [AddComponentMenu("Scripts/LevelInventory/Level.Inventory.Controller")]
     public class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]

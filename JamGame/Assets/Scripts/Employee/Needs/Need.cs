@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Needs
 {
     public enum NeedType
     {
         Work,
         Piss,
         Eat,
-
         Meeting,
         Leave,
-
         Smoke
     }
 

@@ -1,12 +1,12 @@
-﻿using Common;
-using Level.Room;
-using Pickle;
-using Sirenix.OdinInspector;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Common;
+using Level.Room;
+using Pickle;
+using Sirenix.OdinInspector;
 using TileBuilder;
 using TileUnion.PlaceCondition;
 using TileUnion.Tile;
@@ -15,7 +15,7 @@ using UnityEngine;
 namespace TileUnion
 {
     [SelectionBase]
-    [AddComponentMenu("Scripts/TileUnion.TileUnion")]
+    [AddComponentMenu("Scripts/TileUnion/TileUnion.TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
         [Serializable]

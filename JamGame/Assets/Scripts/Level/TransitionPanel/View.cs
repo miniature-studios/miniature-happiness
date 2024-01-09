@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Level.TransitionPanel
 {
-    [AddComponentMenu("Scripts/Level.TransitionPanel.View")]
+    [AddComponentMenu("Scripts/Level/TransitionPanel/Level.TransitionPanel.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

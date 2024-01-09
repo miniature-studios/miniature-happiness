@@ -11,7 +11,7 @@ namespace Level.DailyBill
         public int Sum => Rent;
     }
 
-    [AddComponentMenu("Scripts/Level.DailyBill.Model")]
+    [AddComponentMenu("Scripts/Level/DailyBill/Level.DailyBill.Model")]
     public class Model : MonoBehaviour
     {
         [SerializeField]

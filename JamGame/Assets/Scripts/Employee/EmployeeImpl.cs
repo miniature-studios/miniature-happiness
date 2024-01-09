@@ -1,14 +1,15 @@
-using Location;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Employee.Needs;
+using Location;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee
 {
     [SelectionBase]
-    [RequireComponent(typeof(Controller))]
+    [RequireComponent(typeof(Controller.Controller))]
     [RequireComponent(typeof(StressEffect))]
     [AddComponentMenu("Scripts/Employee.Employee")]
     public class EmployeeImpl : MonoBehaviour
@@ -35,7 +36,7 @@ namespace Employee
         private float satisfyingNeedRemaining = 0.0f;
         private NeedProvider targetNeedProvider = null;
 
-        private Controller controller;
+        private Controller.Controller controller;
 
         private List<NeedModifiers> registeredModifiers = new();
 
@@ -66,7 +67,7 @@ namespace Employee
 
         private void Start()
         {
-            controller = GetComponent<Controller>();
+            controller = GetComponent<Controller.Controller>();
             Stress = GetComponent<StressMeter>();
 
             buffsNeedModifiers = new BuffsNeedModifiersPool(this);
@@ -83,7 +84,7 @@ namespace Employee
                 case State.Idle:
                     targetNeedProvider = GetTargetNeedProvider();
 
-                    if(targetNeedProvider == null)
+                    if (targetNeedProvider == null)
                     {
                         return;
                     }
@@ -145,9 +146,9 @@ namespace Employee
         public void AddNeed(Need.NeedProperties properties)
         {
             Need need = new(properties);
-            foreach (NeedModifiers modifer in registeredModifiers)
+            foreach (NeedModifiers modifier in registeredModifiers)
             {
-                need.RegisterModifier(modifer);
+                need.RegisterModifier(modifier);
             }
             needs.Add(need);
         }
@@ -277,7 +278,7 @@ namespace Employee
 
         private void OnEnable()
         {
-            controller ??= GetComponent<Controller>();
+            controller = controller != null ? controller : GetComponent<Controller.Controller>();
 
             controller.OnFinishedMoving += FinishedMoving;
         }

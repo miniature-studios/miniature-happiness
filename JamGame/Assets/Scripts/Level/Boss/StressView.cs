@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Level.Boss
 {
-    [AddComponentMenu("Scripts/Level.Boss.StressView")]
+    [AddComponentMenu("Scripts/Level/Boss/Level.Boss.StressView")]
     public class StressView : MonoBehaviour
     {
         [SerializeField]

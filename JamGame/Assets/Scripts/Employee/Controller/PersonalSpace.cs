@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Controller
 {
     [RequireComponent(typeof(SphereCollider))]
-    [AddComponentMenu("Scripts/Employee.PersonalSpace")]
+    [AddComponentMenu("Scripts/Employee/Controller/Employee.Controller.PersonalSpace")]
     public class PersonalSpace : MonoBehaviour
     {
         [SerializeField]

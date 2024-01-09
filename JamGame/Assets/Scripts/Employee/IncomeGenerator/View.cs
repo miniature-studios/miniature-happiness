@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Employee.IncomeGenerator
 {
-    [AddComponentMenu("Scripts/Employee.IncomeGenerator.View")]
+    [AddComponentMenu("Scripts/Employee/IncomeGenerator/Employee.IncomeGenerator.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

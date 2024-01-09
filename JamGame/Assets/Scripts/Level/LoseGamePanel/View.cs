@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Level.LoseGamePanel
 {
-    [AddComponentMenu("Scripts/Level.LoseGamePanel.View")]
+    [AddComponentMenu("Scripts/Level/LoseGamePanel/Level.LoseGamePanel.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

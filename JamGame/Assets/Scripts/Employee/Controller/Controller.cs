@@ -1,12 +1,12 @@
-using Location;
 using System.Collections.Generic;
+using Location;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Employee
+namespace Employee.Controller
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    [AddComponentMenu("Scripts/Employee.Controller")]
+    [AddComponentMenu("Scripts/Employee/Controller/Employee.Controller.Controller")]
     public class Controller : MonoBehaviour, IEffectExecutor<ControllerEffect>
     {
         private enum State
@@ -99,7 +99,7 @@ namespace Employee
 
         public void Teleport(NeedProvider needProvider)
         {
-            transform.position = needProvider.transform.position + agent.baseOffset * Vector3.up;
+            transform.position = needProvider.transform.position + (agent.baseOffset * Vector3.up);
         }
 
         public float? ComputePathLength(NeedProvider need_provider)

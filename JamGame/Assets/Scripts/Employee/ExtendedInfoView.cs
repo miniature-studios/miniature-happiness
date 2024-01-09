@@ -9,7 +9,7 @@ namespace Employee.ExtendedInfo
     {
         private Camera cam;
 
-        private Personality personality;
+        private Personality.Personality personality;
         private EmployeeImpl employee;
 
         private TMP_Text text;
@@ -18,7 +18,7 @@ namespace Employee.ExtendedInfo
         {
             cam = Camera.main;
 
-            personality = GetComponentInParent<Personality>();
+            personality = GetComponentInParent<Personality.Personality>();
             employee = GetComponentInParent<EmployeeImpl>();
 
             text = GetComponentInChildren<TMP_Text>();

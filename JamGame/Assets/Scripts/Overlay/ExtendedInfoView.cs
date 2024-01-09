@@ -1,11 +1,12 @@
-using Employee;
 using System.Linq;
+using Employee;
+using Employee.Personality;
 using TMPro;
 using UnityEngine;
 
 namespace Overlay
 {
-    [AddComponentMenu("Scripts/ExtendedInfoView")]
+    [AddComponentMenu("Scripts/Overlay/ExtendedInfoView")]
     public class ExtendedInfoView : MonoBehaviour
     {
         private Camera cam;

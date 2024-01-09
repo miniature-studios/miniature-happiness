@@ -1,7 +1,7 @@
-﻿using Common;
-using Sirenix.OdinInspector;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Common;
+using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEngine;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -20,7 +20,7 @@ namespace Level.Room
     [RequireComponent(typeof(Shop.Room.Model))]
     [RequireComponent(typeof(TileUnion.Model))]
     [RequireComponent(typeof(Inventory.Room.Model))]
-    [AddComponentMenu("Scripts/Level.Room.CoreModel")]
+    [AddComponentMenu("Scripts/Level/Room/Level.Room.CoreModel")]
     public partial class CoreModel : MonoBehaviour
     {
         private static string coreModelsLabel = "CoreModel";

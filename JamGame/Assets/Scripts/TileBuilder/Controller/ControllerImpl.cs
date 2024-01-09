@@ -1,7 +1,7 @@
-﻿using Common;
+﻿using System.Linq;
+using Common;
 using Level;
 using Level.Room;
-using System.Linq;
 using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 namespace TileBuilder.Controller
 {
-    [AddComponentMenu("Scripts/TileBuilder.Controller.ControllerImpl")]
+    [AddComponentMenu("Scripts/TileBuilder/Controller/TileBuilder.Controller.ControllerImpl")]
     public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]

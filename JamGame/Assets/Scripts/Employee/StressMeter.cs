@@ -1,6 +1,7 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using Employee.Needs;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee

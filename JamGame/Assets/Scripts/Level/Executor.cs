@@ -1,12 +1,12 @@
-﻿using Common;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Common;
 using Level.Config;
 using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,7 +22,7 @@ namespace Level
         public bool Value;
     }
 
-    [AddComponentMenu("Scripts/Level.Executor")]
+    [AddComponentMenu("Scripts/Level/Level.Executor")]
     public class Executor : SerializedMonoBehaviour
     {
         [SerializeField]

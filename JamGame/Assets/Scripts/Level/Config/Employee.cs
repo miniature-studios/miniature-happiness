@@ -1,8 +1,8 @@
-using Common;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Config
@@ -44,7 +44,7 @@ namespace Level.Config
 
         [SerializeField]
         private string quirk;
-        
+
         [AssetsOnly]
         [AssetSelector]
         [FoldoutGroup("@Label")]

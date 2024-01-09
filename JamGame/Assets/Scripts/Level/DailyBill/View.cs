@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Level.DailyBill
 {
-    [AddComponentMenu("Scripts/Level.DailyBill.View")]
+    [AddComponentMenu("Scripts/Level/DailyBill/Level.DailyBill.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

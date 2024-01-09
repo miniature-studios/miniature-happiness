@@ -1,13 +1,13 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Level.Config;
-using System;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 namespace Level.Shop
 {
-    [AddComponentMenu("Scripts/Level.Shop.EmployeeView")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.EmployeeView")]
     public class EmployeeView : MonoBehaviour
     {
         [SerializeField]

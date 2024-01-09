@@ -1,14 +1,14 @@
-﻿using Level.Config;
-using Level.Room;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Level.Config;
+using Level.Room;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Level.Shop
 {
-    [AddComponentMenu("Scripts/Level.Shop.Model")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInShop = new();
