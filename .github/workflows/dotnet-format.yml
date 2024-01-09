@@ -13,6 +13,9 @@ jobs:
       image: mcr.microsoft.com/dotnet/sdk:8.0
     
     steps:
+      - name: Remove git lfs hooks
+        run: rm -rf ./.git/hooks
+
       - name: Check out code
         uses: actions/checkout@v4
 
