@@ -244,7 +244,9 @@ namespace TileBuilder.Controller
             _ = EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Grow Meeting room"))
             {
-                Common.Result result = controller.GrowMeetingRoomForEmployees(controller.NeededEmployeeCount);
+                Common.Result result = controller.GrowMeetingRoomForEmployees(
+                    controller.NeededEmployeeCount
+                );
                 if (result.Failure)
                 {
                     Debug.Log(result.Error);

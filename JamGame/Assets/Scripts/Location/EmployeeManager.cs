@@ -18,7 +18,8 @@ namespace Location
     }
 
     [AddComponentMenu("Scripts/Location/Location.EmployeeManager")]
-    public class EmployeeManager : MonoBehaviour,
+    public class EmployeeManager
+        : MonoBehaviour,
             IDataProvider<EmployeeAmount>,
             IDataProvider<MaxStress>,
             IDataProvider<AllEmployeesAtMeeting>,
@@ -46,11 +47,11 @@ namespace Location
             employee.gameObject.SetActive(true);
 
             // TODO: Refactor when #45 will be resolved.
-            IDataProvider<MeetingRoomPlaces> meeting_room_places = FindObjectOfType<MeetingRoomLogics>();
+            IDataProvider<MeetingRoomPlaces> meeting_room_places =
+                FindObjectOfType<MeetingRoomLogics>();
             NeedProvider place = meeting_room_places
                 .GetData()
-                .Places
-                .Where(place => place.TryTake(employee))
+                .Places.Where(place => place.TryTake(employee))
                 .FirstOrDefault();
 
             if (place == null)

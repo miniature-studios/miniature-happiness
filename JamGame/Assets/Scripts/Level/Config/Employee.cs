@@ -85,9 +85,9 @@ namespace Level.Config
         public EmployeeConfig GetEmployeeConfig()
         {
             List<float> list = weightList.EmployeeWeights.Select(x => x.Weight).ToList();
-            GameObject result = weightList.EmployeeWeights.ToList()[
-                RandomTools.RandomlyChooseWithWeights(list)
-            ].Prototype;
+            GameObject result = weightList
+                .EmployeeWeights.ToList()[RandomTools.RandomlyChooseWithWeights(list)]
+                .Prototype;
 
             string first_name = nameList.FirstNames.OrderBy(x => UnityEngine.Random.value).First();
             string last_name = nameList.LastNames.OrderBy(x => UnityEngine.Random.value).First();

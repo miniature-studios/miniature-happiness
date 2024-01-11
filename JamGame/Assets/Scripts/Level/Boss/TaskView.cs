@@ -34,14 +34,12 @@ namespace Level.Boss
 
             description.text = task switch
             {
-                TargetEmployeeAmount =>
-                    $"Hire at least {progress.Overall} employees",
-                MaxStressBound task =>
-                    $"Hold maximum stress of employees less than {task.MaxStressTarget} for {progress.Overall} seconds",
-                TargetRoomCount task =>
-                    $"Build at least {progress.Overall} [{task.RoomTitle}]s",
-                RoomCountUpperBound task =>
-                    $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days",
+                TargetEmployeeAmount => $"Hire at least {progress.Overall} employees",
+                MaxStressBound task
+                    => $"Hold maximum stress of employees less than {task.MaxStressTarget} for {progress.Overall} seconds",
+                TargetRoomCount task => $"Build at least {progress.Overall} [{task.RoomTitle}]s",
+                RoomCountUpperBound task
+                    => $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days",
                 _ => throw new NotImplementedException("This task type is not supported")
             };
         }
