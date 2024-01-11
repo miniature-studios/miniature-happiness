@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CameraController
 {
-    [AddComponentMenu("Scripts/CameraController/CameraController.CameraControllerImpl")]
+    [AddComponentMenu("Scripts/CameraController/CameraController")]
     public class CameraControllerImpl : MonoBehaviour
     {
         [SerializeField]
