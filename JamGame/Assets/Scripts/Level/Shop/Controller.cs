@@ -1,9 +1,9 @@
-﻿using Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Common;
 using Level.Config;
 using Level.Room;
 using Location;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Level.Shop
@@ -57,7 +57,7 @@ namespace Level.Shop
             if (result.Success)
             {
                 result = employeeManager.AddEmployee(employee);
-                if(result.Failure) 
+                if (result.Failure)
                 {
                     financesController.AddMoney(employee.HireCost);
                     return result;

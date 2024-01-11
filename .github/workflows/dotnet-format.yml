@@ -1,0 +1,50 @@
+name: dotnet format
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  check-code-formatting:
+    runs-on: self-hosted
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+    
+    steps:
+      - name: Remove git lfs hooks
+        run: rm -rf ./.git/hooks
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Creating project
+        run: dotnet new classlib --name JamGame --output ./JamGame
+
+      - name: Deleting garbage
+        run: rm ./JamGame/Class1.cs
+
+      - name: Add .editorconfig
+        run: wget -O JamGame/.editorconfig https://raw.githubusercontent.com/mertwole/miniature-happiness/main/JamGame/.editorconfig
+
+      - name: Check content
+        run: |
+          ls -a -l JamGame
+          cat JamGame/.editorconfig
+
+      - name: Install csharpier locally
+        run: |
+          dotnet new tool-manifest
+          dotnet tool install --local csharpier
+      
+      - name: Check versions
+        run: |
+          dotnet format --version
+          dotnet csharpier --version
+
+      - name: Run dotnet format
+        run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
+      
+      - name: Run csharpier format
+        run: dotnet csharpier --config-path "JamGame/.csharpierrc.json" 'JamGame\Assets\Scripts\' --check
