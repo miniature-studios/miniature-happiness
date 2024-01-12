@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace Level.Shop
 {
-    [AddComponentMenu("Scripts/Level.Shop.Model")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.Model")]
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInShop = new();

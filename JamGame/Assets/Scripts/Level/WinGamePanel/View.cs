@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Level.WinGamePanel
 {
-    [AddComponentMenu("Scripts/Level.WinGamePanel.View")]
+    [AddComponentMenu("Scripts/Level/WinGamePanel/Level.WinGamePanel.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

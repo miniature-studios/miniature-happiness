@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Scripts/Level.Inventory.Controller")]
+    [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.Controller")]
     public class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]

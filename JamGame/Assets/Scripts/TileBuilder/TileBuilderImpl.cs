@@ -21,7 +21,7 @@ namespace TileBuilder
         Play
     }
 
-    [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
+    [AddComponentMenu("Scripts/TileBuilder/TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour, IDataProvider<RoomCountByUid>
     {
         [Pickle(LookupType = ObjectProviderType.Assets)]

@@ -11,7 +11,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Shop
 {
     [RequireComponent(typeof(Animator))]
-    [AddComponentMenu("Scripts/Level.Shop.View")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

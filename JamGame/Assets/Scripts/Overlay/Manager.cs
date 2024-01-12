@@ -12,7 +12,7 @@ namespace Overlay
             where O : class, IOverlay;
     }
 
-    [AddComponentMenu("Scripts/Overlay.Manager")]
+    [AddComponentMenu("Scripts/Overlay/Overlay.Manager")]
     public class Manager : MonoBehaviour, IOverlayManager
     {
         // TODO: Update in runtime.

@@ -15,7 +15,7 @@ namespace Level
         public Result<CoreModel> Borrow();
     }
 
-    [AddComponentMenu("Scripts/Level.DragAndDropManager")]
+    [AddComponentMenu("Scripts/Level/Level.DragAndDropManager")]
     public class DragAndDropManager : MonoBehaviour
     {
         [ReadOnly]

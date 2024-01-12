@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Level.Boss
 {
-    [AddComponentMenu("Scripts/Level.Boss.TaskListView")]
+    [AddComponentMenu("Scripts/Level/Boss/Level.Boss.TaskListView")]
     public class TaskListView : MonoBehaviour
     {
         [SerializeField]

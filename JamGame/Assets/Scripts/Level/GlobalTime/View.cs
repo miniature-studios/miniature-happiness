@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Level.GlobalTime
 {
-    [AddComponentMenu("Scripts/Level.GlobalTime.View")]
+    [AddComponentMenu("Scripts/Level/GlobalTime/Level.GlobalTime.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

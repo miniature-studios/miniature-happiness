@@ -1,9 +1,10 @@
+using Employee.Needs;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Employee.IncomeGenerator
 {
-    [AddComponentMenu("Scripts/Employee.IncomeGenerator.Model")]
+    [AddComponentMenu("Scripts/Employee/IncomeGenerator/Employee.IncomeGenerator.Model")]
     public class Model : MonoBehaviour
     {
         [SerializeField]

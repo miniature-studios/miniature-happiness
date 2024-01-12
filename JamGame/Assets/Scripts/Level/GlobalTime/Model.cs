@@ -49,7 +49,7 @@ namespace Level.GlobalTime
         }
     }
 
-    [AddComponentMenu("Scripts/Level.GlobalTime.Model")]
+    [AddComponentMenu("Scripts/Level/GlobalTime/Level.GlobalTime.Model")]
     public class Model : MonoBehaviour
     {
         private static float dayLength_ = 0.0f;

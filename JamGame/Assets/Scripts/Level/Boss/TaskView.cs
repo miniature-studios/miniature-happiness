@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Level.Boss
 {
-    [AddComponentMenu("Scripts/Level.Boss.TaskView")]
+    [AddComponentMenu("Scripts/Level/Boss/Level.Boss.TaskView")]
     public class TaskView : MonoBehaviour
     {
         private ITask task;

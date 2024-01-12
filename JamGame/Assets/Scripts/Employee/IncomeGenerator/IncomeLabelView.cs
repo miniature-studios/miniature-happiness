@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Employee.IncomeGenerator
 {
-    [AddComponentMenu("Scripts/Employee.IncomeGenerator.IncomeLabelView")]
+    [AddComponentMenu("Scripts/Employee/IncomeGenerator/Employee.IncomeGenerator.IncomeLabelView")]
     public class IncomeLabelView : MonoBehaviour
     {
         [SerializeField]

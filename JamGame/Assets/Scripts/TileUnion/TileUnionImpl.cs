@@ -15,7 +15,7 @@ using UnityEngine;
 namespace TileUnion
 {
     [SelectionBase]
-    [AddComponentMenu("Scripts/TileUnion.TileUnion")]
+    [AddComponentMenu("Scripts/TileUnion/TileUnion")]
     public partial class TileUnionImpl : MonoBehaviour
     {
         [Serializable]

@@ -2,11 +2,10 @@
 using System.Linq;
 using Common;
 using Employee;
+using Employee.Needs;
 using Level;
 using Level.Boss.Task;
 using Level.Config;
-using Pickle;
-using Sirenix.OdinInspector;
 using TileUnion;
 using UnityEngine;
 using TileBuilderController = TileBuilder.Controller.ControllerImpl;
@@ -18,7 +17,7 @@ namespace Location
         public List<NeedProvider> Places;
     }
 
-    [AddComponentMenu("Scripts/Location.EmployeeManager")]
+    [AddComponentMenu("Scripts/Location/Location.EmployeeManager")]
     public class EmployeeManager
         : MonoBehaviour,
             IDataProvider<EmployeeAmount>,
@@ -36,7 +35,7 @@ namespace Location
 
         public Result AddEmployee(EmployeeConfig config)
         {
-            var result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
+            Result result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
 
             if (result.Failure)
             {
@@ -48,9 +47,9 @@ namespace Location
             employee.gameObject.SetActive(true);
 
             // TODO: Refactor when #45 will be resolved.
-            var meeting_room_places =
-                FindObjectOfType<MeetingRoomLogics>() as IDataProvider<MeetingRoomPlaces>;
-            var place = meeting_room_places
+            IDataProvider<MeetingRoomPlaces> meeting_room_places =
+                FindObjectOfType<MeetingRoomLogics>();
+            NeedProvider place = meeting_room_places
                 .GetData()
                 .Places.Where(place => place.TryTake(employee))
                 .FirstOrDefault();

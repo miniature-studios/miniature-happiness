@@ -41,7 +41,7 @@ namespace TileUnion
         }
     }
 
-    [AddComponentMenu("Scripts/TileUnion.Model")]
+    [AddComponentMenu("Scripts/TileUnion/TileUnion.Model")]
     public class Model : SerializedMonoBehaviour
     {
         [SerializeField]

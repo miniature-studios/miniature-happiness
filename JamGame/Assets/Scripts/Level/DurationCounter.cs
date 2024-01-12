@@ -9,7 +9,7 @@ namespace Level
         public int Value;
     }
 
-    [AddComponentMenu("Scripts/Level.DurationCounter")]
+    [AddComponentMenu("Scripts/Level/Level.DurationCounter")]
     public class DurationCounter : MonoBehaviour, IDataProvider<DaysLived>
     {
         [ReadOnly]

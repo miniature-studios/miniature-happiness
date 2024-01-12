@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Employee;
+using Employee.Needs;
 using UnityEngine;
 
 namespace Location
 {
-    [AddComponentMenu("Scripts/Location.NeedProvider")]
+    [AddComponentMenu("Scripts/Location/Location.NeedProvider")]
     public class NeedProvider : MonoBehaviour
     {
         public enum FilterType

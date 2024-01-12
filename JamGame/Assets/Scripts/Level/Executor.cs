@@ -22,7 +22,7 @@ namespace Level
         public bool Value;
     }
 
-    [AddComponentMenu("Scripts/Level.Executor")]
+    [AddComponentMenu("Scripts/Level/Level.Executor")]
     public class Executor : SerializedMonoBehaviour
     {
         [SerializeField]

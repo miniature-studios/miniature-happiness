@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Employee;
+using Employee.Needs;
 using UnityEngine;
 
 namespace Location
 {
-    [AddComponentMenu("Scripts/Location.NeedProviderManager")]
+    [AddComponentMenu("Scripts/Location/Location.NeedProviderManager")]
     public class NeedProviderManager : MonoBehaviour
     {
         private List<NeedProvider> needProviders;

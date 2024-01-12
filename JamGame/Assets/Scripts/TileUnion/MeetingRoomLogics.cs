@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using Employee.Needs;
 using Location;
 using Sirenix.OdinInspector;
 using TileUnion.Tile;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace TileUnion
 {
-    [AddComponentMenu("Scripts/TileUnion.MeetingRoomLogics")]
+    [AddComponentMenu("Scripts/TileUnion/TileUnion.MeetingRoomLogics")]
     public class MeetingRoomLogics : MonoBehaviour, IDataProvider<MeetingRoomPlaces>
     {
         [SerializeField]
@@ -157,12 +158,10 @@ namespace TileUnion
 
         public MeetingRoomPlaces GetData()
         {
-            var need_providers = transform.GetComponentsInChildren<NeedProvider>();
+            NeedProvider[] need_providers = transform.GetComponentsInChildren<NeedProvider>();
             return new MeetingRoomPlaces()
             {
-                Places = need_providers
-                    .Where(np => np.NeedType == Employee.NeedType.Meeting)
-                    .ToList()
+                Places = need_providers.Where(np => np.NeedType == NeedType.Meeting).ToList()
             };
         }
     }

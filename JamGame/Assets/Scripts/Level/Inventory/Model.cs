@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Level.Inventory
 {
-    [AddComponentMenu("Scripts/Level.Inventory.Model")]
+    [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.Model")]
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInInventory = new();

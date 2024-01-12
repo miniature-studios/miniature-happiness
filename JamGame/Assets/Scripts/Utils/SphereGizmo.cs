@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Utils
 {
-    [AddComponentMenu("Scripts/Utils.SphereGizmo")]
+    [AddComponentMenu("Scripts/Utils/Utils.SphereGizmo")]
     public class SphereGizmo : MonoBehaviour
     {
         private void OnDrawGizmos()

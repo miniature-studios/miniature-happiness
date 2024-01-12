@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using Employee.Needs;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Personality
 {
     // TODO: Can we place Quirk here or even make it to be not SO.
 
     [RequireComponent(typeof(EmployeeImpl))]
-    [AddComponentMenu("Scripts/Employee.Personality")]
-    public class Personality : MonoBehaviour
+    [AddComponentMenu("Scripts/Employee/Personality/Employee.Personality")]
+    public class PersonalityImpl : MonoBehaviour
     {
         [SerializeField]
         private string name_;

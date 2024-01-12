@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Needs
 {
     public struct NeedModifiersCollection
     {
@@ -63,7 +63,7 @@ namespace Employee
         }
     }
 
-    [AddComponentMenu("Scripts/Employee.NeedModifiers")]
+    [AddComponentMenu("Scripts/Employee/Employee.NeedModifiers")]
     public class NeedModifiers : MonoBehaviour
     {
         [SerializeField]

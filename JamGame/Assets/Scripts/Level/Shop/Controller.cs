@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Level.Shop
 {
-    [AddComponentMenu("Scripts/Level.Shop.Controller")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.Controller")]
     public class Controller : MonoBehaviour
     {
         [SerializeField]

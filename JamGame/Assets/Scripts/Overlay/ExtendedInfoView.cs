@@ -1,16 +1,17 @@
 using System.Linq;
 using Employee;
+using Employee.Personality;
 using TMPro;
 using UnityEngine;
 
 namespace Overlay
 {
-    [AddComponentMenu("Scripts/ExtendedInfoView")]
+    [AddComponentMenu("Scripts/Overlay/Overlay.ExtendedInfoView")]
     public class ExtendedInfoView : MonoBehaviour
     {
         private Camera cam;
 
-        private Personality personality;
+        private PersonalityImpl personality;
         private EmployeeImpl employee;
 
         private TMP_Text text;
@@ -19,7 +20,7 @@ namespace Overlay
         {
             cam = Camera.main;
 
-            personality = GetComponentInParent<Personality>();
+            personality = GetComponentInParent<PersonalityImpl>();
             employee = GetComponentInParent<EmployeeImpl>();
 
             text = GetComponentInChildren<TMP_Text>();

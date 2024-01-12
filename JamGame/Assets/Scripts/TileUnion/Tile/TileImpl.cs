@@ -13,7 +13,7 @@ namespace TileUnion.Tile
     [DisallowMultipleComponent]
     [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
-    [AddComponentMenu("Scripts/TileUnion.Tile.Tile")]
+    [AddComponentMenu("Scripts/TileUnion/Tile/TileUnion.Tile")]
     public partial class TileImpl : MonoBehaviour
     {
         [SerializeField]

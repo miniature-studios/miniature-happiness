@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace Level
 {
-    [AddComponentMenu("Scripts/Level.TransitionPanelShownEvent")]
+    [AddComponentMenu("Scripts/Level/Level.TransitionPanelShownEvent")]
     public class TransitionPanelShownEvent : MonoBehaviour
     {
         public UnityEvent OnShown;

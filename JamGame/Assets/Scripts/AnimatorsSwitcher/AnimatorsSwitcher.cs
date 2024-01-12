@@ -46,6 +46,7 @@ namespace AnimatorsSwitcher
         public List<InterfaceMatch> InterfaceMatcher = new();
     }
 
+    [AddComponentMenu("Scripts/AnimatorsSwitcher/AnimatorsSwitcher.AnimatorsSwitcher")]
     public class AnimatorsSwitcher : MonoBehaviour
     {
         [SerializeField]

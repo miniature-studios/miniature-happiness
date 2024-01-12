@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Level.Shop
 {
-    [AddComponentMenu("Scripts/Level.Shop.EmployeeView")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.EmployeeView")]
     public class EmployeeView : MonoBehaviour
     {
         [SerializeField]

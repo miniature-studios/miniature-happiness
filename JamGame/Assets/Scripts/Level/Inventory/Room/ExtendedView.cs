@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Level.Inventory.Room
 {
-    [AddComponentMenu("Scripts/Level.Inventory.Room.ExtendedView")]
+    [AddComponentMenu("Scripts/Level/Inventory/Room/Level.Inventory.Room.ExtendedView")]
     public class ExtendedView : MonoBehaviour
     {
         [SerializeField]

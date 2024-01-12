@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Employee.Needs;
 using UnityEngine;
 
 namespace Employee

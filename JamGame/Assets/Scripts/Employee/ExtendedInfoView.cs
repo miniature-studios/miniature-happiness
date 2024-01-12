@@ -1,15 +1,16 @@
 using System.Linq;
+using Employee.Personality;
 using TMPro;
 using UnityEngine;
 
 namespace Employee.ExtendedInfo
 {
-    [AddComponentMenu("Scripts/Employee.ExtendedInfo.View")]
+    [AddComponentMenu("Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.View")]
     public class View : MonoBehaviour
     {
         private Camera cam;
 
-        private Personality personality;
+        private PersonalityImpl personality;
         private EmployeeImpl employee;
 
         private TMP_Text text;
@@ -18,7 +19,7 @@ namespace Employee.ExtendedInfo
         {
             cam = Camera.main;
 
-            personality = GetComponentInParent<Personality>();
+            personality = GetComponentInParent<PersonalityImpl>();
             employee = GetComponentInParent<EmployeeImpl>();
 
             text = GetComponentInChildren<TMP_Text>();

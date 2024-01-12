@@ -18,7 +18,7 @@ namespace Level.Boss
         Complete
     }
 
-    [AddComponentMenu("Scripts/Level.Boss.Model")]
+    [AddComponentMenu("Scripts/Level/Boss/Level.Boss.Model")]
     public class Model : SerializedMonoBehaviour
     {
         [Serializable]

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Overlay
 {
-    [AddComponentMenu("Scripts/Overlay.Controller")]
+    [AddComponentMenu("Scripts/Overlay/Overlay.Controller")]
     public class Controller : MonoBehaviour
     {
         [HideLabel]

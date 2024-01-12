@@ -1,9 +1,9 @@
 ﻿#if UNITY_EDITOR
-using Level.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Level.Config;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
