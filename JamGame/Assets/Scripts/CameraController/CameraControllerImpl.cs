@@ -1,108 +1,45 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CameraController
 {
     [AddComponentMenu("Scripts/CameraController/CameraController")]
     public class CameraControllerImpl : MonoBehaviour
     {
+        [ReadOnly]
         [SerializeField]
-        private Vector2 moveSensitivity;
+        private Vector2 moveVector = Vector2.zero;
 
         [SerializeField]
-        private float scrollSensitivity;
+        private float moveSpeed;
 
-        [SerializeField]
-        private float minDistance;
+        private InputActions inputActions = null;
 
-        [SerializeField]
-        private float maxDistance;
-        public float Distance;
-
-        [SerializeField]
-        private Transform lookAt;
-
-        [SerializeField]
-        private float topLimiter;
-
-        [SerializeField]
-        private float bottomLimiter;
-        public Vector2 PitchYaw;
-
-        private void Start()
+        private void Awake()
         {
-            Distance = (minDistance + maxDistance) * 0.5f;
-            SetDistance();
-
-            Vector3 lookAtVector = transform.position - lookAt.position;
-            Vector3 lookAtVectorProjXZ = lookAtVector;
-            lookAtVectorProjXZ.y = 0;
-            Vector3 lookAtVectorTangent = new(lookAtVectorProjXZ.z, 0.0f, -lookAtVectorProjXZ.x);
-
-            float pitch = Vector3.SignedAngle(
-                lookAtVector,
-                lookAtVectorProjXZ,
-                lookAtVectorTangent
-            );
-            float yaw = Vector3.SignedAngle(new Vector3(0, 0, 1), lookAtVectorProjXZ, Vector3.up);
-
-            PitchYaw = new Vector2(pitch, yaw);
-
-            transform.LookAt(lookAt);
+            inputActions = new();
+            inputActions.Enable();
+            inputActions.CameraLook.Move.performed += MovePerformed;
+            inputActions.CameraLook.Move.canceled += MoveCanceled;
         }
 
-        private bool movingAround = false;
-        private Vector2 prevMousePosition;
+        public void MoveCanceled(InputAction.CallbackContext context)
+        {
+            moveVector = Vector2.zero;
+        }
+
+        public void MovePerformed(InputAction.CallbackContext context)
+        {
+            moveVector = context.ReadValue<Vector2>();
+        }
 
         private void Update()
         {
-            if (movingAround)
-            {
-                Vector2 mouseDelta = (Vector2)Input.mousePosition - prevMousePosition;
-                Vector2 deltaMove = mouseDelta * moveSensitivity;
-                prevMousePosition = (Vector2)Input.mousePosition;
-
-                PitchYaw += new Vector2(-deltaMove.y, deltaMove.x);
-                PitchYaw.x = Mathf.Clamp(PitchYaw.x, bottomLimiter, topLimiter);
-                SetPitchYaw();
-
-                if (Input.GetMouseButtonUp(2))
-                {
-                    movingAround = false;
-                }
-
-                return;
-            }
-
-            float scroll = Input.mouseScrollDelta.y;
-            if (Mathf.Abs(scroll) > 0.001)
-            {
-                Distance -= scrollSensitivity * scroll;
-                Distance = Mathf.Clamp(Distance, minDistance, maxDistance);
-                SetDistance();
-                return;
-            }
-
-            if (Input.GetMouseButtonDown(2))
-            {
-                movingAround = true;
-                prevMousePosition = Input.mousePosition;
-            }
-        }
-
-        private void SetDistance()
-        {
-            float distance = (transform.position - lookAt.position).magnitude;
-            transform.position =
-                lookAt.position + ((transform.position - lookAt.position) / distance * Distance);
-        }
-
-        private void SetPitchYaw()
-        {
-            Vector3 offset = new Vector3(0, 0, 1) * Distance;
-            offset = Quaternion.AngleAxis(PitchYaw.x, Vector3.left) * offset;
-            offset = Quaternion.AngleAxis(PitchYaw.y, Vector3.up) * offset;
-            transform.position = lookAt.position + offset;
-            transform.LookAt(lookAt.position);
+            Debug.Log(transform.position);
+            transform.position += transform.TransformDirection(
+                new Vector3(moveVector.y, 0, moveVector.x) * Time.unscaledDeltaTime * moveSpeed
+            );
         }
     }
 }
