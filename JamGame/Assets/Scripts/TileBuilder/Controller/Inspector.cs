@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TileBuilder.Controller
 {
-    public partial class ControllerImpl : MonoBehaviour
+    public partial class ControllerImpl
     {
         public CoreModel FreeSpace => tileBuilder.FreeSpace;
 

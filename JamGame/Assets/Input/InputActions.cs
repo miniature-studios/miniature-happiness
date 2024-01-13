@@ -179,18 +179,18 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Mouse Rotate"",
-                    ""id"": ""ba9825b6-c436-4658-b367-079d4c0c3d7c"",
-                    ""path"": ""OneModifier"",
+                    ""id"": ""bcba3cd9-677e-4acc-b9f6-d4f641046e31"",
+                    ""path"": ""TwoModifiers"",
                     ""interactions"": """",
-                    ""processors"": ""Invert"",
+                    ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Rotate"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier"",
-                    ""id"": ""ef47bbfd-8af4-4749-868e-66a4350c13dc"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""943157a6-901e-4c75-a19f-141ab0049ea4"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -200,9 +200,20 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier2"",
+                    ""id"": ""04267760-4df1-44e7-9946-fee8d616b67b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""binding"",
-                    ""id"": ""e72f71f2-b81a-49a3-b4dc-b6fd390d4bdf"",
-                    ""path"": ""<Mouse>/scroll/y"",
+                    ""id"": ""7674ef61-4576-46f3-b56c-5a396d08d81d"",
+                    ""path"": ""<Mouse>/delta/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -122,5 +122,10 @@ namespace TileBuilder.Controller
 
             return new SuccessResult();
         }
+
+        public Vector3 FitPositionInBuilding(Vector3 point)
+        {
+            return tileBuilder.FitPointInside(point);
+        }
     }
 }

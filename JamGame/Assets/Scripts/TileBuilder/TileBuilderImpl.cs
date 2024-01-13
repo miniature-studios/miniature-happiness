@@ -440,5 +440,30 @@ namespace TileBuilder
 
             return new RoomCountByUid() { CountByUid = count };
         }
+
+        public Vector3 FitPointInside(Vector3 point)
+        {
+            Vector2Int position = GridProperties.GetMatrixPosition(point);
+            IEnumerable<Vector2Int> insidePositions = TileUnionDictionary
+                .Where(pair => !pair.Value.IsAllWithMark("Outside"))
+                .Select(pair => pair.Key);
+            if (!insidePositions.Contains(position))
+            {
+                Vector2Int newPosition = insidePositions
+                    .OrderBy(vec => Vector2Int.Distance(vec, position))
+                    .First();
+                return MoveToPosition(newPosition, point);
+            }
+            return point;
+        }
+
+        private Vector3 MoveToPosition(Vector2Int position, Vector3 point)
+        {
+            Vector3 worldPosition = GridProperties.GetWorldPoint(position);
+            float halfStep = (float)GridProperties.Step / 2;
+            point.x = Mathf.Clamp(point.x, worldPosition.x - halfStep, worldPosition.x + halfStep);
+            point.z = Mathf.Clamp(point.z, worldPosition.z - halfStep, worldPosition.z + halfStep);
+            return point;
+        }
     }
 }

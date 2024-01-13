@@ -39,6 +39,9 @@ namespace CameraController
         private CinemachineVirtualCamera virtualCamera;
         private Cinemachine3rdPersonFollow personFollow;
 
+        [SerializeField]
+        private TileBuilder.Controller.ControllerImpl tileController;
+
         private InputActions inputActions = null;
 
         private void Awake()
@@ -101,19 +104,23 @@ namespace CameraController
 
         private void Update()
         {
-            ProcessMoving();
             bool rotated = ProcessRotation();
             if (!rotated)
             {
+                ProcessMoving();
                 ProcessZoom();
             }
         }
 
         private void ProcessMoving()
         {
-            transform.position += transform.TransformDirection(
-                Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
-            );
+            Vector3 newPosition =
+                transform.position
+                + transform.TransformDirection(
+                    Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
+                );
+
+            transform.position = tileController.FitPositionInBuilding(newPosition);
         }
 
         private bool ProcessRotation()
