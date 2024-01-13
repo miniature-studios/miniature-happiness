@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2295257828796690578}
-  - component: {fileID: 1723745330881879572}
   - component: {fileID: 7432799769784669489}
+  - component: {fileID: 4179768186529116556}
+  - component: {fileID: 4517460662340294446}
   m_Layer: 0
   m_Name: CameraTarget
   m_TagString: Untagged
@@ -33,28 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1723745330881879572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2543505845816447370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6520f7035919bab45800daf48f06f63d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveVector: {x: 0, y: 0}
-  moveSpeed: 4
-  zoomValue: 0
-  zoomSpeed: 2
-  rotateValue: 0
-  rotateSpeed: 120
-  cameraSideRange: {x: 0.65, y: 1}
-  verticalArmLengthRange: {x: -5, y: 12}
-  virtualCamera: {fileID: 0}
-  tileController: {fileID: 0}
 --- !u!114 &7432799769784669489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,3 +46,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca3b93a1ec6cf29499157f5fdfb8cc89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4179768186529116556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2543505845816447370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d846e618fa593b44ab0e6e99718e505b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logic: {fileID: 4517460662340294446}
+--- !u!114 &4517460662340294446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2543505845816447370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd6914835f585e146be0467477cc0735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveVector: {x: 0, y: 0}
+  moveSpeed: 4
+  zoomValue: 0
+  zoomSpeed: 2
+  rotateValue: 0
+  rotateSpeed: 120
+  cameraSideRange: {x: 0.65, y: 1}
+  verticalArmLengthRange: {x: -5, y: 12}
+  virtualCamera: {fileID: 0}
+  tileController: {fileID: 0}

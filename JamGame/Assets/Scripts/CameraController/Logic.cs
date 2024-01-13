@@ -1,12 +1,12 @@
-using Cinemachine;
+﻿using Cinemachine;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace CameraController
 {
-    [AddComponentMenu("Scripts/CameraController/CameraController")]
-    public class CameraControllerImpl : MonoBehaviour
+    [AddComponentMenu("Scripts/CameraController/CameraController.Logic")]
+    internal class Logic : MonoBehaviour
     {
         [ReadOnly]
         [SerializeField]
@@ -42,42 +42,17 @@ namespace CameraController
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileController;
 
-        private InputActions inputActions = null;
-
         private void Awake()
         {
-            inputActions = new();
             personFollow = virtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         }
 
-        private void OnEnable()
-        {
-            inputActions.Enable();
-            inputActions.CameraLook.Move.performed += MovePerformed;
-            inputActions.CameraLook.Move.canceled += MoveCanceled;
-            inputActions.CameraLook.Zoom.performed += ZoomPerformed;
-            inputActions.CameraLook.Zoom.canceled += ZoomCanceled;
-            inputActions.CameraLook.Rotate.performed += RotatePerformed;
-            inputActions.CameraLook.Rotate.canceled += RotateCanceled;
-        }
-
-        private void OnDisable()
-        {
-            inputActions.CameraLook.Move.performed -= MovePerformed;
-            inputActions.CameraLook.Move.canceled -= MoveCanceled;
-            inputActions.CameraLook.Zoom.performed -= ZoomPerformed;
-            inputActions.CameraLook.Zoom.canceled -= ZoomCanceled;
-            inputActions.CameraLook.Rotate.performed -= RotatePerformed;
-            inputActions.CameraLook.Rotate.canceled -= RotateCanceled;
-            inputActions.Disable();
-        }
-
-        private void ZoomPerformed(InputAction.CallbackContext context)
+        public void ZoomPerformed(InputAction.CallbackContext context)
         {
             zoomValue = context.ReadValue<float>();
         }
 
-        private void ZoomCanceled(InputAction.CallbackContext context)
+        public void ZoomCanceled(InputAction.CallbackContext context)
         {
             zoomValue = 0;
         }
@@ -92,12 +67,12 @@ namespace CameraController
             moveVector = context.ReadValue<Vector2>();
         }
 
-        private void RotateCanceled(InputAction.CallbackContext context)
+        public void RotateCanceled(InputAction.CallbackContext context)
         {
             rotateValue = 0;
         }
 
-        private void RotatePerformed(InputAction.CallbackContext context)
+        public void RotatePerformed(InputAction.CallbackContext context)
         {
             rotateValue = context.ReadValue<float>();
         }
