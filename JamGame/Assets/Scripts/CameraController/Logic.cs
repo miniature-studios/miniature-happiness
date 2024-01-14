@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Common;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -95,7 +96,8 @@ namespace CameraController
                     Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
                 );
 
-            transform.position = tileController.FitPositionInBuilding(newPosition);
+            Bounds bounds = tileController.GetBuildingBounds();
+            transform.position = bounds.FitInBounds(newPosition);
         }
 
         private bool ProcessRotation()

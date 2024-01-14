@@ -369,6 +369,7 @@ namespace TileBuilder
             {
                 TileUnionDictionary.Add(pos, tileUnion);
             }
+            CalculateInsideBounds();
         }
 
         private void RemoveTileFromDictionary(TileUnionImpl tileUnion)
@@ -387,6 +388,7 @@ namespace TileBuilder
                     }
                 }
             } while (flag);
+            CalculateInsideBounds();
         }
 
         private void UpdateSidesInPositions(IEnumerable<Vector2Int> positions)
@@ -441,29 +443,50 @@ namespace TileBuilder
             return new RoomCountByUid() { CountByUid = count };
         }
 
-        public Vector3 FitPointInside(Vector3 point)
+        private Bounds Bounds { get; set; } =
+            new Bounds(Vector3.zero, new Vector3(float.MaxValue, float.MaxValue, float.MaxValue));
+
+        public Bounds GetInsideBounds()
         {
-            Vector2Int position = GridProperties.GetMatrixPosition(point);
+            return Bounds;
+        }
+
+        public void CalculateInsideBounds()
+        {
             IEnumerable<Vector2Int> insidePositions = TileUnionDictionary
                 .Where(pair => !pair.Value.IsAllWithMark("Outside"))
                 .Select(pair => pair.Key);
-            if (!insidePositions.Contains(position))
-            {
-                Vector2Int newPosition = insidePositions
-                    .OrderBy(vec => Vector2Int.Distance(vec, position))
-                    .First();
-                return MoveToPosition(newPosition, point);
-            }
-            return point;
-        }
 
-        private Vector3 MoveToPosition(Vector2Int position, Vector3 point)
-        {
-            Vector3 worldPosition = GridProperties.GetWorldPoint(position);
+            if (!insidePositions.Any())
+            {
+                return;
+            }
+
+            IEnumerable<int> xList = insidePositions.Select(vec => vec.x);
+            IEnumerable<int> yList = insidePositions.Select(vec => vec.y);
+
             float halfStep = (float)GridProperties.Step / 2;
-            point.x = Mathf.Clamp(point.x, worldPosition.x - halfStep, worldPosition.x + halfStep);
-            point.z = Mathf.Clamp(point.z, worldPosition.z - halfStep, worldPosition.z + halfStep);
-            return point;
+            Vector3 shift = new(halfStep, 0, halfStep);
+
+            Vector3 point1 = GridProperties.GetWorldPoint(new(xList.Min(), yList.Min()));
+            Vector3 point2 = GridProperties.GetWorldPoint(new(xList.Max(), yList.Max()));
+
+            Vector3 min =
+                new Vector3(
+                    Mathf.Min(point1.x, point2.x),
+                    float.MinValue,
+                    Mathf.Min(point1.z, point2.z)
+                ) - shift;
+            Vector3 max =
+                new Vector3(
+                    Mathf.Max(point1.x, point2.x),
+                    float.MaxValue,
+                    Mathf.Max(point1.z, point2.z)
+                ) + shift;
+
+            Bounds bounds = new();
+            bounds.SetMinMax(min, max);
+            Bounds = bounds;
         }
     }
 }

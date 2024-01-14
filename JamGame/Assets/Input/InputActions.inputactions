@@ -39,7 +39,7 @@
                     "id": "610e1cdf-e94c-44bd-8ce9-c649176e8f32",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=2,y=2)",
                     "groups": "",
                     "action": "Move",
                     "isComposite": true,
@@ -191,6 +191,39 @@
                 {
                     "name": "binding",
                     "id": "7674ef61-4576-46f3-b56c-5a396d08d81d",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Middle mouse button",
+                    "id": "5f12fe83-258b-4a55-95f5-f7cf41a706cc",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "3316db90-7489-4b2a-a1bb-333286d2c070",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "3f1b4550-2bbe-4313-bb7e-0f91a203a50b",
                     "path": "<Mouse>/delta/x",
                     "interactions": "",
                     "processors": "",

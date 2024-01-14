@@ -123,9 +123,9 @@ namespace TileBuilder.Controller
             return new SuccessResult();
         }
 
-        public Vector3 FitPositionInBuilding(Vector3 point)
+        public Bounds GetBuildingBounds()
         {
-            return tileBuilder.FitPointInside(point);
+            return tileBuilder.GetInsideBounds();
         }
     }
 }
