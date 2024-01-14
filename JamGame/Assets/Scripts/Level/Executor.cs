@@ -74,8 +74,6 @@ namespace Level
         public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
 
-        private void Awake() { }
-
         public void Execute(DayStart dayStart)
         {
             needProviderManager.InitGameMode();
