@@ -68,7 +68,7 @@ namespace Location
 
         public Result AddEmployee(EmployeeConfig config)
         {
-            var result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
+            Result result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
 
             if (result.Failure)
             {
@@ -79,10 +79,9 @@ namespace Location
                 .GetComponent<EmployeeImpl>();
             employee.gameObject.SetActive(true);
 
-            // TODO: Refactor when #45 will be resolved.
-            var meeting_room_places =
+            MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
-            var place = meeting_room_places
+            NeedProvider place = meeting_room_places
                 .Places.Where(place => place.TryTake(employee))
                 .FirstOrDefault();
 

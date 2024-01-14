@@ -13,7 +13,7 @@ namespace TileUnion
     [AddComponentMenu("Scripts/TileUnion/TileUnion.MeetingRoomLogics")]
     public class MeetingRoomLogics : MonoBehaviour
     {
-        DataProvider<MeetingRoomPlaces> meetingRoomPlacesDataProvider;
+        private DataProvider<MeetingRoomPlaces> meetingRoomPlacesDataProvider;
 
         [SerializeField]
         private TileUnionImpl tileUnion;
@@ -54,7 +54,7 @@ namespace TileUnion
         {
             meetingRoomPlacesDataProvider = new DataProvider<MeetingRoomPlaces>(() =>
             {
-                var need_providers = transform.GetComponentsInChildren<NeedProvider>();
+                NeedProvider[] need_providers = transform.GetComponentsInChildren<NeedProvider>();
                 return new MeetingRoomPlaces()
                 {
                     Places = need_providers.Where(np => np.NeedType == NeedType.Meeting).ToList()

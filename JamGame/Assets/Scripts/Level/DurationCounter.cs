@@ -12,7 +12,7 @@ namespace Level
     [AddComponentMenu("Scripts/Level/Level.DurationCounter")]
     public class DurationCounter : MonoBehaviour
     {
-        DataProvider<DaysLived> daysLivedDataProvider;
+        private DataProvider<DaysLived> daysLivedDataProvider;
 
         [ReadOnly]
         [SerializeField]

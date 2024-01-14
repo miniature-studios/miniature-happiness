@@ -6,7 +6,7 @@ namespace Common
 
     public class DataProvider<D> : IDataProvider
     {
-        Func<D> fetchData;
+        private Func<D> fetchData;
 
         public DataProvider(Func<D> fetch_data)
         {

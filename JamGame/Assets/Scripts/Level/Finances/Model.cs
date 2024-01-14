@@ -13,7 +13,7 @@ namespace Level.Finances
     [AddComponentMenu("Scripts/Level/Finances/Level.Finances.Model")]
     public class Model : MonoBehaviour
     {
-        DataProvider<MoneyEarned> moneyEarnedDataProvider;
+        private DataProvider<MoneyEarned> moneyEarnedDataProvider;
 
         [ReadOnly]
         [SerializeField]

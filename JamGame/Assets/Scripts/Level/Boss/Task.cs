@@ -93,7 +93,9 @@ namespace Level.Boss.Task
                 return;
             }
 
-            var max_stress = DataProviderServiceLocator.FetchDataFromSingleton<MaxStress>().Stress;
+            float max_stress = DataProviderServiceLocator
+                .FetchDataFromSingleton<MaxStress>()
+                .Stress;
             if (max_stress < MaxStressTarget)
             {
                 currentDuration += delta_time;

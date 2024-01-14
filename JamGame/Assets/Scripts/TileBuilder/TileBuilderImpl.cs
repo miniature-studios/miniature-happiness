@@ -24,7 +24,7 @@ namespace TileBuilder
     [AddComponentMenu("Scripts/TileBuilder/TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
-        DataProvider<RoomCountByUid> roomCountDataProvider;
+        private DataProvider<RoomCountByUid> roomCountDataProvider;
 
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel FreeSpace;
