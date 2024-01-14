@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3110821718998623523}
+  - component: {fileID: 7260772582350482911}
   m_Layer: 0
   m_Name: Center
   m_TagString: Untagged
@@ -28,10 +29,25 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7932211826634701074}
+  m_Children: []
   m_Father: {fileID: 4870030722263301879}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7260772582350482911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044912829617311177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c000df1d65cdba742aadb9ace7537a08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: {x: 5, y: 0.1, z: 5}
+  shift: {x: 0, y: 0, z: 0}
+  color: {r: 0.5911949, g: 1, b: 0.8793137, a: 1}
+  isWireframe: 1
 --- !u!1 &1698300087744768227
 GameObject:
   m_ObjectHideFlags: 0
@@ -1386,68 +1402,6 @@ GameObject:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6586609481843613895, guid: 51758d2eb9571364ab7ee7ce6434337e, type: 3}
   m_PrefabInstance: {fileID: 3390894549130739336}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &3574345589141815909
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 3110821718998623523}
-    m_Modifications:
-    - target: {fileID: 6885512078388296562, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_Name
-      value: Center_Nothing
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
---- !u!4 &7932211826634701074 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6885512078388296567, guid: 0bd44dd3de882fb4091730134f401986, type: 3}
-  m_PrefabInstance: {fileID: 3574345589141815909}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3580930820612628452
 PrefabInstance:
