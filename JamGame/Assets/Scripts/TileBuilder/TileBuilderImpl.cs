@@ -56,6 +56,8 @@ namespace TileBuilder
         public GameMode CurrentGameMode => validator.GameMode;
 
         private Vector2Int stashPosition = new(-10, -10);
+        private float boundingBoxMin = -100.0f;
+        private float boundingBoxMax = 100.0f;
 
         private void Awake()
         {
@@ -447,7 +449,7 @@ namespace TileBuilder
 
             return buildingConfig;
         }
-        
+
         public Bounds Bounds { get; private set; } =
             new Bounds(Vector3.zero, Vector3.positiveInfinity);
 
@@ -478,9 +480,9 @@ namespace TileBuilder
             Vector3 shift = new(halfStep, 0, halfStep);
 
             Vector3 min = Vector3.Min(point1, point2) - shift;
-            min.y = float.NegativeInfinity;
+            min.y = boundingBoxMin;
             Vector3 max = Vector3.Max(point1, point2) + shift;
-            max.y = float.PositiveInfinity;
+            max.y = boundingBoxMax;
 
             Bounds bounds = new();
             bounds.SetMinMax(min, max);
