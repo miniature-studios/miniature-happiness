@@ -53,14 +53,15 @@ namespace TileUnion.Tile
         {
             foreach (KeyValuePair<Renderer, Material[]> materialsMap in initialMaterialsMap)
             {
-                materialsMap.Key.materials =
+                materialsMap.Key.SetMaterials(
                     state == State.Default
-                        ? materialsMap.Value
+                        ? materialsMap.Value.ToList()
                         : Enumerable
                             .Range(0, materialsMap.Value.Count())
                             .Select(x => materialsByState[state].ToList())
                             .Aggregate((x, y) => x.Concat(y).ToList())
-                            .ToArray();
+                            .ToList()
+                );
             }
         }
     }
