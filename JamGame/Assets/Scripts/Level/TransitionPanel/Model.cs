@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Level.TransitionPanel
 {
-    [AddComponentMenu("Scripts/Level.TransitionPanel.Model")]
+    [AddComponentMenu("Scripts/Level/TransitionPanel/Level.TransitionPanel.Model")]
     public class Model : MonoBehaviour
     {
         [ReadOnly]

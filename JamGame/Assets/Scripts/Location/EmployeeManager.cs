@@ -1,11 +1,11 @@
-﻿using Common;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Common;
 using Employee;
 using Level;
 using Level.Boss.Task;
 using Level.Config;
 using Scripts;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using TileBuilderController = TileBuilder.Controller.ControllerImpl;
 
@@ -16,7 +16,7 @@ namespace Location
         public List<NeedProvider> Places;
     }
 
-    [AddComponentMenu("Scripts/Location.EmployeeManager")]
+    [AddComponentMenu("Scripts/Location/Location.EmployeeManager")]
     public class EmployeeManager : MonoBehaviour
     {
         private DataProvider<EmployeeAmount> employeeAmountDataProvider;
@@ -79,9 +79,11 @@ namespace Location
                 .GetComponent<EmployeeImpl>();
             employee.gameObject.SetActive(true);
 
+            // TODO: Refactor when #45 will be resolved.
             var meeting_room_places =
-                DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
+                FindObjectOfType<MeetingRoomLogics>() as IDataProvider<MeetingRoomPlaces>;
             var place = meeting_room_places
+                .GetData()
                 .Places.Where(place => place.TryTake(employee))
                 .FirstOrDefault();
 

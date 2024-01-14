@@ -11,7 +11,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void SetDirectionsGizmo(bool value)
         {
-            foreach (Tile.TileImpl tile in Tiles)
+            foreach (TileImpl tile in Tiles)
             {
                 tile.ShowDirectionGizmo = value;
             }
@@ -20,7 +20,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void SetPathGizmo(bool value)
         {
-            foreach (Tile.TileImpl tile in Tiles)
+            foreach (TileImpl tile in Tiles)
             {
                 tile.ShowPathGizmo = value;
             }
@@ -29,7 +29,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void SetCenterCube(bool value)
         {
-            foreach (Tile.TileImpl tile in Tiles)
+            foreach (TileImpl tile in Tiles)
             {
                 tile.SetCubeInCenter(value);
             }

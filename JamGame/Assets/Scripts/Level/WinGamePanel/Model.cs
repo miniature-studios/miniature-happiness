@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Level.WinGamePanel
 {
-    [AddComponentMenu("Scripts/Level.WinGamePanel.Model")]
+    [AddComponentMenu("Scripts/Level/WinGamePanel/Level.WinGamePanel.Model")]
     public class Model : MonoBehaviour
     {
         [SerializeField]

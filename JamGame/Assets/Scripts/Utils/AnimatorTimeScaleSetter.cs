@@ -1,5 +1,4 @@
 using UnityEngine;
-
 #if UNITY_EDITOR
 
 using System.IO;
@@ -71,7 +70,7 @@ namespace Utils
 
 namespace Utils
 {
-    [AddComponentMenu("Scripts/Utils.IgnoreAnimatorTimeScaleSetter")]
+    [AddComponentMenu("Scripts/Utils/Utils.IgnoreAnimatorTimeScaleSetter")]
     public class AnimatorTimeScaleSetter : MonoBehaviour
     {
         // Not called IgnoreAnimatorTimeScaleSetter because file name should match the class name.

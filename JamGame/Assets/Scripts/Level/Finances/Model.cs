@@ -10,7 +10,7 @@ namespace Level.Finances
         public float Value;
     }
 
-    [AddComponentMenu("Scripts/Level.Finances.Model")]
+    [AddComponentMenu("Scripts/Level/Finances/Level.Finances.Model")]
     public class Model : MonoBehaviour
     {
         DataProvider<MoneyEarned> moneyEarnedDataProvider;

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Level.Inventory.Room
 {
-    [AddComponentMenu("Scripts/Level.Inventory.Room.View")]
+    [AddComponentMenu("Scripts/Level/Inventory/Room/Level.Inventory.Room.View")]
     public class View : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     {
         [Pickle(LookupType = ObjectProviderType.Assets)]

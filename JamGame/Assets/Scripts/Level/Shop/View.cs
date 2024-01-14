@@ -1,9 +1,9 @@
-﻿using Common;
-using Level.Config;
-using Level.Room;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Common;
+using Level.Config;
+using Level.Room;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -11,7 +11,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Shop
 {
     [RequireComponent(typeof(Animator))]
-    [AddComponentMenu("Scripts/Level.Shop.View")]
+    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

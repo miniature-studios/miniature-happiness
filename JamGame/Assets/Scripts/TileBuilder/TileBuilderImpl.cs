@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Level.Boss.Task;
 using Level.Room;
 using Pickle;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TileBuilder.Command;
 using TileUnion;
 using TileUnion.Tile;
@@ -21,7 +21,7 @@ namespace TileBuilder
         Play
     }
 
-    [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
+    [AddComponentMenu("Scripts/TileBuilder/TileBuilder")]
     public partial class TileBuilderImpl : MonoBehaviour
     {
         DataProvider<RoomCountByUid> roomCountDataProvider;

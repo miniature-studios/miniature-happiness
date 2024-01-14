@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Needs
 {
     public struct NeedModifiersCollection
     {
@@ -20,10 +20,10 @@ namespace Employee
             modifiers = new Dictionary<NeedType, Need.NeedProperties>();
             foreach (Need.NeedProperties modifier in modifiers_raw)
             {
-                if(modifiers.ContainsKey(modifier.NeedType))
+                if (modifiers.ContainsKey(modifier.NeedType))
                 {
                     modifiers[modifier.NeedType] = modifiers[modifier.NeedType].Combine(modifier);
-                } 
+                }
                 else
                 {
                     modifiers.Add(modifier.NeedType, modifier);
@@ -63,7 +63,7 @@ namespace Employee
         }
     }
 
-    [AddComponentMenu("Scripts/Employee.NeedModifiers")]
+    [AddComponentMenu("Scripts/Employee/Employee.NeedModifiers")]
     public class NeedModifiers : MonoBehaviour
     {
         [SerializeField]

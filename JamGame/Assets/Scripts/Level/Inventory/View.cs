@@ -1,9 +1,9 @@
-﻿using Common;
-using Level.Room;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Common;
+using Level.Room;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -12,7 +12,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Inventory
 {
     [RequireComponent(typeof(Animator))]
-    [AddComponentMenu("Scripts/Level.Inventory.View")]
+    [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.View")]
     public class View : MonoBehaviour
     {
         [SerializeField]

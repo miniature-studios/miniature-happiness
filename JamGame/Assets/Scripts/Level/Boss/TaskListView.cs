@@ -1,12 +1,12 @@
-using Level.Boss.Task;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Level.Boss.Task;
 using UnityEngine;
 
 namespace Level.Boss
 {
-    [AddComponentMenu("Scripts/Level.Boss.TaskListView")]
+    [AddComponentMenu("Scripts/Level/Boss/Level.Boss.TaskListView")]
     public class TaskListView : MonoBehaviour
     {
         [SerializeField]

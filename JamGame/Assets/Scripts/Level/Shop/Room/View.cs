@@ -1,14 +1,14 @@
-﻿using Common;
+﻿using System;
+using Common;
 using Level.Room;
 using Pickle;
 using Sirenix.OdinInspector;
-using System;
 using TMPro;
 using UnityEngine;
 
 namespace Level.Shop.Room
 {
-    [AddComponentMenu("Scripts/Level.Shop.Room.View")]
+    [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.View")]
     public class View : MonoBehaviour
     {
         [Pickle(LookupType = ObjectProviderType.Assets)]

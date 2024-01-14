@@ -1,6 +1,7 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using Employee.Needs;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee
@@ -27,7 +28,7 @@ namespace Employee
     }
 
     [RequireComponent(typeof(EmployeeImpl))]
-    [AddComponentMenu("Scripts/Employee.StressMeter")]
+    [AddComponentMenu("Scripts/Employee/Employee.StressMeter")]
     public class StressMeter : MonoBehaviour, IEffectExecutor<StressEffect>
     {
         private EmployeeImpl employee;

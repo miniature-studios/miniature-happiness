@@ -1,8 +1,8 @@
-using Common;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
+using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEditor;
 using UnityEngine;
@@ -13,7 +13,7 @@ namespace TileUnion.Tile
     [DisallowMultipleComponent]
     [RequireComponent(typeof(View))]
     [RequireComponent(typeof(BoxCollider))]
-    [AddComponentMenu("Scripts/TileUnion.Tile.Tile")]
+    [AddComponentMenu("Scripts/TileUnion/Tile/TileUnion.Tile")]
     public partial class TileImpl : MonoBehaviour
     {
         [SerializeField]

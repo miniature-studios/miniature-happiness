@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Employee
 {
     [RequireComponent(typeof(EmployeeImpl))]
-    [AddComponentMenu("Scripts/Employee.View")]
+    [AddComponentMenu("Scripts/Employee/Employee.View")]
     public partial class View : MonoBehaviour
     {
         private EmployeeImpl employee;
@@ -26,14 +26,14 @@ namespace Employee
         }
     }
 
-    public partial class View : IOverlayRenderer<Overlay.Stress>
+    public partial class View : IOverlayRenderer<Stress>
     {
         [SerializeField]
         private MeshRenderer meshRenderer;
 
-        private Overlay.Stress appliedStressOverlay;
+        private Stress appliedStressOverlay;
 
-        public void ApplyOverlay(Overlay.Stress overlay)
+        public void ApplyOverlay(Stress overlay)
         {
             appliedStressOverlay = overlay;
         }
@@ -74,11 +74,11 @@ namespace Employee
         }
     }
 
-    public partial class View : IOverlayRenderer<Overlay.ExtendedEmployeeInfo>
+    public partial class View : IOverlayRenderer<ExtendedEmployeeInfo>
     {
         private GameObject overlayUI;
 
-        public void ApplyOverlay(Overlay.ExtendedEmployeeInfo overlay)
+        public void ApplyOverlay(ExtendedEmployeeInfo overlay)
         {
             if (overlayUI == null)
             {

@@ -1,8 +1,8 @@
-﻿using Common;
+﻿using System;
+using System.Collections.Generic;
+using Common;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using System;
-using System.Collections.Generic;
 using TileUnion.PlaceCondition;
 using UnityEngine;
 
@@ -41,7 +41,7 @@ namespace TileUnion
         }
     }
 
-    [AddComponentMenu("Scripts/TileUnion.Model")]
+    [AddComponentMenu("Scripts/TileUnion/TileUnion.Model")]
     public class Model : SerializedMonoBehaviour
     {
         [SerializeField]

@@ -1,9 +1,10 @@
 using Employee;
+using Employee.Needs;
 using UnityEngine;
 
 namespace Location
 {
-    [AddComponentMenu("Scripts/Location.AllChildrenNeedModifiersApplier")]
+    [AddComponentMenu("Scripts/Location/Location.AllChildrenNeedModifiersApplier")]
     [RequireComponent(typeof(NeedModifiers))]
     public class AllChildrenNeedModifiersApplier : MonoBehaviour
     {

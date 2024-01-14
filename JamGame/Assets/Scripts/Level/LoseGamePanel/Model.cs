@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Level.LoseGamePanel
 {
-    [AddComponentMenu("Scripts/Level.LoseGamePanel.Model")]
+    [AddComponentMenu("Scripts/Level/LoseGamePanel/Level.LoseGamePanel.Model")]
     public class Model : MonoBehaviour
     {
         [SerializeField]
