@@ -24,14 +24,22 @@ namespace TileBuilder
             if (plane.Raycast(ray, out float enter))
             {
                 Vector3 hitPoint = ray.GetPoint(enter);
-                return new SuccessResult<Vector2Int>(
-                    new(Mathf.RoundToInt(-hitPoint.z / Step), Mathf.RoundToInt(hitPoint.x / Step))
-                );
+                return new SuccessResult<Vector2Int>(GetMatrixPosition(hitPoint));
             }
             else
             {
                 return new FailResult<Vector2Int>("No ray hits with matrix");
             }
+        }
+
+        public Vector2Int GetMatrixPosition(Vector3 point)
+        {
+            return new(Mathf.RoundToInt(-point.z / Step), Mathf.RoundToInt(point.x / Step));
+        }
+
+        public Vector3 GetWorldPoint(Vector2Int point)
+        {
+            return new(point.y * Step, 0, -point.x * Step);
         }
     }
 }

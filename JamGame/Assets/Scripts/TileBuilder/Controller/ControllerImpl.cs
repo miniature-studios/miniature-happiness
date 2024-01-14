@@ -122,5 +122,10 @@ namespace TileBuilder.Controller
 
             return new SuccessResult();
         }
+
+        public Bounds GetBuildingBounds()
+        {
+            return tileBuilder.Bounds;
+        }
     }
 }
