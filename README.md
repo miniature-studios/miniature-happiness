@@ -40,7 +40,7 @@ When the class with name identical to the namespace's one is needed, for example
 ```csharp
 namespace Level
 {
-    [AddComponentMenu("Level.Level")]
+    [AddComponentMenu("Scripts/Level.Level")]
     public class Level { ... }
 }
 ```
@@ -49,12 +49,12 @@ it should be renamed to `...Impl`:
 ```csharp
 namespace Level
 {
-    [AddComponentMenu("Level.Level")]
+    [AddComponentMenu("Scripts/Level.Level")]
     public class LevelImpl { ... }
 }
 ```
-
-For comfortable executing this rules, should be used [This Unity Package](https://github.com/Kiuh/Item-Templates-For-Unity) or [This Visual Studio Extension](https://marketplace.visualstudio.com/items?itemName=nikolay-khimich.unity-class-template). Both package and extension gives opportunity to create unity scripts with all rules in one click. 
+Note: `Impl` is omitted in `AddComponentMenu` attribute.
+For comfortable executing this rules [This Unity Package](https://github.com/Kiuh/Item-Templates-For-Unity) and [This Visual Studio Extension](https://marketplace.visualstudio.com/items?itemName=nikolay-khimich.unity-class-template) can be used. Both package and extension gives opportunity to create unity scripts with proper naming rules in one click. 
 
 ### Formatting
 
@@ -64,21 +64,41 @@ Project uses two formatters: `.NET format` and `CSharpier`.
 - Rules for `CSharpier` described in [.csharpierrc.json](https://github.com/mertwole/miniature-happiness/blob/main/JamGame/.csharpierrc.json) file.
 
 <b>.Net format</b> it's a builtin formatter for .NET and can be found [here](https://github.com/dotnet/format).\
-<b>CSharpier</b> it's a tool that's can be found [here](https://csharpier.com/) and installed for any popular IDE.
+<b>CSharpier</b> it's a tool that can be found [here](https://csharpier.com/) and installed for any popular IDE.
 
 ### OdinInspector
 
 [Odin Inspector](https://odininspector.com/) used in project for comfortable debugging and proper visualization complex data structures in Inspector.
 
-## Continuous integration
-The project uses 2 ci parts, one for formatting that described in *Formatting* section.
+When some variables are private in MonoBehaviour script, but will helpful to see in inspector, Odin provides `[ReadOnly]` attribute:
 
-### Unity Build Check
-After any pull request for main branch, CI try to build project for Windows x32 and x64, and tells if build was failed.
+```csharp
+using Sirenix.OdinInspector;
+...
+public class Model : MonoBehaviour
+{
+    [ReadOnly]
+    [SerializeField]
+    private float privateVariable;
+    ...
+}
+...
+```
 
-### Formatting Check
-Both <b>.NET format</b> and <b>CSharpier</b> checks included in CI checks and *triggers when any pull request for main branch* was created.
+When you need to test some method, `[Button]` attribute used to create button in inspector to invoke that method for testing.
 
+```csharp
+using Sirenix.OdinInspector;
+...
+public class Model : MonoBehaviour
+{
+    [Button]
+    private void SomeAction() { ... }
+    ...
+}
+...
+```
+ 
 ## License
 
 [MIT license](https://github.com/mertwole/miniature-happiness/blob/main/LICENSE)
