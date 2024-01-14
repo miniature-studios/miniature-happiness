@@ -1,5 +1,4 @@
 ﻿using Cinemachine;
-using Common;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -97,7 +96,7 @@ namespace CameraController
                 );
 
             Bounds bounds = tileController.GetBuildingBounds();
-            transform.position = bounds.ClampVector3(newPosition);
+            transform.position = bounds.ClosestPoint(newPosition);
         }
 
         private bool ProcessRotation()

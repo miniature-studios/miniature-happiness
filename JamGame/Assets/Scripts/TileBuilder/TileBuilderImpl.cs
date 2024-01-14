@@ -446,7 +446,7 @@ namespace TileBuilder
         public Bounds Bounds { get; private set; } =
             new Bounds(Vector3.zero, Vector3.positiveInfinity);
 
-        public void RecalculateBounds()
+        private void RecalculateBounds()
         {
             IEnumerable<Vector2Int> insidePositions = TileUnionDictionary
                 .Where(pair => !pair.Value.IsAllWithMark("Outside"))
@@ -462,22 +462,8 @@ namespace TileBuilder
 
             foreach (Vector2Int point in insidePositions)
             {
-                if (minPoint.x > point.x)
-                {
-                    minPoint.x = point.x;
-                }
-                if (minPoint.y > point.y)
-                {
-                    minPoint.y = point.y;
-                }
-                if (maxPoint.x < point.x)
-                {
-                    maxPoint.x = point.x;
-                }
-                if (maxPoint.y < point.y)
-                {
-                    maxPoint.y = point.y;
-                }
+                minPoint = Vector2Int.Min(minPoint, point);
+                maxPoint = Vector2Int.Max(maxPoint, point);
             }
 
             Vector3 point1 = GridProperties.GetWorldPoint(new(minPoint.x, minPoint.y));
@@ -486,18 +472,10 @@ namespace TileBuilder
             float halfStep = (float)GridProperties.Step / 2;
             Vector3 shift = new(halfStep, 0, halfStep);
 
-            Vector3 min =
-                new Vector3(
-                    Mathf.Min(point1.x, point2.x),
-                    float.MinValue,
-                    Mathf.Min(point1.z, point2.z)
-                ) - shift;
-            Vector3 max =
-                new Vector3(
-                    Mathf.Max(point1.x, point2.x),
-                    float.MaxValue,
-                    Mathf.Max(point1.z, point2.z)
-                ) + shift;
+            Vector3 min = Vector3.Min(point1, point2) - shift;
+            min.y = float.NegativeInfinity;
+            Vector3 max = Vector3.Max(point1, point2) + shift;
+            max.y = float.PositiveInfinity;
 
             Bounds bounds = new();
             bounds.SetMinMax(min, max);
