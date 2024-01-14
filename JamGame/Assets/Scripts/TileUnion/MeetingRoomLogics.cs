@@ -57,9 +57,7 @@ namespace TileUnion
                 var need_providers = transform.GetComponentsInChildren<NeedProvider>();
                 return new MeetingRoomPlaces()
                 {
-                    Places = need_providers
-                        .Where(np => np.NeedType == Employee.NeedType.Meeting)
-                        .ToList()
+                    Places = need_providers.Where(np => np.NeedType == NeedType.Meeting).ToList()
                 };
             });
         }

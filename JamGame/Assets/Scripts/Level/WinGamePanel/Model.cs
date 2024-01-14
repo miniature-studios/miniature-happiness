@@ -1,5 +1,4 @@
 ﻿using Level.Finances;
-using Scripts;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;

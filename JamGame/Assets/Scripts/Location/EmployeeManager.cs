@@ -2,10 +2,10 @@
 using System.Linq;
 using Common;
 using Employee;
+using Employee.Needs;
 using Level;
 using Level.Boss.Task;
 using Level.Config;
-using Scripts;
 using UnityEngine;
 using TileBuilderController = TileBuilder.Controller.ControllerImpl;
 
@@ -81,9 +81,8 @@ namespace Location
 
             // TODO: Refactor when #45 will be resolved.
             var meeting_room_places =
-                FindObjectOfType<MeetingRoomLogics>() as IDataProvider<MeetingRoomPlaces>;
+                DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
             var place = meeting_room_places
-                .GetData()
                 .Places.Where(place => place.TryTake(employee))
                 .FirstOrDefault();
 

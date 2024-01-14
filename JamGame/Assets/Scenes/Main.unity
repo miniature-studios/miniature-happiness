@@ -3349,8 +3349,6 @@ MonoBehaviour:
   meetingEndNeedOverride: {fileID: 924940280}
   leaveNeedOverride: {fileID: 797130039}
   goToWorkNeedOverride: {fileID: 438653535}
-  homeConditionProvider: {fileID: 42303832}
-  meetingConditionProvider: {fileID: 42303832}
   ActionEndNotify:
     m_PersistentCalls:
       m_Calls:
@@ -3721,63 +3719,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243994319}
   m_CullTransparentMesh: 1
---- !u!1 &1308370553
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1308370554}
-  - component: {fileID: 1308370556}
-  - component: {fileID: 1308370555}
-  m_Layer: 0
-  m_Name: Test
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1308370554
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1308370553}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1914692, y: 22.681974, z: -21.161427}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1308370555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1308370553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37b538cd72a563148a61a46d0a69f10a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1308370556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1308370553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8344205658e100b468daf6ef126c1040, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1324624648
 GameObject:
   m_ObjectHideFlags: 0
@@ -5771,4 +5712,3 @@ SceneRoots:
   - {fileID: 429340884}
   - {fileID: 1904627832}
   - {fileID: 1936918355}
-  - {fileID: 1308370554}
