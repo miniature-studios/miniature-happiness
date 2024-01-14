@@ -473,9 +473,9 @@ namespace TileBuilder
             Vector3 shift = new(halfStep, 0, halfStep);
 
             Vector3 min = Vector3.Min(point1, point2) - shift;
-            min.y = float.NegativeInfinity;
+            min.y = -100;
             Vector3 max = Vector3.Max(point1, point2) + shift;
-            max.y = float.PositiveInfinity;
+            max.y = 100;
 
             Bounds bounds = new();
             bounds.SetMinMax(min, max);

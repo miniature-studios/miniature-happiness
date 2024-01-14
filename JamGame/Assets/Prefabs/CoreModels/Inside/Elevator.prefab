@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8701682620509132357}
   - component: {fileID: 4588327520170321208}
   m_Layer: 0
-  m_Name: TileFreeSpace
+  m_Name: Elevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cb076f9cce233a40a66f5b9849b915f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uid: ae36420d-e3ce-4098-af09-81bc71b89210
-  title: free space
+  uid: 168bf3e8-fb22-420e-a413-7a347dfeb8d0
+  title: elevator
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
@@ -56,9 +56,9 @@ MonoBehaviour:
     cost: 0
   shopRooms: []
   inventoryViews:
-  - {fileID: 7606936360430423353, guid: 32858c7307f455d48a4957f9ea2f9eb6, type: 3}
+  - {fileID: 7606936360430423353, guid: fb2e32d16b6aba44e9a570bb44f8e6db, type: 3}
   tileUnions:
-  - {fileID: 6867066097170886030, guid: 86278a2363650b744bc1722eddc1d12c, type: 3}
+  - {fileID: 3467285144550413319, guid: baf7d3f722de4944988f583c9e325a59, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
       Data: 
   placingProperties:
     rotation: 0
-    position: {x: 6, y: 5}
+    position: {x: 0, y: 0}
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0
