@@ -125,7 +125,7 @@ namespace TileBuilder.Controller
 
         public Bounds GetBuildingBounds()
         {
-            return tileBuilder.GetInsideBounds();
+            return tileBuilder.Bounds;
         }
     }
 }

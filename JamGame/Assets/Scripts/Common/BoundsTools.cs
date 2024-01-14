@@ -4,7 +4,7 @@ namespace Common
 {
     public static class BoundsTools
     {
-        public static Vector3 FitInBounds(this Bounds bounds, Vector3 point)
+        public static Vector3 ClampVector3(this Bounds bounds, Vector3 point)
         {
             return new(
                 Mathf.Clamp(point.x, bounds.min.x, bounds.max.x),

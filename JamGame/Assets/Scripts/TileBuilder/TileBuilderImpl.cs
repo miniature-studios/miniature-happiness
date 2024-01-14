@@ -369,7 +369,7 @@ namespace TileBuilder
             {
                 TileUnionDictionary.Add(pos, tileUnion);
             }
-            CalculateInsideBounds();
+            RecalculateBounds();
         }
 
         private void RemoveTileFromDictionary(TileUnionImpl tileUnion)
@@ -388,7 +388,7 @@ namespace TileBuilder
                     }
                 }
             } while (flag);
-            CalculateInsideBounds();
+            RecalculateBounds();
         }
 
         private void UpdateSidesInPositions(IEnumerable<Vector2Int> positions)
@@ -443,15 +443,10 @@ namespace TileBuilder
             return new RoomCountByUid() { CountByUid = count };
         }
 
-        private Bounds Bounds { get; set; } =
-            new Bounds(Vector3.zero, new Vector3(float.MaxValue, float.MaxValue, float.MaxValue));
+        public Bounds Bounds { get; private set; } =
+            new Bounds(Vector3.zero, Vector3.positiveInfinity);
 
-        public Bounds GetInsideBounds()
-        {
-            return Bounds;
-        }
-
-        public void CalculateInsideBounds()
+        public void RecalculateBounds()
         {
             IEnumerable<Vector2Int> insidePositions = TileUnionDictionary
                 .Where(pair => !pair.Value.IsAllWithMark("Outside"))
@@ -462,14 +457,34 @@ namespace TileBuilder
                 return;
             }
 
-            IEnumerable<int> xList = insidePositions.Select(vec => vec.x);
-            IEnumerable<int> yList = insidePositions.Select(vec => vec.y);
+            Vector2Int minPoint = insidePositions.First();
+            Vector2Int maxPoint = insidePositions.First();
+
+            foreach (Vector2Int point in insidePositions)
+            {
+                if (minPoint.x > point.x)
+                {
+                    minPoint.x = point.x;
+                }
+                if (minPoint.y > point.y)
+                {
+                    minPoint.y = point.y;
+                }
+                if (maxPoint.x < point.x)
+                {
+                    maxPoint.x = point.x;
+                }
+                if (maxPoint.y < point.y)
+                {
+                    maxPoint.y = point.y;
+                }
+            }
+
+            Vector3 point1 = GridProperties.GetWorldPoint(new(minPoint.x, minPoint.y));
+            Vector3 point2 = GridProperties.GetWorldPoint(new(maxPoint.x, maxPoint.y));
 
             float halfStep = (float)GridProperties.Step / 2;
             Vector3 shift = new(halfStep, 0, halfStep);
-
-            Vector3 point1 = GridProperties.GetWorldPoint(new(xList.Min(), yList.Min()));
-            Vector3 point2 = GridProperties.GetWorldPoint(new(xList.Max(), yList.Max()));
 
             Vector3 min =
                 new Vector3(

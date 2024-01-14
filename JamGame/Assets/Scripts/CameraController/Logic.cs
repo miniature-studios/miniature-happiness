@@ -97,7 +97,7 @@ namespace CameraController
                 );
 
             Bounds bounds = tileController.GetBuildingBounds();
-            transform.position = bounds.FitInBounds(newPosition);
+            transform.position = bounds.ClampVector3(newPosition);
         }
 
         private bool ProcessRotation()
