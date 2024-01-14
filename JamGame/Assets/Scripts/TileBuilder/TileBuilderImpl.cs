@@ -393,6 +393,7 @@ namespace TileBuilder
             {
                 TileUnionDictionary.Add(pos, tileUnion);
             }
+            RecalculateBounds();
         }
 
         private void RemoveTileFromDictionary(TileUnionImpl tileUnion)
@@ -411,6 +412,7 @@ namespace TileBuilder
                     }
                 }
             } while (flag);
+            RecalculateBounds();
         }
 
         private void UpdateSidesInPositions(IEnumerable<Vector2Int> positions)
@@ -444,6 +446,45 @@ namespace TileBuilder
             BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tileConfigs);
 
             return buildingConfig;
+        }
+        
+        public Bounds Bounds { get; private set; } =
+            new Bounds(Vector3.zero, Vector3.positiveInfinity);
+
+        private void RecalculateBounds()
+        {
+            IEnumerable<Vector2Int> insidePositions = TileUnionDictionary
+                .Where(pair => !pair.Value.IsAllWithMark("Outside"))
+                .Select(pair => pair.Key);
+
+            if (!insidePositions.Any())
+            {
+                return;
+            }
+
+            Vector2Int minPoint = insidePositions.First();
+            Vector2Int maxPoint = insidePositions.First();
+
+            foreach (Vector2Int point in insidePositions)
+            {
+                minPoint = Vector2Int.Min(minPoint, point);
+                maxPoint = Vector2Int.Max(maxPoint, point);
+            }
+
+            Vector3 point1 = GridProperties.GetWorldPoint(new(minPoint.x, minPoint.y));
+            Vector3 point2 = GridProperties.GetWorldPoint(new(maxPoint.x, maxPoint.y));
+
+            float halfStep = (float)GridProperties.Step / 2;
+            Vector3 shift = new(halfStep, 0, halfStep);
+
+            Vector3 min = Vector3.Min(point1, point2) - shift;
+            min.y = float.NegativeInfinity;
+            Vector3 max = Vector3.Max(point1, point2) + shift;
+            max.y = float.PositiveInfinity;
+
+            Bounds bounds = new();
+            bounds.SetMinMax(min, max);
+            Bounds = bounds;
         }
     }
 }
