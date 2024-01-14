@@ -1,14 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class DataProviderServiceLocator : MonoBehaviour
+public class DataProviderServiceLocator : SerializedMonoBehaviour
 {
-    private static Dictionary<Type, IDataProvider> singletons = new();
-    private static Dictionary<Type, List<IDataProvider>> multipleSources = new();
+    [SerializeField]
+    [ReadOnly]
+    private Dictionary<Type, IDataProvider> singletons = new();
+
+    [SerializeField]
+    [ReadOnly]
+    private Dictionary<Type, List<IDataProvider>> multipleSources = new();
+
+    private static DataProviderServiceLocator instance;
+
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogError(
+                "Two or more instances of DataProviderServiceLocator are added to scene"
+            );
+            return;
+        }
+
+        instance = this;
+    }
 
     public static void RegisterProvider<D>(DataProvider<D> data_provider)
+    {
+        instance.RegisterProviderInstance(data_provider);
+    }
+
+    private void RegisterProviderInstance<D>(DataProvider<D> data_provider)
     {
         Type type = typeof(D);
 
@@ -29,6 +55,11 @@ public class DataProviderServiceLocator : MonoBehaviour
 
     public static void UnregisterProvider<D>(DataProvider<D> data_provider)
     {
+        instance.UnregisterProviderInstance(data_provider);
+    }
+
+    private void UnregisterProviderInstance<D>(DataProvider<D> data_provider)
+    {
         Type type = typeof(D);
 
         if (singletons.ContainsKey(type))
@@ -46,6 +77,11 @@ public class DataProviderServiceLocator : MonoBehaviour
     }
 
     public static D FetchDataFromSingleton<D>()
+    {
+        return instance.FetchDataFromSingletonInstance<D>();
+    }
+
+    public D FetchDataFromSingletonInstance<D>()
     {
         Type type = typeof(D);
 
