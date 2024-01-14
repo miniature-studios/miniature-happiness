@@ -13,8 +13,11 @@ namespace TileUnion.Tile
         [SerializeField]
         private Material errorMaterial;
 
-        private Dictionary<Renderer, Material[]> initialMaterialsMap = new();
-        private Dictionary<State, Material[]> materialsByState;
+        [SerializeField]
+        private Material standardMaterial;
+
+        private List<Renderer> renderers = new();
+        private Dictionary<State, Material> materialsByState;
 
         public enum State
         {
@@ -26,15 +29,16 @@ namespace TileUnion.Tile
         private void Awake()
         {
             SetActiveChilds(transform);
-            Renderer[] renderers = GetComponentsInChildren<Renderer>();
+            renderers = GetComponentsInChildren<Renderer>().ToList();
             foreach (Renderer renderer in renderers)
             {
-                initialMaterialsMap.Add(renderer, renderer.materials);
+                renderer.SetMaterials(new List<Material>());
             }
             materialsByState = new()
             {
-                { State.Selected, new Material[1] { transparentMaterial } },
-                { State.SelectedOverlapping, new Material[1] { errorMaterial } },
+                { State.Default, standardMaterial },
+                { State.Selected, transparentMaterial },
+                { State.SelectedOverlapping, errorMaterial },
             };
             SetMaterial(State.Default);
         }
@@ -51,17 +55,9 @@ namespace TileUnion.Tile
 
         public void SetMaterial(State state)
         {
-            foreach (KeyValuePair<Renderer, Material[]> materialsMap in initialMaterialsMap)
+            foreach (Renderer renderer in renderers)
             {
-                materialsMap.Key.SetMaterials(
-                    state == State.Default
-                        ? materialsMap.Value.ToList()
-                        : Enumerable
-                            .Range(0, materialsMap.Value.Count())
-                            .Select(x => materialsByState[state].ToList())
-                            .Aggregate((x, y) => x.Concat(y).ToList())
-                            .ToList()
-                );
+                renderer.sharedMaterial = materialsByState[state];
             }
         }
     }
