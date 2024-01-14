@@ -1,7 +1,6 @@
-using Common;
 using Level.GlobalTime;
 using Level.Room;
-using Pickle;
+using Scripts;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System;
@@ -33,13 +32,6 @@ namespace Level.Boss.Task
     [Serializable]
     public class TargetEmployeeAmount : ITask
     {
-        [SerializeReference]
-        [Pickle(typeof(IDataProvider<EmployeeAmount>), LookupType = ObjectProviderType.Scene)]
-        [FoldoutGroup("Target Employee Amount")]
-        private MonoBehaviour employeeCountProvider;
-        private IDataProvider<EmployeeAmount> EmployeeCount =>
-            employeeCountProvider as IDataProvider<EmployeeAmount>;
-
         [SerializeField]
         [FoldoutGroup("Target Employee Amount")]
         private int employeeCountTarget;
@@ -48,7 +40,9 @@ namespace Level.Boss.Task
         {
             get
             {
-                int employee_amount = EmployeeCount.GetData().Amount;
+                int employee_amount = DataProviderServiceLocator
+                    .FetchDataFromSingleton<EmployeeAmount>()
+                    .Amount;
 
                 return new Progress
                 {
@@ -68,12 +62,6 @@ namespace Level.Boss.Task
     [Serializable]
     public class MaxStressBound : ITask
     {
-        [SerializeField]
-        [Pickle(typeof(IDataProvider<MaxStress>), LookupType = ObjectProviderType.Scene)]
-        [FoldoutGroup("Max Stress Bound")]
-        private MonoBehaviour maxStressProvider;
-        private IDataProvider<MaxStress> MaxStress => maxStressProvider as IDataProvider<MaxStress>;
-
         [OdinSerialize]
         [FoldoutGroup("Max Stress Bound")]
         public float MaxStressTarget { get; private set; }
@@ -103,8 +91,11 @@ namespace Level.Boss.Task
             if (currentDuration > targetDuration)
             {
                 complete = true;
+                return;
             }
-            else if (MaxStress.GetData().Stress < MaxStressTarget)
+
+            var max_stress = DataProviderServiceLocator.FetchDataFromSingleton<MaxStress>().Stress;
+            if (max_stress < MaxStressTarget)
             {
                 currentDuration += delta_time;
             }
@@ -128,13 +119,6 @@ namespace Level.Boss.Task
         [FoldoutGroup("Target Room Count")]
         private float timeToEnsureCompletion = 0.5f;
 
-        [SerializeField]
-        [Pickle(typeof(IDataProvider<RoomCountByUid>), LookupType = ObjectProviderType.Scene)]
-        [FoldoutGroup("Target Room Count")]
-        private MonoBehaviour roomCountProvider;
-        private IDataProvider<RoomCountByUid> RoomCount =>
-            roomCountProvider as IDataProvider<RoomCountByUid>;
-
         [AssetsOnly]
         [AssetSelector]
         [SerializeField]
@@ -150,7 +134,8 @@ namespace Level.Boss.Task
         {
             get
             {
-                roomCountCache = RoomCount.GetData();
+                roomCountCache =
+                    DataProviderServiceLocator.FetchDataFromSingleton<RoomCountByUid>();
 
                 int completion = 0;
                 if (roomCountCache.CountByUid.ContainsKey(room.Uid))
@@ -202,13 +187,6 @@ namespace Level.Boss.Task
     [Serializable]
     public class RoomCountUpperBound : ITask
     {
-        [SerializeField]
-        [Pickle(typeof(IDataProvider<RoomCountByUid>), LookupType = ObjectProviderType.Scene)]
-        [FoldoutGroup("Room Count Upper Bound")]
-        private MonoBehaviour roomCountProvider;
-        private IDataProvider<RoomCountByUid> RoomCount =>
-            roomCountProvider as IDataProvider<RoomCountByUid>;
-
         [AssetsOnly]
         [AssetSelector]
         [SerializeField]
@@ -241,7 +219,9 @@ namespace Level.Boss.Task
                 return;
             }
 
-            Dictionary<string, int> count_by_id = RoomCount.GetData().CountByUid;
+            Dictionary<string, int> count_by_id = DataProviderServiceLocator
+                .FetchDataFromSingleton<RoomCountByUid>()
+                .CountByUid;
             int currentCount = 0;
             if (count_by_id.ContainsKey(room.Uid))
             {

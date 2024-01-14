@@ -83,7 +83,7 @@ namespace Employee
                 case State.Idle:
                     targetNeedProvider = GetTargetNeedProvider();
 
-                    if(targetNeedProvider == null)
+                    if (targetNeedProvider == null)
                     {
                         return;
                     }

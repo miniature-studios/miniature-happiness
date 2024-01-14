@@ -22,8 +22,10 @@ namespace TileBuilder
     }
 
     [AddComponentMenu("Scripts/TileBuilder.TileBuilder")]
-    public partial class TileBuilderImpl : MonoBehaviour, IDataProvider<RoomCountByUid>
+    public partial class TileBuilderImpl : MonoBehaviour
     {
+        DataProvider<RoomCountByUid> roomCountDataProvider;
+
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel FreeSpace;
 
@@ -59,6 +61,28 @@ namespace TileBuilder
         {
             ChangeGameMode(GameMode.God);
             InitModelViewMap();
+        }
+
+        private void Start()
+        {
+            roomCountDataProvider = new DataProvider<RoomCountByUid>(() =>
+            {
+                Dictionary<string, int> count = new();
+
+                foreach (CoreModel core_model in coreModels)
+                {
+                    if (count.ContainsKey(core_model.Uid))
+                    {
+                        count[core_model.Uid]++;
+                    }
+                    else
+                    {
+                        count.Add(core_model.Uid, 1);
+                    }
+                }
+
+                return new RoomCountByUid() { CountByUid = count };
+            });
         }
 
         public void ChangeGameMode(GameMode gameMode)
@@ -420,25 +444,6 @@ namespace TileBuilder
             BuildingConfig buildingConfig = BuildingConfig.CreateInstance(tileConfigs);
 
             return buildingConfig;
-        }
-
-        public RoomCountByUid GetData()
-        {
-            Dictionary<string, int> count = new();
-
-            foreach (CoreModel core_model in coreModels)
-            {
-                if (count.ContainsKey(core_model.Uid))
-                {
-                    count[core_model.Uid]++;
-                }
-                else
-                {
-                    count.Add(core_model.Uid, 1);
-                }
-            }
-
-            return new RoomCountByUid() { CountByUid = count };
         }
     }
 }

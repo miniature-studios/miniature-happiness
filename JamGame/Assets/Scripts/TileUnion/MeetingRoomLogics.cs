@@ -8,10 +8,12 @@ using TileUnion.Tile;
 using UnityEngine;
 
 namespace TileUnion
-{ 
+{
     [AddComponentMenu("Scripts/TileUnion.MeetingRoomLogics")]
-    public class MeetingRoomLogics : MonoBehaviour, IDataProvider<MeetingRoomPlaces>
+    public class MeetingRoomLogics : MonoBehaviour
     {
+        DataProvider<MeetingRoomPlaces> meetingRoomPlacesDataProvider;
+
         [SerializeField]
         private TileUnionImpl tileUnion;
 
@@ -46,6 +48,20 @@ namespace TileUnion
         [SerializeField]
         private List<string> incorrectMarks = new();
         public IEnumerable<string> IncorrectMarks => incorrectMarks;
+
+        private void Start()
+        {
+            meetingRoomPlacesDataProvider = new DataProvider<MeetingRoomPlaces>(() =>
+            {
+                var need_providers = transform.GetComponentsInChildren<NeedProvider>();
+                return new MeetingRoomPlaces()
+                {
+                    Places = need_providers
+                        .Where(np => np.NeedType == Employee.NeedType.Meeting)
+                        .ToList()
+                };
+            });
+        }
 
         public bool IsEnoughPlace(int employeeCount)
         {
@@ -137,8 +153,9 @@ namespace TileUnion
                 {
                     addingConfig.Add(
                         (
-                            info.MovingTileUnionPositions
-                                .Select(x => x + (info.MovingDirection * i))
+                            info.MovingTileUnionPositions.Select(
+                                x => x + (info.MovingDirection * i)
+                            )
                                 .ToList()[j],
                             TileUnion.Rotation
                         ),
@@ -152,15 +169,6 @@ namespace TileUnion
             Vector2Int unionPosition = TileUnion.Position;
             TileUnion.CreateCache(false);
             TileUnion.SetPosition(unionPosition);
-        }
-
-        public MeetingRoomPlaces GetData()
-        {
-            var need_providers = transform.GetComponentsInChildren<NeedProvider>();
-            return new MeetingRoomPlaces() 
-            { 
-                Places = need_providers.Where(np => np.NeedType == Employee.NeedType.Meeting).ToList() 
-            };
         }
     }
 }
