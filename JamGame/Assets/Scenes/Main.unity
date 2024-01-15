@@ -1572,6 +1572,95 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bufferCoreModel: {fileID: 0}
   backupDragAndDropProvider: {fileID: 1395078480}
+--- !u!1 &432579848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 432579850}
+  - component: {fileID: 432579849}
+  m_Layer: 0
+  m_Name: DataProviderServiceLocator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &432579849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432579848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37b538cd72a563148a61a46d0a69f10a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: singletons
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[Common.IDataProvider,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
+        mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: multipleSources
+      Entry: 7
+      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[System.Collections.Generic.List`1[[Common.IDataProvider,
+        Assembly-CSharp]], mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 9
+      Data: 1
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+--- !u!4 &432579850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432579848}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.8949175, y: 23.326256, z: -29.16333}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &438653533
 GameObject:
   m_ObjectHideFlags: 0
@@ -3360,8 +3449,6 @@ MonoBehaviour:
   meetingEndNeedOverride: {fileID: 924940280}
   leaveNeedOverride: {fileID: 797130039}
   goToWorkNeedOverride: {fileID: 438653535}
-  homeConditionProvider: {fileID: 42303832}
-  meetingConditionProvider: {fileID: 42303832}
   ActionEndNotify:
     m_PersistentCalls:
       m_Calls:
@@ -5836,3 +5923,4 @@ SceneRoots:
   - {fileID: 1936918355}
   - {fileID: 875223986991048451}
   - {fileID: 6960596142154257495}
+  - {fileID: 432579850}

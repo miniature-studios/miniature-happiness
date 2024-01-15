@@ -22,8 +22,10 @@ namespace TileBuilder
     }
 
     [AddComponentMenu("Scripts/TileBuilder/TileBuilder")]
-    public partial class TileBuilderImpl : MonoBehaviour, IDataProvider<RoomCountByUid>
+    public partial class TileBuilderImpl : MonoBehaviour
     {
+        private DataProvider<RoomCountByUid> roomCountDataProvider;
+
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel FreeSpace;
 
@@ -54,11 +56,35 @@ namespace TileBuilder
         public GameMode CurrentGameMode => validator.GameMode;
 
         private Vector2Int stashPosition = new(-10, -10);
+        private float boundingBoxMin = -100.0f;
+        private float boundingBoxMax = 100.0f;
 
         private void Awake()
         {
             ChangeGameMode(GameMode.God);
             InitModelViewMap();
+        }
+
+        private void Start()
+        {
+            roomCountDataProvider = new DataProvider<RoomCountByUid>(() =>
+            {
+                Dictionary<string, int> count = new();
+
+                foreach (CoreModel core_model in coreModels)
+                {
+                    if (count.ContainsKey(core_model.Uid))
+                    {
+                        count[core_model.Uid]++;
+                    }
+                    else
+                    {
+                        count.Add(core_model.Uid, 1);
+                    }
+                }
+
+                return new RoomCountByUid() { CountByUid = count };
+            });
         }
 
         public void ChangeGameMode(GameMode gameMode)
@@ -424,25 +450,6 @@ namespace TileBuilder
             return buildingConfig;
         }
 
-        public RoomCountByUid GetData()
-        {
-            Dictionary<string, int> count = new();
-
-            foreach (CoreModel core_model in coreModels)
-            {
-                if (count.ContainsKey(core_model.Uid))
-                {
-                    count[core_model.Uid]++;
-                }
-                else
-                {
-                    count.Add(core_model.Uid, 1);
-                }
-            }
-
-            return new RoomCountByUid() { CountByUid = count };
-        }
-
         public Bounds Bounds { get; private set; } =
             new Bounds(Vector3.zero, Vector3.positiveInfinity);
 
@@ -473,9 +480,9 @@ namespace TileBuilder
             Vector3 shift = new(halfStep, 0, halfStep);
 
             Vector3 min = Vector3.Min(point1, point2) - shift;
-            min.y = -100;
+            min.y = boundingBoxMin;
             Vector3 max = Vector3.Max(point1, point2) + shift;
-            max.y = 100;
+            max.y = boundingBoxMax;
 
             Bounds bounds = new();
             bounds.SetMinMax(min, max);

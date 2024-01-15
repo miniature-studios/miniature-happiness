@@ -67,40 +67,12 @@ namespace Level
         [SerializeField]
         private AllChildrenNeedModifiersApplier goToWorkNeedOverride;
 
-        [SerializeField]
-        private GameObject homeConditionProvider;
-        private IDataProvider<AllEmployeesAtHome> homeCondition;
-
-        [SerializeField]
-        private GameObject meetingConditionProvider;
-        private IDataProvider<AllEmployeesAtMeeting> meetingCondition;
-
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
         [OdinSerialize]
         public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
-
-        private void Awake()
-        {
-            homeCondition = homeConditionProvider.GetComponent<IDataProvider<AllEmployeesAtHome>>();
-            if (homeCondition == null)
-            {
-                Debug.LogError(
-                    "IDataProvider<AllEmployeesAtHome> not found in homeConditionProvider"
-                );
-            }
-            meetingCondition = meetingConditionProvider.GetComponent<
-                IDataProvider<AllEmployeesAtMeeting>
-            >();
-            if (meetingCondition == null)
-            {
-                Debug.LogError(
-                    "IDataProvider<AllEmployeesAtMeeting> not found in meetingConditionProvider"
-                );
-            }
-        }
 
         public void Execute(DayStart dayStart)
         {
@@ -126,7 +98,13 @@ namespace Level
             meetingStartNeedOverride.Register();
 
             this.CreateGate(
-                new List<Func<bool>>() { () => meetingCondition.GetData().Value },
+                new List<Func<bool>>()
+                {
+                    () =>
+                        DataProviderServiceLocator
+                            .FetchDataFromSingleton<AllEmployeesAtMeeting>()
+                            .Value
+                },
                 new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
             );
         }
@@ -198,7 +176,13 @@ namespace Level
             leaveNeedOverride.Register();
 
             this.CreateGate(
-                new List<Func<bool>>() { () => homeCondition.GetData().Value },
+                new List<Func<bool>>()
+                {
+                    () =>
+                        DataProviderServiceLocator
+                            .FetchDataFromSingleton<AllEmployeesAtHome>()
+                            .Value
+                },
                 new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
             );
         }

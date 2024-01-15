@@ -1,6 +1,4 @@
-﻿using Common;
-using Level.Finances;
-using Pickle;
+﻿using Level.Finances;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -13,16 +11,11 @@ namespace Level.LoseGamePanel
         [SerializeField]
         private string loadingScene;
 
-        [SerializeField]
-        [Pickle(typeof(IDataProvider<DaysLived>), LookupType = Pickle.ObjectProviderType.Scene)]
-        private MonoBehaviour daysLivedDataProvider;
-        public DaysLived DaysLived => (daysLivedDataProvider as IDataProvider<DaysLived>).GetData();
+        public DaysLived DaysLived =>
+            DataProviderServiceLocator.FetchDataFromSingleton<DaysLived>();
 
-        [SerializeField]
-        [Pickle(typeof(IDataProvider<MoneyEarned>), LookupType = Pickle.ObjectProviderType.Scene)]
-        private MonoBehaviour moneyEarnedDataProvider;
         public MoneyEarned MoneyEarned =>
-            (moneyEarnedDataProvider as IDataProvider<MoneyEarned>).GetData();
+            DataProviderServiceLocator.FetchDataFromSingleton<MoneyEarned>();
 
         public UnityEvent<Model> OnModelChanged;
 
