@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-namespace Utils.GizmoTools
+namespace Utils.Gizmo
 {
-    [AddComponentMenu("Scripts/Utils/GizmoTools/Utils.GizmoTools.BoxGizmo")]
-    internal class BoxGizmo : MonoBehaviour
+    [AddComponentMenu("Scripts/Utils/Gizmo/Utils.Gizmo.SphereGizmo")]
+    public class SphereGizmo : MonoBehaviour
     {
         [SerializeField]
-        private Vector3 size = Vector3.one;
+        private float size = 0.1f;
 
         [SerializeField]
         private Vector3 shift = Vector3.zero;
@@ -23,11 +23,11 @@ namespace Utils.GizmoTools
             Gizmos.color = color;
             if (isWireframe)
             {
-                Gizmos.DrawWireCube(transform.position + shift, size);
+                Gizmos.DrawWireSphere(transform.position + shift, size);
             }
             else
             {
-                Gizmos.DrawCube(transform.position + shift, size);
+                Gizmos.DrawSphere(transform.position + shift, size);
             }
             Gizmos.color = temp;
         }

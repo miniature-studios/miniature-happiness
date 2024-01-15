@@ -80,10 +80,13 @@ namespace TileUnion
 
         [MinValue(0)]
         [SerializeField]
-        private int downReplication;
+        private int projectedTilesCount;
 
         [SerializeField]
-        private Transform replicationRoot;
+        private Transform projectedTilesRoot;
+
+        [SerializeField]
+        private GameObject tileToProject;
 
         [ReadOnly]
         [SerializeField]
@@ -95,7 +98,11 @@ namespace TileUnion
         }
 
         [SerializeField]
-        private Dictionary<TileImpl, List<TileImpl>> tiles = new();
+        private List<TileImpl> tiles = new();
+
+        [ReadOnly]
+        [SerializeField]
+        private Dictionary<TileImpl, List<TileImpl>> projectedTiles = new();
 
         private Dictionary<int, CachedConfiguration> cachedConfiguration;
         private Dictionary<int, CachedConfiguration> Configuration => cachedConfiguration;
@@ -110,14 +117,14 @@ namespace TileUnion
         public IEnumerable<string> GetAllUniqueMarks()
         {
             return tiles
-                .Keys.Select(x => x.Marks)
+                .Select(x => x.Marks)
                 .Aggregate(Enumerable.Empty<string>(), (x, y) => x.Concat(y))
                 .Distinct();
         }
 
         public bool IsAllWithMark(string mark)
         {
-            return tiles.Keys.Select(x => x.Marks.Contains(mark)).All(x => x == true);
+            return tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
         }
 
         public IEnumerable<Vector2Int> GetImaginePlaces(PlacingProperties placingProperties)
@@ -129,7 +136,7 @@ namespace TileUnion
 
         public Result IsValidPlacing(TileBuilderImpl tileBuilder)
         {
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 Dictionary<Direction, TileImpl> neighbors = new();
                 foreach (Direction pos in Direction.Up.GetCircle90())
@@ -177,7 +184,7 @@ namespace TileUnion
 
         public void ApplyTileUnionState(TileImpl.TileState state)
         {
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(state);
             }
@@ -186,13 +193,13 @@ namespace TileUnion
         public IEnumerable<Direction> GetAccessibleDirectionsFromPosition(Vector2Int position)
         {
             return tiles
-                .Keys.FirstOrDefault(x => x.Position == position - this.position)
+                .FirstOrDefault(x => x.Position == position - this.position)
                 .GetPassableDirections();
         }
 
         public void ShowInvalidPlacing()
         {
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(TileImpl.TileState.SelectedAndErrored);
             }
@@ -202,7 +209,7 @@ namespace TileUnion
         private IEnumerator ShowInvalidPlacingRoutine()
         {
             yield return new WaitForSecondsRealtime(1);
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(TileImpl.TileState.Normal);
             }
@@ -210,7 +217,7 @@ namespace TileUnion
 
         public void SetColliderActive(bool active)
         {
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 foreach (Collider collider in tile.GetComponentsInChildren<Collider>())
                 {
@@ -221,7 +228,7 @@ namespace TileUnion
 
         public void UpdateWalls(TileBuilderImpl tileBuilder, Vector2Int position)
         {
-            KeyValuePair<TileImpl, List<TileImpl>> tilePair = GetTilePair(position);
+            TileImpl tile = GetTile(position);
             Dictionary<Direction, TileImpl> neighbors = new();
             foreach (Direction pos in Direction.Up.GetCircle90())
             {
@@ -242,20 +249,23 @@ namespace TileUnion
                     neighbors.Add(pos, null);
                 }
             }
-            Result<TileImpl.WallTypeMatch> result = tilePair.Key.RequestWallUpdates(neighbors);
+            Result<TileImpl.WallTypeMatch> result = tile.RequestWallUpdates(neighbors);
             if (result.Success)
             {
-                tilePair.Key.ApplyUpdatingWalls(result);
-                foreach (TileImpl subTile in tilePair.Value)
+                tile.ApplyUpdatingWalls(result);
+                if (projectedTiles.TryGetValue(tile, out List<TileImpl> tilesList))
                 {
-                    subTile.ApplyUpdatingWalls(result);
+                    foreach (TileImpl subTile in tilesList)
+                    {
+                        subTile.ApplyUpdatingWalls(result);
+                    }
                 }
             }
         }
 
         public void UpdateCorners(TileBuilderImpl tileBuilder, Vector2Int position)
         {
-            KeyValuePair<TileImpl, List<TileImpl>> tilePair = GetTilePair(position);
+            TileImpl tile = GetTile(position);
             Dictionary<Direction, TileImpl> neighbors = new();
             foreach (Direction pos in Direction.Up.GetCircle45())
             {
@@ -276,43 +286,12 @@ namespace TileUnion
                     neighbors.Add(pos, null);
                 }
             }
-            tilePair.Key.UpdateCorners(neighbors);
-            foreach (TileImpl subTile in tilePair.Value)
+            tile.UpdateCorners(neighbors);
+            if (projectedTiles.TryGetValue(tile, out List<TileImpl> tilesList))
             {
-                subTile.UpdateCorners(neighbors);
-            }
-        }
-
-        [Button(Style = ButtonStyle.Box)]
-        private void CreateReplicationTiles()
-        {
-            if (replicationRoot == null)
-            {
-                GameObject gameObject = new("Replication Root");
-                replicationRoot = Instantiate(gameObject, transform).transform;
-            }
-            while (replicationRoot.childCount > 0)
-            {
-                DestroyImmediate(replicationRoot.GetChild(0).gameObject);
-            }
-            foreach (KeyValuePair<TileImpl, List<TileImpl>> pair in tiles)
-            {
-                pair.Value.Clear();
-                for (int i = 0; i < downReplication; i++)
+                foreach (TileImpl subTile in tilesList)
                 {
-                    TileImpl instance = Instantiate(
-                            pair.Key.gameObject,
-                            pair.Key.transform.position
-                                + (
-                                    (pair.Value.Count() + 1)
-                                    * gridProperties.TileHeight
-                                    * Vector3.down
-                                ),
-                            pair.Key.transform.rotation,
-                            replicationRoot
-                        )
-                        .GetComponent<TileImpl>();
-                    pair.Value.Add(instance);
+                    subTile.UpdateCorners(neighbors);
                 }
             }
         }
@@ -320,18 +299,15 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void IsolateUpdate()
         {
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 Dictionary<Direction, TileImpl> neighbors = new();
                 foreach (Direction pos in Direction.Up.GetCircle90())
                 {
                     Vector2Int bufferPosition = tile.Position + pos.ToVector2Int();
-                    if (tiles.Keys.Select(x => x.Position).Contains(bufferPosition))
+                    if (tiles.Select(x => x.Position).Contains(bufferPosition))
                     {
-                        neighbors.Add(
-                            pos,
-                            tiles.FirstOrDefault(x => x.Key.Position == bufferPosition).Key
-                        );
+                        neighbors.Add(pos, tiles.FirstOrDefault(x => x.Position == bufferPosition));
                     }
                     else
                     {
@@ -354,7 +330,7 @@ namespace TileUnion
             for (int i = 0; i < 4; i++)
             {
                 List<TileCachedConfiguration> tileConfigurations = new();
-                foreach (TileImpl tile in tiles.Keys)
+                foreach (TileImpl tile in tiles)
                 {
                     tileConfigurations.Add(new(tile, tile.Position, tile.Rotation));
                 }
@@ -362,7 +338,7 @@ namespace TileUnion
                     rotation,
                     new(
                         GetTilesPositionsForUpdating().ToList(),
-                        tiles.Keys.Select(x => x.Position).ToList(),
+                        tiles.Select(x => x.Position).ToList(),
                         tileConfigurations,
                         GetCenterTilePosition()
                     )
@@ -408,13 +384,7 @@ namespace TileUnion
         private TileImpl GetTile(Vector2Int globalPosition)
         {
             globalPosition -= position;
-            return tiles.Keys.FirstOrDefault(x => x.Position == globalPosition);
-        }
-
-        private KeyValuePair<TileImpl, List<TileImpl>> GetTilePair(Vector2Int globalPosition)
-        {
-            globalPosition -= position;
-            return tiles.FirstOrDefault(x => x.Key.Position == globalPosition);
+            return tiles.FirstOrDefault(x => x.Position == globalPosition);
         }
 
         private void RotateTileUnion(bool considerCenterOfMass)
@@ -423,13 +393,13 @@ namespace TileUnion
             if (considerCenterOfMass)
             {
                 firstCenter = CenterOfMassTools.GetCenterOfMass(
-                    tiles.Keys.Select(x => x.Position).ToList()
+                    tiles.Select(x => x.Position).ToList()
                 );
             }
 
             rotation++;
             rotation %= 4;
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
                 tile.SetPosition(gridProperties, new Vector2Int(tile.Position.y, -tile.Position.x));
@@ -438,10 +408,10 @@ namespace TileUnion
             if (considerCenterOfMass)
             {
                 Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                    tiles.Keys.Select(x => x.Position).ToList()
+                    tiles.Select(x => x.Position).ToList()
                 );
                 Vector2 delta = firstCenter - secondCenter;
-                foreach (TileImpl tile in tiles.Keys)
+                foreach (TileImpl tile in tiles)
                 {
                     tile.SetPosition(
                         gridProperties,
@@ -454,7 +424,7 @@ namespace TileUnion
         private IEnumerable<Vector2Int> GetTilesPositionsForUpdating()
         {
             HashSet<Vector2Int> localPositions = new();
-            foreach (TileImpl tile in tiles.Keys)
+            foreach (TileImpl tile in tiles)
             {
                 foreach (Direction position in Direction.Up.GetCircle45())
                 {
@@ -469,7 +439,7 @@ namespace TileUnion
         private Vector2Int GetCenterTilePosition()
         {
             Vector2 vectorSum = new();
-            foreach (Vector2Int pos in tiles.Keys.Select(x => x.Position))
+            foreach (Vector2Int pos in tiles.Select(x => x.Position))
             {
                 vectorSum += pos;
             }
@@ -515,7 +485,7 @@ namespace TileUnion
             )
             {
                 TileImpl newTile = Instantiate(pair.Value, transform);
-                tiles.Add(newTile, null);
+                tiles.Add(newTile);
                 newTile.SetPosition(gridProperties, pair.Key.globalPosition - position);
                 newTile.SetRotation(pair.Key.roatation);
             }

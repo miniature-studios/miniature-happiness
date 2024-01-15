@@ -75,10 +75,8 @@ namespace Level.Inventory
         {
             if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
             {
-                Room.View newRoomView = Instantiate(
-                    AddressableTools<Room.View>.LoadAsset(location),
-                    container
-                );
+                Result<Room.View> result = AddressableTools<Room.View>.LoadAsset(location);
+                Room.View newRoomView = Instantiate(result.Data, container);
 
                 newRoomView.SetCoreModel(newItem);
                 roomViews.Add(newRoomView);

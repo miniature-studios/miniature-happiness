@@ -354,10 +354,8 @@ namespace TileBuilder
         {
             if (modelViewMap.TryGetValue(coreModel.Uid, out IResourceLocation location))
             {
-                TileUnionImpl tileUnion = Instantiate(
-                    AddressableTools<TileUnionImpl>.LoadAsset(location),
-                    transform
-                );
+                Result<TileUnionImpl> result = AddressableTools<TileUnionImpl>.LoadAsset(location);
+                TileUnionImpl tileUnion = Instantiate(result.Data, transform);
                 tileUnion.SetCoreModel(coreModel);
                 tileUnion.SetGridProperties(gridProperties);
                 tileUnion.CreateCache();

@@ -80,9 +80,10 @@ namespace Level.Room
         public static CoreModel InstantiateCoreModel(TileConfig config)
         {
             UpdateUidPrefabsMap();
-            CoreModel core = Instantiate(
-                AddressableTools<CoreModel>.LoadAsset(uidPrefabsMap[config.HashCode])
+            Result<CoreModel> result = AddressableTools<CoreModel>.LoadAsset(
+                uidPrefabsMap[config.HashCode]
             );
+            CoreModel core = Instantiate(result.Data);
             core.TileUnionModel.PlacingProperties.SetPositionAndRotation(
                 config.Position,
                 config.Rotation

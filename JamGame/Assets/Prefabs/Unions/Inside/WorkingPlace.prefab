@@ -299,7 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  standardMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
 --- !u!1 &5391749693138065738
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,14 +473,13 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 5391749692599207981}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: tiles
+    - Name: projectedTiles
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[TileUnion.Tile.TileImpl, Assembly-CSharp],[System.Collections.Generic.List`1[[TileUnion.Tile.TileImpl,
         Assembly-CSharp]], mscorlib]], mscorlib
@@ -493,29 +492,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 10
       Data: 0
-    - Name: $v
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[TileUnion.Tile.TileImpl, Assembly-CSharp]],
-        mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
     - Name: 
       Entry: 13
       Data: 
@@ -527,8 +504,12 @@ MonoBehaviour:
   coreModel: {fileID: 0}
   position: {x: 0, y: 0}
   rotation: 0
-  downReplication: 0
+  projectedTilesCount: 0
+  projectedTilesRoot: {fileID: 0}
+  tileToProject: {fileID: 0}
   gridProperties: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
+  tiles:
+  - {fileID: 5391749692599207981}
 --- !u!1001 &176247152382511972
 PrefabInstance:
   m_ObjectHideFlags: 0

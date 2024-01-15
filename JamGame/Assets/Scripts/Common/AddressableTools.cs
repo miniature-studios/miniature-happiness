@@ -6,14 +6,14 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Common
 {
     public struct AssetWithLocation<T>
-        where T : class
+        where T : MonoBehaviour
     {
         public IResourceLocation Location;
         public T Asset;
     }
 
     public static class AddressableTools<T>
-        where T : class
+        where T : MonoBehaviour
     {
         public static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(
             AssetLabelReference assetLabel
@@ -35,20 +35,31 @@ namespace Common
                     .WaitForCompletion()
             )
             {
-                yield return new AssetWithLocation<T>()
+                Result<T> result = LoadAsset(resourceLocation);
+                if (result.Success)
                 {
-                    Location = resourceLocation,
-                    Asset = LoadAsset(resourceLocation)
-                };
+                    yield return new AssetWithLocation<T>()
+                    {
+                        Location = resourceLocation,
+                        Asset = result.Data
+                    };
+                }
             }
         }
 
-        public static T LoadAsset(IResourceLocation resourceLocation)
+        public static Result<T> LoadAsset(IResourceLocation resourceLocation)
         {
             GameObject gameObject = Addressables
                 .LoadAssetAsync<GameObject>(resourceLocation)
                 .WaitForCompletion();
-            return gameObject.GetComponent<T>();
+            if (gameObject.TryGetComponent(out T component))
+            {
+                return new SuccessResult<T>(component);
+            }
+            else
+            {
+                return new FailResult<T>("Try to load asset with wrong component.");
+            }
         }
     }
 }

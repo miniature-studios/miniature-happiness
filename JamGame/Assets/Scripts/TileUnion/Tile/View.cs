@@ -14,7 +14,7 @@ namespace TileUnion.Tile
         private Material errorMaterial;
 
         [SerializeField]
-        private Material standardMaterial;
+        private Material defaultMaterial;
 
         private List<Renderer> renderers = new();
         private Dictionary<State, Material> materialsByState;
@@ -36,7 +36,7 @@ namespace TileUnion.Tile
             }
             materialsByState = new()
             {
-                { State.Default, standardMaterial },
+                { State.Default, defaultMaterial },
                 { State.Selected, transparentMaterial },
                 { State.SelectedOverlapping, errorMaterial },
             };
