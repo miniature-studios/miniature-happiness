@@ -11,12 +11,21 @@ namespace Level.Finances
     }
 
     [AddComponentMenu("Scripts/Level/Finances/Level.Finances.Model")]
-    public class Model : MonoBehaviour, IDataProvider<MoneyEarned>
+    public class Model : MonoBehaviour
     {
+        private DataProvider<MoneyEarned> moneyEarnedDataProvider;
+
         [ReadOnly]
         [SerializeField]
         private int money;
         public UnityEvent<int> MoneyChange;
+
+        private void Start()
+        {
+            moneyEarnedDataProvider = new DataProvider<MoneyEarned>(
+                () => new MoneyEarned() { Value = money }
+            );
+        }
 
         public void SetMoney(int moneyCount)
         {
@@ -42,11 +51,6 @@ namespace Level.Finances
         {
             money += moneyCount;
             MoneyChange?.Invoke(money);
-        }
-
-        public MoneyEarned GetData()
-        {
-            return new MoneyEarned() { Value = money };
         }
     }
 }
