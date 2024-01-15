@@ -25,7 +25,8 @@ namespace TileUnion.Tile
         [SerializeField]
         private Vector2Int position = new(0, 0);
 
-        [SerializeField, Range(0, 3)]
+        [Range(0, 3)]
+        [SerializeField]
         private int rotation = 0;
 
         public List<WallPrefabHandler> WallPrefabHandlers;

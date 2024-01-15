@@ -11,7 +11,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void SetDirectionsGizmo(bool value)
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles.Keys)
             {
                 tile.ShowDirectionGizmo = value;
             }
@@ -20,7 +20,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void SetPathGizmo(bool value)
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles.Keys)
             {
                 tile.ShowPathGizmo = value;
             }
@@ -29,7 +29,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void SetCenterCube(bool value)
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles.Keys)
             {
                 tile.SetCubeInCenter(value);
             }
@@ -70,7 +70,7 @@ namespace TileUnion
         [Button("Update tiles position and rotation", Style = ButtonStyle.Box)]
         public void UpdateTilesPositionAndRotation()
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles.Keys)
             {
                 tile.SetPosition(gridProperties, tile.Position);
                 tile.SetRotation(tile.Rotation);
