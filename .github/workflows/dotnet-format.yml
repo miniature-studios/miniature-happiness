@@ -37,9 +37,7 @@ jobs:
         run: dotnet tool restore --tool-manifest ./JamGame/.config/dotnet-tools.json
       
       - name: Check versions
-        run: |
-          dotnet format --version
-          dotnet csharpier --version
+        run: dotnet format --version
 
       - name: Run dotnet format
         run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
