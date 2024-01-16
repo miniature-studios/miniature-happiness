@@ -40,11 +40,6 @@ namespace TileUnion.Tile
         [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;
 
-        [SerializeField]
-        private Transform underPlate;
-        private float unselectedUnderPlateYPosition;
-        private float selectedUnderPlateYPosition;
-
         [ReadOnly]
         [SerializeField]
         private TileState currentState = TileState.Normal;
@@ -73,11 +68,6 @@ namespace TileUnion.Tile
         {
             unselectedYPosition = transform.position.y;
             selectedYPosition = unselectedYPosition + selectLiftingHeight;
-            if (underPlate != null)
-            {
-                unselectedUnderPlateYPosition = underPlate.position.y;
-                selectedUnderPlateYPosition = unselectedUnderPlateYPosition - selectLiftingHeight;
-            }
         }
 
         public struct WallTypeMatch
@@ -228,33 +218,24 @@ namespace TileUnion.Tile
             }
 
             currentState = state;
-            switch (currentState)
+            View.State viewState = currentState switch
             {
-                default:
-                case TileState.Normal:
-                    transform.SetYPosition(unselectedYPosition);
-                    TileView.SetMaterial(View.State.Default);
-                    break;
-                case TileState.Selected:
-                    transform.SetYPosition(selectedYPosition);
-                    TileView.SetMaterial(View.State.Selected);
-                    break;
-                case TileState.SelectedAndErrored:
-                    transform.SetYPosition(selectedYPosition);
-                    TileView.SetMaterial(View.State.SelectedOverlapping);
-                    break;
-            }
-            if (underPlate != null)
+                TileState.Normal => View.State.Default,
+                TileState.Selected => View.State.Selected,
+                TileState.SelectedAndErrored => View.State.SelectedOverlapping,
+                _ => throw new InvalidOperationException()
+            };
+
+            float newY = currentState switch
             {
-                float yPosition = currentState switch
-                {
-                    TileState.Normal => unselectedUnderPlateYPosition,
-                    TileState.Selected => unselectedUnderPlateYPosition,
-                    TileState.SelectedAndErrored => selectedUnderPlateYPosition,
-                    _ => throw new Exception("Invalid TileState"),
-                };
-                underPlate.SetYPosition(yPosition);
-            }
+                TileState.Normal => unselectedYPosition,
+                TileState.Selected => selectedYPosition,
+                TileState.SelectedAndErrored => unselectedYPosition,
+                _ => throw new InvalidOperationException()
+            };
+            transform.SetYPosition(newY);
+
+            TileView.SetMaterial(viewState);
         }
 
         public void SetPosition(GridProperties gridProperties, Vector2Int newPosition)

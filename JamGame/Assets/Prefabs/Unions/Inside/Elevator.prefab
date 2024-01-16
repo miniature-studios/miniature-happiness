@@ -30,7 +30,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5675694395347448245}
   - {fileID: 7384952401557745059}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -116,7 +115,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3467285144550413316}
+  m_Father: {fileID: 7384952401557745059}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3900676632461819341
 MonoBehaviour:
@@ -171,6 +170,7 @@ Transform:
   - {fileID: 7384952402597352032}
   - {fileID: 7384952402074085774}
   - {fileID: 5248867450893579194}
+  - {fileID: 5675694395347448245}
   m_Father: {fileID: 3467285144550413316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7384952401557745058
@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foundation: {fileID: 8500288032044955598}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
   defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
@@ -361,7 +362,6 @@ MonoBehaviour:
   CenterPrefabs:
   - {fileID: 3272155991223568803, guid: e17fcbe31e640a044a9737fb71a043b4, type: 3}
   TileView: {fileID: 7384952401557745058}
-  underPlate: {fileID: 5248867450893579194}
   currentState: 0
 --- !u!1 &7384952402074085769
 GameObject:
@@ -2762,6 +2762,11 @@ PrefabInstance:
 --- !u!4 &5248867450893579194 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1173653101955517911, guid: 551a4533f89240e409492c44d99e3842, type: 3}
+  m_PrefabInstance: {fileID: 6385574737242177133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8500288032044955598 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3272155991223568803, guid: 551a4533f89240e409492c44d99e3842, type: 3}
   m_PrefabInstance: {fileID: 6385574737242177133}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6405950946134817939

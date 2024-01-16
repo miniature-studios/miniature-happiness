@@ -8,6 +8,9 @@ namespace TileUnion.Tile
     public class View : MonoBehaviour
     {
         [SerializeField]
+        private GameObject foundation;
+
+        [SerializeField]
         private Material transparentMaterial;
 
         [SerializeField]
@@ -30,6 +33,14 @@ namespace TileUnion.Tile
         {
             SetActiveChilds(transform);
             renderers = GetComponentsInChildren<Renderer>().ToList();
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                if (renderers[i].GetComponentInParent<IgnoreCatch>())
+                {
+                    renderers.RemoveAt(i);
+                    i--;
+                }
+            }
             foreach (Renderer renderer in renderers)
             {
                 renderer.SetMaterials(new List<Material>());
@@ -55,6 +66,11 @@ namespace TileUnion.Tile
 
         public void SetMaterial(State state)
         {
+            if (foundation != null)
+            {
+                foundation.SetActive(state != State.Selected);
+            }
+
             foreach (Renderer renderer in renderers)
             {
                 renderer.sharedMaterial = materialsByState[state];

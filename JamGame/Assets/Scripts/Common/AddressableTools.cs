@@ -35,7 +35,7 @@ namespace Common
                     .WaitForCompletion()
             )
             {
-                Result<T> result = LoadAsset(resourceLocation);
+                Result<T> result = TryLoadAsset(resourceLocation);
                 if (result.Success)
                 {
                     yield return new AssetWithLocation<T>()
@@ -47,7 +47,7 @@ namespace Common
             }
         }
 
-        public static Result<T> LoadAsset(IResourceLocation resourceLocation)
+        private static Result<T> TryLoadAsset(IResourceLocation resourceLocation)
         {
             GameObject gameObject = Addressables
                 .LoadAssetAsync<GameObject>(resourceLocation)
@@ -60,6 +60,16 @@ namespace Common
             {
                 return new FailResult<T>("Try to load asset with wrong component.");
             }
+        }
+
+        public static Result<T> LoadAsset(IResourceLocation resourceLocation)
+        {
+            Result<T> result = TryLoadAsset(resourceLocation);
+            if (result.Failure)
+            {
+                Debug.LogError(result.Error);
+            }
+            return result;
         }
     }
 }
