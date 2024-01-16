@@ -176,10 +176,9 @@ namespace Employee
 
                 List<NeedProvider> available_providers = needProviderManager
                     .FindAllAvailableProviders(this, need.NeedType)
-                    .Where(
-                        np =>
-                            !needProviderBindings.ContainsKey(np.NeedType)
-                            || needProviderBindings[np.NeedType] == np
+                    .Where(np =>
+                        !needProviderBindings.ContainsKey(np.NeedType)
+                        || needProviderBindings[np.NeedType] == np
                     )
                     .ToList();
 

@@ -105,8 +105,8 @@ namespace TileUnion.Tile
                 float degrees = wallCollection.Place.GetDegrees();
                 foreach (WallPrefabHandler handler in wallCollection.Handlers)
                 {
-                    WallPrefabHandler prefabHandler = WallPrefabHandlers.Find(
-                        x => x.Type == handler.Type
+                    WallPrefabHandler prefabHandler = WallPrefabHandlers.Find(x =>
+                        x.Type == handler.Type
                     );
                     if (prefabHandler != null)
                     {
@@ -159,8 +159,8 @@ namespace TileUnion.Tile
                 float degrees = cornerCollection.Place.GetDegrees() - 45;
                 foreach (CornerPrefabHandler handler in cornerCollection.Handlers)
                 {
-                    CornerPrefabHandler prefabHandler = CornerPrefabHandlers.Find(
-                        x => x.Type == handler.Type
+                    CornerPrefabHandler prefabHandler = CornerPrefabHandlers.Find(x =>
+                        x.Type == handler.Type
                     );
                     if (prefabHandler != null)
                     {

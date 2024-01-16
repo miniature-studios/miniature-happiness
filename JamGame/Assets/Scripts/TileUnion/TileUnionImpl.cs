@@ -129,8 +129,8 @@ namespace TileUnion
 
         public IEnumerable<Vector2Int> GetImaginePlaces(PlacingProperties placingProperties)
         {
-            return Configuration[placingProperties.Rotation % 4].TilesPositions.Select(
-                x => x + placingProperties.Position
+            return Configuration[placingProperties.Rotation % 4].TilesPositions.Select(x =>
+                x + placingProperties.Position
             );
         }
 

@@ -52,15 +52,15 @@ namespace Location
             });
             allEmployeesAtMeetingDataProvider = new DataProvider<AllEmployeesAtMeeting>(() =>
             {
-                bool all_at_meeting = employees.All(
-                    employee => employee.LatestSatisfiedNeedType == NeedType.Meeting
+                bool all_at_meeting = employees.All(employee =>
+                    employee.LatestSatisfiedNeedType == NeedType.Meeting
                 );
                 return new AllEmployeesAtMeeting { Value = all_at_meeting };
             });
             allEmployeesAtHomeDataProvider = new DataProvider<AllEmployeesAtHome>(() =>
             {
-                bool all_go_home = employees.All(
-                    employee => employee.LatestSatisfiedNeedType == NeedType.Leave
+                bool all_go_home = employees.All(employee =>
+                    employee.LatestSatisfiedNeedType == NeedType.Leave
                 );
                 return new AllEmployeesAtHome { Value = all_go_home };
             });
