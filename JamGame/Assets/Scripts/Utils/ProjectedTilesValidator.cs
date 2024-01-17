@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if UNITY_EDITOR
+using System.IO;
 using TileUnion;
 using UnityEditor;
 using UnityEngine;
@@ -35,3 +36,4 @@ namespace Utils
         }
     }
 }
+#endif
