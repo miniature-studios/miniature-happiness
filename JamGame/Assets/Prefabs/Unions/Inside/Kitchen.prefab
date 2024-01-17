@@ -54,35 +54,12 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: projectedTiles
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[TileUnion.Tile.TileImpl, Assembly-CSharp],[System.Collections.Generic.List`1[[TileUnion.Tile.TileImpl,
-        Assembly-CSharp]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[TileUnion.Tile.TileImpl,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   DrawNeedProviderGizmo: 0
   CoreModelPrefab: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
   coreModel: {fileID: 0}
   position: {x: 0, y: 0}
   rotation: 0
-  projectedTilesCount: 0
-  projectedTilesRoot: {fileID: 0}
-  tileToProject: {fileID: 0}
   gridProperties: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   tiles:
   - {fileID: 6973409562912976731}
@@ -207,6 +184,7 @@ MonoBehaviour:
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
   defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!65 &6322101272495862146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -375,6 +353,9 @@ MonoBehaviour:
   - {fileID: 8703714483910898736, guid: 8133f6042aca8d448844c1c96e72d405, type: 3}
   TileView: {fileID: 6322101272495862147}
   currentState: 0
+  projectedTiles: []
+  projectedTilesRoot: {fileID: 0}
+  tileToProject: {fileID: 0}
 --- !u!1 &6322101272868149573
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,6 +677,7 @@ MonoBehaviour:
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
   defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!65 &6973409562912976732
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -856,6 +838,9 @@ MonoBehaviour:
   - {fileID: 5688251105297414089, guid: 685322fcfd11c00418c787856a641b37, type: 3}
   TileView: {fileID: 6973409562912976733}
   currentState: 0
+  projectedTiles: []
+  projectedTilesRoot: {fileID: 0}
+  tileToProject: {fileID: 0}
 --- !u!1001 &119307200601323194
 PrefabInstance:
   m_ObjectHideFlags: 0

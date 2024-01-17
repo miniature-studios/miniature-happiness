@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace TileUnion.Tile
@@ -19,7 +20,12 @@ namespace TileUnion.Tile
         [SerializeField]
         private Material defaultMaterial;
 
+        [ReadOnly]
+        [SerializeField]
         private List<Renderer> renderers = new();
+
+        [ReadOnly]
+        [SerializeField]
         private Dictionary<State, Material> materialsByState;
 
         public enum State

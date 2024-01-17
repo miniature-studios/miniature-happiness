@@ -48,6 +48,18 @@ namespace TileUnion.Tile
         public int Rotation => rotation;
         public IEnumerable<string> Marks => marks;
 
+        [ReadOnly]
+        [SerializeField]
+        private List<TileImpl> projectedTiles = new();
+        public IEnumerable<TileImpl> ProjectedTiles => projectedTiles;
+
+        [SerializeField]
+        private Transform projectedTilesRoot;
+
+        [SerializeField]
+        private GameObject tileToProject;
+        public GameObject TileToProject => tileToProject;
+
         private Dictionary<Direction, List<WallType>> Walls
         {
             get
@@ -111,6 +123,13 @@ namespace TileUnion.Tile
             {
                 GetWallCollection(directionWall.Key).SetWall(directionWall.Value);
             }
+            if (ProjectedTiles != null)
+            {
+                foreach (TileImpl tile in ProjectedTiles)
+                {
+                    tile.ApplyUpdatingWalls(result);
+                }
+            }
         }
 
         private WallCollection GetWallCollection(Direction imaginePlace)
@@ -145,6 +164,13 @@ namespace TileUnion.Tile
                 }
                 GetCornerCollection(direction.Rotate45()).SetCorner(toPlace);
             }
+            if (ProjectedTiles != null)
+            {
+                foreach (TileImpl tile in ProjectedTiles)
+                {
+                    tile.UpdateCorners(neighbors);
+                }
+            }
         }
 
         // Walls means:
@@ -173,25 +199,23 @@ namespace TileUnion.Tile
 
         private CornerType ChooseCornerForCorridor(WallType[] walls)
         {
-            if (walls[0] is WallType.Door && walls[3] is WallType.Door)
-            {
-                return CornerType.OutsideMiddle;
-            }
-            return (
-                walls[0].IsWallForCorridor(),
-                walls[1].IsWallForCorridor(),
-                walls[2].IsWallForCorridor(),
-                walls[3].IsWallForCorridor()
-            ) switch
-            {
-                (true, _, _, true) => CornerType.Inside,
-                (true, _, true, _) => CornerType.WallRight,
-                (_, true, _, true) => CornerType.WallLeft,
-                (_, true, true, _) => CornerType.OutsideMiddle,
-                (true, true, _, _) => CornerType.OutsideRight,
-                (_, _, true, true) => CornerType.OutsideLeft,
-                _ => CornerType.None,
-            };
+            return walls[0] is WallType.Door && walls[3] is WallType.Door
+                ? CornerType.OutsideMiddle
+                : (
+                    walls[0].IsWallForCorridor(),
+                    walls[1].IsWallForCorridor(),
+                    walls[2].IsWallForCorridor(),
+                    walls[3].IsWallForCorridor()
+                ) switch
+                {
+                    (true, _, _, true) => CornerType.Inside,
+                    (true, _, true, _) => CornerType.WallRight,
+                    (_, true, _, true) => CornerType.WallLeft,
+                    (_, true, true, _) => CornerType.OutsideMiddle,
+                    (true, true, _, _) => CornerType.OutsideRight,
+                    (_, _, true, true) => CornerType.OutsideLeft,
+                    _ => CornerType.None,
+                };
         }
 
         private CornerCollection GetCornerCollection(Direction imaginePlace)

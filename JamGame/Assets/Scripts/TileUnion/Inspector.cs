@@ -1,10 +1,9 @@
 ﻿#if UNITY_EDITOR
-using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Location;
 using Sirenix.OdinInspector;
 using TileUnion.Tile;
-using UnityEditor;
 using UnityEngine;
 
 namespace TileUnion
@@ -81,45 +80,45 @@ namespace TileUnion
         }
 
         [Button(Style = ButtonStyle.Box)]
-        private void CreateProjectedTiles()
+        public void ValidateProjectedTiles(int projectedCount)
+        {
+            if (IsAllWithMark("Outside"))
+            {
+                foreach (TileImpl tile in tiles)
+                {
+                    if (tile.ProjectedTiles.Count() != projectedCount && tile.TileToProject != null)
+                    {
+                        ProjectTile(tile, projectedCount);
+                    }
+                }
+            }
+        }
+
+        [Button(Style = ButtonStyle.Box)]
+        public void RecreateProjectedTiles(int projectedCount)
         {
             if (!IsAllWithMark("Outside"))
             {
                 Debug.LogError("Projected Tiles valid only for outside tiles");
                 return;
             }
-            if (projectedTilesRoot == null)
-            {
-                GameObject gameObject = new("Projected Root");
-                projectedTilesRoot = Instantiate(gameObject, transform).transform;
-            }
-            while (projectedTilesRoot.childCount > 0)
-            {
-                DestroyImmediate(projectedTilesRoot.GetChild(0).gameObject);
-            }
-            projectedTiles.Clear();
             foreach (TileImpl tile in tiles)
             {
-                projectedTiles.Add(tile, new List<TileImpl>());
-            }
-            foreach (KeyValuePair<TileImpl, List<TileImpl>> pair in projectedTiles)
-            {
-                pair.Value.Clear();
-                for (int i = 0; i < projectedTilesCount; i++)
+                if (tile.TileToProject == null)
                 {
-                    Object gameObject = PrefabUtility.InstantiatePrefab(
-                        tileToProject,
-                        projectedTilesRoot
-                    );
-                    TileImpl instance = (gameObject as GameObject).GetComponent<TileImpl>();
-
-                    instance.transform.SetPositionAndRotation(
-                        pair.Key.transform.position
-                            + ((pair.Value.Count() + 1) * gridProperties.TileHeight * Vector3.down),
-                        pair.Key.transform.rotation
-                    );
-                    pair.Value.Add(instance);
+                    Debug.LogError($"Tile {tile.gameObject.name} have null TileToProject");
+                    continue;
                 }
+                ProjectTile(tile, projectedCount);
+            }
+        }
+
+        private void ProjectTile(TileImpl tile, int projectedCount)
+        {
+            Result result = tile.CreateProjectedTiles(gridProperties, projectedCount);
+            if (result.Failure)
+            {
+                Debug.LogError($"Fail to recreate {tile.gameObject.name}: {result.Error}");
             }
         }
     }

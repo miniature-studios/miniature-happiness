@@ -78,19 +78,11 @@ namespace TileUnion
         [SerializeField]
         private int rotation;
 
-        [MinValue(0)]
-        [SerializeField]
-        private int projectedTilesCount;
-
-        [SerializeField]
-        private Transform projectedTilesRoot;
-
-        [SerializeField]
-        private GameObject tileToProject;
-
         [ReadOnly]
         [SerializeField]
         private GridProperties gridProperties;
+
+        private int selectedDuration = 1;
 
         public void SetGridProperties(GridProperties gridProperties)
         {
@@ -99,10 +91,6 @@ namespace TileUnion
 
         [SerializeField]
         private List<TileImpl> tiles = new();
-
-        [ReadOnly]
-        [SerializeField]
-        private Dictionary<TileImpl, List<TileImpl>> projectedTiles = new();
 
         private Dictionary<int, CachedConfiguration> cachedConfiguration;
         private Dictionary<int, CachedConfiguration> Configuration => cachedConfiguration;
@@ -208,7 +196,7 @@ namespace TileUnion
 
         private IEnumerator ShowInvalidPlacingRoutine()
         {
-            yield return new WaitForSecondsRealtime(1);
+            yield return new WaitForSecondsRealtime(selectedDuration);
             foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(TileImpl.TileState.Normal);
@@ -253,13 +241,6 @@ namespace TileUnion
             if (result.Success)
             {
                 tile.ApplyUpdatingWalls(result);
-                if (projectedTiles.TryGetValue(tile, out List<TileImpl> tilesList))
-                {
-                    foreach (TileImpl subTile in tilesList)
-                    {
-                        subTile.ApplyUpdatingWalls(result);
-                    }
-                }
             }
         }
 
@@ -287,13 +268,6 @@ namespace TileUnion
                 }
             }
             tile.UpdateCorners(neighbors);
-            if (projectedTiles.TryGetValue(tile, out List<TileImpl> tilesList))
-            {
-                foreach (TileImpl subTile in tilesList)
-                {
-                    subTile.UpdateCorners(neighbors);
-                }
-            }
         }
 
         [Button(Style = ButtonStyle.Box)]
