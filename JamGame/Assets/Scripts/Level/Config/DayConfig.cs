@@ -10,6 +10,6 @@ namespace Level.Config
     public class DayConfig
     {
         [OdinSerialize]
-        public IEnumerable<IDayAction> DayActions { get; private set; } = new List<IDayAction>();
+        public List<IDayAction> DayActions { get; private set; } = new();
     }
 }
