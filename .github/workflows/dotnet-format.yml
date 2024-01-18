@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Creating project
-        run: cd JamGame/Assets/Scripts && dotnet new classlib --name JamGame && rm Class1.cs
+        run: cd JamGame/Assets/Scripts && dotnet new classlib --name JamGame --output . && rm Class1.cs
 
       - name: Move .editorconfig and .csharpierrc
         run: cd JamGame && mv .editorconfig Assets/Scripts && mv .csharpierrc.json Assets/Scripts
