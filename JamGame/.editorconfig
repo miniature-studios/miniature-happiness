@@ -12,8 +12,8 @@ indent_style = space
 tab_width = 4
 
 # New line preferences
-end_of_line = crlf
-insert_final_newline = false
+end_of_line = auto
+insert_final_newline = true
 
 #### .NET Coding Conventions ####
 
@@ -61,7 +61,7 @@ dotnet_style_prefer_simplified_boolean_expressions = true:silent
 dotnet_style_prefer_simplified_interpolation = true
 
 # Field preferences
-dotnet_style_readonly_field = true
+dotnet_style_readonly_field = false
 
 # Parameter preferences
 dotnet_code_quality_unused_parameters = all:silent
@@ -337,26 +337,3 @@ dotnet_naming_style.camel_case.required_suffix =
 dotnet_naming_style.camel_case.word_separator = 
 dotnet_naming_style.camel_case.capitalization = camel_case
 csharp_style_prefer_primary_constructors = true:suggestion
-
-[*.{cs,vb}]
-dotnet_style_operator_placement_when_wrapping = beginning_of_line
-tab_width = 4
-indent_size = 4
-end_of_line = lf
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_null_propagation = true:suggestion
-dotnet_style_prefer_is_null_check_over_reference_equality_method = false:silent
-dotnet_style_prefer_auto_properties = false:silent
-dotnet_style_object_initializer = true:suggestion
-dotnet_style_collection_initializer = true:suggestion
-dotnet_style_prefer_simplified_boolean_expressions = true:silent
-dotnet_style_prefer_conditional_expression_over_assignment = false:silent
-dotnet_style_prefer_conditional_expression_over_return = false:silent
-dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_tuple_names = true:suggestion
-dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
-dotnet_style_prefer_compound_assignment = true:silent
-dotnet_style_prefer_simplified_interpolation = true:suggestion
-dotnet_style_namespace_match_folder = true:suggestion
-dotnet_style_readonly_field = false:suggestion
-dotnet_style_prefer_collection_expression = true:suggestion
