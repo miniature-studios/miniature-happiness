@@ -86,7 +86,10 @@ namespace TileUnion
             {
                 foreach (TileImpl tile in tiles)
                 {
-                    if (tile.ProjectedTiles.Count() != projectedCount && tile.TileToProject != null)
+                    if (
+                        tile.ProjectedTiles.Where(x => x != null).Count() != projectedCount
+                        && tile.TileToProject != null
+                    )
                     {
                         ProjectTile(tile, projectedCount);
                     }
