@@ -2,19 +2,19 @@ using System;
 using System.Collections.Generic;
 using Employee.Needs;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 namespace Employee
 {
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
-    public class Buff : SerializedScriptableObject
+    public class Buff : ScriptableObject
     {
         // TODO: refactor
         public float Time;
 
-        [OdinSerialize]
-        public IEnumerable<IEffect> Effects { get; private set; } = new List<IEffect>();
+        [SerializeReference]
+        private List<IEffect> effects = new();
+        public IEnumerable<IEffect> Effects => effects;
 
         // TODO: Move to BuffView
         // TODO: Change to Image
@@ -38,25 +38,27 @@ namespace Employee
     [Serializable]
     public class StressEffect : IEffect
     {
-        [OdinSerialize]
+        [SerializeField]
         [FoldoutGroup("Stress Effect")]
-        public float IncreaseMultiplier { get; private set; }
+        private float increaseMultiplier;
+        public float IncreaseMultiplier => increaseMultiplier;
     }
 
     [Serializable]
     public class NeedModifierEffect : IEffect
     {
-        [OdinSerialize]
+        [SerializeField]
         [FoldoutGroup("NeedModifier Effect")]
-        public IEnumerable<Need.NeedProperties> NeedModifiers { get; private set; } =
-            new List<Need.NeedProperties>();
+        private List<Need.NeedProperties> needModifiers = new();
+        public IEnumerable<Need.NeedProperties> NeedModifiers => needModifiers;
     }
 
     [Serializable]
     public class ControllerEffect : IEffect
     {
-        [OdinSerialize]
+        [SerializeField]
         [FoldoutGroup("Controller Effect")]
-        public float SpeedMultiplier { get; private set; }
+        private float speedMultiplier;
+        public float SpeedMultiplier => speedMultiplier;
     }
 }

@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Level.GlobalTime;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
+using UnityEngine;
 
 namespace Level.Config
 {
@@ -15,11 +14,13 @@ namespace Level.Config
     [Serializable]
     public class Cutscene : IDayAction
     {
-        [OdinSerialize]
-        public float Duration { get; private set; }
+        [SerializeField]
+        private float duration;
+        public float Duration => duration;
 
-        [OdinSerialize]
-        public string Text { get; private set; }
+        [SerializeField]
+        private string text;
+        public string Text => text;
 
         public void Execute(Executor executor)
         {
@@ -30,11 +31,13 @@ namespace Level.Config
     [Serializable]
     public class DayStart : IDayAction
     {
-        [OdinSerialize]
-        public int MorningMoney { get; private set; }
+        [SerializeField]
+        private int morningMoney;
+        public int MorningMoney => morningMoney;
 
-        [OdinSerialize]
-        public float Duration { get; private set; }
+        [SerializeField]
+        private float duration;
+        public float Duration => duration;
 
         public void Execute(Executor executor)
         {
@@ -54,21 +57,19 @@ namespace Level.Config
     [Serializable]
     public class Meeting : IDayAction
     {
-        [OdinSerialize]
-        [ShowInInspector]
+        [SerializeReference]
         private List<IEmployeeConfig> shopEmployees = new();
 
         public IEnumerable<EmployeeConfig> ShopEmployees =>
             shopEmployees.Select(x => x.GetEmployeeConfig());
 
-        [OdinSerialize]
-        [ShowInInspector]
+        [SerializeReference]
         private List<IShopRoomConfig> shopRooms = new();
         public IEnumerable<ShopRoomConfig> ShopRooms => shopRooms.Select(x => x.GetRoomConfig());
 
-        [OdinSerialize]
-        public IEnumerable<InventoryRoomConfig> MandatoryRooms { get; private set; } =
-            new List<InventoryRoomConfig>();
+        [SerializeField]
+        private List<InventoryRoomConfig> mandatoryRooms = new();
+        public IEnumerable<InventoryRoomConfig> MandatoryRooms => mandatoryRooms;
 
         public void Execute(Executor executor)
         {
@@ -79,8 +80,9 @@ namespace Level.Config
     [Serializable]
     public class Working : IDayAction
     {
-        [OdinSerialize]
-        public Days Duration { get; private set; }
+        [SerializeField]
+        private Days duration = new();
+        public Days Duration => duration;
 
         public void Execute(Executor executor)
         {

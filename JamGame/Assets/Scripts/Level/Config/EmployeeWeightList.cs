@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 namespace Level.Config
@@ -12,10 +10,10 @@ namespace Level.Config
         menuName = "Level/EmployeeWeightList",
         order = 0
     )]
-    public class EmployeeWeightList : SerializedScriptableObject
+    public class EmployeeWeightList : ScriptableObject
     {
-        [OdinSerialize]
-        public IEnumerable<EmployeeWeights> EmployeeWeights { get; private set; } =
-            new List<EmployeeWeights>();
+        [SerializeField]
+        private List<EmployeeWeights> employeeWeights = new();
+        public IEnumerable<EmployeeWeights> EmployeeWeights => employeeWeights;
     }
 }

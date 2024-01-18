@@ -19,7 +19,7 @@ namespace Level.Boss
     }
 
     [AddComponentMenu("Scripts/Level/Boss/Level.Boss.Model")]
-    public class Model : SerializedMonoBehaviour
+    public class Model : MonoBehaviour
     {
         [Serializable]
         private class MeetingTasks

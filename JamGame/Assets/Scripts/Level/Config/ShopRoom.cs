@@ -4,7 +4,6 @@ using System.Linq;
 using Common;
 using Level.Room;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 namespace Level.Config
@@ -36,13 +35,15 @@ namespace Level.Config
     [HideReferenceObjectPicker]
     public class RoomWeights
     {
-        [OdinSerialize]
-        public float Weight { get; private set; }
+        [SerializeField]
+        private float weight;
+        public float Weight => weight;
 
         [AssetSelector]
         [AssetsOnly]
-        [OdinSerialize]
-        public CoreModel Room { get; private set; }
+        [SerializeField]
+        private CoreModel room;
+        public CoreModel Room => room;
     }
 
     [Serializable]
