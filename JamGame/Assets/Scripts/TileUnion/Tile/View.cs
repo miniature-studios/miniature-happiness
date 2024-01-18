@@ -39,12 +39,11 @@ namespace TileUnion.Tile
         {
             SetActiveChilds(transform);
             renderers = GetComponentsInChildren<Renderer>().ToList();
-            for (int i = 0; i < renderers.Count; i++)
+            if (foundation != null)
             {
-                if (renderers[i].GetComponentInParent<IgnoreCatch>())
+                foreach (Renderer toRemove in foundation.GetComponentsInChildren<Renderer>())
                 {
-                    renderers.RemoveAt(i);
-                    i--;
+                    _ = renderers.Remove(toRemove);
                 }
             }
             foreach (Renderer renderer in renderers)

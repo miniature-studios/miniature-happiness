@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -58,7 +59,7 @@ namespace Common
             }
             else
             {
-                return new FailResult<T>("Try to load asset with wrong component.");
+                return new FailResult<T>("Tried to load asset with wrong component.");
             }
         }
 
@@ -67,7 +68,7 @@ namespace Common
             Result<T> result = TryLoadAsset(resourceLocation);
             if (result.Failure)
             {
-                Debug.LogError(result.Error);
+                throw new Exception(result.Error);
             }
             return result;
         }
