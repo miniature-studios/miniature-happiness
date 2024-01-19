@@ -12,7 +12,7 @@ namespace Location
         private GameObject root;
 
         private NeedModifiers modifiers;
-        private EmployeeImpl[] registeredOn;
+        private EmployeeImpl[] registeredOn = new EmployeeImpl[0] { };
 
         private void Start()
         {

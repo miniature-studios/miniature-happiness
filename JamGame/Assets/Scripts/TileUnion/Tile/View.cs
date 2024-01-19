@@ -73,7 +73,14 @@ namespace TileUnion.Tile
         {
             if (foundation != null)
             {
-                foundation.SetActive(state != State.Selected);
+                bool active = state switch
+                {
+                    State.Default => true,
+                    State.Selected => false,
+                    State.SelectedOverlapping => false,
+                    _ => throw new System.ArgumentException()
+                };
+                foundation.SetActive(active);
             }
 
             foreach (Renderer renderer in renderers)

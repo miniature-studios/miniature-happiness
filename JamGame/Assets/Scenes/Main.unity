@@ -425,7 +425,7 @@ MonoBehaviour:
   GameModeToChange: 0
   SquareSideLength: 20
   NeededEmployeeCount: 4
-  StairsPrefab: {fileID: 739786844684371711, guid: 9a5e3fa55f0f38f409431cce0f63f437, type: 3}
+  StairsPrefab: {fileID: 739786844684371711, guid: 0f69c79ab430bae47b800e8f9a170768, type: 3}
   WindowPrefab: {fileID: 739786844684371711, guid: f104552f7cc9c2f4296f37ad0d234453, type: 3}
   OutdoorPrefab: {fileID: 739786844684371711, guid: fd419519c05e90b439b657c43772d3c0, type: 3}
   CorridorPrefab: {fileID: 739786844684371711, guid: f044b3ffd09d573499c1b6fa1770b0cf, type: 3}
@@ -1601,51 +1601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37b538cd72a563148a61a46d0a69f10a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: singletons
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[Common.IDataProvider,
-        Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
-        mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: multipleSources
-      Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[System.Collections.Generic.List`1[[Common.IDataProvider,
-        Assembly-CSharp]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 9
-      Data: 1
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
 --- !u!4 &432579850
 Transform:
   m_ObjectHideFlags: 0
@@ -2284,7 +2239,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -3408,33 +3363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144e4e9922969da448b075859c2653b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: TestEmployeeConfig
-      Entry: 7
-      Data: 0|Level.Config.FixedEmployeeConfig, Assembly-CSharp
-    - Name: name
-      Entry: 1
-      Data: John
-    - Name: hireCost
-      Entry: 3
-      Data: 10
-    - Name: profession
-      Entry: 1
-      Data: Programmer
-    - Name: quirk
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   tileBuilderController: {fileID: 115190262}
   financesModel: {fileID: 1125594366}
   shopController: {fileID: 1671638923}
@@ -3467,6 +3395,18 @@ MonoBehaviour:
   DayEnds:
     m_PersistentCalls:
       m_Calls: []
+  TestEmployeeConfig:
+    rid: 1908735040774995968
+  references:
+    version: 2
+    RefIds:
+    - rid: 1908735040774995968
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        name: Jonh
+        hireCost: 50
+        profession: GGG
+        quirk: DFD
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5463,26 +5403,6 @@ PrefabInstance:
     - target: {fileID: 753605451584959659, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
       propertyPath: m_Name
       value: Main Camera
-      objectReference: {fileID: 0}
-    - target: {fileID: 3139791413907972050, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
-      propertyPath: field of view
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 3139791413907972050, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
-      propertyPath: m_FocalLength
-      value: 10.069196
-      objectReference: {fileID: 0}
-    - target: {fileID: 3139791413907972050, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
-      propertyPath: near clip plane
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3139791413907972050, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
-      propertyPath: m_projectionMatrixMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7781768571682195243, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
-      propertyPath: m_IgnoreTimeScale
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7857302743038720757, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
       propertyPath: m_LocalPosition.x
