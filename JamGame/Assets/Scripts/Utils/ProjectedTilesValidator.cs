@@ -1,6 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
-using SettingsConfigs;
+using Settings;
 using TileUnion;
 using UnityEditor;
 using UnityEngine;

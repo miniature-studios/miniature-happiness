@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
-using SettingsConfigs;
+using Settings;
 using TileBuilder;
 using UnityEditor;
 using UnityEngine;

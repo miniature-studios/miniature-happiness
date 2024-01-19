@@ -2,7 +2,7 @@
 using TileBuilder;
 using UnityEngine;
 
-namespace SettingsConfigs
+namespace Settings
 {
     [CreateAssetMenu(
         fileName = "GameSettings",

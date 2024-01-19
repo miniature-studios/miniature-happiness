@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
 
-namespace SettingsConfigs
+namespace Settings
 {
     public static class GlobalGameSettings
     {

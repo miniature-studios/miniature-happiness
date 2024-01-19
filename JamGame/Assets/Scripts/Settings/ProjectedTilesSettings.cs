@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SettingsConfigs
+namespace Settings
 {
     [CreateAssetMenu(
         fileName = "ProjectedTilesSettings",
