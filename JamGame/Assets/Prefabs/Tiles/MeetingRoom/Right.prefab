@@ -95,9 +95,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1564712329040920804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca3b93a1ec6cf29499157f5fdfb8cc89, type: 3}
+  m_Script: {fileID: 11500000, guid: 32101c4a35cc9e4489ebbebd25c71f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  size: 0.1
+  shift: {x: 0, y: 0, z: 0}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  isWireframe: 0
 --- !u!1 &2221570835820734206
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  standardMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
 --- !u!65 &4861591555642219981
 BoxCollider:
   m_ObjectHideFlags: 0

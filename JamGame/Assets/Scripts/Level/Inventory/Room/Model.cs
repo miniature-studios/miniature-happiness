@@ -2,6 +2,6 @@
 
 namespace Level.Inventory.Room
 {
-    [AddComponentMenu("Scripts/Level/Inventory/Room/Level.Inventory.Room.model")]
+    [AddComponentMenu("Scripts/Level/Inventory/Room/Level.Inventory.Room.Model")]
     public class Model : MonoBehaviour { }
 }

@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using Settings;
 using TileBuilder;
 using UnityEditor;
 using UnityEngine;
@@ -20,11 +21,8 @@ namespace Utils
         {
             string[] paths = AssetDatabase.FindAssets("t:GridProperties");
             List<GridProperties> gridProperties = paths
-                .Select(
-                    x =>
-                        AssetDatabase.LoadAssetAtPath<GridProperties>(
-                            AssetDatabase.GUIDToAssetPath(x)
-                        )
+                .Select(x =>
+                    AssetDatabase.LoadAssetAtPath<GridProperties>(AssetDatabase.GUIDToAssetPath(x))
                 )
                 .ToList();
 

@@ -25,7 +25,8 @@ namespace TileUnion.Tile
         [SerializeField]
         private Vector2Int position = new(0, 0);
 
-        [SerializeField, Range(0, 3)]
+        [Range(0, 3)]
+        [SerializeField]
         private int rotation = 0;
 
         public List<WallPrefabHandler> WallPrefabHandlers;
@@ -46,6 +47,18 @@ namespace TileUnion.Tile
         public Vector2Int Position => position;
         public int Rotation => rotation;
         public IEnumerable<string> Marks => marks;
+
+        [ReadOnly]
+        [SerializeField]
+        private List<TileImpl> projectedTiles = new();
+        public IEnumerable<TileImpl> ProjectedTiles => projectedTiles;
+
+        [SerializeField]
+        private Transform projectedTilesRoot;
+
+        [SerializeField]
+        private GameObject tileToProject;
+        public GameObject TileToProject => tileToProject;
 
         private Dictionary<Direction, List<WallType>> Walls
         {
@@ -110,6 +123,13 @@ namespace TileUnion.Tile
             {
                 GetWallCollection(directionWall.Key).SetWall(directionWall.Value);
             }
+            if (ProjectedTiles != null)
+            {
+                foreach (TileImpl tile in ProjectedTiles)
+                {
+                    tile.ApplyUpdatingWalls(result);
+                }
+            }
         }
 
         private WallCollection GetWallCollection(Direction imaginePlace)
@@ -143,6 +163,13 @@ namespace TileUnion.Tile
                         : ChooseCorner(wallTypes);
                 }
                 GetCornerCollection(direction.Rotate45()).SetCorner(toPlace);
+            }
+            if (ProjectedTiles != null)
+            {
+                foreach (TileImpl tile in ProjectedTiles)
+                {
+                    tile.UpdateCorners(neighbors);
+                }
             }
         }
 
@@ -217,34 +244,24 @@ namespace TileUnion.Tile
             }
 
             currentState = state;
-            switch (currentState)
+            View.State viewState = currentState switch
             {
-                default:
-                case TileState.Normal:
-                    transform.position = new Vector3(
-                        transform.position.x,
-                        unselectedYPosition,
-                        transform.position.z
-                    );
-                    TileView.SetMaterial(View.State.Default);
-                    break;
-                case TileState.Selected:
-                    transform.position = new Vector3(
-                        transform.position.x,
-                        selectedYPosition,
-                        transform.position.z
-                    );
-                    TileView.SetMaterial(View.State.Selected);
-                    break;
-                case TileState.SelectedAndErrored:
-                    transform.position = new Vector3(
-                        transform.position.x,
-                        selectedYPosition,
-                        transform.position.z
-                    );
-                    TileView.SetMaterial(View.State.SelectedOverlapping);
-                    break;
-            }
+                TileState.Normal => View.State.Default,
+                TileState.Selected => View.State.Selected,
+                TileState.SelectedAndErrored => View.State.SelectedOverlapping,
+                _ => throw new InvalidOperationException()
+            };
+
+            float newY = currentState switch
+            {
+                TileState.Normal => unselectedYPosition,
+                TileState.Selected => selectedYPosition,
+                TileState.SelectedAndErrored => unselectedYPosition,
+                _ => throw new InvalidOperationException()
+            };
+            transform.SetYPosition(newY);
+
+            TileView.SetMaterial(viewState);
         }
 
         public void SetPosition(GridProperties gridProperties, Vector2Int newPosition)
