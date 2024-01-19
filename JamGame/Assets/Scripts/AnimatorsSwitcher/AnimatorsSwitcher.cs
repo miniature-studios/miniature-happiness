@@ -55,13 +55,13 @@ namespace AnimatorsSwitcher
 
         public void SetAnimatorStates(Type dayType)
         {
-            interfaceMatch = animatorList.InterfaceMatcher.Find(
-                x => x.InterfaceName == dayType.Name
+            interfaceMatch = animatorList.InterfaceMatcher.Find(x =>
+                x.InterfaceName == dayType.Name
             );
             foreach (AnimatorProperties properties in interfaceMatch.AnimatorsProperties)
             {
-                Animator animator = animatorList.Animators.Find(
-                    x => x.name == properties.AnimatorName
+                Animator animator = animatorList.Animators.Find(x =>
+                    x.name == properties.AnimatorName
                 );
                 animator.SetBool("Showed", properties.Showed);
                 switch (properties.OverrideState)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace TileBuilder
@@ -8,6 +9,7 @@ namespace TileBuilder
     [Serializable]
     public struct TileConfig
     {
+        [ReadOnly]
         [SerializeField]
         private string hashCode;
         public string HashCode => hashCode;
