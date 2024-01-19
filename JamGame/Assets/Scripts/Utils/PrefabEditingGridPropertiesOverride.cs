@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using SettingsConfigs;
 using TileUnion;
 using UnityEditor;
 using UnityEditor.SceneManagement;

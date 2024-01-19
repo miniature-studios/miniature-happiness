@@ -71,8 +71,10 @@ namespace Level.Shop
         {
             if (modelViewMap.TryGetValue(newRoom.Uid, out IResourceLocation location))
             {
-                Result<Room.View> result = AddressableTools<Room.View>.LoadAsset(location);
-                Room.View newRoomView = Instantiate(result.Data, roomsUIContainer.transform);
+                Room.View newRoomView = Instantiate(
+                    AddressableTools<Room.View>.LoadAsset(location),
+                    roomsUIContainer.transform
+                );
 
                 newRoomView.SetCoreModel(newRoom);
                 newRoomView.enabled = true;

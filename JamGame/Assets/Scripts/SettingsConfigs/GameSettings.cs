@@ -2,11 +2,11 @@
 using TileBuilder;
 using UnityEngine;
 
-namespace Utils
+namespace SettingsConfigs
 {
     [CreateAssetMenu(
         fileName = "GameSettings",
-        menuName = "GameSettings/CreateGameSettings",
+        menuName = "Settings/Create GameSettings",
         order = 5
     )]
     public class GameSettings : ScriptableObject

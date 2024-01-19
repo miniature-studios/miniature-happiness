@@ -63,14 +63,14 @@ namespace Common
             }
         }
 
-        public static Result<T> LoadAsset(IResourceLocation resourceLocation)
+        public static T LoadAsset(IResourceLocation resourceLocation)
         {
             Result<T> result = TryLoadAsset(resourceLocation);
             if (result.Failure)
             {
                 throw new Exception(result.Error);
             }
-            return result;
+            return result.Data;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
+using SettingsConfigs;
 using TileUnion;
 using UnityEditor;
 using UnityEngine;
@@ -8,8 +9,6 @@ namespace Utils
 {
     internal class ProjectedTilesValidator
     {
-        private static int projectedCount = 10;
-
         [MenuItem("Tools/ProjectedTilesValidator/Validate Projected Tiles in TileUnions")]
         private static void OnPostprocessAllAssets()
         {
@@ -23,7 +22,9 @@ namespace Utils
                     TileUnionImpl tileUnion = prefab.GetComponent<TileUnionImpl>();
                     if (tileUnion != null)
                     {
-                        tileUnion.ValidateProjectedTiles(projectedCount);
+                        tileUnion.ValidateProjectedTiles(
+                            GlobalGameSettings.GetProjectedTilesSettings().ProjectedCount
+                        );
                         dirty = true;
                     }
                 }
