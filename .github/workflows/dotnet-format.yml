@@ -20,29 +20,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Creating project
-        run: dotnet new classlib --name JamGame --output ./JamGame
+        run: cd JamGame/Assets/Scripts && dotnet new classlib --name JamGame --output . && rm Class1.cs
 
-      - name: Deleting garbage
-        run: rm ./JamGame/Class1.cs
-
-      - name: Add .editorconfig
-        run: wget -O JamGame/.editorconfig https://raw.githubusercontent.com/mertwole/miniature-happiness/main/JamGame/.editorconfig
+      - name: Move .editorconfig and .csharpierrc
+        run: cd JamGame && mv .editorconfig Assets/Scripts && mv .csharpierrc.json Assets/Scripts
 
       - name: Check content
-        run: |
-          ls -a -l JamGame
-          cat JamGame/.editorconfig
+        run: ls -a -l JamGame/Assets/Scripts
 
       - name: Restore tools
-        run: dotnet tool restore --tool-manifest ./JamGame/.config/dotnet-tools.json
+        run:  cd JamGame/Assets/Scripts && dotnet tool restore --tool-manifest ../../.config/dotnet-tools.json
       
-      - name: Check versions
-        run: |
-          dotnet format --version
-          cd JamGame/ && dotnet tool list
+      - name: Check dotnet format version
+        run: dotnet format --version
 
       - name: Run dotnet format
-        run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
+        run: dotnet format JamGame/Assets/Scripts/JamGame.csproj --verify-no-changes --no-restore -v d
       
       - name: Run csharpier format
-        run: cd JamGame/ && dotnet tool run dotnet-csharpier --config-path "./.csharpierrc.json" 'Assets\Scripts\' --check
+        run: cd JamGame/Assets/Scripts && dotnet tool run dotnet-csharpier --config-path ".csharpierrc.json" . --check
