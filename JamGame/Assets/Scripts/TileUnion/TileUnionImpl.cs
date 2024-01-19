@@ -16,7 +16,7 @@ namespace TileUnion
 {
     [SelectionBase]
     [AddComponentMenu("Scripts/TileUnion/TileUnion")]
-    public partial class TileUnionImpl : MonoBehaviour
+    public partial class TileUnionImpl : SerializedMonoBehaviour
     {
         [Serializable]
         private class CachedConfiguration
@@ -74,19 +74,23 @@ namespace TileUnion
         [SerializeField]
         private Vector2Int position;
 
-        [SerializeField, Range(0, 3)]
+        [Range(0, 3)]
+        [SerializeField]
         private int rotation;
 
         [ReadOnly]
         [SerializeField]
         private GridProperties gridProperties;
 
+        private int selectedDuration = 1;
+
         public void SetGridProperties(GridProperties gridProperties)
         {
             this.gridProperties = gridProperties;
         }
 
-        public List<TileImpl> Tiles = new();
+        [SerializeField]
+        private List<TileImpl> tiles = new();
 
         private Dictionary<int, CachedConfiguration> cachedConfiguration;
         private Dictionary<int, CachedConfiguration> Configuration => cachedConfiguration;
@@ -96,11 +100,11 @@ namespace TileUnion
             Configuration[rotation].TilesPositionsForUpdating.Select(x => x + position);
         public IEnumerable<Vector2Int> TilesPositions =>
             Configuration[rotation].TilesPositions.Select(x => x + position);
-        public int TilesCount => Tiles.Count;
+        public int TilesCount => tiles.Count;
 
         public IEnumerable<string> GetAllUniqueMarks()
         {
-            return Tiles
+            return tiles
                 .Select(x => x.Marks)
                 .Aggregate(Enumerable.Empty<string>(), (x, y) => x.Concat(y))
                 .Distinct();
@@ -108,19 +112,19 @@ namespace TileUnion
 
         public bool IsAllWithMark(string mark)
         {
-            return Tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
+            return tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
         }
 
         public IEnumerable<Vector2Int> GetImaginePlaces(PlacingProperties placingProperties)
         {
-            return Configuration[placingProperties.Rotation % 4].TilesPositions.Select(
-                x => x + placingProperties.Position
+            return Configuration[placingProperties.Rotation % 4].TilesPositions.Select(x =>
+                x + placingProperties.Position
             );
         }
 
         public Result IsValidPlacing(TileBuilderImpl tileBuilder)
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 Dictionary<Direction, TileImpl> neighbors = new();
                 foreach (Direction pos in Direction.Up.GetCircle90())
@@ -168,7 +172,7 @@ namespace TileUnion
 
         public void ApplyTileUnionState(TileImpl.TileState state)
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(state);
             }
@@ -176,12 +180,14 @@ namespace TileUnion
 
         public IEnumerable<Direction> GetAccessibleDirectionsFromPosition(Vector2Int position)
         {
-            return Tiles.Find(x => x.Position == position - this.position).GetPassableDirections();
+            return tiles
+                .FirstOrDefault(x => x.Position == position - this.position)
+                .GetPassableDirections();
         }
 
         public void ShowInvalidPlacing()
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(TileImpl.TileState.SelectedAndErrored);
             }
@@ -190,8 +196,8 @@ namespace TileUnion
 
         private IEnumerator ShowInvalidPlacingRoutine()
         {
-            yield return new WaitForSecondsRealtime(1);
-            foreach (TileImpl tile in Tiles)
+            yield return new WaitForSecondsRealtime(selectedDuration);
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetTileState(TileImpl.TileState.Normal);
             }
@@ -199,7 +205,7 @@ namespace TileUnion
 
         public void SetColliderActive(bool active)
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 foreach (Collider collider in tile.GetComponentsInChildren<Collider>())
                 {
@@ -267,15 +273,15 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void IsolateUpdate()
         {
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 Dictionary<Direction, TileImpl> neighbors = new();
                 foreach (Direction pos in Direction.Up.GetCircle90())
                 {
                     Vector2Int bufferPosition = tile.Position + pos.ToVector2Int();
-                    if (Tiles.Select(x => x.Position).Contains(bufferPosition))
+                    if (tiles.Select(x => x.Position).Contains(bufferPosition))
                     {
-                        neighbors.Add(pos, Tiles.FirstOrDefault(x => x.Position == bufferPosition));
+                        neighbors.Add(pos, tiles.FirstOrDefault(x => x.Position == bufferPosition));
                     }
                     else
                     {
@@ -298,7 +304,7 @@ namespace TileUnion
             for (int i = 0; i < 4; i++)
             {
                 List<TileCachedConfiguration> tileConfigurations = new();
-                foreach (TileImpl tile in Tiles)
+                foreach (TileImpl tile in tiles)
                 {
                     tileConfigurations.Add(new(tile, tile.Position, tile.Rotation));
                 }
@@ -306,7 +312,7 @@ namespace TileUnion
                     rotation,
                     new(
                         GetTilesPositionsForUpdating().ToList(),
-                        Tiles.Select(x => x.Position).ToList(),
+                        tiles.Select(x => x.Position).ToList(),
                         tileConfigurations,
                         GetCenterTilePosition()
                     )
@@ -352,7 +358,7 @@ namespace TileUnion
         private TileImpl GetTile(Vector2Int globalPosition)
         {
             globalPosition -= position;
-            return Tiles.FirstOrDefault(x => x.Position == globalPosition);
+            return tiles.FirstOrDefault(x => x.Position == globalPosition);
         }
 
         private void RotateTileUnion(bool considerCenterOfMass)
@@ -361,13 +367,13 @@ namespace TileUnion
             if (considerCenterOfMass)
             {
                 firstCenter = CenterOfMassTools.GetCenterOfMass(
-                    Tiles.Select(x => x.Position).ToList()
+                    tiles.Select(x => x.Position).ToList()
                 );
             }
 
             rotation++;
             rotation %= 4;
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 tile.SetRotation(tile.Rotation + 1);
                 tile.SetPosition(gridProperties, new Vector2Int(tile.Position.y, -tile.Position.x));
@@ -376,10 +382,10 @@ namespace TileUnion
             if (considerCenterOfMass)
             {
                 Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                    Tiles.Select(x => x.Position).ToList()
+                    tiles.Select(x => x.Position).ToList()
                 );
                 Vector2 delta = firstCenter - secondCenter;
-                foreach (TileImpl tile in Tiles)
+                foreach (TileImpl tile in tiles)
                 {
                     tile.SetPosition(
                         gridProperties,
@@ -392,7 +398,7 @@ namespace TileUnion
         private IEnumerable<Vector2Int> GetTilesPositionsForUpdating()
         {
             HashSet<Vector2Int> localPositions = new();
-            foreach (TileImpl tile in Tiles)
+            foreach (TileImpl tile in tiles)
             {
                 foreach (Direction position in Direction.Up.GetCircle45())
                 {
@@ -407,7 +413,7 @@ namespace TileUnion
         private Vector2Int GetCenterTilePosition()
         {
             Vector2 vectorSum = new();
-            foreach (Vector2Int pos in Tiles.Select(x => x.Position))
+            foreach (Vector2Int pos in tiles.Select(x => x.Position))
             {
                 vectorSum += pos;
             }
@@ -453,7 +459,7 @@ namespace TileUnion
             )
             {
                 TileImpl newTile = Instantiate(pair.Value, transform);
-                Tiles.Add(newTile);
+                tiles.Add(newTile);
                 newTile.SetPosition(gridProperties, pair.Key.globalPosition - position);
                 newTile.SetRotation(pair.Key.roatation);
             }

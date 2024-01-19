@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -6,14 +7,14 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Common
 {
     public struct AssetWithLocation<T>
-        where T : class
+        where T : MonoBehaviour
     {
         public IResourceLocation Location;
         public T Asset;
     }
 
     public static class AddressableTools<T>
-        where T : class
+        where T : MonoBehaviour
     {
         public static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(
             AssetLabelReference assetLabel
@@ -35,20 +36,41 @@ namespace Common
                     .WaitForCompletion()
             )
             {
-                yield return new AssetWithLocation<T>()
+                Result<T> result = TryLoadAsset(resourceLocation);
+                if (result.Success)
                 {
-                    Location = resourceLocation,
-                    Asset = LoadAsset(resourceLocation)
-                };
+                    yield return new AssetWithLocation<T>()
+                    {
+                        Location = resourceLocation,
+                        Asset = result.Data
+                    };
+                }
+            }
+        }
+
+        private static Result<T> TryLoadAsset(IResourceLocation resourceLocation)
+        {
+            GameObject gameObject = Addressables
+                .LoadAssetAsync<GameObject>(resourceLocation)
+                .WaitForCompletion();
+            if (gameObject.TryGetComponent(out T component))
+            {
+                return new SuccessResult<T>(component);
+            }
+            else
+            {
+                return new FailResult<T>("Tried to load asset with wrong component.");
             }
         }
 
         public static T LoadAsset(IResourceLocation resourceLocation)
         {
-            GameObject gameObject = Addressables
-                .LoadAssetAsync<GameObject>(resourceLocation)
-                .WaitForCompletion();
-            return gameObject.GetComponent<T>();
+            Result<T> result = TryLoadAsset(resourceLocation);
+            if (result.Failure)
+            {
+                throw new Exception(result.Error);
+            }
+            return result.Data;
         }
     }
 }

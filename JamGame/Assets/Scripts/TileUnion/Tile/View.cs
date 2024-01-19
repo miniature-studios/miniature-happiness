@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace TileUnion.Tile
@@ -8,13 +9,24 @@ namespace TileUnion.Tile
     public class View : MonoBehaviour
     {
         [SerializeField]
+        private GameObject foundation;
+
+        [SerializeField]
         private Material transparentMaterial;
 
         [SerializeField]
         private Material errorMaterial;
 
-        private Dictionary<Renderer, Material[]> initialMaterialsMap = new();
-        private Dictionary<State, Material[]> materialsByState;
+        [SerializeField]
+        private Material defaultMaterial;
+
+        [ReadOnly]
+        [SerializeField]
+        private List<Renderer> renderers = new();
+
+        [ReadOnly]
+        [SerializeField]
+        private Dictionary<State, Material> materialsByState;
 
         public enum State
         {
@@ -26,15 +38,23 @@ namespace TileUnion.Tile
         private void Awake()
         {
             SetActiveChilds(transform);
-            Renderer[] renderers = GetComponentsInChildren<Renderer>();
+            renderers = GetComponentsInChildren<Renderer>().ToList();
+            if (foundation != null)
+            {
+                foreach (Renderer toRemove in foundation.GetComponentsInChildren<Renderer>())
+                {
+                    _ = renderers.Remove(toRemove);
+                }
+            }
             foreach (Renderer renderer in renderers)
             {
-                initialMaterialsMap.Add(renderer, renderer.materials);
+                renderer.SetMaterials(new List<Material>());
             }
             materialsByState = new()
             {
-                { State.Selected, new Material[1] { transparentMaterial } },
-                { State.SelectedOverlapping, new Material[1] { errorMaterial } },
+                { State.Default, defaultMaterial },
+                { State.Selected, transparentMaterial },
+                { State.SelectedOverlapping, errorMaterial },
             };
             SetMaterial(State.Default);
         }
@@ -51,16 +71,14 @@ namespace TileUnion.Tile
 
         public void SetMaterial(State state)
         {
-            foreach (KeyValuePair<Renderer, Material[]> materialsMap in initialMaterialsMap)
+            if (foundation != null)
             {
-                materialsMap.Key.materials =
-                    state == State.Default
-                        ? materialsMap.Value
-                        : Enumerable
-                            .Range(0, materialsMap.Value.Count())
-                            .Select(x => materialsByState[state].ToList())
-                            .Aggregate((x, y) => x.Concat(y).ToList())
-                            .ToArray();
+                foundation.SetActive(state != State.Selected);
+            }
+
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.sharedMaterial = materialsByState[state];
             }
         }
     }

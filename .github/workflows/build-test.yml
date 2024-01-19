@@ -39,4 +39,5 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
       
       - name: Chown files to koala
+        if: success() || failure()
         run: sudo chown -R 'koala:' ~/office-runner/_work --recursive

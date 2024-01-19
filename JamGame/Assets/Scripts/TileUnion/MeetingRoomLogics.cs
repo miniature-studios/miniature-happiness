@@ -152,8 +152,8 @@ namespace TileUnion
                 {
                     addingConfig.Add(
                         (
-                            info.MovingTileUnionPositions.Select(
-                                x => x + (info.MovingDirection * i)
+                            info.MovingTileUnionPositions.Select(x =>
+                                x + (info.MovingDirection * i)
                             )
                                 .ToList()[j],
                             TileUnion.Rotation

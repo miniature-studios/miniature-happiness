@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Common;
 using Sirenix.OdinInspector;
+using TileBuilder;
 using UnityEditor;
 using UnityEngine;
 
@@ -105,8 +106,8 @@ namespace TileUnion.Tile
                 float degrees = wallCollection.Place.GetDegrees();
                 foreach (WallPrefabHandler handler in wallCollection.Handlers)
                 {
-                    WallPrefabHandler prefabHandler = WallPrefabHandlers.Find(
-                        x => x.Type == handler.Type
+                    WallPrefabHandler prefabHandler = WallPrefabHandlers.Find(x =>
+                        x.Type == handler.Type
                     );
                     if (prefabHandler != null)
                     {
@@ -159,8 +160,8 @@ namespace TileUnion.Tile
                 float degrees = cornerCollection.Place.GetDegrees() - 45;
                 foreach (CornerPrefabHandler handler in cornerCollection.Handlers)
                 {
-                    CornerPrefabHandler prefabHandler = CornerPrefabHandlers.Find(
-                        x => x.Type == handler.Type
+                    CornerPrefabHandler prefabHandler = CornerPrefabHandlers.Find(x =>
+                        x.Type == handler.Type
                     );
                     if (prefabHandler != null)
                     {
@@ -212,6 +213,48 @@ namespace TileUnion.Tile
             {
                 _ = PrefabUtility.InstantiatePrefab(centerObject, centerHandler.transform);
             }
+        }
+
+        [Button(Style = ButtonStyle.Box)]
+        public Result CreateProjectedTiles(GridProperties gridProperties, int projectedTilesCount)
+        {
+            if (projectedTilesRoot == null)
+            {
+                GameObject gameObject = new("Projected Root");
+                projectedTilesRoot = Instantiate(gameObject, transform).transform;
+            }
+            while (projectedTilesRoot.childCount > 0)
+            {
+                DestroyImmediate(projectedTilesRoot.GetChild(0).gameObject);
+            }
+            projectedTiles.Clear();
+            for (int i = 0; i < projectedTilesCount; i++)
+            {
+                if (tileToProject == null)
+                {
+                    return new FailResult("TileToProject is null.");
+                }
+
+                UnityEngine.Object gameObject = PrefabUtility.InstantiatePrefab(
+                    tileToProject,
+                    projectedTilesRoot
+                );
+
+                if (!(gameObject as GameObject).TryGetComponent(out TileImpl instance))
+                {
+                    DestroyImmediate(gameObject);
+                    return new FailResult("TileToProject not contain TileImpl component.");
+                }
+
+                instance.transform.SetPositionAndRotation(
+                    transform.position
+                        + ((projectedTiles.Count() + 1) * gridProperties.TileHeight * Vector3.down),
+                    transform.rotation
+                );
+                projectedTiles.Add(instance);
+            }
+
+            return new SuccessResult();
         }
 
         private void OnDrawGizmos()

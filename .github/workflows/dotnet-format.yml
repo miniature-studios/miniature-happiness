@@ -33,18 +33,16 @@ jobs:
           ls -a -l JamGame
           cat JamGame/.editorconfig
 
-      - name: Install csharpier locally
-        run: |
-          dotnet new tool-manifest
-          dotnet tool install --local csharpier
+      - name: Restore tools
+        run: dotnet tool restore --tool-manifest ./JamGame/.config/dotnet-tools.json
       
       - name: Check versions
         run: |
           dotnet format --version
-          dotnet csharpier --version
+          cd JamGame/ && dotnet tool list
 
       - name: Run dotnet format
         run: dotnet format JamGame/JamGame.csproj --verify-no-changes --include JamGame/Assets/Scripts -v d
       
       - name: Run csharpier format
-        run: dotnet csharpier --config-path "JamGame/.csharpierrc.json" 'JamGame\Assets\Scripts\' --check
+        run: cd JamGame/ && dotnet tool run dotnet-csharpier --config-path "./.csharpierrc.json" 'Assets\Scripts\' --check

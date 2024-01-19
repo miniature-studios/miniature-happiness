@@ -15,8 +15,11 @@ namespace TileBuilder
 
         [SerializeField]
         private int step;
-
         public int Step => step;
+
+        [SerializeField]
+        private float tileHeight;
+        public float TileHeight => tileHeight;
 
         public Result<Vector2Int> GetMatrixPosition(Ray ray)
         {
