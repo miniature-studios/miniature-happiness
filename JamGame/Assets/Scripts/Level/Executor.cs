@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using AnimatorsSwitcher;
 using Common;
 using Level.Config;
+using Level.Config.DayAction;
 using Level.GlobalTime;
 using Location;
 using UnityEngine;
@@ -33,7 +35,7 @@ namespace Level
         private Shop.Controller shopController;
 
         [SerializeField]
-        private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
+        private AnimatorsSwitcherImpl animatorSwitcher;
 
         [SerializeField]
         private DailyBill.Model dailyBill;

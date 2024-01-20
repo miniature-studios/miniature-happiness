@@ -15,7 +15,7 @@ MonoBehaviour:
   days: []
   defaultDay:
     dayActions:
-    - rid: 1908735019434377216
+    - rid: 1908735060811186178
     - rid: 1908735019434377217
     - rid: 1908735019434377219
     - rid: 1908735019434377220
@@ -29,11 +29,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1908735019434377216
-      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        duration: 2
-        text: Day Start
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 1908735019434377217
       type: {class: DayStart, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -44,11 +41,14 @@ MonoBehaviour:
       data:
         shopEmployees:
         - rid: 1908735019434377222
-        shopRooms: []
-        mandatoryRooms: []
+        shopRooms:
+        - rid: 1908735060811186176
+        - rid: 1908735060811186177
+        mandatoryRooms:
+        - {room: {fileID: 0}}
     - rid: 1908735019434377219
       type: {class: PreMeeting, ns: Level.Config, asm: Assembly-CSharp}
-      data: 
+      data: {}
     - rid: 1908735019434377220
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -66,6 +66,7 @@ MonoBehaviour:
         hireCost: 10
         profession: LOH
         quirk: Quirk
+        prototype: {fileID: 0}
     - rid: 1908735019434377223
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -78,9 +79,23 @@ MonoBehaviour:
         text: 
     - rid: 1908735019434377225
       type: {class: PreDayEnd, ns: Level.Config, asm: Assembly-CSharp}
-      data: 
+      data: {}
     - rid: 1908735019434377226
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration: 0
         text: Day end
+    - rid: 1908735060811186176
+      type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data: {room: {fileID: 0}}
+    - rid: 1908735060811186177
+      type: {class: RandomRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        roomWeights:
+        - weight: 0
+          room: {fileID: 0}
+    - rid: 1908735060811186178
+      type: {class: Cutscene, ns: Level.Config.DayAction, asm: Assembly-CSharp}
+      data:
+        duration: 0
+        text: 
