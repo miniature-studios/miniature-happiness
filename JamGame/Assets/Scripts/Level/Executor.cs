@@ -88,7 +88,7 @@ namespace Level
 
         private IEnumerator DayStartRoutine(float time)
         {
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSecondsRealtime(time);
             ActionEndNotify?.Invoke();
         }
 
@@ -157,6 +157,8 @@ namespace Level
             ActionEndNotify?.Invoke();
         }
 
+        private bool ended = false;
+
         public void Execute(Cutscene cutscene)
         {
             transitionPanel.PanelText = cutscene.Text;
@@ -165,9 +167,16 @@ namespace Level
             transitionPanelShown = false;
 
             this.CreateGate(
-                new List<Func<bool>>() { () => transitionPanelShown },
-                new List<Action>() { ActionEndNotify.Invoke }
+                new List<Func<bool>>() { () => transitionPanelShown, () => ended },
+                new List<Action>() { ActionEndNotify.Invoke, () => ended = false }
             );
+            _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
+        }
+
+        private IEnumerator CutsceneRoutine(float time)
+        {
+            yield return new WaitForSecondsRealtime(time);
+            ended = true;
         }
 
         public void Execute(PreDayEnd preDayEnd)
