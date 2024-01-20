@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Level.Config;
-using Level.Config.DayAction;
 using UnityEngine;
 
 namespace Level

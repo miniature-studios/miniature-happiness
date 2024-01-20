@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using AnimatorsSwitcher;
 using Common;
 using Level.Config;
-using Level.Config.DayAction;
 using Level.GlobalTime;
 using Location;
 using UnityEngine;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Level.Config.DayAction;
+using Level.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -19,9 +19,10 @@ namespace AnimatorsSwitcher
     public class AnimatorProperties
     {
         [HideInInspector]
-        public string AnimatorName;
+        public Animator Animator;
+        private string AnimatorName => Animator == null ? "NULL" : Animator.name;
 
-        [LabelText("@AnimatorName")]
+        [LabelText("@" + nameof(AnimatorName))]
         [HorizontalGroup()]
         public bool Showed;
 
@@ -78,7 +79,7 @@ namespace AnimatorsSwitcher
             {
                 foreach (InterfaceMatch match in InterfaceMatcher)
                 {
-                    _ = match.AnimatorsProperties.RemoveAll(x => x.AnimatorName == animator.name);
+                    _ = match.AnimatorsProperties.RemoveAll(x => x.Animator == animator);
                 }
             }
             Animators.RemoveAt(index);
@@ -86,23 +87,31 @@ namespace AnimatorsSwitcher
 
         private void TitleBarGUIAnimators()
         {
-            if (InterfaceMatcher.Count() != ActionNames.Value.Count)
+            for (int i = 0; i < InterfaceMatcher.Count; i++)
+            {
+                if (InterfaceMatcher[i] == null || InterfaceMatcher[i].InterfaceName == null)
+                {
+                    InterfaceMatcher.RemoveAt(i);
+                    i--;
+                }
+            }
+            if (InterfaceMatcher.Count != ActionNames.Value.Count)
             {
                 List<string> cache = InterfaceMatcher.Select(x => x.InterfaceName).ToList();
                 List<string> names = new();
-                foreach (string interfaceName in ActionNames.Value)
+                foreach (string interfaceNames in ActionNames.Value)
                 {
-                    if (!cache.Contains(interfaceName))
+                    if (!cache.Contains(interfaceNames))
                     {
                         InterfaceMatcher.Add(
                             new InterfaceMatch
                             {
-                                InterfaceName = interfaceName,
+                                InterfaceName = interfaceNames,
                                 AnimatorsProperties = new()
                             }
                         );
                     }
-                    names.Add(interfaceName);
+                    names.Add(interfaceNames);
                 }
                 _ = InterfaceMatcher.RemoveAll(x => !names.Contains(x.InterfaceName));
             }
@@ -118,9 +127,9 @@ namespace AnimatorsSwitcher
                 }
                 foreach (InterfaceMatch match in InterfaceMatcher)
                 {
-                    if (!match.AnimatorsProperties.Any(x => x.AnimatorName == animator.name))
+                    if (!match.AnimatorsProperties.Any(x => x.Animator == animator))
                     {
-                        match.AnimatorsProperties.Add(new() { AnimatorName = animator.name });
+                        match.AnimatorsProperties.Add(new() { Animator = animator });
                     }
                 }
             }
@@ -131,7 +140,7 @@ namespace AnimatorsSwitcher
             Type[] types = Assembly.GetAssembly(typeof(IDayAction)).GetTypes();
             return types
                 .Where(type => typeof(IDayAction).IsAssignableFrom(type) && !type.IsInterface)
-                .Select(t => t.Name)
+                .Select(x => x.Name)
                 .ToList();
         }
     }
@@ -151,19 +160,16 @@ namespace AnimatorsSwitcher
             );
             foreach (AnimatorProperties properties in interfaceMatch.AnimatorsProperties)
             {
-                Animator animator = animatorList.Animators.Find(x =>
-                    x.name == properties.AnimatorName
-                );
-                animator.SetBool("Showed", properties.Showed);
+                properties.Animator.SetBool("Showed", properties.Showed);
                 switch (properties.OverrideState)
                 {
                     case OverrideState.DoNotOverride:
                         continue;
                     case OverrideState.Hidden:
-                        animator.Play("Hidden");
+                        properties.Animator.Play("Hidden");
                         break;
                     case OverrideState.Showed:
-                        animator.Play("Showed");
+                        properties.Animator.Play("Showed");
                         break;
                 }
             }
