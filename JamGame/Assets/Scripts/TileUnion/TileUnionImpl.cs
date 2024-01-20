@@ -16,7 +16,7 @@ namespace TileUnion
 {
     [SelectionBase]
     [AddComponentMenu("Scripts/TileUnion/TileUnion")]
-    public partial class TileUnionImpl : SerializedMonoBehaviour
+    public partial class TileUnionImpl : MonoBehaviour
     {
         [Serializable]
         private class CachedConfiguration

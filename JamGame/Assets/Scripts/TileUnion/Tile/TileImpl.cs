@@ -256,11 +256,10 @@ namespace TileUnion.Tile
             {
                 TileState.Normal => unselectedYPosition,
                 TileState.Selected => selectedYPosition,
-                TileState.SelectedAndErrored => unselectedYPosition,
+                TileState.SelectedAndErrored => selectedYPosition,
                 _ => throw new InvalidOperationException()
             };
             transform.SetYPosition(newY);
-
             TileView.SetMaterial(viewState);
         }
 

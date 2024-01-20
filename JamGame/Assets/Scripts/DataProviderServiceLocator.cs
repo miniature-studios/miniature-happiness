@@ -4,13 +4,13 @@ using Common;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class DataProviderServiceLocator : SerializedMonoBehaviour
+public class DataProviderServiceLocator : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeReference]
     [ReadOnly]
     private Dictionary<Type, IDataProvider> singletons = new();
 
-    [SerializeField]
+    [SerializeReference]
     [ReadOnly]
     private Dictionary<Type, List<IDataProvider>> multipleSources = new();
 

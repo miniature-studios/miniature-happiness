@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 namespace Level.Config
 {
     [Serializable]
     [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList", order = 0)]
-    public class EmployeeNameList : SerializedScriptableObject
+    public class EmployeeNameList : ScriptableObject
     {
-        [OdinSerialize]
-        public IEnumerable<string> FirstNames { get; private set; } = new List<string>();
+        [SerializeField]
+        private List<string> firstNames = new();
+        public IEnumerable<string> FirstNames => firstNames;
 
-        [OdinSerialize]
-        public IEnumerable<string> LastNames { get; private set; } = new List<string>();
+        [SerializeField]
+        private List<string> lastNames = new();
+        public IEnumerable<string> LastNames => lastNames;
     }
 }

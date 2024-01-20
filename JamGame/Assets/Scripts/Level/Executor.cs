@@ -5,8 +5,6 @@ using Common;
 using Level.Config;
 using Level.GlobalTime;
 using Location;
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,7 +21,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level/Level.Executor")]
-    public class Executor : SerializedMonoBehaviour
+    public class Executor : MonoBehaviour
     {
         [SerializeField]
         private TileBuilder.Controller.ControllerImpl tileBuilderController;
@@ -70,7 +68,7 @@ namespace Level
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
-        [OdinSerialize]
+        [SerializeReference]
         public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
 

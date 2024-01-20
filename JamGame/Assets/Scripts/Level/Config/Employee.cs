@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Level.Config
 {
-    [HideReferenceObjectPicker]
     public interface IEmployeeConfig
     {
         public EmployeeConfig GetEmployeeConfig();

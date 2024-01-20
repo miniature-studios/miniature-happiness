@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Level.GlobalTime;
 using Level.Room;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 
 namespace Level.Boss.Task
@@ -61,9 +60,10 @@ namespace Level.Boss.Task
     [Serializable]
     public class MaxStressBound : ITask
     {
-        [OdinSerialize]
+        [SerializeField]
         [FoldoutGroup("Max Stress Bound")]
-        public float MaxStressTarget { get; private set; }
+        private float maxStressTarget;
+        public float MaxStressTarget => maxStressTarget;
 
         public Progress Progress =>
             new()
@@ -195,9 +195,10 @@ namespace Level.Boss.Task
         private CoreModel room;
         public string RoomTitle => room.Title;
 
-        [OdinSerialize]
+        [SerializeField]
         [FoldoutGroup("Room Count Upper Bound")]
-        public int UpperBoundInclusive { get; private set; }
+        private int upperIntBoundInclusive;
+        public int UpperBoundInclusive => upperIntBoundInclusive;
 
         [SerializeField]
         [FoldoutGroup("Room Count Upper Bound")]

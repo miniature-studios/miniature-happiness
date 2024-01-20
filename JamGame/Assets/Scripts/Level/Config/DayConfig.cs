@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
+using UnityEngine;
 
 namespace Level.Config
 {
@@ -9,7 +9,8 @@ namespace Level.Config
     [HideReferenceObjectPicker]
     public class DayConfig
     {
-        [OdinSerialize]
-        public List<IDayAction> DayActions { get; private set; } = new();
+        [SerializeReference]
+        private List<IDayAction> dayActions = new();
+        public IEnumerable<IDayAction> DayActions => dayActions;
     }
 }
