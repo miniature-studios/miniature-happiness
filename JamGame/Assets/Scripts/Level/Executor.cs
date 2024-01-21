@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using AnimatorsSwitcher;
 using Common;
 using Level.Config;
 using Level.GlobalTime;
@@ -33,7 +34,7 @@ namespace Level
         private Shop.Controller shopController;
 
         [SerializeField]
-        private AnimatorsSwitcher.AnimatorsSwitcher animatorSwitcher;
+        private AnimatorsSwitcherImpl animatorSwitcher;
 
         [SerializeField]
         private DailyBill.Model dailyBill;
@@ -71,6 +72,7 @@ namespace Level
         [SerializeReference]
         public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
+        private bool cutsceneMinTimeEnded = false;
 
         public void Execute(DayStart dayStart)
         {
@@ -87,7 +89,7 @@ namespace Level
 
         private IEnumerator DayStartRoutine(float time)
         {
-            yield return new WaitForSeconds(time);
+            yield return new WaitForSecondsRealtime(time);
             ActionEndNotify?.Invoke();
         }
 
@@ -164,9 +166,16 @@ namespace Level
             transitionPanelShown = false;
 
             this.CreateGate(
-                new List<Func<bool>>() { () => transitionPanelShown },
-                new List<Action>() { ActionEndNotify.Invoke }
+                new List<Func<bool>>() { () => transitionPanelShown, () => cutsceneMinTimeEnded },
+                new List<Action>() { ActionEndNotify.Invoke, () => cutsceneMinTimeEnded = false }
             );
+            _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
+        }
+
+        private IEnumerator CutsceneRoutine(float time)
+        {
+            yield return new WaitForSecondsRealtime(time);
+            cutsceneMinTimeEnded = true;
         }
 
         public void Execute(PreDayEnd preDayEnd)

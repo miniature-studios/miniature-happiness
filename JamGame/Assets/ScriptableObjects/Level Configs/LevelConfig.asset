@@ -15,72 +15,81 @@ MonoBehaviour:
   days: []
   defaultDay:
     dayActions:
-    - rid: 1908735019434377216
-    - rid: 1908735019434377217
-    - rid: 1908735019434377219
-    - rid: 1908735019434377220
-    - rid: 1908735019434377218
-    - rid: 1908735019434377223
-    - rid: 1908735019434377221
-    - rid: 1908735019434377224
-    - rid: 1908735019434377225
-    - rid: 1908735019434377226
-  bossStressSpeed: 0.1
+    - rid: 1908735064151687181
+    - rid: 1908735064151687168
+    - rid: 1908735064151687170
+    - rid: 1908735064151687169
+    - rid: 1908735064151687171
+    - rid: 1908735064151687173
+    - rid: 1908735064151687175
+    - rid: 1908735064151687176
+    - rid: 1908735064151687177
+    - rid: 1908735064151687178
+    - rid: 1908735064151687182
+  bossStressSpeed: 0
   references:
     version: 2
     RefIds:
-    - rid: 1908735019434377216
-      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        duration: 2
-        text: Day Start
-    - rid: 1908735019434377217
+    - rid: 1908735064151687168
       type: {class: DayStart, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        morningMoney: 150
-        duration: 0.5
-    - rid: 1908735019434377218
+        morningMoney: 500
+        duration: 1
+    - rid: 1908735064151687169
+      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        duration: 1
+        text: Meeting
+    - rid: 1908735064151687170
+      type: {class: PreMeeting, ns: Level.Config, asm: Assembly-CSharp}
+      data: 
+    - rid: 1908735064151687171
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 1908735019434377222
-        shopRooms: []
+        - rid: 1908735064151687179
+        shopRooms:
+        - rid: 1908735064151687180
         mandatoryRooms: []
-    - rid: 1908735019434377219
-      type: {class: PreMeeting, ns: Level.Config, asm: Assembly-CSharp}
-      data: 
-    - rid: 1908735019434377220
-      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        duration: 0
-        text: Meeting
-    - rid: 1908735019434377221
-      type: {class: Working, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        duration:
-          Days_: 1
-    - rid: 1908735019434377222
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        name: Giorgio
-        hireCost: 10
-        profession: LOH
-        quirk: Quirk
-    - rid: 1908735019434377223
+    - rid: 1908735064151687173
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration: 2
-        text: Working
-    - rid: 1908735019434377224
-      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
+        text: Start Working
+    - rid: 1908735064151687175
+      type: {class: Working, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        duration: 0
-        text: 
-    - rid: 1908735019434377225
+        duration:
+          Days_: 0.5
+    - rid: 1908735064151687176
       type: {class: PreDayEnd, ns: Level.Config, asm: Assembly-CSharp}
       data: 
-    - rid: 1908735019434377226
+    - rid: 1908735064151687177
+      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        duration: 1
+        text: Day End
+    - rid: 1908735064151687178
+      type: {class: DayEnd, ns: Level.Config, asm: Assembly-CSharp}
+      data: 
+    - rid: 1908735064151687179
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        name: Jonh
+        hireCost: 150
+        profession: Loh
+        quirk: Loh
+    - rid: 1908735064151687180
+      type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
+    - rid: 1908735064151687181
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration: 0
-        text: Day end
+        text: Day SStart
+    - rid: 1908735064151687182
+      type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        duration: 2
+        text: Day End
