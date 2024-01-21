@@ -72,6 +72,7 @@ namespace Level
         [SerializeReference]
         public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
+        private bool cutsceneMinTimeEnded = false;
 
         public void Execute(DayStart dayStart)
         {
@@ -157,8 +158,6 @@ namespace Level
             ActionEndNotify?.Invoke();
         }
 
-        private bool ended = false;
-
         public void Execute(Cutscene cutscene)
         {
             transitionPanel.PanelText = cutscene.Text;
@@ -167,8 +166,8 @@ namespace Level
             transitionPanelShown = false;
 
             this.CreateGate(
-                new List<Func<bool>>() { () => transitionPanelShown, () => ended },
-                new List<Action>() { ActionEndNotify.Invoke, () => ended = false }
+                new List<Func<bool>>() { () => transitionPanelShown, () => cutsceneMinTimeEnded },
+                new List<Action>() { ActionEndNotify.Invoke, () => cutsceneMinTimeEnded = false }
             );
             _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
         }
@@ -176,7 +175,7 @@ namespace Level
         private IEnumerator CutsceneRoutine(float time)
         {
             yield return new WaitForSecondsRealtime(time);
-            ended = true;
+            cutsceneMinTimeEnded = true;
         }
 
         public void Execute(PreDayEnd preDayEnd)
