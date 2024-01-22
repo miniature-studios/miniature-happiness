@@ -1,7 +1,6 @@
 ﻿using Unity.AI.Navigation;
 using UnityEngine;
 
-// TODO: apply optimization
 [RequireComponent(typeof(NavMeshSurface))]
 public class NavMeshSurfaceUpdater : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class NavMeshSurfaceUpdater : MonoBehaviour
         surface.BuildNavMesh();
     }
 
-    private void Update()
+    public void UpdateNavMesh()
     {
         _ = surface.UpdateNavMesh(surface.navMeshData);
     }
