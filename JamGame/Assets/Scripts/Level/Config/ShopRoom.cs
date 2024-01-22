@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Level.Room;
+using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,13 +18,12 @@ namespace Level.Config
     [Serializable]
     public class FixedRoomConfig : IShopRoomConfig
     {
-        [SerializeField]
-        [AssetSelector]
         [AssetsOnly]
-        [FoldoutGroup("@Label")]
+        [SerializeField]
+        [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
+        [FoldoutGroup("@" + nameof(Label))]
         private CoreModel room;
-
-        private string Label => $"Fixed Room - {room?.Title}";
+        private string Label => $"Fixed Room - {(room == null ? "NULL" : room.Title)}";
 
         public ShopRoomConfig GetRoomConfig()
         {
@@ -39,9 +39,9 @@ namespace Level.Config
         private float weight;
         public float Weight => weight;
 
-        [AssetSelector]
         [AssetsOnly]
         [SerializeField]
+        [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
         private CoreModel room;
         public CoreModel Room => room;
     }
@@ -49,12 +49,33 @@ namespace Level.Config
     [Serializable]
     public class RandomRoomConfig : IShopRoomConfig
     {
+        private enum SourceMode
+        {
+            Raw,
+            ScriptableObject
+        }
+
+        [EnumToggleButtons]
         [SerializeField]
         [FoldoutGroup("Random Room")]
+        private SourceMode mode = SourceMode.Raw;
+
+        [SerializeField]
+        [FoldoutGroup("Random Room")]
+        [ShowIf("@" + nameof(mode), SourceMode.Raw)]
         private List<RoomWeights> roomWeights = new();
+
+        [SerializeField]
+        [FoldoutGroup("Random Room")]
+        [ShowIf("@" + nameof(mode), SourceMode.ScriptableObject)]
+        private RandomShopRoomBundle randomShopRoomBundle;
 
         public ShopRoomConfig GetRoomConfig()
         {
+            if (mode == SourceMode.ScriptableObject)
+            {
+                return randomShopRoomBundle.GetRoomConfig();
+            }
             List<float> list = roomWeights.Select(x => x.Weight).ToList();
             CoreModel result = roomWeights[RandomTools.RandomlyChooseWithWeights(list)].Room;
             return new ShopRoomConfig(result);

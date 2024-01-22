@@ -13,7 +13,7 @@ namespace Common
             float random = UnityEngine.Random.Range(0, sumWeights);
             for (int i = 0; i < weights.Count; i++)
             {
-                if (weights[i] <= random)
+                if (random <= weights[i])
                 {
                     return i;
                 }
