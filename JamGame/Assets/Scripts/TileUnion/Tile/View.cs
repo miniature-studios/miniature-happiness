@@ -77,7 +77,7 @@ namespace TileUnion.Tile
                 {
                     State.Default => true,
                     State.Selected => false,
-                    State.SelectedOverlapping => false,
+                    State.SelectedOverlapping => true,
                     _ => throw new System.ArgumentException()
                 };
                 foundation.SetActive(active);

@@ -18,5 +18,20 @@ namespace Common
         {
             transform.position = new(transform.position.x, transform.position.y, z);
         }
+
+        public static void SetXLocalPosition(this Transform transform, float x)
+        {
+            transform.localPosition = new(x, transform.localPosition.y, transform.localPosition.z);
+        }
+
+        public static void SetYLocalPosition(this Transform transform, float y)
+        {
+            transform.localPosition = new(transform.localPosition.x, y, transform.localPosition.z);
+        }
+
+        public static void SetZLocalPosition(this Transform transform, float z)
+        {
+            transform.localPosition = new(transform.localPosition.x, transform.localPosition.y, z);
+        }
     }
 }
