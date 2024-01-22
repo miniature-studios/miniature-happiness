@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Level.Room;
 using UnityEngine;
@@ -10,6 +11,13 @@ namespace Level.Inventory
     {
         [SerializeField]
         private Model model;
+
+        private InputActions inputActions;
+
+        private void Awake()
+        {
+            inputActions = new InputActions();
+        }
 
         public void AddNewRoom(CoreModel room)
         {
@@ -29,13 +37,10 @@ namespace Level.Inventory
 
         public Result<CoreModel> Borrow()
         {
-            Room.View hovered = RayCastUtilities
-                .UIRayCast(Input.mousePosition)
-                ?.FirstOrDefault(x => x.GetComponent<Room.View>() != null)
-                ?.GetComponent<Room.View>();
-            if (hovered != null)
+            Result<Room.View> hovered = RayCastForFirstRoomView();
+            if (hovered.Success)
             {
-                CoreModel coreModel = hovered.CoreModel;
+                CoreModel coreModel = hovered.Data.CoreModel;
                 return new SuccessResult<CoreModel>(model.BorrowRoom(coreModel));
             }
             else
@@ -45,5 +50,22 @@ namespace Level.Inventory
         }
 
         public void HoverLeave() { }
+
+        private Result<Room.View> RayCastForFirstRoomView()
+        {
+            Vector2 position = inputActions.UI.PointPosition.ReadValue<Vector2>();
+            IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
+            GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
+                x.TryGetComponent(out Room.View _)
+            );
+            if (foundObject != null)
+            {
+                return new SuccessResult<Room.View>(foundObject.GetComponent<Room.View>());
+            }
+            else
+            {
+                return new FailResult<Room.View>("Room.View not found");
+            }
+        }
     }
 }

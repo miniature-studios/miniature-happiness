@@ -24,9 +24,11 @@ namespace Level.Inventory.Room
 
         private bool isHovered = false;
         private RectTransform canvas;
+        private InputActions inputActions;
 
         private void Awake()
         {
+            inputActions = new();
             canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         }
 
@@ -37,7 +39,7 @@ namespace Level.Inventory.Room
 
         public void Update()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && isHovered)
+            if (inputActions.UI.ExtendInventoryTileInfo.IsPressed() && isHovered)
             {
                 if (!extendedView.gameObject.activeSelf)
                 {

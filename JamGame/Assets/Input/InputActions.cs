@@ -266,6 +266,114 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""34da3c5c-c727-4b90-81d9-d0de36e9b1a3"",
+            ""actions"": [
+                {
+                    ""name"": ""PointPosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""bf5cea16-d525-46a0-9971-9c9aa7d54a35"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointLeftClick"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""99a959e3-df73-4690-87ef-7837e3ddf460"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Ecape"",
+                    ""type"": ""Button"",
+                    ""id"": ""ca00c751-63df-4f90-962f-942b22670f07"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateTile"",
+                    ""type"": ""Button"",
+                    ""id"": ""eac92c0d-6b2e-42c2-936a-1ec07e7895a8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExtendInventoryTileInfo"",
+                    ""type"": ""Button"",
+                    ""id"": ""01da7ed3-c0c9-447c-9a7d-3baf850d8523"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""936ad4fc-808e-4932-91cd-0c371a39fdd7"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b608e82-3e77-4920-acb2-85d44f487e95"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2),Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointLeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc4f8cb0-5849-42f5-9c86-c148e2fbad87"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ecape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35141c51-0a7b-4e2e-9fd4-9d94e164132f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateTile"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a5a198e-8493-4aff-b01d-f3338b6623d0"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExtendInventoryTileInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -275,6 +383,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_CameraLook_Zoom = m_CameraLook.FindAction("Zoom", throwIfNotFound: true);
         m_CameraLook_Move = m_CameraLook.FindAction("Move", throwIfNotFound: true);
         m_CameraLook_Rotate = m_CameraLook.FindAction("Rotate", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_PointPosition = m_UI.FindAction("PointPosition", throwIfNotFound: true);
+        m_UI_PointLeftClick = m_UI.FindAction("PointLeftClick", throwIfNotFound: true);
+        m_UI_Ecape = m_UI.FindAction("Ecape", throwIfNotFound: true);
+        m_UI_RotateTile = m_UI.FindAction("RotateTile", throwIfNotFound: true);
+        m_UI_ExtendInventoryTileInfo = m_UI.FindAction("ExtendInventoryTileInfo", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -394,10 +509,96 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         }
     }
     public CameraLookActions @CameraLook => new CameraLookActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_PointPosition;
+    private readonly InputAction m_UI_PointLeftClick;
+    private readonly InputAction m_UI_Ecape;
+    private readonly InputAction m_UI_RotateTile;
+    private readonly InputAction m_UI_ExtendInventoryTileInfo;
+    public struct UIActions
+    {
+        private @InputActions m_Wrapper;
+        public UIActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PointPosition => m_Wrapper.m_UI_PointPosition;
+        public InputAction @PointLeftClick => m_Wrapper.m_UI_PointLeftClick;
+        public InputAction @Ecape => m_Wrapper.m_UI_Ecape;
+        public InputAction @RotateTile => m_Wrapper.m_UI_RotateTile;
+        public InputAction @ExtendInventoryTileInfo => m_Wrapper.m_UI_ExtendInventoryTileInfo;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @PointPosition.started += instance.OnPointPosition;
+            @PointPosition.performed += instance.OnPointPosition;
+            @PointPosition.canceled += instance.OnPointPosition;
+            @PointLeftClick.started += instance.OnPointLeftClick;
+            @PointLeftClick.performed += instance.OnPointLeftClick;
+            @PointLeftClick.canceled += instance.OnPointLeftClick;
+            @Ecape.started += instance.OnEcape;
+            @Ecape.performed += instance.OnEcape;
+            @Ecape.canceled += instance.OnEcape;
+            @RotateTile.started += instance.OnRotateTile;
+            @RotateTile.performed += instance.OnRotateTile;
+            @RotateTile.canceled += instance.OnRotateTile;
+            @ExtendInventoryTileInfo.started += instance.OnExtendInventoryTileInfo;
+            @ExtendInventoryTileInfo.performed += instance.OnExtendInventoryTileInfo;
+            @ExtendInventoryTileInfo.canceled += instance.OnExtendInventoryTileInfo;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @PointPosition.started -= instance.OnPointPosition;
+            @PointPosition.performed -= instance.OnPointPosition;
+            @PointPosition.canceled -= instance.OnPointPosition;
+            @PointLeftClick.started -= instance.OnPointLeftClick;
+            @PointLeftClick.performed -= instance.OnPointLeftClick;
+            @PointLeftClick.canceled -= instance.OnPointLeftClick;
+            @Ecape.started -= instance.OnEcape;
+            @Ecape.performed -= instance.OnEcape;
+            @Ecape.canceled -= instance.OnEcape;
+            @RotateTile.started -= instance.OnRotateTile;
+            @RotateTile.performed -= instance.OnRotateTile;
+            @RotateTile.canceled -= instance.OnRotateTile;
+            @ExtendInventoryTileInfo.started -= instance.OnExtendInventoryTileInfo;
+            @ExtendInventoryTileInfo.performed -= instance.OnExtendInventoryTileInfo;
+            @ExtendInventoryTileInfo.canceled -= instance.OnExtendInventoryTileInfo;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     public interface ICameraLookActions
     {
         void OnZoom(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnPointPosition(InputAction.CallbackContext context);
+        void OnPointLeftClick(InputAction.CallbackContext context);
+        void OnEcape(InputAction.CallbackContext context);
+        void OnRotateTile(InputAction.CallbackContext context);
+        void OnExtendInventoryTileInfo(InputAction.CallbackContext context);
     }
 }

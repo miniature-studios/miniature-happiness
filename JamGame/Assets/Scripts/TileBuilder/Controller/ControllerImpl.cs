@@ -15,10 +15,27 @@ namespace TileBuilder.Controller
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
-        public UnityEvent BuiltValidatedOffice;
-
         [SerializeField]
         private Level.Inventory.Controller inventory;
+
+        public UnityEvent BuiltValidatedOffice;
+
+        private InputActions inputActions;
+
+        private void Awake()
+        {
+            inputActions = new();
+        }
+
+        private void OnEnable()
+        {
+            inputActions.Enable();
+        }
+
+        private void OnDisable()
+        {
+            inputActions.Disable();
+        }
 
         public void ChangeGameMode(GameMode gameMode)
         {
@@ -36,14 +53,16 @@ namespace TileBuilder.Controller
 
         public void Hover(CoreModel coreModel)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (inputActions.UI.RotateTile.IsPressed())
             {
                 coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
                     RotationDirection.Clockwise
                 );
             }
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(
+                inputActions.UI.PointPosition.ReadValue<Vector2>()
+            );
             Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
             if (matrixResult.Failure)
             {
@@ -57,7 +76,9 @@ namespace TileBuilder.Controller
 
         public Result Drop(CoreModel coreModel)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(
+                inputActions.UI.PointPosition.ReadValue<Vector2>()
+            );
             Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
             if (matrixResult.Success)
             {
@@ -72,7 +93,9 @@ namespace TileBuilder.Controller
 
         public Result<CoreModel> Borrow()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(
+                inputActions.UI.PointPosition.ReadValue<Vector2>()
+            );
             Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
             if (matrixResult.Success)
             {

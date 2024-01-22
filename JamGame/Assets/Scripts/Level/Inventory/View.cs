@@ -27,7 +27,7 @@ namespace Level.Inventory
         private bool inventoryVisible = false;
 
         private Dictionary<string, IResourceLocation> modelViewMap = new();
-        private List<Room.View> roomViews;
+        private List<Room.View> roomViews = new();
 
         private void Awake()
         {

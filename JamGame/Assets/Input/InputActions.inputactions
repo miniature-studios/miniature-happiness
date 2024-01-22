@@ -244,6 +244,114 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "34da3c5c-c727-4b90-81d9-d0de36e9b1a3",
+            "actions": [
+                {
+                    "name": "PointPosition",
+                    "type": "PassThrough",
+                    "id": "bf5cea16-d525-46a0-9971-9c9aa7d54a35",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PointLeftClick",
+                    "type": "PassThrough",
+                    "id": "99a959e3-df73-4690-87ef-7837e3ddf460",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Ecape",
+                    "type": "Button",
+                    "id": "ca00c751-63df-4f90-962f-942b22670f07",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RotateTile",
+                    "type": "Button",
+                    "id": "eac92c0d-6b2e-42c2-936a-1ec07e7895a8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ExtendInventoryTileInfo",
+                    "type": "Button",
+                    "id": "01da7ed3-c0c9-447c-9a7d-3baf850d8523",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "936ad4fc-808e-4932-91cd-0c371a39fdd7",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PointPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b608e82-3e77-4920-acb2-85d44f487e95",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(behavior=2),Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PointLeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc4f8cb0-5849-42f5-9c86-c148e2fbad87",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ecape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "35141c51-0a7b-4e2e-9fd4-9d94e164132f",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateTile",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a5a198e-8493-4aff-b01d-f3338b6623d0",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExtendInventoryTileInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
