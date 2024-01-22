@@ -77,20 +77,10 @@ namespace TileUnion.Tile
 
         private readonly float selectLiftingHeight = 3;
 
-        [ReadOnly]
-        [SerializeField]
         private float unselectedYPosition;
-
-        [ReadOnly]
-        [SerializeField]
         private float selectedYPosition;
 
-        [ReadOnly]
-        [SerializeField]
         private float unselectedFoundationYPosition;
-
-        [ReadOnly]
-        [SerializeField]
         private float selectedFoundationYPosition;
 
         private void Awake()
@@ -292,7 +282,7 @@ namespace TileUnion.Tile
                     TileState.SelectedAndErrored => selectedFoundationYPosition,
                     _ => throw new InvalidOperationException()
                 };
-                foundation.SetYLocalPosition(foundationNewY);
+                foundation.SetLocalYPosition(foundationNewY);
             }
 
             transform.SetYPosition(newY);
