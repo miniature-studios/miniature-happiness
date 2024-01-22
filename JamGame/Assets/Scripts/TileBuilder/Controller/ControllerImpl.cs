@@ -121,7 +121,7 @@ namespace TileBuilder.Controller
         private Result<Vector2Int> RayCastMatrix()
         {
             Ray ray = mainCamera.ScreenPointToRay(
-                inputActions.UI.PointPosition.ReadValue<Vector2>()
+                inputActions.UI.PointerPosition.ReadValue<Vector2>()
             );
             return tileBuilder.GridProperties.GetMatrixPosition(ray);
         }

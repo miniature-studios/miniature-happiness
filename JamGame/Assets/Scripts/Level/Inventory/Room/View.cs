@@ -32,6 +32,16 @@ namespace Level.Inventory.Room
             canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         }
 
+        private void OnEnable()
+        {
+            inputActions.Enable();
+        }
+
+        private void OnDisable()
+        {
+            inputActions.Disable();
+        }
+
         public void SetCoreModel(CoreModel coreModel)
         {
             this.coreModel = coreModel;
@@ -47,7 +57,8 @@ namespace Level.Inventory.Room
                     extendedView.transform.SetParent(canvas);
                 }
                 extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
-                extendedView.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
+                Vector2 pointerPosition = inputActions.UI.PointerPosition.ReadValue<Vector2>();
+                extendedView.transform.position = (Vector3)pointerPosition + new Vector3(20, 20, 0);
             }
             else if (extendedView.gameObject.activeSelf)
             {

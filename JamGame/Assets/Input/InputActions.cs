@@ -272,7 +272,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""id"": ""34da3c5c-c727-4b90-81d9-d0de36e9b1a3"",
             ""actions"": [
                 {
-                    ""name"": ""PointPosition"",
+                    ""name"": ""PointerPosition"",
                     ""type"": ""PassThrough"",
                     ""id"": ""bf5cea16-d525-46a0-9971-9c9aa7d54a35"",
                     ""expectedControlType"": ""Vector2"",
@@ -281,7 +281,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""PointLeftClick"",
+                    ""name"": ""PointerLeftClick"",
                     ""type"": ""PassThrough"",
                     ""id"": ""99a959e3-df73-4690-87ef-7837e3ddf460"",
                     ""expectedControlType"": ""Button"",
@@ -325,7 +325,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PointPosition"",
+                    ""action"": ""PointerPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -336,7 +336,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": ""Press(behavior=2),Hold"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PointLeftClick"",
+                    ""action"": ""PointerLeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -385,8 +385,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_CameraLook_Rotate = m_CameraLook.FindAction("Rotate", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_PointPosition = m_UI.FindAction("PointPosition", throwIfNotFound: true);
-        m_UI_PointLeftClick = m_UI.FindAction("PointLeftClick", throwIfNotFound: true);
+        m_UI_PointerPosition = m_UI.FindAction("PointerPosition", throwIfNotFound: true);
+        m_UI_PointerLeftClick = m_UI.FindAction("PointerLeftClick", throwIfNotFound: true);
         m_UI_Ecape = m_UI.FindAction("Ecape", throwIfNotFound: true);
         m_UI_RotateTile = m_UI.FindAction("RotateTile", throwIfNotFound: true);
         m_UI_ExtendInventoryTileInfo = m_UI.FindAction("ExtendInventoryTileInfo", throwIfNotFound: true);
@@ -513,8 +513,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_PointPosition;
-    private readonly InputAction m_UI_PointLeftClick;
+    private readonly InputAction m_UI_PointerPosition;
+    private readonly InputAction m_UI_PointerLeftClick;
     private readonly InputAction m_UI_Ecape;
     private readonly InputAction m_UI_RotateTile;
     private readonly InputAction m_UI_ExtendInventoryTileInfo;
@@ -522,8 +522,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     {
         private @InputActions m_Wrapper;
         public UIActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PointPosition => m_Wrapper.m_UI_PointPosition;
-        public InputAction @PointLeftClick => m_Wrapper.m_UI_PointLeftClick;
+        public InputAction @PointerPosition => m_Wrapper.m_UI_PointerPosition;
+        public InputAction @PointerLeftClick => m_Wrapper.m_UI_PointerLeftClick;
         public InputAction @Ecape => m_Wrapper.m_UI_Ecape;
         public InputAction @RotateTile => m_Wrapper.m_UI_RotateTile;
         public InputAction @ExtendInventoryTileInfo => m_Wrapper.m_UI_ExtendInventoryTileInfo;
@@ -536,12 +536,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
-            @PointPosition.started += instance.OnPointPosition;
-            @PointPosition.performed += instance.OnPointPosition;
-            @PointPosition.canceled += instance.OnPointPosition;
-            @PointLeftClick.started += instance.OnPointLeftClick;
-            @PointLeftClick.performed += instance.OnPointLeftClick;
-            @PointLeftClick.canceled += instance.OnPointLeftClick;
+            @PointerPosition.started += instance.OnPointerPosition;
+            @PointerPosition.performed += instance.OnPointerPosition;
+            @PointerPosition.canceled += instance.OnPointerPosition;
+            @PointerLeftClick.started += instance.OnPointerLeftClick;
+            @PointerLeftClick.performed += instance.OnPointerLeftClick;
+            @PointerLeftClick.canceled += instance.OnPointerLeftClick;
             @Ecape.started += instance.OnEcape;
             @Ecape.performed += instance.OnEcape;
             @Ecape.canceled += instance.OnEcape;
@@ -555,12 +555,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IUIActions instance)
         {
-            @PointPosition.started -= instance.OnPointPosition;
-            @PointPosition.performed -= instance.OnPointPosition;
-            @PointPosition.canceled -= instance.OnPointPosition;
-            @PointLeftClick.started -= instance.OnPointLeftClick;
-            @PointLeftClick.performed -= instance.OnPointLeftClick;
-            @PointLeftClick.canceled -= instance.OnPointLeftClick;
+            @PointerPosition.started -= instance.OnPointerPosition;
+            @PointerPosition.performed -= instance.OnPointerPosition;
+            @PointerPosition.canceled -= instance.OnPointerPosition;
+            @PointerLeftClick.started -= instance.OnPointerLeftClick;
+            @PointerLeftClick.performed -= instance.OnPointerLeftClick;
+            @PointerLeftClick.canceled -= instance.OnPointerLeftClick;
             @Ecape.started -= instance.OnEcape;
             @Ecape.performed -= instance.OnEcape;
             @Ecape.canceled -= instance.OnEcape;
@@ -595,8 +595,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     }
     public interface IUIActions
     {
-        void OnPointPosition(InputAction.CallbackContext context);
-        void OnPointLeftClick(InputAction.CallbackContext context);
+        void OnPointerPosition(InputAction.CallbackContext context);
+        void OnPointerLeftClick(InputAction.CallbackContext context);
         void OnEcape(InputAction.CallbackContext context);
         void OnRotateTile(InputAction.CallbackContext context);
         void OnExtendInventoryTileInfo(InputAction.CallbackContext context);

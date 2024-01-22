@@ -63,7 +63,7 @@ namespace Level.Inventory
 
         private Result<Room.View> RayCastTopRoomView()
         {
-            Vector2 position = inputActions.UI.PointPosition.ReadValue<Vector2>();
+            Vector2 position = inputActions.UI.PointerPosition.ReadValue<Vector2>();
             IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
             GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
                 x.TryGetComponent(out Room.View _)

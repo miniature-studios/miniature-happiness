@@ -51,14 +51,15 @@ namespace Level
             {
                 Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
             }
+            previousHovered = backupDragAndDrop;
             inputActions = new InputActions();
         }
 
         private void OnEnable()
         {
             inputActions.Enable();
-            inputActions.UI.PointLeftClick.performed += PointLeftClickPerformed;
-            inputActions.UI.PointLeftClick.canceled += PointLeftClickCanceled;
+            inputActions.UI.PointerLeftClick.performed += PointLeftClickPerformed;
+            inputActions.UI.PointerLeftClick.canceled += PointLeftClickCanceled;
         }
 
         private void PointLeftClickPerformed(InputAction.CallbackContext context)
@@ -73,8 +74,8 @@ namespace Level
 
         private void OnDisable()
         {
-            inputActions.UI.PointLeftClick.performed -= PointLeftClickPerformed;
-            inputActions.UI.PointLeftClick.canceled -= PointLeftClickCanceled;
+            inputActions.UI.PointerLeftClick.performed -= PointLeftClickPerformed;
+            inputActions.UI.PointerLeftClick.canceled -= PointLeftClickCanceled;
             inputActions.Disable();
         }
 
@@ -137,7 +138,7 @@ namespace Level
 
         private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
         {
-            Vector2 position = inputActions.UI.PointPosition.ReadValue<Vector2>();
+            Vector2 position = inputActions.UI.PointerPosition.ReadValue<Vector2>();
             IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
             GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
                 x.TryGetComponent(out IDragAndDropAgent _)
