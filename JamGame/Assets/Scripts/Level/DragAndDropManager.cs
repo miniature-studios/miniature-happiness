@@ -31,8 +31,18 @@ namespace Level
         private IDragAndDropAgent previousHovered;
 
         private InputActions inputActions;
-        private bool isPointerClicked;
-        private bool isPointerCanceled;
+
+        [ReadOnly]
+        [SerializeField]
+        private bool isPointLeftClicked = false;
+
+        [ReadOnly]
+        [SerializeField]
+        private bool isPointLeftHeld = false;
+
+        [ReadOnly]
+        [SerializeField]
+        private bool isPointLeftReleased = false;
 
         private void Awake()
         {
@@ -47,32 +57,32 @@ namespace Level
         private void OnEnable()
         {
             inputActions.Enable();
-            inputActions.UI.PointLeftClick.performed += ClickPerformed;
-            inputActions.UI.PointLeftClick.canceled += ClickCanceled;
+            inputActions.UI.PointLeftClick.performed += PointLeftClickPerformed;
+            inputActions.UI.PointLeftClick.canceled += PointLeftClickCanceled;
         }
 
-        private void ClickPerformed(InputAction.CallbackContext context)
+        private void PointLeftClickPerformed(InputAction.CallbackContext context)
         {
-            isPointerClicked = true;
+            isPointLeftClicked = true;
         }
 
-        private void ClickCanceled(InputAction.CallbackContext context)
+        private void PointLeftClickCanceled(InputAction.CallbackContext context)
         {
-            isPointerCanceled = true;
+            isPointLeftReleased = true;
         }
 
         private void OnDisable()
         {
-            inputActions.UI.PointLeftClick.canceled -= ClickCanceled;
-            inputActions.UI.PointLeftClick.performed -= ClickPerformed;
+            inputActions.UI.PointLeftClick.performed -= PointLeftClickPerformed;
+            inputActions.UI.PointLeftClick.canceled -= PointLeftClickCanceled;
             inputActions.Disable();
         }
 
         private void Update()
         {
-            Result<IDragAndDropAgent> rayCastResult = RayCastFirstAgent();
+            Result<IDragAndDropAgent> rayCastResult = RayCastTopDragAndDropAgent();
 
-            if (isPointerClicked)
+            if (isPointLeftClicked)
             {
                 if (rayCastResult.Success)
                 {
@@ -85,7 +95,7 @@ namespace Level
                 }
             }
 
-            if (isPointerCanceled)
+            if (isPointLeftReleased)
             {
                 if (
                     bufferCoreModel != null
@@ -98,7 +108,7 @@ namespace Level
                 bufferCoreModel = null;
             }
 
-            if (isPointerClicked && rayCastResult.Success && bufferCoreModel != null)
+            if (isPointLeftHeld && rayCastResult.Success && bufferCoreModel != null)
             {
                 rayCastResult.Data.Hover(bufferCoreModel);
                 if (previousHovered != rayCastResult.Data && previousHovered != null)
@@ -113,14 +123,19 @@ namespace Level
                 previousHovered = null;
             }
 
-            if (isPointerCanceled)
+            if (isPointLeftClicked)
             {
-                isPointerClicked = false;
+                isPointLeftHeld = true;
             }
-            isPointerCanceled = false;
+            if (isPointLeftReleased)
+            {
+                isPointLeftHeld = false;
+            }
+            isPointLeftClicked = false;
+            isPointLeftReleased = false;
         }
 
-        private Result<IDragAndDropAgent> RayCastFirstAgent()
+        private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
         {
             Vector2 position = inputActions.UI.PointPosition.ReadValue<Vector2>();
             IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);

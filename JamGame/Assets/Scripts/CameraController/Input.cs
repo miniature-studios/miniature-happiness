@@ -15,16 +15,6 @@ namespace CameraController
             inputActions = new();
         }
 
-        public void Lock()
-        {
-            inputActions.CameraLook.Disable();
-        }
-
-        public void UnLock()
-        {
-            inputActions.CameraLook.Enable();
-        }
-
         private void OnEnable()
         {
             inputActions.Enable();

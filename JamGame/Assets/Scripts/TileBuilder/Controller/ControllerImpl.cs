@@ -6,6 +6,7 @@ using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace TileBuilder.Controller
 {
@@ -21,20 +22,37 @@ namespace TileBuilder.Controller
         public UnityEvent BuiltValidatedOffice;
 
         private InputActions inputActions;
+        private bool isRotateTilePressed = false;
+        private Camera mainCamera;
 
         private void Awake()
         {
+            mainCamera = Camera.main;
             inputActions = new();
         }
 
         private void OnEnable()
         {
             inputActions.Enable();
+            inputActions.UI.RotateTile.performed += RotateTilePerformed;
+            inputActions.UI.RotateTile.canceled += RotateTileCanceled;
+        }
+
+        private void RotateTilePerformed(InputAction.CallbackContext context)
+        {
+            isRotateTilePressed = true;
+        }
+
+        private void RotateTileCanceled(InputAction.CallbackContext context)
+        {
+            isRotateTilePressed = false;
         }
 
         private void OnDisable()
         {
-            inputActions.Disable();
+            inputActions.UI.RotateTile.performed -= RotateTilePerformed;
+            inputActions.UI.RotateTile.canceled -= RotateTileCanceled;
+            inputActions.Enable();
         }
 
         public void ChangeGameMode(GameMode gameMode)
@@ -53,17 +71,15 @@ namespace TileBuilder.Controller
 
         public void Hover(CoreModel coreModel)
         {
-            if (inputActions.UI.RotateTile.IsPressed())
+            if (isRotateTilePressed)
             {
                 coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
                     RotationDirection.Clockwise
                 );
+                isRotateTilePressed = false;
             }
 
-            Ray ray = Camera.main.ScreenPointToRay(
-                inputActions.UI.PointPosition.ReadValue<Vector2>()
-            );
-            Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
+            Result<Vector2Int> matrixResult = RayCastMatrix();
             if (matrixResult.Failure)
             {
                 return;
@@ -76,10 +92,7 @@ namespace TileBuilder.Controller
 
         public Result Drop(CoreModel coreModel)
         {
-            Ray ray = Camera.main.ScreenPointToRay(
-                inputActions.UI.PointPosition.ReadValue<Vector2>()
-            );
-            Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
+            Result<Vector2Int> matrixResult = RayCastMatrix();
             if (matrixResult.Success)
             {
                 coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
@@ -93,10 +106,7 @@ namespace TileBuilder.Controller
 
         public Result<CoreModel> Borrow()
         {
-            Ray ray = Camera.main.ScreenPointToRay(
-                inputActions.UI.PointPosition.ReadValue<Vector2>()
-            );
-            Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
+            Result<Vector2Int> matrixResult = RayCastMatrix();
             if (matrixResult.Success)
             {
                 BorrowRoom command = new(matrixResult.Data);
@@ -106,6 +116,14 @@ namespace TileBuilder.Controller
                     : new FailResult<CoreModel>(result.Error);
             }
             return new FailResult<CoreModel>(matrixResult.Error);
+        }
+
+        private Result<Vector2Int> RayCastMatrix()
+        {
+            Ray ray = mainCamera.ScreenPointToRay(
+                inputActions.UI.PointPosition.ReadValue<Vector2>()
+            );
+            return tileBuilder.GridProperties.GetMatrixPosition(ray);
         }
 
         public void HoverLeave()

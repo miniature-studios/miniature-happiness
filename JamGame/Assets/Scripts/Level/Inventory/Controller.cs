@@ -19,6 +19,16 @@ namespace Level.Inventory
             inputActions = new InputActions();
         }
 
+        private void OnEnable()
+        {
+            inputActions.Enable();
+        }
+
+        private void OnDisable()
+        {
+            inputActions.Disable();
+        }
+
         public void AddNewRoom(CoreModel room)
         {
             model.AddNewRoom(room);
@@ -37,7 +47,7 @@ namespace Level.Inventory
 
         public Result<CoreModel> Borrow()
         {
-            Result<Room.View> hovered = RayCastForFirstRoomView();
+            Result<Room.View> hovered = RayCastTopRoomView();
             if (hovered.Success)
             {
                 CoreModel coreModel = hovered.Data.CoreModel;
@@ -51,7 +61,7 @@ namespace Level.Inventory
 
         public void HoverLeave() { }
 
-        private Result<Room.View> RayCastForFirstRoomView()
+        private Result<Room.View> RayCastTopRoomView()
         {
             Vector2 position = inputActions.UI.PointPosition.ReadValue<Vector2>();
             IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
