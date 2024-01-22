@@ -55,9 +55,6 @@ namespace Level
         private GlobalTime.Model globalTime;
 
         [SerializeField]
-        private NavMeshSurfaceUpdater navMeshUpdater;
-
-        [SerializeField]
         private AllChildrenNeedModifiersApplier meetingStartNeedOverride;
 
         [SerializeField]
@@ -79,7 +76,6 @@ namespace Level
 
         public void Execute(DayStart dayStart)
         {
-            navMeshUpdater.UpdateNavMesh();
             needProviderManager.InitGameMode();
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
@@ -133,8 +129,6 @@ namespace Level
         // Called by button complete meeting.
         public void CompleteMeeting()
         {
-            navMeshUpdater.UpdateNavMesh();
-
             meetingStartNeedOverride.Unregister();
             meetingEndNeedOverride.Register();
 
