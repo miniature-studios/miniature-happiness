@@ -60,9 +60,6 @@ namespace TileUnion.Tile
         private GameObject tileToProject;
         public GameObject TileToProject => tileToProject;
 
-        [SerializeField]
-        private Transform foundation;
-
         private Dictionary<Direction, List<WallType>> Walls
         {
             get
@@ -76,23 +73,13 @@ namespace TileUnion.Tile
         }
 
         private readonly float selectLiftingHeight = 3;
-
         private float unselectedYPosition;
         private float selectedYPosition;
-
-        private float unselectedFoundationYPosition;
-        private float selectedFoundationYPosition;
 
         private void Awake()
         {
             unselectedYPosition = transform.position.y;
             selectedYPosition = unselectedYPosition + selectLiftingHeight;
-
-            if (foundation != null)
-            {
-                unselectedFoundationYPosition = foundation.position.y;
-                selectedFoundationYPosition = unselectedFoundationYPosition - selectLiftingHeight;
-            }
         }
 
         public struct WallTypeMatch
@@ -272,19 +259,6 @@ namespace TileUnion.Tile
                 TileState.SelectedAndErrored => selectedYPosition,
                 _ => throw new InvalidOperationException()
             };
-
-            if (foundation != null)
-            {
-                float foundationNewY = currentState switch
-                {
-                    TileState.Normal => unselectedFoundationYPosition,
-                    TileState.Selected => selectedFoundationYPosition,
-                    TileState.SelectedAndErrored => selectedFoundationYPosition,
-                    _ => throw new InvalidOperationException()
-                };
-                foundation.SetLocalYPosition(foundationNewY);
-            }
-
             transform.SetYPosition(newY);
             TileView.SetMaterial(viewState);
         }
