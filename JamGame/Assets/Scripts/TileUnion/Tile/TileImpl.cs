@@ -81,16 +81,6 @@ namespace TileUnion.Tile
             }
         }
 
-        private readonly float selectLiftingHeight = 3;
-        private float unselectedYPosition;
-        private float selectedYPosition;
-
-        private void Awake()
-        {
-            unselectedYPosition = transform.position.y;
-            selectedYPosition = unselectedYPosition + selectLiftingHeight;
-        }
-
         public struct WallTypeMatch
         {
             public Dictionary<Direction, WallType> Data;
@@ -246,15 +236,6 @@ namespace TileUnion.Tile
             }
             currentState = state;
             StateChanged?.Invoke(currentState);
-
-            float newY = currentState switch
-            {
-                State.Normal => unselectedYPosition,
-                State.Selected => selectedYPosition,
-                State.SelectedAndErrored => selectedYPosition,
-                _ => throw new InvalidOperationException()
-            };
-            transform.SetYPosition(newY);
         }
 
         public void SetPosition(GridProperties gridProperties, Vector2Int newPosition)

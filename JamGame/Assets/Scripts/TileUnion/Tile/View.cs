@@ -14,6 +14,9 @@ namespace TileUnion.Tile
         private GameObject foundation;
 
         [SerializeField]
+        private Transform tileBase;
+
+        [SerializeField]
         private Material transparentMaterial;
 
         [SerializeField]
@@ -30,10 +33,9 @@ namespace TileUnion.Tile
         [SerializeField]
         private Dictionary<State, Material> materialsByState;
 
-        // TODO: move all parameters to animations
         private readonly float selectLiftingHeight = 3;
-        private float unselectedFoundationYPosition;
-        private float selectedFoundationYPosition;
+        private float unselectedYPosition;
+        private float selectedYPosition;
 
         private void Awake()
         {
@@ -46,8 +48,8 @@ namespace TileUnion.Tile
                     _ = renderers.Remove(toRemove);
                 }
 
-                unselectedFoundationYPosition = foundation.transform.position.y;
-                selectedFoundationYPosition = unselectedFoundationYPosition - selectLiftingHeight;
+                unselectedYPosition = tileBase.position.y;
+                selectedYPosition = unselectedYPosition + selectLiftingHeight;
             }
             foreach (Renderer renderer in renderers)
             {
@@ -86,14 +88,14 @@ namespace TileUnion.Tile
                 };
                 foundation.SetActive(active);
 
-                float foundationNewY = state switch
+                float newY = state switch
                 {
-                    State.Normal => unselectedFoundationYPosition,
-                    State.Selected => selectedFoundationYPosition,
-                    State.SelectedAndErrored => selectedFoundationYPosition,
+                    State.Normal => unselectedYPosition,
+                    State.Selected => selectedYPosition,
+                    State.SelectedAndErrored => selectedYPosition,
                     _ => throw new InvalidOperationException()
                 };
-                foundation.transform.SetLocalYPosition(foundationNewY);
+                tileBase.SetYPosition(newY);
             }
 
             foreach (Renderer renderer in renderers)
