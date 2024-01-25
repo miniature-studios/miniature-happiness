@@ -22,7 +22,6 @@ namespace TileBuilder.Controller
         public UnityEvent BuiltValidatedOffice;
 
         private InputActions inputActions;
-        private bool isRotateTilePressed = false;
         private Camera mainCamera;
 
         private void Awake()
@@ -34,25 +33,11 @@ namespace TileBuilder.Controller
         private void OnEnable()
         {
             inputActions.Enable();
-            inputActions.UI.RotateTile.performed += RotateTilePerformed;
-            inputActions.UI.RotateTile.canceled += RotateTileCanceled;
-        }
-
-        private void RotateTilePerformed(InputAction.CallbackContext context)
-        {
-            isRotateTilePressed = true;
-        }
-
-        private void RotateTileCanceled(InputAction.CallbackContext context)
-        {
-            isRotateTilePressed = false;
         }
 
         private void OnDisable()
         {
-            inputActions.UI.RotateTile.performed -= RotateTilePerformed;
-            inputActions.UI.RotateTile.canceled -= RotateTileCanceled;
-            inputActions.Enable();
+            inputActions.Disable();
         }
 
         public void ChangeGameMode(GameMode gameMode)
@@ -71,12 +56,11 @@ namespace TileBuilder.Controller
 
         public void Hover(CoreModel coreModel)
         {
-            if (isRotateTilePressed)
+            if (inputActions.UI.RotateTile.WasPressedThisFrame())
             {
                 coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
                     RotationDirection.Clockwise
                 );
-                isRotateTilePressed = false;
             }
 
             Result<Vector2Int> matrixResult = RayCastMatrix();

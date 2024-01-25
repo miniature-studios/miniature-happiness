@@ -13,17 +13,18 @@ public class GlobalInput : MonoBehaviour
     private void OnEnable()
     {
         inputActions.Enable();
-        inputActions.UI.Ecape.performed += EscapePerformed;
+        inputActions.UI.Pause.performed += PausePerformed;
+        ;
     }
 
-    private void EscapePerformed(InputAction.CallbackContext context)
+    private void PausePerformed(InputAction.CallbackContext context)
     {
         Application.Quit();
     }
 
     private void OnDisable()
     {
-        inputActions.UI.Ecape.performed -= EscapePerformed;
+        inputActions.UI.Pause.performed -= PausePerformed;
         inputActions.Disable();
     }
 }

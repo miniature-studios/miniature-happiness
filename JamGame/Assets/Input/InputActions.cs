@@ -272,7 +272,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""id"": ""34da3c5c-c727-4b90-81d9-d0de36e9b1a3"",
             ""actions"": [
                 {
-                    ""name"": ""Ecape"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""ca00c751-63df-4f90-962f-942b22670f07"",
                     ""expectedControlType"": ""Button"",
@@ -307,7 +307,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Ecape"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -345,7 +345,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_CameraLook_Rotate = m_CameraLook.FindAction("Rotate", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Ecape = m_UI.FindAction("Ecape", throwIfNotFound: true);
+        m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
         m_UI_RotateTile = m_UI.FindAction("RotateTile", throwIfNotFound: true);
         m_UI_ExtendInventoryTileInfo = m_UI.FindAction("ExtendInventoryTileInfo", throwIfNotFound: true);
     }
@@ -471,14 +471,14 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_Ecape;
+    private readonly InputAction m_UI_Pause;
     private readonly InputAction m_UI_RotateTile;
     private readonly InputAction m_UI_ExtendInventoryTileInfo;
     public struct UIActions
     {
         private @InputActions m_Wrapper;
         public UIActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Ecape => m_Wrapper.m_UI_Ecape;
+        public InputAction @Pause => m_Wrapper.m_UI_Pause;
         public InputAction @RotateTile => m_Wrapper.m_UI_RotateTile;
         public InputAction @ExtendInventoryTileInfo => m_Wrapper.m_UI_ExtendInventoryTileInfo;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
@@ -490,9 +490,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
-            @Ecape.started += instance.OnEcape;
-            @Ecape.performed += instance.OnEcape;
-            @Ecape.canceled += instance.OnEcape;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
             @RotateTile.started += instance.OnRotateTile;
             @RotateTile.performed += instance.OnRotateTile;
             @RotateTile.canceled += instance.OnRotateTile;
@@ -503,9 +503,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IUIActions instance)
         {
-            @Ecape.started -= instance.OnEcape;
-            @Ecape.performed -= instance.OnEcape;
-            @Ecape.canceled -= instance.OnEcape;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
             @RotateTile.started -= instance.OnRotateTile;
             @RotateTile.performed -= instance.OnRotateTile;
             @RotateTile.canceled -= instance.OnRotateTile;
@@ -537,7 +537,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     }
     public interface IUIActions
     {
-        void OnEcape(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
         void OnRotateTile(InputAction.CallbackContext context);
         void OnExtendInventoryTileInfo(InputAction.CallbackContext context);
     }
