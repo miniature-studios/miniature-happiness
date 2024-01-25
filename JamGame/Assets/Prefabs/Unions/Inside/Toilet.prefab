@@ -128,9 +128,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7384952401557745059}
-  - component: {fileID: 7384952401557745058}
   - component: {fileID: 7384952401557745085}
   - component: {fileID: 7384952401557745084}
+  - component: {fileID: 7384952401557745058}
   m_Layer: 0
   m_Name: ToiletTile
   m_TagString: Untagged
@@ -158,23 +158,6 @@ Transform:
   - {fileID: 2519501329753651518}
   m_Father: {fileID: 3467285144550413316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7384952401557745058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7384952401557745087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 2294512348582591818}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &7384952401557745085
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -343,11 +326,42 @@ MonoBehaviour:
       Prefab: {fileID: 5204499692858779407}
   CenterPrefabs:
   - {fileID: 3272155991223568803, guid: 8af27d5a7cd865546ba2eccff9c1b858, type: 3}
-  TileView: {fileID: 7384952401557745058}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7384952401557745058}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7384952401557745058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7384952401557745087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 2294512348582591818}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &7384952402074085769
 GameObject:
   m_ObjectHideFlags: 0

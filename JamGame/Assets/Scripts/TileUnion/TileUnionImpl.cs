@@ -170,7 +170,7 @@ namespace TileUnion
             return new SuccessResult();
         }
 
-        public void ApplyTileUnionState(TileImpl.TileState state)
+        public void ApplyTileUnionState(TileState state)
         {
             foreach (TileImpl tile in tiles)
             {
@@ -189,7 +189,7 @@ namespace TileUnion
         {
             foreach (TileImpl tile in tiles)
             {
-                tile.SetTileState(TileImpl.TileState.SelectedAndErrored);
+                tile.SetTileState(TileState.SelectedAndErrored);
             }
             _ = StartCoroutine(ShowInvalidPlacingRoutine());
         }
@@ -199,7 +199,7 @@ namespace TileUnion
             yield return new WaitForSecondsRealtime(selectedDuration);
             foreach (TileImpl tile in tiles)
             {
-                tile.SetTileState(TileImpl.TileState.Normal);
+                tile.SetTileState(TileState.Normal);
             }
         }
 

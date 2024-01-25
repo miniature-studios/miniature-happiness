@@ -168,9 +168,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8407151721961191607}
-  - component: {fileID: 7237539337420044066}
   - component: {fileID: 8318407623644397488}
   - component: {fileID: 6023392488271475129}
+  - component: {fileID: 7237539337420044066}
   m_Layer: 0
   m_Name: Tile (1)
   m_TagString: Untagged
@@ -197,23 +197,6 @@ Transform:
   - {fileID: 1781713962359291397}
   m_Father: {fileID: 3198020651115359956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7237539337420044066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1835414189785868346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 2709272131078945393}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &8318407623644397488
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -371,11 +354,42 @@ MonoBehaviour:
       Prefab: {fileID: 2908223260615522729}
   CenterPrefabs:
   - {fileID: 5009589534270781964, guid: 21c5cd1fb4169e042a4d5fabc972fa42, type: 3}
-  TileView: {fileID: 7237539337420044066}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7237539337420044066}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7237539337420044066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835414189785868346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 2709272131078945393}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &2133431180693887670
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,9 +472,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5984041335520537534}
-  - component: {fileID: 4498539882633212675}
   - component: {fileID: 8064986393353152893}
   - component: {fileID: 5241539118009146801}
+  - component: {fileID: 4498539882633212675}
   m_Layer: 0
   m_Name: Tile (2)
   m_TagString: Untagged
@@ -488,23 +502,6 @@ Transform:
   - {fileID: 6078719490702057276}
   m_Father: {fileID: 3198020651115359956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4498539882633212675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2524896838454742443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 4128892098573306382}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &8064986393353152893
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -666,11 +663,42 @@ MonoBehaviour:
       Prefab: {fileID: 5013798029904191469}
   CenterPrefabs:
   - {fileID: 3861564403118015299, guid: ac5b0de49066df84e95a0c4bafc26fb0, type: 3}
-  TileView: {fileID: 4498539882633212675}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4498539882633212675}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4498539882633212675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2524896838454742443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 4128892098573306382}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &2623629563769652283
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,9 +815,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3148811326908554697}
-  - component: {fileID: 7212552907560613872}
   - component: {fileID: 6490756892857601519}
   - component: {fileID: 1850657713405631901}
+  - component: {fileID: 7212552907560613872}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -817,23 +845,6 @@ Transform:
   - {fileID: 4940572369891398906}
   m_Father: {fileID: 3198020651115359956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7212552907560613872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3148811326908554696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 8768754397127151758}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &6490756892857601519
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -995,11 +1006,42 @@ MonoBehaviour:
       Prefab: {fileID: 3226840427167719962}
   CenterPrefabs:
   - {fileID: 9182207274158703136, guid: 6f127e55fe2977c438b7856908e5ecd0, type: 3}
-  TileView: {fileID: 7212552907560613872}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7212552907560613872}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7212552907560613872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3148811326908554696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 8768754397127151758}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &3198020651115359957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,9 +1263,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7712540139820041040}
-  - component: {fileID: 8706037476565874305}
   - component: {fileID: 9169809645065636146}
   - component: {fileID: 3520567390060003207}
+  - component: {fileID: 8706037476565874305}
   m_Layer: 0
   m_Name: Tile (3)
   m_TagString: Untagged
@@ -1251,23 +1293,6 @@ Transform:
   - {fileID: 6813793403303927136}
   m_Father: {fileID: 3198020651115359956}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8706037476565874305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4145165978999445638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 6205854744612605047}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &9169809645065636146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1429,11 +1454,42 @@ MonoBehaviour:
       Prefab: {fileID: 9098626582207519088}
   CenterPrefabs:
   - {fileID: 1870462802525994375, guid: 657e0e09e4de33b49be68bc4e634141b, type: 3}
-  TileView: {fileID: 8706037476565874305}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8706037476565874305}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8706037476565874305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4145165978999445638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 6205854744612605047}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &4201423896504395384
 GameObject:
   m_ObjectHideFlags: 0

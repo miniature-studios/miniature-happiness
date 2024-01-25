@@ -130,9 +130,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6322101272495862144}
-  - component: {fileID: 6322101272495862147}
   - component: {fileID: 6322101272495862146}
   - component: {fileID: 6322101272495862145}
+  - component: {fileID: 6322101272495862147}
   m_Layer: 0
   m_Name: KitchenTile1
   m_TagString: Untagged
@@ -159,23 +159,6 @@ Transform:
   - {fileID: 8317680512223754590}
   m_Father: {fileID: 3424363191602470848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6322101272495862147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6322101272495862151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 5642721805436009770}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &6322101272495862146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -342,11 +325,42 @@ MonoBehaviour:
       Prefab: {fileID: 4649061031828268042}
   CenterPrefabs:
   - {fileID: 8703714483910898736, guid: 8133f6042aca8d448844c1c96e72d405, type: 3}
-  TileView: {fileID: 6322101272495862147}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6322101272495862147}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6322101272495862147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6322101272495862151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 5642721805436009770}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &6322101272868149573
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,9 +636,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6973409562912976730}
-  - component: {fileID: 6973409562912976733}
   - component: {fileID: 6973409562912976732}
   - component: {fileID: 6973409562912976731}
+  - component: {fileID: 6973409562912976733}
   m_Layer: 0
   m_Name: KitchenTile0
   m_TagString: Untagged
@@ -652,23 +666,6 @@ Transform:
   - {fileID: 2307871455202283694}
   m_Father: {fileID: 3424363191602470848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6973409562912976733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6973409562912976729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  foundation: {fileID: 1827233385481187199}
-  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
-  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
-  renderers: []
 --- !u!65 &6973409562912976732
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -827,11 +824,42 @@ MonoBehaviour:
       Prefab: {fileID: 3727874258075945087}
   CenterPrefabs:
   - {fileID: 5688251105297414089, guid: 685322fcfd11c00418c787856a641b37, type: 3}
-  TileView: {fileID: 6973409562912976733}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6973409562912976731}
+        m_TargetAssemblyTypeName: TileUnion.Tile.TileImpl, Assembly-CSharp
+        m_MethodName: SetTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6973409562912976733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6973409562912976729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foundation: {fileID: 1827233385481187199}
+  transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
+  errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1001 &119307200601323194
 PrefabInstance:
   m_ObjectHideFlags: 0

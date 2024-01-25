@@ -263,11 +263,25 @@ MonoBehaviour:
       Prefab: {fileID: 262543824804162097}
   CenterPrefabs:
   - {fileID: 7786712757218351222, guid: ed1e59c8b18fb044396cd599fc8b99a2, type: 3}
-  TileView: {fileID: 7606974842227797511}
   currentState: 0
   projectedTiles: []
   projectedTilesRoot: {fileID: 0}
   tileToProject: {fileID: 0}
+  TileStateChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7606974842227797511}
+        m_TargetAssemblyTypeName: TileUnion.Tile.View, Assembly-CSharp
+        m_MethodName: ApplyTileState
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7606974842227797511
 MonoBehaviour:
   m_ObjectHideFlags: 0

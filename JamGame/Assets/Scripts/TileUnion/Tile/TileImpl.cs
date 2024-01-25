@@ -6,9 +6,17 @@ using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TileUnion.Tile
 {
+    public enum TileState
+    {
+        Normal,
+        Selected,
+        SelectedAndErrored
+    }
+
     [SelectionBase]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(View))]
@@ -35,7 +43,6 @@ namespace TileUnion.Tile
         public List<WallCollection> RawWalls = new();
         public List<CornerCollection> Corners = new();
         public List<GameObject> CenterPrefabs = new();
-        public View TileView;
 
         [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;
@@ -59,6 +66,8 @@ namespace TileUnion.Tile
         [SerializeField]
         private GameObject tileToProject;
         public GameObject TileToProject => tileToProject;
+
+        public UnityEvent<TileState> TileStateChanged;
 
         private Dictionary<Direction, List<WallType>> Walls
         {
@@ -229,13 +238,6 @@ namespace TileUnion.Tile
             return Corners.Find(x => x.Place == imaginePlace);
         }
 
-        public enum TileState
-        {
-            Normal,
-            Selected,
-            SelectedAndErrored
-        }
-
         public void SetTileState(TileState state)
         {
             if (state == currentState)
@@ -244,13 +246,7 @@ namespace TileUnion.Tile
             }
 
             currentState = state;
-            View.State viewState = currentState switch
-            {
-                TileState.Normal => View.State.Default,
-                TileState.Selected => View.State.Selected,
-                TileState.SelectedAndErrored => View.State.SelectedOverlapping,
-                _ => throw new InvalidOperationException()
-            };
+            TileStateChanged?.Invoke(currentState);
 
             float newY = currentState switch
             {
@@ -260,7 +256,6 @@ namespace TileUnion.Tile
                 _ => throw new InvalidOperationException()
             };
             transform.SetYPosition(newY);
-            TileView.SetMaterial(viewState);
         }
 
         public void SetPosition(GridProperties gridProperties, Vector2Int newPosition)
