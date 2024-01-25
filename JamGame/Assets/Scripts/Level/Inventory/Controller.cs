@@ -3,6 +3,7 @@ using System.Linq;
 using Common;
 using Level.Room;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Level.Inventory
 {
@@ -11,23 +12,6 @@ namespace Level.Inventory
     {
         [SerializeField]
         private Model model;
-
-        private InputActions inputActions;
-
-        private void Awake()
-        {
-            inputActions = new InputActions();
-        }
-
-        private void OnEnable()
-        {
-            inputActions.Enable();
-        }
-
-        private void OnDisable()
-        {
-            inputActions.Disable();
-        }
 
         public void AddNewRoom(CoreModel room)
         {
@@ -63,7 +47,7 @@ namespace Level.Inventory
 
         private Result<Room.View> RayCastTopRoomView()
         {
-            Vector2 position = inputActions.UI.PointerPosition.ReadValue<Vector2>();
+            Vector2 position = Mouse.current.position.ReadValue();
             IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
             GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
                 x.TryGetComponent(out Room.View _)

@@ -120,9 +120,7 @@ namespace TileBuilder.Controller
 
         private Result<Vector2Int> RayCastMatrix()
         {
-            Ray ray = mainCamera.ScreenPointToRay(
-                inputActions.UI.PointerPosition.ReadValue<Vector2>()
-            );
+            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             return tileBuilder.GridProperties.GetMatrixPosition(ray);
         }
 

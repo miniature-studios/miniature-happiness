@@ -30,20 +30,6 @@ namespace Level
         private IDragAndDropAgent backupDragAndDrop;
         private IDragAndDropAgent previousHovered;
 
-        private InputActions inputActions;
-
-        [ReadOnly]
-        [SerializeField]
-        private bool isPointLeftClicked = false;
-
-        [ReadOnly]
-        [SerializeField]
-        private bool isPointLeftHeld = false;
-
-        [ReadOnly]
-        [SerializeField]
-        private bool isPointLeftReleased = false;
-
         private void Awake()
         {
             backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropAgent>();
@@ -52,38 +38,13 @@ namespace Level
                 Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
             }
             previousHovered = backupDragAndDrop;
-            inputActions = new InputActions();
-        }
-
-        private void OnEnable()
-        {
-            inputActions.Enable();
-            inputActions.UI.PointerLeftClick.performed += PointLeftClickPerformed;
-            inputActions.UI.PointerLeftClick.canceled += PointLeftClickCanceled;
-        }
-
-        private void PointLeftClickPerformed(InputAction.CallbackContext context)
-        {
-            isPointLeftClicked = true;
-        }
-
-        private void PointLeftClickCanceled(InputAction.CallbackContext context)
-        {
-            isPointLeftReleased = true;
-        }
-
-        private void OnDisable()
-        {
-            inputActions.UI.PointerLeftClick.performed -= PointLeftClickPerformed;
-            inputActions.UI.PointerLeftClick.canceled -= PointLeftClickCanceled;
-            inputActions.Disable();
         }
 
         private void Update()
         {
             Result<IDragAndDropAgent> rayCastResult = RayCastTopDragAndDropAgent();
 
-            if (isPointLeftClicked)
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 if (rayCastResult.Success)
                 {
@@ -96,7 +57,7 @@ namespace Level
                 }
             }
 
-            if (isPointLeftReleased)
+            if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 if (
                     bufferCoreModel != null
@@ -109,7 +70,11 @@ namespace Level
                 bufferCoreModel = null;
             }
 
-            if (isPointLeftHeld && rayCastResult.Success && bufferCoreModel != null)
+            if (
+                Mouse.current.leftButton.isPressed
+                && rayCastResult.Success
+                && bufferCoreModel != null
+            )
             {
                 rayCastResult.Data.Hover(bufferCoreModel);
                 if (previousHovered != rayCastResult.Data && previousHovered != null)
@@ -123,22 +88,11 @@ namespace Level
                 previousHovered.HoverLeave();
                 previousHovered = null;
             }
-
-            if (isPointLeftClicked)
-            {
-                isPointLeftHeld = true;
-            }
-            if (isPointLeftReleased)
-            {
-                isPointLeftHeld = false;
-            }
-            isPointLeftClicked = false;
-            isPointLeftReleased = false;
         }
 
         private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
         {
-            Vector2 position = inputActions.UI.PointerPosition.ReadValue<Vector2>();
+            Vector2 position = Mouse.current.position.ReadValue();
             IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
             GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
                 x.TryGetComponent(out IDragAndDropAgent _)
