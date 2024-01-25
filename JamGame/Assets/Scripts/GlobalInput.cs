@@ -14,7 +14,6 @@ public class GlobalInput : MonoBehaviour
     {
         inputActions.Enable();
         inputActions.UI.Pause.performed += PausePerformed;
-        ;
     }
 
     private void PausePerformed(InputAction.CallbackContext context)
