@@ -49,15 +49,15 @@ namespace Level.Inventory.Room
         {
             if (inputActions.UI.ExtendInventoryTileInfo.IsPressed() && isHovered)
             {
-                if (!extendedView.gameObject.activeSelf)
+                if (!extendedView.IsVisible)
                 {
-                    extendedView.gameObject.SetActive(true);
+                    extendedView.Show();
                     extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
                 }
             }
-            else if (extendedView.gameObject.activeSelf)
+            else if (extendedView.IsVisible)
             {
-                extendedView.gameObject.SetActive(false);
+                extendedView.Hide();
             }
         }
 

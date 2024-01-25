@@ -297,6 +297,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ae594491-ff58-4944-b5f9-1c5ceb927c72"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -332,6 +341,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ExtendInventoryTileInfo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38229405-0c7c-4128-9b17-dcb9b921832d"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -348,6 +368,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
         m_UI_RotateTile = m_UI.FindAction("RotateTile", throwIfNotFound: true);
         m_UI_ExtendInventoryTileInfo = m_UI.FindAction("ExtendInventoryTileInfo", throwIfNotFound: true);
+        m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -474,6 +495,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Pause;
     private readonly InputAction m_UI_RotateTile;
     private readonly InputAction m_UI_ExtendInventoryTileInfo;
+    private readonly InputAction m_UI_Point;
     public struct UIActions
     {
         private @InputActions m_Wrapper;
@@ -481,6 +503,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @Pause => m_Wrapper.m_UI_Pause;
         public InputAction @RotateTile => m_Wrapper.m_UI_RotateTile;
         public InputAction @ExtendInventoryTileInfo => m_Wrapper.m_UI_ExtendInventoryTileInfo;
+        public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -499,6 +522,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @ExtendInventoryTileInfo.started += instance.OnExtendInventoryTileInfo;
             @ExtendInventoryTileInfo.performed += instance.OnExtendInventoryTileInfo;
             @ExtendInventoryTileInfo.canceled += instance.OnExtendInventoryTileInfo;
+            @Point.started += instance.OnPoint;
+            @Point.performed += instance.OnPoint;
+            @Point.canceled += instance.OnPoint;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -512,6 +538,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @ExtendInventoryTileInfo.started -= instance.OnExtendInventoryTileInfo;
             @ExtendInventoryTileInfo.performed -= instance.OnExtendInventoryTileInfo;
             @ExtendInventoryTileInfo.canceled -= instance.OnExtendInventoryTileInfo;
+            @Point.started -= instance.OnPoint;
+            @Point.performed -= instance.OnPoint;
+            @Point.canceled -= instance.OnPoint;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -540,5 +569,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnRotateTile(InputAction.CallbackContext context);
         void OnExtendInventoryTileInfo(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
     }
 }
