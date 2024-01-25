@@ -48,10 +48,8 @@ namespace Level.Inventory
         private Result<Room.View> RayCastTopRoomView()
         {
             Vector2 position = Mouse.current.position.ReadValue();
-            IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
-            GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
-                x.TryGetComponent(out Room.View _)
-            );
+            IEnumerable<GameObject> hits = RayCastUtilities.UIRayCast(position);
+            GameObject foundObject = hits.FirstOrDefault(x => x.TryGetComponent(out Room.View _));
             if (foundObject != null)
             {
                 return new SuccessResult<Room.View>(foundObject.GetComponent<Room.View>());

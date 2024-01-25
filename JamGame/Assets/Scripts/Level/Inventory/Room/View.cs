@@ -3,7 +3,6 @@ using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 namespace Level.Inventory.Room
 {
@@ -24,14 +23,11 @@ namespace Level.Inventory.Room
         public CoreModel CoreModel => coreModel;
 
         private bool isHovered = false;
-        private RectTransform canvas;
         private InputActions inputActions;
-        private Vector2 extendViewShift = new(20, 20);
 
         private void Awake()
         {
             inputActions = new();
-            canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
         }
 
         private void OnEnable()
@@ -56,16 +52,12 @@ namespace Level.Inventory.Room
                 if (!extendedView.gameObject.activeSelf)
                 {
                     extendedView.gameObject.SetActive(true);
-                    extendedView.transform.SetParent(canvas);
+                    extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
                 }
-                extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
-                Vector2 pointerPosition = Mouse.current.position.ReadValue();
-                extendedView.transform.position = (Vector3)(pointerPosition + extendViewShift);
             }
             else if (extendedView.gameObject.activeSelf)
             {
                 extendedView.gameObject.SetActive(false);
-                extendedView.transform.SetParent(transform);
             }
         }
 

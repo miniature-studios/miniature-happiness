@@ -63,7 +63,7 @@ namespace TileBuilder.Controller
                 );
             }
 
-            Result<Vector2Int> matrixResult = RayCastMatrix();
+            Result<Vector2Int> matrixResult = RaycastMatrix();
             if (matrixResult.Failure)
             {
                 return;
@@ -76,7 +76,7 @@ namespace TileBuilder.Controller
 
         public Result Drop(CoreModel coreModel)
         {
-            Result<Vector2Int> matrixResult = RayCastMatrix();
+            Result<Vector2Int> matrixResult = RaycastMatrix();
             if (matrixResult.Success)
             {
                 coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
@@ -90,7 +90,7 @@ namespace TileBuilder.Controller
 
         public Result<CoreModel> Borrow()
         {
-            Result<Vector2Int> matrixResult = RayCastMatrix();
+            Result<Vector2Int> matrixResult = RaycastMatrix();
             if (matrixResult.Success)
             {
                 BorrowRoom command = new(matrixResult.Data);
@@ -102,7 +102,7 @@ namespace TileBuilder.Controller
             return new FailResult<CoreModel>(matrixResult.Error);
         }
 
-        private Result<Vector2Int> RayCastMatrix()
+        private Result<Vector2Int> RaycastMatrix()
         {
             Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             return tileBuilder.GridProperties.GetMatrixPosition(ray);

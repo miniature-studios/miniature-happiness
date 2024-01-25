@@ -42,13 +42,13 @@ namespace Level
 
         private void Update()
         {
-            Result<IDragAndDropAgent> rayCastResult = RayCastTopDragAndDropAgent();
+            Result<IDragAndDropAgent> rayсastResult = RayCastTopDragAndDropAgent();
 
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                if (rayCastResult.Success)
+                if (rayсastResult.Success)
                 {
-                    Result<CoreModel> result = rayCastResult.Data.Borrow();
+                    Result<CoreModel> result = rayсastResult.Data.Borrow();
                     if (result.Success)
                     {
                         bufferCoreModel = result.Data;
@@ -61,8 +61,8 @@ namespace Level
             {
                 if (
                     bufferCoreModel != null
-                    && rayCastResult.Success
-                    && rayCastResult.Data.Drop(bufferCoreModel).Failure
+                    && rayсastResult.Success
+                    && rayсastResult.Data.Drop(bufferCoreModel).Failure
                 )
                 {
                     _ = backupDragAndDrop.Drop(bufferCoreModel);
@@ -72,16 +72,16 @@ namespace Level
 
             if (
                 Mouse.current.leftButton.isPressed
-                && rayCastResult.Success
+                && rayсastResult.Success
                 && bufferCoreModel != null
             )
             {
-                rayCastResult.Data.Hover(bufferCoreModel);
-                if (previousHovered != rayCastResult.Data && previousHovered != null)
+                rayсastResult.Data.Hover(bufferCoreModel);
+                if (previousHovered != rayсastResult.Data && previousHovered != null)
                 {
                     previousHovered.HoverLeave();
                 }
-                previousHovered = rayCastResult.Data;
+                previousHovered = rayсastResult.Data;
             }
             else if (previousHovered != null)
             {
@@ -93,8 +93,8 @@ namespace Level
         private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
         {
             Vector2 position = Mouse.current.position.ReadValue();
-            IEnumerable<GameObject> rayCastObjects = RayCastUtilities.UIRayCast(position);
-            GameObject foundObject = rayCastObjects.FirstOrDefault(x =>
+            IEnumerable<GameObject> hits = RayCastUtilities.UIRayCast(position);
+            GameObject foundObject = hits.FirstOrDefault(x =>
                 x.TryGetComponent(out IDragAndDropAgent _)
             );
             if (foundObject != null)
