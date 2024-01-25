@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common;
+using Employee;
+using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -32,7 +34,7 @@ namespace Level.Config
     public class FixedEmployeeConfig : IEmployeeConfig
     {
         [SerializeField]
-        [FoldoutGroup("@Label")]
+        [FoldoutGroup("@" + nameof(Label))]
         private string name;
 
         [SerializeField]
@@ -45,8 +47,8 @@ namespace Level.Config
         private string quirk;
 
         [AssetsOnly]
-        [AssetSelector]
-        [FoldoutGroup("@Label")]
+        [Pickle(typeof(EmployeeImpl), LookupType = ObjectProviderType.Assets)]
+        [FoldoutGroup("@" + nameof(Label))]
         private GameObject prototype;
 
         private string Label => $"Employee - {name}";
@@ -64,7 +66,7 @@ namespace Level.Config
         public float Weight;
 
         [AssetsOnly]
-        [AssetSelector]
+        [Pickle(typeof(EmployeeImpl), LookupType = ObjectProviderType.Assets)]
         public GameObject Prototype;
     }
 
@@ -72,12 +74,12 @@ namespace Level.Config
     public class RandomEmployeeConfig : IEmployeeConfig
     {
         [SerializeField]
-        [AssetSelector]
+        [Pickle(typeof(EmployeeWeightList), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Employee - Random")]
         private EmployeeWeightList weightList;
 
         [SerializeField]
-        [AssetSelector]
+        [Pickle(typeof(EmployeeNameList), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Employee - Random")]
         private EmployeeNameList nameList;
 

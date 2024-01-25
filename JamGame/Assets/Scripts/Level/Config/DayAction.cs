@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Level.GlobalTime;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Config
@@ -58,16 +59,42 @@ namespace Level.Config
     public class Meeting : IDayAction
     {
         [SerializeReference]
+        [FoldoutGroup("Employees to sell in shop")]
         private List<IEmployeeConfig> shopEmployees = new();
-
         public IEnumerable<EmployeeConfig> ShopEmployees =>
             shopEmployees.Select(x => x.GetEmployeeConfig());
 
-        [SerializeReference]
-        private List<IShopRoomConfig> shopRooms = new();
-        public IEnumerable<ShopRoomConfig> ShopRooms => shopRooms.Select(x => x.GetRoomConfig());
+        private enum SourceMode
+        {
+            Raw,
+            ScriptableObject
+        }
 
         [SerializeField]
+        [EnumToggleButtons]
+        [FoldoutGroup("Rooms to sell in shop")]
+        private SourceMode mode = SourceMode.Raw;
+
+        [SerializeReference]
+        [FoldoutGroup("Rooms to sell in shop")]
+        [ShowIf("@" + nameof(mode), SourceMode.Raw)]
+        private List<IShopRoomConfig> shopRooms = new();
+
+        [SerializeField]
+        [FoldoutGroup("Rooms to sell in shop")]
+        [ShowIf("@" + nameof(mode), SourceMode.ScriptableObject)]
+        private MeetingShopRoomBundle meetingShopRoomBundle;
+
+        public IEnumerable<ShopRoomConfig> ShopRooms =>
+            mode switch
+            {
+                SourceMode.ScriptableObject => meetingShopRoomBundle.GetShopRooms(),
+                SourceMode.Raw => shopRooms.Select(x => x.GetRoomConfig()),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Rooms that will placed in inventory")]
         private List<InventoryRoomConfig> mandatoryRooms = new();
         public IEnumerable<InventoryRoomConfig> MandatoryRooms => mandatoryRooms;
 

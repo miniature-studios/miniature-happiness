@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Level.GlobalTime;
 using Level.Room;
+using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -121,8 +122,8 @@ namespace Level.Boss.Task
         private float timeToEnsureCompletion = 0.5f;
 
         [AssetsOnly]
-        [AssetSelector]
         [SerializeField]
+        [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Target Room Count")]
         private CoreModel room;
         public string RoomTitle => room.Title;
@@ -189,8 +190,8 @@ namespace Level.Boss.Task
     public class RoomCountUpperBound : ITask
     {
         [AssetsOnly]
-        [AssetSelector]
         [SerializeField]
+        [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Room Count Upper Bound")]
         private CoreModel room;
         public string RoomTitle => room.Title;
