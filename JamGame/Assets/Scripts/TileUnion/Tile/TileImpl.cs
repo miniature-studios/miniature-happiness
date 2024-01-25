@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace TileUnion.Tile
 {
-    public enum TileState
+    public enum State
     {
         Normal,
         Selected,
@@ -49,7 +49,7 @@ namespace TileUnion.Tile
 
         [ReadOnly]
         [SerializeField]
-        private TileState currentState = TileState.Normal;
+        private State currentState = State.Normal;
 
         public Vector2Int Position => position;
         public int Rotation => rotation;
@@ -67,7 +67,7 @@ namespace TileUnion.Tile
         private GameObject tileToProject;
         public GameObject TileToProject => tileToProject;
 
-        public UnityEvent<TileState> TileStateChanged;
+        public UnityEvent<State> StateChanged;
 
         private Dictionary<Direction, List<WallType>> Walls
         {
@@ -238,21 +238,20 @@ namespace TileUnion.Tile
             return Corners.Find(x => x.Place == imaginePlace);
         }
 
-        public void SetTileState(TileState state)
+        public void SetTileState(State state)
         {
             if (state == currentState)
             {
                 return;
             }
-
             currentState = state;
-            TileStateChanged?.Invoke(currentState);
+            StateChanged?.Invoke(currentState);
 
             float newY = currentState switch
             {
-                TileState.Normal => unselectedYPosition,
-                TileState.Selected => selectedYPosition,
-                TileState.SelectedAndErrored => selectedYPosition,
+                State.Normal => unselectedYPosition,
+                State.Selected => selectedYPosition,
+                State.SelectedAndErrored => selectedYPosition,
                 _ => throw new InvalidOperationException()
             };
             transform.SetYPosition(newY);

@@ -28,7 +28,7 @@ namespace TileUnion.Tile
 
         [ReadOnly]
         [SerializeField]
-        private Dictionary<TileState, Material> materialsByState;
+        private Dictionary<State, Material> materialsByState;
 
         // TODO: move all parameters to animations
         private readonly float selectLiftingHeight = 3;
@@ -55,11 +55,11 @@ namespace TileUnion.Tile
             }
             materialsByState = new()
             {
-                { TileState.Normal, defaultMaterial },
-                { TileState.Selected, transparentMaterial },
-                { TileState.SelectedAndErrored, errorMaterial },
+                { State.Normal, defaultMaterial },
+                { State.Selected, transparentMaterial },
+                { State.SelectedAndErrored, errorMaterial },
             };
-            ApplyTileState(TileState.Normal);
+            ApplyTileState(State.Normal);
         }
 
         private void SetActiveChilds(Transform transform)
@@ -73,24 +73,24 @@ namespace TileUnion.Tile
         }
 
         // Must be called by TileImpl event
-        public void ApplyTileState(TileState state)
+        public void ApplyTileState(State state)
         {
             if (foundation != null)
             {
                 bool active = state switch
                 {
-                    TileState.Normal => true,
-                    TileState.Selected => false,
-                    TileState.SelectedAndErrored => true,
+                    State.Normal => true,
+                    State.Selected => false,
+                    State.SelectedAndErrored => true,
                     _ => throw new System.ArgumentException()
                 };
                 foundation.SetActive(active);
 
                 float foundationNewY = state switch
                 {
-                    TileState.Normal => unselectedFoundationYPosition,
-                    TileState.Selected => selectedFoundationYPosition,
-                    TileState.SelectedAndErrored => selectedFoundationYPosition,
+                    State.Normal => unselectedFoundationYPosition,
+                    State.Selected => selectedFoundationYPosition,
+                    State.SelectedAndErrored => selectedFoundationYPosition,
                     _ => throw new InvalidOperationException()
                 };
                 foundation.transform.SetLocalYPosition(foundationNewY);
