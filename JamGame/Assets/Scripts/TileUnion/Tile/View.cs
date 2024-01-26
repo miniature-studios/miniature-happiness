@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,6 +12,9 @@ namespace TileUnion.Tile
     {
         [SerializeField]
         private GameObject foundation;
+
+        [SerializeField]
+        private Transform tileBase;
 
         [SerializeField]
         private Material transparentMaterial;
@@ -28,12 +33,9 @@ namespace TileUnion.Tile
         [SerializeField]
         private Dictionary<State, Material> materialsByState;
 
-        public enum State
-        {
-            Default,
-            Selected,
-            SelectedOverlapping
-        }
+        private readonly float selectLiftingHeight = 3;
+        private float unselectedYPosition;
+        private float selectedYPosition;
 
         private void Awake()
         {
@@ -45,6 +47,9 @@ namespace TileUnion.Tile
                 {
                     _ = renderers.Remove(toRemove);
                 }
+
+                unselectedYPosition = tileBase.position.y;
+                selectedYPosition = unselectedYPosition + selectLiftingHeight;
             }
             foreach (Renderer renderer in renderers)
             {
@@ -52,11 +57,11 @@ namespace TileUnion.Tile
             }
             materialsByState = new()
             {
-                { State.Default, defaultMaterial },
+                { State.Normal, defaultMaterial },
                 { State.Selected, transparentMaterial },
-                { State.SelectedOverlapping, errorMaterial },
+                { State.SelectedAndErrored, errorMaterial },
             };
-            SetMaterial(State.Default);
+            ApplyTileState(State.Normal);
         }
 
         private void SetActiveChilds(Transform transform)
@@ -69,18 +74,28 @@ namespace TileUnion.Tile
             }
         }
 
-        public void SetMaterial(State state)
+        // Must be called by TileImpl event
+        public void ApplyTileState(State state)
         {
             if (foundation != null)
             {
                 bool active = state switch
                 {
-                    State.Default => true,
+                    State.Normal => true,
                     State.Selected => false,
-                    State.SelectedOverlapping => true,
+                    State.SelectedAndErrored => true,
                     _ => throw new System.ArgumentException()
                 };
                 foundation.SetActive(active);
+
+                float newY = state switch
+                {
+                    State.Normal => unselectedYPosition,
+                    State.Selected => selectedYPosition,
+                    State.SelectedAndErrored => selectedYPosition,
+                    _ => throw new InvalidOperationException()
+                };
+                tileBase.SetYPosition(newY);
             }
 
             foreach (Renderer renderer in renderers)

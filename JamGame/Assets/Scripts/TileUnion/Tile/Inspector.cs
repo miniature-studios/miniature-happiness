@@ -40,7 +40,7 @@ namespace TileUnion.Tile
             }
         }
 
-        [Button]
+        [Button(DirtyOnClick = true)]
         private void FillWalls()
         {
             RawWalls = new();
@@ -58,7 +58,7 @@ namespace TileUnion.Tile
             CreateWallsCache();
         }
 
-        [Button]
+        [Button(DirtyOnClick = true)]
         private void FillCorners()
         {
             Corners = new();
@@ -86,15 +86,28 @@ namespace TileUnion.Tile
                 return;
             }
 
-            GameObject wallsHandler;
-            if (transform.Find("Walls") == null)
+            GameObject main;
+            if (transform.Find("Base") == null)
             {
-                wallsHandler = new GameObject("Walls");
-                wallsHandler.transform.parent = gameObject.transform;
+                main = new GameObject("Base");
+                main.transform.parent = gameObject.transform;
+                main.transform.localPosition = Vector3.zero;
             }
             else
             {
-                wallsHandler = transform.Find("Walls").gameObject;
+                main = transform.Find("Base").gameObject;
+            }
+
+            GameObject wallsHandler;
+            if (main.transform.Find("Walls") == null)
+            {
+                wallsHandler = new GameObject("Walls");
+                wallsHandler.transform.parent = main.transform;
+                wallsHandler.transform.localPosition = Vector3.zero;
+            }
+            else
+            {
+                wallsHandler = main.transform.Find("Walls").gameObject;
             }
             while (wallsHandler.transform.childCount > 0)
             {
@@ -141,14 +154,15 @@ namespace TileUnion.Tile
             }
 
             GameObject cornersHandler;
-            if (transform.Find("Corners") == null)
+            if (main.transform.Find("Corners") == null)
             {
                 cornersHandler = new GameObject("Corners");
-                cornersHandler.transform.parent = gameObject.transform;
+                cornersHandler.transform.parent = main.transform;
+                cornersHandler.transform.localPosition = Vector3.zero;
             }
             else
             {
-                cornersHandler = transform.Find("Corners").gameObject;
+                cornersHandler = main.transform.Find("Corners").gameObject;
             }
             while (cornersHandler.transform.childCount > 0)
             {
@@ -195,14 +209,15 @@ namespace TileUnion.Tile
             }
 
             GameObject centerHandler;
-            if (transform.Find("Center") == null)
+            if (main.transform.Find("Center") == null)
             {
                 centerHandler = new GameObject("Center");
-                centerHandler.transform.parent = gameObject.transform;
+                centerHandler.transform.parent = main.transform;
+                centerHandler.transform.localPosition = Vector3.zero;
             }
             else
             {
-                centerHandler = transform.Find("Center").gameObject;
+                centerHandler = main.transform.Find("Center").gameObject;
             }
             while (centerHandler.transform.childCount > 0)
             {
