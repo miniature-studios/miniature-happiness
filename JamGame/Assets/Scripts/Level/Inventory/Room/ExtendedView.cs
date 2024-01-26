@@ -9,6 +9,7 @@ namespace Level.Inventory.Room
         [SerializeField]
         private TMP_Text label;
 
+        // Canvas need to switch parent for ExtendedView because in other way it doesn't showing
         private RectTransform canvas;
         private Transform parent;
 
