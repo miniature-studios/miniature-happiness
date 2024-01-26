@@ -76,6 +76,7 @@ MonoBehaviour:
   marks:
   - Immutable
   - Outside
+  - Window
   position: {x: 0, y: 0}
   rotation: 0
   WallPrefabHandlers:
@@ -196,6 +197,9 @@ MonoBehaviour:
   - {fileID: 2649724788230207436, guid: 496edc3e1d49ab24c907c8f3fe624f5f, type: 3}
   TileView: {fileID: 4857424795001770017}
   currentState: 0
+  projectedTiles: []
+  projectedTilesRoot: {fileID: 0}
+  tileToProject: {fileID: 0}
 --- !u!114 &4857424795001770017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,9 +212,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a00a1d232f1e6b345a36adb5b34679d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foundation: {fileID: 0}
   transparentMaterial: {fileID: 2100000, guid: 42485067ec02f0d44997362dc851ff78, type: 2}
   errorMaterial: {fileID: 2100000, guid: fad66aea04190e842b364db056785b8b, type: 2}
   defaultMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  renderers: []
 --- !u!1 &5251548326590650508
 GameObject:
   m_ObjectHideFlags: 0
