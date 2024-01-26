@@ -15,7 +15,7 @@ namespace TileBuilder.Controller
         {
             if (LoadConfigFromStart)
             {
-                LoadBuildingFromConfig(BuildingConfig);
+                //LoadBuildingFromConfig(BuildingConfig);
             }
         }
 
@@ -30,16 +30,6 @@ namespace TileBuilder.Controller
                 new TileConfig(coreModel.Uid, position, rotation)
             );
             _ = tileBuilder.ExecuteCommand(new DropRoom(newCoreModel));
-        }
-
-        public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
-        {
-            _ = tileBuilder.ExecuteCommand(new RemoveAllRooms());
-            foreach (TileConfig tileConfig in buildingConfig.TilePlaceConfigs)
-            {
-                CoreModel core = CoreModel.InstantiateCoreModel(tileConfig);
-                _ = tileBuilder.ExecuteCommand(new DropRoom(core));
-            }
         }
 
         public BuildingConfig SaveBuildingIntoConfig()

@@ -232,5 +232,11 @@ namespace Level
         {
             animatorSwitcher.SetAnimatorStates(typeof(WinGame));
         }
+
+        public void Execute(LoadLevel loadLevel)
+        {
+            tileBuilderController.LoadBuildingFromConfig(loadLevel.BuildingConfig);
+            ActionEndNotify?.Invoke();
+        }
     }
 }
