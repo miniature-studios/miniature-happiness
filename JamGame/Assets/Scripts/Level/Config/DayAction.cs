@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
+using TileBuilder;
 using UnityEngine;
 
 namespace Level.Config
@@ -10,6 +11,19 @@ namespace Level.Config
     public interface IDayAction
     {
         public void Execute(Executor executor);
+    }
+
+    [Serializable]
+    public class LoadLevel : IDayAction
+    {
+        [SerializeField]
+        private BuildingConfig buildingConfig;
+        public BuildingConfig BuildingConfig => buildingConfig;
+
+        public void Execute(Executor executor)
+        {
+            executor.Execute(this);
+        }
     }
 
     [Serializable]

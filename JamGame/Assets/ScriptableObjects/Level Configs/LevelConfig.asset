@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51c39a70600ea274ebd8278a07991c85, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: 
-  days: []
+  days:
+  - rid: 1908735195745353728
   defaultDay:
     dayActions:
     - rid: 1908735064151687181
@@ -95,3 +96,12 @@ MonoBehaviour:
       data:
         duration: 2
         text: Day End
+    - rid: 1908735195745353728
+      type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        dayActions:
+        - rid: 1908735195745353729
+    - rid: 1908735195745353729
+      type: {class: LoadLevel, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        buildingConfig: {fileID: 11400000, guid: 5de359c410ba2a849ab24ac0f1cba9e8, type: 2}

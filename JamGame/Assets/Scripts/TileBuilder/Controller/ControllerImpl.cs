@@ -150,5 +150,15 @@ namespace TileBuilder.Controller
         {
             return tileBuilder.Bounds;
         }
+
+        public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
+        {
+            _ = tileBuilder.ExecuteCommand(new RemoveAllRooms());
+            foreach (TileConfig tileConfig in buildingConfig.TilePlaceConfigs)
+            {
+                CoreModel core = CoreModel.InstantiateCoreModel(tileConfig);
+                _ = tileBuilder.ExecuteCommand(new DropRoom(core));
+            }
+        }
     }
 }
