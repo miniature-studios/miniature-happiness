@@ -306,6 +306,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Left Click"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""919a27ca-7fbe-4b2e-9679-c97f2b5d19d6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -352,6 +361,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0259cd91-c435-41a0-a09d-bc9744449eb0"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Left Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -369,6 +389,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_RotateTile = m_UI.FindAction("RotateTile", throwIfNotFound: true);
         m_UI_ExtendInventoryTileInfo = m_UI.FindAction("ExtendInventoryTileInfo", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
+        m_UI_LeftClick = m_UI.FindAction("Left Click", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -496,6 +517,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_RotateTile;
     private readonly InputAction m_UI_ExtendInventoryTileInfo;
     private readonly InputAction m_UI_Point;
+    private readonly InputAction m_UI_LeftClick;
     public struct UIActions
     {
         private @InputActions m_Wrapper;
@@ -504,6 +526,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @RotateTile => m_Wrapper.m_UI_RotateTile;
         public InputAction @ExtendInventoryTileInfo => m_Wrapper.m_UI_ExtendInventoryTileInfo;
         public InputAction @Point => m_Wrapper.m_UI_Point;
+        public InputAction @LeftClick => m_Wrapper.m_UI_LeftClick;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -525,6 +548,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Point.started += instance.OnPoint;
             @Point.performed += instance.OnPoint;
             @Point.canceled += instance.OnPoint;
+            @LeftClick.started += instance.OnLeftClick;
+            @LeftClick.performed += instance.OnLeftClick;
+            @LeftClick.canceled += instance.OnLeftClick;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -541,6 +567,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Point.started -= instance.OnPoint;
             @Point.performed -= instance.OnPoint;
             @Point.canceled -= instance.OnPoint;
+            @LeftClick.started -= instance.OnLeftClick;
+            @LeftClick.performed -= instance.OnLeftClick;
+            @LeftClick.canceled -= instance.OnLeftClick;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -570,5 +599,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnRotateTile(InputAction.CallbackContext context);
         void OnExtendInventoryTileInfo(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
     }
 }
