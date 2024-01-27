@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Level.Room;
 using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Level
 {
@@ -35,20 +37,18 @@ namespace Level
             {
                 Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
             }
+            previousHovered = backupDragAndDrop;
         }
 
         private void Update()
         {
-            IDragAndDropAgent dragAndDrop = RayCastUtilities
-                .UIRayCast(Input.mousePosition)
-                ?.FirstOrDefault(x => x.GetComponent<IDragAndDropAgent>() != null)
-                ?.GetComponent<IDragAndDropAgent>();
+            Result<IDragAndDropAgent> rayсastResult = RayCastTopDragAndDropAgent();
 
-            if (Input.GetMouseButtonDown(0))
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                if (dragAndDrop != null)
+                if (rayсastResult.Success)
                 {
-                    Result<CoreModel> result = dragAndDrop.Borrow();
+                    Result<CoreModel> result = rayсastResult.Data.Borrow();
                     if (result.Success)
                     {
                         bufferCoreModel = result.Data;
@@ -57,12 +57,12 @@ namespace Level
                 }
             }
 
-            if (Input.GetMouseButtonUp(0))
+            if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 if (
                     bufferCoreModel != null
-                    && dragAndDrop != null
-                    && dragAndDrop.Drop(bufferCoreModel).Failure
+                    && rayсastResult.Success
+                    && rayсastResult.Data.Drop(bufferCoreModel).Failure
                 )
                 {
                     _ = backupDragAndDrop.Drop(bufferCoreModel);
@@ -70,19 +70,42 @@ namespace Level
                 bufferCoreModel = null;
             }
 
-            if (Input.GetMouseButton(0) && dragAndDrop != null && bufferCoreModel != null)
+            if (
+                Mouse.current.leftButton.isPressed
+                && rayсastResult.Success
+                && bufferCoreModel != null
+            )
             {
-                dragAndDrop.Hover(bufferCoreModel);
-                if (previousHovered != dragAndDrop && previousHovered != null)
+                rayсastResult.Data.Hover(bufferCoreModel);
+                if (previousHovered != rayсastResult.Data && previousHovered != null)
                 {
                     previousHovered.HoverLeave();
                 }
-                previousHovered = dragAndDrop;
+                previousHovered = rayсastResult.Data;
             }
             else if (previousHovered != null)
             {
                 previousHovered.HoverLeave();
                 previousHovered = null;
+            }
+        }
+
+        private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
+        {
+            Vector2 position = Mouse.current.position.ReadValue();
+            IEnumerable<GameObject> hits = RayCastUtilities.UIRayCast(position);
+            GameObject foundObject = hits.FirstOrDefault(x =>
+                x.TryGetComponent(out IDragAndDropAgent _)
+            );
+            if (foundObject != null)
+            {
+                return new SuccessResult<IDragAndDropAgent>(
+                    foundObject.GetComponent<IDragAndDropAgent>()
+                );
+            }
+            else
+            {
+                return new FailResult<IDragAndDropAgent>("IDragAndDropAgent not found");
             }
         }
     }

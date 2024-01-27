@@ -6,6 +6,7 @@ using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace TileBuilder.Controller
 {
@@ -15,10 +16,29 @@ namespace TileBuilder.Controller
         [SerializeField]
         private TileBuilderImpl tileBuilder;
 
-        public UnityEvent BuiltValidatedOffice;
-
         [SerializeField]
         private Level.Inventory.Controller inventory;
+
+        public UnityEvent BuiltValidatedOffice;
+
+        private InputActions inputActions;
+        private Camera mainCamera;
+
+        private void Awake()
+        {
+            mainCamera = Camera.main;
+            inputActions = new();
+        }
+
+        private void OnEnable()
+        {
+            inputActions.Enable();
+        }
+
+        private void OnDisable()
+        {
+            inputActions.Disable();
+        }
 
         public void ChangeGameMode(GameMode gameMode)
         {
@@ -36,15 +56,14 @@ namespace TileBuilder.Controller
 
         public void Hover(CoreModel coreModel)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (inputActions.UI.RotateTile.WasPressedThisFrame())
             {
                 coreModel.TileUnionModel.PlacingProperties.ApplyRotation(
                     RotationDirection.Clockwise
                 );
             }
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
+            Result<Vector2Int> matrixResult = RaycastMatrix();
             if (matrixResult.Failure)
             {
                 return;
@@ -57,8 +76,7 @@ namespace TileBuilder.Controller
 
         public Result Drop(CoreModel coreModel)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
+            Result<Vector2Int> matrixResult = RaycastMatrix();
             if (matrixResult.Success)
             {
                 coreModel.TileUnionModel.PlacingProperties.SetPosition(matrixResult.Data);
@@ -72,8 +90,7 @@ namespace TileBuilder.Controller
 
         public Result<CoreModel> Borrow()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Result<Vector2Int> matrixResult = tileBuilder.GridProperties.GetMatrixPosition(ray);
+            Result<Vector2Int> matrixResult = RaycastMatrix();
             if (matrixResult.Success)
             {
                 BorrowRoom command = new(matrixResult.Data);
@@ -83,6 +100,12 @@ namespace TileBuilder.Controller
                     : new FailResult<CoreModel>(result.Error);
             }
             return new FailResult<CoreModel>(matrixResult.Error);
+        }
+
+        private Result<Vector2Int> RaycastMatrix()
+        {
+            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            return tileBuilder.GridProperties.GetMatrixPosition(ray);
         }
 
         public void HoverLeave()

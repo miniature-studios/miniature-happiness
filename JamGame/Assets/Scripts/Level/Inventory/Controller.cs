@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Level.Room;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Level.Inventory
 {
@@ -29,13 +31,10 @@ namespace Level.Inventory
 
         public Result<CoreModel> Borrow()
         {
-            Room.View hovered = RayCastUtilities
-                .UIRayCast(Input.mousePosition)
-                ?.FirstOrDefault(x => x.GetComponent<Room.View>() != null)
-                ?.GetComponent<Room.View>();
-            if (hovered != null)
+            Result<Room.View> hovered = RayCastTopRoomView();
+            if (hovered.Success)
             {
-                CoreModel coreModel = hovered.CoreModel;
+                CoreModel coreModel = hovered.Data.CoreModel;
                 return new SuccessResult<CoreModel>(model.BorrowRoom(coreModel));
             }
             else
@@ -45,5 +44,20 @@ namespace Level.Inventory
         }
 
         public void HoverLeave() { }
+
+        private Result<Room.View> RayCastTopRoomView()
+        {
+            Vector2 position = Mouse.current.position.ReadValue();
+            IEnumerable<GameObject> hits = RayCastUtilities.UIRayCast(position);
+            GameObject foundObject = hits.FirstOrDefault(x => x.TryGetComponent(out Room.View _));
+            if (foundObject != null)
+            {
+                return new SuccessResult<Room.View>(foundObject.GetComponent<Room.View>());
+            }
+            else
+            {
+                return new FailResult<Room.View>("Room.View not found");
+            }
+        }
     }
 }
