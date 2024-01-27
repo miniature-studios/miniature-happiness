@@ -6,14 +6,14 @@ namespace Common
 {
     public static class CenterOfMassTools
     {
-        public static Vector2 GetCenterOfMass(this List<Vector2Int> positions)
+        public static Vector2 GetCenterOfMass(this IEnumerable<Vector2Int> positions)
         {
             Vector2 vectorSum = new();
             foreach (Vector2Int pos in positions)
             {
                 vectorSum += pos;
             }
-            vectorSum /= positions.Count;
+            vectorSum /= positions.Count();
             List<Vector2> variants =
                 new()
                 {
