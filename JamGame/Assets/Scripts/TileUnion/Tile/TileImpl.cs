@@ -6,9 +6,17 @@ using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TileUnion.Tile
 {
+    public enum State
+    {
+        Normal,
+        Selected,
+        SelectedAndErrored
+    }
+
     [SelectionBase]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(View))]
@@ -35,14 +43,13 @@ namespace TileUnion.Tile
         public List<WallCollection> RawWalls = new();
         public List<CornerCollection> Corners = new();
         public List<GameObject> CenterPrefabs = new();
-        public View TileView;
 
         [SerializeField]
         private Dictionary<Direction, List<WallType>> cachedWalls;
 
         [ReadOnly]
         [SerializeField]
-        private TileState currentState = TileState.Normal;
+        private State currentState = State.Normal;
 
         public Vector2Int Position => position;
         public int Rotation => rotation;
@@ -60,6 +67,8 @@ namespace TileUnion.Tile
         private GameObject tileToProject;
         public GameObject TileToProject => tileToProject;
 
+        public UnityEvent<State> StateChanged;
+
         private Dictionary<Direction, List<WallType>> Walls
         {
             get
@@ -70,16 +79,6 @@ namespace TileUnion.Tile
                 }
                 return cachedWalls;
             }
-        }
-
-        private readonly float selectLiftingHeight = 3;
-        private float unselectedYPosition;
-        private float selectedYPosition;
-
-        private void Awake()
-        {
-            unselectedYPosition = transform.position.y;
-            selectedYPosition = unselectedYPosition + selectLiftingHeight;
         }
 
         public struct WallTypeMatch
@@ -229,38 +228,14 @@ namespace TileUnion.Tile
             return Corners.Find(x => x.Place == imaginePlace);
         }
 
-        public enum TileState
-        {
-            Normal,
-            Selected,
-            SelectedAndErrored
-        }
-
-        public void SetTileState(TileState state)
+        public void SetTileState(State state)
         {
             if (state == currentState)
             {
                 return;
             }
-
             currentState = state;
-            View.State viewState = currentState switch
-            {
-                TileState.Normal => View.State.Default,
-                TileState.Selected => View.State.Selected,
-                TileState.SelectedAndErrored => View.State.SelectedOverlapping,
-                _ => throw new InvalidOperationException()
-            };
-
-            float newY = currentState switch
-            {
-                TileState.Normal => unselectedYPosition,
-                TileState.Selected => selectedYPosition,
-                TileState.SelectedAndErrored => selectedYPosition,
-                _ => throw new InvalidOperationException()
-            };
-            transform.SetYPosition(newY);
-            TileView.SetMaterial(viewState);
+            StateChanged?.Invoke(currentState);
         }
 
         public void SetPosition(GridProperties gridProperties, Vector2Int newPosition)

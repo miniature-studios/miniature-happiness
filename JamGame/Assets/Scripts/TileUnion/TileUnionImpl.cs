@@ -170,7 +170,7 @@ namespace TileUnion
             return new SuccessResult();
         }
 
-        public void ApplyTileUnionState(TileImpl.TileState state)
+        public void ApplyTileUnionState(State state)
         {
             foreach (TileImpl tile in tiles)
             {
@@ -189,7 +189,7 @@ namespace TileUnion
         {
             foreach (TileImpl tile in tiles)
             {
-                tile.SetTileState(TileImpl.TileState.SelectedAndErrored);
+                tile.SetTileState(State.SelectedAndErrored);
             }
             _ = StartCoroutine(ShowInvalidPlacingRoutine());
         }
@@ -199,7 +199,7 @@ namespace TileUnion
             yield return new WaitForSecondsRealtime(selectedDuration);
             foreach (TileImpl tile in tiles)
             {
-                tile.SetTileState(TileImpl.TileState.Normal);
+                tile.SetTileState(State.Normal);
             }
         }
 
@@ -366,9 +366,7 @@ namespace TileUnion
             Vector2 firstCenter = Vector2.zero;
             if (considerCenterOfMass)
             {
-                firstCenter = CenterOfMassTools.GetCenterOfMass(
-                    tiles.Select(x => x.Position).ToList()
-                );
+                firstCenter = tiles.Select(x => x.Position).GetCenterOfMass();
             }
 
             rotation++;
@@ -381,9 +379,7 @@ namespace TileUnion
 
             if (considerCenterOfMass)
             {
-                Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                    tiles.Select(x => x.Position).ToList()
-                );
+                Vector2 secondCenter = tiles.Select(x => x.Position).GetCenterOfMass();
                 Vector2 delta = firstCenter - secondCenter;
                 foreach (TileImpl tile in tiles)
                 {

@@ -124,7 +124,7 @@ namespace TileBuilder
                 unionInstance.CreateCache();
                 unionInstance.SetColliderActive(false);
                 unionInstance.SetPosition(stashPosition);
-                unionInstance.ApplyTileUnionState(TileImpl.TileState.Selected);
+                unionInstance.ApplyTileUnionState(State.Selected);
                 unionInstance.IsolateUpdate();
                 unionInstance.gameObject.SetActive(false);
             }
@@ -212,7 +212,7 @@ namespace TileBuilder
                 if (union.Position != stashPosition)
                 {
                     union.SetPosition(stashPosition);
-                    union.ApplyTileUnionState(TileImpl.TileState.Selected);
+                    union.ApplyTileUnionState(State.Selected);
                     union.gameObject.SetActive(false);
                 }
             }
@@ -277,7 +277,7 @@ namespace TileBuilder
                 )
             )
             {
-                stashTileUnion.ApplyTileUnionState(TileImpl.TileState.SelectedAndErrored);
+                stashTileUnion.ApplyTileUnionState(State.SelectedAndErrored);
             }
         }
 

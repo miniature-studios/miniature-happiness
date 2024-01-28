@@ -23,11 +23,21 @@ namespace Level.Inventory.Room
         public CoreModel CoreModel => coreModel;
 
         private bool isHovered = false;
-        private RectTransform canvas;
+        private InputActions inputActions;
 
         private void Awake()
         {
-            canvas = FindObjectOfType<Canvas>().GetComponent<RectTransform>();
+            inputActions = new();
+        }
+
+        private void OnEnable()
+        {
+            inputActions.Enable();
+        }
+
+        private void OnDisable()
+        {
+            inputActions.Disable();
         }
 
         public void SetCoreModel(CoreModel coreModel)
@@ -37,20 +47,17 @@ namespace Level.Inventory.Room
 
         public void Update()
         {
-            if (Input.GetKey(KeyCode.LeftControl) && isHovered)
+            if (inputActions.UI.ExtendInventoryTileInfo.IsPressed() && isHovered)
             {
-                if (!extendedView.gameObject.activeSelf)
+                if (!extendedView.IsVisible)
                 {
-                    extendedView.gameObject.SetActive(true);
-                    extendedView.transform.SetParent(canvas);
+                    extendedView.Show();
+                    extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
                 }
-                extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
-                extendedView.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
             }
-            else if (extendedView.gameObject.activeSelf)
+            else if (extendedView.IsVisible)
             {
-                extendedView.gameObject.SetActive(false);
-                extendedView.transform.SetParent(transform);
+                extendedView.Hide();
             }
         }
 

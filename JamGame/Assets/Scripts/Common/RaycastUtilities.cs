@@ -30,8 +30,7 @@ namespace Common
         {
             List<RaycastResult> results = new();
             EventSystem.current.RaycastAll(pointerData, results);
-
-            return results.Count < 1 ? null : results.Select(x => x.gameObject);
+            return results.Select(x => x.gameObject);
         }
 
         private static PointerEventData ScreenPosToPointerData(Vector2 screenPos)
