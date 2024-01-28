@@ -366,9 +366,7 @@ namespace TileUnion
             Vector2 firstCenter = Vector2.zero;
             if (considerCenterOfMass)
             {
-                firstCenter = CenterOfMassTools.GetCenterOfMass(
-                    tiles.Select(x => x.Position).ToList()
-                );
+                firstCenter = tiles.Select(x => x.Position).GetCenterOfMass();
             }
 
             rotation++;
@@ -381,9 +379,7 @@ namespace TileUnion
 
             if (considerCenterOfMass)
             {
-                Vector2 secondCenter = CenterOfMassTools.GetCenterOfMass(
-                    tiles.Select(x => x.Position).ToList()
-                );
+                Vector2 secondCenter = tiles.Select(x => x.Position).GetCenterOfMass();
                 Vector2 delta = firstCenter - secondCenter;
                 foreach (TileImpl tile in tiles)
                 {
