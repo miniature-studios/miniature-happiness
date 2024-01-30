@@ -92,7 +92,7 @@ namespace TileUnion.Tile
                 {
                     State.Normal => unselectedYPosition,
                     State.Selected => selectedYPosition,
-                    State.SelectedAndErrored => selectedYPosition,
+                    State.SelectedAndErrored => unselectedYPosition,
                     _ => throw new InvalidOperationException()
                 };
                 tileBase.SetYPosition(newY);

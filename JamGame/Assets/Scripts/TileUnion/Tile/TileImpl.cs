@@ -198,10 +198,6 @@ namespace TileUnion.Tile
 
         private CornerType ChooseCornerForCorridor(WallType[] walls)
         {
-            if (walls[0] is WallType.Door && walls[3] is WallType.Door)
-            {
-                return CornerType.OutsideMiddle;
-            }
             return (
                 walls[0].IsWallForCorridor(),
                 walls[1].IsWallForCorridor(),
@@ -210,12 +206,9 @@ namespace TileUnion.Tile
             ) switch
             {
                 (true, _, _, true) => CornerType.Inside,
-                (true, _, true, _) => CornerType.WallRight,
-                (_, true, _, true) => CornerType.WallLeft,
-                (_, true, true, _) => CornerType.OutsideMiddle,
-                (true, true, _, _) => CornerType.OutsideRight,
-                (_, _, true, true) => CornerType.OutsideLeft,
-                _ => CornerType.None,
+                (true, _, _, _) => CornerType.WallRight,
+                (_, _, _, true) => CornerType.WallLeft,
+                (false, _, _, false) => CornerType.OutsideMiddle,
             };
         }
 
