@@ -14,6 +14,7 @@ namespace TileUnion.Tile
     {
         Normal,
         Selected,
+        Errored,
         SelectedAndErrored
     }
 
