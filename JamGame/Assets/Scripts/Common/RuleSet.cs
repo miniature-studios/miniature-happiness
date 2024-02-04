@@ -1,17 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Common
 {
+    public enum MatchType
+    {
+        Includes,
+        Excludes
+    }
+
     public struct Match<T, R>
         where T : Enum
     {
         public T Target;
         public R Result;
+        public MatchType MatchType;
 
         public bool Pass(T match)
         {
-            return match.HasFlag(Target);
+            return MatchType switch
+            {
+                MatchType.Includes => match.HasFlag(Target),
+                MatchType.Excludes
+                    => (Unsafe.As<T, int>(ref Target) & Unsafe.As<T, int>(ref match)) == 0,
+                _ => throw new ArgumentException()
+            };
         }
     }
 

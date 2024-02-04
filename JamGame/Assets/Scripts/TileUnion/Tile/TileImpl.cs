@@ -144,6 +144,7 @@ namespace TileUnion.Tile
         [Flags]
         public enum WallCross
         {
+            None = 0,
             Up = 1,
             Down = 2,
             Left = 4,
@@ -208,7 +209,8 @@ namespace TileUnion.Tile
                             new() { Target = WallCross.Right, Result = CornerType.WallLeft },
                             new()
                             {
-                                Target = WallCross.Left | WallCross.Up,
+                                MatchType = MatchType.Excludes,
+                                Target = WallCross.Down | WallCross.Right,
                                 Result = CornerType.OutsideMiddle
                             },
                         },
@@ -230,7 +232,7 @@ namespace TileUnion.Tile
                     DecideType decideType = marks.Contains("Corridor")
                         ? DecideType.Corridor
                         : DecideType.Default;
-                    WallCross wallCross = default;
+                    WallCross wallCross = WallCross.None;
                     if (GetActiveWallType(direction).IsWall(decideType))
                     {
                         wallCross |= WallCross.Down;
