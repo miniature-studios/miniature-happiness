@@ -24,15 +24,14 @@ namespace Employee
 
         [SerializeField]
         private List<AnimationByState> rawAnimationsByState;
-        private Lazy<Dictionary<State, string>> animationsByState;
-        private Dictionary<State, string> AnimationsByState => animationsByState.Value;
+        private Dictionary<State, string> AnimationsByState =>
+            new Lazy<Dictionary<State, string>>(
+                rawAnimationsByState.ToDictionary(key => key.State, value => value.AnimationName)
+            ).Value;
 
         private void Start()
         {
             employee = GetComponent<EmployeeImpl>();
-            animationsByState = new Lazy<Dictionary<State, string>>(
-                rawAnimationsByState.ToDictionary(key => key.State, value => value.AnimationName)
-            );
             employee.OnStateChanged += EmployeeStateChanged;
         }
 
