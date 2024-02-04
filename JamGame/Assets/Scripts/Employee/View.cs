@@ -1,17 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Overlay;
 using UnityEngine;
 
 namespace Employee
 {
+    [Serializable]
+    internal struct AnimationByState
+    {
+        public string AnimationName;
+        public State State;
+    }
+
     [RequireComponent(typeof(EmployeeImpl))]
     [AddComponentMenu("Scripts/Employee/Employee.View")]
     public partial class View : MonoBehaviour
     {
         private EmployeeImpl employee;
 
+        [SerializeField]
+        private Animator animator;
+
+        [SerializeField]
+        private List<AnimationByState> rawAnimationsByState;
+        private Lazy<Dictionary<State, string>> animationsByState;
+        private Dictionary<State, string> AnimationsByState => animationsByState.Value;
+
         private void Start()
         {
             employee = GetComponent<EmployeeImpl>();
+            animationsByState = new Lazy<Dictionary<State, string>>(
+                rawAnimationsByState.ToDictionary(key => key.State, value => value.AnimationName)
+            );
+            employee.OnStateChanged += EmployeeStateChanged;
+        }
+
+        private void EmployeeStateChanged(State state)
+        {
+            animator.Play(AnimationsByState[state]);
         }
 
         private void Update()
@@ -29,7 +56,7 @@ namespace Employee
     public partial class View : IOverlayRenderer<Stress>
     {
         [SerializeField]
-        private MeshRenderer meshRenderer;
+        private SkinnedMeshRenderer meshRenderer;
 
         private Stress appliedStressOverlay;
 

@@ -34,7 +34,7 @@ MonoBehaviour:
     - rid: 1908735064151687168
       type: {class: DayStart, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        morningMoney: 500
+        morningMoney: 15000
         duration: 1
     - rid: 1908735064151687169
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
@@ -48,7 +48,10 @@ MonoBehaviour:
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 1908735064151687179
+        - rid: 2702896555545329665
+        - rid: 2702896555545329666
+        - rid: 2702896555545329667
+        - rid: 2702896555545329668
         mode: 1
         shopRooms:
         - rid: 1908735064151687180
@@ -63,7 +66,7 @@ MonoBehaviour:
       type: {class: Working, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          Days_: 0.5
+          Days_: 5
     - rid: 1908735064151687176
       type: {class: PreDayEnd, ns: Level.Config, asm: Assembly-CSharp}
       data: 
@@ -75,13 +78,6 @@ MonoBehaviour:
     - rid: 1908735064151687178
       type: {class: DayEnd, ns: Level.Config, asm: Assembly-CSharp}
       data: 
-    - rid: 1908735064151687179
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        name: Jonh
-        hireCost: 150
-        profession: Loh
-        quirk: Loh
     - rid: 1908735064151687180
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -105,3 +101,31 @@ MonoBehaviour:
       type: {class: LoadLevel, ns: Level.Config, asm: Assembly-CSharp}
       data:
         buildingConfig: {fileID: 11400000, guid: 5de359c410ba2a849ab24ac0f1cba9e8, type: 2}
+    - rid: 2702896555545329665
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        name: Jonh
+        hireCost: 150
+        profession: Loh
+        quirk: Loh
+    - rid: 2702896555545329666
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        name: Jonha
+        hireCost: 150
+        profession: Loh
+        quirk: Loh
+    - rid: 2702896555545329667
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        name: Jonhh
+        hireCost: 150
+        profession: Loh
+        quirk: Loh
+    - rid: 2702896555545329668
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        name: Jonhjhjg
+        hireCost: 150
+        profession: Loh
+        quirk: Loh

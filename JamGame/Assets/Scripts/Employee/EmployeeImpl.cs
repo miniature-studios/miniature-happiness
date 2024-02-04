@@ -9,22 +9,33 @@ using UnityEngine;
 
 namespace Employee
 {
+    public enum State
+    {
+        Idle,
+        Walking,
+        SatisfyingNeed
+    }
+
     [SelectionBase]
     [RequireComponent(typeof(ControllerImpl))]
     [RequireComponent(typeof(StressEffect))]
     [AddComponentMenu("Scripts/Employee/Employee")]
     public class EmployeeImpl : MonoBehaviour
     {
-        private enum State
-        {
-            Idle,
-            Walking,
-            SatisfyingNeed
-        }
-
         [SerializeField]
         [ReadOnly]
         private State state = State.Idle;
+        public State State
+        {
+            get => state;
+            private set
+            {
+                state = value;
+                OnStateChanged?.Invoke(state);
+            }
+        }
+
+        public event Action<State> OnStateChanged;
 
         [SerializeField]
         private NeedProviderManager needProviderManager;
@@ -80,7 +91,7 @@ namespace Employee
             Stress.UpdateStress(needs, Time.deltaTime);
             UpdateBuffs(Time.deltaTime);
 
-            switch (state)
+            switch (State)
             {
                 case State.Idle:
                     targetNeedProvider = GetTargetNeedProvider();
@@ -90,7 +101,7 @@ namespace Employee
                         return;
                     }
 
-                    state = State.Walking;
+                    State = State.Walking;
                     controller.SetDestination(targetNeedProvider.transform.position);
                     break;
                 case State.Walking:
@@ -99,14 +110,14 @@ namespace Employee
                         || targetNeedProvider.NeedType != topPriorityNeed.NeedType
                     )
                     {
-                        state = State.Idle;
+                        State = State.Idle;
                     }
                     break;
                 case State.SatisfyingNeed:
                     satisfyingNeedRemaining -= Time.deltaTime;
                     if (satisfyingNeedRemaining < 0.0f)
                     {
-                        state = State.Idle;
+                        State = State.Idle;
                         currentlySatisfyingNeed.Satisfy();
                         latestSatisfiedNeed = currentlySatisfyingNeed;
                         incomeGenerator.NeedComplete(currentlySatisfyingNeed);
@@ -161,7 +172,7 @@ namespace Employee
         {
             needs.Sort((x, y) => x.Satisfied.CompareTo(y.Satisfied));
 
-            if (state == State.Idle)
+            if (State == State.Idle)
             {
                 // Force select top-priority need.
                 topPriorityNeed = null;
@@ -237,13 +248,13 @@ namespace Employee
         {
             if (targetNeedProvider.TryTake(this))
             {
-                state = State.SatisfyingNeed;
+                State = State.SatisfyingNeed;
                 satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
                 currentlySatisfyingNeed = topPriorityNeed;
             }
             else
             {
-                state = State.Idle;
+                State = State.Idle;
             }
         }
 
