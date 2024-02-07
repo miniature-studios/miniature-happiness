@@ -9,6 +9,71 @@ namespace Location
     [AddComponentMenu("Scripts/Location/Location.NeedProvider")]
     public class NeedProvider : MonoBehaviour
     {
+        public class Reservation
+        {
+            private EmployeeImpl employee;
+            public EmployeeImpl Employee => employee;
+
+            protected Reservation(EmployeeImpl employee)
+            {
+                this.employee = employee;
+            }
+        }
+
+        private class ReservationConstructor : Reservation
+        {
+            public ReservationConstructor(EmployeeImpl employee)
+                : base(employee) { }
+        }
+
+        public class PlaceInWaitingLine
+        {
+            public EmployeeImpl Employee => employee;
+
+            private NeedProvider needProvider;
+            private EmployeeImpl employee;
+            private PlaceInWaitingLine next;
+
+            protected PlaceInWaitingLine(
+                PlaceInWaitingLine next,
+                EmployeeImpl employee,
+                NeedProvider needProvider
+            )
+            {
+                this.next = next;
+                this.employee = employee;
+                this.needProvider = needProvider;
+            }
+
+            public EmployeeImpl GetNextInLine()
+            {
+                return next?.employee;
+            }
+
+            public void Drop()
+            {
+                PlaceInWaitingLine previous_place = needProvider.FindPreviousPlaceInWaitingLine(
+                    this
+                );
+                if (previous_place != null)
+                {
+                    previous_place.next = next;
+                }
+
+                _ = needProvider.waitingLine.Remove(this);
+            }
+        }
+
+        private class PlaceInWaitingLineConstructor : PlaceInWaitingLine
+        {
+            public PlaceInWaitingLineConstructor(
+                PlaceInWaitingLine next,
+                EmployeeImpl employee,
+                NeedProvider needProvider
+            )
+                : base(next, employee, needProvider) { }
+        }
+
         public enum FilterType
         {
             None,
@@ -82,17 +147,43 @@ namespace Location
 
         public NeedType NeedType;
 
+        private Reservation currentReservation = null;
         private EmployeeImpl currentEmployee = null;
 
         private readonly List<NeedModifiers> registeredModifiers = new();
 
-        public bool TryTake(EmployeeImpl employee)
+        private List<PlaceInWaitingLine> waitingLine = new();
+
+        public Reservation TryReserve(EmployeeImpl employee)
         {
             if (!IsAvailable(employee))
             {
-                return false;
+                return null;
             }
 
+            if (waitingLine.Count == 0 || waitingLine[0].Employee != employee)
+            {
+                waitingLine.Insert(0, new PlaceInWaitingLineConstructor(null, employee, this));
+            }
+            return new ReservationConstructor(employee);
+        }
+
+        public void Take(Reservation reservation)
+        {
+            if (reservation == null)
+            {
+                Debug.LogError("Invalid reservation provided");
+                return;
+            }
+
+            if (reservation != currentReservation)
+            {
+                Debug.LogError("Tried to take reservation that don't belong to this NeedProvider");
+                return;
+            }
+
+            currentReservation = null;
+            EmployeeImpl employee = reservation.Employee;
             filter.Take(employee);
             currentEmployee = employee;
 
@@ -105,8 +196,6 @@ namespace Location
             {
                 employee.BindToNeedProvider(this);
             }
-
-            return true;
         }
 
         // TODO: Control release inside NeedProvider
@@ -116,11 +205,56 @@ namespace Location
             {
                 currentEmployee.UnregisterModifier(modifier);
             }
+
+            if (waitingLine[0].Employee != currentEmployee)
+            {
+                Debug.LogError("Wrong waiting line construction detected");
+                return;
+            }
+            waitingLine.RemoveAt(0);
         }
 
         public bool IsAvailable(EmployeeImpl employee)
         {
+            if (currentReservation != null && currentReservation.Employee != employee)
+            {
+                return false;
+            }
+
             return filter.IsEmployeeAllowed(employee);
+        }
+
+        public PlaceInWaitingLine TryLineUp(EmployeeImpl employee)
+        {
+            if (waitingLine.Count == 0)
+            {
+                Debug.LogWarning(
+                    "Employee tried to line up when there's no other employees in line"
+                );
+            }
+
+            if (!filter.IsEmployeeAllowed(employee))
+            {
+                return null;
+            }
+
+            PlaceInWaitingLine last = waitingLine[^1];
+            PlaceInWaitingLineConstructor place = new(last, employee, this);
+            waitingLine.Add(place);
+            return place;
+        }
+
+        private PlaceInWaitingLine FindPreviousPlaceInWaitingLine(PlaceInWaitingLine current)
+        {
+            foreach (PlaceInWaitingLine place in waitingLine)
+            {
+                if (place.GetNextInLine() == current.Employee)
+                {
+                    return place;
+                }
+            }
+
+            return null;
         }
 
         public void RegisterModifier(NeedModifiers modifiers)
@@ -139,6 +273,21 @@ namespace Location
             if (!registeredModifiers.Remove(modifiers))
             {
                 Debug.LogWarning("Modifiers to unregister not found");
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (waitingLine.Count != 0)
+            {
+                List<Vector3> points = new() { transform.position };
+                foreach (PlaceInWaitingLine place in waitingLine)
+                {
+                    points.Add(place.Employee.transform.position);
+                }
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawLineStrip(new ReadOnlySpan<Vector3>(points.ToArray()), false);
             }
         }
     }

@@ -19,6 +19,7 @@ namespace Employee
         {
             Idle,
             Walking,
+            InWaitingLine,
             SatisfyingNeed
         }
 
@@ -66,6 +67,12 @@ namespace Employee
 
         private BuffsNeedModifiersPool buffsNeedModifiers;
 
+        private NeedProvider.PlaceInWaitingLine placeInWaitingLine = null;
+
+        [MinMaxSlider(0, 10, true)]
+        [SerializeField]
+        private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
+
         private void Start()
         {
             controller = GetComponent<ControllerImpl>();
@@ -92,15 +99,65 @@ namespace Employee
 
                     state = State.Walking;
                     controller.SetDestination(targetNeedProvider.transform.position);
+
                     break;
                 case State.Walking:
-                    if (
-                        !targetNeedProvider.IsAvailable(this)
-                        || targetNeedProvider.NeedType != topPriorityNeed.NeedType
-                    )
+                    if (targetNeedProvider.NeedType != topPriorityNeed.NeedType)
                     {
                         state = State.Idle;
                     }
+
+                    if (!targetNeedProvider.IsAvailable(this))
+                    {
+                        placeInWaitingLine = targetNeedProvider.TryLineUp(this);
+                        if (placeInWaitingLine == null)
+                        {
+                            state = State.Idle;
+                            break;
+                        }
+
+                        state = State.InWaitingLine;
+                    }
+
+                    break;
+                case State.InWaitingLine:
+                    if (targetNeedProvider.NeedType != topPriorityNeed.NeedType)
+                    {
+                        placeInWaitingLine.Drop();
+                        placeInWaitingLine = null;
+                        state = State.Idle;
+                    }
+
+                    if (placeInWaitingLine.GetNextInLine() == null)
+                    {
+                        state = State.Walking;
+                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+                        break;
+                    }
+
+                    Vector3 next_in_line_position = placeInWaitingLine
+                        .GetNextInLine()
+                        .transform.position;
+
+                    Vector3 direction_to_next_in_line = transform.position - next_in_line_position;
+                    direction_to_next_in_line.z = 0;
+                    float distance_to_next_in_line = direction_to_next_in_line.magnitude;
+
+                    if (distance_to_next_in_line < keepDistanceFromNextInLine.x)
+                    {
+                        // NOTE: do we need to process this case?
+                        break;
+                    }
+
+                    if (distance_to_next_in_line > keepDistanceFromNextInLine.y)
+                    {
+                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+                        controller.SetDestination(next_in_line_position);
+                        break;
+                    }
+
+                    controller.SetNavigationMode(ControllerImpl.NavigationMode.FreeMove);
+
                     break;
                 case State.SatisfyingNeed:
                     satisfyingNeedRemaining -= Time.deltaTime;
@@ -115,6 +172,7 @@ namespace Employee
                         targetNeedProvider.Release();
                         targetNeedProvider = null;
                     }
+
                     break;
             }
         }
@@ -233,18 +291,24 @@ namespace Employee
             needProviderBindings.Add(need_provider.NeedType, need_provider);
         }
 
-        private void FinishedMoving()
+        private NeedProvider.Reservation needProviderReservation = null;
+
+        private void TouchedNeedProvider()
         {
-            if (targetNeedProvider.TryTake(this))
-            {
-                state = State.SatisfyingNeed;
-                satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
-                currentlySatisfyingNeed = topPriorityNeed;
-            }
-            else
+            needProviderReservation = targetNeedProvider.TryReserve(this);
+            if (needProviderReservation == null)
             {
                 state = State.Idle;
+                return;
             }
+        }
+
+        private void ReachedNeedProvider()
+        {
+            targetNeedProvider.Take(needProviderReservation);
+            state = State.SatisfyingNeed;
+            satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
+            currentlySatisfyingNeed = topPriorityNeed;
         }
 
         public void RegisterModifier(NeedModifiers modifiers)
@@ -280,12 +344,14 @@ namespace Employee
         {
             controller = controller != null ? controller : GetComponent<ControllerImpl>();
 
-            controller.OnFinishedMoving += FinishedMoving;
+            controller.OnTouchedNeedProvider += TouchedNeedProvider;
+            controller.OnReachedNeedProvider += ReachedNeedProvider;
         }
 
         private void OnDisable()
         {
-            controller.OnFinishedMoving -= FinishedMoving;
+            controller.OnTouchedNeedProvider -= TouchedNeedProvider;
+            controller.OnReachedNeedProvider -= ReachedNeedProvider;
         }
 
         // TODO: match type of effect with corresponding Executor type.

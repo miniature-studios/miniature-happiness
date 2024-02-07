@@ -12,8 +12,15 @@ namespace Employee.Controller
         private enum State
         {
             Idle,
+            ApproachingNeedProvider,
             Moving,
             BuildingPath,
+        }
+
+        public enum NavigationMode
+        {
+            Navmesh,
+            FreeMove
         }
 
         [SerializeField]
@@ -30,17 +37,11 @@ namespace Employee.Controller
 
         private State state = State.Idle;
 
-        public Vector3 DesiredVelocityNormalized => Vector3.zero; // (agent.nextPosition - transform.position).normalized;
+        private NavigationMode navigationMode = NavigationMode.Navmesh;
 
         public delegate void FinishedMovingHandler();
-        public event FinishedMovingHandler OnFinishedMoving;
-
-        public void SetDestination(Vector3 target_position)
-        {
-            currentDestination = target_position;
-            _ = agent.SetDestination(currentDestination);
-            state = State.BuildingPath;
-        }
+        public event FinishedMovingHandler OnReachedNeedProvider;
+        public event FinishedMovingHandler OnTouchedNeedProvider;
 
         private void Awake()
         {
@@ -70,21 +71,59 @@ namespace Employee.Controller
                     break;
                 case State.Moving:
                     CorrectMovement();
+                    if (agent.remainingDistance < agent.radius)
+                    {
+                        state = State.ApproachingNeedProvider;
+                        OnTouchedNeedProvider?.Invoke();
+                    }
+                    break;
+                case State.ApproachingNeedProvider:
+                    CorrectMovement();
                     if (agent.remainingDistance < 0.01f)
                     {
                         state = State.Idle;
-                        OnFinishedMoving?.Invoke();
+                        OnReachedNeedProvider?.Invoke();
                     }
                     break;
             }
         }
 
+        public void SetDestination(Vector3 target_position)
+        {
+            currentDestination = target_position;
+            _ = agent.SetDestination(currentDestination);
+            state = State.BuildingPath;
+        }
+
+        public void SetNavigationMode(NavigationMode mode)
+        {
+            if (navigationMode == mode)
+            {
+                return;
+            }
+
+            navigationMode = mode;
+            agent.enabled ^= true;
+
+            if (mode == NavigationMode.FreeMove)
+            {
+                state = State.Idle;
+            }
+            else
+            {
+                state = State.BuildingPath;
+            }
+        }
+
         private void CorrectMovement()
         {
-            agent.speed =
+            float max_speed =
                 (1.0f - personalSpace.GetCrowdMetrics())
                 * maxVelocity
                 * maxVelocityMultiplierByEffects;
+            max_speed = Mathf.Clamp(max_speed, 0.0f, float.MaxValue);
+
+            agent.speed = max_speed;
 
             Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
             if (steering.sqrMagnitude > 0.0001)
@@ -104,6 +143,13 @@ namespace Employee.Controller
 
         public float? ComputePathLength(NeedProvider need_provider)
         {
+            if (!agent.enabled)
+            {
+                Vector3 distance = need_provider.transform.position - transform.position;
+                distance.z = 0;
+                return distance.magnitude;
+            }
+
             NavMeshPath path = new();
             if (agent.CalculatePath(need_provider.transform.position, path))
             {
@@ -120,6 +166,14 @@ namespace Employee.Controller
             }
 
             return null;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + (steering * 10));
         }
 
         private float maxVelocityMultiplierByEffects = 1.0f;
@@ -144,16 +198,6 @@ namespace Employee.Controller
             {
                 maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
             }
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            //Debug.Log(DesiredVelocityNormalized * 10);
-            Gizmos.DrawLine(
-                transform.position,
-                transform.position + (DesiredVelocityNormalized * 10)
-            );
         }
     }
 }

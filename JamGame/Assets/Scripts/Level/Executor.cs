@@ -149,6 +149,17 @@ namespace Level
                 );
             }
 
+            for (int i = 0; i < 3; i++)
+            {
+                Result res = employeeManager.AddEmployee(
+                    new EmployeeConfig($"test{i}", 0, "proff", "")
+                );
+                if (res.Failure)
+                {
+                    Debug.LogError(res.Error);
+                }
+            }
+
             ActionEndNotify?.Invoke();
         }
 
