@@ -99,7 +99,8 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
-            for (int i = 0; i < 3; i++)
+            _ = tileBuilderController.GrowMeetingRoomForEmployees(5);
+            for (int i = 0; i < 5; i++)
             {
                 Result res = employeeManager.AddEmployee(
                     new EmployeeConfig($"test{i}", 0, "proff", "")
