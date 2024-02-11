@@ -9,23 +9,6 @@ namespace Location
     [AddComponentMenu("Scripts/Location/Location.NeedProvider")]
     public class NeedProvider : MonoBehaviour
     {
-        public class Reservation
-        {
-            private EmployeeImpl employee;
-            public EmployeeImpl Employee => employee;
-
-            protected Reservation(EmployeeImpl employee)
-            {
-                this.employee = employee;
-            }
-        }
-
-        private class ReservationConstructor : Reservation
-        {
-            public ReservationConstructor(EmployeeImpl employee)
-                : base(employee) { }
-        }
-
         public class PlaceInWaitingLine
         {
             public EmployeeImpl Employee => employee;
@@ -61,6 +44,12 @@ namespace Location
                 }
 
                 _ = needProvider.waitingLine.Remove(this);
+            }
+
+            // TODO: private
+            public void RemoveNext()
+            {
+                next = null;
             }
         }
 
@@ -147,44 +136,20 @@ namespace Location
 
         public NeedType NeedType;
 
-        private Reservation currentReservation = null;
         private EmployeeImpl currentEmployee = null;
-
-        private readonly List<NeedModifiers> registeredModifiers = new();
 
         private List<PlaceInWaitingLine> waitingLine = new();
 
-        public Reservation TryReserve(EmployeeImpl employee)
+        public void Take(PlaceInWaitingLine place)
         {
-            if (!IsAvailable(employee))
+            if (place == null || place.GetNextInLine() != null)
             {
-                return null;
-            }
-
-            if (waitingLine.Count == 0 || waitingLine[0].Employee != employee)
-            {
-                waitingLine.Insert(0, new PlaceInWaitingLineConstructor(null, employee, this));
-            }
-            return new ReservationConstructor(employee);
-        }
-
-        public void Take(Reservation reservation)
-        {
-            if (reservation == null)
-            {
-                Debug.LogError("Invalid reservation provided");
+                Debug.LogError("Invalid waiting line place provided");
                 return;
             }
 
-            if (reservation != currentReservation)
-            {
-                Debug.LogError("Tried to take reservation that don't belong to this NeedProvider");
-                return;
-            }
-
-            currentReservation = null;
-            EmployeeImpl employee = reservation.Employee;
-            filter.Take(employee);
+            // TODO: Do we need to check criterias again?
+            EmployeeImpl employee = place.Employee;
             currentEmployee = employee;
 
             foreach (NeedModifiers modifier in registeredModifiers)
@@ -212,33 +177,41 @@ namespace Location
                 return;
             }
             waitingLine.RemoveAt(0);
+
+            if (waitingLine.Count > 0)
+            {
+                waitingLine[0].RemoveNext();
+            }
         }
 
         public bool IsAvailable(EmployeeImpl employee)
         {
-            if (currentReservation != null && currentReservation.Employee != employee)
-            {
-                return false;
-            }
-
             return filter.IsEmployeeAllowed(employee);
         }
 
         public PlaceInWaitingLine TryLineUp(EmployeeImpl employee)
         {
-            if (waitingLine.Count == 0)
-            {
-                Debug.LogWarning(
-                    "Employee tried to line up when there's no other employees in line"
-                );
-            }
-
             if (!filter.IsEmployeeAllowed(employee))
             {
                 return null;
             }
 
-            PlaceInWaitingLine last = waitingLine[^1];
+            foreach (PlaceInWaitingLine wl_place in waitingLine)
+            {
+                if (wl_place.Employee == employee)
+                {
+                    Debug.LogError("Employee is already in waiting line");
+                }
+            }
+
+            filter.Take(employee);
+
+            PlaceInWaitingLine last = null;
+            if (waitingLine.Count != 0)
+            {
+                last = waitingLine[^1];
+            }
+
             PlaceInWaitingLineConstructor place = new(last, employee, this);
             waitingLine.Add(place);
             return place;
@@ -256,6 +229,8 @@ namespace Location
 
             return null;
         }
+
+        private readonly List<NeedModifiers> registeredModifiers = new();
 
         public void RegisterModifier(NeedModifiers modifiers)
         {

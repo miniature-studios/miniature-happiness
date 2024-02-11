@@ -1981,6 +1981,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 42303834}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: keepDistanceFromNextInLine.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: keepDistanceFromNextInLine.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].satisfied
       value: Infinity
       objectReference: {fileID: 0}
@@ -1994,7 +2002,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.DecreaseSpeed
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[1].properties.DecreaseSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].properties.DecreaseSpeed
@@ -2014,7 +2026,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.SatisfactionGained
-      value: 800
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[1].properties.SatisfactionGained
+      value: 1600
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].properties.SatisfactionGained

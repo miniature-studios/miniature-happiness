@@ -99,6 +99,17 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
+            for (int i = 0; i < 3; i++)
+            {
+                Result res = employeeManager.AddEmployee(
+                    new EmployeeConfig($"test{i}", 0, "proff", "")
+                );
+                if (res.Failure)
+                {
+                    Debug.LogError(res.Error);
+                }
+            }
+
             meetingStartNeedOverride.Register();
 
             this.CreateGate(
@@ -147,17 +158,6 @@ namespace Level
                     "Cannot change time scale before meeting: "
                         + remove_time_scale_lock_result.Error
                 );
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                Result res = employeeManager.AddEmployee(
-                    new EmployeeConfig($"test{i}", 0, "proff", "")
-                );
-                if (res.Failure)
-                {
-                    Debug.LogError(res.Error);
-                }
             }
 
             ActionEndNotify?.Invoke();

@@ -81,19 +81,17 @@ namespace Location
 
             MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
+            _ = new List<NeedProvider>();
 
             foreach (NeedProvider place in meeting_room_places.Places)
             {
-                NeedProvider.Reservation reservation = place.TryReserve(employee);
-                if (reservation == null)
+                bool taken = employee.TryForceTakeNeedProvider(place);
+                if (!taken)
                 {
                     continue;
                 }
 
-                employee.TeleportToNeedProvider(place);
-                place.Take(reservation);
                 employees.Add(employee);
-
                 return new SuccessResult();
             }
 

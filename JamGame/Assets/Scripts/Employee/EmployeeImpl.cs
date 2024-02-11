@@ -40,6 +40,8 @@ namespace Employee
 
         private ControllerImpl controller;
 
+        [ReadOnly]
+        [SerializeField]
         private List<NeedModifiers> registeredModifiers = new();
 
         [SerializeField]
@@ -107,17 +109,14 @@ namespace Employee
                         state = State.Idle;
                     }
 
-                    if (!targetNeedProvider.IsAvailable(this))
+                    placeInWaitingLine = targetNeedProvider.TryLineUp(this);
+                    if (placeInWaitingLine == null)
                     {
-                        placeInWaitingLine = targetNeedProvider.TryLineUp(this);
-                        if (placeInWaitingLine == null)
-                        {
-                            state = State.Idle;
-                            break;
-                        }
-
-                        state = State.InWaitingLine;
+                        state = State.Idle;
+                        break;
                     }
+
+                    state = State.InWaitingLine;
 
                     break;
                 case State.InWaitingLine:
@@ -130,7 +129,6 @@ namespace Employee
 
                     if (placeInWaitingLine.GetNextInLine() == null)
                     {
-                        state = State.Walking;
                         controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
                         break;
                     }
@@ -140,7 +138,7 @@ namespace Employee
                         .transform.position;
 
                     Vector3 direction_to_next_in_line = transform.position - next_in_line_position;
-                    direction_to_next_in_line.z = 0;
+                    direction_to_next_in_line.y = 0;
                     float distance_to_next_in_line = direction_to_next_in_line.magnitude;
 
                     if (distance_to_next_in_line < keepDistanceFromNextInLine.x)
@@ -271,9 +269,37 @@ namespace Employee
             return null;
         }
 
-        public void TeleportToNeedProvider(NeedProvider needProvider)
+        public bool TryForceTakeNeedProvider(NeedProvider needProvider)
         {
+            placeInWaitingLine = needProvider.TryLineUp(this);
+            if (placeInWaitingLine == null)
+            {
+                return false;
+            }
+            if (placeInWaitingLine.GetNextInLine() != null)
+            {
+                placeInWaitingLine.Drop();
+                return false;
+            }
+
+            topPriorityNeed = needs
+                .Where(need => need.NeedType == needProvider.NeedType)
+                .FirstOrDefault();
+            if (topPriorityNeed == null)
+            {
+                Debug.LogError(
+                    "Cannot force employee to take place in need provider: Employee don't have matching need"
+                );
+                return false;
+            }
+
+            targetNeedProvider = needProvider;
+
             controller.Teleport(needProvider);
+            controller.SetDestination(needProvider.transform.position);
+
+            state = State.InWaitingLine;
+            return true;
         }
 
         public void BindToNeedProvider(NeedProvider need_provider)
@@ -291,21 +317,18 @@ namespace Employee
             needProviderBindings.Add(need_provider.NeedType, need_provider);
         }
 
-        private NeedProvider.Reservation needProviderReservation = null;
-
-        private void TouchedNeedProvider()
-        {
-            needProviderReservation = targetNeedProvider.TryReserve(this);
-            if (needProviderReservation == null)
-            {
-                state = State.Idle;
-                return;
-            }
-        }
-
         private void ReachedNeedProvider()
         {
-            targetNeedProvider.Take(needProviderReservation);
+            if (placeInWaitingLine.GetNextInLine() != null)
+            {
+                Debug.LogWarning(
+                    "Possible unwanted employee collision at "
+                        + targetNeedProvider.transform.position
+                );
+                return;
+            }
+
+            targetNeedProvider.Take(placeInWaitingLine);
             state = State.SatisfyingNeed;
             satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
             currentlySatisfyingNeed = topPriorityNeed;
@@ -344,13 +367,11 @@ namespace Employee
         {
             controller = controller != null ? controller : GetComponent<ControllerImpl>();
 
-            controller.OnTouchedNeedProvider += TouchedNeedProvider;
             controller.OnReachedNeedProvider += ReachedNeedProvider;
         }
 
         private void OnDisable()
         {
-            controller.OnTouchedNeedProvider -= TouchedNeedProvider;
             controller.OnReachedNeedProvider -= ReachedNeedProvider;
         }
 

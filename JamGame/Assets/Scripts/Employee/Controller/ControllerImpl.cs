@@ -12,7 +12,6 @@ namespace Employee.Controller
         private enum State
         {
             Idle,
-            ApproachingNeedProvider,
             Moving,
             BuildingPath,
         }
@@ -41,7 +40,6 @@ namespace Employee.Controller
 
         public delegate void FinishedMovingHandler();
         public event FinishedMovingHandler OnReachedNeedProvider;
-        public event FinishedMovingHandler OnTouchedNeedProvider;
 
         private void Awake()
         {
@@ -70,14 +68,6 @@ namespace Employee.Controller
                     }
                     break;
                 case State.Moving:
-                    CorrectMovement();
-                    if (agent.remainingDistance < agent.radius)
-                    {
-                        state = State.ApproachingNeedProvider;
-                        OnTouchedNeedProvider?.Invoke();
-                    }
-                    break;
-                case State.ApproachingNeedProvider:
                     CorrectMovement();
                     if (agent.remainingDistance < 0.01f)
                     {
@@ -139,6 +129,7 @@ namespace Employee.Controller
         public void Teleport(NeedProvider needProvider)
         {
             transform.position = needProvider.transform.position + (agent.baseOffset * Vector3.up);
+            state = State.BuildingPath;
         }
 
         public float? ComputePathLength(NeedProvider need_provider)
@@ -146,7 +137,7 @@ namespace Employee.Controller
             if (!agent.enabled)
             {
                 Vector3 distance = need_provider.transform.position - transform.position;
-                distance.z = 0;
+                distance.y = 0;
                 return distance.magnitude;
             }
 
