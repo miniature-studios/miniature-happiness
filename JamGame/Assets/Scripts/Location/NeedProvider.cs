@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Employee;
 using Employee.Needs;
 using UnityEngine;
@@ -253,7 +254,7 @@ namespace Location
 
         private void OnDrawGizmos()
         {
-            if (waitingLine.Count != 0)
+            if (waitingLine.Any())
             {
                 List<Vector3> points = new() { transform.position };
                 foreach (PlaceInWaitingLine place in waitingLine)

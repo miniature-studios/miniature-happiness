@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Location;
 using UnityEngine;
@@ -38,8 +39,7 @@ namespace Employee.Controller
 
         private NavigationMode navigationMode = NavigationMode.Navmesh;
 
-        public delegate void FinishedMovingHandler();
-        public event FinishedMovingHandler OnReachedNeedProvider;
+        public event Action OnReachedNeedProvider;
 
         private void Awake()
         {
@@ -112,7 +112,7 @@ namespace Employee.Controller
                 (1.0f - personalSpace.GetCrowdMetrics())
                 * maxVelocity
                 * maxVelocityMultiplierByEffects;
-            max_speed = Mathf.Clamp(max_speed, 0.0f, float.MaxValue);
+            max_speed = Mathf.Max(max_speed, 0.0f);
 
             agent.speed = max_speed;
 
