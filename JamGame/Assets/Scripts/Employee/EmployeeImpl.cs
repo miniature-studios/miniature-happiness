@@ -19,6 +19,7 @@ namespace Employee
         {
             Idle,
             Walking,
+            InWaitingLine,
             SatisfyingNeed
         }
 
@@ -31,7 +32,7 @@ namespace Employee
 
         [SerializeField]
         private List<Need> needs = new();
-        private Need topPriorityNeed;
+        private Need currentNeed;
         private Need currentlySatisfyingNeed;
         private Need latestSatisfiedNeed;
         private float satisfyingNeedRemaining = 0.0f;
@@ -39,6 +40,8 @@ namespace Employee
 
         private ControllerImpl controller;
 
+        [ReadOnly]
+        [SerializeField]
         private List<NeedModifiers> registeredModifiers = new();
 
         [SerializeField]
@@ -66,6 +69,12 @@ namespace Employee
 
         private BuffsNeedModifiersPool buffsNeedModifiers;
 
+        private NeedProvider.PlaceInWaitingLine placeInWaitingLine = null;
+
+        [MinMaxSlider(0, 10, true)]
+        [SerializeField]
+        private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
+
         private void Start()
         {
             controller = GetComponent<ControllerImpl>();
@@ -92,15 +101,61 @@ namespace Employee
 
                     state = State.Walking;
                     controller.SetDestination(targetNeedProvider.transform.position);
+
                     break;
                 case State.Walking:
-                    if (
-                        !targetNeedProvider.IsAvailable(this)
-                        || targetNeedProvider.NeedType != topPriorityNeed.NeedType
-                    )
+                    if (targetNeedProvider.NeedType != currentNeed.NeedType)
                     {
                         state = State.Idle;
                     }
+
+                    placeInWaitingLine = targetNeedProvider.TryLineUp(this);
+                    if (placeInWaitingLine == null)
+                    {
+                        state = State.Idle;
+                        break;
+                    }
+
+                    state = State.InWaitingLine;
+
+                    break;
+                case State.InWaitingLine:
+                    if (targetNeedProvider.NeedType != currentNeed.NeedType)
+                    {
+                        placeInWaitingLine.Drop();
+                        placeInWaitingLine = null;
+                        state = State.Idle;
+                    }
+
+                    if (placeInWaitingLine.GetNextInLine() == null)
+                    {
+                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+                        break;
+                    }
+
+                    Vector3 next_in_line_position = placeInWaitingLine
+                        .GetNextInLine()
+                        .transform.position;
+
+                    Vector3 direction_to_next_in_line = transform.position - next_in_line_position;
+                    direction_to_next_in_line.y = 0;
+                    float distance_to_next_in_line = direction_to_next_in_line.magnitude;
+
+                    if (distance_to_next_in_line < keepDistanceFromNextInLine.x)
+                    {
+                        // NOTE: do we need to process this case?
+                        break;
+                    }
+
+                    if (distance_to_next_in_line > keepDistanceFromNextInLine.y)
+                    {
+                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+                        controller.SetDestination(next_in_line_position);
+                        break;
+                    }
+
+                    controller.SetNavigationMode(ControllerImpl.NavigationMode.FreeMove);
+
                     break;
                 case State.SatisfyingNeed:
                     satisfyingNeedRemaining -= Time.deltaTime;
@@ -114,7 +169,10 @@ namespace Employee
 
                         targetNeedProvider.Release();
                         targetNeedProvider = null;
+
+                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
                     }
+
                     break;
             }
         }
@@ -164,12 +222,12 @@ namespace Employee
             if (state == State.Idle)
             {
                 // Force select top-priority need.
-                topPriorityNeed = null;
+                currentNeed = null;
             }
 
             foreach (Need need in needs)
             {
-                if (need == topPriorityNeed)
+                if (need == currentNeed)
                 {
                     break;
                 }
@@ -205,7 +263,7 @@ namespace Employee
                     continue;
                 }
 
-                topPriorityNeed = need;
+                currentNeed = need;
                 return selected_provider;
             }
 
@@ -213,9 +271,38 @@ namespace Employee
             return null;
         }
 
-        public void TeleportToNeedProvider(NeedProvider needProvider)
+        public bool TryForceTakeNeedProvider(NeedProvider needProvider)
         {
+            placeInWaitingLine = needProvider.TryLineUp(this);
+            if (placeInWaitingLine == null)
+            {
+                return false;
+            }
+            if (placeInWaitingLine.GetNextInLine() != null)
+            {
+                placeInWaitingLine.Drop();
+                return false;
+            }
+
+            currentNeed = needs
+                .Where(need => need.NeedType == needProvider.NeedType)
+                .FirstOrDefault();
+            if (currentNeed == null)
+            {
+                Debug.LogError(
+                    "Cannot force employee to take place in need provider: Employee don't have matching need"
+                );
+                return false;
+            }
+
+            targetNeedProvider = needProvider;
+
             controller.Teleport(needProvider);
+            controller.SetNavigationMode(ControllerImpl.NavigationMode.FreeMove);
+
+            ReachedNeedProvider();
+
+            return true;
         }
 
         public void BindToNeedProvider(NeedProvider need_provider)
@@ -233,18 +320,22 @@ namespace Employee
             needProviderBindings.Add(need_provider.NeedType, need_provider);
         }
 
-        private void FinishedMoving()
+        private void ReachedNeedProvider()
         {
-            if (targetNeedProvider.TryTake(this))
+            if (placeInWaitingLine.GetNextInLine() != null)
             {
-                state = State.SatisfyingNeed;
-                satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
-                currentlySatisfyingNeed = topPriorityNeed;
+                Debug.LogWarning(
+                    "Possible unwanted employee collision at "
+                        + targetNeedProvider.transform.position
+                );
+                return;
             }
-            else
-            {
-                state = State.Idle;
-            }
+
+            targetNeedProvider.Take(placeInWaitingLine);
+            state = State.SatisfyingNeed;
+
+            satisfyingNeedRemaining = currentNeed.GetProperties().SatisfactionTime;
+            currentlySatisfyingNeed = currentNeed;
         }
 
         public void RegisterModifier(NeedModifiers modifiers)
@@ -280,12 +371,12 @@ namespace Employee
         {
             controller = controller != null ? controller : GetComponent<ControllerImpl>();
 
-            controller.OnFinishedMoving += FinishedMoving;
+            controller.OnReachedNeedProvider += ReachedNeedProvider;
         }
 
         private void OnDisable()
         {
-            controller.OnFinishedMoving -= FinishedMoving;
+            controller.OnReachedNeedProvider -= ReachedNeedProvider;
         }
 
         // TODO: match type of effect with corresponding Executor type.

@@ -81,20 +81,24 @@ namespace Location
 
             MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
-            NeedProvider place = meeting_room_places
-                .Places.Where(place => place.TryTake(employee))
-                .FirstOrDefault();
+            _ = new List<NeedProvider>();
 
-            if (place == null)
+            foreach (NeedProvider place in meeting_room_places.Places)
             {
-                Destroy(employee.gameObject);
-                return new FailResult("Cannot find place in meeting room");
+                bool taken = employee.TryForceTakeNeedProvider(place);
+                if (!taken)
+                {
+                    continue;
+                }
+
+                // TODO: set parent back when meeting ends.
+                employee.transform.SetParent(place.transform, true);
+                employees.Add(employee);
+                return new SuccessResult();
             }
 
-            employee.TeleportToNeedProvider(place);
-            employees.Add(employee);
-
-            return new SuccessResult();
+            Destroy(employee.gameObject);
+            return new FailResult("Cannot find place in meeting room");
         }
     }
 }

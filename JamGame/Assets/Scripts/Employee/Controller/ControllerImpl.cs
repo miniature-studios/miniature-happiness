@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Location;
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace Employee.Controller
             BuildingPath,
         }
 
+        public enum NavigationMode
+        {
+            Navmesh,
+            FreeMove
+        }
+
         [SerializeField]
         private float maxVelocity;
 
@@ -30,17 +37,9 @@ namespace Employee.Controller
 
         private State state = State.Idle;
 
-        public Vector3 DesiredVelocityNormalized => Vector3.zero; // (agent.nextPosition - transform.position).normalized;
+        private NavigationMode navigationMode = NavigationMode.Navmesh;
 
-        public delegate void FinishedMovingHandler();
-        public event FinishedMovingHandler OnFinishedMoving;
-
-        public void SetDestination(Vector3 target_position)
-        {
-            currentDestination = target_position;
-            _ = agent.SetDestination(currentDestination);
-            state = State.BuildingPath;
-        }
+        public event Action OnReachedNeedProvider;
 
         private void Awake()
         {
@@ -73,18 +72,49 @@ namespace Employee.Controller
                     if (agent.remainingDistance < 0.01f)
                     {
                         state = State.Idle;
-                        OnFinishedMoving?.Invoke();
+                        transform.position = currentDestination + (agent.baseOffset * Vector3.up);
+                        OnReachedNeedProvider?.Invoke();
                     }
                     break;
             }
         }
 
+        public void SetDestination(Vector3 target_position)
+        {
+            currentDestination = target_position;
+            _ = agent.SetDestination(currentDestination);
+            state = State.BuildingPath;
+        }
+
+        public void SetNavigationMode(NavigationMode mode)
+        {
+            if (navigationMode == mode)
+            {
+                return;
+            }
+
+            navigationMode = mode;
+            agent.enabled ^= true;
+
+            if (mode == NavigationMode.FreeMove)
+            {
+                state = State.Idle;
+            }
+            else
+            {
+                state = State.BuildingPath;
+            }
+        }
+
         private void CorrectMovement()
         {
-            agent.speed =
+            float max_speed =
                 (1.0f - personalSpace.GetCrowdMetrics())
                 * maxVelocity
                 * maxVelocityMultiplierByEffects;
+            max_speed = Mathf.Max(max_speed, 0.0f);
+
+            agent.speed = max_speed;
 
             Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
             if (steering.sqrMagnitude > 0.0001)
@@ -100,10 +130,18 @@ namespace Employee.Controller
         public void Teleport(NeedProvider needProvider)
         {
             transform.position = needProvider.transform.position + (agent.baseOffset * Vector3.up);
+            state = State.BuildingPath;
         }
 
         public float? ComputePathLength(NeedProvider need_provider)
         {
+            if (!agent.enabled)
+            {
+                Vector3 distance = need_provider.transform.position - transform.position;
+                distance.y = 0;
+                return distance.magnitude;
+            }
+
             NavMeshPath path = new();
             if (agent.CalculatePath(need_provider.transform.position, path))
             {
@@ -120,6 +158,14 @@ namespace Employee.Controller
             }
 
             return null;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + (steering * 10));
         }
 
         private float maxVelocityMultiplierByEffects = 1.0f;
@@ -144,16 +190,6 @@ namespace Employee.Controller
             {
                 maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
             }
-        }
-
-        private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            //Debug.Log(DesiredVelocityNormalized * 10);
-            Gizmos.DrawLine(
-                transform.position,
-                transform.position + (DesiredVelocityNormalized * 10)
-            );
         }
     }
 }
