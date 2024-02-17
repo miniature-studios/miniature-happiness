@@ -99,8 +99,10 @@ namespace Level
 
         public void Execute(PreMeeting preMeeting)
         {
-            _ = tileBuilderController.GrowMeetingRoomForEmployees(5);
-            for (int i = 0; i < 5; i++)
+            navMeshUpdater.UpdateNavMesh();
+            needProviderManager.InitGameMode();
+
+            for (int i = 0; i < 3; i++)
             {
                 Result res = employeeManager.AddEmployee(
                     new EmployeeConfig($"test{i}", 0, "proff", "")

@@ -22,7 +22,6 @@ namespace TileUnion.Tile
         [SerializeField]
         private Material errorMaterial;
 
-        // TODO: Just save here material that's currently on.
         [SerializeField]
         private Material defaultMaterial;
 

@@ -32,7 +32,7 @@ namespace Employee
 
         [SerializeField]
         private List<Need> needs = new();
-        private Need topPriorityNeed;
+        private Need currentNeed;
         private Need currentlySatisfyingNeed;
         private Need latestSatisfiedNeed;
         private float satisfyingNeedRemaining = 0.0f;
@@ -104,7 +104,7 @@ namespace Employee
 
                     break;
                 case State.Walking:
-                    if (targetNeedProvider.NeedType != topPriorityNeed.NeedType)
+                    if (targetNeedProvider.NeedType != currentNeed.NeedType)
                     {
                         state = State.Idle;
                     }
@@ -120,7 +120,7 @@ namespace Employee
 
                     break;
                 case State.InWaitingLine:
-                    if (targetNeedProvider.NeedType != topPriorityNeed.NeedType)
+                    if (targetNeedProvider.NeedType != currentNeed.NeedType)
                     {
                         placeInWaitingLine.Drop();
                         placeInWaitingLine = null;
@@ -169,6 +169,8 @@ namespace Employee
 
                         targetNeedProvider.Release();
                         targetNeedProvider = null;
+
+                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
                     }
 
                     break;
@@ -220,12 +222,12 @@ namespace Employee
             if (state == State.Idle)
             {
                 // Force select top-priority need.
-                topPriorityNeed = null;
+                currentNeed = null;
             }
 
             foreach (Need need in needs)
             {
-                if (need == topPriorityNeed)
+                if (need == currentNeed)
                 {
                     break;
                 }
@@ -261,7 +263,7 @@ namespace Employee
                     continue;
                 }
 
-                topPriorityNeed = need;
+                currentNeed = need;
                 return selected_provider;
             }
 
@@ -282,10 +284,10 @@ namespace Employee
                 return false;
             }
 
-            topPriorityNeed = needs
+            currentNeed = needs
                 .Where(need => need.NeedType == needProvider.NeedType)
                 .FirstOrDefault();
-            if (topPriorityNeed == null)
+            if (currentNeed == null)
             {
                 Debug.LogError(
                     "Cannot force employee to take place in need provider: Employee don't have matching need"
@@ -296,9 +298,10 @@ namespace Employee
             targetNeedProvider = needProvider;
 
             controller.Teleport(needProvider);
-            controller.SetDestination(needProvider.transform.position);
+            controller.SetNavigationMode(ControllerImpl.NavigationMode.FreeMove);
 
-            state = State.InWaitingLine;
+            ReachedNeedProvider();
+
             return true;
         }
 
@@ -330,8 +333,9 @@ namespace Employee
 
             targetNeedProvider.Take(placeInWaitingLine);
             state = State.SatisfyingNeed;
-            satisfyingNeedRemaining = topPriorityNeed.GetProperties().SatisfactionTime;
-            currentlySatisfyingNeed = topPriorityNeed;
+
+            satisfyingNeedRemaining = currentNeed.GetProperties().SatisfactionTime;
+            currentlySatisfyingNeed = currentNeed;
         }
 
         public void RegisterModifier(NeedModifiers modifiers)

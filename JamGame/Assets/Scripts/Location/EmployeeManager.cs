@@ -91,6 +91,8 @@ namespace Location
                     continue;
                 }
 
+                // TODO: set parent back when meeting ends.
+                employee.transform.SetParent(place.transform, true);
                 employees.Add(employee);
                 return new SuccessResult();
             }

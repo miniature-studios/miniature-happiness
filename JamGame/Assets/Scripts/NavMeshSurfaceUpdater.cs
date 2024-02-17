@@ -1,4 +1,5 @@
-﻿using Unity.AI.Navigation;
+﻿using Sirenix.OdinInspector;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 [RequireComponent(typeof(NavMeshSurface))]
@@ -12,6 +13,7 @@ public class NavMeshSurfaceUpdater : MonoBehaviour
         surface.BuildNavMesh();
     }
 
+    [Button("Update navmesh")]
     public void UpdateNavMesh()
     {
         _ = surface.UpdateNavMesh(surface.navMeshData);

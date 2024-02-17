@@ -72,6 +72,7 @@ namespace Employee.Controller
                     if (agent.remainingDistance < 0.01f)
                     {
                         state = State.Idle;
+                        transform.position = currentDestination + (agent.baseOffset * Vector3.up);
                         OnReachedNeedProvider?.Invoke();
                     }
                     break;
