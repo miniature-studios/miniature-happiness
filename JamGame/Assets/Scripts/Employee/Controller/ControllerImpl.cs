@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Location;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,6 +31,8 @@ namespace Employee.Controller
         private Vector3 averageVelocity = Vector3.zero;
         public Vector3 AverageVelocity => averageVelocity;
 
+        [Required]
+        [SerializeField]
         private PersonalSpace personalSpace;
 
         private Vector3 currentDestination;
@@ -44,12 +47,6 @@ namespace Employee.Controller
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
-
-            personalSpace = GetComponentInChildren<PersonalSpace>();
-            if (personalSpace == null)
-            {
-                Debug.LogError("Personal space not found");
-            }
         }
 
         private void Update()

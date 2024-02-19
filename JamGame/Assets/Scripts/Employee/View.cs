@@ -1,44 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Overlay;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee
 {
-    [Serializable]
-    internal struct AnimationByState
-    {
-        public string AnimationName;
-        public State State;
-    }
-
     [RequireComponent(typeof(EmployeeImpl))]
     [AddComponentMenu("Scripts/Employee/Employee.View")]
     public partial class View : MonoBehaviour
     {
+        [Required]
+        [SerializeField]
         private EmployeeImpl employee;
-
-        [SerializeField]
-        private Animator animator;
-
-        [SerializeField]
-        private List<AnimationByState> rawAnimationsByState;
-        private Dictionary<State, string> AnimationsByState =>
-            new Lazy<Dictionary<State, string>>(
-                rawAnimationsByState.ToDictionary(key => key.State, value => value.AnimationName)
-            ).Value;
-
-        private void Start()
-        {
-            employee = GetComponent<EmployeeImpl>();
-            employee.OnStateChanged += EmployeeStateChanged;
-        }
-
-        private void EmployeeStateChanged(State state)
-        {
-            animator.Play(AnimationsByState[state]);
-        }
 
         private void Update()
         {
