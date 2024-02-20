@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Employee;
@@ -67,6 +68,15 @@ namespace Location
                 );
                 return new AllEmployeesAtHome { Value = all_go_home };
             });
+        }
+
+        public IEnumerator TurnOnAllEmployees(float delay)
+        {
+            foreach (EmployeeImpl employee in employees)
+            {
+                employee.gameObject.SetActive(true);
+                yield return delay;
+            }
         }
 
         public Result AddEmployee(EmployeeConfig config)

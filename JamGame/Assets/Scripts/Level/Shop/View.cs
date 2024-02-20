@@ -147,7 +147,10 @@ namespace Level.Shop
             {
                 EmployeeView item = employeesViewList.Last();
                 _ = employeesViewList.Remove(item);
-                Destroy(item.gameObject);
+                if (item != null)
+                {
+                    Destroy(item.gameObject);
+                }
             }
         }
 

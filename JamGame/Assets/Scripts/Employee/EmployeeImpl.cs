@@ -168,9 +168,16 @@ namespace Employee
                         currentlySatisfyingNeed = null;
 
                         targetNeedProvider.Release();
+                        // TODO refactor
+                        NeedType prevNeedType = targetNeedProvider.NeedType;
                         targetNeedProvider = null;
 
                         controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+
+                        if (prevNeedType == NeedType.Leave)
+                        {
+                            gameObject.SetActive(false);
+                        }
                     }
 
                     break;

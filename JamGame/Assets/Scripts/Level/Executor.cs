@@ -84,7 +84,10 @@ namespace Level
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
             leaveNeedOverride.Unregister();
-            //goToWorkNeedOverride.Register();
+            meetingEndNeedOverride.Unregister();
+            goToWorkNeedOverride.Register();
+
+            _ = StartCoroutine(employeeManager.TurnOnAllEmployees(2f));
 
             financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
@@ -101,7 +104,6 @@ namespace Level
         {
             navMeshUpdater.UpdateNavMesh();
             needProviderManager.InitGameMode();
-
             meetingStartNeedOverride.Register();
 
             this.CreateGate(
@@ -189,6 +191,7 @@ namespace Level
 
         public void Execute(PreDayEnd preDayEnd)
         {
+            goToWorkNeedOverride.Unregister();
             leaveNeedOverride.Register();
 
             this.CreateGate(

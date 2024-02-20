@@ -274,7 +274,6 @@ Transform:
   m_Children:
   - {fileID: 700443028}
   - {fileID: 40476286}
-  - {fileID: 744904366}
   m_Father: {fileID: 1067622713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &42303834
@@ -303,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   employeePrototype: {fileID: 744904370}
   tileBuilderController: {fileID: 115190262}
+  employees: []
 --- !u!114 &109743454 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1557630203277942582, guid: 459d47196d98bbf4dbe7d4d5fbfeb660, type: 3}
@@ -1801,7 +1801,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 42303833}
+    m_TransformParent: {fileID: 1067622713}
     m_Modifications:
     - target: {fileID: 2575964175689351513, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: finances
@@ -2350,8 +2350,8 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 1
       - Animator: {fileID: 285264313}
-        Showed: 1
-        OverrideState: 2
+        Showed: 0
+        OverrideState: 0
       - Animator: {fileID: 1400874559}
         Showed: 0
         OverrideState: 1
@@ -2503,7 +2503,7 @@ MonoBehaviour:
         OverrideState: 0
       - Animator: {fileID: 285264313}
         Showed: 0
-        OverrideState: 0
+        OverrideState: 1
       - Animator: {fileID: 1400874559}
         Showed: 0
         OverrideState: 0
@@ -3391,6 +3391,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 42303833}
+  - {fileID: 744904366}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1067622715
