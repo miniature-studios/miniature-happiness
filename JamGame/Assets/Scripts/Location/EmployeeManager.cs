@@ -6,6 +6,7 @@ using Employee.Needs;
 using Level;
 using Level.Boss.Task;
 using Level.Config;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using TileBuilderController = TileBuilder.Controller.ControllerImpl;
 
@@ -20,7 +21,7 @@ namespace Location
     public class EmployeeManager : MonoBehaviour
     {
         private DataProvider<EmployeeAmount> employeeAmountDataProvider;
-        private DataProvider<MaxStress> maxStreessDataProvider;
+        private DataProvider<MaxStress> maxStressDataProvider;
         private DataProvider<AllEmployeesAtMeeting> allEmployeesAtMeetingDataProvider;
         private DataProvider<AllEmployeesAtHome> allEmployeesAtHomeDataProvider;
 
@@ -30,6 +31,8 @@ namespace Location
         [SerializeField]
         private TileBuilderController tileBuilderController;
 
+        [ReadOnly]
+        [SerializeField]
         private List<EmployeeImpl> employees = new();
 
         private void Start()
@@ -37,7 +40,7 @@ namespace Location
             employeeAmountDataProvider = new DataProvider<EmployeeAmount>(
                 () => new EmployeeAmount { Amount = employees.Count }
             );
-            maxStreessDataProvider = new DataProvider<MaxStress>(() =>
+            maxStressDataProvider = new DataProvider<MaxStress>(() =>
             {
                 float max_stress = float.NegativeInfinity;
                 foreach (EmployeeImpl emp in employees)
@@ -81,7 +84,6 @@ namespace Location
 
             MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
-            _ = new List<NeedProvider>();
 
             foreach (NeedProvider place in meeting_room_places.Places)
             {

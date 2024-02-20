@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Level.Config;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level
@@ -8,6 +9,7 @@ namespace Level
     [AddComponentMenu("Scripts/Level/Level.Scheduler")]
     public class Scheduler : MonoBehaviour
     {
+        [InfoBox("@" + nameof(InfoText))]
         [SerializeField]
         private ConfigHandler levelConfig;
 
@@ -17,6 +19,7 @@ namespace Level
         private IEnumerator<DayConfig> dayEnumerator;
         private IEnumerator<IDayAction> actionEnumerator;
         private bool isPlanned = true;
+        private string InfoText => $"Current action is {actionEnumerator?.Current?.GetType().Name}";
 
         // Called by Executor when action ends.
         public void ActionEndActivation()

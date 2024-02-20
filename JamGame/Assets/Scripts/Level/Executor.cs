@@ -84,7 +84,7 @@ namespace Level
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
             leaveNeedOverride.Unregister();
-            goToWorkNeedOverride.Register();
+            //goToWorkNeedOverride.Register();
 
             financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
@@ -101,17 +101,6 @@ namespace Level
         {
             navMeshUpdater.UpdateNavMesh();
             needProviderManager.InitGameMode();
-
-            for (int i = 0; i < 3; i++)
-            {
-                Result res = employeeManager.AddEmployee(
-                    new EmployeeConfig($"test{i}", 0, "proff", "")
-                );
-                if (res.Failure)
-                {
-                    Debug.LogError(res.Error);
-                }
-            }
 
             meetingStartNeedOverride.Register();
 
