@@ -72,8 +72,6 @@ namespace Level
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
-        [SerializeReference]
-        public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
         private bool cutsceneMinTimeEnded = false;
 

@@ -8,7 +8,8 @@ namespace Utils
     {
         public void Reload()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            _ = Resources.UnloadUnusedAssets();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         }
     }
 }

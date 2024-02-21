@@ -34,6 +34,8 @@ namespace Employee
         private List<Need> needs = new();
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
+        public Need CurrentlySatisfyingNeed => currentlySatisfyingNeed;
+
         private Need latestSatisfiedNeed;
         private float satisfyingNeedRemaining = 0.0f;
         private NeedProvider targetNeedProvider = null;

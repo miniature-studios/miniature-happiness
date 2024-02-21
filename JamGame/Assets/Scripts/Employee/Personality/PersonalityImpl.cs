@@ -20,6 +20,11 @@ namespace Employee.Personality
         // TODO: Will change when QuirkView will be implemented.
         public IEnumerable<Quirk> Quirks => quirks;
 
+        public void AssignName(string name)
+        {
+            name_ = name;
+        }
+
         private void Start()
         {
             EmployeeImpl employee = GetComponent<EmployeeImpl>();

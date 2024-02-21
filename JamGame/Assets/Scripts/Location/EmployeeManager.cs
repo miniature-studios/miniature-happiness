@@ -4,6 +4,7 @@ using System.Linq;
 using Common;
 using Employee;
 using Employee.Needs;
+using Employee.Personality;
 using Level;
 using Level.Boss.Task;
 using Level.Config;
@@ -90,6 +91,8 @@ namespace Location
 
             EmployeeImpl employee = Instantiate(employeePrototype, transform)
                 .GetComponent<EmployeeImpl>();
+            // TODO: refactor
+            employee.GetComponent<PersonalityImpl>().AssignName(config.Name);
             employee.gameObject.SetActive(true);
 
             MeetingRoomPlaces meeting_room_places =

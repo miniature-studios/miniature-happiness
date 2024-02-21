@@ -65,8 +65,8 @@ namespace Level.Config
     {
         public float Weight;
 
-        [AssetsOnly]
-        [Pickle(typeof(EmployeeImpl), LookupType = ObjectProviderType.Assets)]
+        //[AssetsOnly]
+        //[Pickle(typeof(EmployeeImpl), LookupType = ObjectProviderType.Assets)]
         public GameObject Prototype;
     }
 
@@ -83,6 +83,12 @@ namespace Level.Config
         [FoldoutGroup("Employee - Random")]
         private EmployeeNameList nameList;
 
+        [SerializeField]
+        private int minCost;
+
+        [SerializeField]
+        private int maxCost;
+
         public EmployeeConfig GetEmployeeConfig()
         {
             List<float> list = weightList.EmployeeWeights.Select(x => x.Weight).ToList();
@@ -96,7 +102,12 @@ namespace Level.Config
 
             // TODO: refactor
             //return new EmployeeConfig(result, full_name);
-            return new EmployeeConfig("Fuko", 100, "Proger", "No quirk");
+            return new EmployeeConfig(
+                full_name,
+                UnityEngine.Random.Range(minCost, maxCost),
+                "Proger",
+                "No quirk"
+            );
         }
     }
 }

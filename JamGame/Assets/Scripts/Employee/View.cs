@@ -12,9 +12,19 @@ namespace Employee
         [SerializeField]
         private EmployeeImpl employee;
 
+        [Required]
+        [SerializeField]
+        private Controller.ControllerImpl controller;
+
+        [Required]
+        [SerializeField]
+        private Animator animator;
+
         private void Update()
         {
             UpdateStressOverlay();
+            animator.SetBool("IsWorking", employee.CurrentlySatisfyingNeed != null);
+            animator.SetFloat("Velocity", controller.AverageVelocity.magnitude);
         }
 
         public void RevertOverlays()
