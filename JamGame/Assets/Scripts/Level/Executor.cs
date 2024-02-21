@@ -144,6 +144,7 @@ namespace Level
             meetingEndNeedOverride.Register();
 
             needProviderManager.InitGameMode();
+            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Play);
 
             Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
             if (remove_time_scale_lock_result.Failure)
