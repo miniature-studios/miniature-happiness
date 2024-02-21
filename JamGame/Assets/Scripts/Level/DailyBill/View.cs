@@ -1,4 +1,7 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,7 +22,15 @@ namespace Level.DailyBill
         public void Shown()
         {
             Check data = model.ComputeCheck();
-            dailyBillText.text = $"Rent: {data.Rent} coins.\r\n\r\nSumma: {data.Sum}";
+            StringBuilder stringBuilder = new();
+            int longest = data.RentByRoom.Keys.Select(x => x.Length).Max();
+            foreach (KeyValuePair<string, int> item in data.RentByRoom)
+            {
+                _ = stringBuilder.AppendLine($"{item.Key.PadRight(longest)} cost: {item.Value}");
+            }
+            _ = stringBuilder.AppendLine();
+            _ = stringBuilder.AppendLine($"Summa: {data.Sum}");
+            dailyBillText.text = stringBuilder.ToString();
         }
 
         // Called by button continue.

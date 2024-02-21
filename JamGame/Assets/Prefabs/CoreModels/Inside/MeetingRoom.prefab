@@ -48,13 +48,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: e82cf5ca-97a3-4f7c-95fe-fdbbff46087b
-  title: meeting room
+  title: Meeting room
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  rentCost:
+    cost: 150
+  shopRooms: []
+  inventoryViews:
+  - {fileID: 7606936360430423353, guid: 0d05684e431656940a17b24ac15adfe3, type: 3}
+  tileUnions:
+  - {fileID: 3198020651115359959, guid: 8630e11fb089fe84db261d5ee6a89af1, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost:
-    cost: 0
+    cost: 30
 --- !u!114 &8701682620509132357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +89,9 @@ MonoBehaviour:
     rotation: 0
     position: {x: 0, y: 0}
   placeConditions: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0

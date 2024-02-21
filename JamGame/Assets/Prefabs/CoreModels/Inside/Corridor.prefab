@@ -48,13 +48,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: 5701aac3-8cf0-4eb1-a54b-3abca173a9ce
-  title: corridor
+  title: Corridor
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  rentCost:
+    cost: 10
+  shopRooms:
+  - {fileID: 4919599710832685324, guid: c948183e6d43c6b4ba81c523c0b43f3c, type: 3}
+  inventoryViews:
+  - {fileID: 7606936360430423353, guid: c64e33f649924034fa7310e5db878cd6, type: 3}
+  tileUnions:
+  - {fileID: 1583034983851126799, guid: fd5a3fa9b3ec917429c3ca24c43b7bbd, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost:
-    cost: 0
+    cost: 5
 --- !u!114 &8701682620509132357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +90,9 @@ MonoBehaviour:
     rotation: 0
     position: {x: 0, y: 0}
   placeConditions: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0

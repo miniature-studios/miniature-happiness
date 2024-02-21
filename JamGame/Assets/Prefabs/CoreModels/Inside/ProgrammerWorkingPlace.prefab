@@ -48,13 +48,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: 0f191f5d-b09a-466e-a133-c087c678ecdd
-  title: programmer working place
+  title: Working place
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  rentCost:
+    cost: 20
+  shopRooms:
+  - {fileID: 4919599710832685324, guid: 51b5a2f986ea2a44e899c29ee9016e6f, type: 3}
+  inventoryViews:
+  - {fileID: 7606936360430423353, guid: dc1a62b24ebede14d9ce49d7c5d6e6c7, type: 3}
+  tileUnions:
+  - {fileID: 8812810329888060661, guid: 3ff911bd3b1966c4194d6c22590f49f1, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost:
-    cost: 0
+    cost: 30
 --- !u!114 &8701682620509132357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +90,9 @@ MonoBehaviour:
     rotation: 0
     position: {x: 0, y: 0}
   placeConditions: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0

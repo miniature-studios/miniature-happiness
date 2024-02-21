@@ -48,13 +48,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: a3ac9cde-b124-4451-a153-4d447b23cc1c
-  title: boss office
+  title: Boss office
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  rentCost:
+    cost: 150
+  shopRooms: []
+  inventoryViews:
+  - {fileID: 7606936360430423353, guid: 8971b7e94e75a1148b228978b27e3787, type: 3}
+  tileUnions:
+  - {fileID: 3198020651115359959, guid: 2e832e75712709341b8a3206cf106cc2, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost:
-    cost: 0
+    cost: 50
 --- !u!114 &8701682620509132357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +89,9 @@ MonoBehaviour:
     rotation: 0
     position: {x: 0, y: 0}
   placeConditions: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0

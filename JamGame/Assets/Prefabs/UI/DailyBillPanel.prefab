@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -223.82932}
-  m_SizeDelta: {x: 330, y: 199.1414}
+  m_AnchoredPosition: {x: 0, y: -390}
+  m_SizeDelta: {x: 600, y: 550}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2539039997815928616
 CanvasRenderer:
@@ -65,10 +65,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Rent: 0 coins
+  m_text: 'Working place cost 180
+
+    Empty room cost 45
+
+    Elevator cost 70
+
+    Corridor
+    cost 110
+
+    Toilet cost 50
+
+    Boss office cost 150
+
+    Kitchen cost 50
+
+    Meeting
+    room cost 150
 
 
-    Summ: 0 coins'
+    Summa: 805
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -102,7 +120,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -131,7 +149,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 80, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -170,10 +188,10 @@ RectTransform:
   - {fileID: 6140760385225849713}
   m_Father: {fileID: 4900747363483979959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 168.4}
-  m_SizeDelta: {x: 497.6841, y: 168.1981}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -200}
+  m_SizeDelta: {x: 700, y: 168.19812}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4426895481459568048
 CanvasRenderer:
@@ -468,6 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dailyBillText: {fileID: 7139450872799257950}
+  model: {fileID: 811087427928209788}
   ContinueButtonPressEvent:
     m_PersistentCalls:
       m_Calls:
@@ -517,21 +536,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBuilder: {fileID: 0}
-  CheckChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 835270010398650571}
-        m_TargetAssemblyTypeName: Level.Tarrifs.View, Assembly-CSharp
-        m_MethodName: OnChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &8748344683352621547
 GameObject:
   m_ObjectHideFlags: 0

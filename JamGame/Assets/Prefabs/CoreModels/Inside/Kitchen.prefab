@@ -48,13 +48,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uid: af3b3ba2-2299-49da-aa37-b54982254c88
-  title: kitchen
+  title: Kitchen
   shopModel: {fileID: 8624567786751204017}
   inventoryModel: {fileID: 4588327520170321208}
   tileUnionModel: {fileID: 8701682620509132357}
-  tariffProperties:
-    waterConsumption: 0
-    electricityConsumption: 0
+  rentCost:
+    cost: 50
+  shopRooms:
+  - {fileID: 4919599710832685324, guid: baed59ddab48a4a4fbb4037298ecab28, type: 3}
+  inventoryViews:
+  - {fileID: 7606936360430423353, guid: 35822aff102aeb744b074e5020203af4, type: 3}
+  tileUnions:
+  - {fileID: 3424363191602470855, guid: fb9e68e38a3c9e6488501276d40cfc96, type: 3}
 --- !u!114 &8624567786751204017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost:
-    cost: 0
+    cost: 100
 --- !u!114 &8701682620509132357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +90,9 @@ MonoBehaviour:
     rotation: 0
     position: {x: 0, y: 0}
   placeConditions: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &4588327520170321208
 MonoBehaviour:
   m_ObjectHideFlags: 0
