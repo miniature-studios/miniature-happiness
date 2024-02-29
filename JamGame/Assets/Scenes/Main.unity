@@ -274,7 +274,6 @@ Transform:
   m_Children:
   - {fileID: 700443028}
   - {fileID: 40476286}
-  - {fileID: 744904366}
   m_Father: {fileID: 1067622713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &42303834
@@ -303,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   employeePrototype: {fileID: 744904370}
   tileBuilderController: {fileID: 115190262}
+  employees: []
 --- !u!114 &109743454 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1557630203277942582, guid: 459d47196d98bbf4dbe7d4d5fbfeb660, type: 3}
@@ -1812,7 +1812,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 42303833}
+    m_TransformParent: {fileID: 1067622713}
     m_Modifications:
     - target: {fileID: 2575964175689351513, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: finances
@@ -1884,15 +1884,15 @@ PrefabInstance:
       objectReference: {fileID: 42303834}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].satisfied
-      value: Infinity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].properties.NeedType
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[3].properties.NeedType
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.DecreaseSpeed
@@ -1900,7 +1900,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].properties.DecreaseSpeed
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[3].properties.DecreaseSpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.SatisfactionTime
@@ -1908,11 +1912,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].properties.SatisfactionTime
-      value: 10
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[3].properties.SatisfactionTime
-      value: 0.1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[0].properties.SatisfactionGained
@@ -1920,7 +1924,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needs.Array.data[2].properties.SatisfactionGained
-      value: 0
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[3].properties.SatisfactionGained
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_Name
@@ -3354,6 +3362,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 42303833}
+  - {fileID: 744904366}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1067622715
@@ -3401,18 +3410,6 @@ MonoBehaviour:
   DayEnds:
     m_PersistentCalls:
       m_Calls: []
-  TestEmployeeConfig:
-    rid: 1908735040774995968
-  references:
-    version: 2
-    RefIds:
-    - rid: 1908735040774995968
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        name: Jonh
-        hireCost: 50
-        profession: GGG
-        quirk: DFD
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0

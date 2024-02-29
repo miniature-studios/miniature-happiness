@@ -27,19 +27,19 @@ MonoBehaviour:
     - rid: 1908735064151687177
     - rid: 1908735064151687178
     - rid: 1908735064151687182
-  bossStressSpeed: 0
+  bossStressSpeed: 0.02
   references:
     version: 2
     RefIds:
     - rid: 1908735064151687168
       type: {class: DayStart, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        morningMoney: 500
-        duration: 1
+        morningMoney: 800
+        duration: 1.5
     - rid: 1908735064151687169
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        duration: 1
+        duration: 1.5
         text: Meeting
     - rid: 1908735064151687170
       type: {class: PreMeeting, ns: Level.Config, asm: Assembly-CSharp}
@@ -48,7 +48,10 @@ MonoBehaviour:
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 1908735064151687179
+        - rid: 2702896934914359298
+        - rid: 2702896934914359299
+        - rid: 2702896934914359300
+        - rid: 2702896934914359301
         mode: 1
         shopRooms:
         - rid: 1908735064151687180
@@ -57,7 +60,7 @@ MonoBehaviour:
     - rid: 1908735064151687173
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        duration: 2
+        duration: 1.5
         text: Start Working
     - rid: 1908735064151687175
       type: {class: Working, ns: Level.Config, asm: Assembly-CSharp}
@@ -70,18 +73,11 @@ MonoBehaviour:
     - rid: 1908735064151687177
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        duration: 1
+        duration: 1.5
         text: Day End
     - rid: 1908735064151687178
       type: {class: DayEnd, ns: Level.Config, asm: Assembly-CSharp}
       data: 
-    - rid: 1908735064151687179
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        name: Jonh
-        hireCost: 150
-        profession: Loh
-        quirk: Loh
     - rid: 1908735064151687180
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -89,12 +85,12 @@ MonoBehaviour:
     - rid: 1908735064151687181
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        duration: 0
+        duration: 1.5
         text: Day SStart
     - rid: 1908735064151687182
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        duration: 2
+        duration: 1.5
         text: Day End
     - rid: 1908735195745353728
       type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
@@ -104,4 +100,24 @@ MonoBehaviour:
     - rid: 1908735195745353729
       type: {class: LoadLevel, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        buildingConfig: {fileID: 11400000, guid: 44f8257251ae11940a06264590bdab34, type: 2}
+        buildingConfig: {fileID: 11400000, guid: 5de359c410ba2a849ab24ac0f1cba9e8, type: 2}
+    - rid: 2702896934914359298
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+    - rid: 2702896934914359299
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+    - rid: 2702896934914359300
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+    - rid: 2702896934914359301
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
