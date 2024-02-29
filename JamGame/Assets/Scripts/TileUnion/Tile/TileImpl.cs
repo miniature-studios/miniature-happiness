@@ -192,10 +192,10 @@ namespace TileUnion.Tile
                     WallCross wallCross =
                         new()
                         {
-                            Down = GetActiveWallType(direction),
-                            Left = tile1.GetActiveWallType(direction.Rotate90()),
-                            Up = tile2.GetActiveWallType(direction.GetOpposite()),
-                            Right = tile3.GetActiveWallType(direction.RotateMinus90())
+                            Left = GetActiveWallType(direction),
+                            Up = tile1.GetActiveWallType(direction.Rotate90()),
+                            Right = tile2.GetActiveWallType(direction.GetOpposite()),
+                            Down = tile3.GetActiveWallType(direction.RotateMinus90())
                         };
                     toPlace = marks.Contains("Corridor")
                         ? wallCross.ChooseCornerForCorridor()
