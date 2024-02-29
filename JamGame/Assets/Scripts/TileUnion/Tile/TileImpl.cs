@@ -141,83 +141,40 @@ namespace TileUnion.Tile
             return RawWalls.Find(x => x.Place == imaginePlace);
         }
 
-        [Flags]
-        public enum WallCross
+        private struct WallCross
         {
-            None = 0,
-            Up = 1,
-            Down = 2,
-            Left = 4,
-            Right = 8,
-        }
+            public bool Up;
+            public bool Down;
+            public bool Left;
+            public bool Right;
 
-        private Dictionary<DecideType, RuleSet<WallCross, CornerType>> chooseRightDownCornerRules =
-            new()
+            public CornerType ChooseCorner(DecideType decideType)
             {
+                return decideType switch
                 {
-                    DecideType.Default,
-                    new()
-                    {
-                        Matches = new()
+                    DecideType.Default
+                        => (Left, Up, Right, Down) switch
                         {
-                            new()
-                            {
-                                Target = WallCross.Down | WallCross.Right,
-                                Result = CornerType.Inside
-                            },
-                            new()
-                            {
-                                Target = WallCross.Down | WallCross.Up,
-                                Result = CornerType.WallRight
-                            },
-                            new()
-                            {
-                                Target = WallCross.Left | WallCross.Right,
-                                Result = CornerType.WallLeft
-                            },
-                            new()
-                            {
-                                Target = WallCross.Left | WallCross.Up,
-                                Result = CornerType.OutsideMiddle
-                            },
-                            new()
-                            {
-                                Target = WallCross.Down | WallCross.Left,
-                                Result = CornerType.OutsideRight
-                            },
-                            new()
-                            {
-                                Target = WallCross.Right | WallCross.Up,
-                                Result = CornerType.OutsideLeft
-                            },
+                            (true, _, _, true) => CornerType.Inside,
+                            (true, _, true, _) => CornerType.WallRight,
+                            (_, true, _, true) => CornerType.WallLeft,
+                            (_, true, true, _) => CornerType.OutsideMiddle,
+                            (true, true, _, _) => CornerType.OutsideRight,
+                            (_, _, true, true) => CornerType.OutsideLeft,
+                            _ => CornerType.None
                         },
-                        DefaultResult = CornerType.None
-                    }
-                },
-                {
-                    DecideType.Corridor,
-                    new()
-                    {
-                        Matches = new()
+                    DecideType.Corridor
+                        => (Left, Up, Right, Down) switch
                         {
-                            new()
-                            {
-                                Target = WallCross.Down | WallCross.Right,
-                                Result = CornerType.Inside
-                            },
-                            new() { Target = WallCross.Down, Result = CornerType.WallRight },
-                            new() { Target = WallCross.Right, Result = CornerType.WallLeft },
-                            new()
-                            {
-                                MatchType = MatchType.Excludes,
-                                Target = WallCross.Down | WallCross.Right,
-                                Result = CornerType.OutsideMiddle
-                            },
+                            (true, _, _, true) => CornerType.Inside,
+                            (true, _, _, _) => CornerType.WallRight,
+                            (_, _, _, true) => CornerType.WallLeft,
+                            (false, _, _, false) => CornerType.OutsideMiddle,
                         },
-                        DefaultResult = CornerType.None
-                    }
-                }
-            };
+                    _ => throw new ArgumentException()
+                };
+            }
+        }
 
         public void UpdateCorners(Dictionary<Direction, TileImpl> neighbors)
         {
@@ -232,24 +189,20 @@ namespace TileUnion.Tile
                     DecideType decideType = marks.Contains("Corridor")
                         ? DecideType.Corridor
                         : DecideType.Default;
-                    WallCross wallCross = WallCross.None;
-                    if (GetActiveWallType(direction).IsWall(decideType))
-                    {
-                        wallCross |= WallCross.Down;
-                    }
-                    if (tile1.GetActiveWallType(direction.Rotate90()).IsWall(decideType))
-                    {
-                        wallCross |= WallCross.Left;
-                    }
-                    if (tile2.GetActiveWallType(direction.GetOpposite()).IsWall(decideType))
-                    {
-                        wallCross |= WallCross.Up;
-                    }
-                    if (tile3.GetActiveWallType(direction.RotateMinus90()).IsWall(decideType))
-                    {
-                        wallCross |= WallCross.Right;
-                    }
-                    toPlace = chooseRightDownCornerRules[decideType].Apply(wallCross);
+                    WallCross wallCross =
+                        new()
+                        {
+                            Down = GetActiveWallType(direction).IsWall(decideType),
+                            Left = tile1.GetActiveWallType(direction.Rotate90()).IsWall(decideType),
+                            Up = tile2
+                                .GetActiveWallType(direction.GetOpposite())
+                                .IsWall(decideType),
+
+                            Right = tile3
+                                .GetActiveWallType(direction.RotateMinus90())
+                                .IsWall(decideType)
+                        };
+                    toPlace = wallCross.ChooseCorner(decideType);
                 }
                 GetCornerCollection(direction.Rotate45()).SetCorner(toPlace);
             }
