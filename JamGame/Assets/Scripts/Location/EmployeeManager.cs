@@ -70,6 +70,7 @@ namespace Location
             });
         }
 
+        // TODO: Remove it when employee serialization will developed
         public IEnumerator TurnOnAllEmployees(float delay)
         {
             foreach (EmployeeImpl employee in employees)

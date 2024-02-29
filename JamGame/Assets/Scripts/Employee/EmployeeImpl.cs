@@ -168,12 +168,14 @@ namespace Employee
                         currentlySatisfyingNeed = null;
 
                         targetNeedProvider.Release();
-                        // TODO refactor
+
+                        // TODO: Remove it when employee serialization will developed
                         NeedType prevNeedType = targetNeedProvider.NeedType;
                         targetNeedProvider = null;
 
                         controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
 
+                        // TODO: Remove it when employee serialization will developed
                         if (prevNeedType == NeedType.Leave)
                         {
                             gameObject.SetActive(false);
