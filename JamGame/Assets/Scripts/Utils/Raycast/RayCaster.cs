@@ -3,14 +3,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Common
+namespace Utils.Raycast
 {
-    public static class RayCastUtilities
+    public static class RayCaster
     {
         public static bool PointerIsOverUI(Vector2 screenPosition)
         {
             IEnumerable<GameObject> hitObjects = UIRayCast(ScreenPosToPointerData(screenPosition));
-            return hitObjects.Any(x => x.layer == LayerMask.NameToLayer("UI"));
+            return hitObjects.Any(x => x.GetComponentInParent<Blocker>() != null);
         }
 
         public static IEnumerable<GameObject> UIRayCast(Vector2 screenPos)

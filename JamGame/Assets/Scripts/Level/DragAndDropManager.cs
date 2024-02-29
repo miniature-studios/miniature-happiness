@@ -6,6 +6,7 @@ using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Raycast;
 
 namespace Level
 {
@@ -93,7 +94,7 @@ namespace Level
         private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
         {
             Vector2 position = Mouse.current.position.ReadValue();
-            IEnumerable<GameObject> hits = RayCastUtilities.UIRayCast(position);
+            IEnumerable<GameObject> hits = RayCaster.UIRayCast(position);
             GameObject foundObject = hits.FirstOrDefault(x =>
                 x.TryGetComponent(out IDragAndDropAgent _)
             );
