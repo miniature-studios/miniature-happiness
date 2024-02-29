@@ -104,7 +104,12 @@ namespace TileBuilder.Controller
 
         private Result<Vector2Int> RaycastMatrix()
         {
-            Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Ray ray = mainCamera.ScreenPointToRay(mousePosition);
+            if (RayCastUtilities.PointerIsOverUI(mousePosition))
+            {
+                return new FailResult<Vector2Int>("UI blocked raycast.");
+            }
             return tileBuilder.GridProperties.GetMatrixPosition(ray);
         }
 

@@ -9,16 +9,8 @@ namespace Common
     {
         public static bool PointerIsOverUI(Vector2 screenPosition)
         {
-            GameObject hitObject = UIRayCast(ScreenPosToPointerData(screenPosition))?.First();
-            return hitObject != null && hitObject.layer == LayerMask.NameToLayer("UI");
-        }
-
-        public static bool PointerIsOverTargetGO(Vector2 screenPosition, GameObject targetUI)
-        {
-            IEnumerable<GameObject> rayCastedGameObjects = UIRayCast(
-                ScreenPosToPointerData(screenPosition)
-            );
-            return rayCastedGameObjects != null && rayCastedGameObjects.Any((x) => x == targetUI);
+            IEnumerable<GameObject> hitObjects = UIRayCast(ScreenPosToPointerData(screenPosition));
+            return hitObjects.Any(x => x.layer == LayerMask.NameToLayer("UI"));
         }
 
         public static IEnumerable<GameObject> UIRayCast(Vector2 screenPos)
