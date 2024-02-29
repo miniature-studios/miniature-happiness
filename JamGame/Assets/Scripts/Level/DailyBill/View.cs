@@ -23,10 +23,12 @@ namespace Level.DailyBill
         {
             Check data = model.ComputeCheck();
             StringBuilder stringBuilder = new();
-            int longest = data.RentByRoom.Keys.Select(x => x.Length).Max();
-            foreach (KeyValuePair<string, int> item in data.RentByRoom)
+            int longest = data.RentByRoom.Keys.Select(x => x.Title.Length).Max();
+            foreach (KeyValuePair<Room.CoreModel, int> item in data.RentByRoom)
             {
-                _ = stringBuilder.AppendLine($"{item.Key.PadRight(longest)} cost: {item.Value}");
+                _ = stringBuilder.AppendLine(
+                    $"{item.Key.Title.PadRight(longest)} cost: {item.Value}"
+                );
             }
             _ = stringBuilder.AppendLine();
             _ = stringBuilder.AppendLine($"Sum: {data.Sum}");
