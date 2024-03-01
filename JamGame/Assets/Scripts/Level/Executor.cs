@@ -72,8 +72,6 @@ namespace Level
         public UnityEvent ActionEndNotify;
         public UnityEvent DayEnds;
 
-        [SerializeReference]
-        public IEmployeeConfig TestEmployeeConfig;
         private bool transitionPanelShown = false;
         private bool cutsceneMinTimeEnded = false;
 
@@ -84,7 +82,10 @@ namespace Level
 
             // NOTE: It's a temporary solution while we don't have proper save/load system.
             leaveNeedOverride.Unregister();
+            meetingEndNeedOverride.Unregister();
             goToWorkNeedOverride.Register();
+
+            _ = StartCoroutine(employeeManager.TurnOnAllEmployees(2f));
 
             financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
@@ -101,17 +102,6 @@ namespace Level
         {
             navMeshUpdater.UpdateNavMesh();
             needProviderManager.InitGameMode();
-
-            for (int i = 0; i < 3; i++)
-            {
-                Result res = employeeManager.AddEmployee(
-                    new EmployeeConfig($"test{i}", 0, "proff", "")
-                );
-                if (res.Failure)
-                {
-                    Debug.LogError(res.Error);
-                }
-            }
 
             meetingStartNeedOverride.Register();
 
@@ -153,6 +143,7 @@ namespace Level
             meetingEndNeedOverride.Register();
 
             needProviderManager.InitGameMode();
+            tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Play);
 
             Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
             if (remove_time_scale_lock_result.Failure)
@@ -200,6 +191,7 @@ namespace Level
 
         public void Execute(PreDayEnd preDayEnd)
         {
+            goToWorkNeedOverride.Unregister();
             leaveNeedOverride.Register();
 
             this.CreateGate(

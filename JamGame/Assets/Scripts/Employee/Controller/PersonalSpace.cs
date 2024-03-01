@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee.Controller
@@ -13,16 +14,17 @@ namespace Employee.Controller
         [SerializeField]
         private float movelessVelocityThreshold;
 
-        private SphereCollider personalSpaceTrigger;
+        [Required]
+        [SerializeField]
         private ControllerImpl controller;
+
+        private SphereCollider personalSpaceTrigger;
         private float radius;
 
         private void Start()
         {
             personalSpaceTrigger = GetComponent<SphereCollider>();
             radius = personalSpaceTrigger.radius;
-
-            controller = GetComponentInParent<ControllerImpl>();
         }
 
         private readonly HashSet<ControllerImpl> employeesInPersonalSpace = new();

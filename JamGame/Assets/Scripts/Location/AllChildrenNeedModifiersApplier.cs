@@ -21,7 +21,7 @@ namespace Location
 
         public void Register()
         {
-            registeredOn = root.GetComponentsInChildren<EmployeeImpl>();
+            registeredOn = root.GetComponentsInChildren<EmployeeImpl>(true);
             foreach (EmployeeImpl employee in registeredOn)
             {
                 employee.RegisterModifier(modifiers);

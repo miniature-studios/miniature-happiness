@@ -4,6 +4,7 @@ using System.Linq;
 using Common;
 using Level.Config;
 using Level.Room;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -27,7 +28,12 @@ namespace Level.Shop
         [SerializeField]
         private EmployeeView employeeViewPrototype;
 
+        [ReadOnly]
+        [SerializeField]
         private List<Room.View> roomsViewList = new();
+
+        [ReadOnly]
+        [SerializeField]
         private List<EmployeeView> employeesViewList = new();
 
         private Animator animator;
@@ -89,7 +95,9 @@ namespace Level.Shop
 
         private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Destroy(roomsViewList.Find(x => x.CoreModel == oldRoom).gameObject);
+            Room.View room = roomsViewList.Find(x => x.CoreModel == oldRoom);
+            _ = roomsViewList.Remove(room);
+            Destroy(room.gameObject);
         }
 
         private void DeleteAllRooms()
@@ -138,7 +146,9 @@ namespace Level.Shop
 
         private void RemoveOldEmployee(EmployeeConfig oldEmployee)
         {
-            Destroy(employeesViewList.Find(x => x.EmployeeConfig == oldEmployee).gameObject);
+            EmployeeView employee = employeesViewList.Find(x => x.EmployeeConfig == oldEmployee);
+            _ = employeesViewList.Remove(employee);
+            Destroy(employee.gameObject);
         }
 
         private void DeleteAllEmployees()
