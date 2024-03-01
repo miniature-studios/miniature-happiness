@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee.Needs
@@ -17,6 +18,8 @@ namespace Employee.Needs
     [Serializable]
     public class Need
     {
+        [HideLabel]
+        [InlineProperty]
         [Serializable]
         public struct NeedProperties
         {

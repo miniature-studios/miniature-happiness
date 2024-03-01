@@ -35,7 +35,8 @@ namespace Level.Shop
             Result result = financesController.TryTakeMoney(room.ShopModel.Cost.Value);
             if (result.Success)
             {
-                inventoryController.AddNewRoom(shopModel.BorrowRoom(room));
+                CoreModel borrowedRoom = shopModel.BorrowRoom(room);
+                inventoryController.AddNewRoom(borrowedRoom);
                 return new SuccessResult();
             }
             else
@@ -56,7 +57,8 @@ namespace Level.Shop
             Result result = financesController.TryTakeMoney(employee.HireCost);
             if (result.Success)
             {
-                result = employeeManager.AddEmployee(employee);
+                EmployeeConfig borrowedEmployee = shopModel.BorrowEmployee(employee);
+                result = employeeManager.AddEmployee(borrowedEmployee);
                 if (result.Failure)
                 {
                     financesController.AddMoney(employee.HireCost);

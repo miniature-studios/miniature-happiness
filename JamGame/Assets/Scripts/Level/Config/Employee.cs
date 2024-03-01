@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Common;
 using Employee;
 using Pickle;
 using Sirenix.OdinInspector;
@@ -85,6 +82,8 @@ namespace Level.Config
 
         public EmployeeConfig GetEmployeeConfig()
         {
+            // TODO: refactor
+            /*
             List<float> list = weightList.EmployeeWeights.Select(x => x.Weight).ToList();
             GameObject result = weightList
                 .EmployeeWeights.ToList()[RandomTools.RandomlyChooseWithWeights(list)]
@@ -94,8 +93,9 @@ namespace Level.Config
             string last_name = nameList.LastNames.OrderBy(x => UnityEngine.Random.value).First();
             string full_name = $"{first_name} {last_name}";
 
-            // TODO: refactor
-            //return new EmployeeConfig(result, full_name);
+            
+            return new EmployeeConfig(result, full_name);
+            */
             return new EmployeeConfig("Fuko", 100, "Proger", "No quirk");
         }
     }
