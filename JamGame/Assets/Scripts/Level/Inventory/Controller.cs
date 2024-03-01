@@ -4,6 +4,7 @@ using Common;
 using Level.Room;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Raycast;
 
 namespace Level.Inventory
 {
@@ -48,7 +49,7 @@ namespace Level.Inventory
         private Result<Room.View> RayCastTopRoomView()
         {
             Vector2 position = Mouse.current.position.ReadValue();
-            IEnumerable<GameObject> hits = RayCastUtilities.UIRayCast(position);
+            IEnumerable<GameObject> hits = RayCaster.UIRayCast(position);
             GameObject foundObject = hits.FirstOrDefault(x => x.TryGetComponent(out Room.View _));
             if (foundObject != null)
             {
