@@ -268,9 +268,14 @@ namespace TileBuilder
             TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.Uid];
             stashTileUnion.gameObject.SetActive(true);
             stashTileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
-            Result result = stashTileUnion.IsValidPlacing(this);
+            Result placingResult = stashTileUnion.IsValidPlacing(this);
+            Result conditionResult = stashTileUnion.IsPassedConditions(
+                coreModel.TileUnionModel.PlaceConditions,
+                this
+            );
             if (
-                result.Failure
+                placingResult.Failure
+                || conditionResult.Failure
                 || stashTileUnion.TilesPositions.Any(x =>
                     GetTileUnionInPosition(x) == null
                     || !GetTileUnionInPosition(x).IsAllWithMark("Freespace")

@@ -189,7 +189,7 @@ namespace TileUnion
         {
             foreach (TileImpl tile in tiles)
             {
-                tile.SetTileState(State.SelectedAndErrored);
+                tile.SetTileState(State.Errored);
             }
             _ = StartCoroutine(ShowInvalidPlacingRoutine());
         }

@@ -59,6 +59,7 @@ namespace TileUnion.Tile
             {
                 { State.Normal, defaultMaterial },
                 { State.Selected, transparentMaterial },
+                { State.Errored, errorMaterial },
                 { State.SelectedAndErrored, errorMaterial },
             };
             ApplyTileState(State.Normal);
@@ -83,6 +84,7 @@ namespace TileUnion.Tile
                 {
                     State.Normal => true,
                     State.Selected => false,
+                    State.Errored => true,
                     State.SelectedAndErrored => true,
                     _ => throw new System.ArgumentException()
                 };
@@ -92,6 +94,7 @@ namespace TileUnion.Tile
                 {
                     State.Normal => unselectedYPosition,
                     State.Selected => selectedYPosition,
+                    State.Errored => unselectedYPosition,
                     State.SelectedAndErrored => selectedYPosition,
                     _ => throw new InvalidOperationException()
                 };
