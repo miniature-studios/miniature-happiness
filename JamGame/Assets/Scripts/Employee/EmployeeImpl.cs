@@ -169,13 +169,13 @@ namespace Employee
 
                         targetNeedProvider.Release();
 
-                        // TODO: Remove it when employee serialization will developed
+                        // TODO: Remove it when employee serialization will be implemented (#121)
                         NeedType prevNeedType = targetNeedProvider.NeedType;
                         targetNeedProvider = null;
 
                         controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
 
-                        // TODO: Remove it when employee serialization will developed
+                        // TODO: Remove it when employee serialization will be implemented (#121)
                         if (prevNeedType == NeedType.Leave)
                         {
                             gameObject.SetActive(false);
