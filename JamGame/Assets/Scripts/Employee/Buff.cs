@@ -10,6 +10,19 @@ namespace Employee
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
     public class Buff : ScriptableObject
     {
+        [ReadOnly]
+        [SerializeField]
+        // TODO: Wrap it in newtype.
+        private string uid;
+        public string Uid => uid;
+
+#if UNITY_EDITOR
+        public void SetHashCode(string uid)
+        {
+            this.uid = uid;
+        }
+#endif
+
         public Days Time;
 
         [SerializeReference]
