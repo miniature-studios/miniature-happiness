@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Employee.Controller;
 using Employee.Needs;
+using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -58,7 +59,7 @@ namespace Employee
             public Buff Buff;
 
             [ReadOnly]
-            public float RemainingTime;
+            public RealTimeSeconds RemainingTime;
         }
 
         [SerializeField]
@@ -85,9 +86,11 @@ namespace Employee
 
         private void Update()
         {
-            UpdateNeeds(Time.deltaTime);
-            Stress.UpdateStress(needs, Time.deltaTime);
-            UpdateBuffs(Time.deltaTime);
+            RealTimeSeconds delta_time = new(Time.deltaTime);
+
+            UpdateNeeds(delta_time);
+            Stress.UpdateStress(needs, delta_time);
+            UpdateBuffs(delta_time);
 
             switch (state)
             {
@@ -186,7 +189,7 @@ namespace Employee
             }
         }
 
-        private void UpdateNeeds(float delta_time)
+        private void UpdateNeeds(RealTimeSeconds delta_time)
         {
             foreach (Need need in needs)
             {
@@ -194,13 +197,13 @@ namespace Employee
             }
         }
 
-        private void UpdateBuffs(float delta_time)
+        private void UpdateBuffs(RealTimeSeconds delta_time)
         {
             for (int i = appliedBuffs.Count - 1; i >= 0; i--)
             {
                 AppliedBuff ab = appliedBuffs[i];
                 ab.RemainingTime -= delta_time;
-                if (ab.RemainingTime < 0.0f)
+                if (ab.RemainingTime < RealTimeSeconds.Zero)
                 {
                     UnregisterBuff(appliedBuffs[i].Buff);
                 }
@@ -391,7 +394,9 @@ namespace Employee
         // TODO: match type of effect with corresponding Executor type.
         public void RegisterBuff(Buff buff)
         {
-            appliedBuffs.Add(new AppliedBuff { Buff = buff, RemainingTime = buff.Time });
+            appliedBuffs.Add(
+                new AppliedBuff { Buff = buff, RemainingTime = buff.Time.RealTimeSeconds }
+            );
             foreach (IEffect effect in buff.Effects)
             {
                 if (effect is StressEffect se)

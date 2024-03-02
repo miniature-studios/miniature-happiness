@@ -100,7 +100,7 @@ namespace Level.Boss
 
         private void Update()
         {
-            stress += Time.deltaTime / maxStressGatherTime.RealTimeSeconds;
+            stress += Time.deltaTime / maxStressGatherTime.RealTimeSeconds.Value;
 
             for (int i = 0; i < taskBunchToActivateNext; i++)
             {

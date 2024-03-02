@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Employee.Needs;
+using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -9,8 +10,7 @@ namespace Employee
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
     public class Buff : ScriptableObject
     {
-        // TODO: refactor
-        public float Time;
+        public Days Time;
 
         [SerializeReference]
         private List<IEffect> effects = new();

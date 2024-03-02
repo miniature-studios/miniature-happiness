@@ -9,43 +9,101 @@ namespace Level.GlobalTime
     [InlineProperty]
     public struct Days
     {
-        public float Days_;
+        [SerializeField]
+        private float value;
+        public readonly float Value => value;
 
-        public readonly float RealTimeSeconds => Days_ * Model.DayLength;
+        public readonly RealTimeSeconds RealTimeSeconds => new(value * Model.DayLength);
+
+        public static Days Zero => new(0);
+
+        public Days(RealTimeSeconds seconds)
+        {
+            value = seconds.Value / Model.DayLength;
+        }
+
+        public Days(float days)
+        {
+            value = days;
+        }
 
         public static Days FromRealTimeSeconds(float seconds)
         {
-            return new Days() { Days_ = seconds / Model.DayLength };
+            return new Days() { value = seconds / Model.DayLength };
         }
 
         public static Days operator +(Days a, Days b)
         {
-            return new Days() { Days_ = a.Days_ + b.Days_ };
+            return new Days() { value = a.value + b.value };
         }
 
         public static Days operator -(Days a, Days b)
         {
-            return new Days() { Days_ = a.Days_ - b.Days_ };
+            return new Days() { value = a.value - b.value };
         }
 
         public static bool operator >(Days a, Days b)
         {
-            return a.Days_ > b.Days_;
+            return a.value > b.value;
         }
 
         public static bool operator <(Days a, Days b)
         {
-            return a.Days_ < b.Days_;
+            return a.value < b.value;
         }
 
         public static bool operator <=(Days a, Days b)
         {
-            return a.Days_ <= b.Days_;
+            return a.value <= b.value;
         }
 
         public static bool operator >=(Days a, Days b)
         {
-            return a.Days_ >= b.Days_;
+            return a.value >= b.value;
+        }
+    }
+
+    public struct RealTimeSeconds
+    {
+        [SerializeField]
+        private float value;
+        public readonly float Value => value;
+
+        public static RealTimeSeconds Zero => new(0);
+
+        public RealTimeSeconds(float seconds)
+        {
+            value = seconds;
+        }
+
+        public static RealTimeSeconds operator +(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return new RealTimeSeconds() { value = a.value + b.value };
+        }
+
+        public static RealTimeSeconds operator -(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return new RealTimeSeconds() { value = a.value - b.value };
+        }
+
+        public static bool operator >(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return a.value > b.value;
+        }
+
+        public static bool operator <(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return a.value < b.value;
+        }
+
+        public static bool operator <=(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return a.value <= b.value;
+        }
+
+        public static bool operator >=(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return a.value >= b.value;
         }
     }
 

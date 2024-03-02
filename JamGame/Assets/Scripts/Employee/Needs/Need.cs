@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -87,7 +88,7 @@ namespace Employee.Needs
         }
 
         // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
-        public void Dissatisfy(float delta_time)
+        public void Dissatisfy(RealTimeSeconds time)
         {
             NeedProperties properties = GetProperties();
 
@@ -97,7 +98,7 @@ namespace Employee.Needs
             }
             else
             {
-                satisfied -= delta_time * properties.DecreaseSpeed;
+                satisfied -= time.Value * properties.DecreaseSpeed;
             }
         }
 
