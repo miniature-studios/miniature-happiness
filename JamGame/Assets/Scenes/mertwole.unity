@@ -217,6 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   employeePrototype: {fileID: 744904370}
   tileBuilderController: {fileID: 115190262}
+  employees: []
 --- !u!114 &109743454 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1557630203277942582, guid: 459d47196d98bbf4dbe7d4d5fbfeb660, type: 3}
@@ -1590,7 +1591,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 4
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 1
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -1822,18 +1824,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 42303833}
     m_Modifications:
-    - target: {fileID: 758558600900435677, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 2575964175689351513, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: finances
       value: 
       objectReference: {fileID: 1125594366}
-    - target: {fileID: 3968775258514577249, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804387, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.04
@@ -1879,32 +1873,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 42303834}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: needs.Array.data[0].properties.SatisfactionTime
-      value: 0.1
+      propertyPath: needs.Array.data[0].properties.SatisfactionTime.seconds
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[1].properties.SatisfactionTime.seconds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[2].properties.SatisfactionTime.seconds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: needs.Array.data[3].properties.SatisfactionTime.seconds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804411, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: quirks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027475554387804411, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: quirks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
     - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_Name
       value: Employee
       objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475554526210370, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475555112469023, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8544214614876430312, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2025,7 +2023,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8549211194701896215, guid: 1083f9a92afa82c48b16e1ef0ce0e708, type: 3}
       propertyPath: dayLength
-      value: 60
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 8549211195062993048, guid: 1083f9a92afa82c48b16e1ef0ce0e708, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_FloatArgument
@@ -2612,7 +2610,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 4
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 1
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -2857,7 +2856,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 3
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 1
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -3203,7 +3203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 3
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 1
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -3316,18 +3317,6 @@ MonoBehaviour:
   DayEnds:
     m_PersistentCalls:
       m_Calls: []
-  TestEmployeeConfig:
-    rid: 1908735040774995968
-  references:
-    version: 2
-    RefIds:
-    - rid: 1908735040774995968
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        name: Jonh
-        hireCost: 50
-        profession: GGG
-        quirk: DFD
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4613,6 +4602,8 @@ MonoBehaviour:
   shopViewsLabel:
     m_LabelString: ShopView
   employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
+  roomsViewList: []
+  employeesViewList: []
 --- !u!1 &1711617364
 GameObject:
   m_ObjectHideFlags: 0
@@ -5681,6 +5672,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: maxStressGatherTime.days
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
@@ -5745,6 +5740,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 40476289}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].timeToComplete.days
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].employeeCountTarget
       value: 5
       objectReference: {fileID: 0}
@@ -5773,8 +5772,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 40476285}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].upperIntBoundInclusive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].dataProviderGameObject
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].timeToEnsureCompletion.value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].timeToEnsureCompletion.seconds
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7228478050088520735, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: m_AnchorMax.x

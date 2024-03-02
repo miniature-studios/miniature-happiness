@@ -55,7 +55,7 @@ namespace Employee.Needs
                 properties.OverrideSatisfaction = modifier.OverrideSatisfaction;
                 properties.OverrideSatisfactionValue = modifier.OverrideSatisfactionValue;
                 properties.SatisfactionGained *= modifier.SatisfactionGained;
-                properties.SatisfactionTime *= modifier.SatisfactionTime;
+                properties.SatisfactionTime *= modifier.SatisfactionTime.Value;
                 properties.DecreaseSpeed *= modifier.DecreaseSpeed;
             }
 

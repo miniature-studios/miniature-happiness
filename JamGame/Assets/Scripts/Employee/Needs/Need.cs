@@ -25,7 +25,7 @@ namespace Employee.Needs
         public struct NeedProperties
         {
             public NeedType NeedType;
-            public float SatisfactionTime;
+            public RealTimeSeconds SatisfactionTime;
             public float SatisfactionGained;
             public float DecreaseSpeed;
             public bool OverrideSatisfaction;
@@ -34,7 +34,7 @@ namespace Employee.Needs
             public NeedProperties(NeedType ty)
             {
                 NeedType = ty;
-                SatisfactionTime = 5.0f;
+                SatisfactionTime = new RealTimeSeconds(5.0f);
                 SatisfactionGained = 1.0f;
                 DecreaseSpeed = 1.0f;
                 OverrideSatisfaction = false;
@@ -46,7 +46,7 @@ namespace Employee.Needs
                 return new NeedProperties
                 {
                     NeedType = NeedType,
-                    SatisfactionTime = SatisfactionTime * other.SatisfactionTime,
+                    SatisfactionTime = SatisfactionTime * other.SatisfactionTime.Value,
                     SatisfactionGained = SatisfactionGained * other.SatisfactionGained,
                     DecreaseSpeed = DecreaseSpeed * other.DecreaseSpeed,
                     OverrideSatisfaction = OverrideSatisfaction || other.OverrideSatisfaction,

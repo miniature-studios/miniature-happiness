@@ -36,7 +36,7 @@ namespace Employee
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
         private Need latestSatisfiedNeed;
-        private float satisfyingNeedRemaining = 0.0f;
+        private RealTimeSeconds satisfyingNeedRemaining = RealTimeSeconds.Zero;
         private NeedProvider targetNeedProvider = null;
 
         private ControllerImpl controller;
@@ -161,8 +161,8 @@ namespace Employee
 
                     break;
                 case State.SatisfyingNeed:
-                    satisfyingNeedRemaining -= Time.deltaTime;
-                    if (satisfyingNeedRemaining < 0.0f)
+                    satisfyingNeedRemaining -= new RealTimeSeconds(Time.deltaTime);
+                    if (satisfyingNeedRemaining < RealTimeSeconds.Zero)
                     {
                         state = State.Idle;
                         currentlySatisfyingNeed.Satisfy();
