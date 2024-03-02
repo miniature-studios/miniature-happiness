@@ -99,6 +99,10 @@ public class Model : MonoBehaviour
 ...
 ```
  
+## Pickle settings
+
+On first project startup `Pickle` will propose to create `PickleSettings.asset`. *Don't* create it as it's already present at `/Assets/Plugins` folder.
+
 ## License
 
 [MIT license](https://github.com/mertwole/miniature-happiness/blob/main/LICENSE)
