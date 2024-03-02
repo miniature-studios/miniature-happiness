@@ -85,7 +85,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7027475554387804387
 Transform:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.71
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 0.91, z: 0}
@@ -182,8 +182,8 @@ MonoBehaviour:
       NeedType: 3
       SatisfactionTime:
         seconds: 1
-      SatisfactionGained: 0
-      DecreaseSpeed: 0
+      SatisfactionGained: 800
+      DecreaseSpeed: 2
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
     satisfied: -Infinity
@@ -212,15 +212,14 @@ MonoBehaviour:
       NeedType: 1
       SatisfactionTime:
         seconds: 1
-      SatisfactionGained: 1600
-      DecreaseSpeed: 4
+      SatisfactionGained: 200
+      DecreaseSpeed: 1
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
     satisfied: 0
     registeredModifiers: []
   registeredModifiers: []
   incomeGenerator: {fileID: 2575964175689351513}
-  appliedBuffs: []
   keepDistanceFromNextInLine: {x: 1.2, y: 1.3}
 --- !u!114 &7027475554387804410
 MonoBehaviour:
@@ -245,13 +244,14 @@ MonoBehaviour:
     Buff: {fileID: 11400000, guid: b7b6c2bb573ae2d4fac6c2f15f248025, type: 2}
   - StartsAt: 95
     Buff: {fileID: 11400000, guid: 4520cb830b3b3da4eb50861b185c0469, type: 2}
+  currentBuff: {fileID: 0}
   configRaw:
   - NeedType: 0
     DesatisfactionConfig:
       Threshold: 0
       Speed: 0
   stress: 0
-  restoreSpeed: -100
+  restoreSpeed: -10
 --- !u!114 &7027475554387804411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name_: John
   quirks:
+  - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
   - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
 --- !u!114 &7027475554387804412
 MonoBehaviour:
