@@ -28,12 +28,6 @@ namespace Employee
         [SerializeReference]
         private List<IEffect> effects = new();
         public IEnumerable<IEffect> Effects => effects;
-
-        // TODO: Move to BuffView
-        // TODO: Change to Image
-        [SerializeField]
-        private string name_;
-        public string Name => name_;
     }
 
     public interface IEffectExecutor { }

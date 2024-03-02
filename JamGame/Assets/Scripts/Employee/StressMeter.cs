@@ -37,6 +37,9 @@ namespace Employee
         [SerializeField]
         private List<StressStage> stages;
         private int currentStage = -1;
+
+        [SerializeField]
+        [ReadOnly]
         private Buff currentBuff;
 
         [SerializeField]

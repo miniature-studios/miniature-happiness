@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using Common;
 using Employee.Personality;
 using Sirenix.OdinInspector;
@@ -20,7 +23,7 @@ namespace Employee.ExtendedInfo
         [Required]
         [SerializeField]
         [ChildGameObjectsOnly]
-        private TMP_Text text;
+        private TMP_Text name_text;
 
         [SerializeField]
         private AssetLabelReference quirkViewsLabel;
@@ -39,7 +42,19 @@ namespace Employee.ExtendedInfo
         [Required]
         private Transform buffsContainer;
 
-        private void Start()
+        private List<BuffView> instantiatedBuffViews = new();
+
+        private void OnEnable()
+        {
+            employee.AppliedBuffsChanged += OnBuffsChanged;
+        }
+
+        private void OnDisable()
+        {
+            employee.AppliedBuffsChanged -= OnBuffsChanged;
+        }
+
+        private void Awake()
         {
             cam = Camera.main;
 
@@ -69,40 +84,86 @@ namespace Employee.ExtendedInfo
                     buffModelViewMap.Add(buff_view.Asset.Uid, buff_view.Location);
                 }
             }
-        }
 
-        private bool debugFirstTime = true;
+            foreach (Buff buff in employee.AppliedBuffs)
+            {
+                AddBuff(buff);
+            }
+
+            foreach (Quirk quirk in personality.Quirks)
+            {
+                IResourceLocation view_location = quirkModelViewMap[quirk.Uid];
+
+                _ = Instantiate(
+                    AddressableTools<QuirkView>.LoadAsset(view_location),
+                    quirksContainer
+                );
+            }
+        }
 
         private void Update()
         {
             transform.LookAt(cam.transform.position);
+            name_text.text = $"{personality.Name}";
+        }
 
-            text.text = $"{personality.Name}";
-
-            if (debugFirstTime)
+        public void OnBuffsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
             {
-                debugFirstTime = false;
-
-                foreach (Quirk quirk in personality.Quirks)
+                case NotifyCollectionChangedAction.Add:
                 {
-                    IResourceLocation view_location = quirkModelViewMap[quirk.Uid];
-
-                    _ = Instantiate(
-                        AddressableTools<QuirkView>.LoadAsset(view_location),
-                        quirksContainer
-                    );
+                    Buff added_buff = e.NewItems[0] as Buff;
+                    AddBuff(added_buff);
+                    break;
                 }
-
-                foreach (Buff buff in employee.Buffs)
+                case NotifyCollectionChangedAction.Remove:
                 {
-                    IResourceLocation view_location = buffModelViewMap[buff.Uid];
-
-                    _ = Instantiate(
-                        AddressableTools<BuffView>.LoadAsset(view_location),
-                        buffsContainer
-                    );
+                    Buff removed_buff = e.OldItems[0] as Buff;
+                    RemoveBuff(removed_buff.Uid);
+                    break;
                 }
+                case NotifyCollectionChangedAction.Replace:
+                {
+                    Buff added_buff = e.NewItems[0] as Buff;
+                    AddBuff(added_buff);
+                    Buff removed_buff = e.OldItems[0] as Buff;
+                    RemoveBuff(removed_buff.Uid);
+                    break;
+                }
+                case NotifyCollectionChangedAction.Reset:
+                {
+                    while (instantiatedBuffViews.Count > 0)
+                    {
+                        BuffView last = instantiatedBuffViews.Last();
+                        _ = instantiatedBuffViews.Remove(last);
+                        Destroy(last.gameObject);
+                    }
+                    break;
+                }
+                default:
+                    Debug.LogError(
+                        $"Unexpected variant of NotifyCollectionChangedAction: {e.Action}"
+                    );
+                    throw new ArgumentException();
             }
+        }
+
+        private void AddBuff(Buff buff)
+        {
+            IResourceLocation view_location = buffModelViewMap[buff.Uid];
+            BuffView buff_view = Instantiate(
+                AddressableTools<BuffView>.LoadAsset(view_location),
+                buffsContainer
+            );
+            instantiatedBuffViews.Add(buff_view);
+        }
+
+        private void RemoveBuff(string buff_uid)
+        {
+            BuffView to_remove = instantiatedBuffViews.Find((b) => b.Uid == buff_uid);
+            _ = instantiatedBuffViews.Remove(to_remove);
+            Destroy(to_remove.gameObject);
         }
     }
 }
