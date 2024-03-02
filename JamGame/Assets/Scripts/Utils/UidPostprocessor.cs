@@ -10,7 +10,7 @@ namespace Utils
     internal class UidPostprocessor : AssetPostprocessor
     {
         // TODO: Generalize approach with Uids as it's used in 3 places now:
-        // rooms, extended info buffs, extended info quirks.
+        // rooms, extended info buffs, extended info quirks (#127).
         private static void OnPostprocessAllAssets(
             string[] importedAssets,
             string[] deletedAssets,
