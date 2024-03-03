@@ -116,7 +116,7 @@ namespace Level.Boss
                         }
                         else
                         {
-                            task.Task.Update(new RealTimeSeconds(Time.deltaTime));
+                            task.Task.Update(RealTimeSeconds.FromDeltaTime());
                         }
                     }
                 }

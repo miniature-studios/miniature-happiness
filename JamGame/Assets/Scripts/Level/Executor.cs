@@ -103,6 +103,7 @@ namespace Level
             navMeshUpdater.UpdateNavMesh();
             needProviderManager.InitGameMode();
 
+            meetingEndNeedOverride.Unregister();
             meetingStartNeedOverride.Register();
 
             this.CreateGate(
