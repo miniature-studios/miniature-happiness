@@ -21,6 +21,7 @@ namespace Employee
             Idle,
             Walking,
             InWaitingLine,
+            ApproachingNeedProvider,
             SatisfyingNeed
         }
 
@@ -131,6 +132,8 @@ namespace Employee
                     if (placeInWaitingLine.GetNextInLine() == null)
                     {
                         controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+                        controller.SetDestination(targetNeedProvider.transform.position);
+                        state = State.ApproachingNeedProvider;
                         break;
                     }
 
@@ -157,6 +160,8 @@ namespace Employee
 
                     controller.SetNavigationMode(ControllerImpl.NavigationMode.FreeMove);
 
+                    break;
+                case State.ApproachingNeedProvider:
                     break;
                 case State.SatisfyingNeed:
                     break;

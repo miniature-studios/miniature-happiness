@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 3614930269989214917}
   - component: {fileID: 5121084133198969258}
   - component: {fileID: 4852138091210938660}
+  - component: {fileID: 1689074227714210146}
   m_Layer: 0
   m_Name: NeedProvider
   m_TagString: Untagged
@@ -88,6 +89,36 @@ MonoBehaviour:
     FilterType: 3
   bindToThisProviderOnFirstVisit: 0
   NeedType: 3
+  taken:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1689074227714210146}
+        m_TargetAssemblyTypeName: Location.MeetingRoomEmployeeBinder, Assembly-CSharp
+        m_MethodName: PlaceTaken
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  released:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1689074227714210146}
+        m_TargetAssemblyTypeName: Location.MeetingRoomEmployeeBinder, Assembly-CSharp
+        m_MethodName: PlaceReleased
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4852138091210938660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,6 +135,18 @@ MonoBehaviour:
   shift: {x: 0, y: 0, z: 0}
   color: {r: 1, g: 1, b: 1, a: 1}
   isWireframe: 0
+--- !u!114 &1689074227714210146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783374104973535771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49866dcb5825844eb1d3bc2ced7357e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1947409966708634132
 GameObject:
   m_ObjectHideFlags: 0

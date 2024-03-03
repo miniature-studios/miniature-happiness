@@ -5,6 +5,7 @@ using Employee;
 using Employee.Needs;
 using Level.GlobalTime;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Location
 {
@@ -144,6 +145,12 @@ namespace Location
 
         private List<PlaceInWaitingLine> waitingLine = new();
 
+        [SerializeField]
+        private UnityEvent<EmployeeImpl> taken = new();
+
+        [SerializeField]
+        private UnityEvent<EmployeeImpl> released = new();
+
         public void Take(
             PlaceInWaitingLine place,
             RealTimeSeconds desiredTime,
@@ -172,6 +179,8 @@ namespace Location
                 // TODO: Store bindings inside EmployeeManager
                 employee.BindToNeedProvider(this);
             }
+
+            taken?.Invoke(currentEmployee);
         }
 
         public void Update()
@@ -215,8 +224,11 @@ namespace Location
                 waitingLine[0].RemoveNext();
             }
 
+            EmployeeImpl previousEmployee = currentEmployee;
             currentEmployee = null;
             currentEmployeeReleaseCallback();
+
+            released?.Invoke(previousEmployee);
         }
 
         public bool IsAvailable(EmployeeImpl employee)
