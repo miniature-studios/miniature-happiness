@@ -82,40 +82,45 @@ namespace Employee
         private void Awake()
         {
             appliedBuffs.CollectionChanged += (s, e) =>
-            {
-                NotifyCollectionChangedEventArgs args = null;
-                switch (e.Action)
-                {
-                    case NotifyCollectionChangedAction.Add:
-                        args = new(e.Action, ((AppliedBuff)e.NewItems[0]).Buff);
-                        break;
-                    case NotifyCollectionChangedAction.Remove:
-                        args = new(e.Action, ((AppliedBuff)e.OldItems[0]).Buff);
-                        break;
-                    case NotifyCollectionChangedAction.Replace:
-                        args = new(
-                            e.Action,
-                            ((AppliedBuff)e.NewItems[0]).Buff,
-                            ((AppliedBuff)e.OldItems[0]).Buff
-                        );
-                        break;
-                    case NotifyCollectionChangedAction.Reset:
-                        List<Buff> old_items = new();
-                        foreach (object old_item in e.OldItems)
-                        {
-                            old_items.Add(((AppliedBuff)old_item).Buff);
-                        }
-                        args = new(e.Action, old_items);
-                        break;
-                    default:
-                        Debug.LogError(
-                            $"Unexpected variant of NotifyCollectionChangedAction: {e.Action}"
-                        );
-                        throw new ArgumentException();
-                }
+                AppliedBuffsChanged?.Invoke(s, AppliedBuffsCollectionChangedMapping(e));
+        }
 
-                AppliedBuffsChanged?.Invoke(s, args);
-            };
+        private static NotifyCollectionChangedEventArgs AppliedBuffsCollectionChangedMapping(
+            NotifyCollectionChangedEventArgs original_args
+        )
+        {
+            NotifyCollectionChangedEventArgs args;
+            switch (original_args.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    args = new(original_args.Action, ((AppliedBuff)original_args.NewItems[0]).Buff);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    args = new(original_args.Action, ((AppliedBuff)original_args.OldItems[0]).Buff);
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    args = new(
+                        original_args.Action,
+                        ((AppliedBuff)original_args.NewItems[0]).Buff,
+                        ((AppliedBuff)original_args.OldItems[0]).Buff
+                    );
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    List<Buff> old_items = new();
+                    foreach (object old_item in original_args.OldItems)
+                    {
+                        old_items.Add(((AppliedBuff)old_item).Buff);
+                    }
+                    args = new(original_args.Action, old_items);
+                    break;
+                default:
+                    Debug.LogError(
+                        $"Unexpected variant of NotifyCollectionChangedAction: {original_args.Action}"
+                    );
+                    throw new ArgumentException();
+            }
+
+            return args;
         }
 
         private void Start()
