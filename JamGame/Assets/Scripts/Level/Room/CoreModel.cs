@@ -75,8 +75,6 @@ namespace Level.Room
                 )
             )
             {
-                Debug.Log("Register " + core.Asset.uid);
-
                 uidPrefabsMap.Add(core.Asset.Uid, core.Location);
             }
         }
