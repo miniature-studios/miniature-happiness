@@ -8,7 +8,6 @@ using Employee.Needs;
 using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Employee
@@ -101,7 +100,12 @@ namespace Employee
                         );
                         break;
                     case NotifyCollectionChangedAction.Reset:
-                        args = new(e.Action, e.OldItems.Convert((i) => ((AppliedBuff)i).Buff));
+                        List<Buff> old_items = new();
+                        foreach (object old_item in e.OldItems)
+                        {
+                            old_items.Add(((AppliedBuff)old_item).Buff);
+                        }
+                        args = new(e.Action, old_items);
                         break;
                     default:
                         Debug.LogError(
