@@ -63,6 +63,21 @@ namespace Employee.ExtendedInfo
         {
             cam = Camera.main;
 
+            InitModelViewMaps();
+
+            foreach (Buff buff in employee.AppliedBuffs)
+            {
+                AddBuff(buff);
+            }
+
+            foreach (Quirk quirk in personality.Quirks)
+            {
+                AddQuirk(quirk);
+            }
+        }
+
+        private void InitModelViewMaps()
+        {
             if (quirkModelViewMap.Count == 0)
             {
                 foreach (
@@ -85,21 +100,6 @@ namespace Employee.ExtendedInfo
                 {
                     buffModelViewMap.Add(buff_view.Asset.Uid, buff_view.Location);
                 }
-            }
-
-            foreach (Buff buff in employee.AppliedBuffs)
-            {
-                AddBuff(buff);
-            }
-
-            foreach (Quirk quirk in personality.Quirks)
-            {
-                IResourceLocation view_location = quirkModelViewMap[quirk.Uid];
-
-                _ = Instantiate(
-                    AddressableTools<QuirkView>.LoadAsset(view_location),
-                    quirksContainer
-                );
             }
         }
 
@@ -166,6 +166,12 @@ namespace Employee.ExtendedInfo
             BuffView to_remove = instantiatedBuffViews.Find((b) => b.Uid == buff_uid);
             _ = instantiatedBuffViews.Remove(to_remove);
             Destroy(to_remove.gameObject);
+        }
+
+        private void AddQuirk(Quirk quirk)
+        {
+            IResourceLocation view_location = quirkModelViewMap[quirk.Uid];
+            _ = Instantiate(AddressableTools<QuirkView>.LoadAsset(view_location), quirksContainer);
         }
     }
 }
