@@ -54,3 +54,7 @@ jobs:
       - name: Chown files to koala
         if: success() || failure() || ${{ job.status == 'Cancelled' }}
         run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.run_id || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
