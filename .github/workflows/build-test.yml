@@ -28,7 +28,7 @@ jobs:
           targetPlatform: StandaloneWindows64
       
       - name: Chown files to koala
-        if: success() || failure() || ${{ job.status == 'Cancelled' }}
+        if: ${{ always() }}
         run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
 
   buildForStandaloneWindows:
@@ -52,7 +52,7 @@ jobs:
           targetPlatform: StandaloneWindows
       
       - name: Chown files to koala
-        if: success() || failure() || ${{ job.status == 'Cancelled' }}
+        if: ${{ always() }}
         run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
 
 concurrency:
