@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using Employee.Controller;
 using Employee.Needs;
@@ -63,10 +65,11 @@ namespace Employee
         }
 
         [SerializeField]
-        private List<AppliedBuff> appliedBuffs = new();
+        [ReadOnly]
+        private ObservableCollection<AppliedBuff> appliedBuffs = new();
+        public IEnumerable<Buff> AppliedBuffs => appliedBuffs.Select(b => b.Buff);
 
-        // TODO: Will change when BuffView will be implemented.
-        public IEnumerable<Buff> Buffs => appliedBuffs.Select(buff => buff.Buff);
+        public event NotifyCollectionChangedEventHandler AppliedBuffsChanged;
 
         private BuffsNeedModifiersPool buffsNeedModifiers;
 
@@ -75,6 +78,50 @@ namespace Employee
         [MinMaxSlider(0, 10, true)]
         [SerializeField]
         private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
+
+        private void Awake()
+        {
+            appliedBuffs.CollectionChanged += (s, e) =>
+                AppliedBuffsChanged?.Invoke(s, AppliedBuffsCollectionChangedMapping(e));
+        }
+
+        private static NotifyCollectionChangedEventArgs AppliedBuffsCollectionChangedMapping(
+            NotifyCollectionChangedEventArgs original_args
+        )
+        {
+            NotifyCollectionChangedEventArgs args;
+            switch (original_args.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    args = new(original_args.Action, ((AppliedBuff)original_args.NewItems[0]).Buff);
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    args = new(original_args.Action, ((AppliedBuff)original_args.OldItems[0]).Buff);
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    args = new(
+                        original_args.Action,
+                        ((AppliedBuff)original_args.NewItems[0]).Buff,
+                        ((AppliedBuff)original_args.OldItems[0]).Buff
+                    );
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    List<Buff> old_items = new();
+                    foreach (object old_item in original_args.OldItems)
+                    {
+                        old_items.Add(((AppliedBuff)old_item).Buff);
+                    }
+                    args = new(original_args.Action, old_items);
+                    break;
+                default:
+                    Debug.LogError(
+                        $"Unexpected variant of NotifyCollectionChangedAction: {original_args.Action}"
+                    );
+                    throw new ArgumentException();
+            }
+
+            return args;
+        }
 
         private void Start()
         {

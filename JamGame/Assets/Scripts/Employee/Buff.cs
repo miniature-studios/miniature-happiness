@@ -10,17 +10,24 @@ namespace Employee
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
     public class Buff : ScriptableObject
     {
+        [ReadOnly]
+        [SerializeField]
+        // TODO: Wrap it in newtype.
+        private string uid;
+        public string Uid => uid;
+
+#if UNITY_EDITOR
+        public void SetHashCode(string uid)
+        {
+            this.uid = uid;
+        }
+#endif
+
         public Days Time;
 
         [SerializeReference]
         private List<IEffect> effects = new();
         public IEnumerable<IEffect> Effects => effects;
-
-        // TODO: Move to BuffView
-        // TODO: Change to Image
-        [SerializeField]
-        private string name_;
-        public string Name => name_;
     }
 
     public interface IEffectExecutor { }

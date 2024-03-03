@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Employee.Personality
 {
-    // TODO: Can we place Quirk here or even make it to be not SO.
-
     [RequireComponent(typeof(EmployeeImpl))]
     [AddComponentMenu("Scripts/Employee/Personality/Employee.Personality")]
     public class PersonalityImpl : MonoBehaviour
@@ -16,8 +14,6 @@ namespace Employee.Personality
 
         [SerializeField]
         private List<Quirk> quirks;
-
-        // TODO: Will change when QuirkView will be implemented.
         public IEnumerable<Quirk> Quirks => quirks;
 
         private void Start()

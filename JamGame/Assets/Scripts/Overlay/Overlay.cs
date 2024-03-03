@@ -25,11 +25,8 @@ namespace Overlay
     [Serializable]
     public class ExtendedEmployeeInfo : IOverlay
     {
-        [AssetsOnly]
-        [SerializeField]
-        [FoldoutGroup("Extended Employee Info")]
-        private GameObject uiPrefab;
-        public GameObject UIPrefab => uiPrefab;
+        [FoldoutGroup("None")]
+        public string UselessSting;
 
         public void Activate(IOverlayManager overlay_manager)
         {

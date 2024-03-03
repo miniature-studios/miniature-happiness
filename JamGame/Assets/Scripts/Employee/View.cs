@@ -1,4 +1,5 @@
 using Overlay;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee
@@ -76,26 +77,19 @@ namespace Employee
 
     public partial class View : IOverlayRenderer<ExtendedEmployeeInfo>
     {
-        private GameObject overlayUI;
+        [SerializeField]
+        [Required]
+        [ChildGameObjectsOnly]
+        private ExtendedInfo.View extendedInfoView;
 
         public void ApplyOverlay(ExtendedEmployeeInfo overlay)
         {
-            if (overlayUI == null)
-            {
-                overlayUI = Instantiate(overlay.UIPrefab, transform, false);
-            }
-
-            overlayUI.SetActive(true);
+            extendedInfoView.gameObject.SetActive(true);
         }
 
         public void RevertExtendedInfoOverlay()
         {
-            if (overlayUI == null)
-            {
-                return;
-            }
-
-            overlayUI.SetActive(false);
+            extendedInfoView.gameObject.SetActive(false);
         }
     }
 }
