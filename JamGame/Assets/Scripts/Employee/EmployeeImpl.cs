@@ -85,7 +85,7 @@ namespace Employee
 
         private void Update()
         {
-            RealTimeSeconds delta_time = new(Time.deltaTime);
+            RealTimeSeconds delta_time = RealTimeSeconds.FromDeltaTime();
 
             UpdateNeeds(delta_time);
             Stress.UpdateStress(needs, delta_time);
