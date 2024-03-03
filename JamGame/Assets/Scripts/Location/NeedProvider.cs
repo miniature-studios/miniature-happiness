@@ -186,7 +186,17 @@ namespace Location
             }
         }
 
-        public void ReleaseEmployee()
+        public void ForceReleaseEmployeeIfAny()
+        {
+            if (currentEmployee == null)
+            {
+                return;
+            }
+
+            ReleaseEmployee();
+        }
+
+        private void ReleaseEmployee()
         {
             foreach (NeedModifiers modifier in registeredModifiers)
             {

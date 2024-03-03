@@ -35,7 +35,6 @@ namespace Employee
         private List<Need> needs = new();
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
-        private Need latestSatisfiedNeed;
         private NeedProvider targetNeedProvider = null;
 
         private ControllerImpl controller;
@@ -49,7 +48,7 @@ namespace Employee
 
         public StressMeter Stress { get; private set; }
 
-        public NeedType? LatestSatisfiedNeedType => latestSatisfiedNeed?.NeedType;
+        public NeedType? CurrentNeedType => currentlySatisfyingNeed?.NeedType;
 
         [Serializable]
         private struct AppliedBuff
@@ -334,7 +333,6 @@ namespace Employee
         {
             state = State.Idle;
             currentlySatisfyingNeed.Satisfy();
-            latestSatisfiedNeed = currentlySatisfyingNeed;
             incomeGenerator.NeedComplete(currentlySatisfyingNeed);
             currentlySatisfyingNeed = null;
 
