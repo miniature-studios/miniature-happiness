@@ -332,6 +332,13 @@ namespace Employee
                 ReleasedFromNeedProvider
             );
             state = State.SatisfyingNeed;
+
+            // TODO: Remove it when employee serialization will be implemented (#121)
+            if (currentlySatisfyingNeed.NeedType == NeedType.Leave)
+            {
+                placeInWaitingLine.Drop();
+                gameObject.SetActive(false);
+            }
         }
 
         public void ReleasedFromNeedProvider()
@@ -340,18 +347,9 @@ namespace Employee
             currentlySatisfyingNeed.Satisfy();
             incomeGenerator.NeedComplete(currentlySatisfyingNeed);
             currentlySatisfyingNeed = null;
-
-            // TODO: Remove it when employee serialization will be implemented (#121)
-            NeedType prevNeedType = targetNeedProvider.NeedType;
             targetNeedProvider = null;
 
             controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
-
-            // TODO: Remove it when employee serialization will be implemented (#121)
-            if (prevNeedType == NeedType.Leave)
-            {
-                gameObject.SetActive(false);
-            }
         }
 
         public void RegisterModifier(NeedModifiers modifiers)
