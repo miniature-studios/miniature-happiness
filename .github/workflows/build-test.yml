@@ -11,13 +11,18 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: self-hosted
     steps:
-      - name: Chown files to koala
-        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
-      
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
+      
+      - uses: actions/cache@v4
+        with:
+          path: JamGame/Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+      
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -26,22 +31,25 @@ jobs:
         with:
           projectPath: JamGame
           targetPlatform: StandaloneWindows64
-      
-      - name: Chown files to koala
-        if: ${{ always() }}
-        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
+          runAsHostUser: true
+          chownFilesTo: koala
 
   buildForStandaloneWindows:
-    if: github.event.pull_request.merged == true && github.event.pull_request.draft == false
+    if: github.event.pull_request.draft == false && github.event.pull_request.merged == true
     runs-on: self-hosted
     steps:
-      - name: Chown files to koala
-        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
-      
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
+      
+      - uses: actions/cache@v4
+        with:
+          path: JamGame/Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+      
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -50,10 +58,8 @@ jobs:
         with:
           projectPath: JamGame
           targetPlatform: StandaloneWindows
-      
-      - name: Chown files to koala
-        if: ${{ always() }}
-        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
+          runAsHostUser: true
+          chownFilesTo: koala
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.run_id || github.event.pull_request.number || github.ref }}
