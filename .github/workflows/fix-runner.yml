@@ -1,0 +1,11 @@
+name: Chown
+
+on:
+  workflow_dispatch:
+
+jobs:
+  chownFilesToGithubUser:
+    runs-on: self-hosted
+    steps:
+      - name: Chown files to koala
+        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
