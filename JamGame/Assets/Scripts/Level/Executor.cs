@@ -92,9 +92,9 @@ namespace Level
             _ = StartCoroutine(DayStartRoutine(dayStart.Duration));
         }
 
-        private IEnumerator DayStartRoutine(float time)
+        private IEnumerator DayStartRoutine(RealTimeSeconds time)
         {
-            yield return new WaitForSecondsRealtime(time);
+            yield return new WaitForSecondsRealtime(time.Value);
             ActionEndNotify?.Invoke();
         }
 
@@ -165,7 +165,7 @@ namespace Level
 
         private IEnumerator WorkingTime(Days duration)
         {
-            yield return new WaitForSeconds(duration.RealTimeSeconds);
+            yield return new WaitForSeconds(duration.RealTimeSeconds.Value);
             ActionEndNotify?.Invoke();
         }
 
@@ -183,9 +183,9 @@ namespace Level
             _ = StartCoroutine(CutsceneRoutine(cutscene.Duration));
         }
 
-        private IEnumerator CutsceneRoutine(float time)
+        private IEnumerator CutsceneRoutine(RealTimeSeconds time)
         {
-            yield return new WaitForSecondsRealtime(time);
+            yield return new WaitForSecondsRealtime(time.Value);
             cutsceneMinTimeEnded = true;
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Employee.Needs;
+using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -62,7 +63,7 @@ namespace Employee
             employee = GetComponent<EmployeeImpl>();
         }
 
-        public void UpdateStress(List<Need> needs, float delta_time)
+        public void UpdateStress(List<Need> needs, RealTimeSeconds delta_time)
         {
             float delta = 0.0f;
             foreach (Need need in needs)
@@ -78,7 +79,7 @@ namespace Employee
 
             delta *= increaseMultiplierByEffects;
 
-            stress += (delta - restoreSpeed) * delta_time;
+            stress += (delta - restoreSpeed) * delta_time.Value;
 
             int new_stage = 0;
             for (int i = stages.Count - 1; i > 0; i--)

@@ -1676,7 +1676,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 4
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 0
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -1869,7 +1870,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &741143842
 RectTransform:
@@ -2264,7 +2265,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &764846867
 RectTransform:
@@ -2762,7 +2763,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 4
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 0
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -3064,7 +3066,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 3
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 0
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -3410,7 +3413,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifiersRaw:
   - NeedType: 3
-    SatisfactionTime: 0
+    SatisfactionTime:
+      seconds: 0
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -5891,6 +5895,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: maxStressGatherTime.days
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
@@ -5955,6 +5963,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 40476289}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].timeToComplete.days
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].employeeCountTarget
       value: 5
       objectReference: {fileID: 0}
@@ -5983,8 +5995,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 40476285}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135555].upperIntBoundInclusive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].dataProviderGameObject
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[4306523841130135553].timeToEnsureCompletion.seconds
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7228478050088520735, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: m_AnchorMax.x

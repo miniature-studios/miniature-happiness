@@ -1,54 +1,8 @@
-using System;
 using Common;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.GlobalTime
 {
-    [Serializable]
-    [InlineProperty]
-    public struct Days
-    {
-        public float Days_;
-
-        public readonly float RealTimeSeconds => Days_ * Model.DayLength;
-
-        public static Days FromRealTimeSeconds(float seconds)
-        {
-            return new Days() { Days_ = seconds / Model.DayLength };
-        }
-
-        public static Days operator +(Days a, Days b)
-        {
-            return new Days() { Days_ = a.Days_ + b.Days_ };
-        }
-
-        public static Days operator -(Days a, Days b)
-        {
-            return new Days() { Days_ = a.Days_ - b.Days_ };
-        }
-
-        public static bool operator >(Days a, Days b)
-        {
-            return a.Days_ > b.Days_;
-        }
-
-        public static bool operator <(Days a, Days b)
-        {
-            return a.Days_ < b.Days_;
-        }
-
-        public static bool operator <=(Days a, Days b)
-        {
-            return a.Days_ <= b.Days_;
-        }
-
-        public static bool operator >=(Days a, Days b)
-        {
-            return a.Days_ >= b.Days_;
-        }
-    }
-
     [AddComponentMenu("Scripts/Level/GlobalTime/Level.GlobalTime.Model")]
     public class Model : MonoBehaviour
     {

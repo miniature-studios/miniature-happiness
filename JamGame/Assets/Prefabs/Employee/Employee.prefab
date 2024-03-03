@@ -85,7 +85,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7027475554387804387
 Transform:
   m_ObjectHideFlags: 0
@@ -180,7 +180,8 @@ MonoBehaviour:
   needs:
   - properties:
       NeedType: 3
-      SatisfactionTime: 0.1
+      SatisfactionTime:
+        seconds: 1
       SatisfactionGained: 0
       DecreaseSpeed: 0
       OverrideSatisfaction: 0
@@ -189,7 +190,8 @@ MonoBehaviour:
     registeredModifiers: []
   - properties:
       NeedType: 4
-      SatisfactionTime: 0.1
+      SatisfactionTime:
+        seconds: 1
       SatisfactionGained: 0
       DecreaseSpeed: 0
       OverrideSatisfaction: 0
@@ -198,7 +200,8 @@ MonoBehaviour:
     registeredModifiers: []
   - properties:
       NeedType: 0
-      SatisfactionTime: 2
+      SatisfactionTime:
+        seconds: 1
       SatisfactionGained: 400
       DecreaseSpeed: 1
       OverrideSatisfaction: 0
@@ -207,7 +210,8 @@ MonoBehaviour:
     registeredModifiers: []
   - properties:
       NeedType: 1
-      SatisfactionTime: 2
+      SatisfactionTime:
+        seconds: 1
       SatisfactionGained: 1600
       DecreaseSpeed: 4
       OverrideSatisfaction: 0
@@ -261,7 +265,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name_: John
-  quirks: []
+  quirks:
+  - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
 --- !u!114 &7027475554387804412
 MonoBehaviour:
   m_ObjectHideFlags: 0

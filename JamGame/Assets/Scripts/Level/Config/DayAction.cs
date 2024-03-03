@@ -30,8 +30,8 @@ namespace Level.Config
     public class Cutscene : IDayAction
     {
         [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        private RealTimeSeconds duration;
+        public RealTimeSeconds Duration => duration;
 
         [SerializeField]
         private string text;
@@ -51,8 +51,8 @@ namespace Level.Config
         public int MorningMoney => morningMoney;
 
         [SerializeField]
-        private float duration;
-        public float Duration => duration;
+        private RealTimeSeconds duration;
+        public RealTimeSeconds Duration => duration;
 
         public void Execute(Executor executor)
         {

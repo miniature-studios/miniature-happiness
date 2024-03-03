@@ -18,7 +18,7 @@ namespace Level.Boss.Task
     [HideReferenceObjectPicker]
     public interface ITask
     {
-        public void Update(float delta_time) { }
+        public void Update(RealTimeSeconds delta_time) { }
 
         public Progress Progress { get; }
     }
@@ -69,19 +69,19 @@ namespace Level.Boss.Task
         public Progress Progress =>
             new()
             {
-                Completion = currentDuration,
-                Overall = targetDuration,
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
                 Complete = complete,
             };
 
         [SerializeField]
         [FoldoutGroup("Max Stress Bound")]
-        private float targetDuration;
+        private Days targetDuration;
 
-        private float currentDuration = .0f;
+        private Days currentDuration = Days.Zero;
         private bool complete = false;
 
-        public void Update(float delta_time)
+        public void Update(RealTimeSeconds delta_time)
         {
             if (complete)
             {
@@ -99,11 +99,11 @@ namespace Level.Boss.Task
                 .Stress;
             if (max_stress < MaxStressTarget)
             {
-                currentDuration += delta_time;
+                currentDuration += new Days(delta_time);
             }
             else
             {
-                currentDuration = 0.0f;
+                currentDuration = Days.Zero;
             }
         }
     }
@@ -119,7 +119,7 @@ namespace Level.Boss.Task
         [SerializeField]
         [MinValue(0)]
         [FoldoutGroup("Target Room Count")]
-        private float timeToEnsureCompletion = 0.5f;
+        private RealTimeSeconds timeToEnsureCompletion = new(0.5f);
 
         [AssetsOnly]
         [SerializeField]
@@ -157,10 +157,10 @@ namespace Level.Boss.Task
         private RoomCountByUid roomCountCache =
             new() { CountByUid = new Dictionary<string, int>() };
 
-        private float currentEnsuringTime = 0.0f;
+        private RealTimeSeconds currentEnsuringTime = RealTimeSeconds.Zero;
         private bool complete = false;
 
-        public void Update(float delta_time)
+        public void Update(RealTimeSeconds delta_time)
         {
             if (complete)
             {
@@ -171,7 +171,7 @@ namespace Level.Boss.Task
             {
                 if (roomCountCache.CountByUid[room.Uid] < targetAmount)
                 {
-                    currentEnsuringTime = 0.0f;
+                    currentEnsuringTime = RealTimeSeconds.Zero;
                 }
                 else
                 {
@@ -205,17 +205,17 @@ namespace Level.Boss.Task
         [FoldoutGroup("Room Count Upper Bound")]
         private Days timeToComplete;
 
-        private Days completeness = Days.FromRealTimeSeconds(0.0f);
+        private Days completeness = Days.Zero;
 
         public Progress Progress =>
             new()
             {
                 Complete = completeness >= timeToComplete,
-                Completion = completeness.Days_,
-                Overall = timeToComplete.Days_
+                Completion = completeness.Value,
+                Overall = timeToComplete.Value
             };
 
-        public void Update(float delta_time)
+        public void Update(RealTimeSeconds delta_time)
         {
             if (completeness > timeToComplete)
             {
@@ -233,11 +233,11 @@ namespace Level.Boss.Task
 
             if (currentCount <= UpperBoundInclusive)
             {
-                completeness += Days.FromRealTimeSeconds(delta_time);
+                completeness += new Days(delta_time);
             }
             else
             {
-                completeness = Days.FromRealTimeSeconds(0);
+                completeness = Days.Zero;
             }
         }
     }

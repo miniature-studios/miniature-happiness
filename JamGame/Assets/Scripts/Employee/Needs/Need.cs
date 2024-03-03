@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace Employee.Needs
         public struct NeedProperties
         {
             public NeedType NeedType;
-            public float SatisfactionTime;
+            public RealTimeSeconds SatisfactionTime;
             public float SatisfactionGained;
             public float DecreaseSpeed;
             public bool OverrideSatisfaction;
@@ -33,7 +34,7 @@ namespace Employee.Needs
             public NeedProperties(NeedType ty)
             {
                 NeedType = ty;
-                SatisfactionTime = 5.0f;
+                SatisfactionTime = new RealTimeSeconds(5.0f);
                 SatisfactionGained = 1.0f;
                 DecreaseSpeed = 1.0f;
                 OverrideSatisfaction = false;
@@ -45,7 +46,7 @@ namespace Employee.Needs
                 return new NeedProperties
                 {
                     NeedType = NeedType,
-                    SatisfactionTime = SatisfactionTime * other.SatisfactionTime,
+                    SatisfactionTime = SatisfactionTime * other.SatisfactionTime.Value,
                     SatisfactionGained = SatisfactionGained * other.SatisfactionGained,
                     DecreaseSpeed = DecreaseSpeed * other.DecreaseSpeed,
                     OverrideSatisfaction = OverrideSatisfaction || other.OverrideSatisfaction,
@@ -87,7 +88,7 @@ namespace Employee.Needs
         }
 
         // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
-        public void Dissatisfy(float delta_time)
+        public void Dissatisfy(RealTimeSeconds time)
         {
             NeedProperties properties = GetProperties();
 
@@ -97,7 +98,7 @@ namespace Employee.Needs
             }
             else
             {
-                satisfied -= delta_time * properties.DecreaseSpeed;
+                satisfied -= time.Value * properties.DecreaseSpeed;
             }
         }
 
