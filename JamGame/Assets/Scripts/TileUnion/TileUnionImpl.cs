@@ -58,7 +58,7 @@ namespace TileUnion
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        public string Uid => CoreModelPrefab.Uid;
+        public InternalUid Uid => CoreModelPrefab.Uid;
 
         [ReadOnly]
         [SerializeField]

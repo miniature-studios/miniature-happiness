@@ -23,7 +23,7 @@ namespace Level.Shop
 
         [SerializeField]
         private AssetLabelReference shopViewsLabel;
-        private Dictionary<string, IResourceLocation> modelViewMap = new();
+        private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
 
         [SerializeField]
         private EmployeeView employeeViewPrototype;

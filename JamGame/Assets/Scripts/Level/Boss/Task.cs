@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Common;
 using Level.GlobalTime;
 using Level.Room;
 using Pickle;
@@ -110,7 +111,7 @@ namespace Level.Boss.Task
 
     public struct RoomCountByUid
     {
-        public Dictionary<string, int> CountByUid;
+        public Dictionary<InternalUid, int> CountByUid;
     }
 
     [Serializable]
@@ -155,7 +156,7 @@ namespace Level.Boss.Task
         }
 
         private RoomCountByUid roomCountCache =
-            new() { CountByUid = new Dictionary<string, int>() };
+            new() { CountByUid = new Dictionary<InternalUid, int>() };
 
         private RealTimeSeconds currentEnsuringTime = RealTimeSeconds.Zero;
         private bool complete = false;
@@ -222,7 +223,7 @@ namespace Level.Boss.Task
                 return;
             }
 
-            Dictionary<string, int> count_by_id = DataProviderServiceLocator
+            Dictionary<InternalUid, int> count_by_id = DataProviderServiceLocator
                 .FetchDataFromSingleton<RoomCountByUid>()
                 .CountByUid;
             int currentCount = 0;

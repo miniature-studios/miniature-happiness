@@ -14,7 +14,7 @@ namespace Level.Shop.Room
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        public string Uid => CoreModelPrefab.Uid;
+        public InternalUid Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
         private TMP_Text costText;

@@ -1,4 +1,5 @@
-﻿using Pickle;
+﻿using Common;
+using Pickle;
 using UnityEngine;
 
 namespace Employee.ExtendedInfo
@@ -9,6 +10,6 @@ namespace Employee.ExtendedInfo
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public Quirk QuirkModelPrefab;
 
-        public string Uid => QuirkModelPrefab.Uid;
+        public InternalUid Uid => QuirkModelPrefab.Uid;
     }
 }

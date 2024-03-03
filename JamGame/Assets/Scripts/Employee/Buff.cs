@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Common;
 using Employee.Needs;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
@@ -10,18 +11,10 @@ namespace Employee
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
     public class Buff : ScriptableObject
     {
-        [ReadOnly]
         [SerializeField]
-        // TODO: Wrap it in newtype.
-        private string uid;
-        public string Uid => uid;
-
-#if UNITY_EDITOR
-        public void SetHashCode(string uid)
-        {
-            this.uid = uid;
-        }
-#endif
+        [InlineProperty]
+        private InternalUid uid;
+        public InternalUid Uid => uid;
 
         public Days Time;
 
