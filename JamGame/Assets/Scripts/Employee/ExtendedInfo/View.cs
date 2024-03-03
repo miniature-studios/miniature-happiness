@@ -17,7 +17,12 @@ namespace Employee.ExtendedInfo
     {
         private Camera cam;
 
+        [SerializeField]
+        [Required]
         private PersonalityImpl personality;
+
+        [SerializeField]
+        [Required]
         private EmployeeImpl employee;
 
         [Required]
@@ -57,9 +62,6 @@ namespace Employee.ExtendedInfo
         private void Awake()
         {
             cam = Camera.main;
-
-            personality = GetComponentInParent<PersonalityImpl>();
-            employee = GetComponentInParent<EmployeeImpl>();
 
             if (quirkModelViewMap.Count == 0)
             {
