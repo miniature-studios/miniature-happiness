@@ -3,23 +3,23 @@
     public enum RoomTileLabel
     {
         // Technical
-        Immutable = 0,
+        Immutable = 100,
 
         // Outside
-        Outside = 1,
-        Window = 2,
+        Outside = 300,
+        Window = 301,
 
         // General
-        FreeSpace = 3,
-        Corridor = 6,
-        Elevator = 7,
-        Meeting = 9,
-        BossOffice = 4,
+        FreeSpace = 501,
+        Corridor = 502,
+        Elevator = 503,
+        Meeting = 504,
+        BossOffice = 505,
 
         // Specific
-        WorkingPlace = 5,
-        Kitchen = 8,
-        Smoking = 10,
-        Toilet = 11,
+        WorkingPlace = 701,
+        Kitchen = 702,
+        Smoking = 703,
+        Toilet = 704,
     }
 }
