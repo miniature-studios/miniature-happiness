@@ -23,7 +23,7 @@ namespace TileUnion.PlaceCondition
 
         [SerializeField]
         [FoldoutGroup("RequiredTile")]
-        private List<string> requiredTileTags = new();
+        private List<RoomTileLabel> requiredTileTags = new();
 
         public Result PassCondition(TileUnionImpl targetTileUnion, TileBuilderImpl tileBuilderImpl)
         {

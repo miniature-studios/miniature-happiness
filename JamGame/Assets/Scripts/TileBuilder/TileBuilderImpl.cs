@@ -164,10 +164,11 @@ namespace TileBuilder
         public Result Validate()
         {
             Stack<KeyValuePair<Vector2Int, TileUnionImpl>> pointsStack =
-                new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark("Elevator")));
+                new(TileUnionDictionary.Where(x => x.Value.IsAllWithMark(RoomTileLabel.Elevator)));
             List<KeyValuePair<Vector2Int, TileUnionImpl>> tilesToCheck = TileUnionDictionary
                 .Where(x =>
-                    !x.Value.IsAllWithMark("Outside") && !x.Value.IsAllWithMark("Freespace")
+                    !x.Value.IsAllWithMark(RoomTileLabel.Outside)
+                    && !x.Value.IsAllWithMark(RoomTileLabel.FreeSpace)
                 )
                 .ToList();
 
@@ -278,7 +279,7 @@ namespace TileBuilder
                 || conditionResult.Failure
                 || stashTileUnion.TilesPositions.Any(x =>
                     GetTileUnionInPosition(x) == null
-                    || !GetTileUnionInPosition(x).IsAllWithMark("Freespace")
+                    || !GetTileUnionInPosition(x).IsAllWithMark(RoomTileLabel.FreeSpace)
                 )
             )
             {
@@ -307,7 +308,7 @@ namespace TileBuilder
         {
             TileUnionImpl removed = BorrowTileUnion(borrowedPosition);
             CoreModel coreModel = DeleteTile(removed);
-            return removed.IsAllWithMark("Freespace") ? null : coreModel;
+            return removed.IsAllWithMark(RoomTileLabel.FreeSpace) ? null : coreModel;
         }
 
         public IEnumerable<TileUnionImpl> GetTileUnionsInPositions(
@@ -330,7 +331,7 @@ namespace TileBuilder
         public IEnumerable<Vector2Int> GetAllInsidePositions()
         {
             return TileUnionDictionary
-                .Where(x => !x.Value.IsAllWithMark("Outside"))
+                .Where(x => !x.Value.IsAllWithMark(RoomTileLabel.Outside))
                 .Select(x => x.Key);
         }
 
@@ -464,7 +465,7 @@ namespace TileBuilder
         private void RecalculateBounds()
         {
             IEnumerable<Vector2Int> insidePositions = TileUnionDictionary
-                .Where(pair => !pair.Value.IsAllWithMark("Outside"))
+                .Where(pair => !pair.Value.IsAllWithMark(RoomTileLabel.Outside))
                 .Select(pair => pair.Key);
 
             if (!insidePositions.Any())

@@ -106,11 +106,14 @@ namespace TileUnion
         {
             return tiles
                 .Select(x => x.Marks)
-                .Aggregate(Enumerable.Empty<string>(), (x, y) => x.Concat(y))
+                .Aggregate(
+                    Enumerable.Empty<string>(),
+                    (x, y) => x.Concat(y.Select(x => x.ToString()))
+                )
                 .Distinct();
         }
 
-        public bool IsAllWithMark(string mark)
+        public bool IsAllWithMark(RoomTileLabel mark)
         {
             return tiles.Select(x => x.Marks.Contains(mark)).All(x => x == true);
         }
@@ -350,7 +353,7 @@ namespace TileUnion
             SetPosition(placingProperties.Position);
         }
 
-        public IEnumerable<string> GetTileMarks(Vector2Int globalPosition)
+        public IEnumerable<RoomTileLabel> GetTileMarks(Vector2Int globalPosition)
         {
             return GetTile(globalPosition).Marks;
         }

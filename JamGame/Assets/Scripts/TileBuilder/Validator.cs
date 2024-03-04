@@ -107,7 +107,7 @@ namespace TileBuilder.Validator
                 return
                     tileBuilder
                         .GetTileUnionsInPositions(newPositions)
-                        .All(x => x.IsAllWithMark("Freespace"))
+                        .All(x => x.IsAllWithMark(RoomTileLabel.FreeSpace))
                     && newPositions.All(x => tileBuilder.GetAllInsidePositions().Contains(x))
                     ? new SuccessResult()
                     : new FailResult("Can not place on another room");
@@ -123,11 +123,11 @@ namespace TileBuilder.Validator
             {
                 bool borrowRoomImmutable = tileBuilder
                     .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                    .IsAllWithMark("Immutable");
+                    .IsAllWithMark(RoomTileLabel.Immutable);
 
                 bool borrowRoomFreespace = tileBuilder
                     .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                    .IsAllWithMark("Freespace");
+                    .IsAllWithMark(RoomTileLabel.Immutable);
 
                 Result result = (borrowRoomImmutable, borrowRoomFreespace) switch
                 {
@@ -183,7 +183,7 @@ namespace TileBuilder.Validator
                 return
                     tileBuilder
                         .GetTileUnionsInPositions(newPositions)
-                        .All(x => x.IsAllWithMark("Freespace"))
+                        .All(x => x.IsAllWithMark(RoomTileLabel.FreeSpace))
                     || newPositions.Intersect(tileBuilder.GetAllPositions()).Count() == 0
                     ? new SuccessResult()
                     : new FailResult("Can not place on another room");
