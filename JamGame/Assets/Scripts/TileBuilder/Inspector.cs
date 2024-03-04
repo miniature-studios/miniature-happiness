@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Linq;
+using Common;
 using TileUnion;
 using UnityEditor;
 using UnityEngine;
@@ -49,13 +50,16 @@ namespace TileBuilder
             }
             if (
                 tileBuilder.ShowTilePathGizmo
-                && !tileUnionImpl.IsAllWithMark("Freespace")
-                && !tileUnionImpl.IsAllWithMark("Outside")
+                && !tileUnionImpl.IsAllWithMark(RoomTileLabel.FreeSpace)
+                && !tileUnionImpl.IsAllWithMark(RoomTileLabel.Outside)
             )
             {
                 tileUnionImpl.SetPathGizmo(true);
             }
-            if (tileBuilder.ShowTileFreeSpaceCube && tileUnionImpl.IsAllWithMark("Freespace"))
+            if (
+                tileBuilder.ShowTileFreeSpaceCube
+                && tileUnionImpl.IsAllWithMark(RoomTileLabel.FreeSpace)
+            )
             {
                 tileUnionImpl.SetCenterCube(true);
             }
@@ -93,7 +97,7 @@ namespace TileBuilder
                     TileUnionImpl tileUnion in tileBuilder.TileUnionDictionary.Values.Distinct()
                 )
                 {
-                    if (tileUnion.IsAllWithMark("Freespace"))
+                    if (tileUnion.IsAllWithMark(RoomTileLabel.FreeSpace))
                     {
                         tileUnion.SetCenterCube(!tileBuilder.ShowTileFreeSpaceCube);
                     }
@@ -114,7 +118,8 @@ namespace TileBuilder
                 )
                 {
                     if (
-                        !tileUnion.IsAllWithMark("Freespace") && !tileUnion.IsAllWithMark("Outside")
+                        !tileUnion.IsAllWithMark(RoomTileLabel.FreeSpace)
+                        && !tileUnion.IsAllWithMark(RoomTileLabel.Outside)
                     )
                     {
                         tileUnion.SetPathGizmo(!tileBuilder.ShowTilePathGizmo);

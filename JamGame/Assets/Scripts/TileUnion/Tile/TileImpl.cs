@@ -29,7 +29,7 @@ namespace TileUnion.Tile
         private WallSolver wallSolver;
 
         [SerializeField]
-        private List<string> marks;
+        private List<RoomTileLabel> marks;
 
         [SerializeField]
         private Vector2Int position = new(0, 0);
@@ -54,7 +54,7 @@ namespace TileUnion.Tile
 
         public Vector2Int Position => position;
         public int Rotation => rotation;
-        public IEnumerable<string> Marks => marks;
+        public IEnumerable<RoomTileLabel> Marks => marks;
 
         [ReadOnly]
         [SerializeField]
@@ -197,7 +197,7 @@ namespace TileUnion.Tile
                             Right = tile2.GetActiveWallType(direction.GetOpposite()),
                             Down = tile3.GetActiveWallType(direction.RotateMinus90())
                         };
-                    toPlace = marks.Contains("Corridor")
+                    toPlace = marks.Contains(RoomTileLabel.Corridor)
                         ? wallCross.ChooseCornerForCorridor()
                         : wallCross.ChooseCorner();
                 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Common;
 using TileUnion.Tile;
 using UnityEngine;
 
@@ -22,17 +23,19 @@ namespace TileBuilder
         private List<WallType> forDifferentTilesPriorityQueue;
 
         [SerializeField]
-        private List<string> ignoringMarks;
+        private List<RoomTileLabel> ignoringMarks;
 
         public WallType? ChooseWall(
-            IEnumerable<string> myMarks,
+            IEnumerable<RoomTileLabel> myMarks,
             IEnumerable<WallType> myWalls,
-            IEnumerable<string> outMarks,
+            IEnumerable<RoomTileLabel> outMarks,
             IEnumerable<WallType> outWalls
         )
         {
-            IEnumerable<string> myNewMarks = myMarks.Where(x => !ignoringMarks.Contains(x));
-            IEnumerable<string> outNewMarks = outMarks.Where(x => !ignoringMarks.Contains(x));
+            IEnumerable<RoomTileLabel> myNewMarks = myMarks.Where(x => !ignoringMarks.Contains(x));
+            IEnumerable<RoomTileLabel> outNewMarks = outMarks.Where(x =>
+                !ignoringMarks.Contains(x)
+            );
 
             IEnumerable<WallType> wallTypeIntersect = myWalls.Intersect(outWalls).ToList();
             if (wallTypeIntersect.Count() == 1)
@@ -41,12 +44,23 @@ namespace TileBuilder
             }
             else if (wallTypeIntersect.Count() > 1)
             {
-                IEnumerable<string> marksIntersect = myNewMarks.Intersect(outNewMarks).ToList();
+                IEnumerable<RoomTileLabel> marksIntersect = myNewMarks
+                    .Intersect(outNewMarks)
+                    .ToList();
                 // Unique rule
                 if (
-                    !(myMarks.Contains("Freespace") || outMarks.Contains("Freespace"))
-                    && !(myMarks.Contains("Outside") || outMarks.Contains("Outside"))
-                    && (myMarks.Contains("Corridor") || outMarks.Contains("Corridor"))
+                    !(
+                        myMarks.Contains(RoomTileLabel.FreeSpace)
+                        || outMarks.Contains(RoomTileLabel.FreeSpace)
+                    )
+                    && !(
+                        myMarks.Contains(RoomTileLabel.Outside)
+                        || outMarks.Contains(RoomTileLabel.Outside)
+                    )
+                    && (
+                        myMarks.Contains(RoomTileLabel.Corridor)
+                        || outMarks.Contains(RoomTileLabel.Corridor)
+                    )
                 )
                 {
                     foreach (WallType iterator in forSameTilesPriorityQueueForCorridor)

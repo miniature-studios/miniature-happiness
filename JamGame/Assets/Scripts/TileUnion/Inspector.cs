@@ -82,7 +82,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void ValidateProjectedTiles(int projectedCount)
         {
-            if (IsAllWithMark("Outside"))
+            if (IsAllWithMark(RoomTileLabel.Outside))
             {
                 foreach (TileImpl tile in tiles)
                 {
@@ -100,7 +100,7 @@ namespace TileUnion
         [Button(Style = ButtonStyle.Box)]
         public void RecreateProjectedTiles(int projectedCount)
         {
-            if (!IsAllWithMark("Outside"))
+            if (!IsAllWithMark(RoomTileLabel.Outside))
             {
                 Debug.LogError("Projected Tiles valid only for outside tiles");
                 return;
