@@ -11,6 +11,10 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: self-hosted
     steps:
+      - name: Chown files to koala
+        if: ${{ always() }}
+        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -33,11 +37,19 @@ jobs:
           targetPlatform: StandaloneWindows64
           runAsHostUser: true
           chownFilesTo: koala
+      
+      - name: Chown files to koala
+        if: ${{ always() }}
+        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
 
   buildForStandaloneWindows:
     if: github.event.pull_request.draft == false && github.event.pull_request.merged == true
     runs-on: self-hosted
     steps:
+      - name: Chown files to koala
+        if: ${{ always() }}
+        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -60,6 +72,10 @@ jobs:
           targetPlatform: StandaloneWindows
           runAsHostUser: true
           chownFilesTo: koala
+      
+      - name: Chown files to koala
+        if: ${{ always() }}
+        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.run_id || github.event.pull_request.number || github.ref }}
