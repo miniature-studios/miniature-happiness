@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Employee;
 using Employee.Needs;
+using Level.GlobalTime;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Location
 {
@@ -138,10 +140,22 @@ namespace Location
         public NeedType NeedType;
 
         private EmployeeImpl currentEmployee = null;
+        private RealTimeSeconds currentEmployeeHoldTime = RealTimeSeconds.Zero;
+        private Action currentEmployeeReleaseCallback = null;
 
         private List<PlaceInWaitingLine> waitingLine = new();
 
-        public void Take(PlaceInWaitingLine place)
+        [SerializeField]
+        private UnityEvent<EmployeeImpl> taken = new();
+
+        [SerializeField]
+        private UnityEvent<EmployeeImpl> released = new();
+
+        public void Take(
+            PlaceInWaitingLine place,
+            RealTimeSeconds desiredTime,
+            Action releasedCallback
+        )
         {
             if (place == null || place.GetNextInLine() != null)
             {
@@ -152,6 +166,8 @@ namespace Location
             // TODO: Do we need to check criterias again?
             EmployeeImpl employee = place.Employee;
             currentEmployee = employee;
+            currentEmployeeHoldTime = desiredTime;
+            currentEmployeeReleaseCallback = releasedCallback;
 
             foreach (NeedModifiers modifier in registeredModifiers)
             {
@@ -160,12 +176,36 @@ namespace Location
 
             if (bindToThisProviderOnFirstVisit)
             {
+                // TODO: Store bindings inside EmployeeManager
                 employee.BindToNeedProvider(this);
+            }
+
+            taken?.Invoke(currentEmployee);
+        }
+
+        public void Update()
+        {
+            if (currentEmployee != null)
+            {
+                currentEmployeeHoldTime -= RealTimeSeconds.FromDeltaTime();
+                if (currentEmployeeHoldTime < RealTimeSeconds.Zero)
+                {
+                    ReleaseEmployee();
+                }
             }
         }
 
-        // TODO: Control release inside NeedProvider
-        public void Release()
+        public void ForceReleaseEmployeeIfAny()
+        {
+            if (currentEmployee == null)
+            {
+                return;
+            }
+
+            ReleaseEmployee();
+        }
+
+        private void ReleaseEmployee()
         {
             foreach (NeedModifiers modifier in registeredModifiers)
             {
@@ -183,6 +223,12 @@ namespace Location
             {
                 waitingLine[0].RemoveNext();
             }
+
+            EmployeeImpl previousEmployee = currentEmployee;
+            currentEmployee = null;
+            currentEmployeeReleaseCallback();
+
+            released?.Invoke(previousEmployee);
         }
 
         public bool IsAvailable(EmployeeImpl employee)

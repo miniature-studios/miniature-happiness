@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AnimatorsSwitcher;
 using Common;
+using Employee.Needs;
 using Level.Config;
 using Level.GlobalTime;
 using Location;
@@ -103,6 +104,7 @@ namespace Level
             navMeshUpdater.UpdateNavMesh();
             needProviderManager.InitGameMode();
 
+            meetingEndNeedOverride.Unregister();
             meetingStartNeedOverride.Register();
 
             this.CreateGate(
@@ -152,6 +154,13 @@ namespace Level
                     "Cannot change time scale before meeting: "
                         + remove_time_scale_lock_result.Error
                 );
+            }
+
+            IEnumerable<NeedProvider> meeting_need_providers =
+                needProviderManager.FindAllNeedProvidersOfType(NeedType.Meeting);
+            foreach (NeedProvider need_provider in meeting_need_providers)
+            {
+                need_provider.ForceReleaseEmployeeIfAny();
             }
 
             ActionEndNotify?.Invoke();

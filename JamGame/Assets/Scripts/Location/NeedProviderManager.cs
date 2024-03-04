@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Employee;
 using Employee.Needs;
 using UnityEngine;
@@ -30,6 +31,11 @@ namespace Location
                     yield return provider;
                 }
             }
+        }
+
+        public IEnumerable<NeedProvider> FindAllNeedProvidersOfType(NeedType needType)
+        {
+            return needProviders.Where((np) => np.NeedType == needType);
         }
     }
 }

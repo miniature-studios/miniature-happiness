@@ -82,6 +82,11 @@ namespace Level.GlobalTime
             this.seconds = seconds;
         }
 
+        public static RealTimeSeconds FromDeltaTime()
+        {
+            return new RealTimeSeconds(Time.deltaTime);
+        }
+
         public static RealTimeSeconds operator +(RealTimeSeconds a, RealTimeSeconds b)
         {
             return new RealTimeSeconds() { seconds = a.seconds + b.seconds };

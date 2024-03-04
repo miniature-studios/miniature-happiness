@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using Employee;
 using Level.Room;
 using UnityEditor;
@@ -9,8 +8,6 @@ namespace Utils
 {
     internal class UidPostprocessor : AssetPostprocessor
     {
-        // TODO: Generalize approach with Uids as it's used in 3 places now:
-        // rooms, extended info buffs, extended info quirks (#127).
         private static void OnPostprocessAllAssets(
             string[] importedAssets,
             string[] deletedAssets,
@@ -25,24 +22,24 @@ namespace Utils
                 if (asset != null)
                 {
                     CoreModel coreModel = asset.GetComponent<CoreModel>();
-                    if (coreModel != null && coreModel.Uid == "")
+                    if (coreModel != null)
                     {
-                        coreModel.SetHashCode(Guid.NewGuid().ToString());
+                        coreModel.Uid.GenerateIfEmpty();
                         EditorUtility.SetDirty(asset);
                     }
                 }
 
                 Buff buff = AssetDatabase.LoadAssetAtPath<Buff>(str);
-                if (buff != null && buff.Uid == "")
+                if (buff != null)
                 {
-                    buff.SetHashCode(Guid.NewGuid().ToString());
+                    buff.Uid.GenerateIfEmpty();
                     EditorUtility.SetDirty(buff);
                 }
 
                 Quirk quirk = AssetDatabase.LoadAssetAtPath<Quirk>(str);
-                if (quirk != null && quirk.Uid == "")
+                if (quirk != null)
                 {
-                    quirk.SetHashCode(Guid.NewGuid().ToString());
+                    quirk.Uid.GenerateIfEmpty();
                     EditorUtility.SetDirty(quirk);
                 }
             }

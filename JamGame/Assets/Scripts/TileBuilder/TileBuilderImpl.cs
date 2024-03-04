@@ -49,9 +49,9 @@ namespace TileBuilder
 
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
-        private Dictionary<string, IResourceLocation> modelViewMap = new();
+        private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
 
-        public Dictionary<string, TileUnionImpl> InstantiatedViews { get; } = new();
+        public Dictionary<InternalUid, TileUnionImpl> InstantiatedViews { get; } = new();
 
         public GameMode CurrentGameMode => validator.GameMode;
 
@@ -69,7 +69,7 @@ namespace TileBuilder
         {
             roomCountDataProvider = new DataProvider<RoomCountByUid>(() =>
             {
-                Dictionary<string, int> count = new();
+                Dictionary<InternalUid, int> count = new();
 
                 foreach (CoreModel core_model in coreModels)
                 {
@@ -389,7 +389,11 @@ namespace TileBuilder
         {
             foreach (Transform child in transform)
             {
+#if UNITY_EDITOR
+                DestroyImmediate(child.transform.gameObject);
+#else
                 Destroy(child.transform.gameObject);
+#endif
             }
             TileUnionDictionary.Clear();
         }

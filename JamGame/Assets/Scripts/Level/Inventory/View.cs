@@ -26,7 +26,7 @@ namespace Level.Inventory
         private Animator animator;
         private bool inventoryVisible = false;
 
-        private Dictionary<string, IResourceLocation> modelViewMap = new();
+        private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
         private List<Room.View> roomViews = new();
 
         private void Awake()
