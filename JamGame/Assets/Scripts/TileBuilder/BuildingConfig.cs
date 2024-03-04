@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Common;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,8 +12,8 @@ namespace TileBuilder
     {
         [ReadOnly]
         [SerializeField]
-        private string hashCode;
-        public string HashCode => hashCode;
+        private InternalUid uid;
+        public InternalUid Uid => uid;
 
         [SerializeField]
         private Vector2Int position;
@@ -22,9 +23,9 @@ namespace TileBuilder
         private int rotation;
         public readonly int Rotation => rotation;
 
-        public TileConfig(string hashCode, Vector2Int position, int rotation)
+        public TileConfig(InternalUid uid, Vector2Int position, int rotation)
         {
-            this.hashCode = hashCode;
+            this.uid = uid;
             this.position = position;
             this.rotation = rotation;
         }

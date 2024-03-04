@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Common;
 using Employee.Needs;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -9,18 +10,10 @@ namespace Employee
     [CreateAssetMenu(fileName = "Quirk", menuName = "Employee/Quirk", order = 3)]
     public class Quirk : ScriptableObject
     {
-        [ReadOnly]
         [SerializeField]
-        // TODO: Wrap it in newtype.
-        private string uid;
-        public string Uid => uid;
-
-#if UNITY_EDITOR
-        public void SetHashCode(string uid)
-        {
-            this.uid = uid;
-        }
-#endif
+        [InlineProperty]
+        private InternalUid uid;
+        public InternalUid Uid => uid;
 
         [SerializeField]
         private List<Need.NeedProperties> additionalNeeds;

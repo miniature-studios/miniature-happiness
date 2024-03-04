@@ -36,8 +36,8 @@ namespace Employee.ExtendedInfo
         [SerializeField]
         private AssetLabelReference buffViewsLabel;
 
-        private static Dictionary<string, IResourceLocation> quirkModelViewMap = new();
-        private static Dictionary<string, IResourceLocation> buffModelViewMap = new();
+        private static Dictionary<InternalUid, IResourceLocation> quirkModelViewMap = new();
+        private static Dictionary<InternalUid, IResourceLocation> buffModelViewMap = new();
 
         [SerializeField]
         [Required]
@@ -161,7 +161,7 @@ namespace Employee.ExtendedInfo
             instantiatedBuffViews.Add(buff_view);
         }
 
-        private void RemoveBuff(string buff_uid)
+        private void RemoveBuff(InternalUid buff_uid)
         {
             BuffView to_remove = instantiatedBuffViews.Find((b) => b.Uid == buff_uid);
             _ = instantiatedBuffViews.Remove(to_remove);

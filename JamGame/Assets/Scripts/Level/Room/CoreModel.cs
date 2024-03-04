@@ -24,20 +24,12 @@ namespace Level.Room
     public partial class CoreModel : MonoBehaviour
     {
         private static string coreModelsLabel = "CoreModel";
-        private static Dictionary<string, IResourceLocation> uidPrefabsMap = new();
+        private static Dictionary<InternalUid, IResourceLocation> uidPrefabsMap = new();
 
-        [ReadOnly]
         [SerializeField]
-        // TODO: Wrap it in newtype.
-        private string uid;
-        public string Uid => uid;
-
-#if UNITY_EDITOR
-        public void SetHashCode(string uid)
-        {
-            this.uid = uid;
-        }
-#endif
+        [InlineProperty]
+        private InternalUid uid;
+        public InternalUid Uid => uid;
 
         [SerializeField]
         private string title;
@@ -64,16 +56,26 @@ namespace Level.Room
 
         private static void UpdateUidPrefabsMap()
         {
+#if UNITY_EDITOR
+            uidPrefabsMap.Clear();
+            ForceUpdateUidPrefabsMap();
+#else
             if (uidPrefabsMap.Count == 0)
             {
-                foreach (
-                    AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
-                        coreModelsLabel
-                    )
+                ForceUpdateUidPrefabsMap();
+            }
+#endif
+        }
+
+        private static void ForceUpdateUidPrefabsMap()
+        {
+            foreach (
+                AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
+                    coreModelsLabel
                 )
-                {
-                    uidPrefabsMap.Add(core.Asset.Uid, core.Location);
-                }
+            )
+            {
+                uidPrefabsMap.Add(core.Asset.Uid, core.Location);
             }
         }
 
@@ -81,7 +83,7 @@ namespace Level.Room
         {
             UpdateUidPrefabsMap();
             CoreModel core = Instantiate(
-                AddressableTools<CoreModel>.LoadAsset(uidPrefabsMap[config.HashCode])
+                AddressableTools<CoreModel>.LoadAsset(uidPrefabsMap[config.Uid])
             );
             core.TileUnionModel.PlacingProperties.SetPositionAndRotation(
                 config.Position,
@@ -90,9 +92,9 @@ namespace Level.Room
             return core;
         }
 
-        public static CoreModel InstantiateCoreModel(string hashCode)
+        public static CoreModel InstantiateCoreModel(InternalUid uid)
         {
-            return InstantiateCoreModel(new TileConfig(hashCode, Vector2Int.zero, 0));
+            return InstantiateCoreModel(new TileConfig(uid, Vector2Int.zero, 0));
         }
     }
 }

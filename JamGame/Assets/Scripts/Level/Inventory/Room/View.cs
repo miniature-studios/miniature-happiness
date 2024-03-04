@@ -1,3 +1,4 @@
+using Common;
 using Level.Room;
 using Pickle;
 using Sirenix.OdinInspector;
@@ -12,7 +13,7 @@ namespace Level.Inventory.Room
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
-        public string Uid => CoreModelPrefab.Uid;
+        public InternalUid Uid => CoreModelPrefab.Uid;
 
         [SerializeField]
         private ExtendedView extendedView;
