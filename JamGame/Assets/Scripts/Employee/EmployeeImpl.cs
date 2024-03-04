@@ -23,6 +23,7 @@ namespace Employee
             Idle,
             Walking,
             InWaitingLine,
+            ApproachingNeedProvider,
             SatisfyingNeed
         }
 
@@ -37,8 +38,6 @@ namespace Employee
         private List<Need> needs = new();
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
-        private Need latestSatisfiedNeed;
-        private RealTimeSeconds satisfyingNeedRemaining = RealTimeSeconds.Zero;
         private NeedProvider targetNeedProvider = null;
 
         private ControllerImpl controller;
@@ -52,7 +51,7 @@ namespace Employee
 
         public StressMeter Stress { get; private set; }
 
-        public NeedType? LatestSatisfiedNeedType => latestSatisfiedNeed?.NeedType;
+        public NeedType? CurrentNeedType => currentlySatisfyingNeed?.NeedType;
 
         [Serializable]
         private struct AppliedBuff
@@ -133,7 +132,7 @@ namespace Employee
 
         private void Update()
         {
-            RealTimeSeconds delta_time = new(Time.deltaTime);
+            RealTimeSeconds delta_time = RealTimeSeconds.FromDeltaTime();
 
             UpdateNeeds(delta_time);
             Stress.UpdateStress(needs, delta_time);
@@ -180,6 +179,8 @@ namespace Employee
                     if (placeInWaitingLine.GetNextInLine() == null)
                     {
                         controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+                        controller.SetDestination(targetNeedProvider.transform.position);
+                        state = State.ApproachingNeedProvider;
                         break;
                     }
 
@@ -207,31 +208,9 @@ namespace Employee
                     controller.SetNavigationMode(ControllerImpl.NavigationMode.FreeMove);
 
                     break;
+                case State.ApproachingNeedProvider:
+                    break;
                 case State.SatisfyingNeed:
-                    satisfyingNeedRemaining -= new RealTimeSeconds(Time.deltaTime);
-                    if (satisfyingNeedRemaining < RealTimeSeconds.Zero)
-                    {
-                        state = State.Idle;
-                        currentlySatisfyingNeed.Satisfy();
-                        latestSatisfiedNeed = currentlySatisfyingNeed;
-                        incomeGenerator.NeedComplete(currentlySatisfyingNeed);
-                        currentlySatisfyingNeed = null;
-
-                        targetNeedProvider.Release();
-
-                        // TODO: Remove it when employee serialization will be implemented (#121)
-                        NeedType prevNeedType = targetNeedProvider.NeedType;
-                        targetNeedProvider = null;
-
-                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
-
-                        // TODO: Remove it when employee serialization will be implemented (#121)
-                        if (prevNeedType == NeedType.Leave)
-                        {
-                            gameObject.SetActive(false);
-                        }
-                    }
-
                     break;
             }
         }
@@ -390,11 +369,34 @@ namespace Employee
                 return;
             }
 
-            targetNeedProvider.Take(placeInWaitingLine);
+            RealTimeSeconds satisfying_need_remaining = currentNeed
+                .GetProperties()
+                .SatisfactionTime;
+            currentlySatisfyingNeed = currentNeed;
+            targetNeedProvider.Take(
+                placeInWaitingLine,
+                satisfying_need_remaining,
+                ReleasedFromNeedProvider
+            );
             state = State.SatisfyingNeed;
 
-            satisfyingNeedRemaining = currentNeed.GetProperties().SatisfactionTime;
-            currentlySatisfyingNeed = currentNeed;
+            // TODO: Remove it when employee serialization will be implemented (#121)
+            if (currentlySatisfyingNeed.NeedType == NeedType.Leave)
+            {
+                placeInWaitingLine.Drop();
+                gameObject.SetActive(false);
+            }
+        }
+
+        public void ReleasedFromNeedProvider()
+        {
+            state = State.Idle;
+            currentlySatisfyingNeed.Satisfy();
+            incomeGenerator.NeedComplete(currentlySatisfyingNeed);
+            currentlySatisfyingNeed = null;
+            targetNeedProvider = null;
+
+            controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
         }
 
         public void RegisterModifier(NeedModifiers modifiers)

@@ -38,6 +38,8 @@ namespace Employee.Controller
         private Vector3 currentDestination;
         private Vector3 prevPosition;
 
+        [SerializeField]
+        [ReadOnly]
         private State state = State.Idle;
 
         private NavigationMode navigationMode = NavigationMode.Navmesh;
@@ -99,6 +101,7 @@ namespace Employee.Controller
             }
             else
             {
+                _ = agent.SetDestination(currentDestination);
                 state = State.BuildingPath;
             }
         }
