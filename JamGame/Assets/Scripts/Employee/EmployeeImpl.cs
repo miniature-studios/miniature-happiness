@@ -503,9 +503,9 @@ namespace Employee
                             Debug.LogError("Unknown buff effect type");
                         }
                     }
-                }
 
-                return;
+                    return;
+                }
             }
 
             Debug.LogError("Failed to unregister buff: not registered");
