@@ -460,6 +460,14 @@ namespace Employee
                 {
                     controller.RegisterEffect(ce);
                 }
+                else if (effect is EarnedMoneyEffect eme)
+                {
+                    incomeGenerator.RegisterEffect(eme);
+                }
+                else
+                {
+                    Debug.LogError("Unknown buff effect type");
+                }
             }
         }
 
@@ -485,6 +493,14 @@ namespace Employee
                         else if (effect is ControllerEffect ce)
                         {
                             controller.UnregisterEffect(ce);
+                        }
+                        else if (effect is EarnedMoneyEffect eme)
+                        {
+                            incomeGenerator.UnregisterEffect(eme);
+                        }
+                        else
+                        {
+                            Debug.LogError("Unknown buff effect type");
                         }
                     }
 
