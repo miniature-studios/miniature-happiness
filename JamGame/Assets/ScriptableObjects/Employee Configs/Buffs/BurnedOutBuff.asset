@@ -16,7 +16,19 @@ MonoBehaviour:
     uid: 1016078263
   Time:
     days: Infinity
-  effects: []
+  effects:
+  - rid: 5009512637202432000
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5009512637202432000
+      type: {class: NeedModifierEffect, ns: Employee, asm: Assembly-CSharp}
+      data:
+        needModifiers:
+        - NeedType: 0
+          SatisfactionTime:
+            seconds: 0
+          SatisfactionGained: 0
+          DecreaseSpeed: 0
+          OverrideSatisfaction: 1
+          OverrideSatisfactionValue: Infinity

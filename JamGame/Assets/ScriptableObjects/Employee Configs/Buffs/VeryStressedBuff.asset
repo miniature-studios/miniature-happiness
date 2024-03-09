@@ -16,7 +16,17 @@ MonoBehaviour:
     uid: 312740263
   Time:
     days: Infinity
-  effects: []
+  effects:
+  - rid: 5009512637202432001
+  - rid: 5009512637202432002
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5009512637202432001
+      type: {class: EarnedMoneyEffect, ns: Employee, asm: Assembly-CSharp}
+      data:
+        multiplier: 0.5
+    - rid: 5009512637202432002
+      type: {class: ControllerEffect, ns: Employee, asm: Assembly-CSharp}
+      data:
+        speedMultiplier: 0.7

@@ -31,6 +31,9 @@ namespace Employee.Needs
             }
         }
 
+        // TODO: Refactor this not so obvious behaviour:
+        // when 2 modifiers are merged, a new unwanted need may appear.
+        // #145
         public readonly void Merge(NeedModifiersCollection other)
         {
             foreach (KeyValuePair<NeedType, Need.NeedProperties> mods in other.modifiers)
