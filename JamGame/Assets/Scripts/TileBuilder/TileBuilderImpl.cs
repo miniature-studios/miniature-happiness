@@ -30,9 +30,6 @@ namespace TileBuilder
         public CoreModel FreeSpace;
 
         [SerializeField]
-        private GameObject stashRootObject;
-
-        [SerializeField]
         private GridProperties gridProperties;
 
         [SerializeField]
@@ -55,12 +52,14 @@ namespace TileBuilder
 
         public GameMode CurrentGameMode => validator.GameMode;
 
+        private GameObject stashRootObject;
         private Vector2Int stashPosition = new(-10, -10);
         private float boundingBoxMin = -100.0f;
         private float boundingBoxMax = 100.0f;
 
         private void Awake()
         {
+            stashRootObject = new GameObject("Stash Root Object");
             ChangeGameMode(GameMode.God);
             InitModelViewMap();
         }

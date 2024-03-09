@@ -16,7 +16,7 @@ namespace Level.Inventory.Controller
 
         [SerializeField]
         [ShowIf(nameof(prepareForBuildingModeOnStart))]
-        private int roomsAddCountOnStart = 100;
+        private int roomsAddCountOnStart = 20;
 
         private void Start()
         {

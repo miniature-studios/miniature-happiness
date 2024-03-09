@@ -40,6 +40,7 @@ namespace CameraController
         private Cinemachine3rdPersonFollow personFollow;
 
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private TileBuilder.Controller.ControllerImpl tileController;
 
         private void Awake()

@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Common;
 using Level.Room;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -18,11 +19,16 @@ namespace Level.Inventory
         [SerializeField]
         private AssetLabelReference inventoryViewsLabel;
 
+        [Required]
         [SerializeField]
         private Transform container;
 
+        [Required]
         [SerializeField]
         private TMP_Text buttonText;
+
+        [Required]
+        [SerializeField]
         private Animator animator;
         private bool inventoryVisible = false;
 
@@ -31,7 +37,6 @@ namespace Level.Inventory
 
         private void Awake()
         {
-            animator = GetComponent<Animator>();
             foreach (
                 AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
                     inventoryViewsLabel

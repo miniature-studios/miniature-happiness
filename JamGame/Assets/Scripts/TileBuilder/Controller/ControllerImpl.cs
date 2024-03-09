@@ -2,6 +2,7 @@
 using Common;
 using Level;
 using Level.Room;
+using Sirenix.OdinInspector;
 using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
@@ -15,9 +16,11 @@ namespace TileBuilder.Controller
     public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private Level.Inventory.Controller.ControllerImpl inventory;
 
         public UnityEvent BuiltValidatedOffice;
