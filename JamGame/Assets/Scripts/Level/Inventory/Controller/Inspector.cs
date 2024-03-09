@@ -1,12 +1,32 @@
 ﻿using Common;
 using Level.Room;
 using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Level.Inventory.Controller
 {
     public partial class ControllerImpl
     {
+        [SerializeField]
+        private View view;
+
+        [SerializeField]
+        private bool prepareForBuildingModeOnStart = false;
+
+        [SerializeField]
+        [ShowIf(nameof(prepareForBuildingModeOnStart))]
+        private int roomsAddCountOnStart = 100;
+
+        private void Start()
+        {
+            if (prepareForBuildingModeOnStart)
+            {
+                view.ShowInventory();
+                AddRoomsFromAssets(roomsAddCountOnStart);
+            }
+        }
+
         [Button(Style = ButtonStyle.Box)]
         private void AddRoomToInventory(CoreModel coreModel)
         {
@@ -14,8 +34,8 @@ namespace Level.Inventory.Controller
             AddNewRoom(CoreModel.InstantiateCoreModel(coreModel.Uid));
         }
 
-        [Button]
-        private void AddRoomsFromAssets()
+        [Button(Style = ButtonStyle.Box)]
+        private void AddRoomsFromAssets(int count)
         {
             foreach (
                 AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
@@ -23,7 +43,10 @@ namespace Level.Inventory.Controller
                 )
             )
             {
-                AddNewRoom(CoreModel.InstantiateCoreModel(core.Asset.Uid));
+                for (int i = 0; i < count; i++)
+                {
+                    AddNewRoom(CoreModel.InstantiateCoreModel(core.Asset.Uid));
+                }
             }
         }
     }

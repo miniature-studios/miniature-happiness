@@ -2,8 +2,8 @@
 using System.Linq;
 using Common;
 using Level.Room;
-using Pickle;
 using Sirenix.OdinInspector;
+using TNRD;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils.Raycast;
@@ -26,19 +26,13 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
-        [Pickle(typeof(IDragAndDropAgent), LookupType = ObjectProviderType.Scene)]
-        private GameObject backupDragAndDropProvider;
-        private IDragAndDropAgent backupDragAndDrop;
+        private SerializableInterface<IDragAndDropAgent> backupDragAndDrop;
+        private IDragAndDropAgent BackupDragAndDrop => backupDragAndDrop.Value;
         private IDragAndDropAgent previousHovered;
 
         private void Awake()
         {
-            backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropAgent>();
-            if (backupDragAndDrop == null)
-            {
-                Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
-            }
-            previousHovered = backupDragAndDrop;
+            previousHovered = BackupDragAndDrop;
         }
 
         private void Update()
@@ -66,7 +60,7 @@ namespace Level
                     && rayсastResult.Data.Drop(bufferCoreModel).Failure
                 )
                 {
-                    _ = backupDragAndDrop.Drop(bufferCoreModel);
+                    _ = BackupDragAndDrop.Drop(bufferCoreModel);
                 }
                 bufferCoreModel = null;
             }

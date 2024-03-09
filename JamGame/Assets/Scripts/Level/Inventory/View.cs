@@ -106,5 +106,10 @@ namespace Level.Inventory
                 Destroy(buffer.gameObject);
             }
         }
+
+        public void ShowInventory()
+        {
+            animator.SetBool("Showed", true);
+        }
     }
 }
