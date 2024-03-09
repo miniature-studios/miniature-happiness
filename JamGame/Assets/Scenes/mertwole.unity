@@ -174,7 +174,6 @@ MonoBehaviour:
   ShowTilePathGizmo: 0
   ShowTileFreeSpaceCube: 0
   FreeSpace: {fileID: 739786844684371711, guid: f287ad33a60c1444e995d045a1008512, type: 3}
-  stashRootObject: {fileID: 1936918354}
   gridProperties: {fileID: 11400000, guid: 73ee1c96b303ed743ab5f5019d4f2181, type: 2}
   tileUnionsLabel:
     m_LabelString: TileUnion
@@ -1571,7 +1570,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bufferCoreModel: {fileID: 0}
-  backupDragAndDropProvider: {fileID: 1395078480}
+  backupDragAndDrop:
+    mode: 0
+    unityReference: {fileID: 0}
+    rawReference:
+      rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &432579848
 GameObject:
   m_ObjectHideFlags: 0
@@ -4208,10 +4216,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1395078480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d01920a4bdd5d624d8f3c8e7f7a8593e, type: 3}
+  m_Script: {fileID: 11500000, guid: 57205e70f0ca07d41ae63f9e93a19a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 1395078490}
+  view: {fileID: 1395078489}
+  prepareForBuildingModeOnStart: 0
+  roomsAddCountOnStart: 20
 --- !u!114 &1395078489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4228,6 +4239,7 @@ MonoBehaviour:
     m_LabelString: InventoryView
   container: {fileID: 806777541}
   buttonText: {fileID: 1893067746}
+  animator: {fileID: 1395078487}
 --- !u!114 &1395078490
 MonoBehaviour:
   m_ObjectHideFlags: 0
