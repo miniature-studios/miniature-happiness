@@ -39,7 +39,7 @@ namespace Employee
     public class StressEffect : IEffect
     {
         [SerializeField]
-        [FoldoutGroup("Stress Effect")]
+        [FoldoutGroup("Stress effect")]
         private float increaseMultiplier;
         public float IncreaseMultiplier => increaseMultiplier;
     }
@@ -48,7 +48,7 @@ namespace Employee
     public class NeedModifierEffect : IEffect
     {
         [SerializeField]
-        [FoldoutGroup("NeedModifier Effect")]
+        [FoldoutGroup("NeedModifier effect")]
         private List<Need.NeedProperties> needModifiers = new();
         public IEnumerable<Need.NeedProperties> NeedModifiers => needModifiers;
     }
@@ -57,8 +57,17 @@ namespace Employee
     public class ControllerEffect : IEffect
     {
         [SerializeField]
-        [FoldoutGroup("Controller Effect")]
+        [FoldoutGroup("Controller effect")]
         private float speedMultiplier;
         public float SpeedMultiplier => speedMultiplier;
+    }
+
+    [Serializable]
+    public class EarnedMoneyEffect : IEffect
+    {
+        [SerializeField]
+        [FoldoutGroup("Earned money effect")]
+        private float multiplier;
+        public float Multiplier => multiplier;
     }
 }
