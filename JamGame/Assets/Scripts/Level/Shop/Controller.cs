@@ -2,6 +2,7 @@
 using System.Linq;
 using Common;
 using Level.Config;
+using Level.Inventory.Controller;
 using Level.Room;
 using Location;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Level.Shop
     public class Controller : MonoBehaviour
     {
         [SerializeField]
-        private Inventory.Controller inventoryController;
+        private ControllerImpl inventoryController;
 
         [SerializeField]
         private Model shopModel;

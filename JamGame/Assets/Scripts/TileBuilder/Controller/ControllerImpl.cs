@@ -18,7 +18,7 @@ namespace TileBuilder.Controller
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
-        private Level.Inventory.Controller inventory;
+        private Level.Inventory.Controller.ControllerImpl inventory;
 
         public UnityEvent BuiltValidatedOffice;
 
