@@ -43,6 +43,10 @@ namespace TileBuilder
         [SerializeField]
         private GameObject stashRootObject;
 
+        [Required]
+        [SerializeField]
+        private GameObject mainRootObject;
+
         public IEnumerable<CoreModel> AllCoreModels => coreModels;
 
         private Validator.IValidator validator;
@@ -363,7 +367,7 @@ namespace TileBuilder
             {
                 TileUnionImpl tileUnion = Instantiate(
                     AddressableTools<TileUnionImpl>.LoadAsset(location),
-                    transform
+                    mainRootObject.transform
                 );
                 tileUnion.SetCoreModel(coreModel);
                 tileUnion.SetGridProperties(gridProperties);
@@ -389,7 +393,7 @@ namespace TileBuilder
 
         public void DeleteAllTiles()
         {
-            foreach (Transform child in transform)
+            foreach (Transform child in mainRootObject.transform)
             {
 #if UNITY_EDITOR
                 DestroyImmediate(child.transform.gameObject);

@@ -3,7 +3,6 @@ using System.Linq;
 using Common;
 using Level.Room;
 using Sirenix.OdinInspector;
-using TNRD;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils.Raycast;
@@ -26,13 +25,19 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
-        private SerializableInterface<IDragAndDropAgent> backupDragAndDrop;
-        private IDragAndDropAgent BackupDragAndDrop => backupDragAndDrop.Value;
+        private GameObject backupDragAndDropProvider;
+
+        private IDragAndDropAgent backupDragAndDrop;
         private IDragAndDropAgent previousHovered;
 
         private void Awake()
         {
-            previousHovered = BackupDragAndDrop;
+            backupDragAndDrop = backupDragAndDropProvider.GetComponent<IDragAndDropAgent>();
+            if (backupDragAndDrop == null)
+            {
+                Debug.LogError("IDragAndDropManager not found in backupDragAndDropProvider");
+            }
+            previousHovered = backupDragAndDrop;
         }
 
         private void Update()
@@ -60,7 +65,7 @@ namespace Level
                     && rayсastResult.Data.Drop(bufferCoreModel).Failure
                 )
                 {
-                    _ = BackupDragAndDrop.Drop(bufferCoreModel);
+                    _ = backupDragAndDrop.Drop(bufferCoreModel);
                 }
                 bufferCoreModel = null;
             }
