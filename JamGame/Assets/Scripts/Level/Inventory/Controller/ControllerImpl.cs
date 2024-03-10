@@ -2,15 +2,17 @@
 using System.Linq;
 using Common;
 using Level.Room;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils.Raycast;
 
-namespace Level.Inventory
+namespace Level.Inventory.Controller
 {
-    [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.Controller")]
-    public class Controller : MonoBehaviour, IDragAndDropAgent
+    [AddComponentMenu("Scripts/Level/Inventory/Controller/Level.Inventory.Controller")]
+    public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
     {
+        [Required]
         [SerializeField]
         private Model model;
 

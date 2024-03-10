@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Common;
 using Level.Room;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -18,11 +19,14 @@ namespace Level.Inventory
         [SerializeField]
         private AssetLabelReference inventoryViewsLabel;
 
+        [Required]
         [SerializeField]
         private Transform container;
 
+        [Required]
         [SerializeField]
         private TMP_Text buttonText;
+
         private Animator animator;
         private bool inventoryVisible = false;
 
@@ -105,6 +109,13 @@ namespace Level.Inventory
                 _ = roomViews.Remove(buffer);
                 Destroy(buffer.gameObject);
             }
+        }
+
+        public void ShowInventory()
+        {
+            inventoryVisible = true;
+            animator.SetBool("Showed", true);
+            buttonText.text = "Close";
         }
     }
 }

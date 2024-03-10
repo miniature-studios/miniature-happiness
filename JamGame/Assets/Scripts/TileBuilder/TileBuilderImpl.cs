@@ -5,6 +5,7 @@ using Common;
 using Level.Boss.Task;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using TileBuilder.Command;
 using TileUnion;
 using TileUnion.Tile;
@@ -30,9 +31,6 @@ namespace TileBuilder
         public CoreModel FreeSpace;
 
         [SerializeField]
-        private GameObject stashRootObject;
-
-        [SerializeField]
         private GridProperties gridProperties;
 
         [SerializeField]
@@ -40,6 +38,14 @@ namespace TileBuilder
 
         [SerializeField]
         private List<CoreModel> coreModels = new();
+
+        [Required]
+        [SerializeField]
+        private GameObject stashRootObject;
+
+        [Required]
+        [SerializeField]
+        private GameObject mainRootObject;
 
         public IEnumerable<CoreModel> AllCoreModels => coreModels;
 
@@ -361,7 +367,7 @@ namespace TileBuilder
             {
                 TileUnionImpl tileUnion = Instantiate(
                     AddressableTools<TileUnionImpl>.LoadAsset(location),
-                    transform
+                    mainRootObject.transform
                 );
                 tileUnion.SetCoreModel(coreModel);
                 tileUnion.SetGridProperties(gridProperties);
@@ -387,7 +393,7 @@ namespace TileBuilder
 
         public void DeleteAllTiles()
         {
-            foreach (Transform child in transform)
+            foreach (Transform child in mainRootObject.transform)
             {
 #if UNITY_EDITOR
                 DestroyImmediate(child.transform.gameObject);

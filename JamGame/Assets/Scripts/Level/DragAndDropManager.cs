@@ -2,7 +2,6 @@
 using System.Linq;
 using Common;
 using Level.Room;
-using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,8 +25,8 @@ namespace Level
         private CoreModel bufferCoreModel;
 
         [SerializeField]
-        [Pickle(typeof(IDragAndDropAgent), LookupType = ObjectProviderType.Scene)]
         private GameObject backupDragAndDropProvider;
+
         private IDragAndDropAgent backupDragAndDrop;
         private IDragAndDropAgent previousHovered;
 
