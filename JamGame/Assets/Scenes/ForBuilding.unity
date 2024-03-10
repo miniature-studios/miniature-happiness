@@ -572,10 +572,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8538548282205470296, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1174661117}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
 --- !u!224 &1174661113 stripped
 RectTransform:
@@ -609,21 +606,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8538548282205470296, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
   m_PrefabInstance: {fileID: 1174661112}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1174661117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1174661116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62afcef81a0c03e44af5bf5045823f4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 1174661114}
-  view: {fileID: 1174661115}
-  roomsAddCount: 20
 --- !u!1 &1208480266
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,6 +790,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaea52a8df5640c4ea7d52665cd7fd94, type: 3}
+--- !u!1 &1551623910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1551623911}
+  - component: {fileID: 1551623912}
+  m_Layer: 0
+  m_Name: BuildingEditor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1551623911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551623910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1551623912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551623910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62afcef81a0c03e44af5bf5045823f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryController: {fileID: 1174661114}
+  inventoryView: {fileID: 1174661115}
+  roomsAddCount: 20
 --- !u!1001 &1790162859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1286,3 +1315,4 @@ SceneRoots:
   - {fileID: 1537368685}
   - {fileID: 1131377134}
   - {fileID: 222015905}
+  - {fileID: 1551623911}
