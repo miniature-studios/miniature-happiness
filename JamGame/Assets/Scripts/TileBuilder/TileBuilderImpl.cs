@@ -5,6 +5,7 @@ using Common;
 using Level.Boss.Task;
 using Level.Room;
 using Pickle;
+using Sirenix.OdinInspector;
 using TileBuilder.Command;
 using TileUnion;
 using TileUnion.Tile;
@@ -38,6 +39,10 @@ namespace TileBuilder
         [SerializeField]
         private List<CoreModel> coreModels = new();
 
+        [Required]
+        [SerializeField]
+        private GameObject stashRootObject;
+
         public IEnumerable<CoreModel> AllCoreModels => coreModels;
 
         private Validator.IValidator validator;
@@ -52,14 +57,12 @@ namespace TileBuilder
 
         public GameMode CurrentGameMode => validator.GameMode;
 
-        private GameObject stashRootObject;
         private Vector2Int stashPosition = new(-10, -10);
         private float boundingBoxMin = -100.0f;
         private float boundingBoxMax = 100.0f;
 
         private void Awake()
         {
-            stashRootObject = new GameObject("Stash Root Object");
             ChangeGameMode(GameMode.God);
             InitModelViewMap();
         }
