@@ -572,7 +572,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8538548282205470296, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1174661117}
   m_SourcePrefab: {fileID: 100100000, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
 --- !u!224 &1174661113 stripped
 RectTransform:
@@ -584,12 +587,43 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7208063885572751943, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
   m_PrefabInstance: {fileID: 1174661112}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1174661116}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57205e70f0ca07d41ae63f9e93a19a84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1174661115 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3275262209494009195, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
+  m_PrefabInstance: {fileID: 1174661112}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174661116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d29dbaa833b614b944bb4b833b325e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1174661116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8538548282205470296, guid: 46a815a055be51e4b8eb64341453ff42, type: 3}
+  m_PrefabInstance: {fileID: 1174661112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1174661117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174661116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62afcef81a0c03e44af5bf5045823f4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 1174661114}
+  view: {fileID: 1174661115}
+  roomsAddCount: 20
 --- !u!1 &1208480266
 GameObject:
   m_ObjectHideFlags: 0

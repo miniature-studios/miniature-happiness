@@ -27,8 +27,6 @@ namespace Level.Inventory
         [SerializeField]
         private TMP_Text buttonText;
 
-        [Required]
-        [SerializeField]
         private Animator animator;
         private bool inventoryVisible = false;
 
@@ -37,6 +35,7 @@ namespace Level.Inventory
 
         private void Awake()
         {
+            animator = GetComponent<Animator>();
             foreach (
                 AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
                     inventoryViewsLabel
@@ -114,7 +113,9 @@ namespace Level.Inventory
 
         public void ShowInventory()
         {
+            inventoryVisible = true;
             animator.SetBool("Showed", true);
+            buttonText.text = "Close";
         }
     }
 }
