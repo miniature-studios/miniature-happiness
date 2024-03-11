@@ -16,6 +16,7 @@ namespace Level.Inventory
     [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.View")]
     public class View : MonoBehaviour
     {
+        [Required]
         [SerializeField]
         private AssetLabelReference inventoryViewsLabel;
 
@@ -65,13 +66,13 @@ namespace Level.Inventory
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewItem(e.NewItems[0] as CoreModel);
+                    AddNewRoom(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldItem(e.OldItems[0] as CoreModel);
+                    RemoveOldRoom(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    RemoveAllItems();
+                    RemoveAllRooms();
                     break;
                 default:
                     Debug.LogError(
@@ -81,40 +82,40 @@ namespace Level.Inventory
             }
         }
 
-        private void AddNewItem(CoreModel newItem)
+        private void AddNewRoom(CoreModel newRoom)
         {
-            Room.View foundView = roomViews.Find(x => x.CoreModel.CompareUid(newItem));
+            Room.View foundView = roomViews.Find(x => x.CoreModel.UidEquals(newRoom));
             if (foundView != null)
             {
-                foundView.AddCoreModel(newItem);
+                foundView.AddCoreModel(newRoom);
             }
-            else if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
+            else if (modelViewMap.TryGetValue(newRoom.Uid, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),
                     container
                 );
 
-                newRoomView.AddCoreModel(newItem);
+                newRoomView.AddCoreModel(newRoom);
                 roomViews.Add(newRoomView);
             }
             else
             {
-                Debug.LogError($"Core model {newItem.name} not presented in Inventory View");
+                Debug.LogError($"Core model {newRoom.name} not presented in Inventory View");
             }
         }
 
-        private void RemoveOldItem(CoreModel oldItem)
+        private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Room.View roomView = roomViews.Find(x => x.CoreModel.CompareUid(oldItem));
-            roomView.RemoveCoreModel(oldItem);
+            Room.View roomView = roomViews.Find(x => x.CoreModel.UidEquals(oldRoom));
+            roomView.RemoveCoreModel(oldRoom);
             if (roomView.IsEmpty)
             {
                 RemoveRoomView(roomView);
             }
         }
 
-        private void RemoveAllItems()
+        private void RemoveAllRooms()
         {
             while (roomViews.Count > 0)
             {
