@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using Level.Room;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Level.Inventory
 {
@@ -10,11 +9,10 @@ namespace Level.Inventory
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInInventory = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
-
-        private void Awake()
+        public event NotifyCollectionChangedEventHandler InventoryRoomsCollectionChanged
         {
-            roomsInInventory.CollectionChanged += CollectionChanged.Invoke;
+            add => roomsInInventory.CollectionChanged += value;
+            remove => roomsInInventory.CollectionChanged -= value;
         }
 
         public void AddNewRoom(CoreModel newRoom)

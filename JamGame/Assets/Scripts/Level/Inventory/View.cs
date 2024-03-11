@@ -27,8 +27,12 @@ namespace Level.Inventory
         [SerializeField]
         private TMP_Text buttonText;
 
+        [Required]
+        [SerializeField]
+        private Model inventoryModel;
+
         private Animator animator;
-        private bool inventoryVisible = false;
+        private bool isInventoryVisible = false;
 
         private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
         private List<Room.View> roomViews = new();
@@ -36,6 +40,8 @@ namespace Level.Inventory
         private void Awake()
         {
             animator = GetComponent<Animator>();
+
+            inventoryModel.InventoryRoomsCollectionChanged += OnInventoryChanged;
             foreach (
                 AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
                     inventoryViewsLabel
@@ -49,9 +55,9 @@ namespace Level.Inventory
         // Called by button that open/closes inventory
         public void InventoryButtonClick()
         {
-            inventoryVisible ^= true;
-            animator.SetBool("Showed", inventoryVisible);
-            buttonText.text = inventoryVisible ? "Close" : "Open";
+            isInventoryVisible ^= true;
+            animator.SetBool("Showed", isInventoryVisible);
+            buttonText.text = isInventoryVisible ? "Close" : "Open";
         }
 
         public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -77,16 +83,20 @@ namespace Level.Inventory
 
         private void AddNewItem(CoreModel newItem)
         {
-            if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
+            Room.View foundView = roomViews.Find(x => x.CoreModel.CompareUid(newItem));
+            if (foundView != null)
+            {
+                foundView.AddCoreModel(newItem);
+            }
+            else if (modelViewMap.TryGetValue(newItem.Uid, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),
                     container
                 );
 
-                newRoomView.SetCoreModel(newItem);
+                newRoomView.AddCoreModel(newItem);
                 roomViews.Add(newRoomView);
-                newItem.transform.SetParent(newRoomView.transform);
             }
             else
             {
@@ -96,26 +106,34 @@ namespace Level.Inventory
 
         private void RemoveOldItem(CoreModel oldItem)
         {
-            Room.View existRoom = roomViews.Find(x => x.CoreModel == oldItem);
-            _ = roomViews.Remove(existRoom);
-            Destroy(existRoom.gameObject);
+            Room.View roomView = roomViews.Find(x => x.CoreModel.CompareUid(oldItem));
+            roomView.RemoveCoreModel(oldItem);
+            if (roomView.IsEmpty)
+            {
+                RemoveRoomView(roomView);
+            }
         }
 
         private void RemoveAllItems()
         {
             while (roomViews.Count > 0)
             {
-                Room.View buffer = roomViews.Last();
-                _ = roomViews.Remove(buffer);
-                Destroy(buffer.gameObject);
+                Room.View roomView = roomViews.Last();
+                RemoveRoomView(roomView);
             }
         }
 
         public void ShowInventory()
         {
-            inventoryVisible = true;
+            isInventoryVisible = true;
             animator.SetBool("Showed", true);
             buttonText.text = "Close";
+        }
+
+        private void RemoveRoomView(Room.View roomView)
+        {
+            _ = roomViews.Remove(roomView);
+            Destroy(roomView.gameObject);
         }
     }
 }
