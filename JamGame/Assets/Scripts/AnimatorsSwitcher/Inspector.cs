@@ -63,6 +63,12 @@ namespace AnimatorsSwitcher
 
         private void TitleBarGUIInterfaceMatcher()
         {
+            foreach (InterfaceMatch match in InterfaceMatcher)
+            {
+                match.AnimatorsProperties = match
+                    .AnimatorsProperties.Where(x => x.Animator != null)
+                    .ToList();
+            }
             foreach (Animator animator in Animators)
             {
                 if (animator == null)
