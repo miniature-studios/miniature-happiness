@@ -842,36 +842,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3377d109e65ef46b5037bd2c3eb12b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomsCollectionChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1451860983133951904}
-        m_TargetAssemblyTypeName: Level.Shop.View, Assembly-CSharp
-        m_MethodName: OnShopRoomsChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  EmployeeCollectionChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1451860983133951904}
-        m_TargetAssemblyTypeName: Level.Shop.View, Assembly-CSharp
-        m_MethodName: OnShopEmployeesChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1451860983133951904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -884,13 +854,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b53ede75c53a8746983e1fb49787ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomsUIContainer: {fileID: 487758268540410583}
+  employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
   employeesUIContainer: {fileID: 2509160181742739429}
+  employeesViewList: []
+  roomsUIContainer: {fileID: 487758268540410583}
   shopViewsLabel:
     m_LabelString: ShopView
-  employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
   roomsViewList: []
-  employeesViewList: []
+  shopModel: {fileID: 6816036683439309053}
 --- !u!114 &6334948202757446331
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Common;
 using Level.Room;
 using Pickle;
@@ -11,24 +13,37 @@ namespace Level.Shop.Room
     [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.View")]
     public class View : MonoBehaviour
     {
+        [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
 
         public InternalUid Uid => CoreModelPrefab.Uid;
 
+        [Required]
         [SerializeField]
-        private TMP_Text costText;
+        private TMP_Text costLabel;
 
-        private Func<CoreModel, Result> roomBuying;
+        [Required]
+        [SerializeField]
+        private TMP_Text countLabel;
+
+        private Action<CoreModel> roomBuying;
 
         [ReadOnly]
         [SerializeField]
-        private CoreModel coreModel;
-        public CoreModel CoreModel => coreModel;
+        private List<CoreModel> coreModels = new();
+        public CoreModel CoreModel => coreModels.Last();
 
-        public void SetCoreModel(CoreModel coreModel)
+        public void AddCoreModel(CoreModel coreModel)
         {
-            this.coreModel = coreModel;
+            coreModels.Add(coreModel);
+            coreModel.transform.parent = transform;
+        }
+
+        public void RemoveCoreModel(CoreModel coreModel)
+        {
+            _ = coreModels.Remove(coreModel);
+            DestroyIfEmpty();
         }
 
         private void Awake()
@@ -38,13 +53,19 @@ namespace Level.Shop.Room
 
         private void Update()
         {
-            costText.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
+            costLabel.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
+            countLabel.text = coreModels.Count.ToString();
         }
 
         // Called by pressing button.
         public void TryBuyRoom()
         {
-            if (roomBuying(CoreModel).Success)
+            roomBuying(CoreModel);
+        }
+
+        private void DestroyIfEmpty()
+        {
+            if (coreModels.Count == 0)
             {
                 Destroy(gameObject);
             }

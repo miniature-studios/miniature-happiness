@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using Level.Config;
 using Level.Room;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Level.Shop
 {
@@ -12,16 +11,17 @@ namespace Level.Shop
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInShop = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> RoomsCollectionChanged = new();
+        public event NotifyCollectionChangedEventHandler RoomsCollectionChanged
+        {
+            add => roomsInShop.CollectionChanged += value;
+            remove => roomsInShop.CollectionChanged -= value;
+        }
 
         private ObservableCollection<EmployeeConfig> employeesInShop = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> EmployeeCollectionChanged =
-            new();
-
-        private void Awake()
+        public event NotifyCollectionChangedEventHandler EmployeeCollectionChanged
         {
-            roomsInShop.CollectionChanged += RoomsCollectionChanged.Invoke;
-            employeesInShop.CollectionChanged += EmployeeCollectionChanged.Invoke;
+            add => employeesInShop.CollectionChanged += value;
+            remove => employeesInShop.CollectionChanged -= value;
         }
 
         public void ResetRooms(IEnumerable<CoreModel> rooms)
