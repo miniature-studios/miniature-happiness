@@ -32,18 +32,18 @@ namespace Level.Shop.Room
         [ReadOnly]
         [SerializeField]
         private List<CoreModel> coreModels = new();
+        public bool IsEmpty => coreModels.Count == 0;
         public CoreModel CoreModel => coreModels.Last();
 
         public void AddCoreModel(CoreModel coreModel)
         {
             coreModels.Add(coreModel);
-            coreModel.transform.parent = transform;
+            coreModel.transform.SetParent(transform);
         }
 
         public void RemoveCoreModel(CoreModel coreModel)
         {
             _ = coreModels.Remove(coreModel);
-            DestroyIfEmpty();
         }
 
         private void Awake()
@@ -61,14 +61,6 @@ namespace Level.Shop.Room
         public void TryBuyRoom()
         {
             roomBuying(CoreModel);
-        }
-
-        private void DestroyIfEmpty()
-        {
-            if (coreModels.Count == 0)
-            {
-                Destroy(gameObject);
-            }
         }
     }
 }

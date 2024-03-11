@@ -21,7 +21,7 @@ namespace Level.Shop.View
 
         [ReadOnly]
         [SerializeField]
-        private List<Room.View> roomsViewList = new();
+        private List<Room.View> roomsViews = new();
 
         private void InitModelViewMap()
         {
@@ -57,7 +57,7 @@ namespace Level.Shop.View
 
         private void AddNewRoom(CoreModel newRoom)
         {
-            Room.View foundView = roomsViewList.Find(x => x.CoreModel.CompareUid(newRoom));
+            Room.View foundView = roomsViews.Find(x => x.CoreModel.CompareUid(newRoom));
             if (foundView != null)
             {
                 foundView.AddCoreModel(newRoom);
@@ -71,7 +71,7 @@ namespace Level.Shop.View
 
                 newRoomView.AddCoreModel(newRoom);
                 newRoomView.enabled = true;
-                roomsViewList.Add(newRoomView);
+                roomsViews.Add(newRoomView);
             }
             else
             {
@@ -81,18 +81,27 @@ namespace Level.Shop.View
 
         private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Room.View room = roomsViewList.Find(x => x.CoreModel.CompareUid(oldRoom));
-            room.RemoveCoreModel(oldRoom);
+            Room.View roomView = roomsViews.Find(x => x.CoreModel.CompareUid(oldRoom));
+            roomView.RemoveCoreModel(oldRoom);
+            if (roomView.IsEmpty)
+            {
+                RemoveRoomView(roomView);
+            }
         }
 
         private void DeleteAllRooms()
         {
-            while (roomsViewList.Count > 0)
+            while (roomsViews.Count > 0)
             {
-                Room.View item = roomsViewList.Last();
-                _ = roomsViewList.Remove(item);
-                Destroy(item.gameObject);
+                Room.View roomView = roomsViews.Last();
+                RemoveRoomView(roomView);
             }
+        }
+
+        private void RemoveRoomView(Room.View roomView)
+        {
+            _ = roomsViews.Remove(roomView);
+            Destroy(roomView.gameObject);
         }
     }
 }
