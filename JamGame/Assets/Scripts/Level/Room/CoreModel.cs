@@ -97,7 +97,7 @@ namespace Level.Room
             return InstantiateCoreModel(new TileConfig(uid, Vector2Int.zero, 0));
         }
 
-        public bool CompareUid(CoreModel coreModel)
+        public bool UidEquals(CoreModel coreModel)
         {
             return uid == coreModel.Uid;
         }

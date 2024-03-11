@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Level.Room;
@@ -27,7 +26,7 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text countLabel;
 
-        private Action<CoreModel> roomBuying;
+        private Controller shopController;
 
         [ReadOnly]
         [SerializeField]
@@ -48,7 +47,7 @@ namespace Level.Shop.Room
 
         private void Awake()
         {
-            roomBuying = GetComponentInParent<Controller>().TryBuyRoom;
+            shopController = GetComponentInParent<Controller>();
         }
 
         private void Update()
@@ -60,7 +59,7 @@ namespace Level.Shop.Room
         // Called by pressing button.
         public void TryBuyRoom()
         {
-            roomBuying(CoreModel);
+            shopController.TryBuyRoom(CoreModel);
         }
     }
 }

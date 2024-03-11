@@ -2,24 +2,38 @@
 using System.Collections.Specialized;
 using System.Linq;
 using Level.Config;
+using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Shop.View
 {
-    public partial class ViewImpl
+    [AddComponentMenu("Scripts/Level/Shop/View/Level.Shop.View.Employees")]
+    internal class Employees : MonoBehaviour
     {
+        [Required]
         [SerializeField]
+        private Model shopModel;
+
+        [Required]
+        [SerializeField]
+        [Pickle(typeof(EmployeeView), LookupType = ObjectProviderType.Assets)]
         private EmployeeView employeeViewPrototype;
 
+        [Required]
         [SerializeField]
         private Transform employeesUIContainer;
 
         [ReadOnly]
         [SerializeField]
-        private List<EmployeeView> employeesViewList = new();
+        private List<EmployeeView> employeeViews = new();
 
-        public void OnShopEmployeesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Awake()
+        {
+            shopModel.EmployeeCollectionChanged += OnShopEmployeesChanged;
+        }
+
+        private void OnShopEmployeesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -49,22 +63,22 @@ namespace Level.Shop.View
 
             newEmployeeView.SetEmployeeConfig(newEmployee);
             newEmployeeView.enabled = true;
-            employeesViewList.Add(newEmployeeView);
+            employeeViews.Add(newEmployeeView);
         }
 
         private void RemoveOldEmployee(EmployeeConfig oldEmployee)
         {
-            EmployeeView employee = employeesViewList.Find(x => x.EmployeeConfig == oldEmployee);
-            _ = employeesViewList.Remove(employee);
+            EmployeeView employee = employeeViews.Find(x => x.EmployeeConfig == oldEmployee);
+            _ = employeeViews.Remove(employee);
             Destroy(employee.gameObject);
         }
 
         private void DeleteAllEmployees()
         {
-            while (employeesViewList.Count > 0)
+            while (employeeViews.Count > 0)
             {
-                EmployeeView item = employeesViewList.Last();
-                _ = employeesViewList.Remove(item);
+                EmployeeView item = employeeViews.Last();
+                _ = employeeViews.Remove(item);
                 Destroy(item.gameObject);
             }
         }

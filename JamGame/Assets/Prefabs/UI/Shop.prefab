@@ -801,10 +801,12 @@ GameObject:
   - component: {fileID: 3153212781563778263}
   - component: {fileID: 6816036683439309053}
   - component: {fileID: 1451860983133951904}
+  - component: {fileID: 4413611163851216387}
+  - component: {fileID: 7848946130878353022}
   - component: {fileID: 6334948202757446331}
   - component: {fileID: 3136687235834596715}
   m_Layer: 5
-  m_Name: Content
+  m_Name: Shop content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -854,14 +856,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b53ede75c53a8746983e1fb49787ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
-  employeesUIContainer: {fileID: 2509160181742739429}
-  employeesViewList: []
+--- !u!114 &4413611163851216387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2985515104468172034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c458ed82725014ab18419e3db0c35a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopModel: {fileID: 6816036683439309053}
   roomsUIContainer: {fileID: 487758268540410583}
   shopViewsLabel:
     m_LabelString: ShopView
-  roomsViewList: []
+  roomViews: []
+--- !u!114 &7848946130878353022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2985515104468172034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47f96fa9971af044fb20dc5de868b1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   shopModel: {fileID: 6816036683439309053}
+  employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
+  employeesUIContainer: {fileID: 2509160181742739429}
+  employeeViews: []
 --- !u!114 &6334948202757446331
 MonoBehaviour:
   m_ObjectHideFlags: 0

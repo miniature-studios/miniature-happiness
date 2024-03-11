@@ -10,18 +10,31 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Shop.View
 {
-    public partial class ViewImpl
+    [AddComponentMenu("Scripts/Level/Shop/View/Level.Shop.View.Rooms")]
+    internal class Rooms : MonoBehaviour
     {
+        [Required]
+        [SerializeField]
+        private Model shopModel;
+
+        [Required]
         [SerializeField]
         private Transform roomsUIContainer;
 
+        [Required]
         [SerializeField]
         private AssetLabelReference shopViewsLabel;
         private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
 
         [ReadOnly]
         [SerializeField]
-        private List<Room.View> roomsViews = new();
+        private List<Room.View> roomViews = new();
+
+        private void Awake()
+        {
+            shopModel.RoomsCollectionChanged += OnShopRoomsChanged;
+            InitModelViewMap();
+        }
 
         private void InitModelViewMap()
         {
@@ -34,7 +47,7 @@ namespace Level.Shop.View
             }
         }
 
-        public void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -57,7 +70,7 @@ namespace Level.Shop.View
 
         private void AddNewRoom(CoreModel newRoom)
         {
-            Room.View foundView = roomsViews.Find(x => x.CoreModel.CompareUid(newRoom));
+            Room.View foundView = roomViews.Find(x => x.CoreModel.UidEquals(newRoom));
             if (foundView != null)
             {
                 foundView.AddCoreModel(newRoom);
@@ -71,7 +84,7 @@ namespace Level.Shop.View
 
                 newRoomView.AddCoreModel(newRoom);
                 newRoomView.enabled = true;
-                roomsViews.Add(newRoomView);
+                roomViews.Add(newRoomView);
             }
             else
             {
@@ -81,7 +94,7 @@ namespace Level.Shop.View
 
         private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Room.View roomView = roomsViews.Find(x => x.CoreModel.CompareUid(oldRoom));
+            Room.View roomView = roomViews.Find(x => x.CoreModel.UidEquals(oldRoom));
             roomView.RemoveCoreModel(oldRoom);
             if (roomView.IsEmpty)
             {
@@ -91,16 +104,16 @@ namespace Level.Shop.View
 
         private void DeleteAllRooms()
         {
-            while (roomsViews.Count > 0)
+            while (roomViews.Count > 0)
             {
-                Room.View roomView = roomsViews.Last();
+                Room.View roomView = roomViews.Last();
                 RemoveRoomView(roomView);
             }
         }
 
         private void RemoveRoomView(Room.View roomView)
         {
-            _ = roomsViews.Remove(roomView);
+            _ = roomViews.Remove(roomView);
             Destroy(roomView.gameObject);
         }
     }
