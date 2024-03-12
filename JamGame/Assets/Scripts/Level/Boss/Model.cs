@@ -39,17 +39,24 @@ namespace Level.Boss
 
             [SerializeField]
             [FoldoutGroup("Task")]
-            public float Cost;
+            [Unit(Units.Percent)]
+            private float cost;
+
+            public float CostNormalized => cost / 100.0f;
         }
 
         [SerializeField]
         private Days maxStressGatherTime;
 
-        // Normalized (0..1)
+        private float stressNormalized;
+        public float StressNormalized => stressNormalized;
+
+#if UNITY_EDITOR
         [SerializeField]
         [ReadOnly]
+        [Unit(Units.Percent)]
         private float stress;
-        public float Stress => stress;
+#endif
 
         [SerializeField]
         private List<MeetingTasks> meetingTasks = new();
@@ -100,7 +107,7 @@ namespace Level.Boss
 
         private void Update()
         {
-            stress += Time.deltaTime / maxStressGatherTime.RealTimeSeconds.Value;
+            stressNormalized += Time.deltaTime / maxStressGatherTime.RealTimeSeconds.Value;
 
             for (int i = 0; i < taskBunchToActivateNext; i++)
             {
@@ -112,7 +119,8 @@ namespace Level.Boss
                         {
                             taskState[task.Task] = TaskState.Complete;
                             _ = activeTasks.Remove(task.Task);
-                            stress -= task.Cost;
+                            stressNormalized -= task.CostNormalized;
+                            stressNormalized = Mathf.Max(0, stressNormalized);
                         }
                         else
                         {
@@ -121,6 +129,15 @@ namespace Level.Boss
                     }
                 }
             }
+
+            if (stressNormalized > 1)
+            {
+                // TODO: Lose game
+            }
+
+#if UNITY_EDITOR
+            stress = stressNormalized * 100.0f;
+#endif
         }
     }
 }
