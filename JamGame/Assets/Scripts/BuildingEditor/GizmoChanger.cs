@@ -33,36 +33,30 @@ namespace BuildingEditor
 
         private void OnTileUnionCreated(TileUnionImpl tileUnion)
         {
-            SetDirectionsGizmo(tileUnion);
-            SetPathGizmo(tileUnion);
-            SetCenterCube(tileUnion);
+            UpdateTileUnionGizmos(tileUnion);
         }
 
         public void SwitchShowTileDirectionGizmo()
         {
-            showDirectionGizmo = !showDirectionGizmo;
-            tileBuilder.TileUnionsWithStash.ForEach(SetDirectionsGizmo);
+            showDirectionGizmo ^= true;
+            tileBuilder.TileUnionsWithStash.ForEach(UpdateTileUnionGizmos);
         }
 
         public void SwitchShowTilePathGizmo()
         {
-            showPathGizmo = !showPathGizmo;
-            tileBuilder.TileUnionsWithStash.ForEach(SetPathGizmo);
+            showPathGizmo ^= true;
+            tileBuilder.TileUnionsWithStash.ForEach(UpdateTileUnionGizmos);
         }
 
         public void SwitchShowHiddenTilesCube()
         {
-            showHiddenTilesCube = !showHiddenTilesCube;
-            tileBuilder.TileUnionsWithStash.ForEach(SetCenterCube);
+            showHiddenTilesCube ^= true;
+            tileBuilder.TileUnionsWithStash.ForEach(UpdateTileUnionGizmos);
         }
 
-        private void SetDirectionsGizmo(TileUnionImpl tileUnion)
+        private void UpdateTileUnionGizmos(TileUnionImpl tileUnion)
         {
             tileUnion.SetDirectionsGizmo(showDirectionGizmo);
-        }
-
-        private void SetPathGizmo(TileUnionImpl tileUnion)
-        {
             if (
                 !tileUnion.IsAllWithMark(RoomTileLabel.FreeSpace)
                 && !tileUnion.IsAllWithMark(RoomTileLabel.Outside)
@@ -70,10 +64,6 @@ namespace BuildingEditor
             {
                 tileUnion.SetPathGizmo(showPathGizmo);
             }
-        }
-
-        private void SetCenterCube(TileUnionImpl tileUnion)
-        {
             if (tileUnion.IsAllWithMark(RoomTileLabel.Outside))
             {
                 tileUnion.SetCenterCube(showHiddenTilesCube);

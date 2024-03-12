@@ -35,8 +35,7 @@ namespace BuildingEditor
         [SerializeField]
         private Level.Inventory.View inventoryView;
 
-        [SerializeField]
-        private int roomsAddCount = 400;
+        private const int rooms_to_add_count = 500;
 
         [Title("Tile Builder")]
         [Required]
@@ -72,7 +71,7 @@ namespace BuildingEditor
         {
             tileBuilder.ChangeGameMode(GameMode.God);
             inventoryView.ShowInventory();
-            inventoryController.AddRoomsFromAssets(roomsAddCount);
+            inventoryController.AddRoomsFromAssets(rooms_to_add_count);
             coreModelByLabels = coreModelByRoomLabels.ToDictionary(
                 x => x.RoomTileLabel,
                 x => x.CoreModel
@@ -88,17 +87,11 @@ namespace BuildingEditor
         [Button]
         public void SaveBuildingIntoConfigFromLabel()
         {
-            CreateBuildingConfig command = new();
-            Result result = tileBuilder.ExecuteCommand(command);
-            if (result.Success)
-            {
-                BuildingConfig config = command.BuildingConfig;
-                string localPath = baseSavePath + "/" + buildingConfigNameInput.text + ".asset";
-                localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
-                AssetDatabase.CreateAsset(config, localPath);
-                EditorGUIUtility.PingObject(config);
-            }
-            result.LogResult("CreateBuildingConfig");
+            BuildingConfig config = tileBuilder.CreateBuildingConfig();
+            string localPath = baseSavePath + "/" + buildingConfigNameInput.text + ".asset";
+            localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+            AssetDatabase.CreateAsset(config, localPath);
+            EditorGUIUtility.PingObject(config);
         }
 
         [Button]
@@ -117,8 +110,7 @@ namespace BuildingEditor
         [Button]
         private void DeleteAllTiles()
         {
-            Result result = tileBuilder.ExecuteCommand(new RemoveAllRooms());
-            result.LogResult("RemoveAllRooms");
+            _ = tileBuilder.ExecuteCommand(new RemoveAllRooms());
         }
 
         [Button]
@@ -127,8 +119,7 @@ namespace BuildingEditor
             TileConfig config = new(coreModel.Uid, position, rotation);
             CoreModel newCoreModel = CoreModel.InstantiateCoreModel(config);
             DropRoom command = new(newCoreModel);
-            Result result = tileBuilder.ExecuteCommand(command);
-            result.LogResult($"DropRoom pos: {position} rot: {rotation}");
+            _ = tileBuilder.ExecuteCommand(command);
         }
 
         [Button]
