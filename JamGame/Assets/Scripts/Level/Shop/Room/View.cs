@@ -15,7 +15,6 @@ namespace Level.Shop.Room
         [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
-
         public InternalUid Uid => CoreModelPrefab.Uid;
 
         [Required]
@@ -32,7 +31,6 @@ namespace Level.Shop.Room
         [SerializeField]
         private List<CoreModel> coreModels = new();
         public bool IsEmpty => coreModels.Count == 0;
-        public CoreModel CoreModel => coreModels.Last();
 
         public void AddCoreModel(CoreModel coreModel)
         {
@@ -52,14 +50,14 @@ namespace Level.Shop.Room
 
         private void Update()
         {
-            costLabel.text = $"Money cost: {CoreModel.ShopModel.Cost.Value}";
+            costLabel.text = $"Money cost: {CoreModelPrefab.ShopModel.Cost.Value}";
             countLabel.text = coreModels.Count.ToString();
         }
 
         // Called by pressing button.
         public void TryBuyRoom()
         {
-            shopController.TryBuyRoom(CoreModel);
+            shopController.TryBuyRoom(coreModels.Last());
         }
     }
 }

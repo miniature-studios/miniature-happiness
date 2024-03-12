@@ -70,7 +70,7 @@ namespace Level.Shop.View
 
         private void AddNewRoom(CoreModel newRoom)
         {
-            Room.View foundView = roomViews.Find(x => x.CoreModel.UidEquals(newRoom));
+            Room.View foundView = roomViews.Find(x => x.Uid == newRoom.Uid);
             if (foundView != null)
             {
                 foundView.AddCoreModel(newRoom);
@@ -94,7 +94,7 @@ namespace Level.Shop.View
 
         private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Room.View roomView = roomViews.Find(x => x.CoreModel.UidEquals(oldRoom));
+            Room.View roomView = roomViews.Find(x => x.Uid == oldRoom.Uid);
             roomView.RemoveCoreModel(oldRoom);
             if (roomView.IsEmpty)
             {
