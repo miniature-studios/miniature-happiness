@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using Common;
 using Level.Room;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Level.Inventory
 {
@@ -10,11 +11,10 @@ namespace Level.Inventory
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInInventory = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> CollectionChanged = new();
-
-        private void Awake()
+        public event NotifyCollectionChangedEventHandler InventoryRoomsCollectionChanged
         {
-            roomsInInventory.CollectionChanged += CollectionChanged.Invoke;
+            add => roomsInInventory.CollectionChanged += value;
+            remove => roomsInInventory.CollectionChanged -= value;
         }
 
         public void AddNewRoom(CoreModel newRoom)
@@ -22,9 +22,18 @@ namespace Level.Inventory
             roomsInInventory.Add(newRoom);
         }
 
-        public CoreModel BorrowRoom(CoreModel roomInInventory)
+        public Result<CoreModel> BorrowRoom(InternalUid roomUid)
         {
-            return roomsInInventory.Remove(roomInInventory) ? roomInInventory : null;
+            CoreModel foundRoom = roomsInInventory.FirstOrDefault(x => x.Uid == roomUid);
+            if (foundRoom != null)
+            {
+                _ = roomsInInventory.Remove(foundRoom);
+                return new SuccessResult<CoreModel>(foundRoom);
+            }
+            else
+            {
+                return new FailResult<CoreModel>("No any CoreModel with this Uid.");
+            }
         }
     }
 }
