@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using Common;
 using Level.Config;
 using Level.Room;
 using UnityEngine;
@@ -38,9 +40,18 @@ namespace Level.Shop
             roomsInShop.Add(room);
         }
 
-        public CoreModel BorrowRoom(CoreModel room)
+        public Result<CoreModel> BorrowRoom(InternalUid roomUid)
         {
-            return roomsInShop.Remove(room) ? room : null;
+            CoreModel foundRoom = roomsInShop.FirstOrDefault(x => x.Uid == roomUid);
+            if (foundRoom != null)
+            {
+                _ = roomsInShop.Remove(foundRoom);
+                return new SuccessResult<CoreModel>(foundRoom);
+            }
+            else
+            {
+                return new FailResult<CoreModel>("No any CoreModel with this Uid.");
+            }
         }
 
         public void ClearRooms()

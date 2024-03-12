@@ -37,19 +37,24 @@ namespace Level.Shop
             shopModel.ResetRooms(newCoreModels);
         }
 
-        public void TryBuyRoom(CoreModel room)
+        public Result TryBuyRoom(InternalUid roomUid, int cost)
         {
-            Result result = financesController.TryTakeMoney(room.ShopModel.Cost.Value);
-            if (result.Success)
-            {
-                CoreModel borrowedRoom = shopModel.BorrowRoom(room);
-                inventoryController.AddNewRoom(borrowedRoom);
-            }
-            else
+            Result takeMoneyResult = financesController.TryTakeMoney(cost);
+            if (takeMoneyResult.Failure)
             {
                 // TODO show something
-                Debug.Log(result.Error);
+                Debug.Log(takeMoneyResult.Error);
+                return new FailResult(takeMoneyResult.Error);
             }
+
+            Result<CoreModel> borrowedResult = shopModel.BorrowRoom(roomUid);
+            if (borrowedResult.Failure)
+            {
+                return new FailResult(borrowedResult.Error);
+            }
+
+            inventoryController.AddNewRoom(borrowedResult.Data);
+            return new SuccessResult();
         }
 
         public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Common;
 using Level.Room;
 using Pickle;
@@ -12,10 +11,12 @@ namespace Level.Shop.Room
     [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.View")]
     public class View : MonoBehaviour
     {
+        [SerializeField]
         [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
         [Pickle(LookupType = ObjectProviderType.Assets)]
-        public CoreModel CoreModelPrefab;
-        public InternalUid Uid => CoreModelPrefab.Uid;
+        private CoreModel coreModelPrefab;
+        public InternalUid Uid => coreModelPrefab.Uid;
+        private int Cost => coreModelPrefab.ShopModel.Cost.Value;
 
         [Required]
         [SerializeField]
@@ -50,14 +51,14 @@ namespace Level.Shop.Room
 
         private void Update()
         {
-            costLabel.text = $"Money cost: {CoreModelPrefab.ShopModel.Cost.Value}";
+            costLabel.text = $"Money cost: {Cost}";
             countLabel.text = coreModels.Count.ToString();
         }
 
         // Called by pressing button.
         public void TryBuyRoom()
         {
-            shopController.TryBuyRoom(coreModels.Last());
+            _ = shopController.TryBuyRoom(Uid, Cost);
         }
     }
 }
