@@ -95,15 +95,20 @@ namespace TileBuilder.Controller
         public Result<CoreModel> Borrow()
         {
             Result<Vector2Int> matrixResult = RaycastMatrix();
-            if (matrixResult.Success)
+
+            if (matrixResult.Failure)
             {
-                BorrowRoom command = new(matrixResult.Data);
-                Result result = tileBuilder.ExecuteCommand(command);
-                return result.Success
-                    ? new SuccessResult<CoreModel>(command.BorrowedRoom)
-                    : new FailResult<CoreModel>(result.Error);
+                return new FailResult<CoreModel>(matrixResult.Error);
             }
-            return new FailResult<CoreModel>(matrixResult.Error);
+
+            BorrowRoom command = new(matrixResult.Data);
+            Result result = tileBuilder.ExecuteCommand(command);
+            if (result.Failure)
+            {
+                return new FailResult<CoreModel>(result.Error);
+            }
+
+            return new SuccessResult<CoreModel>(command.BorrowedRoom);
         }
 
         private Result<Vector2Int> RaycastMatrix()

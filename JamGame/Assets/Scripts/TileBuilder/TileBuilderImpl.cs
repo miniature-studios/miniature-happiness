@@ -393,13 +393,9 @@ namespace TileBuilder
 
         public void DeleteAllTiles()
         {
-            foreach (Transform child in mainRootObject.transform)
+            for (int i = mainRootObject.transform.childCount - 1; i >= 0; i--)
             {
-#if UNITY_EDITOR
-                DestroyImmediate(child.transform.gameObject);
-#else
-                Destroy(child.transform.gameObject);
-#endif
+                Destroy(mainRootObject.transform.GetChild(i).gameObject);
             }
             TileUnionDictionary.Clear();
         }

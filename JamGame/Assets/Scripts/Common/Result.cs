@@ -73,4 +73,19 @@ namespace Common
             base.Err = error;
         }
     }
+
+    public static class ResultTools
+    {
+        public static void LogResult(this Result result, string actionName)
+        {
+            if (result.Success)
+            {
+                UnityEngine.Debug.Log(actionName + " is Success");
+            }
+            else
+            {
+                UnityEngine.Debug.LogError(actionName + " is Failure");
+            }
+        }
+    }
 }
