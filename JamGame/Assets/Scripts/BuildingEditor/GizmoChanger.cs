@@ -1,4 +1,5 @@
-﻿using Common;
+﻿#if UNITY_EDITOR
+using Common;
 using Sirenix.OdinInspector;
 using TileBuilder;
 using TileUnion;
@@ -80,3 +81,4 @@ namespace BuildingEditor
         }
     }
 }
+#endif
