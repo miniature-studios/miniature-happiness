@@ -15,11 +15,11 @@ namespace BuildingEditor
 
         [ReadOnly]
         [SerializeField]
-        private bool showTileDirectionGizmo = false;
+        private bool showDirectionGizmo = false;
 
         [ReadOnly]
         [SerializeField]
-        private bool showTilePathGizmo = false;
+        private bool showPathGizmo = false;
 
         [ReadOnly]
         [SerializeField]
@@ -39,13 +39,13 @@ namespace BuildingEditor
 
         public void SwitchShowTileDirectionGizmo()
         {
-            showTileDirectionGizmo = !showTileDirectionGizmo;
+            showDirectionGizmo = !showDirectionGizmo;
             tileBuilder.TileUnionsWithStash.ForEach(SetDirectionsGizmo);
         }
 
         public void SwitchShowTilePathGizmo()
         {
-            showTilePathGizmo = !showTilePathGizmo;
+            showPathGizmo = !showPathGizmo;
             tileBuilder.TileUnionsWithStash.ForEach(SetPathGizmo);
         }
 
@@ -57,7 +57,7 @@ namespace BuildingEditor
 
         private void SetDirectionsGizmo(TileUnionImpl tileUnion)
         {
-            tileUnion.SetDirectionsGizmo(showTileDirectionGizmo);
+            tileUnion.SetDirectionsGizmo(showDirectionGizmo);
         }
 
         private void SetPathGizmo(TileUnionImpl tileUnion)
@@ -67,7 +67,7 @@ namespace BuildingEditor
                 && !tileUnion.IsAllWithMark(RoomTileLabel.Outside)
             )
             {
-                tileUnion.SetPathGizmo(showTilePathGizmo);
+                tileUnion.SetPathGizmo(showPathGizmo);
             }
         }
 
