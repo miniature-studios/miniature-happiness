@@ -13,7 +13,7 @@ namespace Level.Boss
 
         private void Update()
         {
-            bar.localScale = new Vector3(1.0f, Mathf.Clamp01(model.Stress));
+            bar.localScale = new Vector3(1.0f, Mathf.Clamp01(model.StressNormalized), 1.0f);
         }
     }
 }

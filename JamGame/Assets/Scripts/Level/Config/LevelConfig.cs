@@ -20,10 +20,5 @@ namespace Level.Config
         [FoldoutGroup("Default Day")]
         private DayConfig defaultDay = new();
         public DayConfig DefaultDay => defaultDay;
-
-        [SerializeField]
-        [FoldoutGroup("General Information")]
-        private float bossStressSpeed;
-        public float BossStressSpeed => bossStressSpeed;
     }
 }
