@@ -54,9 +54,10 @@ MonoBehaviour:
         - rid: 2702896934914359299
         - rid: 2702896934914359300
         - rid: 2702896934914359301
-        mode: 1
+        mode: 0
         shopRooms:
         - rid: 1908735064151687180
+        - rid: 2361025563211333632
         meetingShopRoomBundle: {fileID: 11400000, guid: 1e798fa99bd9b9e43b9287f1153f4f4c, type: 2}
         mandatoryRooms: []
     - rid: 1908735064151687173
@@ -107,6 +108,10 @@ MonoBehaviour:
       type: {class: LoadLevel, ns: Level.Config, asm: Assembly-CSharp}
       data:
         buildingConfig: {fileID: 11400000, guid: 71d1ca6f250c6624983e1c237ed800cf, type: 2}
+    - rid: 2361025563211333632
+      type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
     - rid: 2702896934914359298
       type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:

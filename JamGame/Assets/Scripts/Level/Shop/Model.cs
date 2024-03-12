@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using Common;
 using Level.Config;
 using Level.Room;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Level.Shop
 {
@@ -12,16 +13,17 @@ namespace Level.Shop
     public class Model : MonoBehaviour
     {
         private ObservableCollection<CoreModel> roomsInShop = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> RoomsCollectionChanged = new();
+        public event NotifyCollectionChangedEventHandler RoomsCollectionChanged
+        {
+            add => roomsInShop.CollectionChanged += value;
+            remove => roomsInShop.CollectionChanged -= value;
+        }
 
         private ObservableCollection<EmployeeConfig> employeesInShop = new();
-        public UnityEvent<object, NotifyCollectionChangedEventArgs> EmployeeCollectionChanged =
-            new();
-
-        private void Awake()
+        public event NotifyCollectionChangedEventHandler EmployeeCollectionChanged
         {
-            roomsInShop.CollectionChanged += RoomsCollectionChanged.Invoke;
-            employeesInShop.CollectionChanged += EmployeeCollectionChanged.Invoke;
+            add => employeesInShop.CollectionChanged += value;
+            remove => employeesInShop.CollectionChanged -= value;
         }
 
         public void ResetRooms(IEnumerable<CoreModel> rooms)
@@ -38,9 +40,18 @@ namespace Level.Shop
             roomsInShop.Add(room);
         }
 
-        public CoreModel BorrowRoom(CoreModel room)
+        public Result<CoreModel> BorrowRoom(InternalUid roomUid)
         {
-            return roomsInShop.Remove(room) ? room : null;
+            CoreModel foundRoom = roomsInShop.FirstOrDefault(x => x.Uid == roomUid);
+            if (foundRoom != null)
+            {
+                _ = roomsInShop.Remove(foundRoom);
+                return new SuccessResult<CoreModel>(foundRoom);
+            }
+            else
+            {
+                return new FailResult<CoreModel>("No any CoreModel with this Uid.");
+            }
         }
 
         public void ClearRooms()

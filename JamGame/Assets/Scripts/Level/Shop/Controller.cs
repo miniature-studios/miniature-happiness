@@ -5,6 +5,7 @@ using Level.Config;
 using Level.Inventory.Controller;
 using Level.Room;
 using Location;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Shop
@@ -13,39 +14,47 @@ namespace Level.Shop
     public class Controller : MonoBehaviour
     {
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private ControllerImpl inventoryController;
 
+        [Required]
         [SerializeField]
         private Model shopModel;
 
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private Finances.Model financesController;
 
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private EmployeeManager employeeManager;
 
         public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {
-            shopModel.ResetRooms(
-                roomConfigs.Select(x => CoreModel.InstantiateCoreModel(x.Room.Uid))
+            IEnumerable<CoreModel> newCoreModels = roomConfigs.Select(x =>
+                CoreModel.InstantiateCoreModel(x.Room.Uid)
             );
+            shopModel.ResetRooms(newCoreModels);
         }
 
-        public Result TryBuyRoom(CoreModel room)
+        public Result TryBuyRoom(InternalUid roomUid, int cost)
         {
-            Result result = financesController.TryTakeMoney(room.ShopModel.Cost.Value);
-            if (result.Success)
-            {
-                CoreModel borrowedRoom = shopModel.BorrowRoom(room);
-                inventoryController.AddNewRoom(borrowedRoom);
-                return new SuccessResult();
-            }
-            else
+            Result takeMoneyResult = financesController.TryTakeMoney(cost);
+            if (takeMoneyResult.Failure)
             {
                 // TODO show something
-                Debug.Log(result.Error);
-                return result;
+                Debug.Log(takeMoneyResult.Error);
+                return new FailResult(takeMoneyResult.Error);
             }
+
+            Result<CoreModel> borrowedResult = shopModel.BorrowRoom(roomUid);
+            if (borrowedResult.Failure)
+            {
+                return new FailResult(borrowedResult.Error);
+            }
+
+            inventoryController.AddNewRoom(borrowedResult.Data);
+            return new SuccessResult();
         }
 
         public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)
