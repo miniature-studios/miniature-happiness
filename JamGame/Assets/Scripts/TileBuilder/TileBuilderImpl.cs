@@ -445,7 +445,7 @@ namespace TileBuilder
             }
         }
 
-        public BuildingConfig SaveBuildingIntoConfig()
+        public BuildingConfig CreateBuildingConfig()
         {
             List<TileConfig> tileConfigs = new();
 

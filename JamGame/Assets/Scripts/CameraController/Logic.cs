@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Sirenix.OdinInspector;
+using TileBuilder;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -41,7 +42,7 @@ namespace CameraController
 
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private TileBuilder.Controller.ControllerImpl tileController;
+        private Controller tileController;
 
         private void Awake()
         {

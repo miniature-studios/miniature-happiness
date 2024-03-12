@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using TileBuilder;
 using TileBuilder.Command;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 namespace BuildingEditor
@@ -39,15 +40,32 @@ namespace BuildingEditor
         [Title("Tile Builder")]
         [Required]
         [SerializeField]
+        private Controller tileBuilderController;
+
+        [Required]
+        [SerializeField]
         private TileBuilderImpl tileBuilder;
 
         [SerializeField]
         private List<CoreModelByRoomLabel> coreModelByRoomLabels = new();
         private Dictionary<RoomTileLabel, CoreModel> coreModelByLabels;
 
+        [Space]
         [Required]
         [SerializeField]
         private TMP_InputField defaultBuildingSizeInput;
+
+        [Space]
+        [SerializeField]
+        [Pickle(typeof(BuildingConfig), LookupType = ObjectProviderType.Assets)]
+        private BuildingConfig buildingConfigToLoad;
+
+        [Required]
+        [SerializeField]
+        private TMP_InputField buildingConfigNameInput;
+
+        [SerializeField]
+        private string baseSavePath = "Assets/ScriptableObjects/Building Configs";
 
         private void Start()
         {
@@ -57,6 +75,22 @@ namespace BuildingEditor
                 x => x.RoomTileLabel,
                 x => x.CoreModel
             );
+        }
+
+        [Button]
+        private void LoadBuildingFromConfig()
+        {
+            tileBuilderController.LoadBuildingFromConfig(buildingConfigToLoad);
+        }
+
+        [Button]
+        private void SaveBuildingIntoConfig()
+        {
+            BuildingConfig config = tileBuilder.CreateBuildingConfig();
+            string localPath = baseSavePath + "/" + buildingConfigNameInput.text + ".asset";
+            localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+            AssetDatabase.CreateAsset(config, localPath);
+            Debug.Log("Asset was saved successfully");
         }
 
         [Button]

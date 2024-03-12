@@ -18,8 +18,12 @@ namespace Level
         private IEnumerator<IDayAction> actionEnumerator;
         private bool isPlanned = true;
 
-        // Called by Executor when action ends.
-        public void ActionEndActivation()
+        private void Awake()
+        {
+            levelExecutor.ActionEndNotify += ActionEndActivation;
+        }
+
+        private void ActionEndActivation()
         {
             if (isPlanned)
             {

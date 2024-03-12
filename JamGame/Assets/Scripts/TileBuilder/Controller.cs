@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Common;
 using Level;
 using Level.Room;
@@ -6,14 +7,13 @@ using Sirenix.OdinInspector;
 using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Utils.Raycast;
 
-namespace TileBuilder.Controller
+namespace TileBuilder
 {
-    [AddComponentMenu("Scripts/TileBuilder/Controller/TileBuilder.Controller")]
-    public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
+    [AddComponentMenu("Scripts/TileBuilder/TileBuilder.Controller")]
+    public partial class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
@@ -23,7 +23,7 @@ namespace TileBuilder.Controller
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private Level.Inventory.Controller.ControllerImpl inventory;
 
-        public UnityEvent BuiltValidatedOffice;
+        public event Action BuiltValidatedOffice;
 
         private InputActions inputActions;
         private Camera mainCamera;
