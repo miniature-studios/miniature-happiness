@@ -84,13 +84,19 @@ namespace BuildingEditor
         }
 
         [Button]
-        private void SaveBuildingIntoConfig()
+        public void SaveBuildingIntoConfigFromLabel()
         {
-            BuildingConfig config = tileBuilder.CreateBuildingConfig();
-            string localPath = baseSavePath + "/" + buildingConfigNameInput.text + ".asset";
-            localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
-            AssetDatabase.CreateAsset(config, localPath);
-            Debug.Log("Asset was saved successfully");
+            CreateBuildingConfig command = new();
+            Result result = tileBuilder.ExecuteCommand(command);
+            if (result.Success)
+            {
+                BuildingConfig config = command.BuildingConfig;
+                string localPath = baseSavePath + "/" + buildingConfigNameInput.text + ".asset";
+                localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+                AssetDatabase.CreateAsset(config, localPath);
+                EditorGUIUtility.PingObject(config);
+            }
+            result.LogResult("CreateBuildingConfig");
         }
 
         [Button]

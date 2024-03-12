@@ -119,4 +119,14 @@ namespace TileBuilder.Command
             tileBuilder.PlaceTileUnion(meetingRoom);
         }
     }
+
+    public class CreateBuildingConfig : ICommand
+    {
+        public BuildingConfig BuildingConfig { get; private set; } = null;
+
+        public void Execute(TileBuilderImpl tileBuilder)
+        {
+            BuildingConfig = tileBuilder.CreateBuildingConfig();
+        }
+    }
 }
