@@ -30,7 +30,7 @@ namespace Level.Inventory
 
         [Required]
         [SerializeField]
-        private Model inventoryModel;
+        private Model model;
 
         private Animator animator;
         private bool isInventoryVisible = false;
@@ -42,7 +42,7 @@ namespace Level.Inventory
         {
             animator = GetComponent<Animator>();
 
-            inventoryModel.InventoryRoomsCollectionChanged += OnInventoryChanged;
+            model.InventoryRoomsCollectionChanged += OnInventoryChanged;
             foreach (
                 AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
                     inventoryViewsLabel
@@ -66,10 +66,10 @@ namespace Level.Inventory
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewRoom(e.NewItems[0] as CoreModel);
+                    AddRoom(e.NewItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldRoom(e.OldItems[0] as CoreModel);
+                    RemoveRoom(e.OldItems[0] as CoreModel);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     RemoveAllRooms();
@@ -82,33 +82,33 @@ namespace Level.Inventory
             }
         }
 
-        private void AddNewRoom(CoreModel newRoom)
+        private void AddRoom(CoreModel room)
         {
-            Room.View foundView = roomViews.Find(x => x.CoreModel.UidEquals(newRoom));
+            Room.View foundView = roomViews.Find(x => x.Uid == room.Uid);
             if (foundView != null)
             {
-                foundView.AddCoreModel(newRoom);
+                foundView.AddCoreModel(room);
             }
-            else if (modelViewMap.TryGetValue(newRoom.Uid, out IResourceLocation location))
+            else if (modelViewMap.TryGetValue(room.Uid, out IResourceLocation location))
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),
                     container
                 );
 
-                newRoomView.AddCoreModel(newRoom);
+                newRoomView.AddCoreModel(room);
                 roomViews.Add(newRoomView);
             }
             else
             {
-                Debug.LogError($"Core model {newRoom.name} not presented in Inventory View");
+                Debug.LogError($"Core model {room.name} not presented in Inventory View");
             }
         }
 
-        private void RemoveOldRoom(CoreModel oldRoom)
+        private void RemoveRoom(CoreModel room)
         {
-            Room.View roomView = roomViews.Find(x => x.CoreModel.UidEquals(oldRoom));
-            roomView.RemoveCoreModel(oldRoom);
+            Room.View roomView = roomViews.Find(x => x.Uid == room.Uid);
+            roomView.RemoveCoreModel(room);
             if (roomView.IsEmpty)
             {
                 RemoveRoomView(roomView);

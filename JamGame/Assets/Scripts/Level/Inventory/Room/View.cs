@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Common;
 using Level.Room;
 using Pickle;
@@ -16,7 +15,6 @@ namespace Level.Inventory.Room
         [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public CoreModel CoreModelPrefab;
-
         public InternalUid Uid => CoreModelPrefab.Uid;
 
         [Required]
@@ -31,7 +29,6 @@ namespace Level.Inventory.Room
         [SerializeField]
         private List<CoreModel> coreModels = new();
         public bool IsEmpty => coreModels.Count == 0;
-        public CoreModel CoreModel => coreModels.Last();
 
         private bool isHovered = false;
         private InputActions inputActions;
@@ -70,7 +67,7 @@ namespace Level.Inventory.Room
                 if (!extendedView.IsVisible)
                 {
                     extendedView.Show();
-                    extendedView.SetLabelText($"Rent: {CoreModel.RentCost.Value}");
+                    extendedView.SetLabelText($"Rent: {CoreModelPrefab.RentCost.Value}");
                 }
             }
             else if (extendedView.IsVisible)

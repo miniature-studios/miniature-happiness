@@ -34,11 +34,19 @@ namespace Level.Inventory.Controller
 
         public Result<CoreModel> Borrow()
         {
-            Result<Room.View> hovered = RayCastTopRoomView();
-            if (hovered.Success)
+            Result<Room.View> hoveredResult = RayCastTopRoomView();
+            if (hoveredResult.Success)
             {
-                CoreModel coreModel = hovered.Data.CoreModel;
-                return new SuccessResult<CoreModel>(model.BorrowRoom(coreModel));
+                InternalUid hoveredUid = hoveredResult.Data.Uid;
+                Result<CoreModel> borrowedResult = model.BorrowRoom(hoveredUid);
+                if (borrowedResult.Success)
+                {
+                    return new SuccessResult<CoreModel>(borrowedResult.Data);
+                }
+                else
+                {
+                    return borrowedResult;
+                }
             }
             else
             {
