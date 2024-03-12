@@ -30,12 +30,11 @@ namespace TileUnion.Tile
             {
                 case (true, true):
                     centerCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    centerCube.transform.parent = transform.Find("Center").transform;
+                    centerCube.transform.SetParent(transform.Find("Base").Find("Center").transform);
+                    centerCube.transform.localPosition = Vector3.zero;
                     break;
                 case (false, false):
                     Destroy(centerCube);
-                    break;
-                default:
                     break;
             }
         }

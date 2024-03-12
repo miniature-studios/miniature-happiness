@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Common;
 using Level.Boss.Task;
@@ -36,6 +37,7 @@ namespace TileBuilder
         [SerializeField]
         private AssetLabelReference tileUnionsLabel;
 
+        [ReadOnly]
         [SerializeField]
         private List<CoreModel> coreModels = new();
 
@@ -56,10 +58,14 @@ namespace TileBuilder
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
         private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
-
         public Dictionary<InternalUid, TileUnionImpl> InstantiatedViews { get; } = new();
 
-        public GameMode CurrentGameMode => validator.GameMode;
+        public ImmutableList<TileUnionImpl> TileUnionsWithStash =>
+            TileUnionDictionary
+                .Values.Distinct()
+                .Concat(InstantiatedViews.Values)
+                .ToImmutableList();
+        public event Action<TileUnionImpl> OnTileUnionCreated;
 
         private Vector2Int stashPosition = new(-10, -10);
         private float boundingBoxMin = -100.0f;
@@ -144,26 +150,7 @@ namespace TileBuilder
             {
                 return response;
             }
-
-            if (command is DropRoom dropRoom)
-            {
-                coreModels.Add(dropRoom.CoreModel);
-                dropRoom.CoreModel.transform.parent = transform;
-            }
-            else if (command is RemoveAllRooms)
-            {
-                foreach (CoreModel room in coreModels)
-                {
-                    Destroy(room.gameObject);
-                }
-                coreModels.Clear();
-            }
             command.Execute(this);
-            if (command is BorrowRoom borrowRoom)
-            {
-                _ = coreModels.Remove(borrowRoom.BorrowedRoom);
-            }
-
             return new SuccessResult();
         }
 
@@ -245,6 +232,8 @@ namespace TileBuilder
 
         public void InstantiateTileUnion(CoreModel coreModel)
         {
+            coreModels.Add(coreModel);
+            coreModel.transform.parent = transform;
             TileUnionImpl tileUnion = CreateTile(coreModel);
             PlaceTileUnion(tileUnion);
         }
@@ -314,7 +303,12 @@ namespace TileBuilder
         {
             TileUnionImpl removed = BorrowTileUnion(borrowedPosition);
             CoreModel coreModel = DeleteTile(removed);
-            return removed.IsAllWithMark(RoomTileLabel.FreeSpace) ? null : coreModel;
+            if (!removed.IsAllWithMark(RoomTileLabel.FreeSpace))
+            {
+                _ = coreModels.Remove(coreModel);
+                return coreModel;
+            }
+            return null;
         }
 
         public IEnumerable<TileUnionImpl> GetTileUnionsInPositions(
@@ -350,10 +344,7 @@ namespace TileBuilder
         {
             AddTileUnionToDictionary(tileUnion);
             UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
-
-#if UNITY_EDITOR
             OnTileUnionCreated?.Invoke(tileUnion);
-#endif
 
             if (changeParent)
             {
@@ -393,6 +384,11 @@ namespace TileBuilder
 
         public void DeleteAllTiles()
         {
+            foreach (CoreModel room in coreModels)
+            {
+                Destroy(room.gameObject);
+            }
+            coreModels.Clear();
             for (int i = mainRootObject.transform.childCount - 1; i >= 0; i--)
             {
                 Destroy(mainRootObject.transform.GetChild(i).gameObject);
