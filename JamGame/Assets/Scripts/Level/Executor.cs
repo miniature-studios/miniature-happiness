@@ -8,7 +8,6 @@ using Level.Config;
 using Level.GlobalTime;
 using Location;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Level
 {
@@ -26,7 +25,7 @@ namespace Level
     public class Executor : MonoBehaviour
     {
         [SerializeField]
-        private TileBuilder.Controller.ControllerImpl tileBuilderController;
+        private TileBuilder.Controller tileBuilderController;
 
         [SerializeField]
         private Finances.Model financesModel;
@@ -70,11 +69,15 @@ namespace Level
         [SerializeField]
         private AllChildrenNeedModifiersApplier goToWorkNeedOverride;
 
-        public UnityEvent ActionEndNotify;
-        public UnityEvent DayEnds;
+        public event Action ActionEndNotify;
 
         private bool transitionPanelShown = false;
         private bool cutsceneMinTimeEnded = false;
+
+        private void Awake()
+        {
+            tileBuilderController.BuiltValidatedOffice += CompleteMeeting;
+        }
 
         public void Execute(DayStart dayStart)
         {
@@ -136,7 +139,6 @@ namespace Level
             boss.ActivateNextTaskBunch();
         }
 
-        // Called by button complete meeting.
         public void CompleteMeeting()
         {
             navMeshUpdater.UpdateNavMesh();
@@ -228,7 +230,6 @@ namespace Level
         // Called by button continue on daily bill panel.
         public void CompleteDayEnd()
         {
-            DayEnds?.Invoke();
             ActionEndNotify?.Invoke();
         }
 

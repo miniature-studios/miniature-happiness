@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Sirenix.OdinInspector;
+using TileBuilder;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -41,7 +42,7 @@ namespace CameraController
 
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private TileBuilder.Controller.ControllerImpl tileController;
+        private Controller tileBuilderController;
 
         private void Awake()
         {
@@ -96,7 +97,7 @@ namespace CameraController
                     Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
                 );
 
-            Bounds bounds = tileController.GetBuildingBounds();
+            Bounds bounds = tileBuilderController.GetBuildingBounds();
             transform.position = bounds.ClosestPoint(newPosition);
         }
 

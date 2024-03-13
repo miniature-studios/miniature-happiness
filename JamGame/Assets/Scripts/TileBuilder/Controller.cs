@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Common;
 using Level;
 using Level.Room;
@@ -6,14 +7,13 @@ using Sirenix.OdinInspector;
 using TileBuilder.Command;
 using TileUnion;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Utils.Raycast;
 
-namespace TileBuilder.Controller
+namespace TileBuilder
 {
-    [AddComponentMenu("Scripts/TileBuilder/Controller/TileBuilder.Controller")]
-    public partial class ControllerImpl : MonoBehaviour, IDragAndDropAgent
+    [AddComponentMenu("Scripts/TileBuilder/TileBuilder.Controller")]
+    public partial class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
@@ -23,7 +23,7 @@ namespace TileBuilder.Controller
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private Level.Inventory.Controller.ControllerImpl inventory;
 
-        public UnityEvent BuiltValidatedOffice;
+        public event Action BuiltValidatedOffice;
 
         private InputActions inputActions;
         private Camera mainCamera;
@@ -95,15 +95,20 @@ namespace TileBuilder.Controller
         public Result<CoreModel> Borrow()
         {
             Result<Vector2Int> matrixResult = RaycastMatrix();
-            if (matrixResult.Success)
+
+            if (matrixResult.Failure)
             {
-                BorrowRoom command = new(matrixResult.Data);
-                Result result = tileBuilder.ExecuteCommand(command);
-                return result.Success
-                    ? new SuccessResult<CoreModel>(command.BorrowedRoom)
-                    : new FailResult<CoreModel>(result.Error);
+                return new FailResult<CoreModel>(matrixResult.Error);
             }
-            return new FailResult<CoreModel>(matrixResult.Error);
+
+            BorrowRoom command = new(matrixResult.Data);
+            Result result = tileBuilder.ExecuteCommand(command);
+            if (result.Failure)
+            {
+                return new FailResult<CoreModel>(result.Error);
+            }
+
+            return new SuccessResult<CoreModel>(command.BorrowedRoom);
         }
 
         private Result<Vector2Int> RaycastMatrix()

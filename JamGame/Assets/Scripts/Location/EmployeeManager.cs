@@ -9,7 +9,7 @@ using Level.Boss.Task;
 using Level.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using TileBuilderController = TileBuilder.Controller.ControllerImpl;
+using TileBuilderController = TileBuilder.Controller;
 
 namespace Location
 {

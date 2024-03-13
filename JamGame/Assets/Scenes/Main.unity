@@ -267,7 +267,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7537bea764d80904095ecfa5cc25a732, type: 3}
+  m_Script: {fileID: 11500000, guid: 440e7b5c1b83c774db1d3dddbfd44012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &285264310 stripped
@@ -1640,24 +1640,6 @@ MonoBehaviour:
   meetingEndNeedOverride: {fileID: 924940280}
   leaveNeedOverride: {fileID: 797130039}
   goToWorkNeedOverride: {fileID: 438653535}
-  ActionEndNotify:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1067622711}
-        m_TargetAssemblyTypeName: Level.Sheduler, Assembly-CSharp
-        m_MethodName: ActionEndActivation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  DayEnds:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2105,7 +2087,7 @@ PrefabInstance:
     - target: {fileID: 764269450512905335, guid: 6c4d19b144c4c8846bd100aa60377bf8, type: 3}
       propertyPath: inventory
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 942579365}
     - target: {fileID: 764269450512905335, guid: 6c4d19b144c4c8846bd100aa60377bf8, type: 3}
       propertyPath: tileBuilder
       value: 
@@ -2261,6 +2243,10 @@ PrefabInstance:
       objectReference: {fileID: 109743454}
     - target: {fileID: 4517460662340294446, guid: 9e218286d38e6c54297d163b9d7c6451, type: 3}
       propertyPath: tileController
+      value: 
+      objectReference: {fileID: 115190262}
+    - target: {fileID: 4517460662340294446, guid: 9e218286d38e6c54297d163b9d7c6451, type: 3}
+      propertyPath: tileBuilderController
       value: 
       objectReference: {fileID: 115190262}
     m_RemovedComponents: []
