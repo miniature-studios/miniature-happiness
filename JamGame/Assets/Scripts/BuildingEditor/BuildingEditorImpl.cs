@@ -35,7 +35,7 @@ namespace BuildingEditor
         [SerializeField]
         private Level.Inventory.View inventoryView;
 
-        private const int rooms_to_add_count = 500;
+        private const int INITIAL_ROOM_COUNT = 500;
 
         [Title("Tile Builder")]
         [Required]
@@ -71,7 +71,7 @@ namespace BuildingEditor
         {
             tileBuilder.ChangeGameMode(GameMode.God);
             inventoryView.ShowInventory();
-            inventoryController.AddRoomsFromAssets(rooms_to_add_count);
+            inventoryController.AddRoomsFromAssets(INITIAL_ROOM_COUNT);
             coreModelByLabels = coreModelByRoomLabels.ToDictionary(
                 x => x.RoomTileLabel,
                 x => x.CoreModel
