@@ -16,6 +16,7 @@ namespace Employee
     [SelectionBase]
     [RequireComponent(typeof(ControllerImpl))]
     [RequireComponent(typeof(StressEffect))]
+    [RequireComponent(typeof(StressMeterImpl))]
     [AddComponentMenu("Scripts/Employee/Employee")]
     public class EmployeeImpl : MonoBehaviour
     {
