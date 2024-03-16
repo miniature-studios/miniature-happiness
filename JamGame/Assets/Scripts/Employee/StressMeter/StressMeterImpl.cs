@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Employee.Needs;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.StressMeter
 {
     [Serializable]
     internal struct StressByNeedDissatisfaction
@@ -30,12 +30,32 @@ namespace Employee
 
     [RequireComponent(typeof(EmployeeImpl))]
     [AddComponentMenu("Scripts/Employee/Employee.StressMeter")]
-    public class StressMeter : MonoBehaviour, IEffectExecutor<StressEffect>
+    public class StressMeterImpl : MonoBehaviour, IEffectExecutor<StressEffect>
     {
         private EmployeeImpl employee;
 
         [SerializeField]
+        [HideInInspector]
         private List<StressStage> stages;
+
+        [SerializeField]
+        [HideInInspector]
+        private float maxStress;
+
+#if UNITY_EDITOR
+        internal List<StressStage> Stages
+        {
+            get => stages;
+            set => stages = value;
+        }
+
+        public float MaxStress
+        {
+            get => maxStress;
+            set => maxStress = value;
+        }
+#endif
+
         private int currentStage = -1;
 
         [SerializeField]
@@ -49,7 +69,7 @@ namespace Employee
         [ReadOnly]
         [SerializeField]
         private float stress = 0.0f;
-        public float Value => stress;
+        public float Stress => stress;
 
         [SerializeField]
         private float restoreSpeed;
@@ -83,16 +103,10 @@ namespace Employee
             delta *= increaseMultiplierByEffects;
 
             stress += (delta - restoreSpeed) * delta_time.Value;
+            float clamp_min = stages.Count == 0 ? float.NegativeInfinity : stages[0].StartsAt;
+            stress = Mathf.Clamp(stress, clamp_min, maxStress);
 
-            int new_stage = 0;
-            for (int i = stages.Count - 1; i > 0; i--)
-            {
-                if (stages[i].StartsAt < stress)
-                {
-                    new_stage = i;
-                    break;
-                }
-            }
+            int new_stage = ComputeCurrentStage();
 
             if (currentStage != new_stage)
             {
@@ -110,6 +124,20 @@ namespace Employee
                     employee.RegisterBuff(currentBuff);
                 }
             }
+        }
+
+        public int ComputeCurrentStage()
+        {
+            int new_stage = 0;
+            for (int i = stages.Count - 1; i > 0; i--)
+            {
+                if (stages[i].StartsAt < stress)
+                {
+                    new_stage = i;
+                    break;
+                }
+            }
+            return new_stage;
         }
 
         private void PrepareConfig()
