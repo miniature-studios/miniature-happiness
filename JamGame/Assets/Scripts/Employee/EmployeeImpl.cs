@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using Employee.Controller;
 using Employee.Needs;
+using Employee.StressMeter;
 using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
@@ -15,6 +16,7 @@ namespace Employee
     [SelectionBase]
     [RequireComponent(typeof(ControllerImpl))]
     [RequireComponent(typeof(StressEffect))]
+    [RequireComponent(typeof(StressMeterImpl))]
     [AddComponentMenu("Scripts/Employee/Employee")]
     public class EmployeeImpl : MonoBehaviour
     {
@@ -49,7 +51,7 @@ namespace Employee
         [SerializeField]
         private IncomeGenerator.Model incomeGenerator;
 
-        public StressMeter Stress { get; private set; }
+        public StressMeterImpl Stress { get; private set; }
 
         public NeedType? CurrentNeedType => currentlySatisfyingNeed?.NeedType;
 
@@ -125,7 +127,7 @@ namespace Employee
         private void Start()
         {
             controller = GetComponent<ControllerImpl>();
-            Stress = GetComponent<StressMeter>();
+            Stress = GetComponent<StressMeterImpl>();
 
             buffsNeedModifiers = new BuffsNeedModifiersPool(this);
         }
