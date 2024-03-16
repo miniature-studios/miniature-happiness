@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Employee.Needs;
 using Level.GlobalTime;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee.StressMeter
@@ -43,11 +42,7 @@ namespace Employee.StressMeter
         private float maxStress;
 
 #if UNITY_EDITOR
-        internal List<StressStage> Stages
-        {
-            get => stages;
-            set => stages = value;
-        }
+        internal List<StressStage> Stages => stages;
 
         public float MaxStress
         {
@@ -58,15 +53,12 @@ namespace Employee.StressMeter
 
         private int currentStage = -1;
 
-        [SerializeField]
-        [ReadOnly]
         private Buff currentBuff;
 
         [SerializeField]
         private List<StressByNeedDissatisfactionWithNeedType> configRaw;
         private Dictionary<NeedType, StressByNeedDissatisfaction> config;
 
-        [ReadOnly]
         [SerializeField]
         private float stress = 0.0f;
         public float Stress => stress;

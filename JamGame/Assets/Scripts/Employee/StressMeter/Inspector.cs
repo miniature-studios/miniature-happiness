@@ -48,7 +48,10 @@ namespace Assets.Scripts.Employee.StressMeter
 
             _ = DrawDefaultInspector();
 
-            EditorUtility.SetDirty(target);
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         private void DrawStageIndicator(StressMeterImpl stress_meter)
