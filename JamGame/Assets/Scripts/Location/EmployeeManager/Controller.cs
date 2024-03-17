@@ -43,18 +43,32 @@ namespace Location.EmployeeManager
         {
             if (firingMode && inputActions.UI.LeftClick.WasPressedThisFrame())
             {
-                Vector3 position = inputActions.UI.Point.ReadValue<Vector2>();
-                Ray ray = Camera.main.ScreenPointToRay(position);
-                RaycastHit[] hits = Physics.RaycastAll(ray);
+                TryFireEmployee();
+            }
+        }
 
-                foreach (RaycastHit hit in hits)
+        private void TryFireEmployee()
+        {
+            Vector3 position = inputActions.UI.Point.ReadValue<Vector2>();
+            Ray ray = Camera.main.ScreenPointToRay(position);
+            RaycastHit[] hits = Physics.RaycastAll(ray);
+
+            EmployeeImpl closest_employee = null;
+            float closest_employee_dist = float.PositiveInfinity;
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.transform.TryGetComponent(out EmployeeImpl employee))
                 {
-                    if (hit.transform.TryGetComponent(out EmployeeImpl employee))
+                    if (hit.distance < closest_employee_dist)
                     {
-                        model.FireEmployee(employee);
-                        return;
+                        closest_employee = employee;
                     }
                 }
+            }
+
+            if (closest_employee != null)
+            {
+                model.FireEmployee(closest_employee);
             }
         }
     }
