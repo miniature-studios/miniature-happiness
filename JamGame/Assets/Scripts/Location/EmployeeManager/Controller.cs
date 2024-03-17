@@ -1,6 +1,9 @@
-﻿using Employee;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Employee;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Utils.Raycast;
 
 namespace Location.EmployeeManager
 {
@@ -10,6 +13,10 @@ namespace Location.EmployeeManager
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         [SerializeField]
         private Model model;
+
+        [SerializeField]
+        [Required]
+        private LayerMask uiMask;
 
         [SerializeField]
         [Required]
@@ -23,9 +30,9 @@ namespace Location.EmployeeManager
         private void Awake()
         {
             inputActions = new();
-            inputActions.UI.LeftClick.performed += (_) =>
+            inputActions.UI.LeftClick.performed += (e) =>
             {
-                if (firingMode)
+                if (firingMode && e.ReadValueAsButton())
                 {
                     TryFireEmployee();
                 }
@@ -51,6 +58,13 @@ namespace Location.EmployeeManager
         private void TryFireEmployee()
         {
             Vector3 position = inputActions.UI.Point.ReadValue<Vector2>();
+
+            IEnumerable<GameObject> ui_hits = RayCaster.UIRayCast(position);
+            if (ui_hits.Any(hit => ((1 << hit.layer) & uiMask) != 0))
+            {
+                return;
+            }
+
             Ray ray = Camera.main.ScreenPointToRay(position);
             RaycastHit[] hits = Physics.RaycastAll(ray);
 

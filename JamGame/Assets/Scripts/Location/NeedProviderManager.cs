@@ -37,6 +37,7 @@ namespace Location
             return needProviders.Where((np) => np.NeedType == needType);
         }
 
+        // Bound to event.
         public void OnEmployeeFired(EmployeeImpl employee)
         {
             foreach (NeedProvider need_provider in needProviders)
