@@ -1,6 +1,7 @@
 using Overlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Employee
 {
@@ -10,6 +11,17 @@ namespace Employee
     {
         private EmployeeImpl employee;
 
+        [Required]
+        [SerializeField]
+        private Animator animator;
+
+        [SerializeField]
+        private float animationSpeedMultiplier = 1.5f;
+
+        [Required]
+        [SerializeField]
+        private NavMeshAgent agent;
+
         private void Start()
         {
             employee = GetComponent<EmployeeImpl>();
@@ -18,6 +30,10 @@ namespace Employee
         private void Update()
         {
             UpdateStressOverlay();
+            animator.SetFloat(
+                "WalkSpeed",
+                agent.velocity.magnitude / agent.speed * animationSpeedMultiplier
+            );
         }
 
         public void RevertOverlays()
@@ -30,7 +46,7 @@ namespace Employee
     public partial class View : IOverlayRenderer<Stress>
     {
         [SerializeField]
-        private MeshRenderer meshRenderer;
+        private SkinnedMeshRenderer meshRenderer;
 
         private Stress appliedStressOverlay;
 
