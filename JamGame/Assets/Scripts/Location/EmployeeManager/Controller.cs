@@ -59,8 +59,8 @@ namespace Location.EmployeeManager
         {
             Vector3 position = inputActions.UI.Point.ReadValue<Vector2>();
 
-            IEnumerable<GameObject> ui_hits = RayCaster.UIRayCast(position);
-            if (ui_hits.Any(hit => ((1 << hit.layer) & uiMask) != 0))
+            IEnumerable<GameObject> ui_hits = Raycaster.MaskedUIRaycast(position, uiMask);
+            if (ui_hits.Any())
             {
                 return;
             }
