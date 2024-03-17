@@ -4,7 +4,6 @@ using Common;
 using Level.Config;
 using Level.Inventory.Controller;
 using Level.Room;
-using Location;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -27,7 +26,7 @@ namespace Level.Shop
 
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private EmployeeManager employeeManager;
+        private Location.EmployeeManager.Model employeeManager;
 
         public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {

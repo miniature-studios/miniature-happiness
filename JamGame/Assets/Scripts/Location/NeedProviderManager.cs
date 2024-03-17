@@ -11,7 +11,6 @@ namespace Location
     {
         private List<NeedProvider> needProviders;
 
-        // TODO: Call it each time room added/removed.
         public void InitGameMode()
         {
             needProviders = new List<NeedProvider>(
@@ -36,6 +35,14 @@ namespace Location
         public IEnumerable<NeedProvider> FindAllNeedProvidersOfType(NeedType needType)
         {
             return needProviders.Where((np) => np.NeedType == needType);
+        }
+
+        public void OnEmployeeFired(EmployeeImpl employee)
+        {
+            foreach (NeedProvider need_provider in needProviders)
+            {
+                need_provider.OnEmployeeFired(employee);
+            }
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Level
         private NeedProviderManager needProviderManager;
 
         [SerializeField]
-        private EmployeeManager employeeManager;
+        private Location.EmployeeManager.Model employeeManager;
 
         [SerializeField]
         private GlobalTime.Model globalTime;
@@ -118,7 +118,7 @@ namespace Level
                             .FetchDataFromSingleton<AllEmployeesAtMeeting>()
                             .Value
                 },
-                new List<Action>() { () => Debug.Log("PreMeeting"), ActionEndNotify.Invoke }
+                new List<Action>() { ActionEndNotify.Invoke }
             );
         }
 
@@ -213,7 +213,7 @@ namespace Level
                             .FetchDataFromSingleton<AllEmployeesAtHome>()
                             .Value
                 },
-                new List<Action>() { () => Debug.Log("PreDayEnd"), ActionEndNotify.Invoke }
+                new List<Action>() { ActionEndNotify.Invoke }
             );
         }
 
