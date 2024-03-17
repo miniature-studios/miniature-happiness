@@ -45,7 +45,7 @@ namespace Location.EmployeeManager
             {
                 Vector3 position = inputActions.UI.Point.ReadValue<Vector2>();
                 Ray ray = Camera.main.ScreenPointToRay(position);
-                RaycastHit[] hits = Physics.RaycastAll(ray, 10000.0f);
+                RaycastHit[] hits = Physics.RaycastAll(ray);
 
                 foreach (RaycastHit hit in hits)
                 {
