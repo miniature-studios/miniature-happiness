@@ -5,23 +5,30 @@ using UnityEngine.EventSystems;
 
 namespace Utils.Raycast
 {
-    public static class RayCaster
+    public static class Raycaster
     {
         public static bool PointerIsOverUI(Vector2 screenPosition)
         {
-            IEnumerable<GameObject> hitObjects = UIRayCast(ScreenPosToPointerData(screenPosition));
+            IEnumerable<GameObject> hitObjects = UIRaycast(ScreenPosToPointerData(screenPosition));
             return hitObjects.Any(x => x.GetComponentInParent<Blocker>() != null);
         }
 
-        public static IEnumerable<GameObject> UIRayCast(Vector2 screenPos)
+        public static IEnumerable<GameObject> UIRaycast(Vector2 screenPos)
         {
-            return UIRayCast(ScreenPosToPointerData(screenPos));
+            return UIRaycast(ScreenPosToPointerData(screenPos));
         }
 
-        private static IEnumerable<GameObject> UIRayCast(PointerEventData pointerData)
+        public static IEnumerable<GameObject> MaskedUIRaycast(Vector2 screenPos, LayerMask mask)
+        {
+            return UIRaycast(ScreenPosToPointerData(screenPos))
+                .Where(x => ((1 << x.layer) & mask) != 0);
+        }
+
+        private static IEnumerable<GameObject> UIRaycast(PointerEventData pointerData)
         {
             List<RaycastResult> results = new();
             EventSystem.current.RaycastAll(pointerData, results);
+
             return results.Select(x => x.gameObject);
         }
 

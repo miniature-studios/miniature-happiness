@@ -1,10 +1,8 @@
 ﻿#if UNITY_EDITOR
-using Employee;
-using Employee.StressMeter;
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets.Scripts.Employee.StressMeter
+namespace Employee.StressMeter
 {
     [CustomEditor(typeof(StressMeterImpl))]
     [CanEditMultipleObjects]

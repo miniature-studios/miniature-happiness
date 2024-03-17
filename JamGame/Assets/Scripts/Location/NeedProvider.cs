@@ -129,6 +129,11 @@ namespace Location
                         break;
                 }
             }
+
+            public void OnEmployeeFired(EmployeeImpl employee)
+            {
+                _ = Employees.Remove(employee);
+            }
         }
 
         [SerializeField]
@@ -275,6 +280,16 @@ namespace Location
             }
 
             return null;
+        }
+
+        public void OnEmployeeFired(EmployeeImpl employee)
+        {
+            filter.OnEmployeeFired(employee);
+
+            if (currentEmployee == employee)
+            {
+                ReleaseEmployee();
+            }
         }
 
         private readonly List<NeedModifiers> registeredModifiers = new();

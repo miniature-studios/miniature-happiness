@@ -9,22 +9,26 @@ using Level.Boss.Task;
 using Level.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 using TileBuilderController = TileBuilder.Controller;
 
-namespace Location
+namespace Location.EmployeeManager
 {
     public struct MeetingRoomPlaces
     {
         public List<NeedProvider> Places;
     }
 
-    [AddComponentMenu("Scripts/Location/Location.EmployeeManager")]
-    public class EmployeeManager : MonoBehaviour
+    [AddComponentMenu("Scripts/Location/EmployeeManager/Location.EmployeeManager.Model")]
+    public class Model : MonoBehaviour
     {
         private DataProvider<EmployeeAmount> employeeAmountDataProvider;
         private DataProvider<MaxStress> maxStressDataProvider;
         private DataProvider<AllEmployeesAtMeeting> allEmployeesAtMeetingDataProvider;
         private DataProvider<AllEmployeesAtHome> allEmployeesAtHomeDataProvider;
+
+        [SerializeField]
+        private UnityEvent<EmployeeImpl> employeeFired;
 
         [SerializeField]
         private EmployeeImpl employeePrototype;
@@ -110,6 +114,19 @@ namespace Location
 
             Destroy(employee.gameObject);
             return new FailResult("Cannot find place in meeting room");
+        }
+
+        public void FireEmployee(EmployeeImpl employee)
+        {
+            if (employee.CurrentNeedType != NeedType.Meeting)
+            {
+                Debug.LogError("Cannot fire employee that's not on meeting");
+                return;
+            }
+
+            employeeFired.Invoke(employee);
+            _ = employees.Remove(employee);
+            Destroy(employee.gameObject);
         }
     }
 }

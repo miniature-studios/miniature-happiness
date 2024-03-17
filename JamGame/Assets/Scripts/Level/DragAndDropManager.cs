@@ -93,7 +93,7 @@ namespace Level
         private Result<IDragAndDropAgent> RayCastTopDragAndDropAgent()
         {
             Vector2 position = Mouse.current.position.ReadValue();
-            IEnumerable<GameObject> hits = RayCaster.UIRayCast(position);
+            IEnumerable<GameObject> hits = Raycaster.UIRaycast(position);
             GameObject foundObject = hits.FirstOrDefault(x =>
                 x.TryGetComponent(out IDragAndDropAgent _)
             );

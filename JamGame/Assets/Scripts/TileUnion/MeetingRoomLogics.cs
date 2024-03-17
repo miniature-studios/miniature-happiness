@@ -4,6 +4,7 @@ using System.Linq;
 using Common;
 using Employee.Needs;
 using Location;
+using Location.EmployeeManager;
 using Sirenix.OdinInspector;
 using TileUnion.Tile;
 using UnityEngine;

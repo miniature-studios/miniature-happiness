@@ -115,7 +115,7 @@ namespace TileBuilder
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = mainCamera.ScreenPointToRay(mousePosition);
-            if (RayCaster.PointerIsOverUI(mousePosition))
+            if (Raycaster.PointerIsOverUI(mousePosition))
             {
                 return new FailResult<Vector2Int>("UI blocked raycast.");
             }
