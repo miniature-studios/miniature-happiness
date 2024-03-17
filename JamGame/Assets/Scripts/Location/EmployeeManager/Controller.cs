@@ -12,7 +12,8 @@ namespace Location.EmployeeManager
         private Model model;
 
         [SerializeField]
-        private LayerMask employeesLayer;
+        [Required]
+        private GameObject uiBlocker;
 
         private bool firingMode = false;
         public bool FiringMode => firingMode;
@@ -22,6 +23,13 @@ namespace Location.EmployeeManager
         private void Awake()
         {
             inputActions = new();
+            inputActions.UI.LeftClick.performed += (_) =>
+            {
+                if (firingMode)
+                {
+                    TryFireEmployee();
+                }
+            };
         }
 
         private void OnEnable()
@@ -37,14 +45,7 @@ namespace Location.EmployeeManager
         public void FiringButtonPressed()
         {
             firingMode ^= true;
-        }
-
-        public void Update()
-        {
-            if (firingMode && inputActions.UI.LeftClick.WasPressedThisFrame())
-            {
-                TryFireEmployee();
-            }
+            uiBlocker.SetActive(firingMode);
         }
 
         private void TryFireEmployee()
