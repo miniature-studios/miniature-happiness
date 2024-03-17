@@ -50,9 +50,9 @@ namespace Location.EmployeeManager
                 float max_stress = float.NegativeInfinity;
                 foreach (EmployeeImpl emp in employees)
                 {
-                    if (emp.Stress.Value > max_stress)
+                    if (emp.Stress.Stress > max_stress)
                     {
-                        max_stress = emp.Stress.Value;
+                        max_stress = emp.Stress.Stress;
                     }
                 }
 
