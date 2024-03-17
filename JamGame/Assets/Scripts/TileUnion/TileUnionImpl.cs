@@ -125,7 +125,7 @@ namespace TileUnion
             );
         }
 
-        public Result IsValidPlacing(TileBuilderImpl tileBuilder)
+        public Result IsValidPlacingByWalls(TileBuilderImpl tileBuilder)
         {
             foreach (TileImpl tile in tiles)
             {
@@ -157,7 +157,7 @@ namespace TileUnion
             return new SuccessResult();
         }
 
-        public Result IsPassedConditions(
+        public Result IsValidPlacingByConditioins(
             IEnumerable<IPlaceCondition> placeConditions,
             TileBuilderImpl tileBuilder
         )

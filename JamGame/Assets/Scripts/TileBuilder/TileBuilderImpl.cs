@@ -73,7 +73,7 @@ namespace TileBuilder
 
         private void Awake()
         {
-            ChangeGameMode(GameMode.God);
+            validator = new Validator.GodMode(this);
             InitModelViewMap();
         }
 
@@ -217,17 +217,21 @@ namespace TileBuilder
             TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.Uid];
             stashTileUnion.gameObject.SetActive(true);
             stashTileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
-            Result placingResult = stashTileUnion.IsValidPlacing(this);
-            Result conditionResult = stashTileUnion.IsPassedConditions(
+            Result placingResult = stashTileUnion.IsValidPlacingByWalls(this);
+            Result conditionResult = stashTileUnion.IsValidPlacingByConditioins(
                 coreModel.TileUnionModel.PlaceConditions,
                 this
             );
             ResetStashedViews();
-            return placingResult.Failure
-                ? placingResult
-                : conditionResult.Failure
-                    ? conditionResult
-                    : new SuccessResult();
+            if (placingResult.Failure)
+            {
+                return placingResult;
+            }
+            if (conditionResult.Failure)
+            {
+                return conditionResult;
+            }
+            return new SuccessResult();
         }
 
         public void InstantiateTileUnion(CoreModel coreModel)
@@ -256,6 +260,7 @@ namespace TileBuilder
 
             BindTileUnion(tileUnion, changeParent);
             UpdateSidesInPositions(placingPositions);
+            tileUnion.ApplyTileUnionState(State.Normal);
         }
 
         public void ShowSelectedTileUnion(CoreModel coreModel)
@@ -264,19 +269,17 @@ namespace TileBuilder
             TileUnionImpl stashTileUnion = InstantiatedViews[coreModel.Uid];
             stashTileUnion.gameObject.SetActive(true);
             stashTileUnion.ApplyPlacingProperties(coreModel.TileUnionModel.PlacingProperties);
-            Result placingResult = stashTileUnion.IsValidPlacing(this);
-            Result conditionResult = stashTileUnion.IsPassedConditions(
-                coreModel.TileUnionModel.PlaceConditions,
-                this
+
+            bool isCorrectWallsPlacing = stashTileUnion.IsValidPlacingByWalls(this).Success;
+            bool isConditionsPassed = stashTileUnion
+                .IsValidPlacingByConditioins(coreModel.TileUnionModel.PlaceConditions, this)
+                .Success;
+            bool isUnderTileNotFreeSpace = stashTileUnion.TilesPositions.Any(x =>
+                GetTileUnionInPosition(x) == null
+                || !GetTileUnionInPosition(x).IsAllWithMark(RoomTileLabel.FreeSpace)
             );
-            if (
-                placingResult.Failure
-                || conditionResult.Failure
-                || stashTileUnion.TilesPositions.Any(x =>
-                    GetTileUnionInPosition(x) == null
-                    || !GetTileUnionInPosition(x).IsAllWithMark(RoomTileLabel.FreeSpace)
-                )
-            )
+
+            if (!isCorrectWallsPlacing || !isConditionsPassed || isUnderTileNotFreeSpace)
             {
                 stashTileUnion.ApplyTileUnionState(State.SelectedAndErrored);
             }
@@ -289,11 +292,14 @@ namespace TileBuilder
 
             List<Vector2Int> previousPlaces = tileUnion.TilesPositions.ToList();
             RemoveTileFromDictionary(tileUnion);
-            foreach (Vector2Int position in previousPlaces)
+            if (validator.GameMode == GameMode.Build)
             {
-                FreeSpace.TileUnionModel.PlacingProperties.SetPosition(position);
-                TileUnionImpl freeSpace = CreateTile(FreeSpace);
-                PlaceTileUnion(freeSpace, false);
+                foreach (Vector2Int position in previousPlaces)
+                {
+                    FreeSpace.TileUnionModel.PlacingProperties.SetPosition(position);
+                    TileUnionImpl freeSpace = CreateTile(FreeSpace);
+                    PlaceTileUnion(freeSpace, false);
+                }
             }
             UpdateSidesInPositions(previousPlaces);
             return tileUnion;
@@ -303,12 +309,8 @@ namespace TileBuilder
         {
             TileUnionImpl removed = BorrowTileUnion(borrowedPosition);
             CoreModel coreModel = DeleteTile(removed);
-            if (!removed.IsAllWithMark(RoomTileLabel.FreeSpace))
-            {
-                _ = coreModels.Remove(coreModel);
-                return coreModel;
-            }
-            return null;
+            _ = coreModels.Remove(coreModel);
+            return coreModel;
         }
 
         public IEnumerable<TileUnionImpl> GetTileUnionsInPositions(
@@ -378,6 +380,7 @@ namespace TileBuilder
             CoreModel coreModel = tileUnion.CoreModel;
             coreModel.TileUnionModel.PlacingProperties.SetRotation(tileUnion.Rotation);
             RemoveTileFromDictionary(tileUnion);
+            UpdateSidesInPositions(tileUnion.TilesPositionsForUpdating);
             Destroy(tileUnion.gameObject);
             return coreModel;
         }

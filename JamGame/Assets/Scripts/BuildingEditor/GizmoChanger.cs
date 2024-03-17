@@ -29,6 +29,7 @@ namespace BuildingEditor
         private void Awake()
         {
             tileBuilder.OnTileUnionCreated += OnTileUnionCreated;
+            SwitchShowHiddenTilesCube();
         }
 
         private void OnTileUnionCreated(TileUnionImpl tileUnion)

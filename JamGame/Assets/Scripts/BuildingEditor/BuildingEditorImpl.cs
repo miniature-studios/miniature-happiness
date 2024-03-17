@@ -69,13 +69,24 @@ namespace BuildingEditor
 
         private void Start()
         {
-            tileBuilder.ChangeGameMode(GameMode.God);
             inventoryView.ShowInventory();
             inventoryController.AddRoomsFromAssets(INITIAL_ROOM_COUNT);
             coreModelByLabels = coreModelByRoomLabels.ToDictionary(
                 x => x.RoomTileLabel,
                 x => x.CoreModel
             );
+        }
+
+        [Button]
+        public void SetGodMode()
+        {
+            tileBuilder.ChangeGameMode(GameMode.God);
+        }
+
+        [Button]
+        public void SetBuildMode()
+        {
+            tileBuilder.ChangeGameMode(GameMode.Build);
         }
 
         [Button]
