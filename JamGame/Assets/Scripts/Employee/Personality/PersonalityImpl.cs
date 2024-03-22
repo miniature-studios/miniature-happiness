@@ -26,6 +26,11 @@ namespace Employee.Personality
                 {
                     employee.AddNeed(additional_need);
                 }
+
+                foreach (IEffect effect in quirk.Effects)
+                {
+                    employee.RegisterEffect(effect);
+                }
             }
         }
     }

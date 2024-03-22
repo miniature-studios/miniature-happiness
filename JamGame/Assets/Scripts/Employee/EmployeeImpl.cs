@@ -442,7 +442,6 @@ namespace Employee
             controller.OnReachedNeedProvider -= ReachedNeedProvider;
         }
 
-        // TODO: match type of effect with corresponding Executor type.
         public void RegisterBuff(Buff buff)
         {
             appliedBuffs.Add(
@@ -450,67 +449,79 @@ namespace Employee
             );
             foreach (IEffect effect in buff.Effects)
             {
-                if (effect is StressEffect se)
-                {
-                    Stress.RegisterEffect(se);
-                }
-                else if (effect is NeedModifierEffect nme)
-                {
-                    buffsNeedModifiers.RegisterEffect(nme);
-                }
-                else if (effect is ControllerEffect ce)
-                {
-                    controller.RegisterEffect(ce);
-                }
-                else if (effect is EarnedMoneyEffect eme)
-                {
-                    incomeGenerator.RegisterEffect(eme);
-                }
-                else
-                {
-                    Debug.LogError("Unknown buff effect type");
-                }
+                RegisterEffect(effect);
             }
         }
 
         // TODO: match type of effect with corresponding Executor type.
+        public void RegisterEffect(IEffect effect)
+        {
+            if (effect is StressEffect se)
+            {
+                Stress.RegisterEffect(se);
+            }
+            else if (effect is NeedModifierEffect nme)
+            {
+                buffsNeedModifiers.RegisterEffect(nme);
+            }
+            else if (effect is ControllerEffect ce)
+            {
+                controller.RegisterEffect(ce);
+            }
+            else if (effect is EarnedMoneyEffect eme)
+            {
+                incomeGenerator.RegisterEffect(eme);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown effect type");
+            }
+        }
+
         public void UnregisterBuff(Buff buff)
         {
             for (int i = 0; i < appliedBuffs.Count; i++)
             {
-                if (appliedBuffs[i].Buff == buff)
+                if (appliedBuffs[i].Buff != buff)
                 {
-                    appliedBuffs.RemoveAt(i);
-
-                    foreach (IEffect effect in buff.Effects)
-                    {
-                        if (effect is StressEffect se)
-                        {
-                            Stress.UnregisterEffect(se);
-                        }
-                        else if (effect is NeedModifierEffect nme)
-                        {
-                            buffsNeedModifiers.UnregisterEffect(nme);
-                        }
-                        else if (effect is ControllerEffect ce)
-                        {
-                            controller.UnregisterEffect(ce);
-                        }
-                        else if (effect is EarnedMoneyEffect eme)
-                        {
-                            incomeGenerator.UnregisterEffect(eme);
-                        }
-                        else
-                        {
-                            Debug.LogError("Unknown buff effect type");
-                        }
-                    }
-
-                    return;
+                    continue;
                 }
+
+                appliedBuffs.RemoveAt(i);
+                foreach (IEffect effect in buff.Effects)
+                {
+                    UnregisterEffect(effect);
+                }
+
+                return;
             }
 
             Debug.LogError("Failed to unregister buff: not registered");
+        }
+
+        // TODO: match type of effect with corresponding Executor type.
+        private void UnregisterEffect(IEffect effect)
+        {
+            if (effect is StressEffect se)
+            {
+                Stress.UnregisterEffect(se);
+            }
+            else if (effect is NeedModifierEffect nme)
+            {
+                buffsNeedModifiers.UnregisterEffect(nme);
+            }
+            else if (effect is ControllerEffect ce)
+            {
+                controller.UnregisterEffect(ce);
+            }
+            else if (effect is EarnedMoneyEffect eme)
+            {
+                incomeGenerator.UnregisterEffect(eme);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown effect type");
+            }
         }
     }
 

@@ -19,5 +19,9 @@ namespace Employee
         private List<Need.NeedProperties> additionalNeeds;
         public ImmutableList<Need.NeedProperties> AdditionalNeeds =>
             additionalNeeds.ToImmutableList();
+
+        [SerializeReference]
+        private List<IEffect> effects = new();
+        public IEnumerable<IEffect> Effects => effects;
     }
 }
