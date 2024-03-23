@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common;
+using Level.Finances;
 using Level.GlobalTime;
 using Level.Room;
 using Pickle;
@@ -239,6 +240,54 @@ namespace Level.Boss.Task
             else
             {
                 completeness = Days.Zero;
+            }
+        }
+    }
+
+    [Serializable]
+    public class MinBalance : ITask
+    {
+        [SerializeField]
+        [FoldoutGroup("Min Balance")]
+        private float minBalanceTarget;
+        public float MinBalanceTarget => minBalanceTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Min Balance")]
+        private Days targetDuration;
+
+        private Days currentDuration = Days.Zero;
+        private bool complete = false;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            if (currentDuration > targetDuration)
+            {
+                complete = true;
+                return;
+            }
+
+            float money = DataProviderServiceLocator.FetchDataFromSingleton<MoneyEarned>().Value;
+            if (money >= minBalanceTarget)
+            {
+                currentDuration += new Days(delta_time);
+            }
+            else
+            {
+                currentDuration = Days.Zero;
             }
         }
     }
