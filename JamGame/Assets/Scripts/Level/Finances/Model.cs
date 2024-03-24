@@ -5,6 +5,11 @@ using UnityEngine.Events;
 
 namespace Level.Finances
 {
+    public struct Money
+    {
+        public float Value;
+    }
+
     public struct MoneyEarned
     {
         public float Value;
@@ -13,6 +18,7 @@ namespace Level.Finances
     [AddComponentMenu("Scripts/Level/Finances/Level.Finances.Model")]
     public class Model : MonoBehaviour
     {
+        private DataProvider<Money> moneyDataProvider;
         private DataProvider<MoneyEarned> moneyEarnedDataProvider;
 
         [ReadOnly]
@@ -20,18 +26,18 @@ namespace Level.Finances
         private int money;
         public UnityEvent<int> MoneyChange;
 
+        private int moneyEarned = 0;
+
         private void Start()
         {
-            moneyEarnedDataProvider = new DataProvider<MoneyEarned>(
-                () => new MoneyEarned() { Value = money },
+            moneyDataProvider = new DataProvider<Money>(
+                () => new Money() { Value = money },
                 DataProviderServiceLocator.ResolveType.Singleton
             );
-        }
-
-        public void SetMoney(int moneyCount)
-        {
-            money = moneyCount;
-            MoneyChange?.Invoke(money);
+            moneyEarnedDataProvider = new DataProvider<MoneyEarned>(
+                () => new MoneyEarned() { Value = moneyEarned },
+                DataProviderServiceLocator.ResolveType.Singleton
+            );
         }
 
         public Result TryTakeMoney(int moneyCount)
@@ -51,6 +57,7 @@ namespace Level.Finances
         public void AddMoney(int moneyCount)
         {
             money += moneyCount;
+            moneyEarned += moneyCount;
             MoneyChange?.Invoke(money);
         }
     }

@@ -24,6 +24,8 @@ namespace Level.Boss.Task
     [HideReferenceObjectPicker]
     public interface ITask
     {
+        public void Init() { }
+
         public void Update(RealTimeSeconds delta_time) { }
 
         public Progress Progress { get; }
@@ -284,7 +286,7 @@ namespace Level.Boss.Task
                 return;
             }
 
-            float money = DataProviderServiceLocator.FetchDataFromSingleton<MoneyEarned>().Value;
+            float money = DataProviderServiceLocator.FetchDataFromSingleton<Money>().Value;
             if (money >= minBalanceTarget)
             {
                 currentDuration += new Days(delta_time);
@@ -435,23 +437,20 @@ namespace Level.Boss.Task
 
         private Days currentDuration = Days.Zero;
         private bool complete = false;
-        private bool firstUpdate = true;
+
+        public void Init()
+        {
+            employeeManager.EmployeeNeedSatisfied += (_, need) =>
+            {
+                if (need == targetNeed && !complete)
+                {
+                    currentDuration = Days.Zero;
+                }
+            };
+        }
 
         public void Update(RealTimeSeconds delta_time)
         {
-            if (firstUpdate)
-            {
-                employeeManager.EmployeeNeedSatisfied += (_, need) =>
-                {
-                    if (need == targetNeed && !complete)
-                    {
-                        currentDuration = Days.Zero;
-                    }
-                };
-                firstUpdate = false;
-                return;
-            }
-
             if (complete)
             {
                 return;
@@ -462,6 +461,54 @@ namespace Level.Boss.Task
             {
                 complete = true;
                 return;
+            }
+        }
+    }
+
+    [Serializable]
+    public class MinEarnPerWorkingSession : ITask
+    {
+        [SerializeField]
+        [Required]
+        [FoldoutGroup("Min Earn Per Working Session")]
+        private Executor executor;
+
+        [SerializeField]
+        [FoldoutGroup("Min Earn Per Working Session")]
+        private float earnTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentEarned - workingTimeStartEarned,
+                Overall = earnTarget,
+                Complete = complete,
+            };
+
+        private bool complete = false;
+        private float workingTimeStartEarned;
+        private float currentEarned = 0.0f;
+
+        public void Init()
+        {
+            workingTimeStartEarned = DataProviderServiceLocator
+                .FetchDataFromSingleton<MoneyEarned>()
+                .Value;
+            executor.ActionEndNotify += () => workingTimeStartEarned = currentEarned;
+        }
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            currentEarned = DataProviderServiceLocator.FetchDataFromSingleton<MoneyEarned>().Value;
+
+            if (currentEarned - workingTimeStartEarned >= earnTarget)
+            {
+                complete = true;
             }
         }
     }

@@ -100,6 +100,7 @@ namespace Level.Boss
             {
                 taskState[task.Task] = TaskState.Active;
                 activeTasks.Add(task.Task);
+                task.Task.Init();
             }
 
             taskBunchToActivateNext++;

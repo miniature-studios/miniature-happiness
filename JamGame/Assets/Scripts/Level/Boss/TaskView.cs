@@ -48,6 +48,8 @@ namespace Level.Boss
                     => $"Keep waiting lines shorter than {task.LengthTarget} for {progress.Overall} days",
                 DontSatisfyNeed task
                     => $"Don't let employees satisfy need {task.TargetNeed} for {progress.Overall} days",
+                MinEarnPerWorkingSession _
+                    => $"Earn at least {progress.Overall} money in a single working session",
                 _ => throw new NotImplementedException("This task type is not supported")
             };
         }
