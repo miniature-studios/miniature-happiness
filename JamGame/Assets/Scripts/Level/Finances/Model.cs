@@ -23,7 +23,8 @@ namespace Level.Finances
         private void Start()
         {
             moneyEarnedDataProvider = new DataProvider<MoneyEarned>(
-                () => new MoneyEarned() { Value = money }
+                () => new MoneyEarned() { Value = money },
+                DataProviderServiceLocator.ResolveType.Singleton
             );
         }
 

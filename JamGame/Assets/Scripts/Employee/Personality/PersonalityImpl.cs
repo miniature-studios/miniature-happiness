@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Common;
 using Employee.Needs;
+using Level.Boss.Task;
 using UnityEngine;
 
 namespace Employee.Personality
@@ -16,8 +18,15 @@ namespace Employee.Personality
         private List<Quirk> quirks;
         public IEnumerable<Quirk> Quirks => quirks;
 
+        private DataProvider<EmployeeQuirks> employeeQuirksDataProvider;
+
         private void Start()
         {
+            employeeQuirksDataProvider = new DataProvider<EmployeeQuirks>(
+                () => new EmployeeQuirks() { Quirks = quirks },
+                DataProviderServiceLocator.ResolveType.MultipleSources
+            );
+
             EmployeeImpl employee = GetComponent<EmployeeImpl>();
 
             foreach (Quirk quirk in quirks)
@@ -32,6 +41,11 @@ namespace Employee.Personality
                     employee.RegisterEffect(effect);
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            DataProviderServiceLocator.Unregister(employeeQuirksDataProvider);
         }
     }
 }

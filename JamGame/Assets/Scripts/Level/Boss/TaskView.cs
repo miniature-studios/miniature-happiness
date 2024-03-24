@@ -40,6 +40,10 @@ namespace Level.Boss
                 TargetRoomCount task => $"Build at least {progress.Overall} [{task.RoomTitle}]s",
                 RoomCountUpperBound task
                     => $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days",
+                MinBalance task
+                    => $"Have at least {task.MinBalanceTarget} for {progress.Overall} days",
+                MinEmployeesWithQuirk task
+                    => $"Have at least {task.EmployeeCountTarget} with quirk [TODO: show quirk icon here]",
                 _ => throw new NotImplementedException("This task type is not supported")
             };
         }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
+using Employee;
 using Level.Finances;
 using Level.GlobalTime;
 using Level.Room;
@@ -8,6 +10,7 @@ using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+// TODO: Move all the DTOs to their source classes.
 namespace Level.Boss.Task
 {
     public struct Progress
@@ -288,6 +291,61 @@ namespace Level.Boss.Task
             else
             {
                 currentDuration = Days.Zero;
+            }
+        }
+    }
+
+    public struct EmployeeQuirks
+    {
+        public IEnumerable<Quirk> Quirks;
+    }
+
+    [Serializable]
+    public class MinEmployeesWithQuirk : ITask
+    {
+        [SerializeField]
+        [FoldoutGroup("Min Employee Count With Quirk")]
+        private int employeeCountTarget;
+        public int EmployeeCountTarget => employeeCountTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentCount,
+                Overall = employeeCountTarget,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [AssetsOnly]
+        [Pickle(typeof(Quirk), LookupType = ObjectProviderType.Assets)]
+        [FoldoutGroup("Min Employee Count With Quirk")]
+        private Quirk targetQuirk;
+
+        private int currentCount = 0;
+        private bool complete = false;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            currentCount = 0;
+            IEnumerable<EmployeeQuirks> employee_quirks =
+                DataProviderServiceLocator.FetchDataFromMultipleSources<EmployeeQuirks>();
+            foreach (EmployeeQuirks quirks in employee_quirks)
+            {
+                if (quirks.Quirks.Contains(targetQuirk))
+                {
+                    currentCount++;
+                }
+            }
+
+            if (currentCount >= employeeCountTarget)
+            {
+                complete = true;
             }
         }
     }

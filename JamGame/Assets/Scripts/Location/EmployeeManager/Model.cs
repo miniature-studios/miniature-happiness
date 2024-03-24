@@ -43,35 +43,45 @@ namespace Location.EmployeeManager
         private void Start()
         {
             employeeAmountDataProvider = new DataProvider<EmployeeAmount>(
-                () => new EmployeeAmount { Amount = employees.Count }
+                () => new EmployeeAmount { Amount = employees.Count },
+                DataProviderServiceLocator.ResolveType.Singleton
             );
-            maxStressDataProvider = new DataProvider<MaxStress>(() =>
-            {
-                float max_stress = float.NegativeInfinity;
-                foreach (EmployeeImpl emp in employees)
+            maxStressDataProvider = new DataProvider<MaxStress>(
+                () =>
                 {
-                    if (emp.Stress.Stress > max_stress)
+                    float max_stress = float.NegativeInfinity;
+                    foreach (EmployeeImpl emp in employees)
                     {
-                        max_stress = emp.Stress.Stress;
+                        if (emp.Stress.Stress > max_stress)
+                        {
+                            max_stress = emp.Stress.Stress;
+                        }
                     }
-                }
 
-                return new MaxStress { Stress = max_stress };
-            });
-            allEmployeesAtMeetingDataProvider = new DataProvider<AllEmployeesAtMeeting>(() =>
-            {
-                bool all_at_meeting = employees.All(employee =>
-                    employee.CurrentNeedType == NeedType.Meeting
-                );
-                return new AllEmployeesAtMeeting { Value = all_at_meeting };
-            });
-            allEmployeesAtHomeDataProvider = new DataProvider<AllEmployeesAtHome>(() =>
-            {
-                bool all_go_home = employees.All(employee =>
-                    employee.CurrentNeedType == NeedType.Leave
-                );
-                return new AllEmployeesAtHome { Value = all_go_home };
-            });
+                    return new MaxStress { Stress = max_stress };
+                },
+                DataProviderServiceLocator.ResolveType.Singleton
+            );
+            allEmployeesAtMeetingDataProvider = new DataProvider<AllEmployeesAtMeeting>(
+                () =>
+                {
+                    bool all_at_meeting = employees.All(employee =>
+                        employee.CurrentNeedType == NeedType.Meeting
+                    );
+                    return new AllEmployeesAtMeeting { Value = all_at_meeting };
+                },
+                DataProviderServiceLocator.ResolveType.Singleton
+            );
+            allEmployeesAtHomeDataProvider = new DataProvider<AllEmployeesAtHome>(
+                () =>
+                {
+                    bool all_go_home = employees.All(employee =>
+                        employee.CurrentNeedType == NeedType.Leave
+                    );
+                    return new AllEmployeesAtHome { Value = all_go_home };
+                },
+                DataProviderServiceLocator.ResolveType.Singleton
+            );
         }
 
         // TODO: Remove it when employee serialization will be implemented (#121)
