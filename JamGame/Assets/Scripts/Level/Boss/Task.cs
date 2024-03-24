@@ -349,4 +349,61 @@ namespace Level.Boss.Task
             }
         }
     }
+
+    public struct WaitingLineLength
+    {
+        public int Value;
+    }
+
+    [Serializable]
+    public class MaxWaitingLineLength : ITask
+    {
+        [SerializeField]
+        [FoldoutGroup("Max Waiting Line Length")]
+        private int lengthTarget;
+        public int LengthTarget => lengthTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Max Waiting Line Length")]
+        private Days targetDuration;
+
+        private Days currentDuration = Days.Zero;
+        private bool complete = false;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            int currentMaxLength = DataProviderServiceLocator
+                .FetchDataFromMultipleSources<WaitingLineLength>()
+                .Select(data => data.Value)
+                .DefaultIfEmpty()
+                .Max();
+
+            if (currentMaxLength <= lengthTarget)
+            {
+                currentDuration += new Days(delta_time);
+            }
+            else
+            {
+                currentDuration = Days.Zero;
+            }
+
+            if (currentDuration >= targetDuration)
+            {
+                complete = true;
+            }
+        }
+    }
 }

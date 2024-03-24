@@ -4,7 +4,6 @@ namespace Common
 {
     public interface IDataProvider { }
 
-    // TODO: Refactor to be serailized and unregister on Destroy.
     public class DataProvider<D> : IDataProvider
     {
         private Func<D> fetchData;

@@ -42,10 +42,5 @@ namespace Employee.Personality
                 }
             }
         }
-
-        private void OnDestroy()
-        {
-            DataProviderServiceLocator.Unregister(employeeQuirksDataProvider);
-        }
     }
 }
