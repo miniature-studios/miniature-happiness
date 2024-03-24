@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Employee;
+using Employee.Needs;
 using Level.Finances;
 using Level.GlobalTime;
 using Level.Room;
@@ -403,6 +404,64 @@ namespace Level.Boss.Task
             if (currentDuration >= targetDuration)
             {
                 complete = true;
+            }
+        }
+    }
+
+    [Serializable]
+    public class DontSatisfyNeed : ITask
+    {
+        [SerializeField]
+        [Required]
+        [FoldoutGroup("Dont Satisfy Need")]
+        private Location.EmployeeManager.Model employeeManager;
+
+        [SerializeField]
+        [FoldoutGroup("Dont Satisfy Need")]
+        private NeedType targetNeed;
+        public NeedType TargetNeed => targetNeed;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Dont Satisfy Need")]
+        private Days targetDuration;
+
+        private Days currentDuration = Days.Zero;
+        private bool complete = false;
+        private bool firstUpdate = true;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (firstUpdate)
+            {
+                employeeManager.EmployeeNeedSatisfied += (_, need) =>
+                {
+                    if (need == targetNeed && !complete)
+                    {
+                        currentDuration = Days.Zero;
+                    }
+                };
+                firstUpdate = false;
+                return;
+            }
+
+            if (complete)
+            {
+                return;
+            }
+
+            currentDuration += new Days(delta_time);
+            if (currentDuration > targetDuration)
+            {
+                complete = true;
+                return;
             }
         }
     }

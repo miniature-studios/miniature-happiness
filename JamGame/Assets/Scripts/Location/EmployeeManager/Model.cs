@@ -40,6 +40,9 @@ namespace Location.EmployeeManager
         [SerializeField]
         private List<EmployeeImpl> employees = new();
 
+        public delegate void EmployeeNeedSatisfiedHandler(EmployeeImpl employee, NeedType need);
+        public event EmployeeNeedSatisfiedHandler EmployeeNeedSatisfied;
+
         private void Start()
         {
             employeeAmountDataProvider = new DataProvider<EmployeeAmount>(
@@ -119,6 +122,7 @@ namespace Location.EmployeeManager
                 }
 
                 employees.Add(employee);
+                employee.NeedSatisifed += (need) => EmployeeNeedSatisfied?.Invoke(employee, need);
                 return new SuccessResult();
             }
 

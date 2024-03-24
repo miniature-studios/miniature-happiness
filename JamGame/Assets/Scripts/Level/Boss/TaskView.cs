@@ -46,6 +46,8 @@ namespace Level.Boss
                     => $"Have at least {task.EmployeeCountTarget} with quirk [TODO: show quirk icon here]",
                 MaxWaitingLineLength task
                     => $"Keep waiting lines shorter than {task.LengthTarget} for {progress.Overall} days",
+                DontSatisfyNeed task
+                    => $"Don't let employees satisfy need {task.TargetNeed} for {progress.Overall} days",
                 _ => throw new NotImplementedException("This task type is not supported")
             };
         }
