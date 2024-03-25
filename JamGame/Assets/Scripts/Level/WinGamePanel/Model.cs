@@ -14,8 +14,7 @@ namespace Level.WinGamePanel
         public DaysLived DaysLived =>
             DataProviderServiceLocator.FetchDataFromSingleton<DaysLived>();
 
-        public MoneyEarned MoneyEarned =>
-            DataProviderServiceLocator.FetchDataFromSingleton<MoneyEarned>();
+        public Money MoneyEarned => DataProviderServiceLocator.FetchDataFromSingleton<Money>();
 
         public UnityEvent<Model> OnModelChanged;
 

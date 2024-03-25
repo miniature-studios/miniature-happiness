@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Employee;
 using Employee.Needs;
+using Level.Boss.Task;
 using Level.GlobalTime;
 using UnityEngine;
 using UnityEngine.Events;
@@ -150,11 +152,21 @@ namespace Location
 
         private List<PlaceInWaitingLine> waitingLine = new();
 
+        private DataProvider<WaitingLineLength> waitingLineLengthDataProvider;
+
         [SerializeField]
         private UnityEvent<EmployeeImpl> taken = new();
 
         [SerializeField]
         private UnityEvent<EmployeeImpl> released = new();
+
+        public void Start()
+        {
+            waitingLineLengthDataProvider = new DataProvider<WaitingLineLength>(
+                () => new() { Value = waitingLine.Count },
+                DataProviderServiceLocator.ResolveType.MultipleSources
+            );
+        }
 
         public void Take(
             PlaceInWaitingLine place,

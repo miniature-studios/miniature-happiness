@@ -42,6 +42,8 @@ namespace Employee
         private Need currentlySatisfyingNeed;
         private NeedProvider targetNeedProvider = null;
 
+        public event Action<NeedType> NeedSatisifed;
+
         private ControllerImpl controller;
 
         [ReadOnly]
@@ -395,6 +397,7 @@ namespace Employee
             state = State.Idle;
             currentlySatisfyingNeed.Satisfy();
             incomeGenerator.NeedComplete(currentlySatisfyingNeed);
+            NeedSatisifed?.Invoke(currentlySatisfyingNeed.NeedType);
             currentlySatisfyingNeed = null;
             targetNeedProvider = null;
 

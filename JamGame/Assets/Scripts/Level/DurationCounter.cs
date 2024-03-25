@@ -21,7 +21,8 @@ namespace Level
         private void Start()
         {
             daysLivedDataProvider = new DataProvider<DaysLived>(
-                () => new DaysLived() { Value = daysLived }
+                () => new DaysLived() { Value = daysLived },
+                DataProviderServiceLocator.ResolveType.Singleton
             );
         }
 

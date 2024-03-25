@@ -53,14 +53,20 @@ namespace TileUnion
 
         private void Start()
         {
-            meetingRoomPlacesDataProvider = new DataProvider<MeetingRoomPlaces>(() =>
-            {
-                NeedProvider[] need_providers = transform.GetComponentsInChildren<NeedProvider>();
-                return new MeetingRoomPlaces()
+            meetingRoomPlacesDataProvider = new DataProvider<MeetingRoomPlaces>(
+                () =>
                 {
-                    Places = need_providers.Where(np => np.NeedType == NeedType.Meeting).ToList()
-                };
-            });
+                    NeedProvider[] need_providers =
+                        transform.GetComponentsInChildren<NeedProvider>();
+                    return new MeetingRoomPlaces()
+                    {
+                        Places = need_providers
+                            .Where(np => np.NeedType == NeedType.Meeting)
+                            .ToList()
+                    };
+                },
+                DataProviderServiceLocator.ResolveType.Singleton
+            );
         }
 
         public bool IsEnoughPlace(int employeeCount)

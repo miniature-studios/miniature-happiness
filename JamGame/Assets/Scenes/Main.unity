@@ -1071,7 +1071,7 @@ MonoBehaviour:
         Showed: 1
         OverrideState: 0
       - Animator: {fileID: 1895812756}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 942579363}
         Showed: 0
@@ -3016,6 +3016,30 @@ PrefabInstance:
       value: Assembly-CSharp Level.Boss.Task.TargetEmployeeAmount
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512948356349952]
+      value: Assembly-CSharp Level.Boss.Task.MinBalance
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648128]
+      value: Assembly-CSharp Level.Boss.Task.MinEmployeesWithQuirk
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648129]
+      value: Assembly-CSharp Level.Boss.Task.MaxWaitingLineLength
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648130]
+      value: Assembly-CSharp Level.Boss.Task.DontSatisfyNeed
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512970511974400]
+      value: Assembly-CSharp Level.Boss.Task.MinEarnPerWorkingSession
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512970511974401]
+      value: Assembly-CSharp Level.Boss.Task.MaxStressBound
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135553].room
       value: 
       objectReference: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
@@ -3025,27 +3049,47 @@ PrefabInstance:
       objectReference: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512970511974400].executor
+      value: 
+      objectReference: {fileID: 1067622715}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648130].targetNeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512970511974400].earnTarget
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648128].targetQuirk
+      value: 
+      objectReference: {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135553].targetAmount
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648129].lengthTarget
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[0].cost
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[0].task
-      value: 4306523841130135553
+      value: 5009512970511974400
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[1].cost
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[1].task
-      value: 4306523841130135555
+      value: 5009512970511974401
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].Cost
@@ -3060,8 +3104,36 @@ PrefabInstance:
       value: 4306523859816284160
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[3].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[3].task
+      value: 5009512948356349952
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[4].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[4].task
+      value: 5009512968745648129
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135554].targetDuration
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648130].employeeManager
+      value: 
+      objectReference: {fileID: 42303835}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512970511974401].maxStressTarget
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512948356349952].minBalanceTarget
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135553].roomCountProvider
@@ -3078,6 +3150,26 @@ PrefabInstance:
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523859816284160].employeeCountTarget
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512948356349952].targetDuration.days
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648128].employeeCountTarget
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648129].targetDuration.days
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512968745648130].targetDuration.days
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
+      propertyPath: managedReferences[5009512970511974401].targetDuration.days
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[4306523841130135555].timeToComplete.Days_

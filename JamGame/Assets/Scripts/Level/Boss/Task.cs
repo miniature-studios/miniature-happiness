@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common;
+using Employee;
+using Employee.Needs;
+using Level.Finances;
 using Level.GlobalTime;
 using Level.Room;
 using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+// TODO: Move all the DTOs to their source classes.
 namespace Level.Boss.Task
 {
     public struct Progress
@@ -19,6 +24,8 @@ namespace Level.Boss.Task
     [HideReferenceObjectPicker]
     public interface ITask
     {
+        public void Init() { }
+
         public void Update(RealTimeSeconds delta_time) { }
 
         public Progress Progress { get; }
@@ -239,6 +246,269 @@ namespace Level.Boss.Task
             else
             {
                 completeness = Days.Zero;
+            }
+        }
+    }
+
+    [Serializable]
+    public class MinBalance : ITask
+    {
+        [SerializeField]
+        [FoldoutGroup("Min Balance")]
+        private float minBalanceTarget;
+        public float MinBalanceTarget => minBalanceTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Min Balance")]
+        private Days targetDuration;
+
+        private Days currentDuration = Days.Zero;
+        private bool complete = false;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            if (currentDuration > targetDuration)
+            {
+                complete = true;
+                return;
+            }
+
+            float money = DataProviderServiceLocator.FetchDataFromSingleton<Money>().Value;
+            if (money >= minBalanceTarget)
+            {
+                currentDuration += new Days(delta_time);
+            }
+            else
+            {
+                currentDuration = Days.Zero;
+            }
+        }
+    }
+
+    public struct EmployeeQuirks
+    {
+        public IEnumerable<Quirk> Quirks;
+    }
+
+    [Serializable]
+    public class MinEmployeesWithQuirk : ITask
+    {
+        [SerializeField]
+        [FoldoutGroup("Min Employee Count With Quirk")]
+        private int employeeCountTarget;
+        public int EmployeeCountTarget => employeeCountTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentCount,
+                Overall = employeeCountTarget,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [AssetsOnly]
+        [Pickle(typeof(Quirk), LookupType = ObjectProviderType.Assets)]
+        [FoldoutGroup("Min Employee Count With Quirk")]
+        private Quirk targetQuirk;
+
+        private int currentCount = 0;
+        private bool complete = false;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            currentCount = 0;
+            IEnumerable<EmployeeQuirks> employee_quirks =
+                DataProviderServiceLocator.FetchDataFromMultipleSources<EmployeeQuirks>();
+            foreach (EmployeeQuirks quirks in employee_quirks)
+            {
+                if (quirks.Quirks.Contains(targetQuirk))
+                {
+                    currentCount++;
+                }
+            }
+
+            if (currentCount >= employeeCountTarget)
+            {
+                complete = true;
+            }
+        }
+    }
+
+    public struct WaitingLineLength
+    {
+        public int Value;
+    }
+
+    [Serializable]
+    public class MaxWaitingLineLength : ITask
+    {
+        [SerializeField]
+        [FoldoutGroup("Max Waiting Line Length")]
+        private int lengthTarget;
+        public int LengthTarget => lengthTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Max Waiting Line Length")]
+        private Days targetDuration;
+
+        private Days currentDuration = Days.Zero;
+        private bool complete = false;
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            int currentMaxLength = DataProviderServiceLocator
+                .FetchDataFromMultipleSources<WaitingLineLength>()
+                .Select(data => data.Value)
+                .DefaultIfEmpty()
+                .Max();
+
+            if (currentMaxLength <= lengthTarget)
+            {
+                currentDuration += new Days(delta_time);
+            }
+            else
+            {
+                currentDuration = Days.Zero;
+            }
+
+            if (currentDuration >= targetDuration)
+            {
+                complete = true;
+            }
+        }
+    }
+
+    [Serializable]
+    public class DontSatisfyNeed : ITask
+    {
+        [SerializeField]
+        [Required]
+        [FoldoutGroup("Dont Satisfy Need")]
+        private Location.EmployeeManager.Model employeeManager;
+
+        [SerializeField]
+        [FoldoutGroup("Dont Satisfy Need")]
+        private NeedType targetNeed;
+        public NeedType TargetNeed => targetNeed;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentDuration.Value,
+                Overall = targetDuration.Value,
+                Complete = complete,
+            };
+
+        [SerializeField]
+        [FoldoutGroup("Dont Satisfy Need")]
+        private Days targetDuration;
+
+        private Days currentDuration = Days.Zero;
+        private bool complete = false;
+
+        public void Init()
+        {
+            employeeManager.EmployeeNeedSatisfied += (_, need) =>
+            {
+                if (need == targetNeed && !complete)
+                {
+                    currentDuration = Days.Zero;
+                }
+            };
+        }
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            currentDuration += new Days(delta_time);
+            if (currentDuration > targetDuration)
+            {
+                complete = true;
+                return;
+            }
+        }
+    }
+
+    [Serializable]
+    public class MinEarnPerWorkingSession : ITask
+    {
+        [SerializeField]
+        [Required]
+        [FoldoutGroup("Min Earn Per Working Session")]
+        private Executor executor;
+
+        [SerializeField]
+        [FoldoutGroup("Min Earn Per Working Session")]
+        private float earnTarget;
+
+        public Progress Progress =>
+            new()
+            {
+                Completion = currentEarned - workingTimeStartEarned,
+                Overall = earnTarget,
+                Complete = complete,
+            };
+
+        private bool complete = false;
+        private float workingTimeStartEarned;
+        private float currentEarned = 0.0f;
+
+        public void Init()
+        {
+            workingTimeStartEarned = DataProviderServiceLocator
+                .FetchDataFromSingleton<MoneyEarned>()
+                .Value;
+            executor.ActionEndNotify += () => workingTimeStartEarned = currentEarned;
+        }
+
+        public void Update(RealTimeSeconds delta_time)
+        {
+            if (complete)
+            {
+                return;
+            }
+
+            currentEarned = DataProviderServiceLocator.FetchDataFromSingleton<MoneyEarned>().Value;
+
+            if (currentEarned - workingTimeStartEarned >= earnTarget)
+            {
+                complete = true;
             }
         }
     }
