@@ -68,6 +68,7 @@ namespace TileUnion
         public void SetCoreModel(CoreModel coreModel)
         {
             this.coreModel = coreModel;
+            coreModel.transform.SetParent(transform);
         }
 
         [Space(20)]

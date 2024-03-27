@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CameraController;
 using Common;
 using Level.Room;
 using Pickle;
@@ -15,7 +16,7 @@ using UnityEngine;
 namespace BuildingEditor
 {
     [AddComponentMenu("Scripts/BuildingEditor/BuildingEditor")]
-    internal class BuildingEditorImpl : MonoBehaviour
+    internal class BuildingEditorImpl : MonoBehaviour, IBoundsSource
     {
         [Serializable]
         private struct CoreModelByRoomLabel
@@ -53,7 +54,11 @@ namespace BuildingEditor
         [Space]
         [Required]
         [SerializeField]
-        private TMP_InputField defaultBuildingSizeInput;
+        private TMP_InputField buildingSizeInputX;
+
+        [Required]
+        [SerializeField]
+        private TMP_InputField buildingSizeInputY;
 
         [Space]
         [SerializeField]
@@ -64,11 +69,23 @@ namespace BuildingEditor
         [SerializeField]
         private TMP_InputField buildingConfigNameInput;
 
+        [Required]
+        [SerializeField]
+        private TMP_Dropdown buildingModeDropdown;
+        private List<GameMode> gameModes;
+
         [SerializeField]
         private string baseSavePath = "Assets/ScriptableObjects/Building Configs";
 
+        public Bounds Bounds => new(Vector3.zero, Vector3.positiveInfinity);
+
         private void Start()
         {
+            buildingModeDropdown.ClearOptions();
+            gameModes = Enum.GetValues(typeof(GameMode)).Cast<GameMode>().ToList();
+            buildingModeDropdown.AddOptions(gameModes.Select(x => x.ToString()).ToList());
+            buildingModeDropdown.value = 0;
+
             inventoryView.ShowInventory();
             inventoryController.AddRoomsFromAssets(INITIAL_ROOM_COUNT);
             coreModelByLabels = coreModelByRoomLabels.ToDictionary(
@@ -78,15 +95,9 @@ namespace BuildingEditor
         }
 
         [Button]
-        public void SetGodMode()
+        public void BuildingModeChanged(int value)
         {
-            tileBuilder.ChangeGameMode(GameMode.God);
-        }
-
-        [Button]
-        public void SetBuildMode()
-        {
-            tileBuilder.ChangeGameMode(GameMode.Build);
+            tileBuilder.ChangeGameMode(gameModes[value]);
         }
 
         [Button]
@@ -108,13 +119,8 @@ namespace BuildingEditor
         [Button]
         public void CreateDefaultBuildingFromLabel()
         {
-            Vector2Int size = new();
-            string[] strings = defaultBuildingSizeInput.text.Split(
-                ' ',
-                StringSplitOptions.RemoveEmptyEntries
-            );
-            size.x = int.Parse(strings[0]);
-            size.y = int.Parse(strings[1]);
+            Vector2Int size =
+                new(int.Parse(buildingSizeInputX.text), int.Parse(buildingSizeInputY.text));
             CreateDefaultBuilding(size);
         }
 

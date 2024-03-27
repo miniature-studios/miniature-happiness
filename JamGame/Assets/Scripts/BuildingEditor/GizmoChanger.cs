@@ -16,10 +16,6 @@ namespace BuildingEditor
 
         [ReadOnly]
         [SerializeField]
-        private bool showDirectionGizmo = false;
-
-        [ReadOnly]
-        [SerializeField]
         private bool showPathGizmo = false;
 
         [ReadOnly]
@@ -29,7 +25,7 @@ namespace BuildingEditor
         private void Awake()
         {
             tileBuilder.OnTileUnionCreated += OnTileUnionCreated;
-            SwitchShowHiddenTilesCube();
+            OnShowHiddenTilesChanged(true);
         }
 
         private void OnTileUnionCreated(TileUnionImpl tileUnion)
@@ -37,27 +33,20 @@ namespace BuildingEditor
             UpdateTileUnionGizmos(tileUnion);
         }
 
-        public void SwitchShowTileDirectionGizmo()
+        public void OnPathGizmoChanged(bool value)
         {
-            showDirectionGizmo ^= true;
+            showPathGizmo = value;
             tileBuilder.TileUnionsWithStash.ForEach(UpdateTileUnionGizmos);
         }
 
-        public void SwitchShowTilePathGizmo()
+        public void OnShowHiddenTilesChanged(bool value)
         {
-            showPathGizmo ^= true;
-            tileBuilder.TileUnionsWithStash.ForEach(UpdateTileUnionGizmos);
-        }
-
-        public void SwitchShowHiddenTilesCube()
-        {
-            showHiddenTilesCube ^= true;
+            showHiddenTilesCube = value;
             tileBuilder.TileUnionsWithStash.ForEach(UpdateTileUnionGizmos);
         }
 
         private void UpdateTileUnionGizmos(TileUnionImpl tileUnion)
         {
-            tileUnion.SetDirectionsGizmo(showDirectionGizmo);
             if (
                 !tileUnion.IsAllWithMark(RoomTileLabel.FreeSpace)
                 && !tileUnion.IsAllWithMark(RoomTileLabel.Outside)
