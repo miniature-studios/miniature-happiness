@@ -40,17 +40,18 @@ namespace TileUnion.Tile
         private void Awake()
         {
             SetActiveChilds(transform);
-            renderers = GetComponentsInChildren<Renderer>().ToList();
+            renderers = GetComponentsInChildren<Renderer>(true).ToList();
             if (foundation != null)
             {
-                foreach (Renderer toRemove in foundation.GetComponentsInChildren<Renderer>())
+                foreach (Renderer toRemove in foundation.GetComponentsInChildren<Renderer>(true))
                 {
                     _ = renderers.Remove(toRemove);
                 }
-
-                unselectedYPosition = tileBase.position.y;
-                selectedYPosition = unselectedYPosition + selectLiftingHeight;
             }
+
+            unselectedYPosition = tileBase.position.y;
+            selectedYPosition = unselectedYPosition + selectLiftingHeight;
+
             foreach (Renderer renderer in renderers)
             {
                 renderer.SetMaterials(new List<Material>());
@@ -89,17 +90,17 @@ namespace TileUnion.Tile
                     _ => throw new System.ArgumentException()
                 };
                 foundation.SetActive(active);
-
-                float newY = state switch
-                {
-                    State.Normal => unselectedYPosition,
-                    State.Selected => selectedYPosition,
-                    State.Errored => unselectedYPosition,
-                    State.SelectedAndErrored => selectedYPosition,
-                    _ => throw new InvalidOperationException()
-                };
-                tileBase.SetYPosition(newY);
             }
+
+            float newY = state switch
+            {
+                State.Normal => unselectedYPosition,
+                State.Selected => selectedYPosition,
+                State.Errored => unselectedYPosition,
+                State.SelectedAndErrored => selectedYPosition,
+                _ => throw new InvalidOperationException()
+            };
+            tileBase.SetYPosition(newY);
 
             foreach (Renderer renderer in renderers)
             {

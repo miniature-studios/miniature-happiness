@@ -1,11 +1,15 @@
 ﻿using Cinemachine;
 using Sirenix.OdinInspector;
-using TileBuilder;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace CameraController
 {
+    internal interface IBoundsSource
+    {
+        public Bounds Bounds { get; }
+    }
+
     [AddComponentMenu("Scripts/CameraController/CameraController.Logic")]
     internal class Logic : MonoBehaviour
     {
@@ -37,16 +41,23 @@ namespace CameraController
         private Vector2 verticalArmLengthRange = new(0, 2);
 
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private CinemachineVirtualCamera virtualCamera;
         private Cinemachine3rdPersonFollow personFollow;
 
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private Controller tileBuilderController;
+        private GameObject boundsSourceProvider;
+        private IBoundsSource boundsSource;
 
         private void Awake()
         {
             personFollow = virtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            boundsSource = boundsSourceProvider.GetComponent<IBoundsSource>();
+            if (boundsSource == null)
+            {
+                Debug.LogError("IBoundsSource not found in boundsSourceProvider");
+            }
         }
 
         public void ZoomPerformed(InputAction.CallbackContext context)
@@ -97,8 +108,7 @@ namespace CameraController
                     Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
                 );
 
-            Bounds bounds = tileBuilderController.GetBuildingBounds();
-            transform.position = bounds.ClosestPoint(newPosition);
+            transform.position = boundsSource.Bounds.ClosestPoint(newPosition);
         }
 
         private bool ProcessRotation()

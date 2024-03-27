@@ -121,22 +121,21 @@ namespace TileBuilder.Validator
                 && tileBuilder.GetTileUnionInPosition(borrowRoom.BorrowingPosition) != null
             )
             {
-                bool borrowRoomImmutable = tileBuilder
-                    .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                    .IsAllWithMark(RoomTileLabel.Immutable);
+                TileUnionImpl tileUnionUnder = tileBuilder.GetTileUnionInPosition(
+                    borrowRoom.BorrowingPosition
+                );
 
-                bool borrowRoomFreespace = tileBuilder
-                    .GetTileUnionInPosition(borrowRoom.BorrowingPosition)
-                    .IsAllWithMark(RoomTileLabel.Immutable);
-
-                Result result = (borrowRoomImmutable, borrowRoomFreespace) switch
+                if (tileUnionUnder.IsAllWithMark(RoomTileLabel.Immutable))
                 {
-                    (true, _) => new FailResult("Immutable Tile"),
-                    (_, true) => new FailResult("Free space Tile"),
-                    _ => new SuccessResult()
-                };
+                    return new FailResult("Immutable Tile");
+                }
 
-                return result;
+                if (tileUnionUnder.IsAllWithMark(RoomTileLabel.FreeSpace))
+                {
+                    return new FailResult("Free space Tile");
+                }
+
+                return new SuccessResult();
             }
 
             return new FailResult("Cannot do this command");
