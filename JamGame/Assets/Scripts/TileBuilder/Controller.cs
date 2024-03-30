@@ -28,6 +28,8 @@ namespace TileBuilder
         private InputActions inputActions;
         private Camera mainCamera;
 
+        public Bounds CameraBounds => tileBuilder.Bounds;
+
         private void Awake()
         {
             mainCamera = Camera.main;
@@ -158,11 +160,6 @@ namespace TileBuilder
             }
 
             return new SuccessResult();
-        }
-
-        public Bounds GetBuildingBounds()
-        {
-            return tileBuilder.Bounds;
         }
 
         public void LoadBuildingFromConfig(BuildingConfig buildingConfig)
