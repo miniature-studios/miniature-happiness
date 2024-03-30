@@ -434,6 +434,7 @@ namespace Employee
         {
             controller = controller != null ? controller : GetComponent<ControllerImpl>();
             controller.OnReachedNeedProvider += ReachedNeedProvider;
+
             state = State.Idle;
         }
 
