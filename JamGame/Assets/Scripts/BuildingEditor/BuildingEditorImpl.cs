@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CameraController;
 using Common;
 using Level.Room;
 using Pickle;
@@ -16,7 +15,7 @@ using UnityEngine;
 namespace BuildingEditor
 {
     [AddComponentMenu("Scripts/BuildingEditor/BuildingEditor")]
-    internal class BuildingEditorImpl : MonoBehaviour, IBoundsSource
+    internal class BuildingEditorImpl : MonoBehaviour
     {
         [Serializable]
         private struct CoreModelByRoomLabel
@@ -76,8 +75,6 @@ namespace BuildingEditor
 
         [SerializeField]
         private string baseSavePath = "Assets/ScriptableObjects/Building Configs";
-
-        public Bounds Bounds => new(Vector3.zero, Vector3.positiveInfinity);
 
         private void Start()
         {

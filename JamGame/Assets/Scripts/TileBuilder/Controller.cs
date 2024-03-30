@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CameraController;
 using Common;
 using Level;
 using Level.Room;
@@ -14,7 +13,7 @@ using Utils.Raycast;
 namespace TileBuilder
 {
     [AddComponentMenu("Scripts/TileBuilder/TileBuilder.Controller")]
-    public partial class Controller : MonoBehaviour, IDragAndDropAgent, IBoundsSource
+    public partial class Controller : MonoBehaviour, IDragAndDropAgent
     {
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
@@ -29,7 +28,7 @@ namespace TileBuilder
         private InputActions inputActions;
         private Camera mainCamera;
 
-        public Bounds Bounds => tileBuilder.Bounds;
+        public Bounds CameraBounds => tileBuilder.Bounds;
 
         private void Awake()
         {

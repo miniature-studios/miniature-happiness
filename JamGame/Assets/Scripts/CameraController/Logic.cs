@@ -5,11 +5,6 @@ using UnityEngine.InputSystem;
 
 namespace CameraController
 {
-    internal interface IBoundsSource
-    {
-        public Bounds Bounds { get; }
-    }
-
     [AddComponentMenu("Scripts/CameraController/CameraController.Logic")]
     internal class Logic : MonoBehaviour
     {
@@ -46,18 +41,15 @@ namespace CameraController
         private Cinemachine3rdPersonFollow personFollow;
 
         [SerializeField]
+        private bool fitInBounds = true;
+
+        [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private GameObject boundsSourceProvider;
-        private IBoundsSource boundsSource;
+        private TileBuilder.Controller builderController;
 
         private void Awake()
         {
             personFollow = virtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-            boundsSource = boundsSourceProvider.GetComponent<IBoundsSource>();
-            if (boundsSource == null)
-            {
-                Debug.LogError("IBoundsSource not found in boundsSourceProvider");
-            }
         }
 
         public void ZoomPerformed(InputAction.CallbackContext context)
@@ -108,7 +100,14 @@ namespace CameraController
                     Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
                 );
 
-            transform.position = boundsSource.Bounds.ClosestPoint(newPosition);
+            if (fitInBounds)
+            {
+                transform.position = builderController.CameraBounds.ClosestPoint(newPosition);
+            }
+            else
+            {
+                transform.position = newPosition;
+            }
         }
 
         private bool ProcessRotation()
