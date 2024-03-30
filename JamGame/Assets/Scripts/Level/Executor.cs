@@ -224,12 +224,19 @@ namespace Level
                 Execute(new LoseGame());
                 return;
             }
+
             animatorSwitcher.SetAnimatorStates(typeof(DayEnd));
         }
 
         // Called by button continue on daily bill panel.
         public void CompleteDayEnd()
         {
+            if (boss.AllTasksAreComplete())
+            {
+                Execute(new WinGame());
+                return;
+            }
+
             ActionEndNotify?.Invoke();
         }
 
