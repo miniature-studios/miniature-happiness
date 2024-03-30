@@ -309,9 +309,231 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2120850797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2120850798}
+  - component: {fileID: 2120850799}
+  m_Layer: 0
+  m_Name: Root
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2120850798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120850797}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2120850799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120850797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb50b5b4038022744b7d09fe41d03007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasDrawer:
+    textDrawer: {}
+    autoLayoutDrawer: {}
+    buttonDrawer:
+      buttons: []
+  imageTypeSetter:
+    downloadableIds: []
+    generativeIds: []
+    drawableIds: []
+    noneIds: []
+  settings:
+    mainSettings:
+      uiFramework: 0
+      positioningMode: 0
+      pivotType: 4
+      imageFormat: 0
+      imageScale: 4
+      pixelsPerUnit: 100
+      goLayer: 5
+      spritesPath: Assets\Sprites
+      uguiOutputPath: Assets\UGUI Output
+      redownloadSprites: 0
+      rawImport: 0
+      windowMode: 0
+      projectUrl: 
+      componentsUrls:
+      - 
+      - 
+      - 
+      - 
+      - 
+    componentSettings:
+      imageComponent: 0
+      shadowComponent: 0
+      textComponent: 0
+      buttonComponent: 0
+      useI2Localization: 0
+    puiSettings:
+      type: 0
+      raycastTarget: 1
+      preserveAspect: 1
+      raycastPadding: {x: 0, y: 0, z: 0, w: 0}
+      falloffDistance: 1
+    mpuikitSettings:
+      type: 0
+      raycastTarget: 1
+      preserveAspect: 1
+      raycastPadding: {x: 0, y: 0, z: 0, w: 0}
+      falloffDistance: 0.5
+    unityImageSettings:
+      type: 0
+      raycastTarget: 1
+      preserveAspect: 1
+      raycastPadding: {x: 0, y: 0, z: 0, w: 0}
+      maskable: 1
+    shapes2D_Settings:
+      type: 0
+      raycastTarget: 1
+      preserveAspect: 1
+      raycastPadding: {x: 0, y: 0, z: 0, w: 0}
+    srSettings:
+      flipX: 0
+      flipY: 0
+      maskInteraction: 0
+      sortPoint: 0
+      sortingLayer: Default
+      nextOrderStep: 10
+    textMeshSettings:
+      autoSize: 0
+      overrideTags: 0
+      wrapping: 1
+      richText: 1
+      raycastTarget: 1
+      parseEscapeCharacters: 1
+      visibleDescender: 1
+      kerning: 1
+      extraPadding: 0
+      overflow: 0
+      horizontalMapping: 0
+      verticalMapping: 0
+      geometrySorting: 0
+      shader: {fileID: 0}
+    unityTextSettings:
+      fontLineSpacing: 1
+      horizontalWrapMode: 0
+      verticalWrapMode: 0
+      bestFit: 1
+    debugSettings:
+      logDefault: 1
+      logSetTag: 1
+      logIsDownloadable: 1
+      logTransform: 1
+      logGameObjectDrawer: 1
+      debugMode: 0
+    prefabSettings:
+      textPrefabNameType: 0
+    buttonSettings:
+      normalColor: {r: 1, g: 1, b: 1, a: 1}
+      highlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+      pressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+      selectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+      disabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+      colorMultiplier: 1
+      fadeDuration: 0.1
+    dabSettings:
+      blendMode: 0
+      blendIntensity: 1
+  events:
+    onProjectDownloadFail:
+      m_PersistentCalls:
+        m_Calls: []
+    onProjectDownloadStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onProjectDownloaded:
+      m_PersistentCalls:
+        m_Calls: []
+    onImportStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onImportComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    onImportFail:
+      m_PersistentCalls:
+        m_Calls: []
+    onObjectInstantiate:
+      m_PersistentCalls:
+        m_Calls: []
+    onAddComponent:
+      m_PersistentCalls:
+        m_Calls: []
+  prefabCreator:
+    prefabsPath: Assets/Prefabs
+    pstructs: []
+  inspectorDrawer:
+    _selectableHambItems: []
+    _doc:
+      name: 
+      selected: 0
+      childs: []
+  requestSender:
+    pbarProgress: 0.5999997
+    pbarBytes: 2900
+    _requestCount: 0
+    _timeoutActive: 0
+    _remainingTime: 0
+  fontDownloader:
+    tmpDownloader:
+      samplingPointSize: 90
+      atlasPadding: 5
+      renderMode: 4165
+      atlasWidth: 512
+      atlasHeight: 512
+      atlasPopulationMode: 1
+      enableMultiAtlasSupport: 1
+      unityTmpFonts:
+        missing: []
+        existing: []
+    gFontsApi:
+      fontSubsets: 1
+  fontLoader:
+    ttfFontsPath: Assets/Fonts/Ttf
+    tmpFontsPath: Assets/Fonts/Sdf
+    ttfFonts: []
+    tmpFonts: []
+  tools:
+    needShowRateMe: 0
+  currentProject:
+    lastImportedFrames: []
+    localPrefabs: []
+  spriteGenerator:
+    rectTransform: {fileID: 0}
+    meshRenderer: {fileID: 0}
+    meshFilter: {fileID: 0}
+    camera: {fileID: 0}
+  guid: 61aa441e
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 2101385105}
   - {fileID: 735408172}
+  - {fileID: 2120850798}
