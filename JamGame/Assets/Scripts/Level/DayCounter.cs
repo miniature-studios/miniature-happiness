@@ -10,7 +10,7 @@ namespace Level
     }
 
     [AddComponentMenu("Scripts/Level/Level.DurationCounter")]
-    public class DurationCounter : MonoBehaviour
+    public class DayCounter : MonoBehaviour
     {
         private DataProvider<DaysLived> daysLivedDataProvider;
 
@@ -27,7 +27,7 @@ namespace Level
         }
 
         // Called by executor when day is end.
-        public void DayEnds()
+        public void DayEnd()
         {
             daysLived++;
         }

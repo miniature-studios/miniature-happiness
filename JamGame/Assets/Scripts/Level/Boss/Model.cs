@@ -91,8 +91,7 @@ namespace Level.Boss
 
         public bool AllTasksAreComplete()
         {
-            return true;
-            //return taskState.Values.All(state => state == TaskState.Complete);
+            return taskState.Values.All(state => state == TaskState.Complete);
         }
 
         public void ActivateNextTaskBunch()

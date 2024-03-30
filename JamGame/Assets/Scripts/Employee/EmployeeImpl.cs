@@ -433,13 +433,14 @@ namespace Employee
         private void OnEnable()
         {
             controller = controller != null ? controller : GetComponent<ControllerImpl>();
-
             controller.OnReachedNeedProvider += ReachedNeedProvider;
+            state = State.Idle;
         }
 
         private void OnDisable()
         {
             controller.OnReachedNeedProvider -= ReachedNeedProvider;
+            placeInWaitingLine?.Drop();
         }
 
         public void RegisterBuff(Buff buff)

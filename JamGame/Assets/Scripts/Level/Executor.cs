@@ -8,6 +8,7 @@ using Level.Config;
 using Level.GlobalTime;
 using Location;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level
 {
@@ -73,6 +74,9 @@ namespace Level
 
         private bool transitionPanelShown = false;
         private bool cutsceneMinTimeEnded = false;
+
+        [SerializeField]
+        private UnityEvent dayEnded;
 
         private void Awake()
         {
@@ -231,6 +235,8 @@ namespace Level
         // Called by button continue on daily bill panel.
         public void CompleteDayEnd()
         {
+            dayEnded.Invoke();
+
             if (boss.AllTasksAreComplete())
             {
                 Execute(new WinGame());

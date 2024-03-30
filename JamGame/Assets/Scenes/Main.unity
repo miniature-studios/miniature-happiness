@@ -409,7 +409,7 @@ MonoBehaviour:
   modifiersRaw:
   - NeedType: 4
     SatisfactionTime:
-      seconds: 0
+      seconds: 1
     SatisfactionGained: 0
     DecreaseSpeed: 0
     OverrideSatisfaction: 1
@@ -1627,6 +1627,7 @@ GameObject:
   - component: {fileID: 1067622711}
   - component: {fileID: 1067622718}
   - component: {fileID: 1067622720}
+  - component: {fileID: 1067622721}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -1692,6 +1693,21 @@ MonoBehaviour:
   meetingEndNeedOverride: {fileID: 924940280}
   leaveNeedOverride: {fileID: 797130039}
   goToWorkNeedOverride: {fileID: 438653535}
+  dayEnded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1067622721}
+        m_TargetAssemblyTypeName: Level.DayCounter, Assembly-CSharp
+        m_MethodName: DayEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1067622718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1717,6 +1733,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7475a4ab86b7c640a4bf50af144f1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1067622721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067622708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce83a7186eed4154eb60aa4d8b446041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  daysLived: 0
 --- !u!224 &1125594362 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3963621669453680727, guid: 67f9ce48f7d0e964093739a8fb0508ba, type: 3}
@@ -2063,6 +2092,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3776875811722781761, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2073773683}
+    - target: {fileID: 3776875811722781761, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TryAgainClick
+      objectReference: {fileID: 0}
     - target: {fileID: 5820048645171035353, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
       propertyPath: m_Name
       value: WinGamePanel
@@ -2082,6 +2119,17 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5269987558148731555, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
   m_PrefabInstance: {fileID: 2073773679}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2073773683 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 782541710000337309, guid: 46633cb02af0b6a44af9d07a5c2bb9e2, type: 3}
+  m_PrefabInstance: {fileID: 2073773679}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d191b6d948be14696595ea0d3c122c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2079579562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3188,7 +3236,7 @@ PrefabInstance:
       objectReference: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: meetingTasks.Array.data[0].Tasks.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[5009512970511974400].executor
@@ -3200,7 +3248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[5009512970511974400].earnTarget
-      value: 10000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 4014241494468431258, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: managedReferences[5009512968745648128].targetQuirk
@@ -3360,7 +3408,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7621747660111451254, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00005340576
+      value: 0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 9223253478089170625, guid: 6d82579b55fcf334ebd2a45cfba17fb8, type: 3}
       propertyPath: m_AnchorMax.x
