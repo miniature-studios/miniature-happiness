@@ -9,7 +9,7 @@ namespace Level
         public int Value;
     }
 
-    [AddComponentMenu("Scripts/Level/Level.DurationCounter")]
+    [AddComponentMenu("Scripts/Level/Level.DayCounter")]
     public class DayCounter : MonoBehaviour
     {
         private DataProvider<DaysLived> daysLivedDataProvider;
