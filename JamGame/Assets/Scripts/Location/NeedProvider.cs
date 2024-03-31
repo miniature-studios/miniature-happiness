@@ -229,6 +229,12 @@ namespace Location
                 currentEmployee.UnregisterModifier(modifier);
             }
 
+            if (waitingLine.Count == 0)
+            {
+                Debug.LogError("Cannon release employee from empty waiting line " + NeedType);
+                return;
+            }
+
             if (waitingLine[0].Employee != currentEmployee)
             {
                 Debug.LogError("Wrong waiting line construction detected");

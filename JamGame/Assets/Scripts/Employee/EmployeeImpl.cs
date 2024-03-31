@@ -84,6 +84,11 @@ namespace Employee
 
         private void Awake()
         {
+            controller = GetComponent<ControllerImpl>();
+            Stress = GetComponent<StressMeterImpl>();
+
+            buffsNeedModifiers = new BuffsNeedModifiersPool(this);
+
             appliedBuffs.CollectionChanged += (s, e) =>
                 AppliedBuffsChanged?.Invoke(s, AppliedBuffsCollectionChangedMapping(e));
         }
@@ -124,14 +129,6 @@ namespace Employee
             }
 
             return args;
-        }
-
-        private void Start()
-        {
-            controller = GetComponent<ControllerImpl>();
-            Stress = GetComponent<StressMeterImpl>();
-
-            buffsNeedModifiers = new BuffsNeedModifiersPool(this);
         }
 
         private void Update()
@@ -436,13 +433,15 @@ namespace Employee
         private void OnEnable()
         {
             controller = controller != null ? controller : GetComponent<ControllerImpl>();
-
             controller.OnReachedNeedProvider += ReachedNeedProvider;
+
+            state = State.Idle;
         }
 
         private void OnDisable()
         {
             controller.OnReachedNeedProvider -= ReachedNeedProvider;
+            placeInWaitingLine?.Drop();
         }
 
         public void RegisterBuff(Buff buff)
