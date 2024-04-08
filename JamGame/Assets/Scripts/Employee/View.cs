@@ -49,6 +49,8 @@ namespace Employee
         private SkinnedMeshRenderer meshRenderer;
 
         private Stress appliedStressOverlay;
+        private const float MAX_SHADER_STRESS_VALUE = 1.5f;
+        private const string STRESS_SHADER_LABEL = "_OutlinePower";
 
         public void ApplyOverlay(Stress overlay)
         {
@@ -63,6 +65,7 @@ namespace Employee
             }
 
             float normalized_stress = employee.Stress.Stress;
+
             normalized_stress =
                 (normalized_stress - appliedStressOverlay.MinimalStressBound)
                 / (
@@ -70,24 +73,20 @@ namespace Employee
                     - appliedStressOverlay.MinimalStressBound
                 );
             normalized_stress = Mathf.Clamp01(normalized_stress);
-
-            Color tint = appliedStressOverlay.Gradient.Evaluate(normalized_stress);
-            SetColorTint(tint);
+            SetStressPower(normalized_stress);
         }
 
         public void RevertStressOverlay()
         {
             appliedStressOverlay = null;
 
-            SetColorTint(Color.white);
+            SetStressPower(0);
         }
 
-        private void SetColorTint(Color color)
+        [Button]
+        private void SetStressPower(float value)
         {
-            foreach (Material material in meshRenderer.materials)
-            {
-                material.color = color;
-            }
+            meshRenderer.material.SetFloat(STRESS_SHADER_LABEL, value * MAX_SHADER_STRESS_VALUE);
         }
     }
 
