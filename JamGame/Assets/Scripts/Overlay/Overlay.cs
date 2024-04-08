@@ -38,13 +38,6 @@ namespace Overlay
     public class Stress : IOverlay
     {
         [SerializeField]
-        [InlineProperty]
-        [HideReferenceObjectPicker]
-        [FoldoutGroup("Stress")]
-        private Gradient gradient = new();
-        public Gradient Gradient => gradient;
-
-        [SerializeField]
         [FoldoutGroup("Stress")]
         private float minimalStressBound;
         public float MinimalStressBound => minimalStressBound;
