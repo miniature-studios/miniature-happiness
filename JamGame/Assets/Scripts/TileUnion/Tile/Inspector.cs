@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TileUnion.Tile
 {
@@ -30,6 +31,10 @@ namespace TileUnion.Tile
             {
                 case (true, true):
                     centerCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    if (Marks.Contains(RoomTileLabel.Window))
+                    {
+                        centerCube.GetComponent<Renderer>().material.color = Color.red;
+                    }
                     centerCube.transform.SetParent(transform.Find("Base").Find("Center").transform);
                     centerCube.transform.localPosition = Vector3.zero;
                     break;

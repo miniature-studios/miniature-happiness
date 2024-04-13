@@ -1,6 +1,5 @@
 ﻿using Cinemachine;
 using Sirenix.OdinInspector;
-using TileBuilder;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,12 +36,16 @@ namespace CameraController
         private Vector2 verticalArmLengthRange = new(0, 2);
 
         [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private CinemachineVirtualCamera virtualCamera;
         private Cinemachine3rdPersonFollow personFollow;
 
         [SerializeField]
+        private bool fitInBounds = true;
+
+        [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private Controller tileBuilderController;
+        private TileBuilder.Controller builderController;
 
         private void Awake()
         {
@@ -97,8 +100,14 @@ namespace CameraController
                     Time.unscaledDeltaTime * moveSpeed * new Vector3(moveVector.y, 0, moveVector.x)
                 );
 
-            Bounds bounds = tileBuilderController.GetBuildingBounds();
-            transform.position = bounds.ClosestPoint(newPosition);
+            if (fitInBounds)
+            {
+                transform.position = builderController.CameraBounds.ClosestPoint(newPosition);
+            }
+            else
+            {
+                transform.position = newPosition;
+            }
         }
 
         private bool ProcessRotation()
