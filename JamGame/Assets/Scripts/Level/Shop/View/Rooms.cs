@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Common;
@@ -11,7 +12,7 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Shop.View
 {
     [AddComponentMenu("Scripts/Level/Shop/View/Level.Shop.View.Rooms")]
-    internal class Rooms : MonoBehaviour
+    internal class Rooms : MonoBehaviour, IShopContent
     {
         [Required]
         [SerializeField]
@@ -19,7 +20,11 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        private Transform roomsUIContainer;
+        private ShopContent content;
+
+        [Required]
+        [SerializeField]
+        private Tab tab;
 
         [Required]
         [SerializeField]
@@ -29,6 +34,8 @@ namespace Level.Shop.View
         [ReadOnly]
         [SerializeField]
         private List<Room.View> roomViews = new();
+
+        public event Action OnSwitchedTo;
 
         private void Awake()
         {
@@ -79,7 +86,7 @@ namespace Level.Shop.View
             {
                 Room.View newRoomView = Instantiate(
                     AddressableTools<Room.View>.LoadAsset(location),
-                    roomsUIContainer.transform
+                    content.ContentTransform
                 );
 
                 newRoomView.AddCoreModel(newRoom);
@@ -115,6 +122,21 @@ namespace Level.Shop.View
         {
             _ = roomViews.Remove(roomView);
             Destroy(roomView.gameObject);
+        }
+
+        [Button]
+        public void Show()
+        {
+            content.Show();
+            tab.Activate();
+            OnSwitchedTo.Invoke();
+        }
+
+        [Button]
+        public void Hide()
+        {
+            content.Hide();
+            tab.Deactivate();
         }
     }
 }

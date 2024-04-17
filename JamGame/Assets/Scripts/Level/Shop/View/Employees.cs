@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Level.Config;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace Level.Shop.View
 {
     [AddComponentMenu("Scripts/Level/Shop/View/Level.Shop.View.Employees")]
-    internal class Employees : MonoBehaviour
+    internal class Employees : MonoBehaviour, IShopContent
     {
         [Required]
         [SerializeField]
@@ -22,11 +23,17 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        private Transform employeesUIContainer;
+        private ShopContent content;
+
+        [Required]
+        [SerializeField]
+        private Tab tab;
 
         [ReadOnly]
         [SerializeField]
         private List<EmployeeView> employeeViews = new();
+
+        public event Action OnSwitchedTo;
 
         private void Awake()
         {
@@ -58,7 +65,7 @@ namespace Level.Shop.View
         {
             EmployeeView newEmployeeView = Instantiate(
                 employeeViewPrototype,
-                employeesUIContainer.transform
+                content.ContentTransform
             );
 
             newEmployeeView.SetEmployeeConfig(newEmployee);
@@ -81,6 +88,21 @@ namespace Level.Shop.View
                 _ = employeeViews.Remove(item);
                 Destroy(item.gameObject);
             }
+        }
+
+        [Button]
+        public void Show()
+        {
+            content.Show();
+            tab.Activate();
+            OnSwitchedTo.Invoke();
+        }
+
+        [Button]
+        public void Hide()
+        {
+            content.Hide();
+            tab.Deactivate();
         }
     }
 }
