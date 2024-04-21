@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9162350671681925913}
   - component: {fileID: 7093047300988668919}
   m_Layer: 5
-  m_Name: _00
+  m_Name: cost text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -538,7 +538,7 @@ GameObject:
   - component: {fileID: 3158745815100030446}
   - component: {fileID: 6711712676899130914}
   m_Layer: 5
-  m_Name: Room Card View
+  m_Name: Room Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -629,7 +629,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 973a7bd251bb0fa4ca8395e517499705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  view: {fileID: 0}
+  coreModelPrefab: {fileID: 0}
+  costLabel: {fileID: 7093047300988668919}
+  rentLabel: {fileID: 6200028344197566957}
+  quantityLabel: {fileID: 6945163032010230211}
 --- !u!1 &1574929981612171509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,7 +1446,7 @@ GameObject:
   - component: {fileID: 2365963352037275889}
   - component: {fileID: 6200028344197566957}
   m_Layer: 5
-  m_Name: _00-day
+  m_Name: rent cost text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2054,7 +2057,7 @@ GameObject:
   - component: {fileID: 9129827980383450499}
   - component: {fileID: 6945163032010230211}
   m_Layer: 5
-  m_Name: _00
+  m_Name: quantity text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

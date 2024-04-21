@@ -10,8 +10,8 @@ using UnityEngine.EventSystems;
 
 namespace Level.Shop.Room
 {
-    [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.View")]
-    public class View : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Plank")]
+    public class Plank : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IUidHandle
     {
         [SerializeField]
         [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
@@ -37,9 +37,25 @@ namespace Level.Shop.Room
         [SerializeField]
         private List<CoreModel> coreModels = new();
         public bool IsEmpty => coreModels.Count == 0;
+        public int RoomQuantity => coreModels.Count;
 
         private Controller shopController;
         private ViewImpl mainView;
+        private Card createdCard;
+
+        private void Awake()
+        {
+            shopController = GetComponentInParent<Controller>();
+            mainView = GetComponentInParent<ViewImpl>();
+        }
+
+        public void AddCard(Card cardPrefab)
+        {
+            createdCard = Instantiate(cardPrefab, mainView.CardParent);
+            createdCard.AssignPlank(this);
+            createdCard.transform.position = mainView.CardPosition;
+            createdCard.enabled = false;
+        }
 
         public void AddCoreModel(CoreModel coreModel)
         {
@@ -52,16 +68,10 @@ namespace Level.Shop.Room
             _ = coreModels.Remove(coreModel);
         }
 
-        private void Awake()
-        {
-            shopController = GetComponentInParent<Controller>();
-            mainView = GetComponentInParent<ViewImpl>();
-        }
-
         private void Update()
         {
-            costLabel.text = $"Money cost: {Cost}";
-            countLabel.text = coreModels.Count.ToString();
+            costLabel.text = Cost.ToString();
+            countLabel.text = RoomQuantity.ToString();
             rentLabel.text = $"{Rent}/day";
         }
 
@@ -73,13 +83,17 @@ namespace Level.Shop.Room
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            //mainView.CardParent
-            //
+            createdCard.enabled = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            //
+            createdCard.enabled = false;
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(createdCard.gameObject);
         }
     }
 }

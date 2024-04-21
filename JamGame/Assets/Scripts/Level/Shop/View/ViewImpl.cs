@@ -18,6 +18,10 @@ namespace Level.Shop.View
         public RectTransform CardParent => cardParent;
 
         [SerializeField]
+        private Vector3 cardPosition;
+        public Vector3 CardPosition => cardPosition;
+
+        [SerializeField]
         private List<GameObject> contentsGameObjects = new();
         private IEnumerable<IShopContent> Contents =>
             contentsGameObjects.Select(x => x.GetComponent<IShopContent>());

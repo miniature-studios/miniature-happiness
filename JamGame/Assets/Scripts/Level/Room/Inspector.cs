@@ -23,7 +23,7 @@ namespace Level.Room
             inventoryViews.Clear();
             tileUnions.Clear();
             foreach (
-                AssetWithLocation<Shop.Room.View> shopView in AddressableTools<Shop.Room.View>.LoadAllFromLabel(
+                AssetWithLocation<Shop.Room.Plank> shopView in AddressableTools<Shop.Room.Plank>.LoadAllFromLabel(
                     "ShopView"
                 )
             )
@@ -62,7 +62,7 @@ namespace Level.Room
         [ReadOnly]
         [SerializeField]
         [Title("All Shop room views dependencies: ")]
-        private List<Shop.Room.View> shopRooms = new();
+        private List<Shop.Room.Plank> shopRooms = new();
 
         [ReadOnly]
         [SerializeField]
