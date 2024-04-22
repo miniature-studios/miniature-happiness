@@ -21,7 +21,7 @@ namespace Level.Room
     [RequireComponent(typeof(TileUnion.Model))]
     [RequireComponent(typeof(Inventory.Room.Model))]
     [AddComponentMenu("Scripts/Level/Room/Level.Room.CoreModel")]
-    public partial class CoreModel : MonoBehaviour
+    public partial class CoreModel : MonoBehaviour, IUidHandle
     {
         private static string coreModelsLabel = "CoreModel";
         private static Dictionary<InternalUid, IResourceLocation> uidPrefabsMap = new();

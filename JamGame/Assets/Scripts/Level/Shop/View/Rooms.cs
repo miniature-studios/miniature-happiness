@@ -81,7 +81,7 @@ namespace Level.Shop.View
                 )
             )
             {
-                Debug.LogError($"Core model {newRoom.name} not presented in Shop View");
+                Debug.LogError($"Core model {newRoom.name} not presented in Plank Shop View");
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace Level.Shop.View
                 )
             )
             {
-                Debug.LogError($"Core model {newRoom.name} not presented in Shop View");
+                Debug.LogError($"Core model {newRoom.name} not presented in Card Shop View");
                 return;
             }
 

@@ -1,12 +1,11 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Level.Shop.View
 {
     [AddComponentMenu("Scripts/Level/Shop/View/Level.Shop.View.ShopContent")]
-    internal class ShopContent : MonoBehaviour, IShopContent
+    internal class ShopContent : MonoBehaviour
     {
         [Required]
         [SerializeField]
@@ -24,8 +23,6 @@ namespace Level.Shop.View
         [Required]
         [SerializeField]
         private GameObject contentParent;
-
-        public event Action OnSwitchedTo;
 
         private void Update()
         {

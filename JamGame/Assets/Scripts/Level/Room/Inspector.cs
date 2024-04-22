@@ -16,53 +16,40 @@ namespace Level.Room
             tileUnionModel = GetComponent<TileUnion.Model>();
         }
 
+        [Button]
         [OnInspectorGUI]
         private void FindViews()
         {
-            shopRooms.Clear();
-            inventoryViews.Clear();
-            tileUnions.Clear();
-            foreach (
-                AssetWithLocation<Shop.Room.Plank> shopView in AddressableTools<Shop.Room.Plank>.LoadAllFromLabel(
-                    "ShopView"
-                )
-            )
-            {
-                if (shopView.Asset.Uid == Uid)
-                {
-                    shopRooms.Add(shopView.Asset);
-                }
-            }
+            shopRoomPlanks = GetFromLabel<Shop.Room.Plank>("ShopRoomPlanks");
+            shopRoomCards = GetFromLabel<Shop.Room.Card>("ShopRoomCards");
+            inventoryViews = GetFromLabel<Inventory.Room.View>("InventoryView");
+            tileUnions = GetFromLabel<TileUnion.TileUnionImpl>("TileUnion");
+        }
 
-            foreach (
-                AssetWithLocation<Inventory.Room.View> invView in AddressableTools<Inventory.Room.View>.LoadAllFromLabel(
-                    "InventoryView"
-                )
-            )
+        private List<T> GetFromLabel<T>(string label)
+            where T : MonoBehaviour, IUidHandle
+        {
+            List<T> result = new();
+            IEnumerable<AssetWithLocation<T>> list = AddressableTools<T>.LoadAllFromLabel(label);
+            foreach (AssetWithLocation<T> asset in list)
             {
-                if (invView.Asset.Uid == Uid)
+                if (asset.Asset.Uid == Uid)
                 {
-                    inventoryViews.Add(invView.Asset);
+                    result.Add(asset.Asset);
                 }
             }
-
-            foreach (
-                AssetWithLocation<TileUnion.TileUnionImpl> tileUnion in AddressableTools<TileUnion.TileUnionImpl>.LoadAllFromLabel(
-                    "TileUnion"
-                )
-            )
-            {
-                if (tileUnion.Asset.Uid == Uid)
-                {
-                    tileUnions.Add(tileUnion.Asset);
-                }
-            }
+            return result;
         }
 
         [ReadOnly]
         [SerializeField]
-        [Title("All Shop room views dependencies: ")]
-        private List<Shop.Room.Plank> shopRooms = new();
+        [Title("All Shop room planks dependencies: ")]
+        private List<Shop.Room.Plank> shopRoomPlanks = new();
+
+        [ReadOnly]
+        [SerializeField]
+        [Title("All Shop room cards dependencies: ")]
+        private List<Shop.Room.Card> shopRoomCards = new();
 
         [ReadOnly]
         [SerializeField]
