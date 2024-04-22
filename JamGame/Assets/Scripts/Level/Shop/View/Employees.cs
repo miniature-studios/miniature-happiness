@@ -64,12 +64,10 @@ namespace Level.Shop.View
 
         private void AddNewEmployee(EmployeeConfig newEmployee)
         {
-            Plank newEmployeeView = Instantiate(employeePlankPrefab, content.ContentTransform);
-
-            newEmployeeView.Initialize();
-            newEmployeeView.SetEmployeeConfig(newEmployee);
-            newEmployeeView.enabled = true;
-            employeeViews.Add(newEmployeeView);
+            Plank newEmployeePlank = Instantiate(employeePlankPrefab, content.ContentTransform);
+            newEmployeePlank.Initialize();
+            newEmployeePlank.SetEmployeeConfig(newEmployee);
+            employeeViews.Add(newEmployeePlank);
         }
 
         private void RemoveOldEmployee(EmployeeConfig oldEmployee)

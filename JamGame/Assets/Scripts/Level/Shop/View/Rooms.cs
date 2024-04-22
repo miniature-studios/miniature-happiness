@@ -105,7 +105,6 @@ namespace Level.Shop.View
             newRoomPlank.Initialize();
             newRoomPlank.AddCard(cardPrefab);
             newRoomPlank.AddCoreModel(newRoom);
-            newRoomPlank.enabled = true;
             roomPlanks.Add(newRoomPlank);
         }
 
