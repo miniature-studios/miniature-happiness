@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Level.Config;
+using Level.Shop.Employee;
 using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -18,8 +19,8 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        [Pickle(typeof(EmployeeView), LookupType = ObjectProviderType.Assets)]
-        private EmployeeView employeeViewPrototype;
+        [Pickle(typeof(Plank), LookupType = ObjectProviderType.Assets)]
+        private Plank employeePlankPrefab;
 
         [Required]
         [SerializeField]
@@ -31,7 +32,7 @@ namespace Level.Shop.View
 
         [ReadOnly]
         [SerializeField]
-        private List<EmployeeView> employeeViews = new();
+        private List<Plank> employeeViews = new();
 
         public event Action OnSwitchedTo;
 
@@ -63,11 +64,9 @@ namespace Level.Shop.View
 
         private void AddNewEmployee(EmployeeConfig newEmployee)
         {
-            EmployeeView newEmployeeView = Instantiate(
-                employeeViewPrototype,
-                content.ContentTransform
-            );
+            Plank newEmployeeView = Instantiate(employeePlankPrefab, content.ContentTransform);
 
+            newEmployeeView.Initialize();
             newEmployeeView.SetEmployeeConfig(newEmployee);
             newEmployeeView.enabled = true;
             employeeViews.Add(newEmployeeView);
@@ -75,7 +74,7 @@ namespace Level.Shop.View
 
         private void RemoveOldEmployee(EmployeeConfig oldEmployee)
         {
-            EmployeeView employee = employeeViews.Find(x => x.EmployeeConfig == oldEmployee);
+            Plank employee = employeeViews.Find(x => x.EmployeeConfig == oldEmployee);
             _ = employeeViews.Remove(employee);
             Destroy(employee.gameObject);
         }
@@ -84,7 +83,7 @@ namespace Level.Shop.View
         {
             while (employeeViews.Count > 0)
             {
-                EmployeeView item = employeeViews.Last();
+                Plank item = employeeViews.Last();
                 _ = employeeViews.Remove(item);
                 Destroy(item.gameObject);
             }

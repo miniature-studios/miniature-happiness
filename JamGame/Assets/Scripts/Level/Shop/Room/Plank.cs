@@ -39,22 +39,31 @@ namespace Level.Shop.Room
         public bool IsEmpty => coreModels.Count == 0;
         public int RoomQuantity => coreModels.Count;
 
+        [ReadOnly]
+        [SerializeField]
         private Controller shopController;
+
+        [ReadOnly]
+        [SerializeField]
         private ViewImpl mainView;
+
+        [ReadOnly]
+        [SerializeField]
         private Card createdCard;
 
-        private void Awake()
+        public void Initialize()
         {
-            shopController = GetComponentInParent<Controller>();
-            mainView = GetComponentInParent<ViewImpl>();
+            shopController = GetComponentInParent<Controller>(true);
+            mainView = GetComponentInParent<ViewImpl>(true);
         }
 
         public void AddCard(Card cardPrefab)
         {
             createdCard = Instantiate(cardPrefab, mainView.CardParent);
+            createdCard.Initialize();
             createdCard.AssignPlank(this);
-            createdCard.transform.position = mainView.CardPosition;
-            createdCard.enabled = false;
+            createdCard.RectTransform.anchoredPosition = mainView.CardPosition;
+            createdCard.gameObject.SetActive(false);
         }
 
         public void AddCoreModel(CoreModel coreModel)
@@ -83,12 +92,12 @@ namespace Level.Shop.Room
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            createdCard.enabled = true;
+            createdCard.gameObject.SetActive(true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            createdCard.enabled = false;
+            createdCard.gameObject.SetActive(false);
         }
 
         private void OnDestroy()

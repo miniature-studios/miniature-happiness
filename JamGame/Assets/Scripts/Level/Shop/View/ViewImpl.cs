@@ -18,8 +18,8 @@ namespace Level.Shop.View
         public RectTransform CardParent => cardParent;
 
         [SerializeField]
-        private Vector3 cardPosition;
-        public Vector3 CardPosition => cardPosition;
+        private Vector2 cardPosition;
+        public Vector2 CardPosition => cardPosition;
 
         [SerializeField]
         private List<GameObject> contentsGameObjects = new();

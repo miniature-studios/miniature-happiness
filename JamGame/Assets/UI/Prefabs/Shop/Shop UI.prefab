@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6474306270389945876}
   - component: {fileID: 3772141764341680192}
   m_Layer: 5
-  m_Name: btn-rooms-active
+  m_Name: Rooms Tab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,9 +83,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2570747696638361213}
         m_TargetAssemblyTypeName: Level.Shop.View.Rooms, Assembly-CSharp
-        m_MethodName: ShowRooms
+        m_MethodName: Show
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -479,7 +479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopModel: {fileID: 3546836253939363253}
-  employeeViewPrototype: {fileID: 5431384015200484251, guid: 2229beeb8fdabbd4494a6cf71e28b059, type: 3}
+  employeePlankPrefab: {fileID: 3490105156349357792, guid: 6dce0eef1acd9bf4e9de48f4f4a1793e, type: 3}
   content: {fileID: 1547477441079105678}
   tab: {fileID: 216760726574556080}
   employeeViews: []
@@ -502,7 +502,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3635878134936690242
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1136,7 +1136,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 4b0e98a98ceaf2a408327e2f67d91d1e, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1678,7 +1678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8797590313827004141}
   cardParent: {fileID: 2893449463177979563}
-  cardPosition: {x: 910, y: -315, z: 0}
+  cardPosition: {x: 910, y: -315}
   contentsGameObjects:
   - {fileID: 3296646213862952168}
   - {fileID: 3139434195698129359}
@@ -1918,7 +1918,7 @@ GameObject:
   - component: {fileID: 8923015407282811194}
   - component: {fileID: 3885910697390797164}
   m_Layer: 5
-  m_Name: svg shop
+  m_Name: Shop icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1990,6 +1990,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5080107987377829292}
+  - component: {fileID: 2576768962352948579}
+  - component: {fileID: 7879437110060108332}
   m_Layer: 5
   m_Name: bg
   m_TagString: Untagged
@@ -2016,6 +2018,44 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2576768962352948579
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7883692097859740311}
+  m_CullTransparentMesh: 1
+--- !u!114 &7879437110060108332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7883692097859740311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7910136002612571809
 GameObject:
   m_ObjectHideFlags: 0
@@ -2026,7 +2066,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1246945171295810105}
   m_Layer: 5
-  m_Name: tabs+svg shop
+  m_Name: Tabs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2141,7 +2181,7 @@ GameObject:
   - component: {fileID: 5166977706599448636}
   - component: {fileID: 216760726574556080}
   m_Layer: 5
-  m_Name: btn-employee-inactive
+  m_Name: Employee Tab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2212,9 +2252,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8373254649630067693}
         m_TargetAssemblyTypeName: Level.Shop.View.Employees, Assembly-CSharp
-        m_MethodName: ShowEmployees
+        m_MethodName: Show
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2358,7 +2398,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4177072316284061575}
         m_TargetAssemblyTypeName: Level.Shop.View.ViewImpl, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1

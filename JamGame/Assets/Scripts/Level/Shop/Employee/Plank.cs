@@ -1,45 +1,42 @@
-﻿using System;
-using Common;
-using Level.Config;
+﻿using Level.Config;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
-namespace Level.Shop
+namespace Level.Shop.Employee
 {
-    [AddComponentMenu("Scripts/Level/Shop/Level.Shop.EmployeeView")]
-    public class EmployeeView : MonoBehaviour
+    [AddComponentMenu("Scripts/Level/Shop.Employee/Level.Shop.Employee.Plank")]
+    public class Plank : MonoBehaviour
     {
-        [SerializeField]
         [ReadOnly]
+        [SerializeField]
         private EmployeeConfig employeeConfig;
         public EmployeeConfig EmployeeConfig => employeeConfig;
 
+        [Required]
         [SerializeField]
         private TMP_Text nameLabel;
 
+        [Required]
         [SerializeField]
         private TMP_Text hireCostLabel;
 
+        [Required]
         [SerializeField]
         private TMP_Text professionLabel;
 
-        [SerializeField]
-        private TMP_Text quirkLabel;
+        private Controller controller;
 
-        private Func<EmployeeConfig, Result> employeeBuying;
-
-        private void Awake()
+        public void Initialize()
         {
-            employeeBuying = GetComponentInParent<Controller>().TryBuyEmployee;
+            controller = GetComponentInParent<Controller>(true);
         }
 
         private void Update()
         {
-            nameLabel.text = $"{employeeConfig.Name}";
-            hireCostLabel.text = $"Hire cost: {employeeConfig.HireCost}$";
-            professionLabel.text = $"{employeeConfig.Profession}";
-            quirkLabel.text = $"{employeeConfig.Quirk}";
+            nameLabel.text = EmployeeConfig.Name;
+            hireCostLabel.text = EmployeeConfig.HireCost.ToString();
+            professionLabel.text = EmployeeConfig.Profession;
         }
 
         public void SetEmployeeConfig(EmployeeConfig employeeConfig)
@@ -50,7 +47,7 @@ namespace Level.Shop
         // Called be pressing button.
         public void TryHireEmployee()
         {
-            if (employeeBuying(EmployeeConfig).Success)
+            if (controller.TryBuyEmployee(EmployeeConfig).Success)
             {
                 Destroy(gameObject);
             }

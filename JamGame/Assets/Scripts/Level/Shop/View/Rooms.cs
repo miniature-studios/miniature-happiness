@@ -102,6 +102,7 @@ namespace Level.Shop.View
             }
 
             Room.Card cardPrefab = AddressableTools<Room.Card>.LoadAsset(cardLocation);
+            newRoomPlank.Initialize();
             newRoomPlank.AddCard(cardPrefab);
             newRoomPlank.AddCoreModel(newRoom);
             newRoomPlank.enabled = true;
@@ -138,7 +139,7 @@ namespace Level.Shop.View
         {
             content.Show();
             tab.Activate();
-            OnSwitchedTo.Invoke();
+            OnSwitchedTo?.Invoke();
         }
 
         [Button]

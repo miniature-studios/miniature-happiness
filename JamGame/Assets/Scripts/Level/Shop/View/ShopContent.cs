@@ -26,7 +26,7 @@ namespace Level.Shop.View
 
         private void Update()
         {
-            // Todo
+            // TODO: Implement arrows show/hide
         }
 
         public void Show()

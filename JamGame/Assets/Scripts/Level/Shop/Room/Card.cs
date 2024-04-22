@@ -30,7 +30,15 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text quantityLabel;
 
+        private RectTransform rectTransform;
+        public RectTransform RectTransform => rectTransform;
+
         private Plank plank;
+
+        public void Initialize()
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
 
         public void AssignPlank(Plank plank)
         {
