@@ -37,16 +37,17 @@ namespace Level.Shop.Employee
             controller = GetComponentInParent<Controller>(true);
         }
 
-        private void Update()
+        public void SetEmployeeConfig(EmployeeConfig employeeConfig)
+        {
+            this.employeeConfig = employeeConfig;
+            UpdateData();
+        }
+
+        private void UpdateData()
         {
             nameLabel.text = EmployeeConfig.Name;
             hireCostLabel.text = EmployeeConfig.HireCost.ToString();
             professionLabel.text = EmployeeConfig.Profession;
-        }
-
-        public void SetEmployeeConfig(EmployeeConfig employeeConfig)
-        {
-            this.employeeConfig = employeeConfig;
         }
 
         // Called be pressing button.

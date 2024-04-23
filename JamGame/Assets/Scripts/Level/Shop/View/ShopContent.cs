@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Common;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,10 +15,6 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        private RectTransform viewport;
-
-        [Required]
-        [SerializeField]
         private GameObject arrowUp;
 
         [Required]
@@ -28,14 +25,14 @@ namespace Level.Shop.View
         [SerializeField]
         private GameObject contentParent;
 
-        private bool FullyScrolledUp => scrollRect.content.anchoredPosition.y == 0;
-        private bool FullyScrolledDown =>
-            scrollRect.content.anchoredPosition.y == 650
-            || viewport.sizeDelta.y > scrollRect.content.sizeDelta.y;
+        // TODO: find method to correctly show up/down arrows
+        private bool FullyScrolledUp => scrollRect.content.anchoredPosition.y.IsEqualsZero();
+        private bool FullyScrolledDown => true;
 
-        private void Update()
+        private void OnGUI()
         {
-            arrowUp.SetActive(FullyScrolledUp);
+            arrowUp.SetActive(!FullyScrolledUp);
+            arrowDown.SetActive(!FullyScrolledDown);
         }
 
         [Button]

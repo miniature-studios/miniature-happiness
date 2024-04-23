@@ -1,12 +1,25 @@
 ﻿using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Level.Shop.Room
 {
     [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Card")]
     public class Card : MonoBehaviour
     {
+        [Required]
+        [SerializeField]
+        private Image image;
+
+        [Required]
+        [SerializeField]
+        private TMP_Text title;
+
+        [Required]
+        [SerializeField]
+        private TMP_Text description;
+
         [Required]
         [SerializeField]
         private TMP_Text costLabel;
@@ -21,8 +34,11 @@ namespace Level.Shop.Room
 
         public void UpdateData(Plank plank)
         {
-            costLabel.text = plank.CoreModel.ShopModel.Cost.ToString();
-            rentLabel.text = $"{plank.CoreModel.RoomInfo.RentCost}/day";
+            title.text = plank.CoreModel.RoomInfo.Title;
+            description.text = plank.CoreModel.RoomInfo.Description;
+            image.sprite = plank.CoreModel.ShopModel.CardSprite;
+            costLabel.text = plank.CoreModel.ShopModel.Cost.Value.ToString();
+            rentLabel.text = $"{plank.CoreModel.RoomInfo.RentCost.Value}/day";
             quantityLabel.text = plank.RoomQuantity.ToString();
         }
 

@@ -7,12 +7,21 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Level.Shop.Room
 {
     [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Plank")]
     public class Plank : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        [Required]
+        [SerializeField]
+        private TMP_Text nameLabel;
+
+        [Required]
+        [SerializeField]
+        private Image image;
+
         [Required]
         [SerializeField]
         private TMP_Text rentLabel;
@@ -59,6 +68,8 @@ namespace Level.Shop.Room
 
         private void UpdateTexts()
         {
+            image.sprite = CoreModel.ShopModel.PlankSprite;
+            nameLabel.text = CoreModel.RoomInfo.Title;
             costLabel.text = CoreModel.ShopModel.Cost.Value.ToString();
             countLabel.text = RoomQuantity.ToString();
             rentLabel.text = $"{CoreModel.RoomInfo.RentCost.Value}/day";
