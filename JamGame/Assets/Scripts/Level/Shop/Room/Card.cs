@@ -1,23 +1,12 @@
-﻿using Common;
-using Level.Room;
-using Pickle;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
 namespace Level.Shop.Room
 {
     [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Card")]
-    public class Card : MonoBehaviour, IUidHandle
+    public class Card : MonoBehaviour
     {
-        [SerializeField]
-        [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
-        [Pickle(LookupType = ObjectProviderType.Assets)]
-        private CoreModel coreModelPrefab;
-        public InternalUid Uid => coreModelPrefab.Uid;
-        private int Cost => coreModelPrefab.ShopModel.Cost.Value;
-        private int Rent => coreModelPrefab.RentCost.Value;
-
         [Required]
         [SerializeField]
         private TMP_Text costLabel;
@@ -30,26 +19,21 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text quantityLabel;
 
-        private RectTransform rectTransform;
-        public RectTransform RectTransform => rectTransform;
-
-        private Plank plank;
-
-        public void Initialize()
+        public void UpdateData(Plank plank)
         {
-            rectTransform = GetComponent<RectTransform>();
-        }
-
-        public void AssignPlank(Plank plank)
-        {
-            this.plank = plank;
-        }
-
-        private void Update()
-        {
-            costLabel.text = Cost.ToString();
-            rentLabel.text = $"{Rent}/day";
+            costLabel.text = plank.CoreModel.ShopModel.Cost.ToString();
+            rentLabel.text = $"{plank.CoreModel.RoomInfo.RentCost}/day";
             quantityLabel.text = plank.RoomQuantity.ToString();
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

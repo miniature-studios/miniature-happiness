@@ -1,6 +1,6 @@
 ﻿namespace Common
 {
-    internal interface IUidHandle
+    public interface IUidHandle
     {
         public InternalUid Uid { get; }
     }

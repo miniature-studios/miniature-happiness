@@ -47,6 +47,16 @@ namespace CameraController
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private TileBuilder.Controller builderController;
 
+        [ReadOnly]
+        [SerializeField]
+        private bool inputLocked = false;
+
+        public bool InputLocked
+        {
+            get => inputLocked;
+            set => inputLocked = value;
+        }
+
         private void Awake()
         {
             personFollow = virtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
@@ -84,6 +94,11 @@ namespace CameraController
 
         private void Update()
         {
+            if (inputLocked)
+            {
+                return;
+            }
+
             bool rotated = ProcessRotation();
             if (!rotated)
             {

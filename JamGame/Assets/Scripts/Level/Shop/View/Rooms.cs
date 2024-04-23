@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Common;
 using Level.Room;
+using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Shop.View
 {
     [AddComponentMenu("Scripts/Level/Shop/View/Level.Shop.View.Rooms")]
-    internal class Rooms : MonoBehaviour, IShopContent
+    internal class Rooms : MonoBehaviour
     {
         [Required]
         [SerializeField]
@@ -23,25 +21,28 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        private Tab tab;
+        [Pickle(typeof(Room.Plank), LookupType = ObjectProviderType.Assets)]
+        private Room.Plank roomPlankPrefab;
 
+        [Required]
         [SerializeField]
-        private AssetCollectionLoader<Room.Plank> roomPlanksLoader = new();
-
-        [SerializeField]
-        private AssetCollectionLoader<Room.Card> roomCardLoader = new();
+        [Pickle(typeof(Room.Card), LookupType = ObjectProviderType.Assets)]
+        private Room.Card roomCardPrefab;
 
         [ReadOnly]
         [SerializeField]
         private List<Room.Plank> roomPlanks = new();
 
-        public event Action OnSwitchedTo;
+        [ReadOnly]
+        [SerializeField]
+        private Room.Card cardInstance;
 
         private void Awake()
         {
             shopModel.RoomsCollectionChanged += OnShopRoomsChanged;
-            roomPlanksLoader.PrepareCollection();
-            roomCardLoader.PrepareCollection();
+            ViewImpl mainView = GetComponentInParent<ViewImpl>(true);
+            cardInstance = Instantiate(roomCardPrefab, mainView.CardParent);
+            cardInstance.Hide();
         }
 
         private void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -74,38 +75,15 @@ namespace Level.Shop.View
                 return;
             }
 
-            if (
-                !roomPlanksLoader.Collection.TryGetValue(
-                    newRoom.Uid,
-                    out IResourceLocation plankLocation
-                )
-            )
-            {
-                Debug.LogError($"Core model {newRoom.name} not presented in Plank Shop View");
-                return;
-            }
-
-            Room.Plank newRoomPlank = Instantiate(
-                AddressableTools<Room.Plank>.LoadAsset(plankLocation),
-                content.ContentTransform
-            );
-
-            if (
-                !roomCardLoader.Collection.TryGetValue(
-                    newRoom.Uid,
-                    out IResourceLocation cardLocation
-                )
-            )
-            {
-                Debug.LogError($"Core model {newRoom.name} not presented in Card Shop View");
-                return;
-            }
-
-            Room.Card cardPrefab = AddressableTools<Room.Card>.LoadAsset(cardLocation);
+            Room.Plank newRoomPlank = Instantiate(roomPlankPrefab, content.ContentTransform);
             newRoomPlank.Initialize();
-            newRoomPlank.AddCard(cardPrefab);
             newRoomPlank.AddCoreModel(newRoom);
-            roomPlanks.Add(newRoomPlank);
+            newRoomPlank.OnPointerEnterEvent += () =>
+            {
+                cardInstance.UpdateData(newRoomPlank);
+                cardInstance.Show();
+            };
+            newRoomPlank.OnPointerExitEvent += cardInstance.Hide;
         }
 
         private void RemoveOldRoom(CoreModel oldRoom)
@@ -131,21 +109,6 @@ namespace Level.Shop.View
         {
             _ = roomPlanks.Remove(roomView);
             Destroy(roomView.gameObject);
-        }
-
-        [Button]
-        public void Show()
-        {
-            content.Show();
-            tab.Activate();
-            OnSwitchedTo?.Invoke();
-        }
-
-        [Button]
-        public void Hide()
-        {
-            content.Hide();
-            tab.Deactivate();
         }
     }
 }

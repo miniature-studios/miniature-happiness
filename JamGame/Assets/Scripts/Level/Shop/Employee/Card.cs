@@ -19,18 +19,21 @@ namespace Level.Shop.Employee
         [SerializeField]
         private TMP_Text professionLabel;
 
-        private Plank plank;
-
-        public void AssignPlank(Plank plank)
-        {
-            this.plank = plank;
-        }
-
-        private void Update()
+        public void UpdateData(Plank plank)
         {
             nameLabel.text = plank.EmployeeConfig.Name;
             hireCostLabel.text = plank.EmployeeConfig.HireCost.ToString();
             professionLabel.text = plank.EmployeeConfig.Profession;
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

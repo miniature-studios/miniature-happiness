@@ -1,12 +1,14 @@
-﻿using Level.Config;
+﻿using System;
+using Level.Config;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Level.Shop.Employee
 {
     [AddComponentMenu("Scripts/Level/Shop.Employee/Level.Shop.Employee.Plank")]
-    public class Plank : MonoBehaviour
+    public class Plank : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [ReadOnly]
         [SerializeField]
@@ -26,6 +28,9 @@ namespace Level.Shop.Employee
         private TMP_Text professionLabel;
 
         private Controller controller;
+
+        public event Action OnPointerEnterEvent;
+        public event Action OnPointerExitEvent;
 
         public void Initialize()
         {
@@ -51,6 +56,16 @@ namespace Level.Shop.Employee
             {
                 Destroy(gameObject);
             }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            OnPointerEnterEvent?.Invoke();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            OnPointerExitEvent?.Invoke();
         }
     }
 }

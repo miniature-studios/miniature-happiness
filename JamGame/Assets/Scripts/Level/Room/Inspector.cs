@@ -20,8 +20,6 @@ namespace Level.Room
         [OnInspectorGUI]
         private void FindViews()
         {
-            shopRoomPlanks = GetFromLabel<Shop.Room.Plank>("ShopRoomPlanks");
-            shopRoomCards = GetFromLabel<Shop.Room.Card>("ShopRoomCards");
             inventoryViews = GetFromLabel<Inventory.Room.View>("InventoryView");
             tileUnions = GetFromLabel<TileUnion.TileUnionImpl>("TileUnion");
         }
@@ -40,16 +38,6 @@ namespace Level.Room
             }
             return result;
         }
-
-        [ReadOnly]
-        [SerializeField]
-        [Title("All Shop room planks dependencies: ")]
-        private List<Shop.Room.Plank> shopRoomPlanks = new();
-
-        [ReadOnly]
-        [SerializeField]
-        [Title("All Shop room cards dependencies: ")]
-        private List<Shop.Room.Card> shopRoomCards = new();
 
         [ReadOnly]
         [SerializeField]

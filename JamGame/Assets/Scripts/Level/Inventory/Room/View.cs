@@ -67,7 +67,7 @@ namespace Level.Inventory.Room
                 if (!extendedView.IsVisible)
                 {
                     extendedView.Show();
-                    extendedView.SetLabelText($"Rent: {CoreModelPrefab.RentCost.Value}");
+                    extendedView.SetLabelText($"Rent: {CoreModelPrefab.RoomInfo.RentCost.Value}");
                 }
             }
             else if (extendedView.IsVisible)

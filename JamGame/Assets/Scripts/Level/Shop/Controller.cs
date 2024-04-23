@@ -6,6 +6,7 @@ using Level.Inventory.Controller;
 using Level.Room;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level.Shop
 {
@@ -27,6 +28,13 @@ namespace Level.Shop
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private Location.EmployeeManager.Model employeeManager;
+
+        [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
+        private CameraController.Logic cameraLogic;
+
+        public UnityEvent OnShopShowed;
+        public UnityEvent OnShopClosed;
 
         public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {
@@ -82,6 +90,20 @@ namespace Level.Shop
                 Debug.Log(result.Error);
                 return result;
             }
+        }
+
+        // Called by View.
+        public void Show()
+        {
+            cameraLogic.InputLocked = true;
+            OnShopShowed?.Invoke();
+        }
+
+        // Called by View.
+        public void Hide()
+        {
+            OnShopClosed?.Invoke();
+            cameraLogic.InputLocked = false;
         }
     }
 }

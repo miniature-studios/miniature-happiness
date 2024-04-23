@@ -73,4 +73,25 @@ namespace Common
             return result.Data;
         }
     }
+
+    public static class AddressableTools
+    {
+        public static Dictionary<InternalUid, IResourceLocation> LoadResourceLocationsByUid<T>(
+            AssetLabelReference label
+        )
+            where T : MonoBehaviour, IUidHandle
+        {
+            Dictionary<InternalUid, IResourceLocation> uidResourceMap = new();
+            IEnumerable<AssetWithLocation<T>> locations = AddressableTools<T>.LoadAllFromLabel(
+                label
+            );
+
+            foreach (AssetWithLocation<T> asset in locations)
+            {
+                uidResourceMap.Add(asset.Asset.Uid, asset.Location);
+            }
+
+            return uidResourceMap;
+        }
+    }
 }

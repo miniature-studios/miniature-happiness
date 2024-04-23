@@ -26,7 +26,7 @@ namespace TileBuilder
                 .LoadAllFromLabel("CoreModel")
                 .Select(x => x.Asset)
                 .FirstOrDefault(x => x.Uid == Uid);
-            return coreModel == null ? "NOT FOUND" : coreModel.Title;
+            return coreModel == null ? "NOT FOUND" : coreModel.RoomInfo.Title;
         }
 
         [SerializeField]

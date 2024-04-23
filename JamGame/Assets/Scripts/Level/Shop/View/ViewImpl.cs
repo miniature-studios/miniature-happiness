@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Shop.View
@@ -17,38 +15,13 @@ namespace Level.Shop.View
         private RectTransform cardParent;
         public RectTransform CardParent => cardParent;
 
-        [SerializeField]
-        private Vector2 cardPosition;
-        public Vector2 CardPosition => cardPosition;
-
-        [SerializeField]
-        private List<GameObject> contentsGameObjects = new();
-        private IEnumerable<IShopContent> Contents =>
-            contentsGameObjects.Select(x => x.GetComponent<IShopContent>());
-
-        private void Awake()
-        {
-            foreach (IShopContent content in Contents)
-            {
-                content.OnSwitchedTo += () => OnSwitchedToContent(content);
-            }
-        }
-
-        private void OnSwitchedToContent(IShopContent source)
-        {
-            foreach (IShopContent content in Contents.Where(x => x != source))
-            {
-                content.Hide();
-            }
-        }
-
-        [Button]
+        // Called by controller event.
         public void Open()
         {
             animator.SetBool("Showed", true);
         }
 
-        [Button]
+        // Called by controller event.
         public void Close()
         {
             animator.SetBool("Showed", false);

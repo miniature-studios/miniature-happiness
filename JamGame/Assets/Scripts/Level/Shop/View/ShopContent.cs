@@ -14,6 +14,10 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
+        private RectTransform viewport;
+
+        [Required]
+        [SerializeField]
         private GameObject arrowUp;
 
         [Required]
@@ -24,16 +28,36 @@ namespace Level.Shop.View
         [SerializeField]
         private GameObject contentParent;
 
+        private bool FullyScrolledUp => scrollRect.content.anchoredPosition.y == 0;
+        private bool FullyScrolledDown =>
+            scrollRect.content.anchoredPosition.y == 650
+            || viewport.sizeDelta.y > scrollRect.content.sizeDelta.y;
+
         private void Update()
         {
-            // TODO: Implement arrows show/hide
+            arrowUp.SetActive(FullyScrolledUp);
         }
 
+        [Button]
+        public void OnToggleSwitched(bool check)
+        {
+            if (check)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
+        }
+
+        [Button]
         public void Show()
         {
             contentParent.SetActive(true);
         }
 
+        [Button]
         public void Hide()
         {
             contentParent.SetActive(false);

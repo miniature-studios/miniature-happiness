@@ -134,7 +134,7 @@ namespace Level.Boss.Task
         [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Target Room Count")]
         private CoreModel room;
-        public string RoomTitle => room.Title;
+        public string RoomTitle => room.RoomInfo.Title;
 
         [SerializeField]
         [FoldoutGroup("Target Room Count")]
@@ -202,7 +202,7 @@ namespace Level.Boss.Task
         [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Room Count Upper Bound")]
         private CoreModel room;
-        public string RoomTitle => room.Title;
+        public string RoomTitle => room.RoomInfo.Title;
 
         [SerializeField]
         [FoldoutGroup("Room Count Upper Bound")]

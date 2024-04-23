@@ -9,6 +9,18 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 namespace Level.Room
 {
     [Serializable]
+    [HideLabel]
+    [FoldoutGroup(nameof(GeneralRoomInfo))]
+    public struct GeneralRoomInfo
+    {
+        public string Title;
+        public RentCost RentCost;
+
+        [TextArea]
+        public string Description;
+    }
+
+    [Serializable]
     [InlineProperty]
     public struct RentCost
     {
@@ -31,10 +43,6 @@ namespace Level.Room
         private InternalUid uid;
         public InternalUid Uid => uid;
 
-        [SerializeField]
-        private string title;
-        public string Title => title;
-
         [ReadOnly]
         [SerializeField]
         private Shop.Room.Model shopModel;
@@ -51,8 +59,8 @@ namespace Level.Room
         public TileUnion.Model TileUnionModel => tileUnionModel;
 
         [SerializeField]
-        private RentCost rentCost;
-        public RentCost RentCost => rentCost;
+        private GeneralRoomInfo generalRoomInfo;
+        public GeneralRoomInfo RoomInfo => generalRoomInfo;
 
         private static void UpdateUidPrefabsMap()
         {
