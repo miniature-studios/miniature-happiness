@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 
 namespace Level.Shop.Employee
 {
-    [AddComponentMenu("Scripts/Level/Shop.Employee/Level.Shop.Employee.Plank")]
-    public class Plank : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    [AddComponentMenu("Scripts/Level/Shop.Employee/Level.Shop.Employee.CardView")]
+    public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [ReadOnly]
         [SerializeField]

@@ -21,28 +21,21 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        [Pickle(typeof(Room.Plank), LookupType = ObjectProviderType.Assets)]
-        private Room.Plank roomPlankPrefab;
+        [Pickle(typeof(Room.CardView), LookupType = ObjectProviderType.Assets)]
+        private Room.CardView roomCardPrefab;
+
+        [ReadOnly]
+        [SerializeField]
+        private List<Room.CardView> roomCards = new();
 
         [Required]
         [SerializeField]
-        [Pickle(typeof(Room.Card), LookupType = ObjectProviderType.Assets)]
-        private Room.Card roomCardPrefab;
-
-        [ReadOnly]
-        [SerializeField]
-        private List<Room.Plank> roomPlanks = new();
-
-        [ReadOnly]
-        [SerializeField]
-        private Room.Card cardInstance;
+        private Room.DescriptionView descriptionViewInstance;
 
         private void Awake()
         {
             shopModel.RoomsCollectionChanged += OnShopRoomsChanged;
             ViewImpl mainView = GetComponentInParent<ViewImpl>(true);
-            cardInstance = Instantiate(roomCardPrefab, mainView.CardParent);
-            cardInstance.Hide();
         }
 
         private void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -68,47 +61,44 @@ namespace Level.Shop.View
 
         private void AddNewRoom(CoreModel newRoom)
         {
-            Room.Plank foundRoomPlank = roomPlanks.Find(x => x.Uid == newRoom.Uid);
-            if (foundRoomPlank != null)
+            Room.CardView foundRoomCard = roomCards.Find(x => x.Uid == newRoom.Uid);
+            if (foundRoomCard != null)
             {
-                foundRoomPlank.AddCoreModel(newRoom);
+                foundRoomCard.AddCoreModel(newRoom);
                 return;
             }
 
-            Room.Plank newRoomPlank = Instantiate(roomPlankPrefab, content.ContentTransform);
-            newRoomPlank.Initialize();
-            newRoomPlank.AddCoreModel(newRoom);
-            newRoomPlank.OnPointerEnterEvent += () =>
-            {
-                cardInstance.UpdateData(newRoomPlank);
-                cardInstance.Show();
-            };
-            newRoomPlank.OnPointerExitEvent += cardInstance.Hide;
+            Room.CardView newRoomCard = Instantiate(roomCardPrefab, content.ContentTransform);
+            newRoomCard.Initialize();
+            newRoomCard.AddCoreModel(newRoom);
+            newRoomCard.OnPointerEnterEvent += () =>
+                descriptionViewInstance.UpdateData(newRoomCard);
+            newRoomCard.OnPointerExitEvent += () => descriptionViewInstance.UpdateData(null);
         }
 
         private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Room.Plank roomView = roomPlanks.Find(x => x.Uid == oldRoom.Uid);
-            roomView.RemoveCoreModel(oldRoom);
-            if (roomView.IsEmpty)
+            Room.CardView roomCard = roomCards.Find(x => x.Uid == oldRoom.Uid);
+            roomCard.RemoveCoreModel(oldRoom);
+            if (roomCard.IsEmpty)
             {
-                RemoveRoomView(roomView);
+                RemoveRoom(roomCard);
             }
         }
 
         private void DeleteAllRooms()
         {
-            while (roomPlanks.Count > 0)
+            while (roomCards.Count > 0)
             {
-                Room.Plank roomView = roomPlanks.Last();
-                RemoveRoomView(roomView);
+                Room.CardView roomCard = roomCards.Last();
+                RemoveRoom(roomCard);
             }
         }
 
-        private void RemoveRoomView(Room.Plank roomView)
+        private void RemoveRoom(Room.CardView roomCard)
         {
-            _ = roomPlanks.Remove(roomView);
-            Destroy(roomView.gameObject);
+            _ = roomCards.Remove(roomCard);
+            Destroy(roomCard.gameObject);
         }
     }
 }

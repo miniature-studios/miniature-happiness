@@ -34,10 +34,24 @@ namespace Common
             foreach (IResourceLocation resourceLocation in locations)
             {
                 Result<T> result = TryLoadAsset(resourceLocation);
-                if (result.Success && result.Data.TryGetComponent(out T _))
+                if (result.Failure)
                 {
-                    dictionary.Add(result.Data.Uid, result.Data);
+                    Debug.LogError(result.Error);
+                    continue;
                 }
+
+                InternalUid uid = result.Data.Uid;
+
+                if (dictionary.ContainsKey(uid))
+                {
+                    Debug.LogError(
+                        $"Uid duplication in {result.Data.gameObject.name} "
+                            + $"and {dictionary[uid].gameObject.name} assets."
+                    );
+                    continue;
+                }
+
+                dictionary.Add(uid, result.Data);
             }
             return dictionary;
         }

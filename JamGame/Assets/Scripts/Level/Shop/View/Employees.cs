@@ -17,13 +17,8 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        [Pickle(typeof(Employee.Plank), LookupType = ObjectProviderType.Assets)]
-        private Employee.Plank employeePlankPrefab;
-
-        [Required]
-        [SerializeField]
-        [Pickle(typeof(Employee.Card), LookupType = ObjectProviderType.Assets)]
-        private Employee.Card employeeCardPrefab;
+        [Pickle(typeof(Employee.CardView), LookupType = ObjectProviderType.Assets)]
+        private Employee.CardView employeeCardPrefab;
 
         [Required]
         [SerializeField]
@@ -31,18 +26,16 @@ namespace Level.Shop.View
 
         [ReadOnly]
         [SerializeField]
-        private List<Employee.Plank> employeePlanks = new();
+        private List<Employee.CardView> employeeCards = new();
 
-        [ReadOnly]
+        [Required]
         [SerializeField]
-        private Employee.Card cardInstance;
+        private Employee.DescriptionView cardInstance;
 
         private void Awake()
         {
             shopModel.EmployeeCollectionChanged += OnShopEmployeesChanged;
             ViewImpl mainView = GetComponentInParent<ViewImpl>(true);
-            cardInstance = Instantiate(employeeCardPrefab, mainView.CardParent);
-            cardInstance.Hide();
         }
 
         private void OnShopEmployeesChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -68,36 +61,34 @@ namespace Level.Shop.View
 
         private void AddNewEmployee(EmployeeConfig newEmployee)
         {
-            Employee.Plank newEmployeePlank = Instantiate(
-                employeePlankPrefab,
+            Employee.CardView newEmployeeCard = Instantiate(
+                employeeCardPrefab,
                 content.ContentTransform
             );
-            newEmployeePlank.Initialize();
-            newEmployeePlank.SetEmployeeConfig(newEmployee);
-            employeePlanks.Add(newEmployeePlank);
+            newEmployeeCard.Initialize();
+            newEmployeeCard.SetEmployeeConfig(newEmployee);
+            employeeCards.Add(newEmployeeCard);
 
-            newEmployeePlank.OnPointerEnterEvent += () =>
-            {
-                cardInstance.UpdateData(newEmployeePlank);
-                cardInstance.Show();
-            };
-            newEmployeePlank.OnPointerExitEvent += cardInstance.Hide;
+            newEmployeeCard.OnPointerEnterEvent += () => cardInstance.UpdateData(newEmployeeCard);
+            newEmployeeCard.OnPointerExitEvent += () => cardInstance.UpdateData(null);
         }
 
         private void RemoveOldEmployee(EmployeeConfig oldEmployee)
         {
-            Employee.Plank employee = employeePlanks.Find(x => x.EmployeeConfig == oldEmployee);
-            _ = employeePlanks.Remove(employee);
-            Destroy(employee.gameObject);
+            Employee.CardView employeeCard = employeeCards.Find(x =>
+                x.EmployeeConfig == oldEmployee
+            );
+            _ = employeeCards.Remove(employeeCard);
+            Destroy(employeeCard.gameObject);
         }
 
         private void DeleteAllEmployees()
         {
-            while (employeePlanks.Count > 0)
+            while (employeeCards.Count > 0)
             {
-                Employee.Plank item = employeePlanks.Last();
-                _ = employeePlanks.Remove(item);
-                Destroy(item.gameObject);
+                Employee.CardView employeeCard = employeeCards.Last();
+                _ = employeeCards.Remove(employeeCard);
+                Destroy(employeeCard.gameObject);
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using Common;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +25,8 @@ namespace Level.Shop.View
         private GameObject contentParent;
 
         // TODO: find method to correctly show up/down arrows
-        private bool FullyScrolledUp => scrollRect.content.anchoredPosition.y.IsEqualsZero();
+        private bool FullyScrolledUp =>
+            Mathf.Approximately(scrollRect.content.anchoredPosition.y, 0);
         private bool FullyScrolledDown => true;
 
         private void OnGUI()

@@ -10,11 +10,6 @@ namespace Level.Shop.View
         [SerializeField]
         private Animator animator;
 
-        [Required]
-        [SerializeField]
-        private RectTransform cardParent;
-        public RectTransform CardParent => cardParent;
-
         // Called by controller event.
         public void Open()
         {

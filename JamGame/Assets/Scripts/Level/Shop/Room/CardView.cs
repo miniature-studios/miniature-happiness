@@ -11,8 +11,8 @@ using UnityEngine.UI;
 
 namespace Level.Shop.Room
 {
-    [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Plank")]
-    public class Plank : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.CardView")]
+    public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [Required]
         [SerializeField]
@@ -37,14 +37,15 @@ namespace Level.Shop.Room
         [ReadOnly]
         [SerializeField]
         private List<CoreModel> coreModels = new();
-        public bool IsEmpty => coreModels.Count == 0;
-        public int RoomQuantity => coreModels.Count;
-        public CoreModel CoreModel => coreModels.Last();
-        public InternalUid Uid => CoreModel.Uid;
 
         [ReadOnly]
         [SerializeField]
         private Controller shopController;
+
+        public bool IsEmpty => coreModels.Count == 0;
+        public int Amount => coreModels.Count;
+        public CoreModel CoreModel => coreModels.Last();
+        public InternalUid Uid => CoreModel.Uid;
 
         public event Action OnPointerEnterEvent;
         public event Action OnPointerExitEvent;
@@ -68,10 +69,10 @@ namespace Level.Shop.Room
 
         private void UpdateTexts()
         {
-            image.sprite = CoreModel.ShopModel.PlankSprite;
+            image.sprite = CoreModel.ShopModel.CardSprite;
             nameLabel.text = CoreModel.RoomInfo.Title;
             costLabel.text = CoreModel.ShopModel.Cost.Value.ToString();
-            countLabel.text = RoomQuantity.ToString();
+            countLabel.text = Amount.ToString();
             rentLabel.text = $"{CoreModel.RoomInfo.RentCost.Value}/day";
         }
 
