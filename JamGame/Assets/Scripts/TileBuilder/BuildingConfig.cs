@@ -24,7 +24,7 @@ namespace TileBuilder
         {
             CoreModel coreModel = AddressableTools<CoreModel>
                 .LoadAllFromLabel("CoreModel")
-                .Select(x => x.Asset)
+                .Select(x => x.Value)
                 .FirstOrDefault(x => x.Uid == Uid);
             return coreModel == null ? "NOT FOUND" : coreModel.RoomInfo.Title;
         }

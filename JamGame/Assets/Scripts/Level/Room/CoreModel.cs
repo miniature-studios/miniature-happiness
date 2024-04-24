@@ -4,7 +4,6 @@ using Common;
 using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Room
 {
@@ -36,7 +35,7 @@ namespace Level.Room
     public partial class CoreModel : MonoBehaviour, IUidHandle
     {
         private static string coreModelsLabel = "CoreModel";
-        private static Dictionary<InternalUid, IResourceLocation> uidPrefabsMap = new();
+        private static Dictionary<InternalUid, CoreModel> uidPrefabsMap = new();
 
         [SerializeField]
         [InlineProperty]
@@ -77,22 +76,13 @@ namespace Level.Room
 
         private static void ForceUpdateUidPrefabsMap()
         {
-            foreach (
-                AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
-                    coreModelsLabel
-                )
-            )
-            {
-                uidPrefabsMap.Add(core.Asset.Uid, core.Location);
-            }
+            uidPrefabsMap = AddressableTools<CoreModel>.LoadAllFromLabel(coreModelsLabel);
         }
 
         public static CoreModel InstantiateCoreModel(TileConfig config)
         {
             UpdateUidPrefabsMap();
-            CoreModel core = Instantiate(
-                AddressableTools<CoreModel>.LoadAsset(uidPrefabsMap[config.Uid])
-            );
+            CoreModel core = Instantiate(uidPrefabsMap[config.Uid]);
             core.TileUnionModel.PlacingProperties.SetPositionAndRotation(
                 config.Position,
                 config.Rotation

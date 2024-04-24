@@ -28,12 +28,12 @@ namespace Level.Room
             where T : MonoBehaviour, IUidHandle
         {
             List<T> result = new();
-            IEnumerable<AssetWithLocation<T>> list = AddressableTools<T>.LoadAllFromLabel(label);
-            foreach (AssetWithLocation<T> asset in list)
+            Dictionary<InternalUid, T> dictionary = AddressableTools<T>.LoadAllFromLabel(label);
+            foreach (KeyValuePair<InternalUid, T> asset in dictionary)
             {
-                if (asset.Asset.Uid == Uid)
+                if (asset.Value.Uid == Uid)
                 {
-                    result.Add(asset.Asset);
+                    result.Add(asset.Value);
                 }
             }
             return result;

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Employee.ExtendedInfo
 {
     [AddComponentMenu("Scripts/Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.QuirkView")]
-    internal class QuirkView : MonoBehaviour
+    internal class QuirkView : MonoBehaviour, IUidHandle
     {
         [Pickle(LookupType = ObjectProviderType.Assets)]
         public Quirk QuirkModelPrefab;

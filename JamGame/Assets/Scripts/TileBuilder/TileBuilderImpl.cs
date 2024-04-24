@@ -12,7 +12,6 @@ using TileUnion;
 using TileUnion.Tile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace TileBuilder
 {
@@ -57,7 +56,7 @@ namespace TileBuilder
 
         public Dictionary<Vector2Int, TileUnionImpl> TileUnionDictionary { get; } = new();
 
-        private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
+        private Dictionary<InternalUid, TileUnionImpl> modelViewMap = new();
         public Dictionary<InternalUid, TileUnionImpl> InstantiatedViews { get; } = new();
 
         public ImmutableList<TileUnionImpl> TileUnionsWithStash =>
@@ -115,23 +114,18 @@ namespace TileBuilder
 
         private void InitModelViewMap()
         {
-            modelViewMap.Clear();
             foreach (TileUnionImpl view in InstantiatedViews.Values)
             {
                 DestroyImmediate(view.gameObject);
             }
             InstantiatedViews.Clear();
 
-            foreach (
-                AssetWithLocation<TileUnionImpl> tileUnion in AddressableTools<TileUnionImpl>.LoadAllFromLabel(
-                    tileUnionsLabel
-                )
-            )
+            modelViewMap = AddressableTools<TileUnionImpl>.LoadAllFromLabel(tileUnionsLabel);
+            foreach (KeyValuePair<InternalUid, TileUnionImpl> pair in modelViewMap)
             {
-                modelViewMap.Add(tileUnion.Asset.Uid, tileUnion.Location);
                 InstantiatedViews.Add(
-                    tileUnion.Asset.Uid,
-                    Instantiate(tileUnion.Asset, stashRootObject.transform)
+                    pair.Value.Uid,
+                    Instantiate(pair.Value, stashRootObject.transform)
                 );
 
                 TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
@@ -371,12 +365,9 @@ namespace TileBuilder
 
         private TileUnionImpl CreateTile(CoreModel coreModel)
         {
-            if (modelViewMap.TryGetValue(coreModel.Uid, out IResourceLocation location))
+            if (modelViewMap.TryGetValue(coreModel.Uid, out TileUnionImpl asset))
             {
-                TileUnionImpl tileUnion = Instantiate(
-                    AddressableTools<TileUnionImpl>.LoadAsset(location),
-                    mainRootObject.transform
-                );
+                TileUnionImpl tileUnion = Instantiate(asset, mainRootObject.transform);
                 tileUnion.SetCoreModel(coreModel);
                 tileUnion.SetGridProperties(gridProperties);
                 tileUnion.CreateCache();
