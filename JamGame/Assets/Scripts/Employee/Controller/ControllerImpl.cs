@@ -72,10 +72,18 @@ namespace Employee.Controller
                     {
                         state = State.Idle;
                         transform.position = currentDestination + (agent.baseOffset * Vector3.up);
+                        agent.avoidancePriority += 1;
                         OnReachedNeedProvider?.Invoke();
                     }
                     break;
             }
+        }
+
+        public void MoveToNeedProvider(Vector3 position)
+        {
+            SetNavigationMode(NavigationMode.Navmesh);
+            SetDestination(position);
+            agent.avoidancePriority -= 1;
         }
 
         public void SetDestination(Vector3 target_position)

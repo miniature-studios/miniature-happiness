@@ -179,8 +179,7 @@ namespace Employee
 
                     if (placeInWaitingLine.GetNextInLine() == null)
                     {
-                        controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
-                        controller.SetDestination(targetNeedProvider.transform.position);
+                        controller.MoveToNeedProvider(targetNeedProvider.transform.position);
                         state = State.ApproachingNeedProvider;
                         break;
                     }
