@@ -123,12 +123,9 @@ namespace TileBuilder
             modelViewMap = AddressableTools<TileUnionImpl>.LoadAllFromLabel(tileUnionsLabel);
             foreach (KeyValuePair<InternalUid, TileUnionImpl> pair in modelViewMap)
             {
-                InstantiatedViews.Add(
-                    pair.Value.Uid,
-                    Instantiate(pair.Value, stashRootObject.transform)
-                );
+                TileUnionImpl unionInstance = Instantiate(pair.Value, stashRootObject.transform);
+                InstantiatedViews.Add(pair.Key, unionInstance);
 
-                TileUnionImpl unionInstance = InstantiatedViews.Last().Value;
                 unionInstance.SetGridProperties(gridProperties);
                 unionInstance.CreateCache();
                 unionInstance.SetColliderActive(false);
