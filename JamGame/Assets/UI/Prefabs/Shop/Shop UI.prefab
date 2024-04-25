@@ -1827,37 +1827,6 @@ MonoBehaviour:
   shopModel: {fileID: 3546836253939363253}
   financesController: {fileID: 0}
   employeeManager: {fileID: 0}
-  cameraLogic: {fileID: 0}
-  OnShopShowed:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4177072316284061575}
-        m_TargetAssemblyTypeName: Level.Shop.View.ViewImpl, Assembly-CSharp
-        m_MethodName: Open
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnShopClosed:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4177072316284061575}
-        m_TargetAssemblyTypeName: Level.Shop.View.ViewImpl, Assembly-CSharp
-        m_MethodName: Close
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &3546836253939363253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2677,9 +2646,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6112419006844250274}
-        m_TargetAssemblyTypeName: Level.Shop.Controller, Assembly-CSharp
-        m_MethodName: Hide
+      - m_Target: {fileID: 4177072316284061575}
+        m_TargetAssemblyTypeName: Level.Shop.View.ViewImpl, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

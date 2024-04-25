@@ -1,7 +1,10 @@
-﻿using Cinemachine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Cinemachine;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Raycast;
 
 namespace CameraController
 {
@@ -47,16 +50,6 @@ namespace CameraController
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private TileBuilder.Controller builderController;
 
-        [ReadOnly]
-        [SerializeField]
-        private bool inputLocked = false;
-
-        public bool InputLocked
-        {
-            get => inputLocked;
-            set => inputLocked = value;
-        }
-
         private void Awake()
         {
             personFollow = virtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
@@ -94,11 +87,6 @@ namespace CameraController
 
         private void Update()
         {
-            if (inputLocked)
-            {
-                return;
-            }
-
             bool rotated = ProcessRotation();
             if (!rotated)
             {
@@ -141,6 +129,13 @@ namespace CameraController
 
         private void ProcessZoom()
         {
+            Vector2 position = Mouse.current.position.ReadValue();
+            IEnumerable<GameObject> hits = Raycaster.UIRaycast(position);
+            if (hits.Count() == 0 || !hits.First().TryGetComponent(out TileBuilder.Controller _))
+            {
+                return;
+            }
+
             personFollow.CameraSide = Mathf.Clamp(
                 personFollow.CameraSide + (zoomValue * Time.unscaledDeltaTime * zoomSpeed),
                 cameraSideRange.x,
