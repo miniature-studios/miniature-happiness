@@ -393,35 +393,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5f0ec1d9-459c-4fe0-b456-ec2e6c36c302"",
-                    ""path"": ""<Keyboard>/f6"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenGraphicsSettings"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Debug"",
-            ""id"": ""2fca5b04-2b68-4f8c-89c2-59a51b605907"",
-            ""actions"": [
-                {
-                    ""name"": ""OpenGraphicsSettings"",
-                    ""type"": ""Button"",
-                    ""id"": ""13ae2da5-4d10-4911-824b-4175df3bd15b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""5f0ec1d9-459c-4fe0-b456-ec2e6c36c302"",
-                    ""path"": ""<Keyboard>/f6"",
+                    ""path"": ""<Keyboard>/f7"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -705,10 +677,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnExtendInventoryTileInfo(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
-    }
-    public interface IDebugActions
-    {
-        void OnOpenGraphicsSettings(InputAction.CallbackContext context);
     }
     public interface IDebugActions
     {
