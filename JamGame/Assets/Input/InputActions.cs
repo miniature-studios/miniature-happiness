@@ -374,6 +374,62 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Debug"",
+            ""id"": ""2fca5b04-2b68-4f8c-89c2-59a51b605907"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenGraphicsSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""13ae2da5-4d10-4911-824b-4175df3bd15b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5f0ec1d9-459c-4fe0-b456-ec2e6c36c302"",
+                    ""path"": ""<Keyboard>/f6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenGraphicsSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Debug"",
+            ""id"": ""2fca5b04-2b68-4f8c-89c2-59a51b605907"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenGraphicsSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""13ae2da5-4d10-4911-824b-4175df3bd15b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5f0ec1d9-459c-4fe0-b456-ec2e6c36c302"",
+                    ""path"": ""<Keyboard>/f6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenGraphicsSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -390,6 +446,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_ExtendInventoryTileInfo = m_UI.FindAction("ExtendInventoryTileInfo", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_LeftClick = m_UI.FindAction("Left Click", throwIfNotFound: true);
+        // Debug
+        m_Debug = asset.FindActionMap("Debug", throwIfNotFound: true);
+        m_Debug_OpenGraphicsSettings = m_Debug.FindAction("OpenGraphicsSettings", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -587,6 +646,52 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Debug
+    private readonly InputActionMap m_Debug;
+    private List<IDebugActions> m_DebugActionsCallbackInterfaces = new List<IDebugActions>();
+    private readonly InputAction m_Debug_OpenGraphicsSettings;
+    public struct DebugActions
+    {
+        private @InputActions m_Wrapper;
+        public DebugActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenGraphicsSettings => m_Wrapper.m_Debug_OpenGraphicsSettings;
+        public InputActionMap Get() { return m_Wrapper.m_Debug; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugActions set) { return set.Get(); }
+        public void AddCallbacks(IDebugActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DebugActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DebugActionsCallbackInterfaces.Add(instance);
+            @OpenGraphicsSettings.started += instance.OnOpenGraphicsSettings;
+            @OpenGraphicsSettings.performed += instance.OnOpenGraphicsSettings;
+            @OpenGraphicsSettings.canceled += instance.OnOpenGraphicsSettings;
+        }
+
+        private void UnregisterCallbacks(IDebugActions instance)
+        {
+            @OpenGraphicsSettings.started -= instance.OnOpenGraphicsSettings;
+            @OpenGraphicsSettings.performed -= instance.OnOpenGraphicsSettings;
+            @OpenGraphicsSettings.canceled -= instance.OnOpenGraphicsSettings;
+        }
+
+        public void RemoveCallbacks(IDebugActions instance)
+        {
+            if (m_Wrapper.m_DebugActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IDebugActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DebugActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DebugActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public DebugActions @Debug => new DebugActions(this);
     public interface ICameraLookActions
     {
         void OnZoom(InputAction.CallbackContext context);
@@ -600,5 +705,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnExtendInventoryTileInfo(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnLeftClick(InputAction.CallbackContext context);
+    }
+    public interface IDebugActions
+    {
+        void OnOpenGraphicsSettings(InputAction.CallbackContext context);
+    }
+    public interface IDebugActions
+    {
+        void OnOpenGraphicsSettings(InputAction.CallbackContext context);
     }
 }
