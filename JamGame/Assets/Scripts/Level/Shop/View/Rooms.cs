@@ -61,7 +61,7 @@ namespace Level.Shop.View
 
         private void AddNewRoom(CoreModel newRoom)
         {
-            Room.CardView foundRoomCard = roomCards.Find(x => x.Uid == newRoom.Uid);
+            Room.CardView foundRoomCard = roomCards.FirstOrDefault(x => x.Uid == newRoom.Uid);
             if (foundRoomCard != null)
             {
                 foundRoomCard.AddCoreModel(newRoom);
@@ -69,11 +69,11 @@ namespace Level.Shop.View
             }
 
             Room.CardView newRoomCard = Instantiate(roomCardPrefab, content.ContentTransform);
+            roomCards.Add(newRoomCard);
             newRoomCard.Initialize();
             newRoomCard.AddCoreModel(newRoom);
-            newRoomCard.OnPointerEnterEvent += () =>
-                descriptionViewInstance.UpdateData(newRoomCard);
-            newRoomCard.OnPointerExitEvent += () => descriptionViewInstance.UpdateData(null);
+            newRoomCard.OnPointerEnterEvent += () => descriptionViewInstance.LinkCard(newRoomCard);
+            newRoomCard.OnPointerExitEvent += () => descriptionViewInstance.UnlinkCard();
         }
 
         private void RemoveOldRoom(CoreModel oldRoom)
@@ -83,6 +83,7 @@ namespace Level.Shop.View
             if (roomCard.IsEmpty)
             {
                 RemoveRoom(roomCard);
+                descriptionViewInstance.UnlinkCard();
             }
         }
 

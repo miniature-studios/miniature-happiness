@@ -32,15 +32,31 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text quantityLabel;
 
-        public void UpdateData(CardView card)
-        {
-            if (card == null)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
+        [ReadOnly]
+        [SerializeField]
+        private CardView card;
 
+        public void LinkCard(CardView card)
+        {
             gameObject.SetActive(true);
+            this.card = card;
+            card.OnDataUpdated += CardDataUpdated;
+            UpdateData();
+        }
+
+        private void CardDataUpdated()
+        {
+            UpdateData();
+        }
+
+        public void UnlinkCard()
+        {
+            gameObject.SetActive(false);
+            card.OnDataUpdated -= CardDataUpdated;
+        }
+
+        private void UpdateData()
+        {
             title.text = card.CoreModel.RoomInfo.Title;
             description.text = card.CoreModel.RoomInfo.Description;
             image.sprite = card.CoreModel.ShopModel.DescriptionViewSprite;

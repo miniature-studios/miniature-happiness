@@ -49,6 +49,7 @@ namespace Level.Shop.Room
 
         public event Action OnPointerEnterEvent;
         public event Action OnPointerExitEvent;
+        public event Action OnDataUpdated;
 
         public void Initialize()
         {
@@ -59,21 +60,26 @@ namespace Level.Shop.Room
         {
             coreModels.Add(coreModel);
             coreModel.transform.SetParent(transform);
-            UpdateTexts();
+            UpdateData();
         }
 
         public void RemoveCoreModel(CoreModel coreModel)
         {
             _ = coreModels.Remove(coreModel);
+            if (Amount != 0)
+            {
+                UpdateData();
+            }
         }
 
-        private void UpdateTexts()
+        private void UpdateData()
         {
             image.sprite = CoreModel.ShopModel.CardSprite;
             nameLabel.text = CoreModel.RoomInfo.Title;
             costLabel.text = CoreModel.ShopModel.Cost.Value.ToString();
             countLabel.text = Amount.ToString();
             rentLabel.text = $"{CoreModel.RoomInfo.RentCost.Value}/day";
+            OnDataUpdated?.Invoke();
         }
 
         // Called by pressing button.
