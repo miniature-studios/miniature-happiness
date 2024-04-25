@@ -59,9 +59,7 @@ namespace Employee
 
         private void OnEnable()
         {
-            controller = controller != null ? controller : GetComponent<ControllerImpl>();
             controller.OnReachedNeedProvider += ReachedNeedProvider;
-
             state = State.Idle;
         }
 

@@ -204,7 +204,13 @@ namespace Employee
 
     internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
     {
-        private List<(NeedModifierEffect, NeedModifiers)> registeredModifiers = new();
+        private struct RegisteredModifiers
+        {
+            public NeedModifierEffect Effect;
+            public NeedModifiers Modifiers;
+        }
+
+        private List<RegisteredModifiers> registeredModifiers = new();
         private EmployeeImpl employee;
 
         public BuffsNeedModifiersPool(EmployeeImpl employee)
@@ -219,7 +225,7 @@ namespace Employee
             NeedModifiers mods = mods_go.GetComponent<NeedModifiers>();
             mods.SetRawModifiers(effect.NeedModifiers.ToList());
 
-            registeredModifiers.Add((effect, mods));
+            registeredModifiers.Add(new() { Effect = effect, Modifiers = mods });
             employee.RegisterModifier(mods);
         }
 
@@ -228,7 +234,7 @@ namespace Employee
             int to_remove = -1;
             for (int i = 0; i < registeredModifiers.Count; i++)
             {
-                if (registeredModifiers[i].Item1 == effect)
+                if (registeredModifiers[i].Effect == effect)
                 {
                     to_remove = i;
                     break;
@@ -241,8 +247,8 @@ namespace Employee
                 return;
             }
 
-            employee.UnregisterModifier(registeredModifiers[to_remove].Item2);
-            GameObject.Destroy(registeredModifiers[to_remove].Item2.gameObject);
+            employee.UnregisterModifier(registeredModifiers[to_remove].Modifiers);
+            GameObject.Destroy(registeredModifiers[to_remove].Modifiers.gameObject);
             registeredModifiers.RemoveAt(to_remove);
         }
     }
