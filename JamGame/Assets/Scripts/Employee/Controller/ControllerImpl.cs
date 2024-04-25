@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Location;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
@@ -58,13 +57,13 @@ namespace Employee.Controller
 
             switch (state)
             {
-                case State.Idle:
-                    break;
                 case State.BuildingPath:
                     if (!agent.pathPending)
                     {
                         state = State.Moving;
                     }
+                    break;
+                case State.Idle:
                     break;
                 case State.Moving:
                     CorrectMovement();
@@ -72,10 +71,18 @@ namespace Employee.Controller
                     {
                         state = State.Idle;
                         transform.position = currentDestination + (agent.baseOffset * Vector3.up);
+                        agent.avoidancePriority += 1;
                         OnReachedNeedProvider?.Invoke();
                     }
                     break;
             }
+        }
+
+        public void MoveToNeedProvider(Vector3 position)
+        {
+            SetNavigationMode(NavigationMode.Navmesh);
+            SetDestination(position);
+            agent.avoidancePriority -= 1;
         }
 
         public void SetDestination(Vector3 target_position)
@@ -127,23 +134,23 @@ namespace Employee.Controller
             }
         }
 
-        public void Teleport(NeedProvider needProvider)
+        public void Teleport(Vector3 destination)
         {
-            transform.position = needProvider.transform.position + (agent.baseOffset * Vector3.up);
+            transform.position = destination + (agent.baseOffset * Vector3.up);
             state = State.BuildingPath;
         }
 
-        public float? ComputePathLength(NeedProvider need_provider)
+        public float? ApproximatePathLength(Vector3 destination)
         {
             if (!agent.enabled)
             {
-                Vector3 distance = need_provider.transform.position - transform.position;
+                Vector3 distance = destination - transform.position;
                 distance.y = 0;
                 return distance.magnitude;
             }
 
             NavMeshPath path = new();
-            if (agent.CalculatePath(need_provider.transform.position, path))
+            if (agent.CalculatePath(destination, path))
             {
                 if (path.status == NavMeshPathStatus.PathComplete)
                 {
@@ -158,14 +165,6 @@ namespace Employee.Controller
             }
 
             return null;
-        }
-
-        private void OnDrawGizmos()
-        {
-            Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, transform.position + (steering * 10));
         }
 
         private float maxVelocityMultiplierByEffects = 1.0f;
@@ -190,6 +189,14 @@ namespace Employee.Controller
             {
                 maxVelocityMultiplierByEffects *= eff.SpeedMultiplier;
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + (steering * 10));
         }
     }
 }

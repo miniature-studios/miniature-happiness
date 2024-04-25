@@ -143,6 +143,7 @@ namespace Location
 
         [SerializeField]
         private bool bindToThisProviderOnFirstVisit;
+        public bool BindToThisNeedProviderOnFirstVisit => bindToThisProviderOnFirstVisit;
 
         public NeedType NeedType;
 
@@ -152,7 +153,9 @@ namespace Location
 
         private List<PlaceInWaitingLine> waitingLine = new();
 
+#pragma warning disable IDE0052
         private DataProvider<WaitingLineLength> waitingLineLengthDataProvider;
+#pragma warning restore IDE0052
 
         [SerializeField]
         private UnityEvent<EmployeeImpl> taken = new();
@@ -189,12 +192,6 @@ namespace Location
             foreach (NeedModifiers modifier in registeredModifiers)
             {
                 currentEmployee.RegisterModifier(modifier);
-            }
-
-            if (bindToThisProviderOnFirstVisit)
-            {
-                // TODO: Store bindings inside EmployeeManager
-                employee.BindToNeedProvider(this);
             }
 
             taken?.Invoke(currentEmployee);
