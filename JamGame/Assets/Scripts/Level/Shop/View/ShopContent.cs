@@ -24,15 +24,21 @@ namespace Level.Shop.View
         [SerializeField]
         private GameObject contentParent;
 
-        // TODO: find method to correctly show up/down arrows
-        private bool FullyScrolledUp =>
-            Mathf.Approximately(scrollRect.content.anchoredPosition.y, 0);
-        private bool FullyScrolledDown => true;
+        private bool FullyScrolledUp => Mathf.Abs(scrollRect.normalizedPosition.y) < 0.001;
+        private bool FullyScrolledDown => Mathf.Abs(scrollRect.normalizedPosition.y) > 0.999;
 
-        private void OnGUI()
+        private void Update()
         {
-            arrowUp.SetActive(!FullyScrolledUp);
-            arrowDown.SetActive(!FullyScrolledDown);
+            if (scrollRect.viewport.sizeDelta.y > scrollRect.content.sizeDelta.y)
+            {
+                arrowUp.SetActive(FullyScrolledUp);
+                arrowDown.SetActive(FullyScrolledDown);
+            }
+            else
+            {
+                arrowUp.SetActive(false);
+                arrowDown.SetActive(false);
+            }
         }
 
         [Button]

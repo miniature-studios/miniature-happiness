@@ -20,7 +20,7 @@ namespace Level.Shop.Room
 
         [Required]
         [SerializeField]
-        private Image image;
+        private Image contentImage;
 
         [Required]
         [SerializeField]
@@ -33,6 +33,15 @@ namespace Level.Shop.Room
         [Required]
         [SerializeField]
         private TMP_Text countLabel;
+
+        [SerializeField]
+        private List<Image> backgroundImages;
+
+        [SerializeField]
+        private Color unHoveredColor;
+
+        [SerializeField]
+        private Color hoveredColor;
 
         [ReadOnly]
         [SerializeField]
@@ -74,7 +83,7 @@ namespace Level.Shop.Room
 
         private void UpdateData()
         {
-            image.sprite = CoreModel.ShopModel.CardSprite;
+            contentImage.sprite = CoreModel.ShopModel.CardSprite;
             nameLabel.text = CoreModel.RoomInfo.Title;
             costLabel.text = CoreModel.ShopModel.Cost.Value.ToString();
             countLabel.text = Amount.ToString();
@@ -91,11 +100,21 @@ namespace Level.Shop.Room
         public void OnPointerEnter(PointerEventData eventData)
         {
             OnPointerEnterEvent?.Invoke();
+            SetBackgroundImagesColor(hoveredColor);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            SetBackgroundImagesColor(unHoveredColor);
             OnPointerExitEvent?.Invoke();
+        }
+
+        private void SetBackgroundImagesColor(Color color)
+        {
+            foreach (Image image in backgroundImages)
+            {
+                image.color = color;
+            }
         }
     }
 }
