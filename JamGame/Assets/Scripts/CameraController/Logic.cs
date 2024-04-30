@@ -87,6 +87,11 @@ namespace CameraController
 
         private void Update()
         {
+            if (!IsOnTileBuilder())
+            {
+                return;
+            }
+
             bool rotated = ProcessRotation();
             if (!rotated)
             {
@@ -129,13 +134,6 @@ namespace CameraController
 
         private void ProcessZoom()
         {
-            Vector2 position = Mouse.current.position.ReadValue();
-            IEnumerable<GameObject> hits = Raycaster.UIRaycast(position);
-            if (hits.Count() == 0 || !hits.First().TryGetComponent(out TileBuilder.Controller _))
-            {
-                return;
-            }
-
             personFollow.CameraSide = Mathf.Clamp(
                 personFollow.CameraSide + (zoomValue * Time.unscaledDeltaTime * zoomSpeed),
                 cameraSideRange.x,
@@ -148,6 +146,13 @@ namespace CameraController
                 (personFollow.CameraSide - cameraSideRange.x)
                     / (cameraSideRange.y - cameraSideRange.x)
             );
+        }
+
+        private bool IsOnTileBuilder()
+        {
+            Vector2 position = Mouse.current.position.ReadValue();
+            IEnumerable<GameObject> hits = Raycaster.UIRaycast(position);
+            return hits.Count() == 0 || hits.First().TryGetComponent(out TileBuilder.Controller _);
         }
     }
 }
