@@ -1,0 +1,219 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471efbc970a337c4c83b1330ba757435, type: 3}
+  m_Name: FcuConfig
+  m_EditorClassIdentifier: 
+  productVersion: 3.1.5
+  tags:
+  - label: None
+    fcuTag: 0
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 0
+  - label: Page
+    fcuTag: 3
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 0
+  - label: Frame
+    fcuTag: 2
+    figmaTag: frame
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 0
+  - label: Container
+    fcuTag: 1
+    figmaTag: cont
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: Image
+    fcuTag: 201
+    figmaTag: img
+    customButtonTag: 0
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 1
+  - label: Vector
+    fcuTag: 202
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: Text
+    fcuTag: 200
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 1
+  - label: Placeholder
+    fcuTag: 302
+    figmaTag: ph
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 1
+  - label: AutoLayoutGroup
+    fcuTag: 100
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 1
+  - label: ContentSizeFitter
+    fcuTag: 101
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 1
+  - label: BtnDefault
+    fcuTag: 400
+    figmaTag: def
+    customButtonTag: 1
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: BtnHover
+    fcuTag: 401
+    figmaTag: hov
+    customButtonTag: 1
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: BtnPressed
+    fcuTag: 402
+    figmaTag: pres
+    customButtonTag: 1
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: BtnSelected
+    fcuTag: 403
+    figmaTag: sel
+    customButtonTag: 1
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: BtnDisabled
+    fcuTag: 404
+    figmaTag: dis
+    customButtonTag: 1
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: BtnLooped
+    fcuTag: 405
+    figmaTag: lp
+    customButtonTag: 1
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 0
+  - label: Button
+    fcuTag: 300
+    figmaTag: btn
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 1
+  - label: InputField
+    fcuTag: 301
+    figmaTag: fld
+    customButtonTag: 0
+    canBeDownloaded: 0
+    canBeInsideSingleImage: 0
+    hasComponent: 1
+  - label: Shadow
+    fcuTag: 500
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 1
+  - label: CanvasGroup
+    fcuTag: 501
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 1
+  - label: Mask
+    fcuTag: 502
+    figmaTag: 
+    customButtonTag: 0
+    canBeDownloaded: 1
+    canBeInsideSingleImage: 1
+    hasComponent: 1
+  dependencies:
+  - Name: Json.NET
+    Type: Newtonsoft.Json.JsonConvert, Newtonsoft.Json
+    ScriptingDefineName: JSONNET_EXISTS
+  - Name: TextMeshPro
+    Type: TMPro.TextMeshPro, Unity.TextMeshPro
+    ScriptingDefineName: TextMeshPro
+  - Name: TrueShadow
+    Type: LeTai.TrueShadow.TrueShadow, LeTai.TrueShadow
+    ScriptingDefineName: TRUESHADOW_EXISTS
+  - Name: MPUIKit
+    Type: MPUIKIT.MPImage, MPUIKit
+    ScriptingDefineName: MPUIKIT_EXISTS
+  - Name: Procedural UI Image
+    Type: UnityEngine.UI.ProceduralImage.ProceduralImage, Assembly-CSharp
+    ScriptingDefineName: PUI_EXISTS
+  - Name: I2Localization
+    Type: I2.Loc.Localize, Assembly-CSharp
+    ScriptingDefineName: I2LOC_EXISTS
+  - Name: Shapes2D
+    Type: Shapes2D.Shape, Assembly-CSharp
+    ScriptingDefineName: SHAPES_EXISTS
+  - Name: UI Toolkit
+    Type: UnityEngine.UIElements.UIDocument, UnityEngine.UIElementsModule
+    ScriptingDefineName: UITK_EXISTS
+  - Name: UITK Plugin
+    Type: DA_Assets.FCU.UITK_Converter, Assembly-CSharp
+    ScriptingDefineName: UITKPLUGIN_EXISTS
+  - Name: DAButton
+    Type: DA_Assets.DAB.DAButton, DA_Button
+    ScriptingDefineName: DABUTTON_EXISTS
+  webLogFileName: response.json
+  localizationFileName: localization.csv
+  dateTimeFormat1: HH-mm-ss-fff
+  dateTimeFormat2: HH-mm-ss
+  canvasGameObjectName: Canvas {0}
+  i2LocGameObjectName: script - Language Source
+  maxCachedFilesCount: 25
+  maxLogFilesCount: 50
+  generateMipMaps: 0
+  crunchedCompression: 0
+  crunchedCompressionQuality: 100
+  textureImporterCompression: 0
+  https: 1
+  apiRequestsCountLimit: 500
+  apiTimeoutSec: 60
+  chunkSizeGetNodes: 10
+  chunkSizeGetSpriteLinks: 100
+  chunkSizeDownloadSprites: 100
+  inspectorDepth: 2
+  gFontsApiKey: 
+  realTagSeparator: 45
+  maxRenderSize: 4096
+  rateMePrefsKey: fcuRateMeShown
+  renderUpscaleFactor: 2
+  spriteX32: {fileID: 21300000, guid: c863a1ee30e5f0a478b421c09b3bcfd9, type: 3}
