@@ -12,10 +12,6 @@ internal class PostprocessingSelector : MonoBehaviour, IOverlayRenderer<Stress>
         StressOverlay
     }
 
-    [SerializeField]
-    [ReadOnly]
-    private Mode mode = Mode.Normal;
-
     [Serializable]
     private struct NormalSettings
     {
