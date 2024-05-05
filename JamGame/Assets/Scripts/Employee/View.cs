@@ -45,16 +45,27 @@ namespace Employee
 
     public partial class View : IOverlayRenderer<Stress>
     {
+        [Required]
         [SerializeField]
         private SkinnedMeshRenderer meshRenderer;
 
+        [Required]
+        [SerializeField]
+        private Material baseMaterial;
+
+        [Required]
+        [SerializeField]
+        private Material stressMaterial;
+
+        [SerializeField]
+        private Gradient gradient;
+
         private Stress appliedStressOverlay;
-        private const float MAX_SHADER_STRESS_VALUE = 1.5f;
-        private const string STRESS_SHADER_LABEL = "_OutlinePower";
 
         public void ApplyOverlay(Stress overlay)
         {
             appliedStressOverlay = overlay;
+            meshRenderer.material = stressMaterial;
         }
 
         private void UpdateStressOverlay()
@@ -72,21 +83,14 @@ namespace Employee
                     appliedStressOverlay.MaximalStressBound
                     - appliedStressOverlay.MinimalStressBound
                 );
-            normalized_stress = Mathf.Clamp01(normalized_stress);
-            SetStressPower(normalized_stress);
+
+            meshRenderer.material.color = gradient.Evaluate(normalized_stress);
         }
 
         public void RevertStressOverlay()
         {
             appliedStressOverlay = null;
-
-            SetStressPower(0);
-        }
-
-        [Button]
-        private void SetStressPower(float value)
-        {
-            meshRenderer.material.SetFloat(STRESS_SHADER_LABEL, value * MAX_SHADER_STRESS_VALUE);
+            meshRenderer.material = baseMaterial;
         }
     }
 
