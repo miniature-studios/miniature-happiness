@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Overlay
@@ -16,17 +14,17 @@ namespace Overlay
     public class Manager : MonoBehaviour, IOverlayManager
     {
         // TODO: Update in runtime.
-        private List<IOverlayRenderer> overlayRenderers;
+        private IOverlayRenderer[] overlayRenderers;
 
         private void Start()
         {
-            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
+            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>();
         }
 
         private void Update()
         {
             // TODO: Find optimal approach.
-            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
+            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>();
         }
 
         public void RevertAllOverlays()
