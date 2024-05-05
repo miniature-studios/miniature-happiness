@@ -1,9 +1,10 @@
 ﻿using System;
+using Overlay;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 [AddComponentMenu("Scripts/PostprocessingSelector")]
-internal class PostprocessingSelector : MonoBehaviour
+internal class PostprocessingSelector : MonoBehaviour, IOverlayRenderer<Stress>
 {
     public enum Mode
     {
@@ -62,5 +63,15 @@ internal class PostprocessingSelector : MonoBehaviour
             default:
                 throw new ArgumentException();
         }
+    }
+
+    public void ApplyOverlay(Stress overlay)
+    {
+        SetMode(Mode.StressOverlay);
+    }
+
+    public void RevertOverlays()
+    {
+        SetMode(Mode.Normal);
     }
 }
