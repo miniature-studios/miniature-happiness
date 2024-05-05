@@ -51,7 +51,6 @@ namespace Location
                 _ = needProvider.waitingLine.Remove(this);
             }
 
-            // TODO: private
             public void RemoveNext()
             {
                 next = null;
@@ -183,7 +182,6 @@ namespace Location
                 return;
             }
 
-            // TODO: Do we need to check criterias again?
             EmployeeImpl employee = place.Employee;
             currentEmployee = employee;
             currentEmployeeHoldTime = desiredTime;

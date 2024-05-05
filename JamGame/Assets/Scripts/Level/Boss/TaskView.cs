@@ -43,7 +43,7 @@ namespace Level.Boss
                 MinBalance task
                     => $"Have at least {task.MinBalanceTarget} for {progress.Overall} days",
                 MinEmployeesWithQuirk task
-                    => $"Have at least {task.EmployeeCountTarget} with quirk [TODO: show quirk icon here]",
+                    => $"Have at least {task.EmployeeCountTarget} with quirk [TODO: #170]",
                 MaxWaitingLineLength task
                     => $"Keep waiting lines shorter than {task.LengthTarget} for {progress.Overall} days",
                 DontSatisfyNeed task

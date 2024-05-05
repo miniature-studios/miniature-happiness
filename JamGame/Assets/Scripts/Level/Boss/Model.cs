@@ -138,7 +138,7 @@ namespace Level.Boss
 
             if (stressNormalized > 1)
             {
-                // TODO: Lose game
+                // TODO: Lose game (#164)
             }
 
 #if UNITY_EDITOR

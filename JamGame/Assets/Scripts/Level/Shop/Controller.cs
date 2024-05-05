@@ -41,7 +41,7 @@ namespace Level.Shop
             Result takeMoneyResult = financesController.TryTakeMoney(cost);
             if (takeMoneyResult.Failure)
             {
-                // TODO show something
+                // TODO: #172
                 Debug.Log(takeMoneyResult.Error);
                 return new FailResult(takeMoneyResult.Error);
             }
@@ -78,7 +78,7 @@ namespace Level.Shop
             }
             else
             {
-                // TODO show something
+                // TODO: #172
                 Debug.Log(result.Error);
                 return result;
             }

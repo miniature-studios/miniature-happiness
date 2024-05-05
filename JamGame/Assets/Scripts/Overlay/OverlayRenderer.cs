@@ -2,7 +2,7 @@ namespace Overlay
 {
     public interface IOverlayRenderer
     {
-        // TODO: Move this to IOverlayRenderer<T>.
+        // TODO: #171
         public void RevertOverlays();
     }
 

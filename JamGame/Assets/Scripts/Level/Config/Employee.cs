@@ -82,20 +82,7 @@ namespace Level.Config
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            // TODO: refactor
-            /*
-            List<float> list = weightList.EmployeeWeights.Select(x => x.Weight).ToList();
-            GameObject result = weightList
-                .EmployeeWeights.ToList()[RandomTools.RandomlyChooseWithWeights(list)]
-                .Prototype;
-
-            string first_name = nameList.FirstNames.OrderBy(x => UnityEngine.Random.value).First();
-            string last_name = nameList.LastNames.OrderBy(x => UnityEngine.Random.value).First();
-            string full_name = $"{first_name} {last_name}";
-
-            
-            return new EmployeeConfig(result, full_name);
-            */
+            // TODO: #48
             return new EmployeeConfig("Fuko", 100, "Proger", "No quirk");
         }
     }
