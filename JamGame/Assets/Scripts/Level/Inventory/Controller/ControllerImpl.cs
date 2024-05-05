@@ -23,7 +23,7 @@ namespace Level.Inventory.Controller
 
         public void Hover(CoreModel room)
         {
-            // TODO: implement another view
+            // TODO: implement in the scope of #57's `Inventory` point.
         }
 
         public Result Drop(CoreModel room)

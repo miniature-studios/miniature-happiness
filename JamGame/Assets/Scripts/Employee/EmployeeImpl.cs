@@ -203,6 +203,7 @@ namespace Employee
                 }
 
                 // TODO: Process case when NeedProvider this employee bound to is destroyed.
+                // #173
                 List<NeedProvider> available_providers = needProviderManager
                     .FindAllAvailableProviders(this, need.NeedType)
                     .Where(np =>

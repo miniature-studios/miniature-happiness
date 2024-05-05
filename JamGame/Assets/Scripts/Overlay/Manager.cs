@@ -15,7 +15,6 @@ namespace Overlay
     [AddComponentMenu("Scripts/Overlay/Overlay.Manager")]
     public class Manager : MonoBehaviour, IOverlayManager
     {
-        // TODO: Update in runtime.
         private List<IOverlayRenderer> overlayRenderers;
 
         private void Start()
@@ -25,10 +24,11 @@ namespace Overlay
 
         private void Update()
         {
-            // TODO: Find optimal approach.
+            // TODO: #174
             overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
         }
 
+        // TODO: #174
         public void RevertAllOverlays()
         {
             foreach (IOverlayRenderer overlay_renderer in overlayRenderers)

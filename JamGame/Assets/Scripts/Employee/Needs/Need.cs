@@ -69,7 +69,6 @@ namespace Employee.Needs
 
         public float Satisfied => satisfied;
 
-        // TODO: refactor
         [SerializeField]
         [HideInInspector]
         private List<NeedModifiers> registeredModifiers;
@@ -87,7 +86,7 @@ namespace Employee.Needs
             registeredModifiers = new List<NeedModifiers>();
         }
 
-        // TODO: Cache DecreaseSpeed every 1s instead of computing it every frame?
+        // TODO: #176
         public void Dissatisfy(RealTimeSeconds time)
         {
             NeedProperties properties = GetProperties();
