@@ -17,24 +17,36 @@ namespace Overlay
     public class Manager : MonoBehaviour, IOverlayManager
     {
         [SerializeField]
-        [ValidateInput(nameof(ValidateOverlays))]
-        private GameObject[] staticOverlayRenderers;
+        [ValidateInput(
+            nameof(ValidateOverlays),
+            "Not all GameObjects contain IOverlayRenderer component."
+        )]
+        private GameObject[] staticOverlayRenderersHolder;
 
         private IOverlayRenderer[] dynamicOverlayRenderers;
+        private HashSet<IOverlayRenderer> staticOverlayRenderers = new();
 
         private IEnumerable<IOverlayRenderer> OverlayRenderers =>
-            dynamicOverlayRenderers.Concat(
-                staticOverlayRenderers.Select(x => x.GetComponent<IOverlayRenderer>())
-            );
+            dynamicOverlayRenderers.Concat(staticOverlayRenderers);
 
         private bool ValidateOverlays()
         {
-            return staticOverlayRenderers.All(x => x.GetComponent<IOverlayRenderer>() != null);
+            return staticOverlayRenderersHolder.All(x =>
+                x.GetComponent<IOverlayRenderer>() != null
+            );
         }
 
         private void Start()
         {
             dynamicOverlayRenderers = GetComponentsInChildren<IOverlayRenderer>();
+            foreach (GameObject gameObject in staticOverlayRenderersHolder)
+            {
+                IOverlayRenderer overlayRenderer = gameObject.GetComponent<IOverlayRenderer>();
+                if (!staticOverlayRenderers.Add(overlayRenderer))
+                {
+                    Debug.LogError($"Duplicated IOverlayRenderer reference in {gameObject.name}");
+                }
+            }
         }
 
         private void Update()

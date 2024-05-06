@@ -39,6 +39,16 @@ internal class PostprocessingSelector : MonoBehaviour, IOverlayRenderer<Stress>
         normalModeSettings.Effects.SetActive(true);
     }
 
+    public void ApplyOverlay(Stress overlay)
+    {
+        SetMode(Mode.StressOverlay);
+    }
+
+    public void RevertOverlays()
+    {
+        SetMode(Mode.Normal);
+    }
+
     [Button]
     public void SetMode(Mode mode)
     {
@@ -59,15 +69,5 @@ internal class PostprocessingSelector : MonoBehaviour, IOverlayRenderer<Stress>
             default:
                 throw new ArgumentException();
         }
-    }
-
-    public void ApplyOverlay(Stress overlay)
-    {
-        SetMode(Mode.StressOverlay);
-    }
-
-    public void RevertOverlays()
-    {
-        SetMode(Mode.Normal);
     }
 }

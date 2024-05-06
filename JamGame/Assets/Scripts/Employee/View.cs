@@ -57,9 +57,6 @@ namespace Employee
         [SerializeField]
         private Material stressMaterial;
 
-        [SerializeField]
-        private Gradient gradient;
-
         private Stress appliedStressOverlay;
 
         public void ApplyOverlay(Stress overlay)
@@ -75,16 +72,7 @@ namespace Employee
                 return;
             }
 
-            float normalized_stress = employee.Stress.Stress;
-
-            normalized_stress =
-                (normalized_stress - appliedStressOverlay.MinimalStressBound)
-                / (
-                    appliedStressOverlay.MaximalStressBound
-                    - appliedStressOverlay.MinimalStressBound
-                );
-
-            meshRenderer.material.color = gradient.Evaluate(normalized_stress);
+            meshRenderer.material.color = appliedStressOverlay.GetCurrentColor(employee.Stress);
         }
 
         public void RevertStressOverlay()
