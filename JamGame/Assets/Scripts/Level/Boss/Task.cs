@@ -11,7 +11,6 @@ using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-// TODO: Move all the DTOs to their source classes.
 namespace Level.Boss.Task
 {
     public struct Progress

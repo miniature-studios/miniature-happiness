@@ -1,4 +1,5 @@
 using System;
+using Employee.StressMeter;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -42,7 +43,6 @@ namespace Overlay
         [HideReferenceObjectPicker]
         [FoldoutGroup("Stress")]
         private Gradient gradient = new();
-        public Gradient Gradient => gradient;
 
         [SerializeField]
         [FoldoutGroup("Stress")]
@@ -53,6 +53,14 @@ namespace Overlay
         [FoldoutGroup("Stress")]
         private float maximalStressBound;
         public float MaximalStressBound => maximalStressBound;
+
+        public Color GetCurrentColor(StressMeterImpl stressMeter)
+        {
+            float normalizedStress = stressMeter.Stress;
+            normalizedStress =
+                (normalizedStress - MinimalStressBound) / (MaximalStressBound - MinimalStressBound);
+            return gradient.Evaluate(normalizedStress);
+        }
 
         public void Activate(IOverlayManager overlay_manager)
         {

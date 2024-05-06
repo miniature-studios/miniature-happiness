@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Overlay
@@ -15,23 +16,49 @@ namespace Overlay
     [AddComponentMenu("Scripts/Overlay/Overlay.Manager")]
     public class Manager : MonoBehaviour, IOverlayManager
     {
-        // TODO: Update in runtime.
-        private List<IOverlayRenderer> overlayRenderers;
+        [SerializeField]
+        [ValidateInput(
+            nameof(ValidateOverlays),
+            "Not all GameObjects contain IOverlayRenderer component."
+        )]
+        private GameObject[] staticOverlayRenderersHolder;
+
+        private IOverlayRenderer[] dynamicOverlayRenderers;
+        private HashSet<IOverlayRenderer> staticOverlayRenderers = new();
+
+        private IEnumerable<IOverlayRenderer> OverlayRenderers =>
+            dynamicOverlayRenderers.Concat(staticOverlayRenderers);
+
+        private bool ValidateOverlays()
+        {
+            return staticOverlayRenderersHolder.All(x =>
+                x.GetComponent<IOverlayRenderer>() != null
+            );
+        }
 
         private void Start()
         {
-            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
+            dynamicOverlayRenderers = GetComponentsInChildren<IOverlayRenderer>();
+            foreach (GameObject gameObject in staticOverlayRenderersHolder)
+            {
+                IOverlayRenderer overlayRenderer = gameObject.GetComponent<IOverlayRenderer>();
+                if (!staticOverlayRenderers.Add(overlayRenderer))
+                {
+                    Debug.LogError($"Duplicated IOverlayRenderer reference in {gameObject.name}");
+                }
+            }
         }
 
         private void Update()
         {
-            // TODO: Find optimal approach.
-            overlayRenderers = GetComponentsInChildren<IOverlayRenderer>().ToList();
+            // TODO: #174
+            dynamicOverlayRenderers = GetComponentsInChildren<IOverlayRenderer>();
         }
 
+        // TODO: #174
         public void RevertAllOverlays()
         {
-            foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+            foreach (IOverlayRenderer overlay_renderer in OverlayRenderers)
             {
                 overlay_renderer.RevertOverlays();
             }
@@ -40,7 +67,7 @@ namespace Overlay
         public void ApplyOverlay<O>(O overlay)
             where O : class, IOverlay
         {
-            foreach (IOverlayRenderer overlay_renderer in overlayRenderers)
+            foreach (IOverlayRenderer overlay_renderer in OverlayRenderers)
             {
                 overlay_renderer.RevertOverlays();
                 if (overlay_renderer is IOverlayRenderer<O> or)

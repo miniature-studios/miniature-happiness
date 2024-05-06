@@ -45,14 +45,24 @@ namespace Employee
 
     public partial class View : IOverlayRenderer<Stress>
     {
+        [Required]
         [SerializeField]
         private SkinnedMeshRenderer meshRenderer;
+
+        [Required]
+        [SerializeField]
+        private Material baseMaterial;
+
+        [Required]
+        [SerializeField]
+        private Material stressMaterial;
 
         private Stress appliedStressOverlay;
 
         public void ApplyOverlay(Stress overlay)
         {
             appliedStressOverlay = overlay;
+            meshRenderer.material = stressMaterial;
         }
 
         private void UpdateStressOverlay()
@@ -62,32 +72,13 @@ namespace Employee
                 return;
             }
 
-            float normalized_stress = employee.Stress.Stress;
-            normalized_stress =
-                (normalized_stress - appliedStressOverlay.MinimalStressBound)
-                / (
-                    appliedStressOverlay.MaximalStressBound
-                    - appliedStressOverlay.MinimalStressBound
-                );
-            normalized_stress = Mathf.Clamp01(normalized_stress);
-
-            Color tint = appliedStressOverlay.Gradient.Evaluate(normalized_stress);
-            SetColorTint(tint);
+            meshRenderer.material.color = appliedStressOverlay.GetCurrentColor(employee.Stress);
         }
 
         public void RevertStressOverlay()
         {
             appliedStressOverlay = null;
-
-            SetColorTint(Color.white);
-        }
-
-        private void SetColorTint(Color color)
-        {
-            foreach (Material material in meshRenderer.materials)
-            {
-                material.color = color;
-            }
+            meshRenderer.material = baseMaterial;
         }
     }
 

@@ -995,9 +995,9 @@ MonoBehaviour:
       OverrideSatisfactionValue: 0
     satisfied: 0
     registeredModifiers: []
-  registeredModifiers: []
   incomeGenerator: {fileID: 2575964175689351513}
   keepDistanceFromNextInLine: {x: 1.2, y: 1.3}
+  registeredModifiers: []
 --- !u!114 &7027475554387804411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1053,10 +1053,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76d44f9d1bd213a408703b36634769c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 3401971393799363831}
-  animationSpeedMultiplier: 2
+  animator: {fileID: 8863634158663307415}
+  animationSpeedMultiplier: 1.5
   agent: {fileID: 7027475554387804391}
   meshRenderer: {fileID: 5611752461146474397}
+  baseMaterial: {fileID: 2100000, guid: 5913b9cccf3eb164b83bbde8bb8e64a9, type: 2}
+  stressMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0.12149644, g: 1, b: 0, a: 1}
+    key3: {r: 1, g: 1, b: 1, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 32768
+    ctime2: 65535
+    ctime3: 65535
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 65535
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 2
+    m_ColorSpace: 0
+    m_NumColorKeys: 3
+    m_NumAlphaKeys: 2
   extendedInfoView: {fileID: 8253530781844806640}
 --- !u!54 &744904379
 Rigidbody:
@@ -1473,7 +1505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.05
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1608,8 +1640,8 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3727956284482021115, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
-      propertyPath: m_Quality
-      value: 4
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3727956284482021115, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1658,18 +1690,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8863634158663307415}
   m_SourcePrefab: {fileID: 100100000, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
---- !u!95 &3401971393799363831 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
-  m_PrefabInstance: {fileID: 9105345359339790694}
-  m_PrefabAsset: {fileID: 0}
 --- !u!137 &5611752461146474397 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3727956284482021115, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
   m_PrefabInstance: {fileID: 9105345359339790694}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8258975601914682423 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}
+  m_PrefabInstance: {fileID: 9105345359339790694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8863634158663307415
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8258975601914682423}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 725f16a1dceb9c94aaf9da42923d6e21, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &8779228857985025677 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 93c278dcc936b6b46a165cf9911fed01, type: 3}

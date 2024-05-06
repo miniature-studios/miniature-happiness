@@ -130,7 +130,6 @@ namespace Employee
             }
         }
 
-        // TODO: match type of effect with corresponding Executor type.
         public void RegisterEffect(IEffect effect)
         {
             if (effect is StressEffect se)
@@ -176,7 +175,6 @@ namespace Employee
             Debug.LogError("Failed to unregister buff: not registered");
         }
 
-        // TODO: match type of effect with corresponding Executor type.
         private void UnregisterEffect(IEffect effect)
         {
             if (effect is StressEffect se)

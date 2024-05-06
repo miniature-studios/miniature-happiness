@@ -10,7 +10,6 @@ namespace Level.Config
         [SerializeField]
         private CoreModel room;
 
-        // TODO: implement mandatory room logic
         public CoreModel Room => room;
     }
 }
