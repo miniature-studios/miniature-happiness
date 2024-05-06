@@ -1682,6 +1682,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6931644650239721707, guid: cda76653c8e7a38489e56e24d9bf06d4, type: 3}
   m_PrefabInstance: {fileID: 54332908640629448}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &991673269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 753605451584959659, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
+  m_PrefabInstance: {fileID: 3832652573781273153}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1055950092
 GameObject:
   m_ObjectHideFlags: 0
@@ -1867,6 +1872,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7475a4ab86b7c640a4bf50af144f1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  staticOverlayRenderersHolder:
+  - {fileID: 991673269}
 --- !u!114 &1067622721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2927,26 +2934,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804391, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_Acceleration
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804391, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 400
-      objectReference: {fileID: 0}
-    - target: {fileID: 7027475554387804408, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: maxVelocity
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804409, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: needProviderManager
       value: 
       objectReference: {fileID: 42303834}
-    - target: {fileID: 7027475554387804412, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
-      propertyPath: animationSpeedMultiplier
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 7027475554387804413, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_Name
       value: Employee
