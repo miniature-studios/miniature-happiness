@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 namespace Level.Inventory.Room
 {
     [AddComponentMenu("Scripts/Level/Inventory/Room/Level.Inventory.Room.View")]
-    public class View : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
+    public class View : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, IUidHandle
     {
         [RequiredIn(PrefabKind.Variant | PrefabKind.InstanceInScene)]
         [Pickle(LookupType = ObjectProviderType.Assets)]
@@ -67,7 +67,7 @@ namespace Level.Inventory.Room
                 if (!extendedView.IsVisible)
                 {
                     extendedView.Show();
-                    extendedView.SetLabelText($"Rent: {CoreModelPrefab.RentCost.Value}");
+                    extendedView.SetLabelText($"Rent: {CoreModelPrefab.RoomInfo.RentCost.Value}");
                 }
             }
             else if (extendedView.IsVisible)

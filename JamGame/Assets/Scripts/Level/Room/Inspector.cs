@@ -16,53 +16,28 @@ namespace Level.Room
             tileUnionModel = GetComponent<TileUnion.Model>();
         }
 
+        [Button]
         [OnInspectorGUI]
         private void FindViews()
         {
-            shopRooms.Clear();
-            inventoryViews.Clear();
-            tileUnions.Clear();
-            foreach (
-                AssetWithLocation<Shop.Room.View> shopView in AddressableTools<Shop.Room.View>.LoadAllFromLabel(
-                    "ShopView"
-                )
-            )
-            {
-                if (shopView.Asset.Uid == Uid)
-                {
-                    shopRooms.Add(shopView.Asset);
-                }
-            }
-
-            foreach (
-                AssetWithLocation<Inventory.Room.View> invView in AddressableTools<Inventory.Room.View>.LoadAllFromLabel(
-                    "InventoryView"
-                )
-            )
-            {
-                if (invView.Asset.Uid == Uid)
-                {
-                    inventoryViews.Add(invView.Asset);
-                }
-            }
-
-            foreach (
-                AssetWithLocation<TileUnion.TileUnionImpl> tileUnion in AddressableTools<TileUnion.TileUnionImpl>.LoadAllFromLabel(
-                    "TileUnion"
-                )
-            )
-            {
-                if (tileUnion.Asset.Uid == Uid)
-                {
-                    tileUnions.Add(tileUnion.Asset);
-                }
-            }
+            inventoryViews = GetFromLabel<Inventory.Room.View>("InventoryView");
+            tileUnions = GetFromLabel<TileUnion.TileUnionImpl>("TileUnion");
         }
 
-        [ReadOnly]
-        [SerializeField]
-        [Title("All Shop room views dependencies: ")]
-        private List<Shop.Room.View> shopRooms = new();
+        private List<T> GetFromLabel<T>(string label)
+            where T : MonoBehaviour, IUidHandle
+        {
+            List<T> result = new();
+            Dictionary<InternalUid, T> dictionary = AddressableTools<T>.LoadAllFromLabel(label);
+            foreach (KeyValuePair<InternalUid, T> asset in dictionary)
+            {
+                if (asset.Value.Uid == Uid)
+                {
+                    result.Add(asset.Value);
+                }
+            }
+            return result;
+        }
 
         [ReadOnly]
         [SerializeField]

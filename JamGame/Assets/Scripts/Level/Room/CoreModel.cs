@@ -4,10 +4,21 @@ using Common;
 using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Room
 {
+    [Serializable]
+    [HideLabel]
+    [FoldoutGroup(nameof(GeneralRoomInfo))]
+    public struct GeneralRoomInfo
+    {
+        public string Title;
+        public RentCost RentCost;
+
+        [TextArea]
+        public string Description;
+    }
+
     [Serializable]
     [InlineProperty]
     public struct RentCost
@@ -21,19 +32,15 @@ namespace Level.Room
     [RequireComponent(typeof(TileUnion.Model))]
     [RequireComponent(typeof(Inventory.Room.Model))]
     [AddComponentMenu("Scripts/Level/Room/Level.Room.CoreModel")]
-    public partial class CoreModel : MonoBehaviour
+    public partial class CoreModel : MonoBehaviour, IUidHandle
     {
         private static string coreModelsLabel = "CoreModel";
-        private static Dictionary<InternalUid, IResourceLocation> uidPrefabsMap = new();
+        private static Dictionary<InternalUid, CoreModel> uidPrefabsMap = new();
 
         [SerializeField]
         [InlineProperty]
         private InternalUid uid;
         public InternalUid Uid => uid;
-
-        [SerializeField]
-        private string title;
-        public string Title => title;
 
         [ReadOnly]
         [SerializeField]
@@ -51,8 +58,8 @@ namespace Level.Room
         public TileUnion.Model TileUnionModel => tileUnionModel;
 
         [SerializeField]
-        private RentCost rentCost;
-        public RentCost RentCost => rentCost;
+        private GeneralRoomInfo generalRoomInfo;
+        public GeneralRoomInfo RoomInfo => generalRoomInfo;
 
         private static void UpdateUidPrefabsMap()
         {
@@ -69,22 +76,13 @@ namespace Level.Room
 
         private static void ForceUpdateUidPrefabsMap()
         {
-            foreach (
-                AssetWithLocation<CoreModel> core in AddressableTools<CoreModel>.LoadAllFromLabel(
-                    coreModelsLabel
-                )
-            )
-            {
-                uidPrefabsMap.Add(core.Asset.Uid, core.Location);
-            }
+            uidPrefabsMap = AddressableTools<CoreModel>.LoadAllFromLabel(coreModelsLabel);
         }
 
         public static CoreModel InstantiateCoreModel(TileConfig config)
         {
             UpdateUidPrefabsMap();
-            CoreModel core = Instantiate(
-                AddressableTools<CoreModel>.LoadAsset(uidPrefabsMap[config.Uid])
-            );
+            CoreModel core = Instantiate(uidPrefabsMap[config.Uid]);
             core.TileUnionModel.PlacingProperties.SetPositionAndRotation(
                 config.Position,
                 config.Rotation

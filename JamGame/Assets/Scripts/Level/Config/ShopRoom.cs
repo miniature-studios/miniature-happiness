@@ -23,7 +23,7 @@ namespace Level.Config
         [Pickle(typeof(CoreModel), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("@" + nameof(Label))]
         private CoreModel room;
-        private string Label => $"Fixed Room - {(room == null ? "NULL" : room.Title)}";
+        private string Label => $"Fixed Room - {(room == null ? "NULL" : room.RoomInfo.Title)}";
 
         public ShopRoomConfig GetRoomConfig()
         {

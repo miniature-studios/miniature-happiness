@@ -1,28 +1,31 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Level.Shop.View
 {
-    [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Scripts/Level/Shop/Level.Shop.View")]
     public partial class ViewImpl : MonoBehaviour
     {
+        [Required]
+        [SerializeField]
         private Animator animator;
 
-        private void Awake()
-        {
-            animator = GetComponent<Animator>();
-        }
+        public UnityEvent OnShopOpened;
+        public UnityEvent OnShopClosed;
 
-        // Called by button open shop.
+        // Called by controller event.
         public void Open()
         {
             animator.SetBool("Showed", true);
+            OnShopOpened?.Invoke();
         }
 
-        // Called by button close shop.
+        // Called by controller event.
         public void Close()
         {
             animator.SetBool("Showed", false);
+            OnShopClosed?.Invoke();
         }
     }
 }

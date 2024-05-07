@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.ResourceLocations;
@@ -14,38 +13,47 @@ namespace Common
     }
 
     public static class AddressableTools<T>
-        where T : MonoBehaviour
+        where T : MonoBehaviour, IUidHandle
     {
-        public static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(
-            AssetLabelReference assetLabel
-        )
+        public static Dictionary<InternalUid, T> LoadAllFromLabel(AssetLabelReference assetLabel)
         {
             return LoadAllFromLabel((object)assetLabel);
         }
 
-        public static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(string assetLabel)
+        public static Dictionary<InternalUid, T> LoadAllFromLabel(string assetLabel)
         {
             return LoadAllFromLabel((object)assetLabel);
         }
 
-        private static IEnumerable<AssetWithLocation<T>> LoadAllFromLabel(object assetLabel)
+        private static Dictionary<InternalUid, T> LoadAllFromLabel(object assetLabel)
         {
-            foreach (
-                IResourceLocation resourceLocation in Addressables
-                    .LoadResourceLocationsAsync(assetLabel, typeof(GameObject))
-                    .WaitForCompletion()
-            )
+            Dictionary<InternalUid, T> dictionary = new();
+            IList<IResourceLocation> locations = Addressables
+                .LoadResourceLocationsAsync(assetLabel)
+                .WaitForCompletion();
+            foreach (IResourceLocation resourceLocation in locations)
             {
                 Result<T> result = TryLoadAsset(resourceLocation);
-                if (result.Success)
+                if (result.Failure)
                 {
-                    yield return new AssetWithLocation<T>()
-                    {
-                        Location = resourceLocation,
-                        Asset = result.Data
-                    };
+                    Debug.LogError(result.Error);
+                    continue;
                 }
+
+                InternalUid uid = result.Data.Uid;
+
+                if (dictionary.ContainsKey(uid))
+                {
+                    Debug.LogError(
+                        $"Uid duplication in {result.Data.gameObject.name} "
+                            + $"and {dictionary[uid].gameObject.name} assets."
+                    );
+                    continue;
+                }
+
+                dictionary.Add(uid, result.Data);
             }
+            return dictionary;
         }
 
         private static Result<T> TryLoadAsset(IResourceLocation resourceLocation)
@@ -61,16 +69,6 @@ namespace Common
             {
                 return new FailResult<T>("Tried to load asset with wrong component.");
             }
-        }
-
-        public static T LoadAsset(IResourceLocation resourceLocation)
-        {
-            Result<T> result = TryLoadAsset(resourceLocation);
-            if (result.Failure)
-            {
-                throw new Exception(result.Error);
-            }
-            return result.Data;
         }
     }
 }

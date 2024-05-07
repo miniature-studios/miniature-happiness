@@ -1,7 +1,10 @@
-﻿using Cinemachine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Cinemachine;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Raycast;
 
 namespace CameraController
 {
@@ -84,6 +87,11 @@ namespace CameraController
 
         private void Update()
         {
+            if (!IsOnTileBuilder())
+            {
+                return;
+            }
+
             bool rotated = ProcessRotation();
             if (!rotated)
             {
@@ -138,6 +146,13 @@ namespace CameraController
                 (personFollow.CameraSide - cameraSideRange.x)
                     / (cameraSideRange.y - cameraSideRange.x)
             );
+        }
+
+        private bool IsOnTileBuilder()
+        {
+            Vector2 position = Mouse.current.position.ReadValue();
+            IEnumerable<GameObject> hits = Raycaster.UIRaycast(position);
+            return hits.Count() == 0 || hits.First().TryGetComponent(out TileBuilder.Controller _);
         }
     }
 }

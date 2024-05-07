@@ -1,7 +1,6 @@
-﻿using DA_Assets.FCU.Extensions;
+﻿using System;
 using DA_Assets.Shared;
 using DA_Assets.Shared.Extensions;
-using System;
 using UnityEngine;
 
 namespace DA_Assets.FCU.Model
@@ -9,7 +8,8 @@ namespace DA_Assets.FCU.Model
     [Serializable]
     public class MainSettings : MonoBehaviourBinder<FigmaConverterUnity>
     {
-        [SerializeField] UIFramework uiFramework = UIFramework.UGUI;
+        [SerializeField]
+        private UIFramework uiFramework = UIFramework.UGUI;
         public UIFramework UIFramework
         {
             get => uiFramework;
@@ -19,45 +19,92 @@ namespace DA_Assets.FCU.Model
                 {
                     case UIFramework.UITK:
 #if UITKPLUGIN_EXISTS == false
-                        DALogger.LogError(FcuLocKey.log_asset_not_imported.Localize(nameof(UIFramework.UITK)));
+                        DALogger.LogError(
+                            FcuLocKey.log_asset_not_imported.Localize(nameof(UIFramework.UITK))
+                        );
                         uiFramework = UIFramework.UGUI;
                         return;
 #endif
-                        break;
                 }
 
                 SetValue(ref uiFramework, value);
             }
         }
 
-        [SerializeField] PositioningMode positioningMode = PositioningMode.Absolute;
-        public PositioningMode PositioningMode { get => positioningMode; set => SetValue(ref positioningMode, value); }
+        [SerializeField]
+        private PositioningMode positioningMode = PositioningMode.Absolute;
+        public PositioningMode PositioningMode
+        {
+            get => positioningMode;
+            set => SetValue(ref positioningMode, value);
+        }
 
-        [SerializeField] PivotType pivotType = PivotType.MiddleCenter;
-        public PivotType PivotType { get => pivotType; set => SetValue(ref pivotType, value); }
+        [SerializeField]
+        private PivotType pivotType = PivotType.MiddleCenter;
+        public PivotType PivotType
+        {
+            get => pivotType;
+            set => SetValue(ref pivotType, value);
+        }
 
-        [SerializeField] ImageFormat imageFormat = ImageFormat.PNG;
-        public ImageFormat ImageFormat { get => imageFormat; set => SetValue(ref imageFormat, value); }
+        [SerializeField]
+        private ImageFormat imageFormat = ImageFormat.PNG;
+        public ImageFormat ImageFormat
+        {
+            get => imageFormat;
+            set => SetValue(ref imageFormat, value);
+        }
 
-        [SerializeField] float imageScale = 4.0f;
-        public float ImageScale { get => imageScale; set => SetValue(ref imageScale, value); }
+        [SerializeField]
+        private float imageScale = 4.0f;
+        public float ImageScale
+        {
+            get => imageScale;
+            set => SetValue(ref imageScale, value);
+        }
 
-        [SerializeField] float pixelsPerUnit = 100;
-        public float PixelsPerUnit { get => pixelsPerUnit; set => SetValue(ref pixelsPerUnit, value); }
+        [SerializeField]
+        private float pixelsPerUnit = 100;
+        public float PixelsPerUnit
+        {
+            get => pixelsPerUnit;
+            set => SetValue(ref pixelsPerUnit, value);
+        }
 
-        [SerializeField] int goLayer = 5;
-        public int GameObjectLayer { get => goLayer; set => SetValue(ref goLayer, value); }
+        [SerializeField]
+        private int goLayer = 5;
+        public int GameObjectLayer
+        {
+            get => goLayer;
+            set => SetValue(ref goLayer, value);
+        }
 
-        [SerializeField] string spritesPath = "Assets\\Sprites";
-        public string SpritesPath { get => spritesPath; set => SetValue(ref spritesPath, value); }
+        [SerializeField]
+        private string spritesPath = "Assets\\Sprites";
+        public string SpritesPath
+        {
+            get => spritesPath;
+            set => SetValue(ref spritesPath, value);
+        }
 
-        [SerializeField] string uguiOutputPath = "Assets\\UGUI Output";
-        public string UGUIOutputPath { get => uguiOutputPath; set => SetValue(ref uguiOutputPath, value); }
+        [SerializeField]
+        private string uguiOutputPath = "Assets\\UGUI Output";
+        public string UGUIOutputPath
+        {
+            get => uguiOutputPath;
+            set => SetValue(ref uguiOutputPath, value);
+        }
 
-        [SerializeField] bool redownloadSprites = false;
-        public bool RedownloadSprites { get => redownloadSprites; set => SetValue(ref redownloadSprites, value); }
+        [SerializeField]
+        private bool redownloadSprites = false;
+        public bool RedownloadSprites
+        {
+            get => redownloadSprites;
+            set => SetValue(ref redownloadSprites, value);
+        }
 
-        [SerializeField] bool rawImport = false;
+        [SerializeField]
+        private bool rawImport = false;
         public bool RawImport
         {
             get => rawImport;
@@ -65,17 +112,27 @@ namespace DA_Assets.FCU.Model
             {
                 if (value && value != rawImport)
                 {
-                    DALogger.LogError(FcuLocKey.log_dev_function_enabled.Localize(FcuLocKey.label_raw_import.Localize()));
+                    DALogger.LogError(
+                        FcuLocKey.log_dev_function_enabled.Localize(
+                            FcuLocKey.label_raw_import.Localize()
+                        )
+                    );
                 }
 
                 SetValue(ref rawImport, value);
             }
         }
 
-        [SerializeField] bool windowMode = false;
-        public bool WindowMode { get => windowMode; set => SetValue(ref windowMode, value); }
+        [SerializeField]
+        private bool windowMode = false;
+        public bool WindowMode
+        {
+            get => windowMode;
+            set => SetValue(ref windowMode, value);
+        }
 
-        [SerializeField] string projectUrl;
+        [SerializeField]
+        private string projectUrl;
         public string ProjectUrl
         {
             get => projectUrl;
@@ -88,10 +145,7 @@ namespace DA_Assets.FCU.Model
                     string fileTag = "/file/";
                     char del = '/';
 
-                    if (_value.IsEmpty())
-                    {
-
-                    }
+                    if (_value.IsEmpty()) { }
                     else if (_value.Contains(fileTag))
                     {
                         _value = _value.GetBetween(fileTag, del.ToString());
@@ -111,7 +165,8 @@ namespace DA_Assets.FCU.Model
             }
         }
 
-        [SerializeField] string[] componentsUrls = new string[5];
+        [SerializeField]
+        private string[] componentsUrls = new string[5];
         public string[] ComponentsUrls
         {
             get
@@ -123,10 +178,7 @@ namespace DA_Assets.FCU.Model
 
                 return componentsUrls;
             }
-            set
-            {
-                SetValue(ref componentsUrls, value);
-            }
+            set => SetValue(ref componentsUrls, value);
         }
     }
 }

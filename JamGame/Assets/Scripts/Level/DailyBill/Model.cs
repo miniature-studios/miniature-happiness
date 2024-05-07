@@ -25,9 +25,9 @@ namespace Level.DailyBill
             return new Check()
             {
                 RentByRoom = tileBuilder
-                    .AllCoreModels.Where(x => x.RentCost.Value != 0)
+                    .AllCoreModels.Where(x => x.RoomInfo.RentCost.Value != 0)
                     .GroupBy(x => x.Uid, x => x)
-                    .Select(x => (CoreModel: x.First(), Sum: x.Sum(x => x.RentCost.Value)))
+                    .Select(x => (CoreModel: x.First(), Sum: x.Sum(x => x.RoomInfo.RentCost.Value)))
                     .ToDictionary(x => x.CoreModel, x => x.Sum)
             };
         }

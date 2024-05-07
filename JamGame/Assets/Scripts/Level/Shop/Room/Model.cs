@@ -16,6 +16,16 @@ namespace Level.Shop.Room
     [AddComponentMenu("Scripts/Level/Shop/Room/Level.Shop.Room.Model")]
     public class Model : MonoBehaviour
     {
+        [Required]
+        [SerializeField]
+        private Sprite cardSprite;
+        public Sprite CardSprite => cardSprite;
+
+        [Required]
+        [SerializeField]
+        private Sprite descriptionViewSprite;
+        public Sprite DescriptionViewSprite => descriptionViewSprite;
+
         [SerializeField]
         private Cost cost;
         public Cost Cost => cost;

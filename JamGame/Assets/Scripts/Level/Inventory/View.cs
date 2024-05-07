@@ -8,7 +8,6 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Inventory
 {
@@ -35,7 +34,7 @@ namespace Level.Inventory
         private Animator animator;
         private bool isInventoryVisible = false;
 
-        private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
+        private Dictionary<InternalUid, Room.View> modelViewMap = new();
         private List<Room.View> roomViews = new();
 
         private void Awake()
@@ -43,14 +42,7 @@ namespace Level.Inventory
             animator = GetComponent<Animator>();
 
             model.InventoryRoomsCollectionChanged += OnInventoryChanged;
-            foreach (
-                AssetWithLocation<Room.View> invView in AddressableTools<Room.View>.LoadAllFromLabel(
-                    inventoryViewsLabel
-                )
-            )
-            {
-                modelViewMap.Add(invView.Asset.Uid, invView.Location);
-            }
+            modelViewMap = AddressableTools<Room.View>.LoadAllFromLabel(inventoryViewsLabel);
         }
 
         // Called by button that open/closes inventory
@@ -89,13 +81,9 @@ namespace Level.Inventory
             {
                 foundView.AddCoreModel(room);
             }
-            else if (modelViewMap.TryGetValue(room.Uid, out IResourceLocation location))
+            else if (modelViewMap.TryGetValue(room.Uid, out Room.View roomView))
             {
-                Room.View newRoomView = Instantiate(
-                    AddressableTools<Room.View>.LoadAsset(location),
-                    container
-                );
-
+                Room.View newRoomView = Instantiate(roomView, container);
                 newRoomView.AddCoreModel(room);
                 roomViews.Add(newRoomView);
             }

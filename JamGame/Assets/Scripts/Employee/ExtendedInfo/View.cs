@@ -8,7 +8,6 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Employee.ExtendedInfo
 {
@@ -36,8 +35,8 @@ namespace Employee.ExtendedInfo
         [SerializeField]
         private AssetLabelReference buffViewsLabel;
 
-        private static Dictionary<InternalUid, IResourceLocation> quirkModelViewMap = new();
-        private static Dictionary<InternalUid, IResourceLocation> buffModelViewMap = new();
+        private static Dictionary<InternalUid, QuirkView> quirkModelViewMap = new();
+        private static Dictionary<InternalUid, BuffView> buffModelViewMap = new();
 
         [SerializeField]
         [Required]
@@ -80,26 +79,12 @@ namespace Employee.ExtendedInfo
         {
             if (quirkModelViewMap.Count == 0)
             {
-                foreach (
-                    AssetWithLocation<QuirkView> quirk_view in AddressableTools<QuirkView>.LoadAllFromLabel(
-                        quirkViewsLabel
-                    )
-                )
-                {
-                    quirkModelViewMap.Add(quirk_view.Asset.Uid, quirk_view.Location);
-                }
+                quirkModelViewMap = AddressableTools<QuirkView>.LoadAllFromLabel(quirkViewsLabel);
             }
 
             if (buffModelViewMap.Count == 0)
             {
-                foreach (
-                    AssetWithLocation<BuffView> buff_view in AddressableTools<BuffView>.LoadAllFromLabel(
-                        buffViewsLabel
-                    )
-                )
-                {
-                    buffModelViewMap.Add(buff_view.Asset.Uid, buff_view.Location);
-                }
+                buffModelViewMap = AddressableTools<BuffView>.LoadAllFromLabel(buffViewsLabel);
             }
         }
 
@@ -153,11 +138,7 @@ namespace Employee.ExtendedInfo
 
         private void AddBuff(Buff buff)
         {
-            IResourceLocation view_location = buffModelViewMap[buff.Uid];
-            BuffView buff_view = Instantiate(
-                AddressableTools<BuffView>.LoadAsset(view_location),
-                buffsContainer
-            );
+            BuffView buff_view = Instantiate(buffModelViewMap[buff.Uid], buffsContainer);
             instantiatedBuffViews.Add(buff_view);
         }
 
@@ -170,8 +151,7 @@ namespace Employee.ExtendedInfo
 
         private void AddQuirk(Quirk quirk)
         {
-            IResourceLocation view_location = quirkModelViewMap[quirk.Uid];
-            _ = Instantiate(AddressableTools<QuirkView>.LoadAsset(view_location), quirksContainer);
+            _ = Instantiate(quirkModelViewMap[quirk.Uid], quirksContainer);
         }
     }
 }

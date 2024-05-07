@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Common;
 using Level.Room;
+using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Level.Shop.View
 {
@@ -19,32 +17,25 @@ namespace Level.Shop.View
 
         [Required]
         [SerializeField]
-        private Transform roomsUIContainer;
+        private ShopContent content;
 
         [Required]
         [SerializeField]
-        private AssetLabelReference shopViewsLabel;
-        private Dictionary<InternalUid, IResourceLocation> modelViewMap = new();
+        [Pickle(typeof(Room.CardView), LookupType = ObjectProviderType.Assets)]
+        private Room.CardView roomCardPrefab;
 
         [ReadOnly]
         [SerializeField]
-        private List<Room.View> roomViews = new();
+        private List<Room.CardView> roomCards = new();
+
+        [Required]
+        [SerializeField]
+        private Room.DescriptionView descriptionViewInstance;
 
         private void Awake()
         {
             shopModel.RoomsCollectionChanged += OnShopRoomsChanged;
-            InitModelViewMap();
-        }
-
-        private void InitModelViewMap()
-        {
-            IEnumerable<AssetWithLocation<Room.View>> shopViewLocations =
-                AddressableTools<Room.View>.LoadAllFromLabel(shopViewsLabel);
-
-            foreach (AssetWithLocation<Room.View> shopView in shopViewLocations)
-            {
-                modelViewMap.Add(shopView.Asset.Uid, shopView.Location);
-            }
+            ViewImpl mainView = GetComponentInParent<ViewImpl>(true);
         }
 
         private void OnShopRoomsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -70,51 +61,45 @@ namespace Level.Shop.View
 
         private void AddNewRoom(CoreModel newRoom)
         {
-            Room.View foundView = roomViews.Find(x => x.Uid == newRoom.Uid);
-            if (foundView != null)
+            Room.CardView foundRoomCard = roomCards.FirstOrDefault(x => x.Uid == newRoom.Uid);
+            if (foundRoomCard != null)
             {
-                foundView.AddCoreModel(newRoom);
+                foundRoomCard.AddCoreModel(newRoom);
+                return;
             }
-            else if (modelViewMap.TryGetValue(newRoom.Uid, out IResourceLocation location))
-            {
-                Room.View newRoomView = Instantiate(
-                    AddressableTools<Room.View>.LoadAsset(location),
-                    roomsUIContainer.transform
-                );
 
-                newRoomView.AddCoreModel(newRoom);
-                newRoomView.enabled = true;
-                roomViews.Add(newRoomView);
-            }
-            else
-            {
-                Debug.LogError($"Core model {newRoom.name} not presented in Shop View");
-            }
+            Room.CardView newRoomCard = Instantiate(roomCardPrefab, content.ContentTransform);
+            roomCards.Add(newRoomCard);
+            newRoomCard.Initialize();
+            newRoomCard.AddCoreModel(newRoom);
+            newRoomCard.OnPointerEnterEvent += () => descriptionViewInstance.LinkCard(newRoomCard);
+            newRoomCard.OnPointerExitEvent += () => descriptionViewInstance.UnlinkCard();
         }
 
         private void RemoveOldRoom(CoreModel oldRoom)
         {
-            Room.View roomView = roomViews.Find(x => x.Uid == oldRoom.Uid);
-            roomView.RemoveCoreModel(oldRoom);
-            if (roomView.IsEmpty)
+            Room.CardView roomCard = roomCards.Find(x => x.Uid == oldRoom.Uid);
+            roomCard.RemoveCoreModel(oldRoom);
+            if (roomCard.IsEmpty)
             {
-                RemoveRoomView(roomView);
+                RemoveRoom(roomCard);
+                descriptionViewInstance.UnlinkCard();
             }
         }
 
         private void DeleteAllRooms()
         {
-            while (roomViews.Count > 0)
+            while (roomCards.Count > 0)
             {
-                Room.View roomView = roomViews.Last();
-                RemoveRoomView(roomView);
+                Room.CardView roomCard = roomCards.Last();
+                RemoveRoom(roomCard);
             }
         }
 
-        private void RemoveRoomView(Room.View roomView)
+        private void RemoveRoom(Room.CardView roomCard)
         {
-            _ = roomViews.Remove(roomView);
-            Destroy(roomView.gameObject);
+            _ = roomCards.Remove(roomCard);
+            Destroy(roomCard.gameObject);
         }
     }
 }
