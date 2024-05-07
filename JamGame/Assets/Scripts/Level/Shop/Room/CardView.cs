@@ -38,7 +38,7 @@ namespace Level.Shop.Room
         private List<Image> backgroundImages;
 
         [SerializeField]
-        private Color unHoveredColor;
+        private Color notHoveredColor;
 
         [SerializeField]
         private Color hoveredColor;
@@ -105,7 +105,7 @@ namespace Level.Shop.Room
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            SetBackgroundImagesColor(unHoveredColor);
+            SetBackgroundImagesColor(notHoveredColor);
             OnPointerExitEvent?.Invoke();
         }
 

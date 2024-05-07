@@ -24,19 +24,18 @@ namespace Level.Shop.View
         [SerializeField]
         private GameObject contentParent;
 
-        private bool FullyScrolledUp => Mathf.Abs(scrollRect.content.anchoredPosition.y) < 0.001;
-        private float HeightDelta =>
-            Mathf.Abs(scrollRect.content.rect.height - scrollRect.viewport.rect.height);
-        private bool FullyScrolledDown =>
-            Mathf.Abs(HeightDelta - scrollRect.content.anchoredPosition.y) < 0.001;
-
         private void Update()
         {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.viewport);
+            bool fullyScrolledUp = Mathf.Abs(scrollRect.content.anchoredPosition.y) < 0.001;
+            float heightDelta = Mathf.Abs(
+                scrollRect.content.rect.height - scrollRect.viewport.rect.height
+            );
+            bool fullyScrolledDown =
+                Mathf.Abs(heightDelta - scrollRect.content.anchoredPosition.y) < 0.001;
             if (scrollRect.viewport.rect.height <= scrollRect.content.rect.height)
             {
-                arrowUp.SetActive(!FullyScrolledUp);
-                arrowDown.SetActive(!FullyScrolledDown);
+                arrowUp.SetActive(!fullyScrolledUp);
+                arrowDown.SetActive(!fullyScrolledDown);
             }
             else
             {
