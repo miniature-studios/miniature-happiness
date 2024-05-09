@@ -21,7 +21,7 @@ namespace Level.Inventory
 
         [Required]
         [SerializeField]
-        private GameObject roomViewPrefab;
+        private Room.View roomViewPrefab;
 
         [Required]
         [SerializeField]
@@ -73,8 +73,7 @@ namespace Level.Inventory
         {
             if (!modelViewMap.TryGetValue(room.Uid, out Room.View view))
             {
-                GameObject viewGO = Instantiate(roomViewPrefab, container);
-                view = viewGO.GetComponent<Room.View>();
+                view = Instantiate(roomViewPrefab, container);
 
                 view.OnHoverChanged += (sender, hovered) =>
                     description.OnActiveRoomChanged(hovered ? sender : null);

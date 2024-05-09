@@ -55,10 +55,7 @@ namespace Level.Inventory.Room
             if (!IsEmpty && coreModel.Uid != Uid)
             {
                 Debug.LogError(
-                    "Trying to add room with wrong Uid. Expected: "
-                        + Uid
-                        + ", got: "
-                        + coreModel.Uid
+                    $"Trying to add room with wrong Uid. Expected: {Uid}, got: {coreModel.Uid}"
                 );
                 return;
             }
