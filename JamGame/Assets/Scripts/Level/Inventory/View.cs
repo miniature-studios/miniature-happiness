@@ -42,6 +42,7 @@ namespace Level.Inventory
             model.InventoryRoomsCollectionChanged += OnInventoryChanged;
         }
 
+        // Toggle callback.
         public void OpenClose(bool state)
         {
             roomList.SetActive(state);
