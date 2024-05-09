@@ -1,4 +1,7 @@
+using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Level.Boss
 {
@@ -6,14 +9,22 @@ namespace Level.Boss
     public class StressView : MonoBehaviour
     {
         [SerializeField]
-        private RectTransform bar;
+        [Required]
+        private Slider slider;
 
         [SerializeField]
+        [Required]
+        private TMP_Text value;
+
+        [SerializeField]
+        [RequiredIn(PrefabKind.InstanceInPrefab | PrefabKind.InstanceInScene)]
         private Model model;
 
         private void Update()
         {
-            bar.localScale = new Vector3(1.0f, Mathf.Clamp01(model.StressNormalized), 1.0f);
+            float clamped_value = Mathf.Clamp01(model.StressNormalized);
+            slider.value = clamped_value;
+            value.text = Mathf.RoundToInt(clamped_value * 100.0f).ToString();
         }
     }
 }
