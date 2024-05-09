@@ -83,7 +83,6 @@ namespace BuildingEditor
             buildingModeDropdown.AddOptions(gameModes.Select(x => x.ToString()).ToList());
             buildingModeDropdown.value = 0;
 
-            inventoryView.ShowInventory();
             inventoryController.AddRoomsFromAssets(INITIAL_ROOM_COUNT);
             coreModelByLabels = coreModelByRoomLabels.ToDictionary(
                 x => x.RoomTileLabel,

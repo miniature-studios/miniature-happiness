@@ -25,7 +25,7 @@ namespace Level.Inventory.Room
         [SerializeField]
         private List<CoreModel> coreModels = new();
 
-        public InternalUid Uid => coreModels.Last().Uid;
+        public InternalUid Uid => coreModels.FirstOrDefault()?.Uid;
 
         public bool IsEmpty => coreModels.Count == 0;
 
@@ -49,38 +49,36 @@ namespace Level.Inventory.Room
 
         public void AddCoreModel(CoreModel coreModel)
         {
+            if (!IsEmpty && coreModel.Uid != Uid)
+            {
+                Debug.LogError(
+                    "Trying to add room with wrong Uid. Expected: "
+                        + Uid
+                        + ", got: "
+                        + coreModel.Uid
+                );
+                return;
+            }
+
             coreModels.Add(coreModel);
             coreModel.transform.SetParent(transform);
 
             UpdateData();
         }
 
+        public void RemoveCoreModel(CoreModel coreModel)
+        {
+            _ = coreModels.Remove(coreModel);
+            if (!IsEmpty)
+            {
+                UpdateData();
+            }
+        }
+
         private void UpdateData()
         {
             miniature.sprite = coreModels.First().InventoryModel.Miniature;
             countLabel.text = coreModels.Count.ToString();
-        }
-
-        public void RemoveCoreModel(CoreModel coreModel)
-        {
-            _ = coreModels.Remove(coreModel);
-        }
-
-        public void Update()
-        {
-            //countLabel.text = coreModels.Count.ToString();
-            //if (inputActions.UI.ExtendInventoryTileInfo.IsPressed() && isHovered)
-            //{
-            //    //if (!extendedView.IsVisible)
-            //    //{
-            //    //    extendedView.Show();
-            //    //    extendedView.SetLabelText($"Rent: {CoreModelPrefab.RoomInfo.RentCost.Value}");
-            //    //}
-            //}
-            //else if (extendedView.IsVisible)
-            //{
-            //    extendedView.Hide();
-            //}
         }
 
         public void OnPointerEnter(PointerEventData eventData)

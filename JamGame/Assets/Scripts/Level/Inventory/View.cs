@@ -11,10 +11,6 @@ namespace Level.Inventory
     [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.View")]
     public class View : MonoBehaviour
     {
-        //[Required]
-        //[SerializeField]
-        //private AssetLabelReference inventoryViewsLabel;
-
         [Required]
         [SerializeField]
         private Transform container;
@@ -23,35 +19,15 @@ namespace Level.Inventory
         [SerializeField]
         private GameObject roomViewPrefab;
 
-        //[Required]
-        //[SerializeField]
-        //private TMP_Text buttonText;
-
         [Required]
         [SerializeField]
         private Model model;
 
-        //private Animator animator;
-        //private bool isInventoryVisible = false;
-
         private Dictionary<InternalUid, Room.View> modelViewMap = new();
-
-        //private List<Room.View> roomViews = new();
 
         private void Awake()
         {
-            //animator = GetComponent<Animator>();
-
             model.InventoryRoomsCollectionChanged += OnInventoryChanged;
-            // modelViewMap = AddressableTools<Room.View>.LoadAllFromLabel(inventoryViewsLabel);
-        }
-
-        // Called by button that open/closes inventory
-        public void InventoryButtonClick()
-        {
-            // isInventoryVisible ^= true;
-            //animator.SetBool("Showed", isInventoryVisible);
-            //buttonText.text = isInventoryVisible ? "Close" : "Open";
         }
 
         public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -106,18 +82,7 @@ namespace Level.Inventory
 
         private void RemoveAllRooms()
         {
-            //while (roomViews.Count > 0)
-            //{
-            //    Room.View roomView = roomViews.Last();
-            //    RemoveRoomView(roomView);
-            //}
-        }
-
-        public void ShowInventory()
-        {
-            //isInventoryVisible = true;
-            //animator.SetBool("Showed", true);
-            //buttonText.text = "Close";
+            // TODO
         }
     }
 }
