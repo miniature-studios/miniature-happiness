@@ -23,6 +23,10 @@ namespace Level.Inventory
         [SerializeField]
         private Model model;
 
+        [Required]
+        [SerializeField]
+        private RoomDescriptionView description;
+
         private Dictionary<InternalUid, Room.View> modelViewMap = new();
 
         private void Awake()
@@ -57,6 +61,10 @@ namespace Level.Inventory
             {
                 GameObject viewGO = Instantiate(roomViewPrefab, container);
                 view = viewGO.GetComponent<Room.View>();
+
+                view.OnHoverChanged += (sender, hovered) =>
+                    description.OnActiveRoomChanged(hovered ? sender : null);
+
                 modelViewMap.Add(room.Uid, view);
             }
 
@@ -82,7 +90,13 @@ namespace Level.Inventory
 
         private void RemoveAllRooms()
         {
-            // TODO
+            foreach (Room.View view in modelViewMap.Values)
+            {
+                view.RemoveAllCoreModels();
+                Destroy(view.gameObject);
+            }
+
+            modelViewMap.Clear();
         }
     }
 }

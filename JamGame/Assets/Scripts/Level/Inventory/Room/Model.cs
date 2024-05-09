@@ -10,5 +10,10 @@ namespace Level.Inventory.Room
         [SerializeField]
         private Sprite miniature;
         public Sprite Miniature => miniature;
+
+        [Required]
+        [SerializeField]
+        private Sprite descriptionImage;
+        public Sprite DescriptionImage => descriptionImage;
     }
 }

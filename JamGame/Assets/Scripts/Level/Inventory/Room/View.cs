@@ -26,11 +26,14 @@ namespace Level.Inventory.Room
         private List<CoreModel> coreModels = new();
 
         public InternalUid Uid => coreModels.FirstOrDefault()?.Uid;
+        public CoreModel CoreModel => coreModels.FirstOrDefault();
 
         public bool IsEmpty => coreModels.Count == 0;
 
-        private bool isHovered = false;
         private InputActions inputActions;
+
+        public delegate void HoverChangedHandler(View sender, bool hovered);
+        public event HoverChangedHandler OnHoverChanged;
 
         private void Awake()
         {
@@ -75,6 +78,11 @@ namespace Level.Inventory.Room
             }
         }
 
+        public void RemoveAllCoreModels()
+        {
+            coreModels.Clear();
+        }
+
         private void UpdateData()
         {
             miniature.sprite = coreModels.First().InventoryModel.Miniature;
@@ -83,12 +91,12 @@ namespace Level.Inventory.Room
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            isHovered = true;
+            OnHoverChanged?.Invoke(this, true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            isHovered = false;
+            OnHoverChanged?.Invoke(this, false);
         }
     }
 }
