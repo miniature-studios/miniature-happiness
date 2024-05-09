@@ -61,7 +61,6 @@ namespace Level.Inventory.Controller
             Vector2 position = Mouse.current.position.ReadValue();
             IEnumerable<GameObject> hits = Raycaster.UIRaycast(position);
             GameObject foundObject = hits.FirstOrDefault(x => x.TryGetComponent(out Room.View _));
-
             if (foundObject != null)
             {
                 return new SuccessResult<Room.View>(foundObject.GetComponent<Room.View>());

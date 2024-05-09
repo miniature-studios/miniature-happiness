@@ -2,6 +2,7 @@
 using System.Linq;
 using Common;
 using Level.Config;
+using Level.Inventory.Controller;
 using Level.Room;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Level.Shop
     {
         [SerializeField]
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        private Inventory.Controller.ControllerImpl inventoryController;
+        private ControllerImpl inventoryController;
 
         [Required]
         [SerializeField]
