@@ -17,7 +17,15 @@ namespace Level.Inventory
 
         [Required]
         [SerializeField]
+        private GameObject placeholder;
+
+        [Required]
+        [SerializeField]
         private GameObject roomViewPrefab;
+
+        [Required]
+        [SerializeField]
+        private GameObject roomList;
 
         [Required]
         [SerializeField]
@@ -32,6 +40,11 @@ namespace Level.Inventory
         private void Awake()
         {
             model.InventoryRoomsCollectionChanged += OnInventoryChanged;
+        }
+
+        public void OpenClose(bool state)
+        {
+            roomList.SetActive(state);
         }
 
         public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -69,10 +82,14 @@ namespace Level.Inventory
             }
 
             view.AddCoreModel(room);
+
+            placeholder.SetActive(false);
         }
 
         private void RemoveRoom(CoreModel room)
         {
+            description.OnActiveRoomChanged(null);
+
             if (modelViewMap.TryGetValue(room.Uid, out Room.View view))
             {
                 view.RemoveCoreModel(room);
@@ -85,6 +102,11 @@ namespace Level.Inventory
             else
             {
                 Debug.LogError("Cannot remove room from inventory: Uid is not present.");
+            }
+
+            if (modelViewMap.Count == 0)
+            {
+                placeholder.SetActive(true);
             }
         }
 
