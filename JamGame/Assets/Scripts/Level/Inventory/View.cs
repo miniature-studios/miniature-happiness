@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using Common;
 using Level.Room;
 using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Level.Inventory
 {
-    [RequireComponent(typeof(Animator))]
     [AddComponentMenu("Scripts/Level/Inventory/Level.Inventory.View")]
     public class View : MonoBehaviour
     {
-        [Required]
-        [SerializeField]
-        private AssetLabelReference inventoryViewsLabel;
+        //[Required]
+        //[SerializeField]
+        //private AssetLabelReference inventoryViewsLabel;
 
         [Required]
         [SerializeField]
@@ -25,32 +21,37 @@ namespace Level.Inventory
 
         [Required]
         [SerializeField]
-        private TMP_Text buttonText;
+        private GameObject roomViewPrefab;
+
+        //[Required]
+        //[SerializeField]
+        //private TMP_Text buttonText;
 
         [Required]
         [SerializeField]
         private Model model;
 
-        private Animator animator;
-        private bool isInventoryVisible = false;
+        //private Animator animator;
+        //private bool isInventoryVisible = false;
 
         private Dictionary<InternalUid, Room.View> modelViewMap = new();
-        private List<Room.View> roomViews = new();
+
+        //private List<Room.View> roomViews = new();
 
         private void Awake()
         {
-            animator = GetComponent<Animator>();
+            //animator = GetComponent<Animator>();
 
             model.InventoryRoomsCollectionChanged += OnInventoryChanged;
-            modelViewMap = AddressableTools<Room.View>.LoadAllFromLabel(inventoryViewsLabel);
+            // modelViewMap = AddressableTools<Room.View>.LoadAllFromLabel(inventoryViewsLabel);
         }
 
         // Called by button that open/closes inventory
         public void InventoryButtonClick()
         {
-            isInventoryVisible ^= true;
-            animator.SetBool("Showed", isInventoryVisible);
-            buttonText.text = isInventoryVisible ? "Close" : "Open";
+            // isInventoryVisible ^= true;
+            //animator.SetBool("Showed", isInventoryVisible);
+            //buttonText.text = isInventoryVisible ? "Close" : "Open";
         }
 
         public void OnInventoryChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -76,53 +77,47 @@ namespace Level.Inventory
 
         private void AddRoom(CoreModel room)
         {
-            Room.View foundView = roomViews.Find(x => x.Uid == room.Uid);
-            if (foundView != null)
+            if (!modelViewMap.TryGetValue(room.Uid, out Room.View view))
             {
-                foundView.AddCoreModel(room);
+                GameObject viewGO = Instantiate(roomViewPrefab, container);
+                view = viewGO.GetComponent<Room.View>();
+                modelViewMap.Add(room.Uid, view);
             }
-            else if (modelViewMap.TryGetValue(room.Uid, out Room.View roomView))
-            {
-                Room.View newRoomView = Instantiate(roomView, container);
-                newRoomView.AddCoreModel(room);
-                roomViews.Add(newRoomView);
-            }
-            else
-            {
-                Debug.LogError($"Core model {room.name} not presented in Inventory View");
-            }
+
+            view.AddCoreModel(room);
         }
 
         private void RemoveRoom(CoreModel room)
         {
-            Room.View roomView = roomViews.Find(x => x.Uid == room.Uid);
-            roomView.RemoveCoreModel(room);
-            if (roomView.IsEmpty)
+            if (modelViewMap.TryGetValue(room.Uid, out Room.View view))
             {
-                RemoveRoomView(roomView);
+                view.RemoveCoreModel(room);
+                if (view.IsEmpty)
+                {
+                    _ = modelViewMap.Remove(room.Uid);
+                    Destroy(view.gameObject);
+                }
+            }
+            else
+            {
+                Debug.LogError("Cannot remove room from inventory: Uid is not present.");
             }
         }
 
         private void RemoveAllRooms()
         {
-            while (roomViews.Count > 0)
-            {
-                Room.View roomView = roomViews.Last();
-                RemoveRoomView(roomView);
-            }
+            //while (roomViews.Count > 0)
+            //{
+            //    Room.View roomView = roomViews.Last();
+            //    RemoveRoomView(roomView);
+            //}
         }
 
         public void ShowInventory()
         {
-            isInventoryVisible = true;
-            animator.SetBool("Showed", true);
-            buttonText.text = "Close";
-        }
-
-        private void RemoveRoomView(Room.View roomView)
-        {
-            _ = roomViews.Remove(roomView);
-            Destroy(roomView.gameObject);
+            //isInventoryVisible = true;
+            //animator.SetBool("Showed", true);
+            //buttonText.text = "Close";
         }
     }
 }
