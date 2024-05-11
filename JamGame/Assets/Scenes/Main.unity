@@ -2711,6 +2711,9 @@ MonoBehaviour:
     - task:
         rid: 5009512970511974400
       cost: 0
+    - task:
+        rid: 3161708622866808832
+      cost: 0
   ActiveTasksChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2729,6 +2732,13 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 3161708622866808832
+      type: {class: DontSatisfyNeed, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        employeeManager: {fileID: 42303835}
+        targetNeed: 0
+        targetDuration:
+          days: 1
     - rid: 5009512970511974400
       type: {class: MinEarnPerWorkingSession, ns: Level.Boss.Task, asm: Assembly-CSharp}
       data:

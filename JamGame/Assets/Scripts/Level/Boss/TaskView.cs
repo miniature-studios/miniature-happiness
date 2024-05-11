@@ -3,6 +3,7 @@ using Level.Boss.Task;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Level.Boss
 {
@@ -34,6 +35,20 @@ namespace Level.Boss
 
         [SerializeField]
         [Required]
+        private GameObject progressScaleParent;
+
+        [SerializeField]
+        [Required]
+        private Color progressComplete;
+
+        [SerializeField]
+        [Required]
+        private Color progressIncomplete;
+
+        private Image[] progressScale;
+
+        [SerializeField]
+        [Required]
         private GameObject unfoldedIcon;
 
         private RectTransform rectTransform;
@@ -48,6 +63,8 @@ namespace Level.Boss
             rectTransform = transform.GetComponent<RectTransform>();
             foldedDescriptionHeight = description.rectTransform.sizeDelta.y;
             descriptionPadding = rectTransform.sizeDelta.y - foldedDescriptionHeight;
+
+            progressScale = progressScaleParent.GetComponentsInChildren<Image>();
         }
 
         // Called by toggle.
@@ -86,8 +103,15 @@ namespace Level.Boss
         private void FixedUpdate()
         {
             Progress progress = task.Progress;
-            _ = Mathf.Clamp01(progress.Completion / progress.Overall);
-            //progress_bar.localScale = new Vector3(bar_pos, 1.0f);
+
+            float progress_normalized = Mathf.Clamp01(progress.Completion / progress.Overall);
+            int scale_divisions = Mathf.RoundToInt(progress_normalized * progressScale.Length);
+            for (int i = 0; i < progressScale.Length; i++)
+            {
+                Color color = (i < scale_divisions) ? progressComplete : progressIncomplete;
+                progressScale[i].color = color;
+            }
+
             progressLabel.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
 
             Vector2 desired_size = rectTransform.sizeDelta;
