@@ -53,25 +53,33 @@ namespace Level.Boss
 
         private RectTransform rectTransform;
 
-        private bool unfolded = false;
-
-        private float descriptionPadding;
-        private float foldedDescriptionHeight;
+        private float initialHeight;
 
         private void Start()
         {
             rectTransform = transform.GetComponent<RectTransform>();
-            foldedDescriptionHeight = description.rectTransform.sizeDelta.y;
-            descriptionPadding = rectTransform.sizeDelta.y - foldedDescriptionHeight;
+            initialHeight = rectTransform.sizeDelta.y;
 
             progressScale = progressScaleParent.GetComponentsInChildren<Image>();
         }
 
         // Called by toggle.
-        public void FoldStateChanged(bool state)
+        public void FoldStateChanged(bool unfolded)
         {
-            unfoldedIcon.SetActive(state);
-            unfolded = state;
+            unfoldedIcon.SetActive(unfolded);
+
+            Vector2 desired_size = rectTransform.sizeDelta;
+            if (unfolded)
+            {
+                float current_size = description.renderedHeight;
+                desired_size.y = description.preferredHeight + initialHeight - current_size;
+            }
+            else
+            {
+                desired_size.y = initialHeight;
+            }
+
+            rectTransform.sizeDelta = desired_size;
         }
 
         private void UpdateFromTask()
@@ -113,13 +121,6 @@ namespace Level.Boss
             }
 
             progressLabel.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
-
-            Vector2 desired_size = rectTransform.sizeDelta;
-            float description_height = unfolded
-                ? description.preferredHeight
-                : foldedDescriptionHeight;
-            desired_size.y = descriptionPadding + description_height;
-            rectTransform.sizeDelta = desired_size;
         }
     }
 }
