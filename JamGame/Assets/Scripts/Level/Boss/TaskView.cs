@@ -83,7 +83,7 @@ namespace Level.Boss
             };
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             Progress progress = task.Progress;
             _ = Mathf.Clamp01(progress.Completion / progress.Overall);
@@ -91,14 +91,10 @@ namespace Level.Boss
             progressLabel.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
 
             Vector2 desired_size = rectTransform.sizeDelta;
-            if (unfolded)
-            {
-                desired_size.y = descriptionPadding + description.preferredHeight;
-            }
-            else
-            {
-                desired_size.y = descriptionPadding + foldedDescriptionHeight;
-            }
+            float description_height = unfolded
+                ? description.preferredHeight
+                : foldedDescriptionHeight;
+            desired_size.y = descriptionPadding + description_height;
             rectTransform.sizeDelta = desired_size;
         }
     }

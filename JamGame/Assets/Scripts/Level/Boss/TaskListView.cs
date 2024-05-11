@@ -20,6 +20,17 @@ namespace Level.Boss
 
         private List<TaskView> task_views = new();
 
+        [SerializeField]
+        [Required]
+        private GameObject unfoldedIcon;
+
+        // Called by toggle.
+        public void FoldStateChanged(bool state)
+        {
+            unfoldedIcon.SetActive(state);
+            tasksParent.SetActive(state);
+        }
+
         public void OnActiveTasksChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
