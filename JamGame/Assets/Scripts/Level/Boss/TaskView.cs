@@ -1,11 +1,13 @@
 using System;
 using Level.Boss.Task;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 
 namespace Level.Boss
 {
     [AddComponentMenu("Scripts/Level/Boss/Level.Boss.TaskView")]
+    [RequireComponent(typeof(RectTransform))]
     public class TaskView : MonoBehaviour
     {
         private ITask task;
@@ -20,13 +22,40 @@ namespace Level.Boss
         }
 
         [SerializeField]
+        [Required]
         private TMP_Text description;
 
         [SerializeField]
-        private RectTransform progress_bar;
+        private RectTransform progressBar;
 
         [SerializeField]
-        private TMP_Text progress_label;
+        [Required]
+        private TMP_Text progressLabel;
+
+        [SerializeField]
+        [Required]
+        private GameObject unfoldedIcon;
+
+        private RectTransform rectTransform;
+
+        private bool unfolded = false;
+
+        private float descriptionPadding;
+        private float foldedDescriptionHeight;
+
+        private void Start()
+        {
+            rectTransform = transform.GetComponent<RectTransform>();
+            foldedDescriptionHeight = description.rectTransform.sizeDelta.y;
+            descriptionPadding = rectTransform.sizeDelta.y - foldedDescriptionHeight;
+        }
+
+        // Called by toggle.
+        public void FoldStateChanged(bool state)
+        {
+            unfoldedIcon.SetActive(state);
+            unfolded = state;
+        }
 
         private void UpdateFromTask()
         {
@@ -57,9 +86,20 @@ namespace Level.Boss
         private void Update()
         {
             Progress progress = task.Progress;
-            float bar_pos = Mathf.Clamp01(progress.Completion / progress.Overall);
-            progress_bar.localScale = new Vector3(bar_pos, 1.0f);
-            progress_label.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
+            _ = Mathf.Clamp01(progress.Completion / progress.Overall);
+            //progress_bar.localScale = new Vector3(bar_pos, 1.0f);
+            progressLabel.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
+
+            Vector2 desired_size = rectTransform.sizeDelta;
+            if (unfolded)
+            {
+                desired_size.y = descriptionPadding + description.preferredHeight;
+            }
+            else
+            {
+                desired_size.y = descriptionPadding + foldedDescriptionHeight;
+            }
+            rectTransform.sizeDelta = desired_size;
         }
     }
 }
