@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Level.GlobalTime
@@ -9,36 +8,23 @@ namespace Level.GlobalTime
     public class View : MonoBehaviour
     {
         [SerializeField]
-        private Button buttonX05;
+        [Required]
+        private ToggleGroup toggleGroup;
 
         [SerializeField]
-        private Button buttonX1;
+        [Required]
+        private Model model;
 
-        [SerializeField]
-        private Button buttonX2;
+        private Toggle active = null;
 
-        [SerializeField]
-        private Button buttonX5;
-
-        private List<Button> buttons;
-
-        private void Start()
+        private void Update()
         {
-            buttons = new List<Button> { buttonX05, buttonX1, buttonX2, buttonX5 };
-
-            foreach (Button button in buttons)
+            Toggle new_active = toggleGroup.GetFirstActiveToggle();
+            if (new_active != active)
             {
-                button.onClick.AddListener(new UnityAction(() => UpdateActiveButtons(button)));
-            }
-
-            UpdateActiveButtons(buttonX1);
-        }
-
-        private void UpdateActiveButtons(Button active_button)
-        {
-            foreach (Button button in buttons)
-            {
-                button.image.color = button != active_button ? Color.white : Color.black;
+                active = new_active;
+                float value = active.GetComponent<TimeScaleValue>().Value;
+                model.SetTimeScale(value);
             }
         }
     }
