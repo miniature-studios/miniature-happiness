@@ -1,11 +1,14 @@
 using System;
 using Level.Boss.Task;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Level.Boss
 {
     [AddComponentMenu("Scripts/Level/Boss/Level.Boss.TaskView")]
+    [RequireComponent(typeof(RectTransform))]
     public class TaskView : MonoBehaviour
     {
         private ITask task;
@@ -20,13 +23,64 @@ namespace Level.Boss
         }
 
         [SerializeField]
+        [Required]
         private TMP_Text description;
 
         [SerializeField]
-        private RectTransform progress_bar;
+        private RectTransform progressBar;
 
         [SerializeField]
-        private TMP_Text progress_label;
+        [Required]
+        private TMP_Text progressLabel;
+
+        [SerializeField]
+        [Required]
+        private GameObject progressScaleParent;
+
+        [SerializeField]
+        [Required]
+        private Color progressComplete;
+
+        [SerializeField]
+        [Required]
+        private Color progressIncomplete;
+
+        private Image[] progressScale;
+
+        [SerializeField]
+        [Required]
+        private GameObject unfoldedIcon;
+
+        private RectTransform rectTransform;
+
+        private float initialHeight;
+
+        private void Start()
+        {
+            rectTransform = transform.GetComponent<RectTransform>();
+            initialHeight = rectTransform.sizeDelta.y;
+
+            progressScale = progressScaleParent.GetComponentsInChildren<Image>();
+        }
+
+        // Called by toggle.
+        public void FoldStateChanged(bool unfolded)
+        {
+            unfoldedIcon.SetActive(unfolded);
+
+            Vector2 desired_size = rectTransform.sizeDelta;
+            if (unfolded)
+            {
+                float current_size = description.renderedHeight;
+                desired_size.y = description.preferredHeight + initialHeight - current_size;
+            }
+            else
+            {
+                desired_size.y = initialHeight;
+            }
+
+            rectTransform.sizeDelta = desired_size;
+        }
 
         private void UpdateFromTask()
         {
@@ -54,12 +108,19 @@ namespace Level.Boss
             };
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             Progress progress = task.Progress;
-            float bar_pos = Mathf.Clamp01(progress.Completion / progress.Overall);
-            progress_bar.localScale = new Vector3(bar_pos, 1.0f);
-            progress_label.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
+
+            float progress_normalized = Mathf.Clamp01(progress.Completion / progress.Overall);
+            int scale_divisions = Mathf.RoundToInt(progress_normalized * progressScale.Length);
+            for (int i = 0; i < progressScale.Length; i++)
+            {
+                Color color = (i < scale_divisions) ? progressComplete : progressIncomplete;
+                progressScale[i].color = color;
+            }
+
+            progressLabel.text = $"{progress.Completion:0.#}/{progress.Overall:0.#}";
         }
     }
 }
