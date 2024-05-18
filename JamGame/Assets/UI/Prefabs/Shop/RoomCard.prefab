@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 6108360059792983280}
   - component: {fileID: 7279070832766532305}
   m_Layer: 5
-  m_Name: svg money
+  m_Name: Coin Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1210,6 +1210,7 @@ GameObject:
   - component: {fileID: 778919379936772926}
   - component: {fileID: 6662198867900677913}
   - component: {fileID: 811209832451456189}
+  - component: {fileID: 7600492571328539320}
   m_Layer: 5
   m_Name: RoomCard
   m_TagString: Untagged
@@ -1269,14 +1270,26 @@ MonoBehaviour:
   rentLabel: {fileID: 4648321687112462192}
   costLabel: {fileID: 4493804747822278440}
   countLabel: {fileID: 2764670427296044601}
-  backgroundImages:
-  - {fileID: 1419942320098547921}
-  - {fileID: 4275242665426267381}
-  - {fileID: 6036420132734864821}
-  notHoveredColor: {r: 0.854902, g: 0.8705883, b: 0.91372555, a: 1}
-  hoveredColor: {r: 1, g: 1, b: 1, a: 1}
   coreModels: []
   shopController: {fileID: 0}
+--- !u!114 &7600492571328539320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6928008023308782657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d7b83d6f3c7ce498f4ce0bf40525db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundImages:
+  - {fileID: 6036420132734864821}
+  - {fileID: 4275242665426267381}
+  - {fileID: 1419942320098547921}
+  hoveredColor: {r: 1, g: 1, b: 1, a: 1}
+  notHoveredColor: {r: 0.854902, g: 0.8705883, b: 0.91372555, a: 1}
 --- !u!1 &7051542114486042517
 GameObject:
   m_ObjectHideFlags: 0

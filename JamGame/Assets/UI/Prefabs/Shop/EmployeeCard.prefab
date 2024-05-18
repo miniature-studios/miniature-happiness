@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 9111150661418903069}
   - component: {fileID: 1935715186136827008}
   - component: {fileID: 3490105156349357792}
+  - component: {fileID: 8489994447573637624}
   m_Layer: 5
   m_Name: EmployeeCard
   m_TagString: Untagged
@@ -113,7 +114,25 @@ MonoBehaviour:
   iconsParent: {fileID: 1235003604497811986}
   coinIcon: {fileID: 110075574414014023}
   hiredIconSprite: {fileID: 21300000, guid: 52577a42525aead49bc3e7b8794ea6c7, type: 3}
+  hireButton: {fileID: 7372153695241045917}
   hired: 0
+--- !u!114 &8489994447573637624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923029691524334046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d7b83d6f3c7ce498f4ce0bf40525db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundImages:
+  - {fileID: 2373722469028777171}
+  - {fileID: 6094982324553553410}
+  hoveredColor: {r: 1, g: 1, b: 1, a: 1}
+  notHoveredColor: {r: 0.9176471, g: 0.93725497, b: 0.9803922, a: 1}
 --- !u!1 &2451244205093244272
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +316,7 @@ GameObject:
   - component: {fileID: 6483646329088574111}
   - component: {fileID: 7372153695241045917}
   m_Layer: 5
-  m_Name: Cost
+  m_Name: Hire zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -369,7 +388,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 0.96856225, b: 0.69166666, a: 1}
     m_PressedColor: {r: 1, g: 0.94519633, b: 0.4625, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.85490197, g: 0.87058824, b: 0.9137255, a: 1}
+    m_DisabledColor: {r: 0.9215687, g: 0.94117653, b: 0.98823535, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1292,7 +1311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1235003604497811986
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1307,10 +1326,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5848477133842157462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -16}
-  m_SizeDelta: {x: 20, y: 32}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &674484503305063756
 MonoBehaviour:

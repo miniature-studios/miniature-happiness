@@ -48,6 +48,10 @@ namespace Level.Shop.Employee
         [SerializeField]
         private Sprite hiredIconSprite;
 
+        [Required]
+        [SerializeField]
+        private Button hireButton;
+
         [ReadOnly]
         [SerializeField]
         private bool hired = false;
@@ -109,6 +113,7 @@ namespace Level.Shop.Employee
             {
                 coinIcon.sprite = hiredIconSprite;
                 hireCostLabel.gameObject.SetActive(false);
+                hireButton.interactable = false;
                 hired = true;
             }
         }
