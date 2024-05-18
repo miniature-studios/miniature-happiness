@@ -6,8 +6,7 @@ namespace Level.Config
 {
     [CreateAssetMenu(
         fileName = "MeetingShopRoomBundle",
-        menuName = "Level/Meeting Shop Room Bundle",
-        order = 0
+        menuName = "Level/Meeting Shop Room Bundle"
     )]
     public class MeetingShopRoomBundle : ScriptableObject
     {

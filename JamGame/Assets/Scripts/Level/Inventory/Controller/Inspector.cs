@@ -19,7 +19,7 @@ namespace Level.Inventory.Controller
         public void AddRoomsFromAssets(int count)
         {
             Dictionary<InternalUid, CoreModel> dictionary =
-                AddressableTools<CoreModel>.LoadAllFromLabel("CoreModel");
+                AddressableTools.LoadAllGameObjectAssets<CoreModel>("CoreModel");
             foreach (InternalUid uid in dictionary.Keys)
             {
                 for (int i = 0; i < count; i++)

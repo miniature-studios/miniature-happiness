@@ -38,7 +38,6 @@ namespace Level.Room
         private static Dictionary<InternalUid, CoreModel> uidPrefabsMap = new();
 
         [SerializeField]
-        [InlineProperty]
         private InternalUid uid;
         public InternalUid Uid => uid;
 
@@ -76,7 +75,7 @@ namespace Level.Room
 
         private static void ForceUpdateUidPrefabsMap()
         {
-            uidPrefabsMap = AddressableTools<CoreModel>.LoadAllFromLabel(coreModelsLabel);
+            uidPrefabsMap = AddressableTools.LoadAllGameObjectAssets<CoreModel>(coreModelsLabel);
         }
 
         public static CoreModel InstantiateCoreModel(TileConfig config)

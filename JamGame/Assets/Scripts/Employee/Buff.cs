@@ -1,16 +1,14 @@
 using System.Collections.Generic;
 using Common;
 using Level.GlobalTime;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Employee
 {
-    [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff", order = 1)]
+    [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff")]
     public class Buff : ScriptableObject
     {
         [SerializeField]
-        [InlineProperty]
         private InternalUid uid;
         public InternalUid Uid => uid;
 

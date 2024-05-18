@@ -2,16 +2,14 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Common;
 using Employee.Needs;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Personality
 {
-    [CreateAssetMenu(fileName = "Quirk", menuName = "Employee/Quirk", order = 3)]
+    [CreateAssetMenu(fileName = "Quirk", menuName = "Employee/Quirk")]
     public class Quirk : ScriptableObject
     {
         [SerializeField]
-        [InlineProperty]
         private InternalUid uid;
         public InternalUid Uid => uid;
 

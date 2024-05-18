@@ -79,12 +79,16 @@ namespace Employee.ExtendedInfo
         {
             if (quirkModelViewMap.Count == 0)
             {
-                quirkModelViewMap = AddressableTools<QuirkView>.LoadAllFromLabel(quirkViewsLabel);
+                quirkModelViewMap = AddressableTools.LoadAllGameObjectAssets<QuirkView>(
+                    quirkViewsLabel
+                );
             }
 
             if (buffModelViewMap.Count == 0)
             {
-                buffModelViewMap = AddressableTools<BuffView>.LoadAllFromLabel(buffViewsLabel);
+                buffModelViewMap = AddressableTools.LoadAllGameObjectAssets<BuffView>(
+                    buffViewsLabel
+                );
             }
         }
 

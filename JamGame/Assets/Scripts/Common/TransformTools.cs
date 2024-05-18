@@ -4,6 +4,36 @@ namespace Common
 {
     public static class TransformTools
     {
+        public static void DestroyChilds(this Transform transform)
+        {
+            int stopper = 0;
+            while (transform.childCount > 0)
+            {
+                GameObject.Destroy(transform.GetChild(0).gameObject);
+                stopper++;
+                if (stopper == 8000)
+                {
+                    Debug.LogError("Infinity loop!");
+                    return;
+                }
+            }
+        }
+
+        public static void DestroyChildsImmediate(this Transform transform)
+        {
+            int stopper = 0;
+            while (transform.childCount > 0)
+            {
+                GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
+                stopper++;
+                if (stopper == 8000)
+                {
+                    Debug.LogError("Infinity loop!");
+                    return;
+                }
+            }
+        }
+
         public static void SetXPosition(this Transform transform, float x)
         {
             transform.position = new(x, transform.position.y, transform.position.z);

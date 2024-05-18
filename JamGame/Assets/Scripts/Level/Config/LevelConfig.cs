@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Level.Config
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "LevelConfig", menuName = "Level/LevelConfig", order = 0)]
+    [CreateAssetMenu(fileName = "LevelConfig", menuName = "Level/LevelConfig")]
     public class LevelConfig : ScriptableObject
     {
         [SerializeReference]

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Employee.Personality;
 using Pickle;
 using UnityEngine;
 

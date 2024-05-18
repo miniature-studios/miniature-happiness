@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using Common;
+using Employee.Personality;
 using Level.Config;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Level.Shop.Employee
 {
     [AddComponentMenu("Scripts/Level/Shop.Employee/Level.Shop.Employee.CardView")]
     public class CardView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [ReadOnly]
-        [SerializeField]
-        private EmployeeConfig employeeConfig;
-        public EmployeeConfig EmployeeConfig => employeeConfig;
-
         [Required]
         [SerializeField]
         private TMP_Text nameLabel;
@@ -27,7 +27,39 @@ namespace Level.Shop.Employee
         [SerializeField]
         private TMP_Text professionLabel;
 
+        [Required]
+        [SerializeField]
+        private AssetLabelReference quirkConfigLabel;
+
+        [Required]
+        [AssetsOnly]
+        [SerializeField]
+        private CardQuirkIcon quirkIconPrefab;
+
+        [Required]
+        [SerializeField]
+        private Transform iconsParent;
+
+        [Required]
+        [SerializeField]
+        private Image coinIcon;
+
+        [Required]
+        [SerializeField]
+        private Sprite hiredIconSprite;
+
+        [ReadOnly]
+        [SerializeField]
+        private bool hired = false;
+
+        [ReadOnly]
+        [SerializeField]
+        private EmployeeConfig employeeConfig;
+        public EmployeeConfig EmployeeConfig => employeeConfig;
+
         private Controller controller;
+        private Dictionary<InternalUid, QuirkConfig> quirkConfigsByUid;
+        public Dictionary<InternalUid, QuirkConfig> QuirkConfigsByUid => quirkConfigsByUid;
 
         public event Action OnPointerEnterEvent;
         public event Action OnPointerExitEvent;
@@ -35,6 +67,9 @@ namespace Level.Shop.Employee
         public void Initialize()
         {
             controller = GetComponentInParent<Controller>(true);
+            quirkConfigsByUid = AddressableTools.LoadAllScriptableObjectAssets<QuirkConfig>(
+                quirkConfigLabel
+            );
         }
 
         public void SetEmployeeConfig(EmployeeConfig employeeConfig)
@@ -48,14 +83,33 @@ namespace Level.Shop.Employee
             nameLabel.text = EmployeeConfig.Name;
             hireCostLabel.text = EmployeeConfig.HireCost.ToString();
             professionLabel.text = EmployeeConfig.Profession;
+
+            iconsParent.DestroyChildsImmediate();
+            bool isQuirksExists = EmployeeConfig.Quirks.Count != 0;
+            iconsParent.gameObject.SetActive(isQuirksExists);
+            if (isQuirksExists)
+            {
+                foreach (Quirk quirk in EmployeeConfig.Quirks)
+                {
+                    CardQuirkIcon quirkIcon = Instantiate(quirkIconPrefab, iconsParent);
+                    quirkIcon.SetIcon(quirkConfigsByUid[quirk.Uid].Icon);
+                }
+            }
         }
 
         // Called be pressing button.
         public void TryHireEmployee()
         {
+            if (hired)
+            {
+                return;
+            }
+
             if (controller.TryBuyEmployee(EmployeeConfig).Success)
             {
-                Destroy(gameObject);
+                coinIcon.sprite = hiredIconSprite;
+                hireCostLabel.gameObject.SetActive(false);
+                hired = true;
             }
         }
 

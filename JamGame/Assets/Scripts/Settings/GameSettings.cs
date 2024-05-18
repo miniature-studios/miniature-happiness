@@ -4,11 +4,7 @@ using UnityEngine;
 
 namespace Settings
 {
-    [CreateAssetMenu(
-        fileName = "GameSettings",
-        menuName = "Settings/Create GameSettings",
-        order = 5
-    )]
+    [CreateAssetMenu(fileName = "GameSettings", menuName = "Settings/Create GameSettings")]
     public class GameSettings : ScriptableObject
     {
         [SerializeField]

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Level.Config
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList", order = 0)]
+    [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList")]
     public class EmployeeNameList : ScriptableObject
     {
         [SerializeField]

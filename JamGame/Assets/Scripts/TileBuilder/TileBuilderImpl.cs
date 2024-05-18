@@ -120,7 +120,7 @@ namespace TileBuilder
             }
             InstantiatedViews.Clear();
 
-            modelViewMap = AddressableTools<TileUnionImpl>.LoadAllFromLabel(tileUnionsLabel);
+            modelViewMap = AddressableTools.LoadAllGameObjectAssets<TileUnionImpl>(tileUnionsLabel);
             foreach (KeyValuePair<InternalUid, TileUnionImpl> pair in modelViewMap)
             {
                 TileUnionImpl unionInstance = Instantiate(pair.Value, stashRootObject.transform);

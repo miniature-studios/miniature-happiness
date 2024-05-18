@@ -5,27 +5,24 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 namespace Common
 {
-    public struct AssetWithLocation<T>
-        where T : MonoBehaviour
+    public static class AddressableTools
     {
-        public IResourceLocation Location;
-        public T Asset;
-    }
-
-    public static class AddressableTools<T>
-        where T : MonoBehaviour, IUidHandle
-    {
-        public static Dictionary<InternalUid, T> LoadAllFromLabel(AssetLabelReference assetLabel)
+        public static Dictionary<InternalUid, T> LoadAllGameObjectAssets<T>(
+            AssetLabelReference assetLabel
+        )
+            where T : MonoBehaviour, IUidHandle
         {
-            return LoadAllFromLabel((object)assetLabel);
+            return LoadAllGameObjectAssets<T>((object)assetLabel);
         }
 
-        public static Dictionary<InternalUid, T> LoadAllFromLabel(string assetLabel)
+        public static Dictionary<InternalUid, T> LoadAllGameObjectAssets<T>(string assetLabel)
+            where T : MonoBehaviour, IUidHandle
         {
-            return LoadAllFromLabel((object)assetLabel);
+            return LoadAllGameObjectAssets<T>((object)assetLabel);
         }
 
-        private static Dictionary<InternalUid, T> LoadAllFromLabel(object assetLabel)
+        private static Dictionary<InternalUid, T> LoadAllGameObjectAssets<T>(object assetLabel)
+            where T : MonoBehaviour, IUidHandle
         {
             Dictionary<InternalUid, T> dictionary = new();
             IList<IResourceLocation> locations = Addressables
@@ -33,7 +30,7 @@ namespace Common
                 .WaitForCompletion();
             foreach (IResourceLocation resourceLocation in locations)
             {
-                Result<T> result = TryLoadAsset(resourceLocation);
+                Result<T> result = TryLoadGameObjectAsset<T>(resourceLocation);
                 if (result.Failure)
                 {
                     Debug.LogError(result.Error);
@@ -56,7 +53,8 @@ namespace Common
             return dictionary;
         }
 
-        private static Result<T> TryLoadAsset(IResourceLocation resourceLocation)
+        private static Result<T> TryLoadGameObjectAsset<T>(IResourceLocation resourceLocation)
+            where T : MonoBehaviour, IUidHandle
         {
             GameObject gameObject = Addressables
                 .LoadAssetAsync<GameObject>(resourceLocation)
@@ -64,6 +62,64 @@ namespace Common
             if (gameObject.TryGetComponent(out T component))
             {
                 return new SuccessResult<T>(component);
+            }
+            else
+            {
+                return new FailResult<T>("Tried to load asset with wrong component.");
+            }
+        }
+
+        public static Dictionary<InternalUid, T> LoadAllScriptableObjectAssets<T>(
+            AssetLabelReference assetLabel
+        )
+            where T : ScriptableObject, IUidHandle
+        {
+            return LoadAllScriptableObjectAssets<T>((object)assetLabel);
+        }
+
+        private static Dictionary<InternalUid, T> LoadAllScriptableObjectAssets<T>(
+            object assetLabel
+        )
+            where T : ScriptableObject, IUidHandle
+        {
+            Dictionary<InternalUid, T> dictionary = new();
+            IList<IResourceLocation> locations = Addressables
+                .LoadResourceLocationsAsync(assetLabel)
+                .WaitForCompletion();
+            foreach (IResourceLocation resourceLocation in locations)
+            {
+                Result<T> result = TryLoadScriptableObjectAsset<T>(resourceLocation);
+                if (result.Failure)
+                {
+                    Debug.LogError(result.Error);
+                    continue;
+                }
+
+                InternalUid uid = result.Data.Uid;
+
+                if (dictionary.ContainsKey(uid))
+                {
+                    Debug.LogError(
+                        $"Uid duplication in {result.Data.name} "
+                            + $"and {dictionary[uid].name} assets."
+                    );
+                    continue;
+                }
+
+                dictionary.Add(uid, result.Data);
+            }
+            return dictionary;
+        }
+
+        private static Result<T> TryLoadScriptableObjectAsset<T>(IResourceLocation resourceLocation)
+            where T : ScriptableObject, IUidHandle
+        {
+            ScriptableObject scriptableObject = Addressables
+                .LoadAssetAsync<ScriptableObject>(resourceLocation)
+                .WaitForCompletion();
+            if (scriptableObject is T casted)
+            {
+                return new SuccessResult<T>(casted);
             }
             else
             {

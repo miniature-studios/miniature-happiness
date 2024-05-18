@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Common
 {
+    [InlineProperty]
     [Serializable]
     public class InternalUid
     {

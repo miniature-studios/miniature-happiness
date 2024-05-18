@@ -4,8 +4,7 @@ namespace Settings
 {
     [CreateAssetMenu(
         fileName = "ProjectedTilesSettings",
-        menuName = "Settings/Create ProjectedTilesSettings",
-        order = 6
+        menuName = "Settings/Create ProjectedTilesSettings"
     )]
     public class ProjectedTilesSettings : ScriptableObject
     {

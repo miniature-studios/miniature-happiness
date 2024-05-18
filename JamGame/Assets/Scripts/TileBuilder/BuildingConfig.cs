@@ -15,15 +15,14 @@ namespace TileBuilder
         [ReadOnly]
         [HideLabel]
         [SerializeField]
-        [InlineProperty]
         [Title("@" + nameof(FindCoreModelName) + "()")]
         private InternalUid uid;
         public InternalUid Uid => uid;
 
         private string FindCoreModelName()
         {
-            CoreModel coreModel = AddressableTools<CoreModel>
-                .LoadAllFromLabel("CoreModel")
+            CoreModel coreModel = AddressableTools
+                .LoadAllGameObjectAssets<CoreModel>("CoreModel")
                 .Select(x => x.Value)
                 .FirstOrDefault(x => x.Uid == Uid);
             return coreModel == null ? "NOT FOUND" : coreModel.RoomInfo.Title;
@@ -46,11 +45,7 @@ namespace TileBuilder
     }
 
     [Serializable]
-    [CreateAssetMenu(
-        fileName = "BuildingConfig",
-        menuName = "TileBuilder/BuildingConfig",
-        order = 0
-    )]
+    [CreateAssetMenu(fileName = "BuildingConfig", menuName = "TileBuilder/BuildingConfig")]
     public class BuildingConfig : ScriptableObject
     {
         [SerializeField]
