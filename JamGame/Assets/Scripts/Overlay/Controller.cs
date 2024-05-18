@@ -13,11 +13,22 @@ namespace Overlay
 
         [SerializeField]
         [SceneObjectsOnly]
+        [Required]
         private OverlaySelectorProxy proxy;
 
-        public void Activate()
+        [SerializeField]
+        [Required]
+        private GameObject selectedIcon;
+
+        // Called by toggle event.
+        public void StateChanged(bool state)
         {
-            proxy.ActivateOverlay(overlay);
+            selectedIcon.SetActive(state);
+
+            if (state)
+            {
+                proxy.ActivateOverlay(overlay);
+            }
         }
     }
 }

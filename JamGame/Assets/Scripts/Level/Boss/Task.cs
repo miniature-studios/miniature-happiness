@@ -468,7 +468,7 @@ namespace Level.Boss.Task
     public class MinEarnPerWorkingSession : ITask
     {
         [SerializeField]
-        [Required]
+        [RequiredIn(PrefabKind.PrefabInstance)]
         [FoldoutGroup("Min Earn Per Working Session")]
         private Executor executor;
 

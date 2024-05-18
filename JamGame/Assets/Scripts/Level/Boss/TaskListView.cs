@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Level.Boss.Task;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Level.Boss
@@ -10,12 +11,25 @@ namespace Level.Boss
     public class TaskListView : MonoBehaviour
     {
         [SerializeField]
-        private GameObject tasks_parent;
+        [Required]
+        private GameObject tasksParent;
 
         [SerializeField]
+        [Required]
         private TaskView taskViewPrefab;
 
         private List<TaskView> task_views = new();
+
+        [SerializeField]
+        [Required]
+        private GameObject unfoldedIcon;
+
+        // Called by toggle.
+        public void FoldStateChanged(bool state)
+        {
+            unfoldedIcon.SetActive(state);
+            tasksParent.SetActive(state);
+        }
 
         public void OnActiveTasksChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -37,7 +51,7 @@ namespace Level.Boss
 
         private void AddTaskToList(ITask task)
         {
-            TaskView task_view = Instantiate(taskViewPrefab, tasks_parent.transform);
+            TaskView task_view = Instantiate(taskViewPrefab, tasksParent.transform);
             task_view.Task = task;
             task_views.Add(task_view);
         }
