@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Employee.Personality
 {
     [CreateAssetMenu(fileName = "Quirk", menuName = "Employee/Quirk")]
-    public class Quirk : ScriptableObject
+    public class Quirk : ScriptableObject, IUidPostprocessingHandle
     {
         [SerializeField]
         private InternalUid uid;
