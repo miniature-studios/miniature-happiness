@@ -29,7 +29,7 @@ namespace Level.Shop.Employee
 
         [Required]
         [SerializeField]
-        private AssetLabelReference quirkConfigLabel;
+        private AssetLabelReference quirkLabel;
 
         [Required]
         [AssetsOnly]
@@ -62,8 +62,8 @@ namespace Level.Shop.Employee
         public EmployeeConfig EmployeeConfig => employeeConfig;
 
         private Controller controller;
-        private Dictionary<InternalUid, QuirkConfig> quirkConfigsByUid;
-        public Dictionary<InternalUid, QuirkConfig> QuirkConfigsByUid => quirkConfigsByUid;
+        private Dictionary<InternalUid, Quirk> quirksByUid;
+        public Dictionary<InternalUid, Quirk> QuirksByUid => quirksByUid;
 
         public event Action OnPointerEnterEvent;
         public event Action OnPointerExitEvent;
@@ -71,9 +71,7 @@ namespace Level.Shop.Employee
         public void Initialize()
         {
             controller = GetComponentInParent<Controller>(true);
-            quirkConfigsByUid = AddressableTools.LoadAllScriptableObjectAssets<QuirkConfig>(
-                quirkConfigLabel
-            );
+            quirksByUid = AddressableTools.LoadAllScriptableObjectAssets<Quirk>(quirkLabel);
         }
 
         public void SetEmployeeConfig(EmployeeConfig employeeConfig)
@@ -88,7 +86,7 @@ namespace Level.Shop.Employee
             hireCostLabel.text = EmployeeConfig.HireCost.ToString();
             professionLabel.text = EmployeeConfig.Profession;
 
-            iconsParent.DestroyChildsImmediate();
+            iconsParent.DestroyChildrenImmediate();
             bool isQuirksExists = EmployeeConfig.Quirks.Count != 0;
             iconsParent.gameObject.SetActive(isQuirksExists);
             if (isQuirksExists)
@@ -96,12 +94,12 @@ namespace Level.Shop.Employee
                 foreach (Quirk quirk in EmployeeConfig.Quirks)
                 {
                     CardQuirkIcon quirkIcon = Instantiate(quirkIconPrefab, iconsParent);
-                    quirkIcon.SetIcon(quirkConfigsByUid[quirk.Uid].Icon);
+                    quirkIcon.SetIcon(quirksByUid[quirk.Uid].Icon);
                 }
             }
         }
 
-        // Called be pressing button.
+        // Called by `hire` button.
         public void TryHireEmployee()
         {
             if (hired)

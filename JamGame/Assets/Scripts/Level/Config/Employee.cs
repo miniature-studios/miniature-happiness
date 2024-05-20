@@ -15,10 +15,23 @@ namespace Level.Config
 
     public class EmployeeConfig
     {
-        public string Name;
-        public int HireCost;
-        public string Profession;
-        public List<Quirk> Quirks;
+        private string name;
+        private int hireCost;
+        private string profession;
+        private List<Quirk> quirks;
+
+        public string Name => name;
+        public int HireCost => hireCost;
+        public string Profession => profession;
+        public List<Quirk> Quirks => quirks;
+
+        public EmployeeConfig(string name, int hireCost, string profession, List<Quirk> quirks)
+        {
+            this.name = name;
+            this.hireCost = hireCost;
+            this.profession = profession;
+            this.quirks = quirks;
+        }
     }
 
     [Serializable]
@@ -41,13 +54,7 @@ namespace Level.Config
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            return new EmployeeConfig()
-            {
-                Name = name,
-                HireCost = hireCost,
-                Profession = profession,
-                Quirks = quirks
-            };
+            return new EmployeeConfig(name, hireCost, profession, quirks);
         }
     }
 
@@ -78,13 +85,7 @@ namespace Level.Config
         public EmployeeConfig GetEmployeeConfig()
         {
             // TODO: #48
-            return new EmployeeConfig()
-            {
-                Name = "Fook",
-                HireCost = 100,
-                Profession = "ProGear",
-                Quirks = null
-            };
+            return new EmployeeConfig("Fook", 100, "ProGear", new List<Quirk>());
         }
     }
 }

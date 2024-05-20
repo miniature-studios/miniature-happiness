@@ -20,7 +20,7 @@ namespace Utils
                 Object asset = AssetDatabase.LoadAssetAtPath<Object>(str);
                 if (asset != null)
                 {
-                    if (asset is IUidPostprocessingHandle uidHandle)
+                    if (asset is IPostprocessedUidHandle uidHandle)
                     {
                         uidHandle.Uid.GenerateIfEmpty();
                         EditorUtility.SetDirty(asset);
@@ -28,10 +28,10 @@ namespace Utils
 
                     if (
                         asset is GameObject gameObject
-                        && gameObject.GetComponent<IUidPostprocessingHandle>() != null
+                        && gameObject.GetComponent<IPostprocessedUidHandle>() != null
                     )
                     {
-                        gameObject.GetComponent<IUidPostprocessingHandle>().Uid.GenerateIfEmpty();
+                        gameObject.GetComponent<IPostprocessedUidHandle>().Uid.GenerateIfEmpty();
                         EditorUtility.SetDirty(asset);
                     }
                 }

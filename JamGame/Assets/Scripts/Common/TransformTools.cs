@@ -4,14 +4,14 @@ namespace Common
 {
     public static class TransformTools
     {
-        public static void DestroyChilds(this Transform transform)
+        public static void DestroyChildren(this Transform transform)
         {
-            int stopper = 0;
+            int watchdog = 0;
             while (transform.childCount > 0)
             {
                 GameObject.Destroy(transform.GetChild(0).gameObject);
-                stopper++;
-                if (stopper == 8000)
+                watchdog++;
+                if (watchdog == 80000)
                 {
                     Debug.LogError("Infinity loop!");
                     return;
@@ -19,14 +19,14 @@ namespace Common
             }
         }
 
-        public static void DestroyChildsImmediate(this Transform transform)
+        public static void DestroyChildrenImmediate(this Transform transform)
         {
-            int stopper = 0;
+            int watchdog = 0;
             while (transform.childCount > 0)
             {
                 GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
-                stopper++;
-                if (stopper == 8000)
+                watchdog++;
+                if (watchdog == 80000)
                 {
                     Debug.LogError("Infinity loop!");
                     return;

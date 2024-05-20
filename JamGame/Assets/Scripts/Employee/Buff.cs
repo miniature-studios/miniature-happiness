@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Employee
 {
     [CreateAssetMenu(fileName = "Buff", menuName = "Employee/Buff")]
-    public class Buff : ScriptableObject, IUidPostprocessingHandle
+    public class Buff : ScriptableObject, IPostprocessedUidHandle
     {
         [SerializeField]
         private InternalUid uid;

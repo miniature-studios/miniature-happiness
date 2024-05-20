@@ -113,7 +113,7 @@ namespace TileUnion.Tile
             {
                 wallsHandler = main.transform.Find("Walls").gameObject;
             }
-            wallsHandler.transform.DestroyChildsImmediate();
+            wallsHandler.transform.DestroyChildrenImmediate();
 
             foreach (WallCollection wallCollection in RawWalls)
             {
@@ -165,7 +165,7 @@ namespace TileUnion.Tile
             {
                 cornersHandler = main.transform.Find("Corners").gameObject;
             }
-            cornersHandler.transform.DestroyChildsImmediate();
+            cornersHandler.transform.DestroyChildrenImmediate();
 
             foreach (CornerCollection cornerCollection in Corners)
             {
@@ -217,7 +217,7 @@ namespace TileUnion.Tile
             {
                 centerHandler = main.transform.Find("Center").gameObject;
             }
-            centerHandler.transform.DestroyChildsImmediate();
+            centerHandler.transform.DestroyChildrenImmediate();
 
             foreach (GameObject centerObject in CenterPrefabs)
             {
@@ -233,7 +233,7 @@ namespace TileUnion.Tile
                 GameObject gameObject = new("Projected Root");
                 projectedTilesRoot = Instantiate(gameObject, transform).transform;
             }
-            projectedTilesRoot.DestroyChildsImmediate();
+            projectedTilesRoot.DestroyChildrenImmediate();
             projectedTiles.Clear();
             for (int i = 0; i < projectedTilesCount; i++)
             {

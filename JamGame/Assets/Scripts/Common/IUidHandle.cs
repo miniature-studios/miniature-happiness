@@ -5,7 +5,7 @@
         public InternalUid Uid { get; }
     }
 
-    public interface IUidPostprocessingHandle
+    public interface IPostprocessedUidHandle
     {
         public InternalUid Uid { get; }
     }

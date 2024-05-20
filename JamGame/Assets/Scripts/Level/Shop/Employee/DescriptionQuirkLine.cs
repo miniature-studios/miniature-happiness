@@ -17,10 +17,10 @@ namespace Level.Shop.Employee
         [SerializeField]
         private TMP_Text nameLabel;
 
-        public void FillData(QuirkConfig quirkConfig)
+        public void FillData(Quirk quirk)
         {
-            icon.sprite = quirkConfig.Icon;
-            nameLabel.text = quirkConfig.FullName;
+            icon.sprite = quirk.Icon;
+            nameLabel.text = quirk.FullName;
         }
     }
 }

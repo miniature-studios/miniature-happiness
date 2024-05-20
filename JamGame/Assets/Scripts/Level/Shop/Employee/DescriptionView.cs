@@ -1,5 +1,6 @@
 ﻿using Common;
 using Employee.Personality;
+using Pickle;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -22,9 +23,9 @@ namespace Level.Shop.Employee
         private TMP_Text professionLabel;
 
         [Required]
-        [AssetsOnly]
         [SerializeField]
-        private DescriptionQuirkLine descriptionQuirkLineAsset;
+        [Pickle(typeof(DescriptionQuirkLine), LookupType = ObjectProviderType.Assets)]
+        private DescriptionQuirkLine descriptionQuirkLinePrefab;
 
         [Required]
         [SerializeField]
@@ -43,7 +44,7 @@ namespace Level.Shop.Employee
             hireCostLabel.text = card.EmployeeConfig.HireCost.ToString();
             professionLabel.text = card.EmployeeConfig.Profession;
 
-            descriptionQuirkLineParent.DestroyChildsImmediate();
+            descriptionQuirkLineParent.DestroyChildrenImmediate();
             if (card.EmployeeConfig.Quirks.Count == 0)
             {
                 descriptionQuirkLineParent.gameObject.SetActive(false);
@@ -53,10 +54,10 @@ namespace Level.Shop.Employee
                 foreach (Quirk quirk in card.EmployeeConfig.Quirks)
                 {
                     DescriptionQuirkLine quirkIcon = Instantiate(
-                        descriptionQuirkLineAsset,
+                        descriptionQuirkLinePrefab,
                         descriptionQuirkLineParent
                     );
-                    quirkIcon.FillData(card.QuirkConfigsByUid[quirk.Uid]);
+                    quirkIcon.FillData(card.QuirksByUid[quirk.Uid]);
                 }
             }
         }
