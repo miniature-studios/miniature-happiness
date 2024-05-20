@@ -34,15 +34,6 @@ namespace Level.Shop.Room
         [SerializeField]
         private TMP_Text countLabel;
 
-        [SerializeField]
-        private List<Image> backgroundImages;
-
-        [SerializeField]
-        private Color notHoveredColor;
-
-        [SerializeField]
-        private Color hoveredColor;
-
         [ReadOnly]
         [SerializeField]
         private List<CoreModel> coreModels = new();
@@ -100,21 +91,11 @@ namespace Level.Shop.Room
         public void OnPointerEnter(PointerEventData eventData)
         {
             OnPointerEnterEvent?.Invoke();
-            SetBackgroundImagesColor(hoveredColor);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            SetBackgroundImagesColor(notHoveredColor);
             OnPointerExitEvent?.Invoke();
-        }
-
-        private void SetBackgroundImagesColor(Color color)
-        {
-            foreach (Image image in backgroundImages)
-            {
-                image.color = color;
-            }
         }
     }
 }

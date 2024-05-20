@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Employee;
+using Employee.Personality;
 using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,17 +15,22 @@ namespace Level.Config
 
     public class EmployeeConfig
     {
-        public string Name { get; }
-        public int HireCost { get; }
-        public string Profession { get; }
-        public string Quirk { get; }
+        private string name;
+        private int hireCost;
+        private string profession;
+        private List<Quirk> quirks;
 
-        public EmployeeConfig(string name, int hireCost, string profession, string quirk)
+        public string Name => name;
+        public int HireCost => hireCost;
+        public string Profession => profession;
+        public List<Quirk> Quirks => quirks;
+
+        public EmployeeConfig(string name, int hireCost, string profession, List<Quirk> quirks)
         {
-            Name = name;
-            HireCost = hireCost;
-            Profession = profession;
-            Quirk = quirk;
+            this.name = name;
+            this.hireCost = hireCost;
+            this.profession = profession;
+            this.quirks = quirks;
         }
     }
 
@@ -41,18 +48,13 @@ namespace Level.Config
         private string profession;
 
         [SerializeField]
-        private string quirk;
-
-        [AssetsOnly]
-        [Pickle(typeof(EmployeeImpl), LookupType = ObjectProviderType.Assets)]
-        [FoldoutGroup("@" + nameof(Label))]
-        private GameObject prototype;
+        private List<Quirk> quirks;
 
         private string Label => $"Employee - {name}";
 
         public EmployeeConfig GetEmployeeConfig()
         {
-            return new EmployeeConfig(name, hireCost, profession, quirk);
+            return new EmployeeConfig(name, hireCost, profession, quirks);
         }
     }
 
@@ -83,7 +85,7 @@ namespace Level.Config
         public EmployeeConfig GetEmployeeConfig()
         {
             // TODO: #48
-            return new EmployeeConfig("Fuko", 100, "Proger", "No quirk");
+            return new EmployeeConfig("Fook", 100, "ProGear", new List<Quirk>());
         }
     }
 }

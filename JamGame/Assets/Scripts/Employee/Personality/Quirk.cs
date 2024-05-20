@@ -5,13 +5,12 @@ using Employee.Needs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Employee
+namespace Employee.Personality
 {
-    [CreateAssetMenu(fileName = "Quirk", menuName = "Employee/Quirk", order = 3)]
-    public class Quirk : ScriptableObject
+    [CreateAssetMenu(fileName = "Quirk", menuName = "Employee/Quirk")]
+    public class Quirk : ScriptableObject, IPostprocessedUidHandle, IUidHandle
     {
         [SerializeField]
-        [InlineProperty]
         private InternalUid uid;
         public InternalUid Uid => uid;
 
@@ -23,5 +22,15 @@ namespace Employee
         [SerializeReference]
         private List<IEffect> effects = new();
         public IEnumerable<IEffect> Effects => effects;
+
+        [SerializeField]
+        private string fullName;
+        public string FullName => fullName;
+
+        [Required]
+        [PreviewField]
+        [SerializeField]
+        private Sprite icon;
+        public Sprite Icon => icon;
     }
 }

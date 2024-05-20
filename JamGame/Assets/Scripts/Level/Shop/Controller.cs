@@ -66,8 +66,7 @@ namespace Level.Shop
             Result result = financesController.TryTakeMoney(employee.HireCost);
             if (result.Success)
             {
-                EmployeeConfig borrowedEmployee = shopModel.BorrowEmployee(employee);
-                result = employeeManager.AddEmployee(borrowedEmployee);
+                result = employeeManager.AddEmployee(employee);
                 if (result.Failure)
                 {
                     financesController.AddMoney(employee.HireCost);

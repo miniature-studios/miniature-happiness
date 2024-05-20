@@ -4,4 +4,9 @@
     {
         public InternalUid Uid { get; }
     }
+
+    public interface IPostprocessedUidHandle
+    {
+        public InternalUid Uid { get; }
+    }
 }

@@ -49,10 +49,8 @@ MonoBehaviour:
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 2702896934914359298
-        - rid: 2702896934914359299
-        - rid: 2702896934914359300
-        - rid: 2702896934914359301
+        - rid: 8023115883194875904
+        - rid: 8023115883194875905
         mode: 1
         shopRooms:
         - rid: 1908735064151687180
@@ -111,23 +109,20 @@ MonoBehaviour:
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
         room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
-    - rid: 2702896934914359298
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+    - rid: 8023115883194875904
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-    - rid: 2702896934914359299
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+        name: Hukko
+        hireCost: 150
+        profession: Programmer
+        quirks:
+        - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
+    - rid: 8023115883194875905
+      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-    - rid: 2702896934914359300
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-    - rid: 2702896934914359301
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        weightList: {fileID: 11400000, guid: 83522d87f9ffb08438de12e077e12719, type: 2}
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+        name: Tattoo
+        hireCost: 2000
+        profession: Worker
+        quirks:
+        - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+        - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}

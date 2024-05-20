@@ -77,11 +77,6 @@ namespace Level.Shop
             employeesInShop.Add(employee);
         }
 
-        public EmployeeConfig BorrowEmployee(EmployeeConfig employee)
-        {
-            return employeesInShop.Remove(employee) ? employee : null;
-        }
-
         public void ClearEmployees()
         {
             employeesInShop.Clear();

@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
-using Employee;
-using Level.Room;
+using Common;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,29 +17,23 @@ namespace Utils
         {
             foreach (string str in importedAssets)
             {
-                GameObject asset = AssetDatabase.LoadAssetAtPath<GameObject>(str);
+                Object asset = AssetDatabase.LoadAssetAtPath<Object>(str);
                 if (asset != null)
                 {
-                    CoreModel coreModel = asset.GetComponent<CoreModel>();
-                    if (coreModel != null)
+                    if (asset is IPostprocessedUidHandle uidHandle)
                     {
-                        coreModel.Uid.GenerateIfEmpty();
+                        uidHandle.Uid.GenerateIfEmpty();
                         EditorUtility.SetDirty(asset);
                     }
-                }
 
-                Buff buff = AssetDatabase.LoadAssetAtPath<Buff>(str);
-                if (buff != null)
-                {
-                    buff.Uid.GenerateIfEmpty();
-                    EditorUtility.SetDirty(buff);
-                }
-
-                Quirk quirk = AssetDatabase.LoadAssetAtPath<Quirk>(str);
-                if (quirk != null)
-                {
-                    quirk.Uid.GenerateIfEmpty();
-                    EditorUtility.SetDirty(quirk);
+                    if (
+                        asset is GameObject gameObject
+                        && gameObject.GetComponent<IPostprocessedUidHandle>() != null
+                    )
+                    {
+                        gameObject.GetComponent<IPostprocessedUidHandle>().Uid.GenerateIfEmpty();
+                        EditorUtility.SetDirty(asset);
+                    }
                 }
             }
         }

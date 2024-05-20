@@ -28,7 +28,9 @@ namespace Level.Room
             where T : MonoBehaviour, IUidHandle
         {
             List<T> result = new();
-            Dictionary<InternalUid, T> dictionary = AddressableTools<T>.LoadAllFromLabel(label);
+            Dictionary<InternalUid, T> dictionary = AddressableTools.LoadAllGameObjectAssets<T>(
+                label
+            );
             foreach (KeyValuePair<InternalUid, T> asset in dictionary)
             {
                 if (asset.Value.Uid == Uid)

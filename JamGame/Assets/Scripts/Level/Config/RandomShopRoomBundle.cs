@@ -7,11 +7,7 @@ using UnityEngine;
 
 namespace Level.Config
 {
-    [CreateAssetMenu(
-        fileName = "RandomShopRoomBundle",
-        menuName = "Level/Random Shop Room Bundle",
-        order = 0
-    )]
+    [CreateAssetMenu(fileName = "RandomShopRoomBundle", menuName = "Level/Random Shop Room Bundle")]
     public class RandomShopRoomBundle : ScriptableObject
     {
         [SerializeField]

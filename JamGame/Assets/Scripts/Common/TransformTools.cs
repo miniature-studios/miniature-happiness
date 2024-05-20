@@ -4,6 +4,22 @@ namespace Common
 {
     public static class TransformTools
     {
+        public static void DestroyChildren(this Transform transform)
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                GameObject.Destroy(transform.GetChild(i).gameObject);
+            }
+        }
+
+        public static void DestroyChildrenImmediate(this Transform transform)
+        {
+            while (transform.childCount > 0)
+            {
+                GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
+            }
+        }
+
         public static void SetXPosition(this Transform transform, float x)
         {
             transform.position = new(x, transform.position.y, transform.position.z);
