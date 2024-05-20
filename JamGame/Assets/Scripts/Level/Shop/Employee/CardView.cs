@@ -86,7 +86,7 @@ namespace Level.Shop.Employee
             hireCostLabel.text = EmployeeConfig.HireCost.ToString();
             professionLabel.text = EmployeeConfig.Profession;
 
-            iconsParent.DestroyChildrenImmediate();
+            iconsParent.DestroyChildren();
             bool isQuirksExists = EmployeeConfig.Quirks.Count != 0;
             iconsParent.gameObject.SetActive(isQuirksExists);
             if (isQuirksExists)

@@ -6,31 +6,17 @@ namespace Common
     {
         public static void DestroyChildren(this Transform transform)
         {
-            int watchdog = 0;
-            while (transform.childCount > 0)
+            for (int i = transform.childCount - 1; i >= 0; i--)
             {
-                GameObject.Destroy(transform.GetChild(0).gameObject);
-                watchdog++;
-                if (watchdog == 80000)
-                {
-                    Debug.LogError("Infinity loop!");
-                    return;
-                }
+                GameObject.Destroy(transform.GetChild(i).gameObject);
             }
         }
 
         public static void DestroyChildrenImmediate(this Transform transform)
         {
-            int watchdog = 0;
             while (transform.childCount > 0)
             {
                 GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
-                watchdog++;
-                if (watchdog == 80000)
-                {
-                    Debug.LogError("Infinity loop!");
-                    return;
-                }
             }
         }
 

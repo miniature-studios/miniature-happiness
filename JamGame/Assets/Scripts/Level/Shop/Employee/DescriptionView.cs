@@ -44,7 +44,7 @@ namespace Level.Shop.Employee
             hireCostLabel.text = card.EmployeeConfig.HireCost.ToString();
             professionLabel.text = card.EmployeeConfig.Profession;
 
-            descriptionQuirkLineParent.DestroyChildrenImmediate();
+            descriptionQuirkLineParent.DestroyChildren();
             if (card.EmployeeConfig.Quirks.Count == 0)
             {
                 descriptionQuirkLineParent.gameObject.SetActive(false);
