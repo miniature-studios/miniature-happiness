@@ -202,8 +202,15 @@ namespace Employee
                     break;
                 }
 
-                // TODO: Process case when NeedProvider this employee bound to is destroyed.
-                // #173
+                // Room to which current employee was bound is destroyed.
+                if (
+                    needProviderBindings.TryGetValue(need.NeedType, out NeedProvider np)
+                    && np == null
+                )
+                {
+                    _ = needProviderBindings.Remove(need.NeedType);
+                }
+
                 List<NeedProvider> available_providers = needProviderManager
                     .FindAllAvailableProviders(this, need.NeedType)
                     .Where(np =>
