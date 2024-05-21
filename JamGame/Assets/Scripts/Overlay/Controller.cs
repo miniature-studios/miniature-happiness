@@ -11,13 +11,12 @@ namespace Overlay
         [SerializeReference]
         private IOverlay overlay;
 
-        [SerializeField]
-        [SceneObjectsOnly]
         [Required]
+        [SerializeField]
         private OverlaySelectorProxy proxy;
 
-        [SerializeField]
         [Required]
+        [SerializeField]
         private GameObject selectedIcon;
 
         // Called by toggle event.

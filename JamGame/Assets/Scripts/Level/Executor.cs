@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AnimatorsSwitcher;
 using Common;
 using Employee.Needs;
 using Level.Config;
 using Level.GlobalTime;
 using Location;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Level
 {
+    public struct GameLoseCause
+    {
+        public LoseGame.Cause Cause;
+    }
+
     public struct AllEmployeesAtHome
     {
         public bool Value;
@@ -55,6 +62,10 @@ namespace Level
         [SerializeField]
         private GlobalTime.Model globalTime;
 
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
+        [SerializeField]
+        private LoseGamePanel.Model loseGamePanelModel;
+
         [SerializeField]
         private NavMeshSurfaceUpdater navMeshUpdater;
 
@@ -74,6 +85,7 @@ namespace Level
 
         private bool transitionPanelShown = false;
         private bool cutsceneMinTimeEnded = false;
+        private bool isGameFinished = false;
 
         [SerializeField]
         private UnityEvent dayEnded;
@@ -81,6 +93,16 @@ namespace Level
         private void Awake()
         {
             tileBuilderController.BuiltValidatedOffice += CompleteMeeting;
+        }
+
+        private void Update()
+        {
+            IEnumerable<GameLoseCause> causes =
+                DataProviderServiceLocator.FetchDataFromMultipleSources<GameLoseCause>();
+            if (causes.Count() > 0 && !isGameFinished)
+            {
+                Execute(new LoseGame(causes.First().Cause));
+            }
         }
 
         public void Execute(DayStart dayStart)
@@ -225,7 +247,8 @@ namespace Level
         {
             if (financesModel.TryTakeMoney(dailyBill.ComputeCheck().Sum).Failure)
             {
-                Execute(new LoseGame());
+                LoseGame loseGame = new(LoseGame.Cause.NegativeMoney);
+                Execute(loseGame);
                 return;
             }
 
@@ -254,16 +277,20 @@ namespace Level
 
         public void Execute(LoseGame loseGame)
         {
+            isGameFinished = true;
+            loseGamePanelModel.SetCause(loseGame.LoseCause);
             animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
         }
 
         public void Execute(WinGame winGame)
         {
+            isGameFinished = true;
             animatorSwitcher.SetAnimatorStates(typeof(WinGame));
         }
 
         public void Execute(LoadLevel loadLevel)
         {
+            isGameFinished = false;
             tileBuilderController.LoadBuildingFromConfig(loadLevel.BuildingConfig);
             ActionEndNotify?.Invoke();
         }
