@@ -1,4 +1,4 @@
-﻿using Level.Finances;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -14,9 +14,18 @@ namespace Level.LoseGamePanel
         public DaysLived DaysLived =>
             DataProviderServiceLocator.FetchDataFromSingleton<DaysLived>();
 
-        public Money MoneyEarned => DataProviderServiceLocator.FetchDataFromSingleton<Money>();
+        [ReadOnly]
+        [SerializeField]
+        private string loseCause = "No cause";
+
+        public string LoseCause => loseCause;
 
         public UnityEvent<Model> OnModelChanged;
+
+        public void SetLoseCause(string loseCause)
+        {
+            this.loseCause = loseCause;
+        }
 
         // Called by event from animation.
         public void Showing()

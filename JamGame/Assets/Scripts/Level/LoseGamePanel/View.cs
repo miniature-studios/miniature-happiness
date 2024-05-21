@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 namespace Level.LoseGamePanel
@@ -6,16 +7,18 @@ namespace Level.LoseGamePanel
     [AddComponentMenu("Scripts/Level/LoseGamePanel/Level.LoseGamePanel.View")]
     public class View : MonoBehaviour
     {
+        [Required]
         [SerializeField]
         private TMP_Text daysLabel;
 
+        [Required]
         [SerializeField]
-        private TMP_Text moneyLabel;
+        private TMP_Text causeLabel;
 
         public void OnModelChanged(Model model)
         {
             daysLabel.text = $"Days lived: {model.DaysLived.Value}";
-            moneyLabel.text = $"Money earned: {model.MoneyEarned.Value} Coins";
+            causeLabel.text = $"Lose cause: {model.LoseCause}";
         }
     }
 }

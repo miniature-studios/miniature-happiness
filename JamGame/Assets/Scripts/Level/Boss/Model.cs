@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Level.Boss.Task;
+using Level.Config;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -44,6 +45,10 @@ namespace Level.Boss
 
             public float CostNormalized => cost / 100.0f;
         }
+
+        [SerializeField]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
+        private Executor executor;
 
         [SerializeField]
         private Days maxStressGatherTime;
@@ -138,7 +143,8 @@ namespace Level.Boss
 
             if (stressNormalized > 1)
             {
-                // TODO: Lose game (#164)
+                LoseGame loseGame = new() { LoseCause = "Boss stressed out!" };
+                executor.Execute(loseGame);
             }
 
 #if UNITY_EDITOR

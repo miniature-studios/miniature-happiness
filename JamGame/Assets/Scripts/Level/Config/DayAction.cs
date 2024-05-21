@@ -152,6 +152,16 @@ namespace Level.Config
     [Serializable]
     public class LoseGame : IDayAction
     {
+        [ReadOnly]
+        [SerializeField]
+        private string loseCause = "No Cause";
+
+        public string LoseCause
+        {
+            get => loseCause;
+            set => loseCause = value;
+        }
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);

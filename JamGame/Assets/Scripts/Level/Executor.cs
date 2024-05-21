@@ -56,6 +56,9 @@ namespace Level
         private GlobalTime.Model globalTime;
 
         [SerializeField]
+        private LoseGamePanel.Model loseGamePanelModel;
+
+        [SerializeField]
         private NavMeshSurfaceUpdater navMeshUpdater;
 
         [SerializeField]
@@ -225,7 +228,8 @@ namespace Level
         {
             if (financesModel.TryTakeMoney(dailyBill.ComputeCheck().Sum).Failure)
             {
-                Execute(new LoseGame());
+                LoseGame loseGame = new() { LoseCause = "Not enough money" };
+                Execute(loseGame);
                 return;
             }
 
@@ -254,6 +258,7 @@ namespace Level
 
         public void Execute(LoseGame loseGame)
         {
+            loseGamePanelModel.SetLoseCause(loseGame.LoseCause);
             animatorSwitcher.SetAnimatorStates(typeof(LoseGame));
         }
 
