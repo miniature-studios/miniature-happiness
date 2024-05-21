@@ -5,16 +5,16 @@ using UnityEngine;
 
 namespace Level.Config
 {
-    public enum ConfigMode
-    {
-        Raw,
-        ConfigLink
-    }
-
     [Serializable]
     [HideReferenceObjectPicker]
     public class DayConfig
     {
+        private enum ConfigMode
+        {
+            Raw,
+            ConfigLink
+        }
+
         [HideLabel]
         [SerializeField]
         [EnumToggleButtons]
