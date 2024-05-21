@@ -497,7 +497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScene: Main
-  loseCause: No cause
+  cause: 0
   OnModelChanged:
     m_PersistentCalls:
       m_Calls:
@@ -527,6 +527,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   daysLabel: {fileID: 2017749256160539438}
   causeLabel: {fileID: 59159097886184060}
+  causeLabels:
+  - Cause: 0
+    Label: Boss stressed out!
+  - Cause: 1
+    Label: Not enough money :(
 --- !u!95 &7688474670522763790
 Animator:
   serializedVersion: 5
@@ -669,8 +674,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Level.WinGamePanel.Model, Assembly-CSharp
+      - m_Target: {fileID: 6553250935625141719}
+        m_TargetAssemblyTypeName: Level.LoseGamePanel.Model, Assembly-CSharp
         m_MethodName: TryAgainClick
         m_Mode: 1
         m_Arguments:

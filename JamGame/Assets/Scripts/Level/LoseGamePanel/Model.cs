@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using Level.Config;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -16,15 +17,14 @@ namespace Level.LoseGamePanel
 
         [ReadOnly]
         [SerializeField]
-        private string loseCause = "No cause";
-
-        public string LoseCause => loseCause;
+        private LoseGame.Cause cause;
+        public LoseGame.Cause LoseCause => cause;
 
         public UnityEvent<Model> OnModelChanged;
 
-        public void SetLoseCause(string loseCause)
+        public void SetCause(LoseGame.Cause cause)
         {
-            this.loseCause = loseCause;
+            this.cause = cause;
         }
 
         // Called by event from animation.
@@ -36,7 +36,7 @@ namespace Level.LoseGamePanel
         // Called by button Try again on WinGamePanel.
         public void TryAgainClick()
         {
-            SceneManager.LoadScene(loadingScene);
+            SceneManager.LoadScene(loadingScene, LoadSceneMode.Single);
         }
     }
 }

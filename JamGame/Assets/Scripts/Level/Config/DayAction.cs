@@ -152,14 +152,20 @@ namespace Level.Config
     [Serializable]
     public class LoseGame : IDayAction
     {
+        public enum Cause
+        {
+            BossOverstress,
+            NegativeMoney
+        }
+
         [ReadOnly]
         [SerializeField]
-        private string loseCause = "No Cause";
+        private Cause cause;
+        public Cause LoseCause => cause;
 
-        public string LoseCause
+        public LoseGame(Cause cause)
         {
-            get => loseCause;
-            set => loseCause = value;
+            this.cause = cause;
         }
 
         public void Execute(Executor executor)
