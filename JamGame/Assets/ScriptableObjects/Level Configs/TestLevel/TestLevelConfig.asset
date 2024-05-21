@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51c39a70600ea274ebd8278a07991c85, type: 3}
-  m_Name: LevelConfig
+  m_Name: TestLevelConfig
   m_EditorClassIdentifier: 
   days:
   - rid: 1908735195745353728
+  - rid: 8023115948667437056
   defaultDay:
+    configMode: 0
     dayActions:
     - rid: 1908735064151687181
     - rid: 1908735064151687168
@@ -27,6 +29,7 @@ MonoBehaviour:
     - rid: 1908735064151687177
     - rid: 1908735064151687178
     - rid: 1908735064151687182
+    bundle: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -99,8 +102,10 @@ MonoBehaviour:
     - rid: 1908735195745353728
       type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
+        configMode: 0
         dayActions:
         - rid: 1908735195745353729
+        bundle: {fileID: 0}
     - rid: 1908735195745353729
       type: {class: LoadLevel, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -126,3 +131,9 @@ MonoBehaviour:
         quirks:
         - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
         - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
+    - rid: 8023115948667437056
+      type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        configMode: 1
+        dayActions: []
+        bundle: {fileID: 11400000, guid: b6e7115d9042bb04398c4f272c0e0ac5, type: 2}
