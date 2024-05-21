@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using Common;
 using Level.Boss.Task;
+using Level.Config;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -44,6 +46,8 @@ namespace Level.Boss
 
             public float CostNormalized => cost / 100.0f;
         }
+
+        private DataProvider<GameLoseCause> gameLoseCauseProvider;
 
         [SerializeField]
         private Days maxStressGatherTime;
@@ -136,9 +140,12 @@ namespace Level.Boss
                 }
             }
 
-            if (stressNormalized > 1)
+            if (stressNormalized > 1 && gameLoseCauseProvider == null)
             {
-                // TODO: Lose game (#164)
+                gameLoseCauseProvider = new(
+                    () => new GameLoseCause() { Cause = LoseGame.Cause.BossOverstress },
+                    DataProviderServiceLocator.ResolveType.MultipleSources
+                );
             }
 
 #if UNITY_EDITOR

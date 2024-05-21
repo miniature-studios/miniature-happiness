@@ -27,7 +27,7 @@ namespace Level.WinGamePanel
         // Called by button Try again on WinGamePanel.
         public void TryAgainClick()
         {
-            SceneManager.LoadScene(loadingScene);
+            SceneManager.LoadScene(loadingScene, LoadSceneMode.Single);
         }
     }
 }

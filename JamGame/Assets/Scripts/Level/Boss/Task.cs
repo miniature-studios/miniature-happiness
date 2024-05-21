@@ -413,7 +413,7 @@ namespace Level.Boss.Task
     public class DontSatisfyNeed : ITask
     {
         [SerializeField]
-        [Required]
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         [FoldoutGroup("Dont Satisfy Need")]
         private Location.EmployeeManager.Model employeeManager;
 

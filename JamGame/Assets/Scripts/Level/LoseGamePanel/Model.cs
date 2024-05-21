@@ -1,4 +1,5 @@
-﻿using Level.Finances;
+﻿using Level.Config;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -14,9 +15,17 @@ namespace Level.LoseGamePanel
         public DaysLived DaysLived =>
             DataProviderServiceLocator.FetchDataFromSingleton<DaysLived>();
 
-        public Money MoneyEarned => DataProviderServiceLocator.FetchDataFromSingleton<Money>();
+        [ReadOnly]
+        [SerializeField]
+        private LoseGame.Cause cause;
+        public LoseGame.Cause LoseCause => cause;
 
         public UnityEvent<Model> OnModelChanged;
+
+        public void SetCause(LoseGame.Cause cause)
+        {
+            this.cause = cause;
+        }
 
         // Called by event from animation.
         public void Showing()
@@ -27,7 +36,7 @@ namespace Level.LoseGamePanel
         // Called by button Try again on WinGamePanel.
         public void TryAgainClick()
         {
-            SceneManager.LoadScene(loadingScene);
+            SceneManager.LoadScene(loadingScene, LoadSceneMode.Single);
         }
     }
 }
