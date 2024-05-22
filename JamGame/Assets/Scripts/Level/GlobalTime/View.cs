@@ -19,6 +19,11 @@ namespace Level.GlobalTime
 
         private void Update()
         {
+            if (model.IsLocked)
+            {
+                return;
+            }
+
             Toggle new_active = toggleGroup.GetFirstActiveToggle();
             if (new_active != active)
             {

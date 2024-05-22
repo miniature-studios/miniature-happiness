@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Level.Config
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "DayConfigBundle", menuName = "Level/DayConfigBundle")]
-    internal class DayConfigBundle : ScriptableObject
+    [CreateAssetMenu(fileName = "DayConfigPreset", menuName = "Level/DayConfigPreset")]
+    internal class DayConfigPreset : ScriptableObject
     {
         [SerializeReference]
         private List<IDayAction> dayActions = new();

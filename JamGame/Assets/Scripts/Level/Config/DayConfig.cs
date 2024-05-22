@@ -26,7 +26,7 @@ namespace Level.Config
 
         [ShowIf(nameof(configMode), ConfigMode.ConfigLink)]
         [SerializeField]
-        private DayConfigBundle bundle;
+        private DayConfigPreset bundle;
 
         public IEnumerable<IDayAction> DayActions => GetDayActions();
 

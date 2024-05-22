@@ -86,6 +86,7 @@ namespace Level
         private bool transitionPanelShown = false;
         private bool cutsceneMinTimeEnded = false;
         private bool isGameFinished = false;
+        private bool isPreMeetingEnd = false;
 
         [SerializeField]
         private UnityEvent dayEnded;
@@ -115,7 +116,7 @@ namespace Level
             meetingEndNeedOverride.Unregister();
             goToWorkNeedOverride.Register();
 
-            _ = StartCoroutine(employeeManager.TurnOnAllEmployees(2f));
+            _ = StartCoroutine(employeeManager.TurnOnAllEmployees(dayStart.EmployeeEnableDelay));
 
             financesModel.AddMoney(dayStart.MorningMoney);
             animatorSwitcher.SetAnimatorStates(typeof(DayStart));
@@ -136,16 +137,26 @@ namespace Level
             meetingEndNeedOverride.Unregister();
             meetingStartNeedOverride.Register();
 
+            isPreMeetingEnd = false;
+            _ = StartCoroutine(WaitRoutine(preMeeting.MinWaitingTime));
+
             this.CreateGate(
                 new List<Func<bool>>()
                 {
                     () =>
                         DataProviderServiceLocator
                             .FetchDataFromSingleton<AllEmployeesAtMeeting>()
-                            .Value
+                            .Value,
+                    () => isPreMeetingEnd
                 },
                 new List<Action>() { ActionEndNotify.Invoke }
             );
+        }
+
+        private IEnumerator WaitRoutine(float time)
+        {
+            yield return new WaitForSecondsRealtime(time);
+            isPreMeetingEnd = true;
         }
 
         public void Execute(Meeting meeting)
@@ -179,8 +190,7 @@ namespace Level
             if (remove_time_scale_lock_result.Failure)
             {
                 Debug.LogError(
-                    "Cannot change time scale before meeting: "
-                        + remove_time_scale_lock_result.Error
+                    "Cannot change time scale after meeting: " + remove_time_scale_lock_result.Error
                 );
             }
 
@@ -208,6 +218,14 @@ namespace Level
 
         public void Execute(Cutscene cutscene)
         {
+            Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
+            if (set_time_scale_lock_result.Failure)
+            {
+                Debug.LogError(
+                    "Cannot change time scale before cutscene: " + set_time_scale_lock_result.Error
+                );
+            }
+
             transitionPanel.PanelText = cutscene.Text;
             animatorSwitcher.SetAnimatorStates(typeof(Cutscene));
 
@@ -224,6 +242,14 @@ namespace Level
         {
             yield return new WaitForSecondsRealtime(time.Value);
             cutsceneMinTimeEnded = true;
+            Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
+            if (remove_time_scale_lock_result.Failure)
+            {
+                Debug.LogError(
+                    "Cannot change time scale after cutscene: "
+                        + remove_time_scale_lock_result.Error
+                );
+            }
         }
 
         public void Execute(PreDayEnd preDayEnd)
@@ -245,6 +271,14 @@ namespace Level
 
         public void Execute(DayEnd dayEnd)
         {
+            Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
+            if (set_time_scale_lock_result.Failure)
+            {
+                Debug.LogError(
+                    "Cannot change time scale before DayEnd: " + set_time_scale_lock_result.Error
+                );
+            }
+
             if (financesModel.TryTakeMoney(dailyBill.ComputeCheck().Sum).Failure)
             {
                 LoseGame loseGame = new(LoseGame.Cause.NegativeMoney);
@@ -264,6 +298,14 @@ namespace Level
             {
                 Execute(new WinGame());
                 return;
+            }
+
+            Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
+            if (remove_time_scale_lock_result.Failure)
+            {
+                Debug.LogError(
+                    "Cannot change time scale after DayEnd: " + remove_time_scale_lock_result.Error
+                );
             }
 
             ActionEndNotify?.Invoke();
@@ -292,6 +334,7 @@ namespace Level
         {
             isGameFinished = false;
             tileBuilderController.LoadBuildingFromConfig(loadLevel.BuildingConfig);
+            animatorSwitcher.SetAnimatorStates(typeof(LoadLevel));
             ActionEndNotify?.Invoke();
         }
     }

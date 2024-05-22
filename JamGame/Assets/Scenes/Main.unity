@@ -965,10 +965,10 @@ RectTransform:
   - {fileID: 1547411090}
   - {fileID: 8549211194350257235}
   - {fileID: 7935747235309979903}
-  - {fileID: 3413106354356984769}
   - {fileID: 3512196152768428352}
   - {fileID: 439256174}
   - {fileID: 961603832}
+  - {fileID: 3413106354356984769}
   - {fileID: 285264310}
   - {fileID: 2073773680}
   - {fileID: 269820493512972589}
@@ -1069,10 +1069,10 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - Animator: {fileID: 1270538556}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8372125752814518491}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8229866956105682242}
         Showed: 0
@@ -1095,7 +1095,7 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - Animator: {fileID: 285264313}
-        Showed: 1
+        Showed: 0
         OverrideState: 0
       - Animator: {fileID: 2139764856}
         Showed: 0
@@ -1107,10 +1107,10 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - Animator: {fileID: 3311212292630176075}
-        Showed: 1
+        Showed: 0
         OverrideState: 0
       - Animator: {fileID: 1270538556}
-        Showed: 1
+        Showed: 0
         OverrideState: 0
       - Animator: {fileID: 8372125752814518491}
         Showed: 0
@@ -1382,8 +1382,8 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 1
       - Animator: {fileID: 285264313}
-        Showed: 0
-        OverrideState: 1
+        Showed: 1
+        OverrideState: 2
       - Animator: {fileID: 2139764856}
         Showed: 0
         OverrideState: 1
@@ -3471,13 +3471,361 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1067622715}
     - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[-2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: maxStressGatherTime.days
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983371]
+      value: Assembly-CSharp Level.Boss.Task.MinBalance
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983372]
+      value: Assembly-CSharp Level.Boss.Task.TargetRoomCount
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983373]
+      value: Assembly-CSharp Level.Boss.Task.TargetEmployeeAmount
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983374]
+      value: Assembly-CSharp Level.Boss.Task.MinEarnPerWorkingSession
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983375]
+      value: Assembly-CSharp Level.Boss.Task.TargetRoomCount
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983376]
+      value: Assembly-CSharp Level.Boss.Task.MaxStressBound
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983377]
+      value: Assembly-CSharp Level.Boss.Task.MinEmployeesWithQuirk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983378]
+      value: Assembly-CSharp Level.Boss.Task.MinEmployeesWithQuirk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983379]
+      value: Assembly-CSharp Level.Boss.Task.MinEmployeesWithQuirk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983380]
+      value: Assembly-CSharp Level.Boss.Task.MinEmployeesWithQuirk
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983381]
+      value: Assembly-CSharp Level.Boss.Task.MinEarnPerWorkingSession
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983382]
+      value: Assembly-CSharp Level.Boss.Task.DontSatisfyNeed
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983383]
+      value: Assembly-CSharp Level.Boss.Task.MinEarnPerWorkingSession
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983384]
+      value: Assembly-CSharp Level.Boss.Task.MaxWaitingLineLength
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983385]
+      value: Assembly-CSharp Level.Boss.Task.RoomCountUpperBound
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983372].room
+      value: 
+      objectReference: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983375].room
+      value: 
+      objectReference: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983385].room
+      value: 
+      objectReference: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[2].Tasks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[4].Tasks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[7].Tasks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[8].Tasks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[10].Tasks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
       propertyPath: managedReferences[5009512970511974400].executor
       value: 
       objectReference: {fileID: 1067622715}
     - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983374].executor
+      value: 
+      objectReference: {fileID: 1067622715}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983381].executor
+      value: 
+      objectReference: {fileID: 1067622715}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983383].executor
+      value: 
+      objectReference: {fileID: 1067622715}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983374].earnTarget
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983381].earnTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983382].targetNeed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983383].earnTarget
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983377].targetQuirk
+      value: 
+      objectReference: {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983378].targetQuirk
+      value: 
+      objectReference: {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983379].targetQuirk
+      value: 
+      objectReference: {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983380].targetQuirk
+      value: 
+      objectReference: {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983372].targetAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983375].targetAmount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983384].lengthTarget
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[0].cost
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[0].task
+      value: 8023115963875983371
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[1].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[1].task
+      value: 8023115963875983372
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[0].Tasks.Array.data[2].task
+      value: 8023115963875983373
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[2].Tasks.Array.data[0].cost
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[2].Tasks.Array.data[0].task
+      value: 8023115963875983374
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[2].Tasks.Array.data[1].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[2].Tasks.Array.data[1].task
+      value: 8023115963875983375
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[4].Tasks.Array.data[0].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[4].Tasks.Array.data[0].task
+      value: 8023115963875983376
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[0].cost
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[0].task
+      value: 8023115963875983377
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[1].cost
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[1].task
+      value: 8023115963875983378
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[2].cost
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[2].task
+      value: 8023115963875983379
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[3].cost
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[5].Tasks.Array.data[3].task
+      value: 8023115963875983380
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[7].Tasks.Array.data[0].cost
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[7].Tasks.Array.data[0].task
+      value: 8023115963875983382
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[8].Tasks.Array.data[0].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[8].Tasks.Array.data[0].task
+      value: 8023115963875983383
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[8].Tasks.Array.data[1].cost
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[8].Tasks.Array.data[1].task
+      value: 8023115963875983384
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[8].Tasks.Array.data[2].task
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[10].Tasks.Array.data[0].cost
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: meetingTasks.Array.data[10].Tasks.Array.data[0].task
+      value: 8023115963875983385
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
       propertyPath: managedReferences[3161708622866808832].employeeManager
       value: 
       objectReference: {fileID: 42303835}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983376].maxStressTarget
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983382].employeeManager
+      value: 
+      objectReference: {fileID: 42303835}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983371].minBalanceTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983371].targetDuration.days
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983373].employeeCountTarget
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983376].targetDuration.days
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983377].employeeCountTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983378].employeeCountTarget
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983379].employeeCountTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983380].employeeCountTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983382].targetDuration.days
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983384].targetDuration.days
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983385].timeToComplete.days
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983385].upperIntBoundInclusive
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983372].timeToEnsureCompletion.seconds
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8254209980902256311, guid: 56568a2b14b58814586efd0c61ee9ef0, type: 3}
+      propertyPath: managedReferences[8023115963875983375].timeToEnsureCompletion.seconds
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

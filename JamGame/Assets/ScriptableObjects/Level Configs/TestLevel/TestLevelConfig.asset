@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   days:
   - rid: 1908735195745353728
-  - rid: 8023115948667437056
   defaultDay:
     configMode: 0
     dayActions:
@@ -38,22 +37,24 @@ MonoBehaviour:
       data:
         morningMoney: 800
         duration:
-          seconds: 2
+          seconds: 1
+        employeeEnableDelay: 1
     - rid: 1908735064151687169
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 2
+          seconds: 1.5
         text: Meeting
     - rid: 1908735064151687170
       type: {class: PreMeeting, ns: Level.Config, asm: Assembly-CSharp}
-      data: 
+      data:
+        minWaitingTime: 1
     - rid: 1908735064151687171
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
         - rid: 8023115883194875904
-        - rid: 8023115883194875905
+        - rid: 8023115963875983386
         mode: 1
         shopRooms:
         - rid: 1908735064151687180
@@ -64,13 +65,13 @@ MonoBehaviour:
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 2
+          seconds: 1.5
         text: Start Working
     - rid: 1908735064151687175
       type: {class: Working, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          days: 2
+          days: 1
     - rid: 1908735064151687176
       type: {class: PreDayEnd, ns: Level.Config, asm: Assembly-CSharp}
       data: 
@@ -78,7 +79,7 @@ MonoBehaviour:
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 2
+          seconds: 1.5
         text: Day End
     - rid: 1908735064151687178
       type: {class: DayEnd, ns: Level.Config, asm: Assembly-CSharp}
@@ -91,14 +92,14 @@ MonoBehaviour:
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 2
+          seconds: 1.5
         text: Day Start
     - rid: 1908735064151687182
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 2
-        text: Day End
+          seconds: 1.5
+        text: Day Ended
     - rid: 1908735195745353728
       type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -122,18 +123,8 @@ MonoBehaviour:
         profession: Programmer
         quirks:
         - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-    - rid: 8023115883194875905
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+    - rid: 8023115963875983386
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        name: Tattoo
-        hireCost: 2000
-        profession: Worker
-        quirks:
-        - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-        - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
-    - rid: 8023115948667437056
-      type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        configMode: 1
-        dayActions: []
-        bundle: {fileID: 11400000, guid: b6e7115d9042bb04398c4f272c0e0ac5, type: 2}
+        weightList: {fileID: 0}
+        nameList: {fileID: 0}
