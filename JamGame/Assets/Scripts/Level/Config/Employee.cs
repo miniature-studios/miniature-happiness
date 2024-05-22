@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Employee;
 using Employee.Personality;
 using Pickle;
 using Sirenix.OdinInspector;
@@ -42,12 +41,15 @@ namespace Level.Config
         private string name;
 
         [SerializeField]
+        [FoldoutGroup("@" + nameof(Label))]
         private int hireCost;
 
         [SerializeField]
+        [FoldoutGroup("@" + nameof(Label))]
         private string profession;
 
         [SerializeField]
+        [FoldoutGroup("@" + nameof(Label))]
         private List<Quirk> quirks;
 
         private string Label => $"Employee - {name}";
@@ -59,33 +61,63 @@ namespace Level.Config
     }
 
     [Serializable]
-    [HideReferenceObjectPicker]
-    public class EmployeeWeights
-    {
-        public float Weight;
-
-        [AssetsOnly]
-        [Pickle(typeof(EmployeeImpl), LookupType = ObjectProviderType.Assets)]
-        public GameObject Prototype;
-    }
-
-    [Serializable]
     public class RandomEmployeeConfig : IEmployeeConfig
     {
-        [SerializeField]
-        [Pickle(typeof(EmployeeWeightList), LookupType = ObjectProviderType.Assets)]
-        [FoldoutGroup("Employee - Random")]
-        private EmployeeWeightList weightList;
+        [Serializable]
+        private struct CostRange
+        {
+            public int Min;
+            public int Max;
+            public int Multiply;
+
+            public int GenerateCost()
+            {
+                return UnityEngine.Random.Range(Min, Max) * Multiply;
+            }
+        }
+
+        [Serializable]
+        private struct QuirkList
+        {
+            public float QuirkChance;
+            public List<Quirk> Quirks;
+
+            public List<Quirk> GenerateQuirks()
+            {
+                List<Quirk> quirks = new();
+                foreach (Quirk quirk in Quirks)
+                {
+                    if (UnityEngine.Random.Range(0f, 1f) <= QuirkChance)
+                    {
+                        quirks.Add(quirk);
+                    }
+                }
+                return quirks;
+            }
+        }
 
         [SerializeField]
         [Pickle(typeof(EmployeeNameList), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Employee - Random")]
         private EmployeeNameList nameList;
 
+        [SerializeField]
+        [FoldoutGroup("Employee - Random")]
+        private CostRange costRange;
+
+        [SerializeField]
+        [FoldoutGroup("Employee - Random")]
+        private QuirkList quirkList;
+
         public EmployeeConfig GetEmployeeConfig()
         {
             // TODO: #48
-            return new EmployeeConfig("Fook", 100, "ProGear", new List<Quirk>());
+            return new EmployeeConfig(
+                nameList.GenerateName(),
+                costRange.GenerateCost(),
+                "Programmer",
+                quirkList.GenerateQuirks()
+            );
         }
     }
 }

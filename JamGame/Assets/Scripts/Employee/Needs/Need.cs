@@ -24,11 +24,22 @@ namespace Employee.Needs
         [Serializable]
         public struct NeedProperties
         {
+            [FoldoutGroup("@" + nameof(NeedType))]
             public NeedType NeedType;
+
+            [FoldoutGroup("@" + nameof(NeedType))]
             public RealTimeSeconds SatisfactionTime;
+
+            [FoldoutGroup("@" + nameof(NeedType))]
             public float SatisfactionGained;
+
+            [FoldoutGroup("@" + nameof(NeedType))]
             public float DecreaseSpeed;
+
+            [FoldoutGroup("@" + nameof(NeedType))]
             public bool OverrideSatisfaction;
+
+            [FoldoutGroup("@" + nameof(NeedType))]
             public float OverrideSatisfactionValue;
 
             public NeedProperties(NeedType ty)

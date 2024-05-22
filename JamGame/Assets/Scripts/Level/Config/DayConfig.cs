@@ -26,7 +26,7 @@ namespace Level.Config
 
         [ShowIf(nameof(configMode), ConfigMode.ConfigLink)]
         [SerializeField]
-        private DayConfigPreset bundle;
+        private DayConfigPreset preset;
 
         public IEnumerable<IDayAction> DayActions => GetDayActions();
 
@@ -35,7 +35,7 @@ namespace Level.Config
             return configMode switch
             {
                 ConfigMode.Raw => dayActions,
-                ConfigMode.ConfigLink => bundle.DayActions,
+                ConfigMode.ConfigLink => preset.DayActions,
                 _ => throw new ArgumentException()
             };
         }

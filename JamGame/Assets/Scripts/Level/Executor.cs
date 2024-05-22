@@ -64,6 +64,10 @@ namespace Level
 
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         [SerializeField]
+        private Overlay.Controller offOverlayController;
+
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
+        [SerializeField]
         private LoseGamePanel.Model loseGamePanelModel;
 
         [SerializeField]
@@ -140,6 +144,12 @@ namespace Level
             isPreMeetingEnd = false;
             _ = StartCoroutine(WaitRoutine(preMeeting.MinWaitingTime));
 
+            if (globalTime.IsLocked)
+            {
+                Result timeScaleLockResult = globalTime.RemoveTimeScaleLock(this);
+                timeScaleLockResult.LogErrorIfFailure("Cannot remove timeScaleLock in Pre meeting");
+            }
+
             this.CreateGate(
                 new List<Func<bool>>()
                 {
@@ -149,7 +159,18 @@ namespace Level
                             .Value,
                     () => isPreMeetingEnd
                 },
-                new List<Action>() { ActionEndNotify.Invoke }
+                new List<Action>()
+                {
+                    () =>
+                    {
+                        Result timeLockResult = globalTime.SetTimeScaleLock(this, 0f);
+                        timeLockResult.LogErrorIfFailure(
+                            "Cannot set time scale lock in preMeeting End."
+                        );
+                    },
+                    () => offOverlayController.ForceSetState(true),
+                    ActionEndNotify.Invoke
+                }
             );
         }
 
@@ -161,14 +182,6 @@ namespace Level
 
         public void Execute(Meeting meeting)
         {
-            Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
-            if (set_time_scale_lock_result.Failure)
-            {
-                Debug.LogError(
-                    "Cannot change time scale before meeting: " + set_time_scale_lock_result.Error
-                );
-            }
-
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Build);
             shopController.SetShopRooms(meeting.ShopRooms);
             shopController.SetShopEmployees(meeting.ShopEmployees);
@@ -186,14 +199,6 @@ namespace Level
             needProviderManager.InitGameMode();
             tileBuilderController.ChangeGameMode(TileBuilder.GameMode.Play);
 
-            Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
-            if (remove_time_scale_lock_result.Failure)
-            {
-                Debug.LogError(
-                    "Cannot change time scale after meeting: " + remove_time_scale_lock_result.Error
-                );
-            }
-
             IEnumerable<NeedProvider> meeting_need_providers =
                 needProviderManager.FindAllNeedProvidersOfType(NeedType.Meeting);
             foreach (NeedProvider need_provider in meeting_need_providers)
@@ -207,25 +212,26 @@ namespace Level
         public void Execute(Working working)
         {
             animatorSwitcher.SetAnimatorStates(typeof(Working));
+            if (globalTime.IsLocked)
+            {
+                Result timeScaleLockResult = globalTime.RemoveTimeScaleLock(this);
+                timeScaleLockResult.LogErrorIfFailure(
+                    "Cannot remove timeScaleLock in Start Working"
+                );
+            }
             _ = StartCoroutine(WorkingTime(working.Duration));
         }
 
         private IEnumerator WorkingTime(Days duration)
         {
             yield return new WaitForSeconds(duration.RealTimeSeconds.Value);
+            Result timeLockResult = globalTime.SetTimeScaleLock(this, 0f);
+            timeLockResult.LogErrorIfFailure("Cannot set time scale lock in End Working.");
             ActionEndNotify?.Invoke();
         }
 
         public void Execute(Cutscene cutscene)
         {
-            Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
-            if (set_time_scale_lock_result.Failure)
-            {
-                Debug.LogError(
-                    "Cannot change time scale before cutscene: " + set_time_scale_lock_result.Error
-                );
-            }
-
             transitionPanel.PanelText = cutscene.Text;
             animatorSwitcher.SetAnimatorStates(typeof(Cutscene));
 
@@ -242,20 +248,20 @@ namespace Level
         {
             yield return new WaitForSecondsRealtime(time.Value);
             cutsceneMinTimeEnded = true;
-            Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
-            if (remove_time_scale_lock_result.Failure)
-            {
-                Debug.LogError(
-                    "Cannot change time scale after cutscene: "
-                        + remove_time_scale_lock_result.Error
-                );
-            }
         }
 
         public void Execute(PreDayEnd preDayEnd)
         {
             goToWorkNeedOverride.Unregister();
             leaveNeedOverride.Register();
+
+            if (globalTime.IsLocked)
+            {
+                Result timeScaleLockResult = globalTime.RemoveTimeScaleLock(this);
+                timeScaleLockResult.LogErrorIfFailure(
+                    "Cannot remove timeScaleLock in Start Working"
+                );
+            }
 
             this.CreateGate(
                 new List<Func<bool>>()
@@ -265,20 +271,23 @@ namespace Level
                             .FetchDataFromSingleton<AllEmployeesAtHome>()
                             .Value
                 },
-                new List<Action>() { ActionEndNotify.Invoke }
+                new List<Action>()
+                {
+                    () =>
+                    {
+                        Result timeLockResult = globalTime.SetTimeScaleLock(this, 0f);
+                        timeLockResult.LogErrorIfFailure(
+                            "Cannot set time scale lock in End Working."
+                        );
+                    },
+                    () => offOverlayController.ForceSetState(true),
+                    ActionEndNotify.Invoke
+                }
             );
         }
 
         public void Execute(DayEnd dayEnd)
         {
-            Result set_time_scale_lock_result = globalTime.SetTimeScaleLock(this, 0.0f);
-            if (set_time_scale_lock_result.Failure)
-            {
-                Debug.LogError(
-                    "Cannot change time scale before DayEnd: " + set_time_scale_lock_result.Error
-                );
-            }
-
             if (financesModel.TryTakeMoney(dailyBill.ComputeCheck().Sum).Failure)
             {
                 LoseGame loseGame = new(LoseGame.Cause.NegativeMoney);
@@ -298,14 +307,6 @@ namespace Level
             {
                 Execute(new WinGame());
                 return;
-            }
-
-            Result remove_time_scale_lock_result = globalTime.RemoveTimeScaleLock(this);
-            if (remove_time_scale_lock_result.Failure)
-            {
-                Debug.LogError(
-                    "Cannot change time scale after DayEnd: " + remove_time_scale_lock_result.Error
-                );
             }
 
             ActionEndNotify?.Invoke();
@@ -335,6 +336,8 @@ namespace Level
             isGameFinished = false;
             tileBuilderController.LoadBuildingFromConfig(loadLevel.BuildingConfig);
             animatorSwitcher.SetAnimatorStates(typeof(LoadLevel));
+            Result timeLockResult = globalTime.SetTimeScaleLock(this, 0f);
+            timeLockResult.LogErrorIfFailure("Cannot set time scale lock in Load level.");
             ActionEndNotify?.Invoke();
         }
     }

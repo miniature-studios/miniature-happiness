@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Common
 {
@@ -15,6 +16,14 @@ namespace Common
                 : throw new Exception(
                     $"You can't access .{nameof(Error)} when .{nameof(Failure)} is false"
                 );
+
+        public void LogErrorIfFailure(string message)
+        {
+            if (Failure)
+            {
+                Debug.LogError(message + "\n" + Error);
+            }
+        }
     }
 
     public class SuccessResult : Result

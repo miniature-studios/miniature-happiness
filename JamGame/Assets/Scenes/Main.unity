@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &27386822 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11537380484559572, guid: e0181b2dcd93ea5469ed2c662a3f21be, type: 3}
+  m_PrefabInstance: {fileID: 1070592466474644033}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f537fc5b16e949f419424d617a26b749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &40476286 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4694645698906236093, guid: cda76653c8e7a38489e56e24d9bf06d4, type: 3}
@@ -812,7 +823,15 @@ PrefabInstance:
     - target: {fileID: 8517373897175255361, guid: d019f47c7d73fa74d9451a576e8fec25, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1067622715}
+      objectReference: {fileID: 115190262}
+    - target: {fileID: 8517373897175255361, guid: d019f47c7d73fa74d9451a576e8fec25, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ValidateBuilding
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517373897175255361, guid: d019f47c7d73fa74d9451a576e8fec25, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TileBuilder.Controller, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1110,10 +1129,10 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - Animator: {fileID: 1270538556}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8372125752814518491}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8229866956105682242}
         Showed: 0
@@ -1233,10 +1252,10 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - Animator: {fileID: 1270538556}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8372125752814518491}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8229866956105682242}
         Showed: 0
@@ -1274,10 +1293,10 @@ MonoBehaviour:
         Showed: 0
         OverrideState: 0
       - Animator: {fileID: 1270538556}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8372125752814518491}
-        Showed: 0
+        Showed: 1
         OverrideState: 0
       - Animator: {fileID: 8229866956105682242}
         Showed: 0
@@ -1814,6 +1833,7 @@ MonoBehaviour:
   needProviderManager: {fileID: 42303834}
   employeeManager: {fileID: 42303835}
   globalTime: {fileID: 8549211194350257232}
+  offOverlayController: {fileID: 27386822}
   loseGamePanelModel: {fileID: 8404306620945633945}
   navMeshUpdater: {fileID: 40476293}
   meetingStartNeedOverride: {fileID: 1055950095}
@@ -2072,6 +2092,17 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 3139791413907972050, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
   m_PrefabInstance: {fileID: 3832652573781273153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1494997330 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7770345968237256520, guid: b343dde2b3eb2f744bacfe69f6a5c19a, type: 3}
+  m_PrefabInstance: {fileID: 3832652573781273153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991673269}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101ac74223261194c952044eea3af2fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1547411089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2875,6 +2906,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Overlay Selector
       objectReference: {fileID: 0}
+    - target: {fileID: 8144147122655402041, guid: e0181b2dcd93ea5469ed2c662a3f21be, type: 3}
+      propertyPath: managedReferences[3161708668494282758].minimalStressBound
+      value: -50
+      objectReference: {fileID: 0}
     - target: {fileID: 9114255772971403646, guid: e0181b2dcd93ea5469ed2c662a3f21be, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -3018,6 +3053,10 @@ PrefabInstance:
       propertyPath: finances
       value: 
       objectReference: {fileID: 1270538555}
+    - target: {fileID: 5240478169435413523, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
+      propertyPath: m_mask
+      value: 
+      objectReference: {fileID: 1494997330}
     - target: {fileID: 7027475554387804387, guid: 2b0954c297f03d64a875548889b6a208, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

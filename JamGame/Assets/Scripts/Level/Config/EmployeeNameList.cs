@@ -10,10 +10,15 @@ namespace Level.Config
     {
         [SerializeField]
         private List<string> firstNames = new();
-        public IEnumerable<string> FirstNames => firstNames;
 
         [SerializeField]
         private List<string> lastNames = new();
-        public IEnumerable<string> LastNames => lastNames;
+
+        public string GenerateName()
+        {
+            string firstName = firstNames[UnityEngine.Random.Range(0, firstNames.Count)];
+            string lastName = lastNames[UnityEngine.Random.Range(0, lastNames.Count)];
+            return firstName + " " + lastName;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Overlay
 {
@@ -18,6 +19,15 @@ namespace Overlay
         [Required]
         [SerializeField]
         private GameObject selectedIcon;
+
+        [Required]
+        [SerializeField]
+        private Toggle toggle;
+
+        public void ForceSetState(bool state)
+        {
+            toggle.isOn = state;
+        }
 
         // Called by toggle event.
         public void StateChanged(bool state)
