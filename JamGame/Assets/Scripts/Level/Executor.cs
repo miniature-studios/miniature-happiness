@@ -64,10 +64,6 @@ namespace Level
 
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         [SerializeField]
-        private Overlay.Controller offOverlayController;
-
-        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
-        [SerializeField]
         private LoseGamePanel.Model loseGamePanelModel;
 
         [SerializeField]
@@ -142,7 +138,7 @@ namespace Level
             meetingStartNeedOverride.Register();
 
             isPreMeetingEnd = false;
-            _ = StartCoroutine(WaitRoutine(preMeeting.MinWaitingTime));
+            _ = StartCoroutine(PreMeetingDelay(preMeeting.MinWaitingTime));
 
             if (globalTime.IsLocked)
             {
@@ -168,13 +164,12 @@ namespace Level
                             "Cannot set time scale lock in preMeeting End."
                         );
                     },
-                    () => offOverlayController.ForceSetState(true),
                     ActionEndNotify.Invoke
                 }
             );
         }
 
-        private IEnumerator WaitRoutine(float time)
+        private IEnumerator PreMeetingDelay(float time)
         {
             yield return new WaitForSecondsRealtime(time);
             isPreMeetingEnd = true;
@@ -280,7 +275,6 @@ namespace Level
                             "Cannot set time scale lock in End Working."
                         );
                     },
-                    () => offOverlayController.ForceSetState(true),
                     ActionEndNotify.Invoke
                 }
             );

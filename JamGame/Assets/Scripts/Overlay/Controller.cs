@@ -24,11 +24,6 @@ namespace Overlay
         [SerializeField]
         private Toggle toggle;
 
-        public void ForceSetState(bool state)
-        {
-            toggle.isOn = state;
-        }
-
         // Called by toggle event.
         public void StateChanged(bool state)
         {

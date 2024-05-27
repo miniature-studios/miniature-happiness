@@ -346,9 +346,9 @@ namespace Employee
             controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
         }
 
-        public void SetEmployeeConfig(EmployeeConfig employeeConfig)
+        public void SetConfig(EmployeeConfig employeeConfig)
         {
-            // TODO: Implement
+            // TODO: Implement config filling (#121)
         }
     }
 }

@@ -58,11 +58,7 @@ namespace Overlay
         {
             float normalizedStress = stressMeter.Stress;
             normalizedStress =
-                1
-                - (
-                    (normalizedStress - MinimalStressBound)
-                    / (MaximalStressBound - MinimalStressBound)
-                );
+                (normalizedStress - MinimalStressBound) / (MaximalStressBound - MinimalStressBound);
             return gradient.Evaluate(normalizedStress);
         }
 
