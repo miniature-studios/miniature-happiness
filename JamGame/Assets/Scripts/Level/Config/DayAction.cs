@@ -54,6 +54,10 @@ namespace Level.Config
         private RealTimeSeconds duration;
         public RealTimeSeconds Duration => duration;
 
+        [SerializeField]
+        private float employeeEnableDelay;
+        public float EmployeeEnableDelay => employeeEnableDelay;
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);
@@ -63,6 +67,10 @@ namespace Level.Config
     [Serializable]
     public class PreMeeting : IDayAction
     {
+        [SerializeField]
+        private float minWaitingTime;
+        public float MinWaitingTime => minWaitingTime;
+
         public void Execute(Executor executor)
         {
             executor.Execute(this);

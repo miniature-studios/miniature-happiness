@@ -95,9 +95,9 @@ namespace Level.Boss
                 RoomCountUpperBound task
                     => $"Have at most {task.UpperBoundInclusive} [{task.RoomTitle}]s for {progress.Overall} days",
                 MinBalance task
-                    => $"Have at least {task.MinBalanceTarget} for {progress.Overall} days",
+                    => $"Have at least {task.MinBalanceTarget} coins for {progress.Overall} days",
                 MinEmployeesWithQuirk task
-                    => $"Have at least {task.EmployeeCountTarget} with quirk [TODO: #170]",
+                    => $"Have at least {task.EmployeeCountTarget} with quirk [TODO: #170] {task.TargetQuirk.FullName}",
                 MaxWaitingLineLength task
                     => $"Keep waiting lines shorter than {task.LengthTarget} for {progress.Overall} days",
                 DontSatisfyNeed task

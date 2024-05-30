@@ -979,9 +979,9 @@ MonoBehaviour:
   - properties:
       NeedType: 0
       SatisfactionTime:
-        seconds: 1
-      SatisfactionGained: 400
-      DecreaseSpeed: 1
+        seconds: 2
+      SatisfactionGained: 250
+      DecreaseSpeed: 5
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
     satisfied: 0
@@ -989,9 +989,19 @@ MonoBehaviour:
   - properties:
       NeedType: 1
       SatisfactionTime:
-        seconds: 1
+        seconds: 2
+      SatisfactionGained: 150
+      DecreaseSpeed: 4
+      OverrideSatisfaction: 0
+      OverrideSatisfactionValue: 0
+    satisfied: 0
+    registeredModifiers: []
+  - properties:
+      NeedType: 2
+      SatisfactionTime:
+        seconds: 2
       SatisfactionGained: 200
-      DecreaseSpeed: 1
+      DecreaseSpeed: 4
       OverrideSatisfaction: 0
       OverrideSatisfactionValue: 0
     satisfied: 0
@@ -1012,9 +1022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name_: John
-  quirks:
-  - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-  - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+  quirks: []
 --- !u!114 &6274426418331602746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1039,9 +1047,25 @@ MonoBehaviour:
   - StartsAt: 80
     Buff: {fileID: 11400000, guid: 4520cb830b3b3da4eb50861b185c0469, type: 2}
   maxStress: 100
-  configRaw: []
+  configRaw:
+  - NeedType: 0
+    DesatisfactionConfig:
+      Threshold: 0
+      Speed: 0.06
+  - NeedType: 1
+    DesatisfactionConfig:
+      Threshold: 0
+      Speed: 0.06
+  - NeedType: 2
+    DesatisfactionConfig:
+      Threshold: 0
+      Speed: 0.06
+  - NeedType: 5
+    DesatisfactionConfig:
+      Threshold: 0
+      Speed: 0.06
   stress: 10
-  restoreSpeed: 0
+  restoreSpeed: 0.05
 --- !u!114 &7027475554387804412
 MonoBehaviour:
   m_ObjectHideFlags: 0

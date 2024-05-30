@@ -4,6 +4,7 @@ using System.Linq;
 using Employee.Controller;
 using Employee.Needs;
 using Employee.StressMeter;
+using Level.Config;
 using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
@@ -343,6 +344,11 @@ namespace Employee
             targetNeedProvider = null;
 
             controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
+        }
+
+        public void SetConfig(EmployeeConfig employeeConfig)
+        {
+            // TODO: Implement config filling (#121)
         }
     }
 }

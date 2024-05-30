@@ -64,7 +64,6 @@ namespace Level
                     _ = (
                         actionEnumerator = dayEnumerator.Current.DayActions.GetEnumerator()
                     ).MoveNext();
-                    actionEnumerator.Current.Execute(levelExecutor);
                 }
                 else
                 {
@@ -72,9 +71,9 @@ namespace Level
                         actionEnumerator = levelConfig.Config.DefaultDay.DayActions.GetEnumerator()
                     ).MoveNext();
                     isPlanned = false;
-                    actionEnumerator.Current.Execute(levelExecutor);
                 }
             }
+            actionEnumerator.Current.Execute(levelExecutor);
         }
 
         private void PlayDefaultDay()

@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51c39a70600ea274ebd8278a07991c85, type: 3}
-  m_Name: LevelConfig
+  m_Name: TestLevelConfig
   m_EditorClassIdentifier: 
   days:
   - rid: 1908735195745353728
+  - rid: 8023115963875983403
   defaultDay:
+    configMode: 0
     dayActions:
     - rid: 1908735064151687181
     - rid: 1908735064151687168
@@ -27,30 +29,34 @@ MonoBehaviour:
     - rid: 1908735064151687177
     - rid: 1908735064151687178
     - rid: 1908735064151687182
+    preset: {fileID: 0}
   references:
     version: 2
     RefIds:
     - rid: 1908735064151687168
       type: {class: DayStart, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        morningMoney: 800
+        morningMoney: 0
         duration:
           seconds: 1
+        employeeEnableDelay: 1
     - rid: 1908735064151687169
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 1
+          seconds: 1.5
         text: Meeting
     - rid: 1908735064151687170
       type: {class: PreMeeting, ns: Level.Config, asm: Assembly-CSharp}
-      data: 
+      data:
+        minWaitingTime: 1
     - rid: 1908735064151687171
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 8023115883194875904
-        - rid: 8023115883194875905
+        - rid: 8023115963875983386
+        - rid: 8023115963875983387
+        - rid: 8023115963875983405
         mode: 1
         shopRooms:
         - rid: 1908735064151687180
@@ -61,7 +67,7 @@ MonoBehaviour:
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 1
+          seconds: 1.5
         text: Start Working
     - rid: 1908735064151687175
       type: {class: Working, ns: Level.Config, asm: Assembly-CSharp}
@@ -75,7 +81,7 @@ MonoBehaviour:
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 1
+          seconds: 1.5
         text: Day End
     - rid: 1908735064151687178
       type: {class: DayEnd, ns: Level.Config, asm: Assembly-CSharp}
@@ -88,41 +94,74 @@ MonoBehaviour:
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 1
+          seconds: 1.5
         text: Day Start
     - rid: 1908735064151687182
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
         duration:
-          seconds: 1
-        text: Day End
+          seconds: 1.5
+        text: Day Ended
     - rid: 1908735195745353728
       type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
+        configMode: 0
         dayActions:
         - rid: 1908735195745353729
+        preset: {fileID: 0}
     - rid: 1908735195745353729
       type: {class: LoadLevel, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        buildingConfig: {fileID: 11400000, guid: 71d1ca6f250c6624983e1c237ed800cf, type: 2}
+        buildingConfig: {fileID: 11400000, guid: 911ce3b66f911cc4e9f87d3987e02c43, type: 2}
     - rid: 2361025563211333632
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
         room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
-    - rid: 8023115883194875904
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+    - rid: 8023115963875983386
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        name: Hukko
-        hireCost: 150
-        profession: Programmer
-        quirks:
-        - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-    - rid: 8023115883194875905
-      type: {class: FixedEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+        costRange:
+          Min: 10
+          Max: 60
+          Multiply: 5
+        quirkList:
+          QuirkChance: 0.2
+          Quirks:
+          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
+          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
+    - rid: 8023115963875983387
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
-        name: Tattoo
-        hireCost: 2000
-        profession: Worker
-        quirks:
-        - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-        - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+        costRange:
+          Min: 10
+          Max: 60
+          Multiply: 5
+        quirkList:
+          QuirkChance: 0.2
+          Quirks:
+          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
+          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
+    - rid: 8023115963875983403
+      type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        configMode: 1
+        dayActions: []
+        preset: {fileID: 11400000, guid: b6e7115d9042bb04398c4f272c0e0ac5, type: 2}
+    - rid: 8023115963875983405
+      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+      data:
+        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+        costRange:
+          Min: 10
+          Max: 60
+          Multiply: 5
+        quirkList:
+          QuirkChance: 0.2
+          Quirks:
+          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
+          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}

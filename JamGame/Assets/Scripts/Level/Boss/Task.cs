@@ -323,6 +323,7 @@ namespace Level.Boss.Task
         [Pickle(typeof(Quirk), LookupType = ObjectProviderType.Assets)]
         [FoldoutGroup("Min Employee Count With Quirk")]
         private Quirk targetQuirk;
+        public Quirk TargetQuirk => targetQuirk;
 
         private int currentCount = 0;
         private bool complete = false;

@@ -15,6 +15,7 @@ namespace Level.GlobalTime
         private float scale = 1.0f;
 
         private object setTimeScaleLockHolder = null;
+        public bool IsLocked => setTimeScaleLockHolder != null;
 
         private void Awake()
         {

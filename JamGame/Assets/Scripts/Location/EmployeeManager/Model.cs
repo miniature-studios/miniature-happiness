@@ -109,6 +109,7 @@ namespace Location.EmployeeManager
             EmployeeImpl employee = Instantiate(employeePrototype, transform)
                 .GetComponent<EmployeeImpl>();
             employee.gameObject.SetActive(true);
+            employee.SetConfig(config);
 
             MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
