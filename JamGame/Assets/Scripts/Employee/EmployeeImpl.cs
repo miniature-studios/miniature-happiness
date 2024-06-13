@@ -349,6 +349,10 @@ namespace Employee
         public void SetConfig(EmployeeConfig employeeConfig)
         {
             // TODO: Implement config filling (#121)
+            // employeeConfig.Name
+            Personality.PersonalityImpl personality =
+                GetComponentInChildren<Personality.PersonalityImpl>();
+            personality.SetEmployeeConfig(employeeConfig);
         }
     }
 }
