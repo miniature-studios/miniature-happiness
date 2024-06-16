@@ -349,10 +349,11 @@ namespace Employee
         public void SetConfig(EmployeeConfig employeeConfig)
         {
             // TODO: Implement config filling (#121)
-            // employeeConfig.Name
             Personality.PersonalityImpl personality =
-                GetComponentInChildren<Personality.PersonalityImpl>();
+                GetComponentInChildren<Personality.PersonalityImpl>(true);
             personality.SetEmployeeConfig(employeeConfig);
+            ExtendedInfo.View extendedInfoView = GetComponentInChildren<ExtendedInfo.View>(true);
+            extendedInfoView.UpdateQuirks();
         }
     }
 }

@@ -1,15 +1,19 @@
-﻿using Common;
-using Pickle;
+﻿using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 namespace Employee.ExtendedInfo
 {
-    [AddComponentMenu("Scripts/Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.BuffView")]
-    internal class BuffView : MonoBehaviour, IUidHandle
+    [AddComponentMenu("Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.BuffView")]
+    internal class BuffView : MonoBehaviour
     {
-        [Pickle(LookupType = ObjectProviderType.Assets)]
-        public Buff BuffModelPrefab;
+        [Required]
+        [SerializeField]
+        private TMP_Text buffLabel;
 
-        public InternalUid Uid => BuffModelPrefab.Uid;
+        public void InitBuffGraphic(Buff buff)
+        {
+            buffLabel.text = buff.FullName;
+        }
     }
 }

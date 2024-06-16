@@ -16,6 +16,10 @@ namespace Employee.Personality
         public string Name => name_;
 
         [SerializeField]
+        private string profession;
+        public string Profession => profession;
+
+        [SerializeField]
         private List<Quirk> quirks;
         public IEnumerable<Quirk> Quirks => quirks;
 
@@ -48,6 +52,7 @@ namespace Employee.Personality
         {
             name_ = employeeConfig.Name;
             quirks = employeeConfig.Quirks;
+            profession = employeeConfig.Profession;
             InitPersonality();
         }
     }

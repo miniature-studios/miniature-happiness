@@ -1,16 +1,26 @@
-﻿using Common;
-using Employee.Personality;
-using Pickle;
+﻿using Employee.Personality;
+using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Employee.ExtendedInfo
 {
-    [AddComponentMenu("Scripts/Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.QuirkView")]
-    internal class QuirkView : MonoBehaviour, IUidHandle
+    [AddComponentMenu("Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.QuirkView")]
+    internal class QuirkView : MonoBehaviour
     {
-        [Pickle(LookupType = ObjectProviderType.Assets)]
-        public Quirk QuirkModelPrefab;
+        [Required]
+        [SerializeField]
+        private TMP_Text label;
 
-        public InternalUid Uid => QuirkModelPrefab.Uid;
+        [Required]
+        [SerializeField]
+        private Image icon;
+
+        public void InitQuirkGraphic(Quirk quirk)
+        {
+            icon.sprite = quirk.Icon;
+            label.text = quirk.FullName;
+        }
     }
 }
