@@ -103,14 +103,11 @@ namespace TileUnion
             Configuration[rotation].TilesPositions.Select(x => x + position);
         public int TilesCount => tiles.Count;
 
-        public IEnumerable<string> GetAllUniqueMarks()
+        public IEnumerable<RoomTileLabel> GetAllUniqueMarks()
         {
             return tiles
                 .Select(x => x.Marks)
-                .Aggregate(
-                    Enumerable.Empty<string>(),
-                    (x, y) => x.Concat(y.Select(x => x.ToString()))
-                )
+                .Aggregate(Enumerable.Empty<RoomTileLabel>(), (x, y) => x.Concat(y))
                 .Distinct();
         }
 
