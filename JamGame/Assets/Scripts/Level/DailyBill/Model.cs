@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Level.Room;
 using TileBuilder;
@@ -6,11 +7,20 @@ using UnityEngine;
 
 namespace Level.DailyBill
 {
-    [SerializeField]
+    [Serializable]
+    public struct RoomCheck
+    {
+        public CoreModel CoreModel;
+        public int Count;
+        public int OneCost => CoreModel.RoomInfo.RentCost.Value;
+        public int SumCost => CoreModel.RoomInfo.RentCost.Value * Count;
+    }
+
+    [Serializable]
     public struct Check
     {
-        public Dictionary<CoreModel, int> RentByRoom;
-        public int Sum => RentByRoom.Values.Sum();
+        public List<RoomCheck> Checks;
+        public int Sum => Checks.Sum(x => x.SumCost);
     }
 
     [AddComponentMenu("Scripts/Level/DailyBill/Level.DailyBill.Model")]
@@ -24,11 +34,15 @@ namespace Level.DailyBill
         {
             return new Check()
             {
-                RentByRoom = tileBuilder
+                Checks = tileBuilder
                     .AllCoreModels.Where(x => x.RoomInfo.RentCost.Value != 0)
                     .GroupBy(x => x.Uid, x => x)
-                    .Select(x => (CoreModel: x.First(), Sum: x.Sum(x => x.RoomInfo.RentCost.Value)))
-                    .ToDictionary(x => x.CoreModel, x => x.Sum)
+                    .Select(group => new RoomCheck()
+                    {
+                        CoreModel = group.First(),
+                        Count = group.Count()
+                    })
+                    .ToList()
             };
         }
     }
