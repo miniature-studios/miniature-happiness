@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -45,6 +46,9 @@ namespace Employee.Controller
 
         public event Action OnReachedNeedProvider;
 
+        private bool avoidancePriorityIncreased = false;
+        private bool isFirstInWaitingLine = false;
+
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
@@ -67,11 +71,27 @@ namespace Employee.Controller
                     break;
                 case State.Moving:
                     CorrectMovement();
+
+                    if (
+                        agent.remainingDistance < 2.0f
+                        && !avoidancePriorityIncreased
+                        && isFirstInWaitingLine
+                    )
+                    {
+                        agent.avoidancePriority -= 1;
+                        avoidancePriorityIncreased = true;
+                    }
+
                     if (agent.remainingDistance < 0.01f)
                     {
                         state = State.Idle;
                         transform.position = currentDestination + (agent.baseOffset * Vector3.up);
-                        agent.avoidancePriority += 1;
+                        if (avoidancePriorityIncreased)
+                        {
+                            agent.avoidancePriority += 1;
+                            avoidancePriorityIncreased = false;
+                        }
+                        isFirstInWaitingLine = false;
                         OnReachedNeedProvider?.Invoke();
                     }
                     break;
@@ -82,7 +102,7 @@ namespace Employee.Controller
         {
             SetNavigationMode(NavigationMode.Navmesh);
             SetDestination(position);
-            agent.avoidancePriority -= 1;
+            isFirstInWaitingLine = true;
         }
 
         public void SetDestination(Vector3 target_position)
@@ -197,6 +217,8 @@ namespace Employee.Controller
 
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + (steering * 10));
+
+            Handles.Label(transform.position, agent.avoidancePriority.ToString());
         }
     }
 }
