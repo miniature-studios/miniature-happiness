@@ -211,6 +211,7 @@ namespace Employee.Controller
             }
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Vector3 steering = personalSpace.GetPreferredSteeringNormalized();
@@ -220,5 +221,6 @@ namespace Employee.Controller
 
             Handles.Label(transform.position, agent.avoidancePriority.ToString());
         }
+#endif
     }
 }
