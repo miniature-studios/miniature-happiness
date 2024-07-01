@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using Common;
 using Level.Room;
 using TileUnion;
 using UnityEngine;
@@ -107,8 +109,10 @@ namespace TileBuilder.Command
 
             foreach (Vector2Int pos in growingInfo.PositionsToTake)
             {
+                TileUnionImpl tileUnion = tileBuilder.GetTileUnionInPosition(pos);
+                IEnumerable<RoomTileLabel> marks = tileUnion.GetAllUniqueMarks();
                 CoreModel coreModel = tileBuilder.RemoveTileUnion(pos);
-                if (coreModel != null)
+                if (coreModel != null && !marks.Contains(RoomTileLabel.FreeSpace))
                 {
                     borrowedCoreModels.Add(coreModel);
                 }

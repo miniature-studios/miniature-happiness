@@ -1,40 +1,44 @@
 ﻿using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Location.EmployeeManager
 {
     [AddComponentMenu("Scripts/Location/EmployeeManager/Location.EmployeeManager.View")]
     internal class View : MonoBehaviour
     {
-        private const string FIRING_ENABLED_LABEL = "finish firing";
-        private const string FIRING_DISABLED_LABEL = "start firing";
+        [Required]
+        [SerializeField]
+        private Image firingButtonBackground;
 
         [Required]
         [SerializeField]
-        private TMP_Text firingButtonLabel;
+        private Button closeButton;
+
+        [Required]
+        [SerializeField]
+        private Button firingActivationButton;
 
         [Required]
         [SerializeField]
         private Controller controller;
 
-        private bool displayedFiringMode = false;
+        [SerializeField]
+        private Color disabledColor;
+
+        [SerializeField]
+        private Color enabledColor;
 
         private void Start()
         {
-            displayedFiringMode = false;
-            firingButtonLabel.text = FIRING_DISABLED_LABEL;
+            controller.OnFiringModeChanged += OnFiringModeChanged;
         }
 
-        private void Update()
+        private void OnFiringModeChanged(bool value)
         {
-            if (displayedFiringMode != controller.FiringMode)
-            {
-                displayedFiringMode = controller.FiringMode;
-                firingButtonLabel.text = displayedFiringMode
-                    ? FIRING_ENABLED_LABEL
-                    : FIRING_DISABLED_LABEL;
-            }
+            firingButtonBackground.color = value ? enabledColor : disabledColor;
+            closeButton.gameObject.SetActive(value);
+            firingActivationButton.interactable = !value;
         }
     }
 }

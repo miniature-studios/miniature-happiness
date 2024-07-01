@@ -19,20 +19,15 @@ namespace Level.LoseGamePanel
 
         [Required]
         [SerializeField]
-        private TMP_Text daysLabel;
-
-        [Required]
-        [SerializeField]
-        private TMP_Text causeLabel;
+        private TMP_Text infoLabel;
 
         [SerializeField]
         private List<LabelByCause> causeLabels;
 
         public void OnModelChanged(Model model)
         {
-            daysLabel.text = $"Days lived: {model.DaysLived.Value}";
-            causeLabel.text =
-                $"Lose cause: {causeLabels.Find(x => x.Cause == model.LoseCause).Label}";
+            infoLabel.text =
+                $"Days - {model.DaysLived.Value} || Cause - {causeLabels.Find(x => x.Cause == model.LoseCause).Label}";
         }
     }
 }
