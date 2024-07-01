@@ -27,6 +27,11 @@ namespace Employee.Personality
         private string fullName;
         public string FullName => fullName;
 
+        [TextArea]
+        [SerializeField]
+        private string description;
+        public string Description => description;
+
         [Required]
         [PreviewField]
         [SerializeField]

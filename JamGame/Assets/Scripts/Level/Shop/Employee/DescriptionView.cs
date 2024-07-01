@@ -51,6 +51,7 @@ namespace Level.Shop.Employee
             }
             else
             {
+                descriptionQuirkLineParent.gameObject.SetActive(true);
                 foreach (Quirk quirk in card.EmployeeConfig.Quirks)
                 {
                     DescriptionQuirkLine quirkIcon = Instantiate(

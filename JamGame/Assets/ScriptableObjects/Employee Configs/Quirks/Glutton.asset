@@ -17,14 +17,20 @@ MonoBehaviour:
   additionalNeeds:
   - NeedType: 2
     SatisfactionTime:
-      seconds: 1
-    SatisfactionGained: 400
-    DecreaseSpeed: 0.5
+      seconds: 2
+    SatisfactionGained: 300
+    DecreaseSpeed: 4
     OverrideSatisfaction: 0
     OverrideSatisfactionValue: 0
-  effects: []
+  effects:
+  - rid: 4754301508085612548
   fullName: Glutton
+  description: This employee will eat more, but his stress meter will increase slower.
   icon: {fileID: 21300000, guid: db3dbe6063206d84b80f9013e5495116, type: 3}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4754301508085612548
+      type: {class: StressEffect, ns: Employee, asm: Assembly-CSharp}
+      data:
+        increaseMultiplier: 0.5

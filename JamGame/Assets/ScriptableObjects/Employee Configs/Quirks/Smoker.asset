@@ -17,14 +17,21 @@ MonoBehaviour:
   additionalNeeds:
   - NeedType: 5
     SatisfactionTime:
-      seconds: 1
-    SatisfactionGained: 400
-    DecreaseSpeed: 0.1
+      seconds: 2
+    SatisfactionGained: 250
+    DecreaseSpeed: 4
     OverrideSatisfaction: 0
     OverrideSatisfactionValue: 0
-  effects: []
+  effects:
+  - rid: 4754301508085612549
   fullName: Smoker
+  description: This employee will need to use smoke room some time. But will work
+    more efficiently (earn you more money).
   icon: {fileID: 21300000, guid: 8e15b9c7125ccd54d9591d8f920b4ce0, type: 3}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4754301508085612549
+      type: {class: EarnedMoneyEffect, ns: Employee, asm: Assembly-CSharp}
+      data:
+        multiplier: 1.5

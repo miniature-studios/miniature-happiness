@@ -14,10 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uid:
     uid: 1077346953
-  additionalNeeds: []
-  effects: []
+  additionalNeeds:
+  - NeedType: 0
+    SatisfactionTime:
+      seconds: 3
+    SatisfactionGained: 300
+    DecreaseSpeed: 5
+    OverrideSatisfaction: 0
+    OverrideSatisfactionValue: 0
+  effects:
+  - rid: 4754301508085612550
   fullName: Workaholic
+  description: This employee will work more. But his walking speed is less that normal
+    (he is always tired).
   icon: {fileID: 21300000, guid: 847f3788f6fdf7d48b285baaa352dc93, type: 3}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4754301508085612550
+      type: {class: ControllerEffect, ns: Employee, asm: Assembly-CSharp}
+      data:
+        speedMultiplier: 0.8
