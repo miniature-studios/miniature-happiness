@@ -39,7 +39,7 @@ namespace Level.DailyBill
                 lineView.FillWithData(roomCheck);
             }
 
-            sumLabel.text = data.Sum.ToString();
+            sumLabel.text = "-" + data.Sum.ToString();
         }
 
         // Called by button continue.

@@ -34,7 +34,7 @@ namespace Level.DailyBill
             nameLabel.text = roomCheck.CoreModel.RoomInfo.Title;
             costLabel.text = roomCheck.OneCost.ToString() + "$";
             countLabel.text = "X" + roomCheck.Count.ToString();
-            sumLabel.text = roomCheck.SumCost.ToString();
+            sumLabel.text = "-" + roomCheck.SumCost.ToString();
         }
     }
 }
