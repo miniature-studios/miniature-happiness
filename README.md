@@ -60,8 +60,8 @@ For comfortable executing this rules [This Unity Package](https://github.com/Kiu
 
 Project uses two formatters: `.NET format` and `CSharpier`.
 
-- Rules for `.NET format` described in [.editorconfig](https://github.com/mertwole/miniature-happiness/blob/main/JamGame/.editorconfig) file.
-- Rules for `CSharpier` described in [.csharpierrc.json](https://github.com/mertwole/miniature-happiness/blob/main/JamGame/.csharpierrc.json) file.
+- Rules for `.NET format` described in [.editorconfig](https://github.com/miniature-studios/miniature-happiness/blob/main/JamGame/.editorconfig) file.
+- Rules for `CSharpier` described in [.csharpierrc.json](https://github.com/miniature-studios/miniature-happiness/blob/main/JamGame/.csharpierrc.json) file.
 
 <b>.Net format</b> it's a builtin formatter for .NET and can be found [here](https://github.com/dotnet/format).\
 <b>CSharpier</b> it's a tool that can be found [here](https://csharpier.com/) and installed for any popular IDE.
@@ -105,4 +105,4 @@ On first project startup `Pickle` will propose to create `PickleSettings.asset`.
 
 ## License
 
-[MIT license](https://github.com/mertwole/miniature-happiness/blob/main/LICENSE)
+[GNU General Public License](https://github.com/miniature-studios/miniature-happiness/blob/main/LICENSE)
