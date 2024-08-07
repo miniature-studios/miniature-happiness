@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Common;
 using Employee.Needs;
 using Level.Boss.Task;
+using Level.Config;
 using UnityEngine;
 
 namespace Employee.Personality
@@ -15,12 +16,16 @@ namespace Employee.Personality
         public string Name => name_;
 
         [SerializeField]
+        private string profession;
+        public string Profession => profession;
+
+        [SerializeField]
         private List<Quirk> quirks;
         public IEnumerable<Quirk> Quirks => quirks;
 
         private DataProvider<EmployeeQuirks> employeeQuirksDataProvider;
 
-        private void Start()
+        private void InitPersonality()
         {
             employeeQuirksDataProvider = new DataProvider<EmployeeQuirks>(
                 () => new EmployeeQuirks() { Quirks = quirks },
@@ -41,6 +46,14 @@ namespace Employee.Personality
                     employee.RegisterEffect(effect);
                 }
             }
+        }
+
+        public void SetEmployeeConfig(EmployeeConfig employeeConfig)
+        {
+            name_ = employeeConfig.Name;
+            quirks = employeeConfig.Quirks;
+            profession = employeeConfig.Profession;
+            InitPersonality();
         }
     }
 }

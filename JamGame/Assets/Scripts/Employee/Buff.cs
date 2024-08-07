@@ -12,6 +12,10 @@ namespace Employee
         private InternalUid uid;
         public InternalUid Uid => uid;
 
+        [SerializeField]
+        private string fullName;
+        public string FullName => fullName;
+
         public Days Time;
 
         [SerializeReference]

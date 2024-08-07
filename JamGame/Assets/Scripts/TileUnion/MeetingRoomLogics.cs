@@ -48,8 +48,8 @@ namespace TileUnion
         private int employeePerGrow = 2;
 
         [SerializeField]
-        private List<string> incorrectMarks = new();
-        public IEnumerable<string> IncorrectMarks => incorrectMarks;
+        private List<RoomTileLabel> incorrectMarks = new();
+        public IEnumerable<RoomTileLabel> IncorrectMarks => incorrectMarks;
 
         private void Start()
         {

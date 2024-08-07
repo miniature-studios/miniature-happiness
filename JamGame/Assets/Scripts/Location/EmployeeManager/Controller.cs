@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Employee;
 using Sirenix.OdinInspector;
@@ -23,6 +24,7 @@ namespace Location.EmployeeManager
         private GameObject uiBlocker;
 
         private bool firingMode = false;
+        public event Action<bool> OnFiringModeChanged;
         public bool FiringMode => firingMode;
 
         private InputActions inputActions;
@@ -52,6 +54,7 @@ namespace Location.EmployeeManager
         public void FiringButtonPressed()
         {
             firingMode ^= true;
+            OnFiringModeChanged?.Invoke(firingMode);
             uiBlocker.SetActive(firingMode);
         }
 

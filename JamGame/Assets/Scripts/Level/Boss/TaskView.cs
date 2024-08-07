@@ -106,9 +106,17 @@ namespace Level.Boss
                     => $"Earn at least {progress.Overall} money in a single working session",
                 _ => throw new NotImplementedException("This task type is not supported")
             };
+
+            progressScale = progressScaleParent.GetComponentsInChildren<Image>();
+            UpdateProgress();
         }
 
         private void FixedUpdate()
+        {
+            UpdateProgress();
+        }
+
+        private void UpdateProgress()
         {
             Progress progress = task.Progress;
 
