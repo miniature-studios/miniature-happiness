@@ -135,6 +135,15 @@ namespace Location
             {
                 _ = Employees.Remove(employee);
             }
+
+            public bool IsEmployeeBound(EmployeeImpl employee)
+            {
+                return FilterType switch
+                {
+                    FilterType.FirstToTake => Employees.Count == 1 && Employees[0] == employee,
+                    _ => false,
+                };
+            }
         }
 
         [SerializeField]
@@ -142,7 +151,6 @@ namespace Location
 
         [SerializeField]
         private bool bindToThisProviderOnFirstVisit;
-        public bool BindToThisNeedProviderOnFirstVisit => bindToThisProviderOnFirstVisit;
 
         public NeedType NeedType;
 
@@ -252,6 +260,11 @@ namespace Location
         public bool IsAvailable(EmployeeImpl employee)
         {
             return filter.IsEmployeeAllowed(employee);
+        }
+
+        public bool IsEmployeeBound(EmployeeImpl employee)
+        {
+            return filter.IsEmployeeBound(employee);
         }
 
         public PlaceInWaitingLine TryLineUp(EmployeeImpl employee)

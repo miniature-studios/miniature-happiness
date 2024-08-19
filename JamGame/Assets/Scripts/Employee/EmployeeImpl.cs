@@ -62,9 +62,6 @@ namespace Employee
         [SerializeField]
         private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
 
-        // NOTE: We may want to preserve it between levels, so we may need to serialize it in this case.
-        private Dictionary<NeedType, NeedProvider> needProviderBindings = new();
-
         private void OnEnable()
         {
             controller.OnReachedNeedProvider += ReachedNeedProvider;
@@ -207,22 +204,27 @@ namespace Employee
                     break;
                 }
 
-                // Room to which current employee was bound is destroyed.
-                if (
-                    needProviderBindings.TryGetValue(need.NeedType, out NeedProvider np)
-                    && np == null
-                )
-                {
-                    _ = needProviderBindings.Remove(need.NeedType);
-                }
-
                 List<NeedProvider> available_providers = needProviderManager
                     .FindAllAvailableProviders(this, need.NeedType)
-                    .Where(np =>
-                        !needProviderBindings.ContainsKey(np.NeedType)
-                        || needProviderBindings[np.NeedType] == np
-                    )
                     .ToList();
+
+                List<NeedProvider> bound_to = available_providers
+                    .Where(need_provider => need_provider.IsEmployeeBound(this))
+                    .ToList();
+
+                switch (bound_to.Count)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        available_providers = bound_to;
+                        break;
+                    default:
+                        Debug.LogError(
+                            "Employee is bound to multiple NeedProviders with the same NeedType"
+                        );
+                        break;
+                }
 
                 NeedProvider selected_provider = null;
                 float min_distance = float.PositiveInfinity;
@@ -304,15 +306,13 @@ namespace Employee
                 .GetProperties()
                 .SatisfactionTime;
             currentlySatisfyingNeed = currentNeed;
+
             targetNeedProvider.Take(
                 placeInWaitingLine,
                 satisfying_need_remaining,
                 ReleasedFromNeedProvider
             );
-            if (targetNeedProvider.BindToThisNeedProviderOnFirstVisit)
-            {
-                BindToNeedProvider(targetNeedProvider);
-            }
+
             state = State.SatisfyingNeed;
 
             // TODO: Remove it when employee serialization will be implemented (#121)
@@ -321,21 +321,6 @@ namespace Employee
                 placeInWaitingLine.Drop();
                 gameObject.SetActive(false);
             }
-        }
-
-        private void BindToNeedProvider(NeedProvider need_provider)
-        {
-            if (needProviderBindings.ContainsKey(need_provider.NeedType))
-            {
-                if (needProviderBindings[need_provider.NeedType] != need_provider)
-                {
-                    Debug.LogError("Trying to bind NeedProvider when there's already one binding");
-                }
-
-                return;
-            }
-
-            needProviderBindings.Add(need_provider.NeedType, need_provider);
         }
 
         public void ReleasedFromNeedProvider()
