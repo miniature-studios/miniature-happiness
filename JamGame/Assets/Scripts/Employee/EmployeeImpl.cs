@@ -32,8 +32,11 @@ namespace Employee
         [ReadOnly]
         private State state = State.Idle;
 
-        [SerializeField]
         private NeedProviderManager needProviderManager;
+        public NeedProviderManager NeedProviderManager
+        {
+            set => needProviderManager = value;
+        }
 
         [SerializeField]
         private List<Need> needs = new();
@@ -47,6 +50,7 @@ namespace Employee
 
         [SerializeField]
         private IncomeGenerator.Model incomeGenerator;
+        public IncomeGenerator.Model IncomeGenerator => incomeGenerator;
 
         public StressMeterImpl Stress { get; private set; }
 
@@ -57,6 +61,9 @@ namespace Employee
         [MinMaxSlider(0, 10, true)]
         [SerializeField]
         private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
+
+        // NOTE: We may want to preserve it between levels, so we may need to serialize it in this case.
+        private Dictionary<NeedType, NeedProvider> needProviderBindings = new();
 
         private void OnEnable()
         {
@@ -182,9 +189,6 @@ namespace Employee
             }
             needs.Add(need);
         }
-
-        // NOTE: We may want to preserve it between levels, so we may need to serialize it in this case.
-        private Dictionary<NeedType, NeedProvider> needProviderBindings = new();
 
         private NeedProvider GetTargetNeedProvider()
         {

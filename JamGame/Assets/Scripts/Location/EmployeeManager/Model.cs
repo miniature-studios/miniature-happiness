@@ -34,6 +34,14 @@ namespace Location.EmployeeManager
         private EmployeeImpl employeePrototype;
 
         [SerializeField]
+        [Required]
+        private NeedProviderManager needProviderManager;
+
+        [SerializeField]
+        [Required]
+        private Level.Finances.Model finances;
+
+        [SerializeField]
         private TileBuilderController tileBuilderController;
 
         [ReadOnly]
@@ -108,8 +116,11 @@ namespace Location.EmployeeManager
 
             EmployeeImpl employee = Instantiate(employeePrototype, transform)
                 .GetComponent<EmployeeImpl>();
+
             employee.gameObject.SetActive(true);
             employee.SetConfig(config);
+            employee.NeedProviderManager = needProviderManager;
+            employee.IncomeGenerator.Finances = finances;
 
             MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();
