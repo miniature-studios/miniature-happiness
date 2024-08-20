@@ -52,7 +52,6 @@ namespace Employee
         private ControllerImpl controller;
 
         [SerializeField]
-        [Required]
         private IncomeGenerator.Model incomeGenerator;
         public IncomeGenerator.Model IncomeGenerator => incomeGenerator;
 
@@ -68,7 +67,6 @@ namespace Employee
 
         [SerializeField]
         [ReadOnly]
-        [Required]
         private PersonalityImpl personality;
         public PersonalityImpl Personality => personality;
 
@@ -349,14 +347,6 @@ namespace Employee
 
         public void SetPersonality(PersonalityImpl personality)
         {
-            if (this.personality != null)
-            {
-                Debug.LogError(
-                    "Attempted to set personality config for already initialized employee"
-                );
-                return;
-            }
-
             this.personality = personality;
 
             foreach (Quirk quirk in personality.Quirks)

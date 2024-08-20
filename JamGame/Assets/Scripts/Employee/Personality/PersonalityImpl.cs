@@ -11,11 +11,23 @@ namespace Employee.Personality
         public PersonalityImpl GetPersonality();
     }
 
+    [Serializable]
     public class PersonalityImpl
     {
+        [SerializeField]
+        [ReadOnly]
         private string name;
+
+        [SerializeField]
+        [ReadOnly]
         private int hireCost;
+
+        [SerializeField]
+        [ReadOnly]
         private string profession;
+
+        [SerializeField]
+        [ReadOnly]
         private List<Quirk> quirks;
 
         public string Name => name;
