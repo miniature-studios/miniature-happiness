@@ -43,6 +43,7 @@ namespace Employee
         [SerializeField]
         private List<Need> needs = new();
 
+        // These fields aren't marked as [SerializeField], so will not be maintained between days.
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
         private NeedProvider targetNeedProvider = null;
