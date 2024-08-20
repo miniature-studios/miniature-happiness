@@ -42,6 +42,7 @@ namespace Employee
 
         [SerializeField]
         private List<Need> needs = new();
+
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
         private NeedProvider targetNeedProvider = null;
@@ -51,6 +52,7 @@ namespace Employee
         private ControllerImpl controller;
 
         [SerializeField]
+        [Required]
         private IncomeGenerator.Model incomeGenerator;
         public IncomeGenerator.Model IncomeGenerator => incomeGenerator;
 
@@ -66,6 +68,7 @@ namespace Employee
 
         [SerializeField]
         [ReadOnly]
+        [Required]
         private PersonalityImpl personality;
         public PersonalityImpl Personality => personality;
 
