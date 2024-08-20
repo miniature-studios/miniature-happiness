@@ -18,10 +18,6 @@ namespace Employee.ExtendedInfo
 
         [SerializeField]
         [Required]
-        private PersonalityImpl personality;
-
-        [SerializeField]
-        [Required]
         private EmployeeImpl employee;
 
         [Required]
@@ -69,7 +65,7 @@ namespace Employee.ExtendedInfo
                 AddBuff(buff);
             }
 
-            foreach (Quirk quirk in personality.Quirks)
+            foreach (Quirk quirk in employee.Personality.Quirks)
             {
                 AddQuirk(quirk);
             }
@@ -95,7 +91,7 @@ namespace Employee.ExtendedInfo
         private void Update()
         {
             transform.LookAt(cam.transform.position);
-            name_text.text = $"{personality.Name}";
+            name_text.text = $"{employee.Personality.Name}";
         }
 
         public void OnBuffsChanged(object sender, NotifyCollectionChangedEventArgs e)

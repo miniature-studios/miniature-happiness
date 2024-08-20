@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Common;
-using Level.Config;
+using Employee.Personality;
 using Level.Room;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ namespace Level.Shop
             remove => roomsInShop.CollectionChanged -= value;
         }
 
-        private ObservableCollection<EmployeeConfig> employeesInShop = new();
+        private ObservableCollection<PersonalityImpl> employeesInShop = new();
         public event NotifyCollectionChangedEventHandler EmployeeCollectionChanged
         {
             add => employeesInShop.CollectionChanged += value;
@@ -63,16 +63,16 @@ namespace Level.Shop
             roomsInShop.Clear();
         }
 
-        public void ResetEmployees(IEnumerable<EmployeeConfig> employees)
+        public void ResetEmployees(IEnumerable<PersonalityImpl> employees)
         {
             ClearEmployees();
-            foreach (EmployeeConfig employee in employees)
+            foreach (PersonalityImpl employee in employees)
             {
                 AddEmployee(employee);
             }
         }
 
-        public void AddEmployee(EmployeeConfig employee)
+        public void AddEmployee(PersonalityImpl employee)
         {
             employeesInShop.Add(employee);
         }

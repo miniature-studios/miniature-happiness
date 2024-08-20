@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Employee.Personality;
 using Level.GlobalTime;
 using Sirenix.OdinInspector;
 using TileBuilder;
 using UnityEngine;
+using IPersonalityConfig = Employee.Personality.IConfig;
 
 namespace Level.Config
 {
@@ -82,9 +84,9 @@ namespace Level.Config
     {
         [SerializeReference]
         [FoldoutGroup("Employees to sell in shop")]
-        private List<IEmployeeConfig> shopEmployees = new();
-        public IEnumerable<EmployeeConfig> ShopEmployees =>
-            shopEmployees.Select(x => x.GetEmployeeConfig());
+        private List<IPersonalityConfig> shopEmployees = new();
+        public IEnumerable<PersonalityImpl> ShopEmployees =>
+            shopEmployees.Select(x => x.GetPersonality());
 
         private enum SourceMode
         {

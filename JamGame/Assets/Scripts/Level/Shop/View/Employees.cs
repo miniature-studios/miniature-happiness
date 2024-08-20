@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Level.Config;
+using Employee.Personality;
 using Pickle;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -43,10 +43,10 @@ namespace Level.Shop.View
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    AddNewEmployee(e.NewItems[0] as EmployeeConfig);
+                    AddNewEmployee(e.NewItems[0] as PersonalityImpl);
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    RemoveOldEmployee(e.OldItems[0] as EmployeeConfig);
+                    RemoveOldEmployee(e.OldItems[0] as PersonalityImpl);
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     DeleteAllEmployees();
@@ -59,21 +59,21 @@ namespace Level.Shop.View
             }
         }
 
-        private void AddNewEmployee(EmployeeConfig newEmployee)
+        private void AddNewEmployee(PersonalityImpl newEmployee)
         {
             Employee.CardView newEmployeeCard = Instantiate(
                 employeeCardPrefab,
                 content.ContentTransform
             );
             newEmployeeCard.Initialize();
-            newEmployeeCard.SetEmployeeConfig(newEmployee);
+            newEmployeeCard.SetEmployeePersonality(newEmployee);
             employeeCards.Add(newEmployeeCard);
 
             newEmployeeCard.OnPointerEnterEvent += () => cardInstance.UpdateData(newEmployeeCard);
             newEmployeeCard.OnPointerExitEvent += () => cardInstance.UpdateData(null);
         }
 
-        private void RemoveOldEmployee(EmployeeConfig oldEmployee)
+        private void RemoveOldEmployee(PersonalityImpl oldEmployee)
         {
             Employee.CardView employeeCard = employeeCards.Find(x =>
                 x.EmployeeConfig == oldEmployee

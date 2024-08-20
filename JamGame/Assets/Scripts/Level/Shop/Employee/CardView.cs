@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Common;
 using Employee.Personality;
-using Level.Config;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -58,8 +57,8 @@ namespace Level.Shop.Employee
 
         [ReadOnly]
         [SerializeField]
-        private EmployeeConfig employeeConfig;
-        public EmployeeConfig EmployeeConfig => employeeConfig;
+        private PersonalityImpl employeeConfig;
+        public PersonalityImpl EmployeeConfig => employeeConfig;
 
         private Controller controller;
         private Dictionary<InternalUid, Quirk> quirksByUid;
@@ -74,9 +73,9 @@ namespace Level.Shop.Employee
             quirksByUid = AddressableTools.LoadAllScriptableObjectAssets<Quirk>(quirkLabel);
         }
 
-        public void SetEmployeeConfig(EmployeeConfig employeeConfig)
+        public void SetEmployeePersonality(PersonalityImpl employeePersonality)
         {
-            this.employeeConfig = employeeConfig;
+            employeeConfig = employeePersonality;
             UpdateData();
         }
 

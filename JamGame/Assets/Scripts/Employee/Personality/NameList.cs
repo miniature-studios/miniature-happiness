@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Level.Config
+namespace Employee.Personality
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "EmployeeNameList", menuName = "Level/EmployeeNameList")]
-    public class EmployeeNameList : ScriptableObject
+    [CreateAssetMenu(fileName = "NameList", menuName = "Employee/NameList")]
+    public class NameList : ScriptableObject
     {
         [SerializeField]
         private List<string> firstNames = new();

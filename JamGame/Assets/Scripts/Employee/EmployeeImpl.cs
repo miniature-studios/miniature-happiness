@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Employee.Controller;
 using Employee.Needs;
+using Employee.Personality;
 using Employee.StressMeter;
-using Level.Config;
+using Level.Boss.Task;
 using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
@@ -61,6 +63,13 @@ namespace Employee
         [MinMaxSlider(0, 10, true)]
         [SerializeField]
         private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
+
+        [SerializeField]
+        [ReadOnly]
+        private PersonalityImpl personality;
+        public PersonalityImpl Personality => personality;
+
+        private DataProvider<EmployeeQuirks> employeeQuirksDataProvider;
 
         private void OnEnable()
         {
@@ -335,9 +344,35 @@ namespace Employee
             controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
         }
 
-        public void SetConfig(EmployeeConfig employeeConfig)
+        public void SetPersonality(PersonalityImpl personality)
         {
-            // TODO: Implement config filling (#121)
+            if (this.personality != null)
+            {
+                Debug.LogError(
+                    "Attempted to set personality config for already initialized employee"
+                );
+                return;
+            }
+
+            this.personality = personality;
+
+            foreach (Quirk quirk in personality.Quirks)
+            {
+                foreach (Need.NeedProperties additional_need in quirk.AdditionalNeeds)
+                {
+                    AddNeed(additional_need);
+                }
+
+                foreach (IEffect effect in quirk.Effects)
+                {
+                    RegisterEffect(effect);
+                }
+            }
+
+            employeeQuirksDataProvider = new DataProvider<EmployeeQuirks>(
+                () => new EmployeeQuirks() { Quirks = this.personality.Quirks },
+                DataProviderServiceLocator.ResolveType.MultipleSources
+            );
         }
     }
 }
