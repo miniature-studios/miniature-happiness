@@ -33,6 +33,8 @@ namespace Employee
 
         public event NotifyCollectionChangedEventHandler AppliedBuffsChanged;
 
+        [SerializeField]
+        [ReadOnly]
         private BuffsNeedModifiersPool buffsNeedModifiers;
 
         private void UpdateBuffs(RealTimeSeconds delta_time)
@@ -200,15 +202,22 @@ namespace Employee
         }
     }
 
+    [Serializable]
     internal class BuffsNeedModifiersPool : IEffectExecutor<NeedModifierEffect>
     {
+        [Serializable]
         private struct RegisteredModifiers
         {
             public NeedModifierEffect Effect;
             public NeedModifiers Modifiers;
         }
 
+        [SerializeField]
+        [ReadOnly]
         private List<RegisteredModifiers> registeredModifiers = new();
+
+        [SerializeField]
+        [HideInInspector]
         private EmployeeImpl employee;
 
         public BuffsNeedModifiersPool(EmployeeImpl employee)
