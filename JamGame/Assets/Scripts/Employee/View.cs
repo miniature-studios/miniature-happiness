@@ -43,6 +43,7 @@ namespace Employee
         }
     }
 
+    [RequireComponent(typeof(PostEffectMaskRenderer))]
     public partial class View : IOverlayRenderer<Stress>
     {
         [Required]
@@ -59,8 +60,21 @@ namespace Employee
 
         private Stress appliedStressOverlay;
 
+        private PostEffectMaskRenderer maskRenderer;
+
         public void ApplyOverlay(Stress overlay)
         {
+            if (maskRenderer == null)
+            {
+                maskRenderer = GetComponent<PostEffectMaskRenderer>();
+                PostEffectMask mask = Camera.main.GetComponent<PostEffectMask>();
+                if (mask == null)
+                {
+                    Debug.LogError("Unable to find PostEffectMask on main camera");
+                }
+                maskRenderer.mask = mask;
+            }
+
             appliedStressOverlay = overlay;
             meshRenderer.material = stressMaterial;
         }

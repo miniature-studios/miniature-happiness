@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Common;
+using Employee.Personality;
 using Level.Config;
 using Level.Inventory.Controller;
 using Level.Room;
@@ -56,12 +57,12 @@ namespace Level.Shop
             return new SuccessResult();
         }
 
-        public void SetShopEmployees(IEnumerable<EmployeeConfig> employeeConfigs)
+        public void SetShopEmployees(IEnumerable<PersonalityImpl> employeePersonalities)
         {
-            shopModel.ResetEmployees(employeeConfigs);
+            shopModel.ResetEmployees(employeePersonalities);
         }
 
-        public Result TryBuyEmployee(EmployeeConfig employee)
+        public Result TryBuyEmployee(PersonalityImpl employee)
         {
             Result result = financesController.TryTakeMoney(employee.HireCost);
             if (result.Success)

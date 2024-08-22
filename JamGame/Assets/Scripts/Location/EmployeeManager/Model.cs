@@ -4,9 +4,9 @@ using System.Linq;
 using Common;
 using Employee;
 using Employee.Needs;
+using Employee.Personality;
 using Level;
 using Level.Boss.Task;
-using Level.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,6 +32,14 @@ namespace Location.EmployeeManager
 
         [SerializeField]
         private EmployeeImpl employeePrototype;
+
+        [SerializeField]
+        [Required]
+        private NeedProviderManager needProviderManager;
+
+        [SerializeField]
+        [Required]
+        private Level.Finances.Model finances;
 
         [SerializeField]
         private TileBuilderController tileBuilderController;
@@ -97,7 +105,7 @@ namespace Location.EmployeeManager
             }
         }
 
-        public Result AddEmployee(EmployeeConfig config)
+        public Result AddEmployee(PersonalityImpl personality)
         {
             Result result = tileBuilderController.GrowMeetingRoomForEmployees(employees.Count + 1);
 
@@ -108,8 +116,11 @@ namespace Location.EmployeeManager
 
             EmployeeImpl employee = Instantiate(employeePrototype, transform)
                 .GetComponent<EmployeeImpl>();
+
             employee.gameObject.SetActive(true);
-            employee.SetConfig(config);
+            employee.SetPersonality(personality);
+            employee.NeedProviderManager = needProviderManager;
+            employee.IncomeGenerator.Finances = finances;
 
             MeetingRoomPlaces meeting_room_places =
                 DataProviderServiceLocator.FetchDataFromSingleton<MeetingRoomPlaces>();

@@ -9,8 +9,11 @@ namespace Employee.IncomeGenerator
     [AddComponentMenu("Scripts/Employee/IncomeGenerator/Employee.IncomeGenerator.Model")]
     public class Model : MonoBehaviour, IEffectExecutor<EarnedMoneyEffect>
     {
-        [SerializeField]
         private Level.Finances.Model finances;
+        public Level.Finances.Model Finances
+        {
+            set => finances = value;
+        }
 
         [SerializeField]
         private int incomePerWorkingSession;

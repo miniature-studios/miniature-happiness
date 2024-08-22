@@ -27,6 +27,14 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 4331002058033856516
+      type: {class: FixedConfig, ns: Employee.Personality, asm: Assembly-CSharp}
+      data:
+        name: John Appleseed
+        hireCost: 100
+        profession: Software Engineer
+        quirks:
+        - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
     - rid: 8023115963875983388
       type: {class: Cutscene, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -54,9 +62,7 @@ MonoBehaviour:
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 8023115963875983399
-        - rid: 8023115963875983400
-        - rid: 8023115963875983406
+        - rid: 4331002058033856516
         mode: 1
         shopRooms:
         - rid: 8023115963875983401
@@ -92,34 +98,6 @@ MonoBehaviour:
         duration:
           seconds: 1.5
         text: Day Ended
-    - rid: 8023115963875983399
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-        costRange:
-          Min: 10
-          Max: 60
-          Multiply: 5
-        quirkList:
-          QuirkChance: 0.2
-          Quirks:
-          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
-    - rid: 8023115963875983400
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-        costRange:
-          Min: 10
-          Max: 60
-          Multiply: 5
-        quirkList:
-          QuirkChance: 0.2
-          Quirks:
-          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
     - rid: 8023115963875983401
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
@@ -128,17 +106,3 @@ MonoBehaviour:
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
         room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
-    - rid: 8023115963875983406
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-        costRange:
-          Min: 10
-          Max: 60
-          Multiply: 5
-        quirkList:
-          QuirkChance: 0.2
-          Quirks:
-          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common;
 using Employee.Controller;
 using Employee.Needs;
+using Employee.Personality;
 using Employee.StressMeter;
-using Level.Config;
+using Level.Boss.Task;
 using Level.GlobalTime;
 using Location;
 using Sirenix.OdinInspector;
@@ -32,11 +34,16 @@ namespace Employee
         [ReadOnly]
         private State state = State.Idle;
 
-        [SerializeField]
         private NeedProviderManager needProviderManager;
+        public NeedProviderManager NeedProviderManager
+        {
+            set => needProviderManager = value;
+        }
 
         [SerializeField]
         private List<Need> needs = new();
+
+        // These fields aren't marked as [SerializeField], so will not be maintained between days.
         private Need currentNeed;
         private Need currentlySatisfyingNeed;
         private NeedProvider targetNeedProvider = null;
@@ -47,6 +54,7 @@ namespace Employee
 
         [SerializeField]
         private IncomeGenerator.Model incomeGenerator;
+        public IncomeGenerator.Model IncomeGenerator => incomeGenerator;
 
         public StressMeterImpl Stress { get; private set; }
 
@@ -57,6 +65,13 @@ namespace Employee
         [MinMaxSlider(0, 10, true)]
         [SerializeField]
         private Vector2 keepDistanceFromNextInLine = new(1.0f, 1.5f);
+
+        [SerializeField]
+        [ReadOnly]
+        private PersonalityImpl personality;
+        public PersonalityImpl Personality => personality;
+
+        private DataProvider<EmployeeQuirks> employeeQuirksDataProvider;
 
         private void OnEnable()
         {
@@ -183,9 +198,6 @@ namespace Employee
             needs.Add(need);
         }
 
-        // NOTE: We may want to preserve it between levels, so we may need to serialize it in this case.
-        private Dictionary<NeedType, NeedProvider> needProviderBindings = new();
-
         private NeedProvider GetTargetNeedProvider()
         {
             needs.Sort((x, y) => x.Satisfied.CompareTo(y.Satisfied));
@@ -203,22 +215,27 @@ namespace Employee
                     break;
                 }
 
-                // Room to which current employee was bound is destroyed.
-                if (
-                    needProviderBindings.TryGetValue(need.NeedType, out NeedProvider np)
-                    && np == null
-                )
-                {
-                    _ = needProviderBindings.Remove(need.NeedType);
-                }
-
                 List<NeedProvider> available_providers = needProviderManager
                     .FindAllAvailableProviders(this, need.NeedType)
-                    .Where(np =>
-                        !needProviderBindings.ContainsKey(np.NeedType)
-                        || needProviderBindings[np.NeedType] == np
-                    )
                     .ToList();
+
+                List<NeedProvider> bound_to = available_providers
+                    .Where(need_provider => need_provider.IsEmployeeBound(this))
+                    .ToList();
+
+                switch (bound_to.Count)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        available_providers = bound_to;
+                        break;
+                    default:
+                        Debug.LogError(
+                            "Employee is bound to multiple NeedProviders with the same NeedType"
+                        );
+                        break;
+                }
 
                 NeedProvider selected_provider = null;
                 float min_distance = float.PositiveInfinity;
@@ -300,15 +317,13 @@ namespace Employee
                 .GetProperties()
                 .SatisfactionTime;
             currentlySatisfyingNeed = currentNeed;
+
             targetNeedProvider.Take(
                 placeInWaitingLine,
                 satisfying_need_remaining,
                 ReleasedFromNeedProvider
             );
-            if (targetNeedProvider.BindToThisNeedProviderOnFirstVisit)
-            {
-                BindToNeedProvider(targetNeedProvider);
-            }
+
             state = State.SatisfyingNeed;
 
             // TODO: Remove it when employee serialization will be implemented (#121)
@@ -317,21 +332,6 @@ namespace Employee
                 placeInWaitingLine.Drop();
                 gameObject.SetActive(false);
             }
-        }
-
-        private void BindToNeedProvider(NeedProvider need_provider)
-        {
-            if (needProviderBindings.ContainsKey(need_provider.NeedType))
-            {
-                if (needProviderBindings[need_provider.NeedType] != need_provider)
-                {
-                    Debug.LogError("Trying to bind NeedProvider when there's already one binding");
-                }
-
-                return;
-            }
-
-            needProviderBindings.Add(need_provider.NeedType, need_provider);
         }
 
         public void ReleasedFromNeedProvider()
@@ -346,9 +346,27 @@ namespace Employee
             controller.SetNavigationMode(ControllerImpl.NavigationMode.Navmesh);
         }
 
-        public void SetConfig(EmployeeConfig employeeConfig)
+        public void SetPersonality(PersonalityImpl personality)
         {
-            // TODO: Implement config filling (#121)
+            this.personality = personality;
+
+            foreach (Quirk quirk in personality.Quirks)
+            {
+                foreach (Need.NeedProperties additional_need in quirk.AdditionalNeeds)
+                {
+                    AddNeed(additional_need);
+                }
+
+                foreach (IEffect effect in quirk.Effects)
+                {
+                    RegisterEffect(effect);
+                }
+            }
+
+            employeeQuirksDataProvider = new DataProvider<EmployeeQuirks>(
+                () => new EmployeeQuirks() { Quirks = this.personality.Quirks },
+                DataProviderServiceLocator.ResolveType.MultipleSources
+            );
         }
     }
 }

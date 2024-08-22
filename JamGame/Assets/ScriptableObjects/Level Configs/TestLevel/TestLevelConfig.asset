@@ -54,9 +54,7 @@ MonoBehaviour:
       type: {class: Meeting, ns: Level.Config, asm: Assembly-CSharp}
       data:
         shopEmployees:
-        - rid: 8023115963875983386
-        - rid: 8023115963875983387
-        - rid: 8023115963875983405
+        - rid: 4331002058033856517
         mode: 1
         shopRooms:
         - rid: 1908735064151687180
@@ -117,51 +115,22 @@ MonoBehaviour:
       type: {class: FixedRoomConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
         room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
-    - rid: 8023115963875983386
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
+    - rid: 4331002058033856517
+      type: {class: RandomConfig, ns: Employee.Personality, asm: Assembly-CSharp}
       data:
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
+        nameList: {fileID: 11400000, guid: d3768e6f3adf815449b7c57a30e90b99, type: 2}
         costRange:
-          Min: 10
-          Max: 60
-          Multiply: 5
+          Min: 5
+          Max: 30
+          Multiply: 10
         quirkList:
           QuirkChance: 0.2
           Quirks:
           - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
           - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
-    - rid: 8023115963875983387
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-        costRange:
-          Min: 10
-          Max: 60
-          Multiply: 5
-        quirkList:
-          QuirkChance: 0.2
-          Quirks:
-          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
     - rid: 8023115963875983403
       type: {class: DayConfig, ns: Level.Config, asm: Assembly-CSharp}
       data:
         configMode: 1
         dayActions: []
         preset: {fileID: 11400000, guid: b6e7115d9042bb04398c4f272c0e0ac5, type: 2}
-    - rid: 8023115963875983405
-      type: {class: RandomEmployeeConfig, ns: Level.Config, asm: Assembly-CSharp}
-      data:
-        nameList: {fileID: 11400000, guid: 9cfeb54453d2df345b5583d794c43760, type: 2}
-        costRange:
-          Min: 10
-          Max: 60
-          Multiply: 5
-        quirkList:
-          QuirkChance: 0.2
-          Quirks:
-          - {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
-          - {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
-          - {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
