@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -220,7 +219,7 @@ namespace Employee.Controller
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, transform.position + (steering * 10));
 
-            Handles.Label(transform.position, agent.avoidancePriority.ToString());
+            UnityEditor.Handles.Label(transform.position, agent.avoidancePriority.ToString());
         }
     }
 }
