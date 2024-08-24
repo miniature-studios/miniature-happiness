@@ -76,16 +76,16 @@ namespace Level.Boss.Task
         public Progress Progress =>
             new()
             {
-                Completion = currentDuration.Value,
-                Overall = targetDuration.Value,
+                Completion = currentDuration.RealTimeSeconds.Value,
+                Overall = targetDuration.RealTimeSeconds.Value,
                 Complete = complete,
             };
 
         [SerializeField]
         [FoldoutGroup("Max Stress Bound")]
-        private Days targetDuration;
+        private InGameTime targetDuration;
 
-        private Days currentDuration = Days.Zero;
+        private InGameTime currentDuration = InGameTime.Zero;
         private bool complete = false;
 
         public void Update(RealTimeSeconds delta_time)
@@ -106,11 +106,11 @@ namespace Level.Boss.Task
                 .Stress;
             if (max_stress < MaxStressTarget)
             {
-                currentDuration += new Days(delta_time);
+                currentDuration += InGameTime.FromDeltaTime();
             }
             else
             {
-                currentDuration = Days.Zero;
+                currentDuration = InGameTime.Zero;
             }
         }
     }
@@ -210,16 +210,16 @@ namespace Level.Boss.Task
 
         [SerializeField]
         [FoldoutGroup("Room Count Upper Bound")]
-        private Days timeToComplete;
+        private InGameTime timeToComplete;
 
-        private Days completeness = Days.Zero;
+        private InGameTime completeness = InGameTime.Zero;
 
         public Progress Progress =>
             new()
             {
                 Complete = completeness >= timeToComplete,
-                Completion = completeness.Value,
-                Overall = timeToComplete.Value
+                Completion = completeness.RealTimeSeconds.Value,
+                Overall = timeToComplete.RealTimeSeconds.Value
             };
 
         public void Update(RealTimeSeconds delta_time)
@@ -240,11 +240,11 @@ namespace Level.Boss.Task
 
             if (currentCount <= UpperBoundInclusive)
             {
-                completeness += new Days(delta_time);
+                completeness += InGameTime.FromDeltaTime();
             }
             else
             {
-                completeness = Days.Zero;
+                completeness = InGameTime.Zero;
             }
         }
     }
@@ -260,16 +260,16 @@ namespace Level.Boss.Task
         public Progress Progress =>
             new()
             {
-                Completion = currentDuration.Value,
-                Overall = targetDuration.Value,
+                Completion = currentDuration.RealTimeSeconds.Value,
+                Overall = targetDuration.RealTimeSeconds.Value,
                 Complete = complete,
             };
 
         [SerializeField]
         [FoldoutGroup("Min Balance")]
-        private Days targetDuration;
+        private InGameTime targetDuration;
 
-        private Days currentDuration = Days.Zero;
+        private InGameTime currentDuration = InGameTime.Zero;
         private bool complete = false;
 
         public void Update(RealTimeSeconds delta_time)
@@ -288,11 +288,11 @@ namespace Level.Boss.Task
             float money = DataProviderServiceLocator.FetchDataFromSingleton<Money>().Value;
             if (money >= minBalanceTarget)
             {
-                currentDuration += new Days(delta_time);
+                currentDuration += InGameTime.FromDeltaTime();
             }
             else
             {
-                currentDuration = Days.Zero;
+                currentDuration = InGameTime.Zero;
             }
         }
     }
@@ -369,16 +369,16 @@ namespace Level.Boss.Task
         public Progress Progress =>
             new()
             {
-                Completion = currentDuration.Value,
-                Overall = targetDuration.Value,
+                Completion = currentDuration.RealTimeSeconds.Value,
+                Overall = targetDuration.RealTimeSeconds.Value,
                 Complete = complete,
             };
 
         [SerializeField]
         [FoldoutGroup("Max Waiting Line Length")]
-        private Days targetDuration;
+        private InGameTime targetDuration;
 
-        private Days currentDuration = Days.Zero;
+        private InGameTime currentDuration = InGameTime.Zero;
         private bool complete = false;
 
         public void Update(RealTimeSeconds delta_time)
@@ -396,11 +396,11 @@ namespace Level.Boss.Task
 
             if (currentMaxLength <= lengthTarget)
             {
-                currentDuration += new Days(delta_time);
+                currentDuration += InGameTime.FromDeltaTime();
             }
             else
             {
-                currentDuration = Days.Zero;
+                currentDuration = InGameTime.Zero;
             }
 
             if (currentDuration >= targetDuration)
@@ -426,16 +426,16 @@ namespace Level.Boss.Task
         public Progress Progress =>
             new()
             {
-                Completion = currentDuration.Value,
-                Overall = targetDuration.Value,
+                Completion = currentDuration.RealTimeSeconds.Value,
+                Overall = targetDuration.RealTimeSeconds.Value,
                 Complete = complete,
             };
 
         [SerializeField]
         [FoldoutGroup("Dont Satisfy Need")]
-        private Days targetDuration;
+        private InGameTime targetDuration;
 
-        private Days currentDuration = Days.Zero;
+        private InGameTime currentDuration = InGameTime.Zero;
         private bool complete = false;
 
         public void Init()
@@ -444,7 +444,7 @@ namespace Level.Boss.Task
             {
                 if (need == targetNeed && !complete)
                 {
-                    currentDuration = Days.Zero;
+                    currentDuration = InGameTime.Zero;
                 }
             };
         }
@@ -456,7 +456,7 @@ namespace Level.Boss.Task
                 return;
             }
 
-            currentDuration += new Days(delta_time);
+            currentDuration += InGameTime.FromDeltaTime();
             if (currentDuration > targetDuration)
             {
                 complete = true;

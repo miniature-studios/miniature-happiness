@@ -181,6 +181,15 @@ namespace Level.GlobalTime
                 _ => throw new NotImplementedException()
             };
 
+        public static InGameTime FromDeltaTime()
+        {
+            return new InGameTime
+            {
+                value = Time.deltaTime / Model.DayLength.Value,
+                timeUnit = Unit.Days
+            };
+        }
+
         private float ToDays()
         {
             return timeUnit switch

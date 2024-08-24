@@ -12,7 +12,8 @@ namespace Employee
         private InternalUid uid;
         public InternalUid Uid => uid;
 
-        public Days Time;
+        [SerializeField]
+        public InGameTime Time;
 
         [SerializeReference]
         private List<IEffect> effects = new();
