@@ -217,7 +217,7 @@ namespace Level
             _ = StartCoroutine(WorkingTime(working.Duration));
         }
 
-        private IEnumerator WorkingTime(Days duration)
+        private IEnumerator WorkingTime(InGameTime duration)
         {
             yield return new WaitForSeconds(duration.RealTimeSeconds.Value);
             Result timeLockResult = globalTime.SetTimeScaleLock(this, 0f);
