@@ -9,6 +9,7 @@ namespace Level.GlobalTime
     public struct RealTimeSeconds
     {
         [SerializeField]
+        [Unit(Units.Second)]
         private float seconds;
         public readonly float Value => seconds;
 
