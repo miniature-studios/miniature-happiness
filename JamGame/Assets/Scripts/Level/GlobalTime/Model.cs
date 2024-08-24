@@ -34,17 +34,17 @@ namespace Level.GlobalTime
             Time.timeScale = scale;
         }
 
-        // Called by buttons that changes time scale.
-        public void SetTimeScale(float scale)
+        public bool TrySetTimeScale(float scale)
         {
             if (setTimeScaleLockHolder != null)
             {
-                Debug.LogError($"Cannot set timescale: locked by {setTimeScaleLockHolder}");
-                return;
+                return false;
             }
 
             this.scale = scale;
             Time.timeScale = scale;
+
+            return true;
         }
 
         public Result SetTimeScaleLock(object sender, float timeScaleOverride)
