@@ -122,7 +122,6 @@ namespace Employee.Personality
 
         public PersonalityImpl GetPersonality()
         {
-            // TODO: #48
             return new PersonalityImpl(
                 nameList.GenerateName(),
                 costRange.GenerateCost(),

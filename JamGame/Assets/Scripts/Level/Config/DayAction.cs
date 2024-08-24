@@ -132,8 +132,8 @@ namespace Level.Config
     public class Working : IDayAction
     {
         [SerializeField]
-        private Days duration = new();
-        public Days Duration => duration;
+        private InGameTime duration = new();
+        public InGameTime Duration => duration;
 
         public void Execute(Executor executor)
         {

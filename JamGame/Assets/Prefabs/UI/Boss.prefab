@@ -52,16 +52,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxStressGatherTime:
-    days: 5
+    timeUnit: 0
+    value: 5
   stress: 0
   meetingTasks:
   - Tasks:
     - task:
-        rid: 5009512970511974400
-      cost: 0
+        rid: 8023115963875983371
+      cost: 20
     - task:
-        rid: 3161708622866808832
-      cost: 0
+        rid: 8023115963875983372
+      cost: 10
+    - task:
+        rid: 8023115963875983373
+      cost: 10
+  - Tasks: []
+  - Tasks:
+    - task:
+        rid: 8023115963875983374
+      cost: 20
+    - task:
+        rid: 8023115963875983375
+      cost: 10
+  - Tasks: []
+  - Tasks:
+    - task:
+        rid: 8023115963875983376
+      cost: 10
+  - Tasks:
+    - task:
+        rid: 8023115963875983377
+      cost: 20
+    - task:
+        rid: 8023115963875983378
+      cost: 7
+    - task:
+        rid: 8023115963875983379
+      cost: 7
+    - task:
+        rid: 8023115963875983380
+      cost: 7
+  - Tasks: []
+  - Tasks:
+    - task:
+        rid: 8023115963875983382
+      cost: 20
+  - Tasks:
+    - task:
+        rid: 8023115963875983383
+      cost: 10
+    - task:
+        rid: 8023115963875983384
+      cost: 10
+  - Tasks: []
+  - Tasks:
+    - task:
+        rid: 8023115963875983385
+      cost: 30
   ActiveTasksChanged:
     m_PersistentCalls:
       m_Calls:
@@ -80,18 +127,91 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 3161708622866808832
+    - rid: 8023115963875983371
+      type: {class: MinBalance, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        minBalanceTarget: 0
+        targetDuration:
+          timeUnit: 0
+          value: 13
+    - rid: 8023115963875983372
+      type: {class: TargetRoomCount, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        timeToEnsureCompletion:
+          seconds: 0.5
+        room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
+        targetAmount: 1
+    - rid: 8023115963875983373
+      type: {class: TargetEmployeeAmount, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        employeeCountTarget: 2
+    - rid: 8023115963875983374
+      type: {class: MinEarnPerWorkingSession, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        executor: {fileID: 0}
+        earnTarget: 500
+    - rid: 8023115963875983375
+      type: {class: TargetRoomCount, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        timeToEnsureCompletion:
+          seconds: 0.5
+        room: {fileID: 739786844684371711, guid: f44832571ae043748b5bf64334ca05af, type: 3}
+        targetAmount: 5
+    - rid: 8023115963875983376
+      type: {class: MaxStressBound, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        maxStressTarget: 80
+        targetDuration:
+          timeUnit: 0
+          value: 1
+    - rid: 8023115963875983377
+      type: {class: MinEmployeesWithQuirk, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        employeeCountTarget: 1
+        targetQuirk: {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+    - rid: 8023115963875983378
+      type: {class: MinEmployeesWithQuirk, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        employeeCountTarget: 2
+        targetQuirk: {fileID: 11400000, guid: f0e19fd7eb5f01940a1e652f0dbc564f, type: 2}
+    - rid: 8023115963875983379
+      type: {class: MinEmployeesWithQuirk, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        employeeCountTarget: 1
+        targetQuirk: {fileID: 11400000, guid: 1156cf1b31295974b9f193ed3f761170, type: 2}
+    - rid: 8023115963875983380
+      type: {class: MinEmployeesWithQuirk, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        employeeCountTarget: 0
+        targetQuirk: {fileID: 11400000, guid: e251cd156eeb0a343a3b80129ea24798, type: 2}
+    - rid: 8023115963875983382
       type: {class: DontSatisfyNeed, ns: Level.Boss.Task, asm: Assembly-CSharp}
       data:
         employeeManager: {fileID: 0}
         targetNeed: 0
         targetDuration:
-          days: 1
-    - rid: 5009512970511974400
+          timeUnit: 0
+          value: 2
+    - rid: 8023115963875983383
       type: {class: MinEarnPerWorkingSession, ns: Level.Boss.Task, asm: Assembly-CSharp}
       data:
         executor: {fileID: 0}
-        earnTarget: 200
+        earnTarget: 2000
+    - rid: 8023115963875983384
+      type: {class: MaxWaitingLineLength, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        lengthTarget: 3
+        targetDuration:
+          timeUnit: 0
+          value: 2
+    - rid: 8023115963875983385
+      type: {class: RoomCountUpperBound, ns: Level.Boss.Task, asm: Assembly-CSharp}
+      data:
+        room: {fileID: 739786844684371711, guid: 12f9d01fff44d1f469de9bec77ff7e01, type: 3}
+        upperIntBoundInclusive: 2
+        timeToComplete:
+          timeUnit: 0
+          value: 2
 --- !u!95 &5879659543434839987
 Animator:
   serializedVersion: 5

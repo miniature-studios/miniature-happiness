@@ -6,11 +6,13 @@ namespace Level.GlobalTime
     [AddComponentMenu("Scripts/Level/GlobalTime/Level.GlobalTime.Model")]
     public class Model : MonoBehaviour
     {
-        private static float dayLength_ = 0.0f;
-        public static float DayLength => dayLength_;
+        private static RealTimeSeconds dayLength_ = RealTimeSeconds.Zero;
+        public static RealTimeSeconds DayLength => dayLength_;
 
         [SerializeField]
-        private float dayLength;
+        private RealTimeSeconds dayLength;
+
+        public const float HOURS_IN_DAY = 24;
 
         private float scale = 1.0f;
 
@@ -19,7 +21,7 @@ namespace Level.GlobalTime
 
         private void Awake()
         {
-            if (dayLength_ != 0.0f)
+            if (dayLength_ != RealTimeSeconds.Zero)
             {
                 Debug.LogError(
                     "Two or more instances of Level.GlobalTime.Model are detected in scene! Deleting one instance..."
@@ -32,17 +34,17 @@ namespace Level.GlobalTime
             Time.timeScale = scale;
         }
 
-        // Called by buttons that changes time scale.
-        public void SetTimeScale(float scale)
+        public bool TrySetTimeScale(float scale)
         {
             if (setTimeScaleLockHolder != null)
             {
-                Debug.LogError($"Cannot set timescale: locked by {setTimeScaleLockHolder}");
-                return;
+                return false;
             }
 
             this.scale = scale;
             Time.timeScale = scale;
+
+            return true;
         }
 
         public Result SetTimeScaleLock(object sender, float timeScaleOverride)

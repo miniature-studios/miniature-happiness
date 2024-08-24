@@ -50,7 +50,7 @@ namespace Level.Boss
         private DataProvider<GameLoseCause> gameLoseCauseProvider;
 
         [SerializeField]
-        private Days maxStressGatherTime;
+        private InGameTime maxStressGatherTime;
 
         private float stressNormalized;
         public float StressNormalized => stressNormalized;
