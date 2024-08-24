@@ -90,7 +90,9 @@ namespace Employee.ExtendedInfo
 
         private void Update()
         {
-            transform.LookAt(cam.transform.position);
+            Quaternion rotation = Quaternion.LookRotation(-cam.transform.forward, cam.transform.up);
+            transform.rotation = rotation;
+
             name_text.text = $"{employee.Personality.Name}";
         }
 
