@@ -12,6 +12,8 @@ namespace Level.GlobalTime
         [SerializeField]
         private RealTimeSeconds dayLength;
 
+        public const float HOURS_IN_DAY = 24;
+
         private float scale = 1.0f;
 
         private object setTimeScaleLockHolder = null;
