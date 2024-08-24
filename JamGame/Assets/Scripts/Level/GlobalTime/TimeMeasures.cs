@@ -12,13 +12,13 @@ namespace Level.GlobalTime
         private float days;
         public readonly float Value => days;
 
-        public readonly RealTimeSeconds RealTimeSeconds => new(days * Model.DayLength);
+        public readonly RealTimeSeconds RealTimeSeconds => new(days * Model.DayLength.Value);
 
         public static Days Zero => new(0);
 
         public Days(RealTimeSeconds seconds)
         {
-            days = seconds.Value / Model.DayLength;
+            days = seconds.Value / Model.DayLength.Value;
         }
 
         public Days(float days)
@@ -107,6 +107,28 @@ namespace Level.GlobalTime
             return new RealTimeSeconds() { seconds = a * b.seconds };
         }
 
+        public static bool operator ==(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return a.seconds == b.seconds;
+        }
+
+        public static bool operator !=(RealTimeSeconds a, RealTimeSeconds b)
+        {
+            return a.seconds != b.seconds;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is RealTimeSeconds rts)
+            {
+                return obj != null && seconds == rts.seconds;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static bool operator >(RealTimeSeconds a, RealTimeSeconds b)
         {
             return a.seconds > b.seconds;
@@ -126,5 +148,21 @@ namespace Level.GlobalTime
         {
             return a.seconds >= b.seconds;
         }
+    }
+
+    [Serializable]
+    public struct InGameTime
+    {
+        public enum Unit
+        {
+            Days,
+            Hours,
+        };
+
+        [SerializeField]
+        private Unit timeUnit;
+
+        [SerializeField]
+        private float value;
     }
 }
