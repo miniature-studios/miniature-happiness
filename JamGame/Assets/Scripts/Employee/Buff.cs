@@ -13,6 +13,10 @@ namespace Employee
         public InternalUid Uid => uid;
 
         [SerializeField]
+        private string fullName;
+        public string FullName => fullName;
+
+        [SerializeField]
         public InGameTime Time;
 
         [SerializeReference]

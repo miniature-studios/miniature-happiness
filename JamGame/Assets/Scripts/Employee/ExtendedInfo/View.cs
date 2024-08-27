@@ -4,20 +4,18 @@ using System.Collections.Specialized;
 using System.Linq;
 using Common;
 using Employee.Personality;
+using Pickle;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Employee.ExtendedInfo
 {
     [AddComponentMenu("Scripts/Employee/ExtendedInfo/Employee.ExtendedInfo.View")]
     public class View : MonoBehaviour
     {
-        private Camera cam;
-
+        [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         [SerializeField]
-        [Required]
         private EmployeeImpl employee;
 
         [Required]
@@ -25,75 +23,82 @@ namespace Employee.ExtendedInfo
         [ChildGameObjectsOnly]
         private TMP_Text name_text;
 
-        [SerializeField]
-        private AssetLabelReference quirkViewsLabel;
-
-        [SerializeField]
-        private AssetLabelReference buffViewsLabel;
-
-        private static Dictionary<InternalUid, QuirkView> quirkModelViewMap = new();
-        private static Dictionary<InternalUid, BuffView> buffModelViewMap = new();
-
-        [SerializeField]
         [Required]
+        [SerializeField]
+        [Pickle(typeof(QuirkView), LookupType = ObjectProviderType.Assets)]
+        private QuirkView quirkViewTemplate;
+
+        [Required]
+        [SerializeField]
+        [Pickle(typeof(BuffView), LookupType = ObjectProviderType.Assets)]
+        private BuffView buffViewTemplate;
+
+        [Required]
+        [SerializeField]
+        private BuffView normalBuff;
+
+        [Required]
+        [SerializeField]
         private Transform quirksContainer;
 
         [SerializeField]
         [Required]
         private Transform buffsContainer;
 
-        private List<BuffView> instantiatedBuffViews = new();
+        [Serializable]
+        private struct BuffViewPair
+        {
+            public InternalUid BuffId;
+            public BuffView BuffView;
+        }
+
+        [ReadOnly]
+        [SerializeField]
+        private List<BuffViewPair> appliedBuffs;
+
+        private Camera cam;
 
         private void OnEnable()
         {
             employee.AppliedBuffsChanged += OnBuffsChanged;
+            employee.OnPersonalityInitialized += UpdateQuirks;
         }
 
         private void OnDisable()
         {
             employee.AppliedBuffsChanged -= OnBuffsChanged;
+            employee.OnPersonalityInitialized -= UpdateQuirks;
         }
 
         private void Awake()
         {
             cam = Camera.main;
+        }
 
-            InitModelViewMaps();
-
-            foreach (Buff buff in employee.AppliedBuffs)
-            {
-                AddBuff(buff);
-            }
-
+        public void UpdateQuirks()
+        {
             foreach (Quirk quirk in employee.Personality.Quirks)
             {
                 AddQuirk(quirk);
             }
+            if (employee.Personality.Quirks.Count() == 0)
+            {
+                quirksContainer.gameObject.SetActive(false);
+            }
         }
 
-        private void InitModelViewMaps()
+        private void AddQuirk(Quirk quirk)
         {
-            if (quirkModelViewMap.Count == 0)
-            {
-                quirkModelViewMap = AddressableTools.LoadAllGameObjectAssets<QuirkView>(
-                    quirkViewsLabel
-                );
-            }
-
-            if (buffModelViewMap.Count == 0)
-            {
-                buffModelViewMap = AddressableTools.LoadAllGameObjectAssets<BuffView>(
-                    buffViewsLabel
-                );
-            }
+            QuirkView quirkView = Instantiate(quirkViewTemplate, quirksContainer);
+            quirkView.InitQuirkGraphic(quirk);
         }
 
         private void Update()
         {
-            Quaternion rotation = Quaternion.LookRotation(-cam.transform.forward, cam.transform.up);
+            Quaternion rotation = Quaternion.LookRotation(cam.transform.forward, cam.transform.up);
             transform.rotation = rotation;
 
-            name_text.text = $"{employee.Personality.Name}";
+            name_text.text = $"{employee.Personality.Profession} - {employee.Personality.Name}";
         }
 
         public void OnBuffsChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -122,11 +127,9 @@ namespace Employee.ExtendedInfo
                 }
                 case NotifyCollectionChangedAction.Reset:
                 {
-                    while (instantiatedBuffViews.Count > 0)
+                    while (appliedBuffs.Count > 0)
                     {
-                        BuffView last = instantiatedBuffViews.Last();
-                        _ = instantiatedBuffViews.Remove(last);
-                        Destroy(last.gameObject);
+                        RemoveBuff(appliedBuffs.Last().BuffId);
                     }
                     break;
                 }
@@ -140,20 +143,21 @@ namespace Employee.ExtendedInfo
 
         private void AddBuff(Buff buff)
         {
-            BuffView buff_view = Instantiate(buffModelViewMap[buff.Uid], buffsContainer);
-            instantiatedBuffViews.Add(buff_view);
+            BuffView buffView = Instantiate(buffViewTemplate, buffsContainer);
+            buffView.InitBuffGraphic(buff);
+            appliedBuffs.Add(new BuffViewPair() { BuffId = buff.Uid, BuffView = buffView });
+            normalBuff.gameObject.SetActive(false);
         }
 
         private void RemoveBuff(InternalUid buff_uid)
         {
-            BuffView to_remove = instantiatedBuffViews.Find((b) => b.Uid == buff_uid);
-            _ = instantiatedBuffViews.Remove(to_remove);
-            Destroy(to_remove.gameObject);
-        }
-
-        private void AddQuirk(Quirk quirk)
-        {
-            _ = Instantiate(quirkModelViewMap[quirk.Uid], quirksContainer);
+            BuffViewPair toRemove = appliedBuffs.Find(x => x.BuffId == buff_uid);
+            Destroy(toRemove.BuffView.gameObject);
+            _ = appliedBuffs.Remove(toRemove);
+            if (appliedBuffs.Count == 0)
+            {
+                normalBuff.gameObject.SetActive(true);
+            }
         }
     }
 }
