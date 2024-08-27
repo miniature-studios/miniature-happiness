@@ -29,6 +29,9 @@ namespace Level.Shop
         [RequiredIn(PrefabKind.PrefabInstanceAndNonPrefabInstance)]
         private Location.EmployeeManager.Model employeeManager;
 
+        [SerializeField]
+        private InfoPopup notEnoughMoneyPopup;
+
         public void SetShopRooms(IEnumerable<ShopRoomConfig> roomConfigs)
         {
             IEnumerable<CoreModel> newCoreModels = roomConfigs.Select(x =>
@@ -42,8 +45,7 @@ namespace Level.Shop
             Result takeMoneyResult = financesController.TryTakeMoney(cost);
             if (takeMoneyResult.Failure)
             {
-                // TODO: #172
-                Debug.Log(takeMoneyResult.Error);
+                notEnoughMoneyPopup.Show();
                 return new FailResult(takeMoneyResult.Error);
             }
 
@@ -78,8 +80,7 @@ namespace Level.Shop
             }
             else
             {
-                // TODO: #172
-                Debug.Log(result.Error);
+                notEnoughMoneyPopup.Show();
                 return result;
             }
         }

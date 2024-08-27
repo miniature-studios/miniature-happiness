@@ -135,15 +135,6 @@ namespace Location
             {
                 _ = Employees.Remove(employee);
             }
-
-            public bool IsEmployeeBound(EmployeeImpl employee)
-            {
-                return FilterType switch
-                {
-                    FilterType.FirstToTake => Employees.Count == 1 && Employees[0] == employee,
-                    _ => false,
-                };
-            }
         }
 
         [SerializeField]
@@ -151,6 +142,8 @@ namespace Location
 
         [SerializeField]
         private bool bindToThisProviderOnFirstVisit;
+
+        private EmployeeImpl boundEmployee;
 
         public NeedType NeedType;
 
@@ -198,6 +191,11 @@ namespace Location
             foreach (NeedModifiers modifier in registeredModifiers)
             {
                 currentEmployee.RegisterModifier(modifier);
+            }
+
+            if (bindToThisProviderOnFirstVisit)
+            {
+                boundEmployee = employee;
             }
 
             taken?.Invoke(currentEmployee);
@@ -264,7 +262,7 @@ namespace Location
 
         public bool IsEmployeeBound(EmployeeImpl employee)
         {
-            return filter.IsEmployeeBound(employee);
+            return boundEmployee == employee;
         }
 
         public PlaceInWaitingLine TryLineUp(EmployeeImpl employee)
@@ -311,6 +309,8 @@ namespace Location
         public void OnEmployeeFired(EmployeeImpl employee)
         {
             filter.OnEmployeeFired(employee);
+
+            boundEmployee = null;
 
             if (currentEmployee == employee)
             {
