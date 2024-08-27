@@ -1,5 +1,4 @@
 ﻿using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 
 namespace Level
@@ -9,23 +8,17 @@ namespace Level
     {
         [Required]
         [SerializeField]
-        private TMP_Text infoLabel;
-
-        [Required]
-        [SerializeField]
         private GameObject viewRoot;
 
         [Button]
-        public void HidePopup()
+        public void Hide()
         {
-            infoLabel.text = "Hidden";
             viewRoot.SetActive(false);
         }
 
         [Button]
-        public void ShowPopup(string info)
+        public void Show()
         {
-            infoLabel.text = info;
             viewRoot.SetActive(true);
         }
     }
