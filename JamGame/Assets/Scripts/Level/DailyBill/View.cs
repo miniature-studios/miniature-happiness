@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Common;
+using Pickle;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,11 +10,20 @@ namespace Level.DailyBill
     [AddComponentMenu("Scripts/Level/DailyBill/Level.DailyBill.View")]
     public class View : MonoBehaviour
     {
+        [Required]
         [SerializeField]
-        private TMP_Text dailyBillText;
+        private TMP_Text sumLabel;
 
+        [Required]
         [SerializeField]
         private Model model;
+
+        [Pickle(typeof(LineView), LookupType = ObjectProviderType.Assets)]
+        [SerializeField]
+        private LineView lineViewPrototype;
+
+        [SerializeField]
+        private RectTransform contentParent;
 
         public UnityEvent ContinueButtonPressEvent;
 
@@ -22,22 +31,15 @@ namespace Level.DailyBill
         public void Shown()
         {
             Check data = model.ComputeCheck();
-            StringBuilder stringBuilder = new();
 
-            if (data.RentByRoom.Keys.Count > 0)
+            contentParent.DestroyChildren();
+            foreach (RoomCheck roomCheck in data.Checks)
             {
-                int longest = data.RentByRoom.Values.Select(x => x.ToString().Length).Max();
-                foreach (KeyValuePair<Room.CoreModel, int> item in data.RentByRoom)
-                {
-                    _ = stringBuilder.AppendLine(
-                        $"{item.Value.ToString().PadRight(longest)}   - {item.Key.RoomInfo.Title}"
-                    );
-                }
-                _ = stringBuilder.AppendLine();
+                LineView lineView = Instantiate(lineViewPrototype, contentParent);
+                lineView.FillWithData(roomCheck);
             }
 
-            _ = stringBuilder.AppendLine($"You lost: {data.Sum} Coins");
-            dailyBillText.text = stringBuilder.ToString();
+            sumLabel.text = "-" + data.Sum.ToString();
         }
 
         // Called by button continue.

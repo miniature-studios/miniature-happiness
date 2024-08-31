@@ -70,6 +70,7 @@ namespace Employee
         [ReadOnly]
         private PersonalityImpl personality;
         public PersonalityImpl Personality => personality;
+        public event Action OnPersonalityInitialized;
 
         private DataProvider<EmployeeQuirks> employeeQuirksDataProvider;
 
@@ -367,6 +368,8 @@ namespace Employee
                 () => new EmployeeQuirks() { Quirks = this.personality.Quirks },
                 DataProviderServiceLocator.ResolveType.MultipleSources
             );
+
+            OnPersonalityInitialized?.Invoke();
         }
     }
 }
