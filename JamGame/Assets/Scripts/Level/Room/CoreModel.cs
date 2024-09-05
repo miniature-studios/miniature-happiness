@@ -15,7 +15,7 @@ namespace Level.Room
         public string Title;
         public RentCost RentCost;
 
-        [TextArea]
+        [TextArea(7, 50)]
         public string Description;
     }
 

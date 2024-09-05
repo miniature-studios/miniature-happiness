@@ -45,11 +45,11 @@ namespace Level.Shop.Employee
             professionLabel.text = card.EmployeeConfig.Profession;
 
             descriptionQuirkLineParent.DestroyChildren();
-            if (card.EmployeeConfig.Quirks.Count == 0)
-            {
-                descriptionQuirkLineParent.gameObject.SetActive(false);
-            }
-            else
+
+            bool isQuirksExist = card.EmployeeConfig.Quirks.Count > 0;
+            descriptionQuirkLineParent.gameObject.SetActive(isQuirksExist);
+
+            if (isQuirksExist)
             {
                 foreach (Quirk quirk in card.EmployeeConfig.Quirks)
                 {
