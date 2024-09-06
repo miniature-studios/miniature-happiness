@@ -32,5 +32,10 @@ namespace Employee.Personality
         [SerializeField]
         private Sprite icon;
         public Sprite Icon => icon;
+
+        [TextArea]
+        [SerializeField]
+        private string description;
+        public string Description => description;
     }
 }

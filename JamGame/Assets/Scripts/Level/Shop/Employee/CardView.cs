@@ -106,12 +106,18 @@ namespace Level.Shop.Employee
                 return;
             }
 
-            if (controller.TryBuyEmployee(EmployeeConfig).Success)
+            Result result = controller.TryBuyEmployee(EmployeeConfig);
+            if (result.Success)
             {
                 coinIcon.sprite = hiredIconSprite;
                 hireCostLabel.gameObject.SetActive(false);
                 hireButton.interactable = false;
                 hired = true;
+            }
+            else
+            {
+                // TODO: #196
+                Debug.Log("Cannot hire employee: " + result.Error);
             }
         }
 
