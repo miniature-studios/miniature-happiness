@@ -116,6 +116,7 @@ namespace Level.Shop.Employee
             }
             else
             {
+                // TODO: #196
                 Debug.Log("Cannot hire employee: " + result.Error);
             }
         }
