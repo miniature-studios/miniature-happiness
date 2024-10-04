@@ -11,10 +11,6 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: self-hosted
     steps:
-      - name: Chown files to koala
-        if: ${{ always() }}
-        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -46,10 +42,6 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: self-hosted
     steps:
-      - name: Chown files to koala
-        if: ${{ always() }}
-        run: sudo chown -R 'koala:' ~/office-runner/_work --recursive
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
