@@ -1,54 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &185702935929224336
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7586611099946346296}
-  - component: {fileID: 1307192108433559779}
-  m_Layer: 6
-  m_Name: Normal
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7586611099946346296
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185702935929224336}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4579035890972269953}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1307192108433559779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 185702935929224336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 26a7a4377a8e8854a931a0e5f3bb1daf, type: 2}
-  isGlobal: 1
-  blendDistance: 0
-  weight: 1
-  priority: 0
 --- !u!1 &753605451584959659
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,9 +12,7 @@ GameObject:
   - component: {fileID: 3139791413907972050}
   - component: {fileID: 7927937589614227420}
   - component: {fileID: 7781768571682195243}
-  - component: {fileID: 7480314389252194916}
-  - component: {fileID: 7770345968237256520}
-  - component: {fileID: 6297820522813076685}
+  - component: {fileID: 7710888446859478804}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -180,7 +129,7 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7480314389252194916
+--- !u!114 &7710888446859478804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,9 +147,9 @@ MonoBehaviour:
     m_Bits: 64
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 0
-  antialiasingMode: 3
+  antialiasingMode: 0
   temporalAntialiasing:
-    jitterSpread: 0.5
+    jitterSpread: 0.75
     sharpness: 0.25
     stationaryBlending: 0.95
     motionBlending: 0.85
@@ -240,50 +189,6 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!114 &7770345968237256520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 753605451584959659}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 101ac74223261194c952044eea3af2fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  opacity: 0
-  invert: 1
-  blur: 0
-  captureMode: 0
-  fullScreenTexture: {fileID: 0}
-  renderersEnabled: 1
-  globalRendererOptions:
-    opacity: 1
-    scale: {x: 1, y: 1, z: 1}
-    extrude: 0
-    texture: {fileID: 0}
-    depthTest: 1
-    cullMode: 0
-  serializedRenderers:
-  - {fileID: 0}
---- !u!114 &6297820522813076685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 753605451584959659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fdc3b87ef91ba64bac57ee5388cff90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  normalModeSettings:
-    Effects: {fileID: 185702935929224336}
-  stressOverlayModeSettings:
-    Effects: {fileID: 6772486059582125840}
-    PostEffectMask: {fileID: 7770345968237256520}
 --- !u!1 &3810965190965251245
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,6 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4579035890972269953}
   - component: {fileID: 7044252924046161799}
+  - component: {fileID: 3771613142519926992}
   m_Layer: 6
   m_Name: Postprocessing
   m_TagString: Untagged
@@ -313,9 +219,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7586611099946346296}
-  - {fileID: 5879925823770723578}
+  m_Children: []
   m_Father: {fileID: 7857302743038720757}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!45 &7044252924046161799
@@ -327,51 +231,19 @@ Skybox:
   m_GameObject: {fileID: 3810965190965251245}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 2100000, guid: f4888603b2a695f40830ca914a62f4b9, type: 2}
---- !u!1 &6772486059582125840
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5879925823770723578}
-  - component: {fileID: 1685868047534430213}
-  m_Layer: 6
-  m_Name: StressOverlay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &5879925823770723578
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6772486059582125840}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4579035890972269953}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1685868047534430213
+--- !u!114 &3771613142519926992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6772486059582125840}
+  m_GameObject: {fileID: 3810965190965251245}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 5d3814b32c4f2284c834a4930d7b6670, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 26a7a4377a8e8854a931a0e5f3bb1daf, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1
