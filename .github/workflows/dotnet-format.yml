@@ -9,7 +9,7 @@ on:
 jobs:
   check-code-formatting:
     if: github.event.pull_request.draft == false
-    runs-on: self-hosted
+    runs-on: [self-hosted, Linux, X64]
     container:
       image: mcr.microsoft.com/dotnet/sdk:8.0
     
